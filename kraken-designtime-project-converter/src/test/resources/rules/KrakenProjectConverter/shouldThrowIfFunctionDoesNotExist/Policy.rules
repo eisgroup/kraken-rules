@@ -1,0 +1,8 @@
+Namespace Policy
+
+Root Context Policy {
+  String policyCd
+}
+
+Function GetPolicyCd(Policy) : String
+

@@ -1,0 +1,31 @@
+Namespace PersonalAuto
+
+Include Base
+
+Rule "AutoTermDetails-180710-7GENi" On AutoTermDetails.termCd {
+  Default To "ANNUAL"
+}
+
+Rule "AutoTermDetails-180726-rc23d" On AutoTermDetails.termExpirationDate {
+  Set Mandatory
+  Error "AutoTermDetails-180726-rc23d": "Term expiration date is mandatory"
+}
+
+Rule "AutoTermDetails-180710-7G9iD" On AutoTermDetails.termEffectiveDate {
+  Default To Today()
+}
+
+Rule "AutoTermDetails-180710-0yZQ9" On AutoTermDetails.termEffectiveDate {
+  When AutoTransactionDetails.txType != 'NEW_BUSINESS'
+  Set Disabled
+}
+
+Rule "AutoTermDetails-180710-Yy6dY" On AutoTermDetails.termExpirationDate {
+  When AutoTransactionDetails.txType != 'NEW_BUSINESS'
+  Set Disabled
+}
+
+Rule "AutoTermDetails-180710-ktEL6" On AutoTermDetails.termCd {
+  When AutoTransactionDetails.txType != 'NEW_BUSINESS'
+  Set Disabled
+}

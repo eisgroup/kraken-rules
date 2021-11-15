@@ -1,0 +1,9 @@
+Namespace Policy
+
+Rule "MultipleInsureds-default" On SecondaryInsured.name {
+    Reset To "new"
+}
+
+EntryPoint "MultipleInsureds-default" {
+    "MultipleInsureds-default"
+}

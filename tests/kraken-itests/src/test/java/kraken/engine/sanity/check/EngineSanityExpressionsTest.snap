@@ -1,0 +1,449 @@
+kraken.engine.sanity.check.EngineSanityExpressionsTest.shouldAssertWithPropositionOperations=[
+  {
+    "DriverInfo:-1:driverType": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "DriverInfo",
+        "fieldName": "driverType",
+        "fieldPath": "driverType"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "Expressions_assert_with_proposition_operations",
+            "context": "DriverInfo",
+            "targetPath": "driverType",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    }
+  }
+]
+
+
+kraken.engine.sanity.check.EngineSanityExpressionsTest.shouldDefaultWithValueFromCCRCollectionCount=[
+  {
+    "Party:-1:relationToPrimaryInsured": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Party",
+        "fieldName": "relationToPrimaryInsured",
+        "fieldPath": "relationToPrimaryInsured"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "Expressions_default_to_with_value_from_CCR_collection_count",
+            "context": "Party",
+            "targetPath": "relationToPrimaryInsured",
+            "payloadType": "DEFAULT"
+          },
+          "payloadResult": {
+            "events": [
+              {
+                "attributeTarget": "relationToPrimaryInsured",
+                "contextName": "Party",
+                "contextId": "-1",
+                "newValue": "2"
+              }
+            ]
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    }
+  }
+]
+
+
+kraken.engine.sanity.check.EngineSanityExpressionsTest.shouldEvaluateFlatWithPredicate=[
+  {
+    "Policy:-1:policyNumber": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "policyNumber",
+        "fieldPath": "policyNumber"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "Expressions_default_to_flat_with_predicate",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "DEFAULT"
+          },
+          "payloadResult": {
+            "events": [
+              {
+                "attributeTarget": "policyNumber",
+                "contextName": "Policy",
+                "contextId": "-1",
+                "newValue": "1"
+              }
+            ]
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    }
+  }
+]
+
+
+kraken.engine.sanity.check.EngineSanityExpressionsTest.shouldExecuteFilterExpressions=[
+  {
+    "Policy:-1:createdFromPolicyRev": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "createdFromPolicyRev",
+        "fieldPath": "createdFromPolicyRev"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "Filter Collection thiz field",
+            "context": "Policy",
+            "targetPath": "createdFromPolicyRev",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:policies": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "policies",
+        "fieldPath": "policies"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "Fold Filter Primitive",
+            "context": "Policy",
+            "targetPath": "policies",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:policyCurrency": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "policyCurrency",
+        "fieldPath": "policyCurrency"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "Filter CCR",
+            "context": "Policy",
+            "targetPath": "policyCurrency",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:policyNumber": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "policyNumber",
+        "fieldPath": "policyNumber"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "Filter Primitive",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:state": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "state",
+        "fieldPath": "state"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "Filter Collection field",
+            "context": "Policy",
+            "targetPath": "state",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:txCreateDate": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "txCreateDate",
+        "fieldPath": "transactionDetails.txCreateDate"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "Filter Collection thiz field and fold",
+            "context": "Policy",
+            "targetPath": "txCreateDate",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:txEffectiveDate": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "txEffectiveDate",
+        "fieldPath": "transactionDetails.txEffectiveDate"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "Filter Collection field and fold",
+            "context": "Policy",
+            "targetPath": "txEffectiveDate",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:txReason": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "txReason",
+        "fieldPath": "transactionDetails.txReason"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "Filter Collection CCR and fold",
+            "context": "Policy",
+            "targetPath": "txReason",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:txType": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "txType",
+        "fieldPath": "transactionDetails.txType"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "Filter Collection Self CCR and fold",
+            "context": "Policy",
+            "targetPath": "txType",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:updatedBy": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "updatedBy",
+        "fieldPath": "accessTrackInfo.updatedBy"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "Filter Collection Self CCR",
+            "context": "Policy",
+            "targetPath": "updatedBy",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    }
+  }
+]
+
+
+kraken.engine.sanity.check.EngineSanityExpressionsTest.shouldFindServiceHistoryAndMatchWithPlusMonthsExpressionOutput=[
+  {
+    "DriverInfo:-1:driverType": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "DriverInfo",
+        "fieldName": "driverType",
+        "fieldPath": "driverType"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "Expressions_default_driverType_with_value_from_CCR_count_with_predicate",
+            "context": "DriverInfo",
+            "targetPath": "driverType",
+            "payloadType": "DEFAULT"
+          },
+          "payloadResult": {
+            "events": [
+              {
+                "attributeTarget": "driverType",
+                "contextName": "DriverInfo",
+                "contextId": "-1",
+                "newValue": "2"
+              }
+            ]
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    }
+  }
+]

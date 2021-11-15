@@ -1,0 +1,54 @@
+Namespace Policy
+
+EntryPoint "Dimensional" {
+    "Set AddressInfo.postalCode to the state name",
+    "Set AddressInfo.street mandatory",
+    "Set AddressInfo.city mandatory",
+    "Set AddressInfo.countryCd to the USA",
+    "Set AddressLine1.addressLine to AddressInfo.postalCode"
+}
+
+Rule "Set AddressInfo.street mandatory" On AddressInfo.street {
+    Set Mandatory
+}
+
+Rule "Set AddressInfo.city mandatory" On AddressInfo.city {
+    Set Mandatory
+}
+
+Rule "Set AddressInfo.postalCode to the state name" On AddressInfo.postalCode {
+    Reset To "Unknown"
+}
+
+Rule "Set AddressInfo.countryCd to the USA" On AddressInfo.countryCd {
+    Reset To "USA"
+}
+
+@Dimension("state", "AZ")
+Rule "Set AddressInfo.postalCode to the state name" On AddressInfo.postalCode {
+    Reset To Concat({
+        countryCd,
+        "-",
+        "AZ",
+        "-",
+        if StringLength(city) > 3 then Substring(city, 0, 3) else "CIT",
+        "-",
+        if StringLength(street) > 1 then Substring(street, 0, 1) else "STR"
+    })
+}
+
+Rule "Set AddressLine1.addressLine to AddressInfo.postalCode" On AddressLine1.addressLine {
+    Reset To AddressInfo.postalCode
+}
+
+
+@Dimension("state", "CA")
+Rule "Set AddressInfo.postalCode to the state name" On AddressInfo.postalCode {
+Reset To Concat({
+        countryCd,
+        "-ca-",
+        if StringLength(city) > 3 then Substring(city, 0, 3) else "CIT",
+        "-ca-",
+        if StringLength(street) > 1 then Substring(street, 0, 1) else "STR"
+    })
+}

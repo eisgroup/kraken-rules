@@ -1,0 +1,8 @@
+Namespace PersonalAuto
+
+Include Base
+
+Rule "AutoBusinessDimensions-180709-rcsCd" On AutoBusinessDimensions.agency {
+  Set Mandatory
+  Error "AutoBusinessDimensions-180709-rcsCd": "Agency is mandatory"
+}

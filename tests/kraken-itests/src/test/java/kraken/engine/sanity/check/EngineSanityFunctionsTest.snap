@@ -1,0 +1,565 @@
+kraken.engine.sanity.check.EngineSanityFunctionsTest.shouldExecuteFunctionAssertsOnPolicy=[
+  {
+    "Policy:-1:policyNumber": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "policyNumber",
+        "fieldPath": "policyNumber"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "f-symmetricDifference-assert-policyNumber",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "f-distinct-assert-policyNumber",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "f-upper-case-assert-policyNumber",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "f-includes-in-array-assert-policyNumber",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "f-format-date-assert-policyNumber",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "f-intersection-assert-policyNumber",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "f-trim-assert-policyNumber",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "f-pad-left-assert-policyNumber",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "f-all-assert-policyNumber",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "f-union-assert-policyNumber",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "f-difference-assert-policyNumber",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "f-concat-assert-policyNumber",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "f-pad-right-assert-policyNumber",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "f-money-to-string-assert-policyNumber",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "f-join-assert-policyNumber",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "f-includes-in-string-assert-policyNumber",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "f-starts-with-assert-policyNumber",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "f-ends-with-between-assert-policyNumber",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "f-lower-case-assert-policyNumber",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "f-get-month-date-assert-policyNumber",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "f-get-day-date-assert-policyNumber",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "f-isBlank-assert-policyNumber",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "f-get-year-date-assert-policyNumber",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "f-date-months-between-assert-policyNumber",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "f-length-assert-policyNumber",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "f-number-to-string-assert-policyNumber",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "f-any-assert-policyNumber",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "f-isEmpty-assert-policyNumber",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "f-numberSequence-assert-policyNumber",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    }
+  }
+]

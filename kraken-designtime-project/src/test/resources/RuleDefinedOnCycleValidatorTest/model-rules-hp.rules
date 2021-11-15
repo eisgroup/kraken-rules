@@ -1,0 +1,10 @@
+Namespace HomePolicy
+
+EntryPoint "EP01" {
+    "RULE01"
+}
+
+Rule "RULE01" On Home.type {
+    Default To "other"
+}
+

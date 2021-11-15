@@ -1,0 +1,19 @@
+Namespace Base
+
+Root Context Policy {
+    Child* CoverageRiskItem
+}
+
+Context CoverageRiskItem {
+    Child Coverage
+    Child* RiskItem
+}
+
+Context RiskItem {
+    String code
+    Child* Coverage
+}
+
+Context Coverage {
+    String code
+}

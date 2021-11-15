@@ -1,0 +1,203 @@
+Namespace Policy
+
+Root Context Policy {
+    String accountName : billingInfo.accountName
+    String policyNumber
+    String* policies
+    string policyCurrency
+    STRING state
+    Integer createdFromPolicyRev
+    Unknown refToCustomer
+    String txType : transactionDetails.txType
+    String txReason : transactionDetails.txReason
+    Datetime txEffectiveDate : transactionDetails.txEffectiveDate
+    date txCreateDate : transactionDetails.txCreateDate
+    Decimal totalPremium : transactionDetails.totalPremium
+    Decimal changePremium : transactionDetails.changePremium
+    Decimal totalLimit : transactionDetails.totalLimit
+    boolean currentQuoteInd : policyDetail.currentQuoteInd
+    String versionDescription : policyDetail.versionDescription
+    String oosProcessingStage : policyDetail.oosProcessingStage
+    String contractTermTypeCd : termDetails.contractTermTypeCd
+    Integer termNo : termDetails.termNo
+    DATE effectiveDate : termDetails.termEffectiveDate
+    Date expirationDate : termDetails.termExpirationDate
+    String termCd : termDetails.termCd
+    Date createdOn : accessTrackInfo.createdOn
+    String createdBy : accessTrackInfo.createdBy
+    Date updatedOn : accessTrackInfo.updatedOn
+    String updatedBy : accessTrackInfo.updatedBy
+    CHILD CreditCardInfo : billingInfo.creditCardInfo
+    child Insured : insured
+    Child* Vehicle : riskItems
+    Vehicle* riskItems
+    Child* Party : parties
+    Party* parties
+    Child CarCoverage : coverage
+    Child TransactionDetails : transactionDetails
+    Child* SecondaryInsured : { oneInsured, multipleInsureds, { multiInsureds1, multiInsureds2 }}
+    Child Referer : referer
+    Referer referer
+}
+
+Context Referer {
+    String name
+    Child RefererInfo
+    Child SuperReferer
+    SuperReferer superReferer
+}
+
+Context SuperReferer is Referer {
+
+}
+
+Context RefererInfo {
+    String referenceName
+    Child Referer
+    Child RefererInfo
+}
+
+Context TransactionDetails {
+    Decimal totalLimit
+    TransactionDetails proxyDetails
+}
+
+Context SecondaryInsured {
+    String name
+}
+
+Context Info {
+    String additionalInfo
+}
+
+Context Insured {
+    String name
+    Boolean haveChildren
+    Integer* childrenAges
+    Child BillingAddress : addressInfo
+    BillingAddress addressInfo
+}
+
+Context CreditCardInfo Is Info {
+    String cardType
+    Money cardCreditLimitAmount
+    String cardNumber
+    Integer cvv
+    Date expirationDate
+    Unknown* refsToBank
+    Child BillingAddress : billingAddress
+}
+
+Context BillingAddress Is AddressInfo {
+    Child AddressLine1 : addressLine1
+    Child AddressLine2 : addressLine2
+    String billingNote
+}
+
+Context Vehicle {
+    Boolean included
+    String model
+    String vehicleState
+    Integer modelYear
+    Decimal newValue
+    Decimal costNew
+    Integer declaredAnnualMiles
+    Integer odometerReading
+    Integer numDaysDrivenPerWeek
+    Date purchasedDate
+    AnubisCoverage* anubisCoverages
+    COLLCoverage* collCoverages
+    Date* serviceHistory
+    Child* COLLCoverage : collCoverages
+    Child* FullCoverage : fullCoverages
+    Child RRCoverage : rentalCoverage
+    RRCoverage rentalCoverage
+    Child AddressInfo : addressInfo
+}
+
+Context Party {
+    String relationToPrimaryInsured
+    Child* PartyRole : roles
+    PartyRole* roles
+    Child PersonInfo : personInfo
+    Child DriverInfo : driverInfo
+}
+
+Context PartyRole {
+    String role
+    Decimal limit
+}
+
+Context PersonInfo Is Info {
+    String firstName
+    String lastName
+    Integer age
+    String occupation
+    Boolean sameHomeAddress
+    Child AddressInfo : addressInfo
+}
+
+Context AddressInfo {
+    Boolean doNotSolicit
+    String countryCd
+    String postalCode
+    String city
+    String street
+    AddressLine* addressLines
+    Child AddressLine1 : addressLine1
+    Child AddressLine2 : addressLine2
+}
+
+Context AddressLine {
+    String addressLine
+}
+
+Context AddressLine1 Is AddressLine {
+}
+
+Context AddressLine2 Is AddressLine {
+}
+
+Context DriverInfo {
+    String driverType
+    Boolean convicted
+    Date trainingCompletionDate
+}
+
+Context CarCoverage {
+    String code
+    Decimal limitAmount
+    Decimal deductibleAmount
+}
+
+Context AnubisCoverage Is CarCoverage {
+    String cultName: cult.name
+    Date cultDate: cult.date
+}
+
+Context AnubisSecretCoverage Is AnubisCoverage {
+    Decimal secretLimitAmount
+}
+
+Context RentalCoverage {
+    String code
+    Decimal limitAmount
+    Decimal deductibleAmount
+}
+
+Context COLLCoverage Is CarCoverage {
+    Date effectiveDate
+    Date expirationDate
+}
+
+Context RRCoverage Is RentalCoverage, CarCoverage {
+    String combinedLimit
+}
+
+Context DriverCoverage {
+    String typeOfInjuryCovered
+}
+
+Context FullCoverage Is COLLCoverage, DriverCoverage {
+
+}

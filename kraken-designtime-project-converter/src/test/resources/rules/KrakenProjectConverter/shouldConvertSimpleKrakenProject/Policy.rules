@@ -1,0 +1,26 @@
+Namespace Policy
+
+Include Base
+
+Root Context Policy Is Identifiable {
+  String policyCd
+
+  Child PackageDetails : package.packageDetails
+}
+
+Context PackageDetails {
+  String packageCd : path.to.planCd.packageCd
+  String planCd : path.to.planCd
+}
+
+Context Coverage Is Identifiable {
+  Money limitAmount
+}
+
+EntryPoint "Default" {
+  "DefaultRule"
+}
+
+Rule "DefaultRule" On Policy.policyCd {
+  Default To "cd"
+}

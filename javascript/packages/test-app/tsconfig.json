@@ -1,0 +1,36 @@
+{
+    "compilerOptions": {
+        "skipDefaultLibCheck": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "jsx": "preserve",
+        "target": "es2018",
+        "module": "commonjs",
+        "outDir": "target/compiled/",
+        "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true,
+        "skipLibCheck": true,
+        "noEmitOnError": true,
+        "noImplicitReturns": true,
+        "allowJs": true,
+        "types": [
+            "node",
+            "jest"
+        ],
+        "resolveJsonModule": true
+    },
+    "compileOnSave": true,
+    "buildOnSave": true,
+    "exclude": [
+        "node_modules",
+        "target"
+    ],
+    "include": [
+        "src/**/*"
+    ],
+    "filesGlob": [
+        "**/*.ts",
+        "**/*.tsx",
+        "!node_modules/**",
+        "!target/**"
+    ]
+}

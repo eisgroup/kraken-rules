@@ -1,0 +1,814 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DataContextBuilder should build from extracted array first element 1`] = `
+DataContext {
+  "contextId": "3",
+  "contextName": "Party",
+  "dataObject": Object {
+    "cd": "Party",
+    "id": "3",
+    "personInfo": Object {
+      "cd": "PersonInfo",
+      "id": "4",
+    },
+    "roles": Array [
+      Object {
+        "cd": "PartyRole",
+        "id": "5",
+      },
+    ],
+  },
+  "definitionProjection": Object {
+    "relationToPrimaryInsured": Object {
+      "cardinality": "SINGLE",
+      "fieldPath": "relationToPrimaryInsured",
+      "fieldType": "STRING",
+      "name": "relationToPrimaryInsured",
+    },
+    "roles": Object {
+      "cardinality": "MULTIPLE",
+      "fieldPath": "roles",
+      "fieldType": "PartyRole",
+      "name": "roles",
+    },
+  },
+  "externalReferenceObjects": ExternalReferences {
+    "references": Object {
+      "Party": Object {
+        "cd": "Party",
+        "id": "3",
+        "personInfo": Object {
+          "cd": "PersonInfo",
+          "id": "4",
+        },
+        "roles": Array [
+          Object {
+            "cd": "PartyRole",
+            "id": "5",
+          },
+        ],
+      },
+    },
+    "singleDataContexts": Object {
+      "Party": [Circular],
+    },
+  },
+  "externalReferences": Object {},
+  "id": "Party:3",
+  "info": Object {
+    "getContextInstanceId": [Function],
+    "getContextName": [Function],
+  },
+  "inheritedContextNames": Array [],
+  "parent": DataContext {
+    "contextId": "0",
+    "contextName": "Policy",
+    "dataObject": Object {
+      "accessTrackInfo": Object {
+        "cd": "AccessTrackInfo",
+        "id": "9",
+      },
+      "billingInfo": Object {
+        "cd": "BillingInfo",
+        "creditCardInfo": Object {
+          "cd": "CreditCardInfo",
+          "id": "2",
+        },
+        "id": "1",
+      },
+      "cd": "Policy",
+      "id": "0",
+      "insured": Object {
+        "addressInfo": Object {
+          "cd": "AddressInfo",
+          "id": "iai1",
+        },
+        "cd": "Insured",
+        "id": "insured-1-id",
+      },
+      "parties": Array [
+        Object {
+          "cd": "Party",
+          "id": "3",
+          "personInfo": Object {
+            "cd": "PersonInfo",
+            "id": "4",
+          },
+          "roles": Array [
+            Object {
+              "cd": "PartyRole",
+              "id": "5",
+            },
+          ],
+        },
+      ],
+      "policyDetail": Object {
+        "cd": "PolicyDetail",
+        "id": "11",
+      },
+      "riskItems": Array [
+        Object {
+          "addressInfo": Object {
+            "cd": "AddressInfo",
+            "id": "7",
+          },
+          "cd": "Vehicle",
+          "id": "6",
+        },
+      ],
+      "termDetails": Object {},
+      "transactionDetails": Object {
+        "cd": "TransactionDetails",
+        "id": "8",
+      },
+    },
+    "definitionProjection": Object {
+      "accountName": Object {
+        "cardinality": "SINGLE",
+        "fieldPath": "billingInfo.accountName",
+        "fieldType": "STRING",
+        "name": "accountName",
+      },
+      "changePremium": Object {
+        "cardinality": "SINGLE",
+        "fieldPath": "transactionDetails.changePremium",
+        "fieldType": "DECIMAL",
+        "name": "changePremium",
+      },
+      "contractTermTypeCd": Object {
+        "cardinality": "SINGLE",
+        "fieldPath": "termDetails.contractTermTypeCd",
+        "fieldType": "STRING",
+        "name": "contractTermTypeCd",
+      },
+      "createdBy": Object {
+        "cardinality": "SINGLE",
+        "fieldPath": "accessTrackInfo.createdBy",
+        "fieldType": "STRING",
+        "name": "createdBy",
+      },
+      "createdFromPolicyRev": Object {
+        "cardinality": "SINGLE",
+        "fieldPath": "createdFromPolicyRev",
+        "fieldType": "INTEGER",
+        "name": "createdFromPolicyRev",
+      },
+      "createdOn": Object {
+        "cardinality": "SINGLE",
+        "fieldPath": "accessTrackInfo.createdOn",
+        "fieldType": "DATE",
+        "name": "createdOn",
+      },
+      "currentQuoteInd": Object {
+        "cardinality": "SINGLE",
+        "fieldPath": "policyDetail.currentQuoteInd",
+        "fieldType": "BOOLEAN",
+        "name": "currentQuoteInd",
+      },
+      "effectiveDate": Object {
+        "cardinality": "SINGLE",
+        "fieldPath": "termDetails.termEffectiveDate",
+        "fieldType": "DATE",
+        "name": "effectiveDate",
+      },
+      "expirationDate": Object {
+        "cardinality": "SINGLE",
+        "fieldPath": "termDetails.termExpirationDate",
+        "fieldType": "DATE",
+        "name": "expirationDate",
+      },
+      "oosProcessingStage": Object {
+        "cardinality": "SINGLE",
+        "fieldPath": "policyDetail.oosProcessingStage",
+        "fieldType": "STRING",
+        "name": "oosProcessingStage",
+      },
+      "parties": Object {
+        "cardinality": "MULTIPLE",
+        "fieldPath": "parties",
+        "fieldType": "Party",
+        "name": "parties",
+      },
+      "policies": Object {
+        "cardinality": "MULTIPLE",
+        "fieldPath": "policies",
+        "fieldType": "STRING",
+        "name": "policies",
+      },
+      "policyCurrency": Object {
+        "cardinality": "SINGLE",
+        "fieldPath": "policyCurrency",
+        "fieldType": "STRING",
+        "name": "policyCurrency",
+      },
+      "policyNumber": Object {
+        "cardinality": "SINGLE",
+        "fieldPath": "policyNumber",
+        "fieldType": "STRING",
+        "name": "policyNumber",
+      },
+      "refToCustomer": Object {
+        "cardinality": "SINGLE",
+        "fieldPath": "refToCustomer",
+        "fieldType": "UNKNOWN",
+        "name": "refToCustomer",
+      },
+      "referer": Object {
+        "cardinality": "SINGLE",
+        "fieldPath": "referer",
+        "fieldType": "Referer",
+        "name": "referer",
+      },
+      "riskItems": Object {
+        "cardinality": "MULTIPLE",
+        "fieldPath": "riskItems",
+        "fieldType": "Vehicle",
+        "name": "riskItems",
+      },
+      "state": Object {
+        "cardinality": "SINGLE",
+        "fieldPath": "state",
+        "fieldType": "STRING",
+        "name": "state",
+      },
+      "termCd": Object {
+        "cardinality": "SINGLE",
+        "fieldPath": "termDetails.termCd",
+        "fieldType": "STRING",
+        "name": "termCd",
+      },
+      "termNo": Object {
+        "cardinality": "SINGLE",
+        "fieldPath": "termDetails.termNo",
+        "fieldType": "INTEGER",
+        "name": "termNo",
+      },
+      "totalLimit": Object {
+        "cardinality": "SINGLE",
+        "fieldPath": "transactionDetails.totalLimit",
+        "fieldType": "DECIMAL",
+        "name": "totalLimit",
+      },
+      "totalPremium": Object {
+        "cardinality": "SINGLE",
+        "fieldPath": "transactionDetails.totalPremium",
+        "fieldType": "DECIMAL",
+        "name": "totalPremium",
+      },
+      "txCreateDate": Object {
+        "cardinality": "SINGLE",
+        "fieldPath": "transactionDetails.txCreateDate",
+        "fieldType": "DATE",
+        "name": "txCreateDate",
+      },
+      "txEffectiveDate": Object {
+        "cardinality": "SINGLE",
+        "fieldPath": "transactionDetails.txEffectiveDate",
+        "fieldType": "DATETIME",
+        "name": "txEffectiveDate",
+      },
+      "txReason": Object {
+        "cardinality": "SINGLE",
+        "fieldPath": "transactionDetails.txReason",
+        "fieldType": "STRING",
+        "name": "txReason",
+      },
+      "txType": Object {
+        "cardinality": "SINGLE",
+        "fieldPath": "transactionDetails.txType",
+        "fieldType": "STRING",
+        "name": "txType",
+      },
+      "updatedBy": Object {
+        "cardinality": "SINGLE",
+        "fieldPath": "accessTrackInfo.updatedBy",
+        "fieldType": "STRING",
+        "name": "updatedBy",
+      },
+      "updatedOn": Object {
+        "cardinality": "SINGLE",
+        "fieldPath": "accessTrackInfo.updatedOn",
+        "fieldType": "DATE",
+        "name": "updatedOn",
+      },
+      "versionDescription": Object {
+        "cardinality": "SINGLE",
+        "fieldPath": "policyDetail.versionDescription",
+        "fieldType": "STRING",
+        "name": "versionDescription",
+      },
+    },
+    "externalReferenceObjects": ExternalReferences {
+      "references": Object {
+        "Policy": Object {
+          "accessTrackInfo": Object {
+            "cd": "AccessTrackInfo",
+            "id": "9",
+          },
+          "billingInfo": Object {
+            "cd": "BillingInfo",
+            "creditCardInfo": Object {
+              "cd": "CreditCardInfo",
+              "id": "2",
+            },
+            "id": "1",
+          },
+          "cd": "Policy",
+          "id": "0",
+          "insured": Object {
+            "addressInfo": Object {
+              "cd": "AddressInfo",
+              "id": "iai1",
+            },
+            "cd": "Insured",
+            "id": "insured-1-id",
+          },
+          "parties": Array [
+            Object {
+              "cd": "Party",
+              "id": "3",
+              "personInfo": Object {
+                "cd": "PersonInfo",
+                "id": "4",
+              },
+              "roles": Array [
+                Object {
+                  "cd": "PartyRole",
+                  "id": "5",
+                },
+              ],
+            },
+          ],
+          "policyDetail": Object {
+            "cd": "PolicyDetail",
+            "id": "11",
+          },
+          "riskItems": Array [
+            Object {
+              "addressInfo": Object {
+                "cd": "AddressInfo",
+                "id": "7",
+              },
+              "cd": "Vehicle",
+              "id": "6",
+            },
+          ],
+          "termDetails": Object {},
+          "transactionDetails": Object {
+            "cd": "TransactionDetails",
+            "id": "8",
+          },
+        },
+      },
+      "singleDataContexts": Object {
+        "Policy": [Circular],
+      },
+    },
+    "id": "Policy:0",
+    "info": Object {
+      "getContextInstanceId": [Function],
+      "getContextName": [Function],
+    },
+    "inheritedContextNames": Array [],
+    "parent": undefined,
+  },
+}
+`;
+
+exports[`DataContextBuilder should build from extracted object 1`] = `
+DataContext {
+  "contextId": "iai1",
+  "contextName": "AddressInfo",
+  "dataObject": Object {
+    "cd": "AddressInfo",
+    "id": "iai1",
+  },
+  "definitionProjection": Object {
+    "addressLines": Object {
+      "cardinality": "MULTIPLE",
+      "fieldPath": "addressLines",
+      "fieldType": "AddressLine",
+      "name": "addressLines",
+    },
+    "city": Object {
+      "cardinality": "SINGLE",
+      "fieldPath": "city",
+      "fieldType": "STRING",
+      "name": "city",
+    },
+    "countryCd": Object {
+      "cardinality": "SINGLE",
+      "fieldPath": "countryCd",
+      "fieldType": "STRING",
+      "name": "countryCd",
+    },
+    "doNotSolicit": Object {
+      "cardinality": "SINGLE",
+      "fieldPath": "doNotSolicit",
+      "fieldType": "BOOLEAN",
+      "name": "doNotSolicit",
+    },
+    "postalCode": Object {
+      "cardinality": "SINGLE",
+      "fieldPath": "postalCode",
+      "fieldType": "STRING",
+      "name": "postalCode",
+    },
+    "street": Object {
+      "cardinality": "SINGLE",
+      "fieldPath": "street",
+      "fieldType": "STRING",
+      "name": "street",
+    },
+  },
+  "externalReferenceObjects": ExternalReferences {
+    "references": Object {
+      "AddressInfo": Object {
+        "cd": "AddressInfo",
+        "id": "iai1",
+      },
+    },
+    "singleDataContexts": Object {
+      "AddressInfo": [Circular],
+    },
+  },
+  "externalReferences": Object {},
+  "id": "AddressInfo:iai1",
+  "info": Object {
+    "getContextInstanceId": [Function],
+    "getContextName": [Function],
+  },
+  "inheritedContextNames": Array [],
+  "parent": DataContext {
+    "contextId": "insured-1-id",
+    "contextName": "Insured",
+    "dataObject": Object {
+      "addressInfo": Object {
+        "cd": "AddressInfo",
+        "id": "iai1",
+      },
+      "cd": "Insured",
+      "id": "insured-1-id",
+    },
+    "definitionProjection": Object {
+      "addressInfo": Object {
+        "cardinality": "SINGLE",
+        "fieldPath": "addressInfo",
+        "fieldType": "BillingAddress",
+        "name": "addressInfo",
+      },
+      "childrenAges": Object {
+        "cardinality": "MULTIPLE",
+        "fieldPath": "childrenAges",
+        "fieldType": "INTEGER",
+        "name": "childrenAges",
+      },
+      "haveChildren": Object {
+        "cardinality": "SINGLE",
+        "fieldPath": "haveChildren",
+        "fieldType": "BOOLEAN",
+        "name": "haveChildren",
+      },
+      "name": Object {
+        "cardinality": "SINGLE",
+        "fieldPath": "name",
+        "fieldType": "STRING",
+        "name": "name",
+      },
+    },
+    "externalReferenceObjects": ExternalReferences {
+      "references": Object {
+        "Insured": Object {
+          "addressInfo": Object {
+            "cd": "AddressInfo",
+            "id": "iai1",
+          },
+          "cd": "Insured",
+          "id": "insured-1-id",
+        },
+      },
+      "singleDataContexts": Object {
+        "Insured": [Circular],
+      },
+    },
+    "id": "Insured:insured-1-id",
+    "info": Object {
+      "getContextInstanceId": [Function],
+      "getContextName": [Function],
+    },
+    "inheritedContextNames": Array [],
+    "parent": DataContext {
+      "contextId": "0",
+      "contextName": "Policy",
+      "dataObject": Object {
+        "accessTrackInfo": Object {
+          "cd": "AccessTrackInfo",
+          "id": "9",
+        },
+        "billingInfo": Object {
+          "cd": "BillingInfo",
+          "creditCardInfo": Object {
+            "cd": "CreditCardInfo",
+            "id": "2",
+          },
+          "id": "1",
+        },
+        "cd": "Policy",
+        "id": "0",
+        "insured": Object {
+          "addressInfo": Object {
+            "cd": "AddressInfo",
+            "id": "iai1",
+          },
+          "cd": "Insured",
+          "id": "insured-1-id",
+        },
+        "parties": Array [
+          Object {
+            "cd": "Party",
+            "id": "3",
+            "personInfo": Object {
+              "cd": "PersonInfo",
+              "id": "4",
+            },
+            "roles": Array [
+              Object {
+                "cd": "PartyRole",
+                "id": "5",
+              },
+            ],
+          },
+        ],
+        "policyDetail": Object {
+          "cd": "PolicyDetail",
+          "id": "11",
+        },
+        "riskItems": Array [
+          Object {
+            "addressInfo": Object {
+              "cd": "AddressInfo",
+              "id": "7",
+            },
+            "cd": "Vehicle",
+            "id": "6",
+          },
+        ],
+        "termDetails": Object {},
+        "transactionDetails": Object {
+          "cd": "TransactionDetails",
+          "id": "8",
+        },
+      },
+      "definitionProjection": Object {
+        "accountName": Object {
+          "cardinality": "SINGLE",
+          "fieldPath": "billingInfo.accountName",
+          "fieldType": "STRING",
+          "name": "accountName",
+        },
+        "changePremium": Object {
+          "cardinality": "SINGLE",
+          "fieldPath": "transactionDetails.changePremium",
+          "fieldType": "DECIMAL",
+          "name": "changePremium",
+        },
+        "contractTermTypeCd": Object {
+          "cardinality": "SINGLE",
+          "fieldPath": "termDetails.contractTermTypeCd",
+          "fieldType": "STRING",
+          "name": "contractTermTypeCd",
+        },
+        "createdBy": Object {
+          "cardinality": "SINGLE",
+          "fieldPath": "accessTrackInfo.createdBy",
+          "fieldType": "STRING",
+          "name": "createdBy",
+        },
+        "createdFromPolicyRev": Object {
+          "cardinality": "SINGLE",
+          "fieldPath": "createdFromPolicyRev",
+          "fieldType": "INTEGER",
+          "name": "createdFromPolicyRev",
+        },
+        "createdOn": Object {
+          "cardinality": "SINGLE",
+          "fieldPath": "accessTrackInfo.createdOn",
+          "fieldType": "DATE",
+          "name": "createdOn",
+        },
+        "currentQuoteInd": Object {
+          "cardinality": "SINGLE",
+          "fieldPath": "policyDetail.currentQuoteInd",
+          "fieldType": "BOOLEAN",
+          "name": "currentQuoteInd",
+        },
+        "effectiveDate": Object {
+          "cardinality": "SINGLE",
+          "fieldPath": "termDetails.termEffectiveDate",
+          "fieldType": "DATE",
+          "name": "effectiveDate",
+        },
+        "expirationDate": Object {
+          "cardinality": "SINGLE",
+          "fieldPath": "termDetails.termExpirationDate",
+          "fieldType": "DATE",
+          "name": "expirationDate",
+        },
+        "oosProcessingStage": Object {
+          "cardinality": "SINGLE",
+          "fieldPath": "policyDetail.oosProcessingStage",
+          "fieldType": "STRING",
+          "name": "oosProcessingStage",
+        },
+        "parties": Object {
+          "cardinality": "MULTIPLE",
+          "fieldPath": "parties",
+          "fieldType": "Party",
+          "name": "parties",
+        },
+        "policies": Object {
+          "cardinality": "MULTIPLE",
+          "fieldPath": "policies",
+          "fieldType": "STRING",
+          "name": "policies",
+        },
+        "policyCurrency": Object {
+          "cardinality": "SINGLE",
+          "fieldPath": "policyCurrency",
+          "fieldType": "STRING",
+          "name": "policyCurrency",
+        },
+        "policyNumber": Object {
+          "cardinality": "SINGLE",
+          "fieldPath": "policyNumber",
+          "fieldType": "STRING",
+          "name": "policyNumber",
+        },
+        "refToCustomer": Object {
+          "cardinality": "SINGLE",
+          "fieldPath": "refToCustomer",
+          "fieldType": "UNKNOWN",
+          "name": "refToCustomer",
+        },
+        "referer": Object {
+          "cardinality": "SINGLE",
+          "fieldPath": "referer",
+          "fieldType": "Referer",
+          "name": "referer",
+        },
+        "riskItems": Object {
+          "cardinality": "MULTIPLE",
+          "fieldPath": "riskItems",
+          "fieldType": "Vehicle",
+          "name": "riskItems",
+        },
+        "state": Object {
+          "cardinality": "SINGLE",
+          "fieldPath": "state",
+          "fieldType": "STRING",
+          "name": "state",
+        },
+        "termCd": Object {
+          "cardinality": "SINGLE",
+          "fieldPath": "termDetails.termCd",
+          "fieldType": "STRING",
+          "name": "termCd",
+        },
+        "termNo": Object {
+          "cardinality": "SINGLE",
+          "fieldPath": "termDetails.termNo",
+          "fieldType": "INTEGER",
+          "name": "termNo",
+        },
+        "totalLimit": Object {
+          "cardinality": "SINGLE",
+          "fieldPath": "transactionDetails.totalLimit",
+          "fieldType": "DECIMAL",
+          "name": "totalLimit",
+        },
+        "totalPremium": Object {
+          "cardinality": "SINGLE",
+          "fieldPath": "transactionDetails.totalPremium",
+          "fieldType": "DECIMAL",
+          "name": "totalPremium",
+        },
+        "txCreateDate": Object {
+          "cardinality": "SINGLE",
+          "fieldPath": "transactionDetails.txCreateDate",
+          "fieldType": "DATE",
+          "name": "txCreateDate",
+        },
+        "txEffectiveDate": Object {
+          "cardinality": "SINGLE",
+          "fieldPath": "transactionDetails.txEffectiveDate",
+          "fieldType": "DATETIME",
+          "name": "txEffectiveDate",
+        },
+        "txReason": Object {
+          "cardinality": "SINGLE",
+          "fieldPath": "transactionDetails.txReason",
+          "fieldType": "STRING",
+          "name": "txReason",
+        },
+        "txType": Object {
+          "cardinality": "SINGLE",
+          "fieldPath": "transactionDetails.txType",
+          "fieldType": "STRING",
+          "name": "txType",
+        },
+        "updatedBy": Object {
+          "cardinality": "SINGLE",
+          "fieldPath": "accessTrackInfo.updatedBy",
+          "fieldType": "STRING",
+          "name": "updatedBy",
+        },
+        "updatedOn": Object {
+          "cardinality": "SINGLE",
+          "fieldPath": "accessTrackInfo.updatedOn",
+          "fieldType": "DATE",
+          "name": "updatedOn",
+        },
+        "versionDescription": Object {
+          "cardinality": "SINGLE",
+          "fieldPath": "policyDetail.versionDescription",
+          "fieldType": "STRING",
+          "name": "versionDescription",
+        },
+      },
+      "externalReferenceObjects": ExternalReferences {
+        "references": Object {
+          "Policy": Object {
+            "accessTrackInfo": Object {
+              "cd": "AccessTrackInfo",
+              "id": "9",
+            },
+            "billingInfo": Object {
+              "cd": "BillingInfo",
+              "creditCardInfo": Object {
+                "cd": "CreditCardInfo",
+                "id": "2",
+              },
+              "id": "1",
+            },
+            "cd": "Policy",
+            "id": "0",
+            "insured": Object {
+              "addressInfo": Object {
+                "cd": "AddressInfo",
+                "id": "iai1",
+              },
+              "cd": "Insured",
+              "id": "insured-1-id",
+            },
+            "parties": Array [
+              Object {
+                "cd": "Party",
+                "id": "3",
+                "personInfo": Object {
+                  "cd": "PersonInfo",
+                  "id": "4",
+                },
+                "roles": Array [
+                  Object {
+                    "cd": "PartyRole",
+                    "id": "5",
+                  },
+                ],
+              },
+            ],
+            "policyDetail": Object {
+              "cd": "PolicyDetail",
+              "id": "11",
+            },
+            "riskItems": Array [
+              Object {
+                "addressInfo": Object {
+                  "cd": "AddressInfo",
+                  "id": "7",
+                },
+                "cd": "Vehicle",
+                "id": "6",
+              },
+            ],
+            "termDetails": Object {},
+            "transactionDetails": Object {
+              "cd": "TransactionDetails",
+              "id": "8",
+            },
+          },
+        },
+        "singleDataContexts": Object {
+          "Policy": [Circular],
+        },
+      },
+      "id": "Policy:0",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "inheritedContextNames": Array [],
+      "parent": undefined,
+    },
+  },
+}
+`;

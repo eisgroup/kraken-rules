@@ -1,0 +1,298 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Engine Sanity Visibility Payload Test should execute 'VisibilityAutoPolicy' entrypoint: Results + reducer results 1`] = `
+Object {
+  "Field Metadata reduced results": Object {
+    "Policy:0:createdBy": Object {
+      "fieldType": "STRING",
+      "id": "Policy:0:createdBy",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": true,
+      "resolvedTargetPath": "accessTrackInfo.createdBy",
+      "ruleResults": Array [],
+    },
+    "Policy:0:createdFromPolicyRev": Object {
+      "fieldType": "INTEGER",
+      "id": "Policy:0:createdFromPolicyRev",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": true,
+      "resolvedTargetPath": "createdFromPolicyRev",
+      "ruleResults": Array [],
+    },
+    "Policy:0:createdOn": Object {
+      "fieldType": "DATE",
+      "id": "Policy:0:createdOn",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": true,
+      "resolvedTargetPath": "accessTrackInfo.createdOn",
+      "ruleResults": Array [],
+    },
+    "Policy:0:state": Object {
+      "fieldType": "STRING",
+      "id": "Policy:0:state",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": true,
+      "resolvedTargetPath": "state",
+      "ruleResults": Array [],
+    },
+    "Policy:0:txType": Object {
+      "fieldType": "STRING",
+      "id": "Policy:0:txType",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": true,
+      "resolvedTargetPath": "transactionDetails.txType",
+      "ruleResults": Array [],
+    },
+    "Policy:0:updatedBy": Object {
+      "fieldType": "STRING",
+      "id": "Policy:0:updatedBy",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": true,
+      "resolvedTargetPath": "accessTrackInfo.updatedBy",
+      "ruleResults": Array [],
+    },
+    "Policy:0:updatedOn": Object {
+      "fieldType": "DATE",
+      "id": "Policy:0:updatedOn",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": true,
+      "resolvedTargetPath": "accessTrackInfo.updatedOn",
+      "ruleResults": Array [],
+    },
+  },
+  "Raw results": Object {
+    "evaluationTimestamp": Any<Date>,
+    "results": Object {
+      "Policy:0:createdBy": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "createdBy",
+          "fieldPath": "accessTrackInfo.createdBy",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "type": 256,
+              "visible": false,
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Policy",
+              "payloadtype": "VISIBILITY",
+              "ruleName": "R0034",
+              "targetPath": "createdBy",
+            },
+          },
+        ],
+      },
+      "Policy:0:createdFromPolicyRev": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "createdFromPolicyRev",
+          "fieldPath": "createdFromPolicyRev",
+          "fieldType": "INTEGER",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "type": 256,
+              "visible": false,
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Policy",
+              "payloadtype": "VISIBILITY",
+              "ruleName": "R0010",
+              "targetPath": "createdFromPolicyRev",
+            },
+          },
+        ],
+      },
+      "Policy:0:createdOn": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "createdOn",
+          "fieldPath": "accessTrackInfo.createdOn",
+          "fieldType": "DATE",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "type": 256,
+              "visible": false,
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Policy",
+              "payloadtype": "VISIBILITY",
+              "ruleName": "R0030",
+              "targetPath": "createdOn",
+            },
+          },
+        ],
+      },
+      "Policy:0:state": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "state",
+          "fieldPath": "state",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "type": 256,
+              "visible": false,
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Policy",
+              "payloadtype": "VISIBILITY",
+              "ruleName": "R0006",
+              "targetPath": "state",
+            },
+          },
+        ],
+      },
+      "Policy:0:txType": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "txType",
+          "fieldPath": "transactionDetails.txType",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "type": 256,
+              "visible": false,
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Policy",
+              "payloadtype": "VISIBILITY",
+              "ruleName": "R0012",
+              "targetPath": "txType",
+            },
+          },
+        ],
+      },
+      "Policy:0:updatedBy": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "updatedBy",
+          "fieldPath": "accessTrackInfo.updatedBy",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "type": 256,
+              "visible": false,
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Policy",
+              "payloadtype": "VISIBILITY",
+              "ruleName": "R0041",
+              "targetPath": "updatedBy",
+            },
+          },
+        ],
+      },
+      "Policy:0:updatedOn": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "updatedOn",
+          "fieldPath": "accessTrackInfo.updatedOn",
+          "fieldType": "DATE",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "type": 256,
+              "visible": false,
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Policy",
+              "payloadtype": "VISIBILITY",
+              "ruleName": "R0038",
+              "targetPath": "updatedOn",
+            },
+          },
+        ],
+      },
+    },
+  },
+  "Validation results": Object {
+    "critical": Array [],
+    "info": Array [],
+    "warning": Array [],
+  },
+}
+`;

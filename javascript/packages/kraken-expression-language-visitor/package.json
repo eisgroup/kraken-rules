@@ -1,0 +1,30 @@
+{
+    "name": "kraken-expression-language-visitor",
+    "version": "1.20.1-autocomplete.3",
+    "main": "./target/dist/js/index.js",
+    "types": "./target/dist/definitions/index.d.ts",
+    "dependencies": {
+        "antlr4ts": "0.5.0-alpha.4"
+    },
+    "devDependencies": {
+        "antlr4ts-cli": "0.5.0-alpha.4",
+        "@babel/cli": "7.1.5",
+        "@types/node": "13.9.0",
+        "@types/jest": "26.0.22",
+        "rimraf": "2.6.3",
+        "ts-node": "4.1.0",
+        "tslint": "5.18.0",
+        "typescript": "4.2.4"
+    },
+    "scripts": {
+        "lint": "echo 'do not lint generated code'",
+        "compile": "tsc --pretty",
+        "babel": "babel target/dist/tsjs/ --out-dir target/dist/js/ --config-file ../../babel.config.js --delete-dir-on-start --ignore ./target/dist/tsjs/__tests__",
+        "babelDev": "babel target/dist/tsjs/ --out-dir target/dist/js/ --config-file ../../babel.config.js --ignore ./target/dist/tsjs/__tests__",
+        "del:compiled": "rimraf target/dist && rimraf src/generated",
+        "build": "npm run compile && npm run lint",
+        "prepare": "node -v && npm run del:compiled && npm run antlr && npm run compile && npm run lint -- --fix && npm run babel",
+        "release": "npm publish",
+        "antlr": "cd src/antlr/generated/ && antlr4ts -no-listener -lib Value.g4 Common.g4 -visitor Kel.g4"
+    }
+}

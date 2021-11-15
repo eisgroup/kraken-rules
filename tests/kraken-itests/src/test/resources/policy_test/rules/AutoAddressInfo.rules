@@ -1,0 +1,8 @@
+Namespace PersonalAuto
+
+Include Base
+
+Rule "AutoAddressInfo-180710-3UHI6" On AutoAddressInfo.countryCd {
+  Set Mandatory
+  Error "AutoAddressInfo-180710-3UHI6": "Country is mandatory"
+}

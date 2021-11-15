@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>tests</artifactId>
+        <groupId>kraken</groupId>
+        <version>1.22.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>kraken-test-product</artifactId>
+    <packaging>jar</packaging>
+
+    <properties>
+        <maven.deploy.skip>true</maven.deploy.skip>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>kraken</groupId>
+                <artifactId>kraken-repo-file-validation-plugin</artifactId>
+                <version>${project.version}</version>
+                <dependencies>
+                    <!-- dependency added to test how not Kraken .rules files are handled -->
+                    <!-- jena core has .rules files in classpath -->
+                    <dependency>
+                        <groupId>org.apache.jena</groupId>
+                        <artifactId>jena-core</artifactId>
+                        <version>3.12.0</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>validate</goal>
+                        </goals>
+                        <phase>compile</phase>
+                        <configuration>
+                            <baseDir>database/gap</baseDir>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>cz.habarta.typescript-generator</groupId>
+                <artifactId>typescript-generator-maven-plugin</artifactId>
+                <version>1.25.322</version>
+                <executions>
+                    <execution>
+                        <id>generate</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <phase>process-classes</phase>
+                        <configuration>
+                            <noFileComment>true</noFileComment>
+                            <sortDeclarations>true</sortDeclarations>
+                            <jsonLibrary>jackson2</jsonLibrary>
+                            <classes>
+                                <class>kraken.testproduct.domain.Policy</class>
+                            </classes>
+                            <customTypeMappings>
+                                <mapping>javax.money.MonetaryAmount : { amount: number, currency: string }</mapping>
+                                <mapping>java.time.LocalDate : Date</mapping>
+                                <mapping>java.time.LocalDateTime : Date</mapping>
+                            </customTypeMappings>
+                            <outputFile>../../javascript/packages/test-product-types/index.d.ts</outputFile>
+                            <outputKind>module</outputKind>
+                            <namespace>TestProduct</namespace>
+                            <declarePropertiesAsOptional>true</declarePropertiesAsOptional>
+                            <mapPackagesToNamespaces>true</mapPackagesToNamespaces>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>javax.xml.bind</groupId>
+                        <artifactId>jaxb-api</artifactId>
+                        <version>${jaxb.api.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>javax.money</groupId>
+            <artifactId>money-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.javamoney</groupId>
+            <artifactId>moneta</artifactId>
+        </dependency>
+
+        <!-- dependency added to test how not Kraken .rules files are handled -->
+        <!-- jena core has .rules files in classpath -->
+        <dependency>
+            <groupId>org.apache.jena</groupId>
+            <artifactId>jena-core</artifactId>
+            <version>3.12.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>kraken</groupId>
+            <artifactId>kraken-expression-language-function-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>kraken</groupId>
+            <artifactId>kraken-repo-file-validation-plugin</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>kraken</groupId>
+            <artifactId>kraken-runtime-repository-filter-api</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

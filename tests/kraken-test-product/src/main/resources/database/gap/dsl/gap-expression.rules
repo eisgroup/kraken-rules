@@ -1,0 +1,53 @@
+Namespace Policy
+
+EntryPoint "Expressions_Date_Nested_Functions" {
+    "Expressions_default_to_date_with_nested_functions", "Expressions_default_to_date_with_nested_functions_when_plus_year_0"
+}
+
+rule "Expressions_default_to_date_with_nested_functions" on Policy.txCreateDate {
+    default to PlusYears(PlusYears(Date("2019-05-05"), 1), 2)
+}
+
+Rule "Expressions_default_to_date_with_nested_functions_when_plus_year_0" On Policy.effectiveDate {
+    Default To PlusYears(PlusYears(expirationDate, 0), 0)
+}
+
+EntryPoint "Expressions_Flat_with_Predicate" {
+    "Expressions_default_to_flat_with_predicate"
+}
+
+RULE "Expressions_default_to_flat_with_predicate" ON Policy.policyNumber {
+    DEFAULT TO NumberToString(Count(Vehicle[*].serviceHistory[NumberOfDaysBetween(this, Policy.expirationDate) < 365]))
+}
+
+EntryPoint "Expressions_default_with_value_from_CCR_collection_count" {
+    "Expressions_default_to_with_value_from_CCR_collection_count"
+}
+
+Rule "Expressions_default_to_with_value_from_CCR_collection_count" On Party.relationToPrimaryInsured {
+   Default To NumberToString(Count(Vehicle[*].anubisCoverages))
+}
+
+EntryPoint "Expressions_default_driverType_with_value_from_CCR_count_with_predicate" {
+    "Expressions_default_driverType_with_value_from_CCR_count_with_predicate"
+}
+
+Rule "Expressions_default_driverType_with_value_from_CCR_count_with_predicate" On DriverInfo.driverType {
+   Default To NumberToString(Count(Vehicle[*].serviceHistory[this > PlusMonths(DriverInfo.trainingCompletionDate, Sum(Insured.childrenAges))]))
+}
+
+EntryPoint "Expressions_assert_with_proposition_operations" {
+    "Expressions_assert_with_proposition_operations"
+}
+
+Rule "Expressions_assert_with_proposition_operations" On DriverInfo.driverType {
+   Assert NumberOfDaysBetween(Date("2017-10-10"), DriverInfo.trainingCompletionDate) > 365 or PersonInfo.sameHomeAddress && AddressInfo.doNotSolicit || DriverInfo.convicted
+}
+
+EntryPoint "Expressions_default_to_policy_state_with_if" {
+    "Expressions_default_to_policy_state_with_if"
+}
+
+Rule "Expressions_default_to_policy_state_with_if" On Policy.state {
+   Default To if(Count(if(true) then policies) = 2) then "FL" else "CA"
+}

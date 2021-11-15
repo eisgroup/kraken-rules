@@ -1,0 +1,44 @@
+Namespace Base
+
+Root Context AutoPolicySummary {
+    String policyNumber
+
+    Child* Vehicle
+    Child Party
+}
+
+Context Vehicle {
+    Child AddressInfo
+    Child VehicleInfo
+}
+
+Context Party {
+    Child DriverInfo
+}
+
+Context VehicleInfo {
+    String info
+}
+
+Context DriverInfo {
+    Child AddressInfo
+}
+
+Context AddressInfo {
+    Child AddressLine1
+    Child AddressLine2
+    Child AddressLine3
+}
+
+Context AddressLine {
+    String addressLine
+}
+
+Context AddressLine1 Is AddressLine{
+}
+
+Context AddressLine2 Is AddressLine{
+}
+
+Context AddressLine3 Is AddressLine{
+}

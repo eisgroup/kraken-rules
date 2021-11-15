@@ -1,0 +1,362 @@
+kraken.engine.sanity.check.EngineSanityAssertionPayloadTest.shouldEvaluateAssertionAutoPolicyWithNodeThatHasNoRule=[
+  {}
+]
+
+
+kraken.engine.sanity.check.EngineSanityAssertionPayloadTest.shouldExecuteAssertionAutoPolicyEntryPointWithNotValidData=[
+  {
+    "AddressInfo:-1:doNotSolicit": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "AddressInfo",
+        "fieldName": "doNotSolicit",
+        "fieldPath": "doNotSolicit"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0155",
+            "context": "AddressInfo",
+            "targetPath": "doNotSolicit",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": false,
+            "messageCode": "code",
+            "message": "Value didn\u0027t match asserton: doNotSolicit \u003d true or doNotSolicit \u003d false",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "PersonInfo:-1:firstName": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "PersonInfo",
+        "fieldName": "firstName",
+        "fieldPath": "firstName"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0150",
+            "context": "PersonInfo",
+            "targetPath": "firstName",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": false,
+            "messageCode": "code",
+            "message": "Value didn\u0027t match asserton: firstName !\u003d lastName",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:termNo": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "termNo",
+        "fieldPath": "termDetails.termNo"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0051",
+            "context": "Policy",
+            "targetPath": "termNo",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": false,
+            "messageCode": "code",
+            "message": "Value didn\u0027t match asserton: termNo \u003e\u003d 0 and termNo \u003c 100",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Vehicle:-1:included": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Vehicle",
+        "fieldName": "included",
+        "fieldPath": "included"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0073",
+            "context": "Vehicle",
+            "targetPath": "included",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": false,
+            "messageCode": "code",
+            "message": "Value didn\u0027t match asserton: included \u003d true or included \u003d false",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    }
+  }
+]
+
+
+kraken.engine.sanity.check.EngineSanityAssertionPayloadTest.shouldExecuteAssertionAutoPolicyEntryPointWithValidData=[
+  {
+    "AddressInfo:-1:doNotSolicit": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "AddressInfo",
+        "fieldName": "doNotSolicit",
+        "fieldPath": "doNotSolicit"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0155",
+            "context": "AddressInfo",
+            "targetPath": "doNotSolicit",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "messageCode": "code",
+            "message": "Value didn\u0027t match asserton: doNotSolicit \u003d true or doNotSolicit \u003d false",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "AddressInfo:2:doNotSolicit": {
+      "contextFieldInfo": {
+        "contextId": "2",
+        "contextName": "AddressInfo",
+        "fieldName": "doNotSolicit",
+        "fieldPath": "doNotSolicit"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0155",
+            "context": "AddressInfo",
+            "targetPath": "doNotSolicit",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "messageCode": "code",
+            "message": "Value didn\u0027t match asserton: doNotSolicit \u003d true or doNotSolicit \u003d false",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "BillingAddress:-1:doNotSolicit": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "BillingAddress",
+        "fieldName": "doNotSolicit",
+        "fieldPath": "doNotSolicit"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0155",
+            "context": "AddressInfo",
+            "targetPath": "doNotSolicit",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "messageCode": "code",
+            "message": "Value didn\u0027t match asserton: doNotSolicit \u003d true or doNotSolicit \u003d false",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "PersonInfo:-1:firstName": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "PersonInfo",
+        "fieldName": "firstName",
+        "fieldPath": "firstName"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0150",
+            "context": "PersonInfo",
+            "targetPath": "firstName",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "messageCode": "code",
+            "message": "Value didn\u0027t match asserton: firstName !\u003d lastName",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:termNo": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "termNo",
+        "fieldPath": "termDetails.termNo"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0051",
+            "context": "Policy",
+            "targetPath": "termNo",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "messageCode": "code",
+            "message": "Value didn\u0027t match asserton: termNo \u003e\u003d 0 and termNo \u003c 100",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Vehicle:-1:included": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Vehicle",
+        "fieldName": "included",
+        "fieldPath": "included"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0073",
+            "context": "Vehicle",
+            "targetPath": "included",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "messageCode": "code",
+            "message": "Value didn\u0027t match asserton: included \u003d true or included \u003d false",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    }
+  }
+]
+
+
+kraken.engine.sanity.check.EngineSanityAssertionPayloadTest.shouldExecuteAssertionAutoPolicyEntrypointWithNotValidDataWithRestriction=[
+  {
+    "Vehicle:-1:included": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Vehicle",
+        "fieldName": "included",
+        "fieldPath": "included"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0073",
+            "context": "Vehicle",
+            "targetPath": "included",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": false,
+            "messageCode": "code",
+            "message": "Value didn\u0027t match asserton: included \u003d true or included \u003d false",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    }
+  }
+]

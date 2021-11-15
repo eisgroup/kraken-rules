@@ -1,0 +1,19 @@
+Namespace PersonalAuto
+
+Include Base
+
+Rule "MiscellaneousTypesMotorhomesEndorsement-180902-sswe1" On MiscellaneousTypesMotorhomesEndorsement.category {
+  Default To "Vehicle usage"
+}
+
+Rule "MiscellaneousTypesMotorhomesEndorsement-180902-F3er5" On MiscellaneousTypesMotorhomesEndorsement.name {
+  Default To "Miscellaneous Types Motorhomes Endorsement"
+}
+
+Rule "MiscellaneousTypesMotorhomesEndorsement-180902-F23ed" On MiscellaneousTypesMotorhomesEndorsement.number {
+  Default To "P.A. 583 AIP"
+}
+
+Rule "MiscellaneousTypesMotorhomesEndorsement-180902-swe3d" On MiscellaneousTypesMotorhomesEndorsement.description {
+  Default To "Miscellaneous Type Vehicle means golfmobiles, pickup trucks used solely to transport camper bodies, motorhomes, motorcycles, motorscooters, motorbikes, all terrain vehicles and similar motor vehicles"
+}

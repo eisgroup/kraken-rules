@@ -1,0 +1,842 @@
+kraken.engine.sanity.check.EngineSanityRegExpPayloadTest.shouldExecuteRegExpAutoPolicyEntryPointWithEmptyData=[
+  {
+    "AddressInfo:-1:city": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "AddressInfo",
+        "fieldName": "city",
+        "fieldPath": "city"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0158",
+            "context": "AddressInfo",
+            "targetPath": "city",
+            "payloadType": "REGEX"
+          },
+          "payloadResult": {
+            "regExp": "^[A-Za-z ]*$",
+            "success": true,
+            "messageCode": "code",
+            "message": "String doesn\u0027t match Regular Expression: ^[A-Za-z ]*$",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "AddressInfo:-1:postalCode": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "AddressInfo",
+        "fieldName": "postalCode",
+        "fieldPath": "postalCode"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0157A",
+            "context": "AddressInfo",
+            "targetPath": "postalCode",
+            "payloadType": "REGEX"
+          },
+          "payloadResult": {
+            "regExp": "^\\d{5}$",
+            "success": true,
+            "messageCode": "code",
+            "message": "String doesn\u0027t match Regular Expression: ^\\d{5}$",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "CreditCardInfo:-1:cardNumber": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "CreditCardInfo",
+        "fieldName": "cardNumber",
+        "fieldPath": "cardNumber"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0062",
+            "context": "CreditCardInfo",
+            "targetPath": "cardNumber",
+            "payloadType": "REGEX"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "NOT_APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "R0063",
+            "context": "CreditCardInfo",
+            "targetPath": "cardNumber",
+            "payloadType": "REGEX"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "NOT_APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "CreditCardInfo:-1:cardType": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "CreditCardInfo",
+        "fieldName": "cardType",
+        "fieldPath": "cardType"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0059",
+            "context": "CreditCardInfo",
+            "targetPath": "cardType",
+            "payloadType": "REGEX"
+          },
+          "payloadResult": {
+            "regExp": "^[A-Za-z]+$",
+            "success": true,
+            "messageCode": "code",
+            "message": "String doesn\u0027t match Regular Expression: ^[A-Za-z]+$",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "CreditCardInfo:-1:cvv": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "CreditCardInfo",
+        "fieldName": "cvv",
+        "fieldPath": "cvv"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0066",
+            "context": "CreditCardInfo",
+            "targetPath": "cvv",
+            "payloadType": "REGEX"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "NOT_APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:policyNumber": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "policyNumber",
+        "fieldPath": "policyNumber"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0003",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "REGEX"
+          },
+          "payloadResult": {
+            "regExp": "^Q[0-9]{4}$",
+            "success": true,
+            "messageCode": "code",
+            "message": "String doesn\u0027t match Regular Expression: ^Q[0-9]{4}$",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:state": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "state",
+        "fieldPath": "state"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0007",
+            "context": "Policy",
+            "targetPath": "state",
+            "payloadType": "REGEX"
+          },
+          "payloadResult": {
+            "regExp": "^[A-Za-z]+$",
+            "success": true,
+            "messageCode": "code",
+            "message": "String doesn\u0027t match Regular Expression: ^[A-Za-z]+$",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    }
+  }
+]
+
+
+kraken.engine.sanity.check.EngineSanityRegExpPayloadTest.shouldExecuteRegExpAutoPolicyEntryPointWithNotValidData=[
+  {
+    "AddressInfo:-1:city": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "AddressInfo",
+        "fieldName": "city",
+        "fieldPath": "city"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0158",
+            "context": "AddressInfo",
+            "targetPath": "city",
+            "payloadType": "REGEX"
+          },
+          "payloadResult": {
+            "regExp": "^[A-Za-z ]*$",
+            "success": false,
+            "messageCode": "code",
+            "message": "String doesn\u0027t match Regular Expression: ^[A-Za-z ]*$",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "AddressInfo:-1:postalCode": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "AddressInfo",
+        "fieldName": "postalCode",
+        "fieldPath": "postalCode"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0157A",
+            "context": "AddressInfo",
+            "targetPath": "postalCode",
+            "payloadType": "REGEX"
+          },
+          "payloadResult": {
+            "regExp": "^\\d{5}$",
+            "success": false,
+            "messageCode": "code",
+            "message": "String doesn\u0027t match Regular Expression: ^\\d{5}$",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "CreditCardInfo:-1:cardNumber": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "CreditCardInfo",
+        "fieldName": "cardNumber",
+        "fieldPath": "cardNumber"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0062",
+            "context": "CreditCardInfo",
+            "targetPath": "cardNumber",
+            "payloadType": "REGEX"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "NOT_APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "R0063",
+            "context": "CreditCardInfo",
+            "targetPath": "cardNumber",
+            "payloadType": "REGEX"
+          },
+          "payloadResult": {
+            "regExp": "^(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}$",
+            "success": false,
+            "messageCode": "code",
+            "message": "String doesn\u0027t match Regular Expression: ^(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}$",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "CreditCardInfo:-1:cardType": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "CreditCardInfo",
+        "fieldName": "cardType",
+        "fieldPath": "cardType"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0059",
+            "context": "CreditCardInfo",
+            "targetPath": "cardType",
+            "payloadType": "REGEX"
+          },
+          "payloadResult": {
+            "regExp": "^[A-Za-z]+$",
+            "success": true,
+            "messageCode": "code",
+            "message": "String doesn\u0027t match Regular Expression: ^[A-Za-z]+$",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "CreditCardInfo:-1:cvv": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "CreditCardInfo",
+        "fieldName": "cvv",
+        "fieldPath": "cvv"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0066",
+            "context": "CreditCardInfo",
+            "targetPath": "cvv",
+            "payloadType": "REGEX"
+          },
+          "payloadResult": {
+            "regExp": "^[0-9]{3}$",
+            "success": false,
+            "messageCode": "code",
+            "message": "String doesn\u0027t match Regular Expression: ^[0-9]{3}$",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:policyNumber": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "policyNumber",
+        "fieldPath": "policyNumber"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0003",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "REGEX"
+          },
+          "payloadResult": {
+            "regExp": "^Q[0-9]{4}$",
+            "success": false,
+            "messageCode": "code",
+            "message": "String doesn\u0027t match Regular Expression: ^Q[0-9]{4}$",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:state": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "state",
+        "fieldPath": "state"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0007",
+            "context": "Policy",
+            "targetPath": "state",
+            "payloadType": "REGEX"
+          },
+          "payloadResult": {
+            "regExp": "^[A-Za-z]+$",
+            "success": false,
+            "messageCode": "code",
+            "message": "String doesn\u0027t match Regular Expression: ^[A-Za-z]+$",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    }
+  }
+]
+
+
+kraken.engine.sanity.check.EngineSanityRegExpPayloadTest.shouldExecuteRegExpAutoPolicyEntryPointWithValidData=[
+  {
+    "AddressInfo:-1:city": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "AddressInfo",
+        "fieldName": "city",
+        "fieldPath": "city"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0158",
+            "context": "AddressInfo",
+            "targetPath": "city",
+            "payloadType": "REGEX"
+          },
+          "payloadResult": {
+            "regExp": "^[A-Za-z ]*$",
+            "success": true,
+            "messageCode": "code",
+            "message": "String doesn\u0027t match Regular Expression: ^[A-Za-z ]*$",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "AddressInfo:-1:postalCode": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "AddressInfo",
+        "fieldName": "postalCode",
+        "fieldPath": "postalCode"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0157A",
+            "context": "AddressInfo",
+            "targetPath": "postalCode",
+            "payloadType": "REGEX"
+          },
+          "payloadResult": {
+            "regExp": "^\\d{5}$",
+            "success": true,
+            "messageCode": "code",
+            "message": "String doesn\u0027t match Regular Expression: ^\\d{5}$",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "AddressInfo:2:city": {
+      "contextFieldInfo": {
+        "contextId": "2",
+        "contextName": "AddressInfo",
+        "fieldName": "city",
+        "fieldPath": "city"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0158",
+            "context": "AddressInfo",
+            "targetPath": "city",
+            "payloadType": "REGEX"
+          },
+          "payloadResult": {
+            "regExp": "^[A-Za-z ]*$",
+            "success": true,
+            "messageCode": "code",
+            "message": "String doesn\u0027t match Regular Expression: ^[A-Za-z ]*$",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "AddressInfo:2:postalCode": {
+      "contextFieldInfo": {
+        "contextId": "2",
+        "contextName": "AddressInfo",
+        "fieldName": "postalCode",
+        "fieldPath": "postalCode"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0157A",
+            "context": "AddressInfo",
+            "targetPath": "postalCode",
+            "payloadType": "REGEX"
+          },
+          "payloadResult": {
+            "regExp": "^\\d{5}$",
+            "success": true,
+            "messageCode": "code",
+            "message": "String doesn\u0027t match Regular Expression: ^\\d{5}$",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "BillingAddress:-1:city": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "BillingAddress",
+        "fieldName": "city",
+        "fieldPath": "city"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0158",
+            "context": "AddressInfo",
+            "targetPath": "city",
+            "payloadType": "REGEX"
+          },
+          "payloadResult": {
+            "regExp": "^[A-Za-z ]*$",
+            "success": true,
+            "messageCode": "code",
+            "message": "String doesn\u0027t match Regular Expression: ^[A-Za-z ]*$",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "BillingAddress:-1:postalCode": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "BillingAddress",
+        "fieldName": "postalCode",
+        "fieldPath": "postalCode"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0157A",
+            "context": "AddressInfo",
+            "targetPath": "postalCode",
+            "payloadType": "REGEX"
+          },
+          "payloadResult": {
+            "regExp": "^\\d{5}$",
+            "success": true,
+            "messageCode": "code",
+            "message": "String doesn\u0027t match Regular Expression: ^\\d{5}$",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "CreditCardInfo:-1:cardNumber": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "CreditCardInfo",
+        "fieldName": "cardNumber",
+        "fieldPath": "cardNumber"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0062",
+            "context": "CreditCardInfo",
+            "targetPath": "cardNumber",
+            "payloadType": "REGEX"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "NOT_APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "R0063",
+            "context": "CreditCardInfo",
+            "targetPath": "cardNumber",
+            "payloadType": "REGEX"
+          },
+          "payloadResult": {
+            "regExp": "^(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}$",
+            "success": true,
+            "messageCode": "code",
+            "message": "String doesn\u0027t match Regular Expression: ^(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}$",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "CreditCardInfo:-1:cardType": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "CreditCardInfo",
+        "fieldName": "cardType",
+        "fieldPath": "cardType"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0059",
+            "context": "CreditCardInfo",
+            "targetPath": "cardType",
+            "payloadType": "REGEX"
+          },
+          "payloadResult": {
+            "regExp": "^[A-Za-z]+$",
+            "success": true,
+            "messageCode": "code",
+            "message": "String doesn\u0027t match Regular Expression: ^[A-Za-z]+$",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "CreditCardInfo:-1:cvv": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "CreditCardInfo",
+        "fieldName": "cvv",
+        "fieldPath": "cvv"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0066",
+            "context": "CreditCardInfo",
+            "targetPath": "cvv",
+            "payloadType": "REGEX"
+          },
+          "payloadResult": {
+            "regExp": "^[0-9]{3}$",
+            "success": true,
+            "messageCode": "code",
+            "message": "String doesn\u0027t match Regular Expression: ^[0-9]{3}$",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:policyNumber": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "policyNumber",
+        "fieldPath": "policyNumber"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0003",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "REGEX"
+          },
+          "payloadResult": {
+            "regExp": "^Q[0-9]{4}$",
+            "success": true,
+            "messageCode": "code",
+            "message": "String doesn\u0027t match Regular Expression: ^Q[0-9]{4}$",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:state": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "state",
+        "fieldPath": "state"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0007",
+            "context": "Policy",
+            "targetPath": "state",
+            "payloadType": "REGEX"
+          },
+          "payloadResult": {
+            "regExp": "^[A-Za-z]+$",
+            "success": true,
+            "messageCode": "code",
+            "message": "String doesn\u0027t match Regular Expression: ^[A-Za-z]+$",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    }
+  }
+]

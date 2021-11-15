@@ -1,0 +1,14 @@
+Namespace PersonalAuto
+
+Include Base
+
+Rule "MBICoverageUserChoiceContainer-280902-sd34" On MBICoverageUserChoiceContainer.userChoice {
+  Set Mandatory
+  Error "MBICoverageUserChoiceContainer-280902-sd34": "User choice is Mandatory"
+}
+
+Rule "MBICoverageUserChoiceContainer-280902-xcv54" On MBICoverageUserChoiceContainer.reason {
+  When userChoice = false
+  Set Mandatory
+  Error "MBICoverageUserChoiceContainer-280902-xcv54": "Decline Reason is Mandatory"
+}

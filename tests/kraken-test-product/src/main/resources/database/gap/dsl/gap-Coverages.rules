@@ -1,0 +1,132 @@
+Namespace Policy
+
+EntryPoint "InitCarCoverage" {
+    "R0101", "R0107", "R0123", "R0114"
+}
+
+EntryPoint "VisibilityCarCoverage" {
+    "R0104", "R0110", "R0113"
+}
+
+EntryPoint "AccessibilityCarCoverage" {
+    "R0104A", "R0119", "R0139"
+}
+
+EntryPoint "UsagePayloadCarCoverage" {
+    "R0099", "R0105", "R0111", "R0115", "R0118"
+}
+
+EntryPoint "AssertionCarCoverage" {
+    "R0108", "R0117"
+}
+
+Rule "R0099" On COLLCoverage.effectiveDate {
+    Set Mandatory
+    Error "The field is mandatory"
+}
+
+Rule "R0101" On COLLCoverage.effectiveDate {
+    Default To Today()
+}
+
+Rule "R0102" On COLLCoverage.effectiveDate {
+    Assert effectiveDate < Today()
+    Error "Value didn't match asserton: effectiveDate < Today()"
+}
+
+Rule "R0104" On COLLCoverage.effectiveDate {
+    Set Hidden
+}
+
+Rule "R0104A" On COLLCoverage.effectiveDate {
+    Set Disabled
+}
+
+Rule "R0105" On COLLCoverage.expirationDate {
+    Set Mandatory
+    Error "The field is mandatory"
+}
+
+Rule "R0107" On COLLCoverage.expirationDate {
+    Default To Today()
+}
+
+Rule "R0108" On COLLCoverage.expirationDate {
+    Assert expirationDate > effectiveDate
+    Error "code":"Value didn't match assertion expirationDate > effectiveDate"
+}
+
+Rule "R0110" On COLLCoverage.expirationDate {
+    Set Hidden
+}
+
+Rule "R0111" On CarCoverage.code {
+    Set Mandatory
+}
+
+Rule "R0113" On CarCoverage.code {
+    Set Hidden
+}
+
+Rule "R0114" On CarCoverage.limitAmount {
+    Default To 1000
+}
+
+Rule "R0115" On CarCoverage.limitAmount {
+    Set Mandatory
+}
+
+Rule "R0117" On CarCoverage.limitAmount {
+    Assert limitAmount > 1000 and limitAmount < 1000000
+    Error "code":"Value didn't match assertion limitAmount > 1000 and limitAmount < 1000000"
+}
+
+Rule "R0118" On CarCoverage.deductibleAmount {
+    Set Mandatory
+}
+
+Rule "R0119" On CarCoverage.deductibleAmount {
+    Set Disabled
+}
+
+Rule "R0120" On COLLCoverage.deductibleAmount {
+    When limitAmount < 50000
+    Default To 5000
+}
+
+Rule "R0121" On COLLCoverage.deductibleAmount {
+    When limitAmount > 50000 and limitAmount < 100000
+    Reset To 10000
+}
+
+Rule "R0122" On COLLCoverage.deductibleAmount {
+    When limitAmount > 100000 and limitAmount < 500000
+    Reset To 15000
+}
+
+Rule "R0123" On COLLCoverage.deductibleAmount {
+    When limitAmount > 500000
+    Reset To 20000
+}
+
+Rule "R0139" On CarCoverage.deductibleAmount {
+    Set Disabled
+}
+
+Rule "R0141" On CarCoverage.deductibleAmount {
+    When limitAmount > 1000
+    Default To 1000
+}
+
+Rule "R0142" On CarCoverage.deductibleAmount {
+    When limitAmount > 10000
+    Default To 5000
+}
+
+Rule "R0171" On COLLCoverage.deductibleAmount {
+    Default To 1000
+}
+
+Rule "R0174" On FullCoverage.deductibleAmount {
+    Default To 1000
+}

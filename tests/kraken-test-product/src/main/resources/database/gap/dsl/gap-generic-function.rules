@@ -1,0 +1,34 @@
+Namespace Policy
+
+EntryPoint "Expressions_default_with_filter_count_result" {
+    "Expressions_default_with_filter_count_result"
+}
+
+Rule "Expressions_default_with_filter_count_result" On Policy.policyNumber {
+    Default To NumberToString(Count(Vehicle[*].anubisCoverages[cultName = "Yinepu"]))
+}
+
+EntryPoint "Expressions_default_to_with_value_from_CCR_with_predicate" {
+    "Expressions_default_to_with_value_from_CCR_with_predicate"
+}
+
+Rule "Expressions_default_to_with_value_from_CCR_with_predicate" On DriverInfo.driverType {
+   Default To NumberToString(Count(Vehicle[*].anubisCoverages[NumberOfDaysBetween(this.cultDate, DriverInfo.trainingCompletionDate) > 365]))
+}
+
+EntryPoint "Expressions_default_with_flat_and_filter_result_count" {
+    "Expressions_default_with_flat_and_filter_result_count"
+}
+
+Rule "Expressions_default_with_flat_and_filter_result_count" On Policy.policyNumber {
+    Default To NumberToString(Count(Vehicle[*].anubisCoverages[this.cultName = "Yinepu"]))
+}
+
+EntryPoint "Expressions_compare_sum" {
+    "Expressions_compare_sum_rule"
+}
+
+Rule "Expressions_compare_sum_rule" On Policy.policyNumber {
+    Assert Sum(Vehicle[*].anubisCoverages[Count(Vehicle) - 1].limitAmount) > 150
+    Error "CollRule5-error" : "Sum of every first Anubis limitAmount in each Vehicle must be more than 150"
+}

@@ -1,0 +1,15 @@
+Namespace PolicyExtended
+
+Include Policy
+
+Rule "R0048" On PolicyExtended.expirationDate {
+    Default To PlusYears(Today(), 1)
+}
+
+Rule "Inheritance-CCR-02" On PolicyExtended.policyCurrency  {
+    Assert CreditCardInfoExtended.cardType == policyCurrency
+}
+
+EntryPoint "Inheritance-CCR" {
+    "Inheritance-CCR-01", "Inheritance-CCR-02"
+}

@@ -1,0 +1,1711 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Engine Expressions Sanity Test should Assert With Proposition Operations: Results + reducer results 1`] = `
+Object {
+  "Field Metadata reduced results": Object {
+    "DriverInfo:14:driverType": Object {
+      "fieldType": "STRING",
+      "id": "DriverInfo:14:driverType",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "driverType",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "rule-assertion-error",
+          "errorMessage": "Assertion failed",
+          "isFailed": false,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "message": undefined,
+            "success": true,
+            "type": 1,
+            "validationSeverity": "critical",
+          },
+          "ruleName": "Expressions_assert_with_proposition_operations",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+  },
+  "Raw results": Object {
+    "evaluationTimestamp": Any<Date>,
+    "results": Object {
+      "DriverInfo:14:driverType": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "14",
+          "contextName": "DriverInfo",
+          "fieldName": "driverType",
+          "fieldPath": "driverType",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": RuleInfo {
+              "context": "DriverInfo",
+              "payloadtype": "ASSERTION",
+              "ruleName": "Expressions_assert_with_proposition_operations",
+              "targetPath": "driverType",
+            },
+          },
+        ],
+      },
+    },
+  },
+  "Validation results": Object {
+    "critical": Array [],
+    "info": Array [],
+    "warning": Array [],
+  },
+}
+`;
+
+exports[`Engine Expressions Sanity Test should Compare Sum And Fail If Lower: Results + reducer results 1`] = `
+Object {
+  "Field Metadata reduced results": Object {
+    "Policy:0:policyNumber": Object {
+      "fieldType": "STRING",
+      "id": "Policy:0:policyNumber",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "policyNumber",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "CollRule5-error",
+          "errorMessage": "Sum of every first Anubis limitAmount in each Vehicle must be more than 150",
+          "isFailed": true,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "message": Object {
+              "errorCode": "CollRule5-error",
+              "errorMessage": "Sum of every first Anubis limitAmount in each Vehicle must be more than 150",
+              "templateVariables": Array [],
+            },
+            "success": false,
+            "type": 1,
+            "validationSeverity": "critical",
+          },
+          "ruleName": "Expressions_compare_sum_rule",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+  },
+  "Raw results": Object {
+    "evaluationTimestamp": Any<Date>,
+    "results": Object {
+      "Policy:0:policyNumber": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "policyNumber",
+          "fieldPath": "policyNumber",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "CollRule5-error",
+                "errorMessage": "Sum of every first Anubis limitAmount in each Vehicle must be more than 150",
+                "templateVariables": Array [],
+              },
+              "success": false,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "Expressions_compare_sum_rule",
+              "targetPath": "policyNumber",
+            },
+          },
+        ],
+      },
+    },
+  },
+  "Validation results": Object {
+    "critical": Array [
+      ResultErrorMessage {
+        "info": Object {
+          "getContextInstanceId": [Function],
+          "getContextName": [Function],
+        },
+        "message": "Sum of every first Anubis limitAmount in each Vehicle must be more than 150",
+        "messageCode": "CollRule5-error",
+        "ruleName": "Expressions_compare_sum_rule",
+        "severity": "critical",
+        "templateVariables": Array [],
+      },
+    ],
+    "info": Array [],
+    "warning": Array [],
+  },
+}
+`;
+
+exports[`Engine Expressions Sanity Test should Compare Sum And Not Fail If Not Lower: Results + reducer results 1`] = `
+Object {
+  "Field Metadata reduced results": Object {
+    "Policy:0:policyNumber": Object {
+      "fieldType": "STRING",
+      "id": "Policy:0:policyNumber",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "policyNumber",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "CollRule5-error",
+          "errorMessage": "Sum of every first Anubis limitAmount in each Vehicle must be more than 150",
+          "isFailed": false,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "message": Object {
+              "errorCode": "CollRule5-error",
+              "errorMessage": "Sum of every first Anubis limitAmount in each Vehicle must be more than 150",
+              "templateVariables": Array [],
+            },
+            "success": true,
+            "type": 1,
+            "validationSeverity": "critical",
+          },
+          "ruleName": "Expressions_compare_sum_rule",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+  },
+  "Raw results": Object {
+    "evaluationTimestamp": Any<Date>,
+    "results": Object {
+      "Policy:0:policyNumber": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "policyNumber",
+          "fieldPath": "policyNumber",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "CollRule5-error",
+                "errorMessage": "Sum of every first Anubis limitAmount in each Vehicle must be more than 150",
+                "templateVariables": Array [],
+              },
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "Expressions_compare_sum_rule",
+              "targetPath": "policyNumber",
+            },
+          },
+        ],
+      },
+    },
+  },
+  "Validation results": Object {
+    "critical": Array [],
+    "info": Array [],
+    "warning": Array [],
+  },
+}
+`;
+
+exports[`Engine Expressions Sanity Test should Default State With If Expression Result: Results + reducer results 1`] = `
+Object {
+  "Field Metadata reduced results": Object {
+    "Policy:0:state": Object {
+      "fieldType": "STRING",
+      "id": "Policy:0:state",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "state",
+      "ruleResults": Array [],
+    },
+  },
+  "Raw results": Object {
+    "evaluationTimestamp": Any<Date>,
+    "results": Object {
+      "Policy:0:state": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "state",
+          "fieldPath": "state",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "events": Array [
+                ValueChangedEvent {
+                  "attributeTarget": "state",
+                  "contextId": "0",
+                  "contextName": "Policy",
+                  "newValue": "CA",
+                  "previousValue": undefined,
+                },
+              ],
+              "type": 8,
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Policy",
+              "payloadtype": "DEFAULT",
+              "ruleName": "Expressions_default_to_policy_state_with_if",
+              "targetPath": "state",
+            },
+          },
+        ],
+      },
+    },
+  },
+  "Validation results": Object {
+    "critical": Array [],
+    "info": Array [],
+    "warning": Array [],
+  },
+}
+`;
+
+exports[`Engine Expressions Sanity Test should Default With Filter Count Result: Results + reducer results 1`] = `
+Object {
+  "Field Metadata reduced results": Object {
+    "Policy:0:policyNumber": Object {
+      "fieldType": "STRING",
+      "id": "Policy:0:policyNumber",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "policyNumber",
+      "ruleResults": Array [],
+    },
+  },
+  "Raw results": Object {
+    "evaluationTimestamp": Any<Date>,
+    "results": Object {
+      "Policy:0:policyNumber": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "policyNumber",
+          "fieldPath": "policyNumber",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "events": Array [
+                ValueChangedEvent {
+                  "attributeTarget": "policyNumber",
+                  "contextId": "0",
+                  "contextName": "Policy",
+                  "newValue": "3",
+                  "previousValue": undefined,
+                },
+              ],
+              "type": 8,
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Policy",
+              "payloadtype": "DEFAULT",
+              "ruleName": "Expressions_default_with_filter_count_result",
+              "targetPath": "policyNumber",
+            },
+          },
+        ],
+      },
+    },
+  },
+  "Validation results": Object {
+    "critical": Array [],
+    "info": Array [],
+    "warning": Array [],
+  },
+}
+`;
+
+exports[`Engine Expressions Sanity Test should Default With Flat And Filter Result Count: Results + reducer results 1`] = `
+Object {
+  "Field Metadata reduced results": Object {
+    "Policy:0:policyNumber": Object {
+      "fieldType": "STRING",
+      "id": "Policy:0:policyNumber",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "policyNumber",
+      "ruleResults": Array [],
+    },
+  },
+  "Raw results": Object {
+    "evaluationTimestamp": Any<Date>,
+    "results": Object {
+      "Policy:0:policyNumber": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "policyNumber",
+          "fieldPath": "policyNumber",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "events": Array [
+                ValueChangedEvent {
+                  "attributeTarget": "policyNumber",
+                  "contextId": "0",
+                  "contextName": "Policy",
+                  "newValue": "3",
+                  "previousValue": undefined,
+                },
+              ],
+              "type": 8,
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Policy",
+              "payloadtype": "DEFAULT",
+              "ruleName": "Expressions_default_with_flat_and_filter_result_count",
+              "targetPath": "policyNumber",
+            },
+          },
+        ],
+      },
+    },
+  },
+  "Validation results": Object {
+    "critical": Array [],
+    "info": Array [],
+    "warning": Array [],
+  },
+}
+`;
+
+exports[`Engine Expressions Sanity Test should Default With Value From CCR Collection Count: Results + reducer results 1`] = `
+Object {
+  "Field Metadata reduced results": Object {
+    "Party:15:relationToPrimaryInsured": Object {
+      "fieldType": "STRING",
+      "id": "Party:15:relationToPrimaryInsured",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "relationToPrimaryInsured",
+      "ruleResults": Array [],
+    },
+  },
+  "Raw results": Object {
+    "evaluationTimestamp": Any<Date>,
+    "results": Object {
+      "Party:15:relationToPrimaryInsured": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "15",
+          "contextName": "Party",
+          "fieldName": "relationToPrimaryInsured",
+          "fieldPath": "relationToPrimaryInsured",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "events": Array [
+                ValueChangedEvent {
+                  "attributeTarget": "relationToPrimaryInsured",
+                  "contextId": "15",
+                  "contextName": "Party",
+                  "newValue": "2",
+                  "previousValue": undefined,
+                },
+              ],
+              "type": 8,
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Party",
+              "payloadtype": "DEFAULT",
+              "ruleName": "Expressions_default_to_with_value_from_CCR_collection_count",
+              "targetPath": "relationToPrimaryInsured",
+            },
+          },
+        ],
+      },
+    },
+  },
+  "Validation results": Object {
+    "critical": Array [],
+    "info": Array [],
+    "warning": Array [],
+  },
+}
+`;
+
+exports[`Engine Expressions Sanity Test should Evaluate Expression With CCR And Predicate: Results + reducer results 1`] = `
+Object {
+  "Field Metadata reduced results": Object {
+    "DriverInfo:14:driverType": Object {
+      "fieldType": "STRING",
+      "id": "DriverInfo:14:driverType",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "driverType",
+      "ruleResults": Array [],
+    },
+  },
+  "Raw results": Object {
+    "evaluationTimestamp": Any<Date>,
+    "results": Object {
+      "DriverInfo:14:driverType": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "14",
+          "contextName": "DriverInfo",
+          "fieldName": "driverType",
+          "fieldPath": "driverType",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "events": Array [
+                ValueChangedEvent {
+                  "attributeTarget": "driverType",
+                  "contextId": "14",
+                  "contextName": "DriverInfo",
+                  "newValue": "4",
+                  "previousValue": undefined,
+                },
+              ],
+              "type": 8,
+            },
+            "ruleInfo": RuleInfo {
+              "context": "DriverInfo",
+              "payloadtype": "DEFAULT",
+              "ruleName": "Expressions_default_to_with_value_from_CCR_with_predicate",
+              "targetPath": "driverType",
+            },
+          },
+        ],
+      },
+    },
+  },
+  "Validation results": Object {
+    "critical": Array [],
+    "info": Array [],
+    "warning": Array [],
+  },
+}
+`;
+
+exports[`Engine Expressions Sanity Test should Evaluate Flat With Predicate: Results + reducer results 1`] = `
+Object {
+  "Field Metadata reduced results": Object {
+    "Policy:0:policyNumber": Object {
+      "fieldType": "STRING",
+      "id": "Policy:0:policyNumber",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "policyNumber",
+      "ruleResults": Array [],
+    },
+  },
+  "Raw results": Object {
+    "evaluationTimestamp": Any<Date>,
+    "results": Object {
+      "Policy:0:policyNumber": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "policyNumber",
+          "fieldPath": "policyNumber",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "events": Array [
+                ValueChangedEvent {
+                  "attributeTarget": "policyNumber",
+                  "contextId": "0",
+                  "contextName": "Policy",
+                  "newValue": "1",
+                  "previousValue": undefined,
+                },
+              ],
+              "type": 8,
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Policy",
+              "payloadtype": "DEFAULT",
+              "ruleName": "Expressions_default_to_flat_with_predicate",
+              "targetPath": "policyNumber",
+            },
+          },
+        ],
+      },
+    },
+  },
+  "Validation results": Object {
+    "critical": Array [],
+    "info": Array [],
+    "warning": Array [],
+  },
+}
+`;
+
+exports[`Engine Expressions Sanity Test should Find Service History And Match With PlusMonths Expression Output: Results + reducer results 1`] = `
+Object {
+  "Field Metadata reduced results": Object {
+    "DriverInfo:14:driverType": Object {
+      "fieldType": "STRING",
+      "id": "DriverInfo:14:driverType",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "driverType",
+      "ruleResults": Array [],
+    },
+  },
+  "Raw results": Object {
+    "evaluationTimestamp": Any<Date>,
+    "results": Object {
+      "DriverInfo:14:driverType": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "14",
+          "contextName": "DriverInfo",
+          "fieldName": "driverType",
+          "fieldPath": "driverType",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "events": Array [
+                ValueChangedEvent {
+                  "attributeTarget": "driverType",
+                  "contextId": "14",
+                  "contextName": "DriverInfo",
+                  "newValue": "2",
+                  "previousValue": undefined,
+                },
+              ],
+              "type": 8,
+            },
+            "ruleInfo": RuleInfo {
+              "context": "DriverInfo",
+              "payloadtype": "DEFAULT",
+              "ruleName": "Expressions_default_driverType_with_value_from_CCR_count_with_predicate",
+              "targetPath": "driverType",
+            },
+          },
+        ],
+      },
+    },
+  },
+  "Validation results": Object {
+    "critical": Array [],
+    "info": Array [],
+    "warning": Array [],
+  },
+}
+`;
+
+exports[`Engine Expressions Sanity Test should execute filter expressions: Results + reducer results 1`] = `
+Object {
+  "Field Metadata reduced results": Object {
+    "Policy:12:createdFromPolicyRev": Object {
+      "fieldType": "INTEGER",
+      "id": "Policy:12:createdFromPolicyRev",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "createdFromPolicyRev",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "rule-assertion-error",
+          "errorMessage": "Assertion failed",
+          "isFailed": false,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "message": undefined,
+            "success": true,
+            "type": 1,
+            "validationSeverity": "critical",
+          },
+          "ruleName": "Filter Collection thiz field",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+    "Policy:12:policies": Object {
+      "fieldType": "STRING",
+      "id": "Policy:12:policies",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "policies",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "rule-assertion-error",
+          "errorMessage": "Assertion failed",
+          "isFailed": false,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "message": undefined,
+            "success": true,
+            "type": 1,
+            "validationSeverity": "critical",
+          },
+          "ruleName": "Fold Filter Primitive",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+    "Policy:12:policyCurrency": Object {
+      "fieldType": "STRING",
+      "id": "Policy:12:policyCurrency",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "policyCurrency",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "rule-assertion-error",
+          "errorMessage": "Assertion failed",
+          "isFailed": false,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "message": undefined,
+            "success": true,
+            "type": 1,
+            "validationSeverity": "critical",
+          },
+          "ruleName": "Filter CCR",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+    "Policy:12:policyNumber": Object {
+      "fieldType": "STRING",
+      "id": "Policy:12:policyNumber",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "policyNumber",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "rule-assertion-error",
+          "errorMessage": "Assertion failed",
+          "isFailed": false,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "message": undefined,
+            "success": true,
+            "type": 1,
+            "validationSeverity": "critical",
+          },
+          "ruleName": "Filter Primitive",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+    "Policy:12:state": Object {
+      "fieldType": "STRING",
+      "id": "Policy:12:state",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "state",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "rule-assertion-error",
+          "errorMessage": "Assertion failed",
+          "isFailed": false,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "message": undefined,
+            "success": true,
+            "type": 1,
+            "validationSeverity": "critical",
+          },
+          "ruleName": "Filter Collection field",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+    "Policy:12:txCreateDate": Object {
+      "fieldType": "DATE",
+      "id": "Policy:12:txCreateDate",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "transactionDetails.txCreateDate",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "rule-assertion-error",
+          "errorMessage": "Assertion failed",
+          "isFailed": false,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "message": undefined,
+            "success": true,
+            "type": 1,
+            "validationSeverity": "critical",
+          },
+          "ruleName": "Filter Collection thiz field and fold",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+    "Policy:12:txEffectiveDate": Object {
+      "fieldType": "DATETIME",
+      "id": "Policy:12:txEffectiveDate",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "transactionDetails.txEffectiveDate",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "rule-assertion-error",
+          "errorMessage": "Assertion failed",
+          "isFailed": false,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "message": undefined,
+            "success": true,
+            "type": 1,
+            "validationSeverity": "critical",
+          },
+          "ruleName": "Filter Collection field and fold",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+    "Policy:12:txReason": Object {
+      "fieldType": "STRING",
+      "id": "Policy:12:txReason",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "transactionDetails.txReason",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "rule-assertion-error",
+          "errorMessage": "Assertion failed",
+          "isFailed": false,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "message": undefined,
+            "success": true,
+            "type": 1,
+            "validationSeverity": "critical",
+          },
+          "ruleName": "Filter Collection CCR and fold",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+    "Policy:12:txType": Object {
+      "fieldType": "STRING",
+      "id": "Policy:12:txType",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "transactionDetails.txType",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "rule-assertion-error",
+          "errorMessage": "Assertion failed",
+          "isFailed": false,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "message": undefined,
+            "success": true,
+            "type": 1,
+            "validationSeverity": "critical",
+          },
+          "ruleName": "Filter Collection Self CCR and fold",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+    "Policy:12:updatedBy": Object {
+      "fieldType": "STRING",
+      "id": "Policy:12:updatedBy",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "accessTrackInfo.updatedBy",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "rule-assertion-error",
+          "errorMessage": "Assertion failed",
+          "isFailed": false,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "message": undefined,
+            "success": true,
+            "type": 1,
+            "validationSeverity": "critical",
+          },
+          "ruleName": "Filter Collection Self CCR",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+  },
+  "Raw results": Object {
+    "evaluationTimestamp": Any<Date>,
+    "results": Object {
+      "Policy:12:createdFromPolicyRev": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "12",
+          "contextName": "Policy",
+          "fieldName": "createdFromPolicyRev",
+          "fieldPath": "createdFromPolicyRev",
+          "fieldType": "INTEGER",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "Filter Collection thiz field",
+              "targetPath": "createdFromPolicyRev",
+            },
+          },
+        ],
+      },
+      "Policy:12:policies": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "12",
+          "contextName": "Policy",
+          "fieldName": "policies",
+          "fieldPath": "policies",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "Fold Filter Primitive",
+              "targetPath": "policies",
+            },
+          },
+        ],
+      },
+      "Policy:12:policyCurrency": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "12",
+          "contextName": "Policy",
+          "fieldName": "policyCurrency",
+          "fieldPath": "policyCurrency",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "Filter CCR",
+              "targetPath": "policyCurrency",
+            },
+          },
+        ],
+      },
+      "Policy:12:policyNumber": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "12",
+          "contextName": "Policy",
+          "fieldName": "policyNumber",
+          "fieldPath": "policyNumber",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "Filter Primitive",
+              "targetPath": "policyNumber",
+            },
+          },
+        ],
+      },
+      "Policy:12:state": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "12",
+          "contextName": "Policy",
+          "fieldName": "state",
+          "fieldPath": "state",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "Filter Collection field",
+              "targetPath": "state",
+            },
+          },
+        ],
+      },
+      "Policy:12:txCreateDate": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "12",
+          "contextName": "Policy",
+          "fieldName": "txCreateDate",
+          "fieldPath": "transactionDetails.txCreateDate",
+          "fieldType": "DATE",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "Filter Collection thiz field and fold",
+              "targetPath": "txCreateDate",
+            },
+          },
+        ],
+      },
+      "Policy:12:txEffectiveDate": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "12",
+          "contextName": "Policy",
+          "fieldName": "txEffectiveDate",
+          "fieldPath": "transactionDetails.txEffectiveDate",
+          "fieldType": "DATETIME",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "Filter Collection field and fold",
+              "targetPath": "txEffectiveDate",
+            },
+          },
+        ],
+      },
+      "Policy:12:txReason": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "12",
+          "contextName": "Policy",
+          "fieldName": "txReason",
+          "fieldPath": "transactionDetails.txReason",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "Filter Collection CCR and fold",
+              "targetPath": "txReason",
+            },
+          },
+        ],
+      },
+      "Policy:12:txType": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "12",
+          "contextName": "Policy",
+          "fieldName": "txType",
+          "fieldPath": "transactionDetails.txType",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "Filter Collection Self CCR and fold",
+              "targetPath": "txType",
+            },
+          },
+        ],
+      },
+      "Policy:12:updatedBy": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "12",
+          "contextName": "Policy",
+          "fieldName": "updatedBy",
+          "fieldPath": "accessTrackInfo.updatedBy",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "Filter Collection Self CCR",
+              "targetPath": "updatedBy",
+            },
+          },
+        ],
+      },
+    },
+  },
+  "Validation results": Object {
+    "critical": Array [],
+    "info": Array [],
+    "warning": Array [],
+  },
+}
+`;
+
+exports[`Engine Expressions Sanity Test shouldAddSecretLimitAmountIfCoverageIsInstanceOfAnubisSecretCoverage_AssertFails: Results + reducer results 1`] = `
+Object {
+  "Field Metadata reduced results": Object {
+    "Policy:0:state": Object {
+      "fieldType": "STRING",
+      "id": "Policy:0:state",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "state",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "Expressions_instanceof_secretLimitAmount_code",
+          "errorMessage": "Sum of secretLimitAmount must be 330",
+          "isFailed": true,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "message": Object {
+              "errorCode": "Expressions_instanceof_secretLimitAmount_code",
+              "errorMessage": "Sum of secretLimitAmount must be 330",
+              "templateVariables": Array [],
+            },
+            "success": false,
+            "type": 1,
+            "validationSeverity": "critical",
+          },
+          "ruleName": "Expressions_instanceof_secretLimitAmount",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+  },
+  "Raw results": Object {
+    "evaluationTimestamp": Any<Date>,
+    "results": Object {
+      "Policy:0:state": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "state",
+          "fieldPath": "state",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "Expressions_instanceof_secretLimitAmount_code",
+                "errorMessage": "Sum of secretLimitAmount must be 330",
+                "templateVariables": Array [],
+              },
+              "success": false,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "Expressions_instanceof_secretLimitAmount",
+              "targetPath": "state",
+            },
+          },
+        ],
+      },
+    },
+  },
+  "Validation results": Object {
+    "critical": Array [
+      ResultErrorMessage {
+        "info": Object {
+          "getContextInstanceId": [Function],
+          "getContextName": [Function],
+        },
+        "message": "Sum of secretLimitAmount must be 330",
+        "messageCode": "Expressions_instanceof_secretLimitAmount_code",
+        "ruleName": "Expressions_instanceof_secretLimitAmount",
+        "severity": "critical",
+        "templateVariables": Array [],
+      },
+    ],
+    "info": Array [],
+    "warning": Array [],
+  },
+}
+`;
+
+exports[`Engine Expressions Sanity Test shouldAddSecretLimitAmountIfCoverageIsInstanceOfAnubisSecretCoverage_AssertPasses: Results + reducer results 1`] = `
+Object {
+  "Field Metadata reduced results": Object {
+    "Policy:0:state": Object {
+      "fieldType": "STRING",
+      "id": "Policy:0:state",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "state",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "Expressions_instanceof_secretLimitAmount_code",
+          "errorMessage": "Sum of secretLimitAmount must be 330",
+          "isFailed": false,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "message": Object {
+              "errorCode": "Expressions_instanceof_secretLimitAmount_code",
+              "errorMessage": "Sum of secretLimitAmount must be 330",
+              "templateVariables": Array [],
+            },
+            "success": true,
+            "type": 1,
+            "validationSeverity": "critical",
+          },
+          "ruleName": "Expressions_instanceof_secretLimitAmount",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+  },
+  "Raw results": Object {
+    "evaluationTimestamp": Any<Date>,
+    "results": Object {
+      "Policy:0:state": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "state",
+          "fieldPath": "state",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "Expressions_instanceof_secretLimitAmount_code",
+                "errorMessage": "Sum of secretLimitAmount must be 330",
+                "templateVariables": Array [],
+              },
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "Expressions_instanceof_secretLimitAmount",
+              "targetPath": "state",
+            },
+          },
+        ],
+      },
+    },
+  },
+  "Validation results": Object {
+    "critical": Array [],
+    "info": Array [],
+    "warning": Array [],
+  },
+}
+`;
+
+exports[`Engine Expressions Sanity Test shouldEvaluateRuleOnlyOnCorrectTypeWhenCheckedWithTypeOfInCondition: Results + reducer results 1`] = `
+Object {
+  "Field Metadata reduced results": Object {
+    "COLLCoverage:11:limitAmount": Object {
+      "fieldType": "DECIMAL",
+      "id": "COLLCoverage:11:limitAmount",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "limitAmount",
+      "ruleResults": Array [],
+    },
+    "RRCoverage:12:limitAmount": Object {
+      "fieldType": "DECIMAL",
+      "id": "RRCoverage:12:limitAmount",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "limitAmount",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "Expressions_typeof_coherence_code",
+          "errorMessage": "For every CarCoverage except COLLCoverage limitAmount must be > 100",
+          "isFailed": true,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "message": Object {
+              "errorCode": "Expressions_typeof_coherence_code",
+              "errorMessage": "For every CarCoverage except COLLCoverage limitAmount must be > 100",
+              "templateVariables": Array [],
+            },
+            "success": false,
+            "type": 1,
+            "validationSeverity": "critical",
+          },
+          "ruleName": "Expressions_typeof_coherence",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+  },
+  "Raw results": Object {
+    "evaluationTimestamp": Any<Date>,
+    "results": Object {
+      "COLLCoverage:11:limitAmount": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "11",
+          "contextName": "COLLCoverage",
+          "fieldName": "limitAmount",
+          "fieldPath": "limitAmount",
+          "fieldType": "DECIMAL",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "NOT_APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 4,
+            "ruleInfo": RuleInfo {
+              "context": "CarCoverage",
+              "payloadtype": "ASSERTION",
+              "ruleName": "Expressions_typeof_coherence",
+              "targetPath": "limitAmount",
+            },
+          },
+        ],
+      },
+      "RRCoverage:12:limitAmount": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "12",
+          "contextName": "RRCoverage",
+          "fieldName": "limitAmount",
+          "fieldPath": "limitAmount",
+          "fieldType": "DECIMAL",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "Expressions_typeof_coherence_code",
+                "errorMessage": "For every CarCoverage except COLLCoverage limitAmount must be > 100",
+                "templateVariables": Array [],
+              },
+              "success": false,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": RuleInfo {
+              "context": "CarCoverage",
+              "payloadtype": "ASSERTION",
+              "ruleName": "Expressions_typeof_coherence",
+              "targetPath": "limitAmount",
+            },
+          },
+        ],
+      },
+    },
+  },
+  "Validation results": Object {
+    "critical": Array [
+      ResultErrorMessage {
+        "info": Object {
+          "getContextInstanceId": [Function],
+          "getContextName": [Function],
+        },
+        "message": "For every CarCoverage except COLLCoverage limitAmount must be > 100",
+        "messageCode": "Expressions_typeof_coherence_code",
+        "ruleName": "Expressions_typeof_coherence",
+        "severity": "critical",
+        "templateVariables": Array [],
+      },
+    ],
+    "info": Array [],
+    "warning": Array [],
+  },
+}
+`;

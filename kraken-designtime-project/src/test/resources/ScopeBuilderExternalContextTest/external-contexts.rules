@@ -1,0 +1,11 @@
+Namespace AutoPolicy
+
+ExternalContext {
+    context: {
+        previous: PreviousAutoPolicy
+    }
+}
+
+ExternalEntity PreviousAutoPolicy {
+    String previousNumber
+}

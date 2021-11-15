@@ -1,0 +1,27 @@
+Namespace Policy
+
+EntryPoint "SizePayload" {
+    "SizePayloadMin",
+    "SizePayloadMax",
+    "SizePayloadEquals"
+}
+
+EntryPoint "SizeRangePayload" {
+    "SizePayloadRange"
+}
+
+Rule "SizePayloadMin" On Policy.policies {
+    Assert Size Min 2
+}
+
+Rule "SizePayloadMax" On Policy.policies {
+    Assert Size Max 2
+}
+
+Rule "SizePayloadEquals" On Policy.policies {
+    Assert Size 2
+}
+
+Rule "SizePayloadRange" On Policy.policies {
+    Assert Size Min 2 Max 3
+}

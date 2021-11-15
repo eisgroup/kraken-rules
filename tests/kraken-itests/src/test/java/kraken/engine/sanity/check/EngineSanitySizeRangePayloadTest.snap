@@ -1,0 +1,109 @@
+kraken.engine.sanity.check.EngineSanitySizeRangePayloadTest.shouldFailOnLess=[
+  {
+    "Policy:-1:policies": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "policies",
+        "fieldPath": "policies"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "SizePayloadRange",
+            "context": "Policy",
+            "targetPath": "policies",
+            "payloadType": "SIZE_RANGE"
+          },
+          "payloadResult": {
+            "min": 2,
+            "max": 3,
+            "success": false,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    }
+  }
+]
+
+
+kraken.engine.sanity.check.EngineSanitySizeRangePayloadTest.shouldFailOnMore=[
+  {
+    "Policy:-1:policies": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "policies",
+        "fieldPath": "policies"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "SizePayloadRange",
+            "context": "Policy",
+            "targetPath": "policies",
+            "payloadType": "SIZE_RANGE"
+          },
+          "payloadResult": {
+            "min": 2,
+            "max": 3,
+            "success": false,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    }
+  }
+]
+
+
+kraken.engine.sanity.check.EngineSanitySizeRangePayloadTest.shouldSuccessOnInRange=[
+  {
+    "Policy:-1:policies": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "policies",
+        "fieldPath": "policies"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "SizePayloadRange",
+            "context": "Policy",
+            "targetPath": "policies",
+            "payloadType": "SIZE_RANGE"
+          },
+          "payloadResult": {
+            "min": 2,
+            "max": 3,
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    }
+  }
+]

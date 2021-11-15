@@ -1,0 +1,10 @@
+Namespace TypeAdapter
+
+EntryPoint "Adapter" {
+    "T01", "R011A", "COVB", "I01"
+}
+
+EntryPoint "CoverageInheritance" {
+    "CoverageInheritance", "InsuredWrappedDefault"
+}
+

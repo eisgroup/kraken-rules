@@ -1,0 +1,23 @@
+Namespace UI
+
+Contexts {
+    Context Key {
+        String rootId
+    }
+    Context Phone {
+        String phoneNumber
+    }
+    Context RiskItem {
+        String itemName
+        String value
+    }
+    Root Context Policy {
+        String policyNumber
+        String packageCd
+        Date effectiveDate
+        Key _key
+        RiskItem* riskItems
+        Child Phone : phones
+        Child* RiskItem : riskItems
+    }
+}

@@ -1,0 +1,16 @@
+Namespace Baz
+
+Include Woo
+
+Import Rule "Band-Default" from Band
+
+Rule "Baz-RegExp2" On AddressInfo.addressType {
+    Assert Matches "[A-Z]{2}"
+}
+
+
+EntryPoint "Baz_EP" {
+    EntryPoint "Woo_EP",
+    "Baz-RegExp2",
+    EntryPoint "Base_EP"
+}

@@ -1,0 +1,14 @@
+Namespace Crm
+
+Root Context Customer {
+  String name
+  Date birthDate
+}
+
+EntryPoint "Validation" {
+  "R01-CRM"
+}
+
+Rule "R01-CRM" On Customer.birthDate {
+  Assert NumberOfYearsBetween(Today(), birthDate) >= 18
+}

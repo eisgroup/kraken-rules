@@ -1,0 +1,13 @@
+externalContext(extContext) ::= <<
+<if(extContext.contexts)><externalContextItem(extContext)><endif><if(extContext.externalContextDefinitions && extContext.contexts)>,<\n><endif><if(extContext.externalContextDefinitions)><boundedDefinitions(extContext)><endif>
+>>
+
+externalContextItem(extContext) ::= <<
+<extContext.contexts: {key | <key>: {
+    <externalContext(extContext.contexts.(key))>
+\}}; separator=",\n">
+>>
+
+boundedDefinitions(extContext) ::= <<
+<extContext.externalContextDefinitions: {key | <key>: <extContext.externalContextDefinitions.(key).name>}; separator=",\n">
+>>

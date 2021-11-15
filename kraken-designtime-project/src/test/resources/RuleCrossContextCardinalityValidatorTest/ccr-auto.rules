@@ -1,0 +1,16 @@
+Namespace Auto
+
+Include Base
+
+Root Context PolicyAuto Is Policy {
+    Child CoverageVehicle
+}
+
+Context CoverageVehicle {
+    Child Coverage
+    Child* Vehicle
+}
+
+Context Vehicle Is RiskItem {
+    Child* Coverage
+}

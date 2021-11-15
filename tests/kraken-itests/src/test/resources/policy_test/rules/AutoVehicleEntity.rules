@@ -1,0 +1,16 @@
+Namespace PersonalAuto
+
+Include Base
+
+Rule "AutoVehicleEntity-180710-7ZM1y" On AutoVehicleEntity.usageCd {
+  Default To "PL"
+}
+
+Rule "AutoVehicleEntity-180710-ehe94" On AutoVehicleEntity.automaticBeltsInd {
+  Default To false
+}
+
+Rule "AutoVehicleEntity-180722-8tW12j" On AutoVehicleEntity.armoredInd   {
+ Set Mandatory
+ Error "AutoVehicleEntity-180722-8tW12j": "Armored Vehicle indicator is required"
+}

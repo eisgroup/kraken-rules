@@ -1,0 +1,953 @@
+Namespace PersonalAuto
+
+Include Base
+
+Contexts {
+    Context AutoInsuredInfo Is InsuredInfo {
+        Boolean primary
+        Child* AutoReportInfo : {clueReport, mvrReport}
+        Child PersonalAutoInsuredMembership
+    }
+    
+    Root Context PersonalAutoPolicyParty Is AutoPolicyParty {
+        String relationToPrimaryInsured
+        Child AutoInsuredInfo : insuredInfo
+        Child* AutoPartyRole : roles
+        Child AutoDriverInfo : driverInfo
+        Child AutoCreditScoreInfo : creditScoreInfo
+        Child AutoPolicyPerson : personInfo
+        Child AutoPriorCarrierInfo : priorCarrierInfo
+    }
+    
+    Context AutoBankAccountInfo {
+        String routingNumber
+        String bankName
+        String accountNumber
+    }
+    
+    Context AutoPartyRole Is PartyRole {
+        String role
+    }
+    
+    Context AutoStudentInfo Is StudentInfo {
+        Boolean over100MilesFromHome
+        Boolean awayAtSchool
+        Boolean goodStudent
+        Boolean publicTransportationDiscount
+    }
+    
+    Context PersonalAutoPolicySummary Is AutoPolicySummary {
+        Integer createdFromQuoteRev
+        String country
+        String currencyCd
+        String notes
+        String sendTo
+        String preConvPolicyPremium
+        String policySource
+        String policyNumber
+        String methodOfDelivery
+        String billingAccount
+        String policyFormCd
+        Boolean overrideRateEffectiveDate
+        String offerStatus
+        String preConvPolicyNumber
+        String riskStateCd
+        Datetime rateEffectiveDate
+        Datetime inceptionDate
+        Integer createdFromPolicyRev
+        String policyType
+        PersonalAutoPolicyParty* parties
+        String state
+        String productCd
+        String bookrollId
+        UNKNOWN customer
+        Child AutoPackagingDetail : packagingDetail
+        Child* PersonalAutoPolicyParty : parties
+        Child AutoDocumentDeliveryOptions : document
+        Child AutoBillingInfo : billingInfo
+        Child AutoTransactionDetails : transactionDetails
+        Child AutoAccessTrackInfo : accessTrackInfo
+        Child AutoPrefillInfo : prefillInfo
+        Child* TripInterruptionEndorsement : tripInterruptionEndorsementForms
+        Child AutoTermDetails : termDetails
+        Child AutoPaymentPlan : paymentPlan
+        Child AutoPolicyDetail : policyDetail
+        Child AutoBusinessDimensions : businessDimensions
+        Child AutoBLOB : blob
+    }
+    
+    Context AutoUMPDCoverage Is SeasonalPremiumHolderEntity {
+        Boolean excludeFromHighLevelOverride
+        String code
+        Boolean propagateOverride
+        String overrideReason
+        Money overwriteOverrideAmount
+        Decimal percentageOverrideAmount
+        String overrideOtherReason
+        Money flatOverrideAmount
+        Integer validForTerms
+        Boolean excludeFromTotal
+        Money limitAmount
+        String premiumOverrideType
+        Integer startTerm
+        Date effectiveDate
+        Date expirationDate
+    }
+    
+    Context AddPartsElecEquipEndorsement Is Form {
+        Boolean excludeFromHighLevelOverride
+        String code
+        Boolean propagateOverride
+        String overrideReason
+        String description
+        Money overwriteOverrideAmount
+        Decimal ACPEECoverage
+        Decimal percentageOverrideAmount
+        String overrideOtherReason
+        String number
+        Money flatOverrideAmount
+        Integer validForTerms
+        Boolean excludeFromTotal
+        Money deductible
+        String name
+        String ACPEEEquipmentDescription
+        String premiumOverrideType
+        Integer startTerm
+        String ACPEEType
+        String category
+    }
+    
+    Context AutoViolationInfo Is ViolationInfo {
+        String violationCode
+        String violationType
+        String violationPoints
+        Boolean includeInRating
+        String exclusionReason
+        Date convictionDate
+        String violationCodeDesc
+    }
+    
+    Context AutoUMBICoverage Is Coverage {
+        Boolean excludeFromHighLevelOverride
+        String code
+        Money deductibleAmount
+        Boolean propagateOverride
+        String overrideReason
+        String combinedLimit
+        Money overwriteOverrideAmount
+        Decimal percentageOverrideAmount
+        String overrideOtherReason
+        Money flatOverrideAmount
+        Integer validForTerms
+        Money additionalLimitAmount
+        Boolean excludeFromTotal
+        Money limitAmount
+        String premiumOverrideType
+        Integer startTerm
+    }
+    
+    Context AutoPrefillInfo Is PrefillInfo {
+        Boolean ordered
+        String firstName
+        String lastName
+        String policyState
+        String gender
+        Date dob
+        String middleName
+        Boolean used
+        String email
+        Boolean skipped
+        Child AutoAddressInfo : address
+    }
+    
+    Context AutoTermDetails Is TermDetails {
+        Datetime termExpirationDate
+        String contractTermTypeCd
+        Datetime termEffectiveDate
+        Integer termNo
+        String termCd
+    }
+    
+    Context AutoPriorCarrierInfo Is PriorCarrierInfo {
+        String carrierPolicyNo
+        Date carrierPolicyExpDate
+        String limitsBiPd
+        String carrierName
+        String carrierCd
+        Money deductibles
+        Money carrierPremium
+        String status
+    }
+    
+    Context PersonalAutoInsuredMembership {
+        String organizationCd
+        Integer membershipNo
+    }
+    
+    Context AutoPaymentPlan Is PaymentPlan {
+        String code
+        Integer dueDate
+    }
+    
+    Context AutoCreditCardInfo {
+        Decimal cvv
+        String cardType
+        String cardNumber
+        Date expirationDate
+    }
+    
+    Context AutoClaimInfo Is ClaimInfo {
+        String claimType
+        String lossType
+        String claimAssociation
+        Date dateOfLoss
+        String policyType
+        Money totalClaimCost
+        String policyNumber
+        String description
+        String claimNumber
+        String claimStatus
+    }
+    
+    Context MiscellaneousTypesMotorhomesEndorsement Is Form {
+        Boolean excludeFromHighLevelOverride
+        String period
+        String code
+        Boolean propagateOverride
+        String overrideReason
+        String description
+        Integer numberOfWeeks
+        Money overwriteOverrideAmount
+        Decimal percentageOverrideAmount
+        String overrideOtherReason
+        String number
+        Money flatOverrideAmount
+        Integer validForTerms
+        Boolean excludeFromTotal
+        String miscellaneousTypesMotorhomes
+        String name
+        String premiumOverrideType
+        Integer startTerm
+        String category
+    }
+    
+    Context AutoMEDCoverage Is Coverage {
+        Boolean excludeFromHighLevelOverride
+        String code
+        Money deductibleAmount
+        Boolean propagateOverride
+        String overrideReason
+        Money overwriteOverrideAmount
+        Decimal percentageOverrideAmount
+        String overrideOtherReason
+        Money flatOverrideAmount
+        Integer validForTerms
+        Boolean excludeFromTotal
+        Money limitAmount
+        String premiumOverrideType
+        Integer startTerm
+    }
+    
+    Context AutoAdditionalInterestInfo {
+        String loanNo
+        Date lossPayeeExpDate
+        String name
+        String rank
+        String type
+        Money loanAmt
+        String email
+        String secondName
+        Child AutoAddressInfo : address
+    }
+    
+    Context AutoPolicyDetail Is PolicyDetail {
+        String versionDescription
+        String manualRenewOtherReason
+        String doNotRenewStatus
+        Boolean followUpRequired
+        String oosProcessingStage
+        String suspendOtherReason
+        Integer cancelNoticeDays
+        Boolean doNotRenew
+        String doNotRenewOtherReason
+        String declineOtherReason
+        String cancelNoticeReason
+        Datetime declineDate
+        String declineReason
+        String doNotRenewReason
+        String cancelNoticeOtherReason
+        String proposeNotes
+        String suspendReason
+        Boolean manualRenew
+        String supportingData
+        Datetime suspendDate
+        Boolean printNotice
+        String manualRenewReason
+        Boolean cancelNotice
+        Boolean currentQuoteInd
+        Datetime cancelNoticeDate
+        Integer archivedAtPolicyRevision
+    }
+    
+    Context AutoPolicyPerson Is PolicyPerson {
+        String nameTypeCd
+        Boolean sameHomeAddress
+        String occupation
+        String occupationDescription
+        String employer
+        String otherName
+        String salutation
+        String title
+        String suffix
+        String employmentStatus
+        Integer age
+        String ssn
+        Child AutoPersonEntity : personBaseDetails
+        Child* AutoAddressInfo : addressInfo
+    }
+    
+    Context AutoDriverFillingInfo {
+        Date date
+        String reason
+        Boolean needed
+        String caseNumber
+        String state
+        String type
+    }
+    
+    Context AutoDriverUnderwritingInfo {
+        Boolean isLivingWithParents
+        Boolean driverTraining
+        Boolean isOnParentsPolicy
+        Boolean isFelonyConvicted
+        Boolean isParentsInsuredRelatedCompany
+        Boolean goodStudent
+        Boolean isIncomeFarmingDerived
+        String residentFor
+        Boolean isChildrenCustody
+    }
+    
+    Context AutoBillingInfo {
+        Money paymentAmt
+        Boolean paymentAuthorized
+        Boolean sameBillingAddress
+        String paymentMethod
+        Boolean paperless
+        Boolean recurringPayment
+        Child AutoBankAccountInfo : bankAccountInfo
+        Child AutoCreditCardInfo : creditCardInfo
+        Child AutoAddressInfo : address
+        Child AutoCommunicationInfo : communicationInfo
+    }
+    
+    Context AutoCommunicationInfo Is CommunicationInfo {
+        Child* AutoEmailInfo : emails
+        Child* AutoPhoneInfo : phones
+    }
+    
+    Context AutoPhoneInfo Is PhoneInfo {
+        String phoneExtension
+        String countryCd
+        Datetime updatedOn
+        String type
+        String value
+        Boolean preferred
+    }
+    
+    Context AutoVehicleRegistrationRecord Is VehicleRegistrationRecord {
+        String licensePlateNumber
+        Date registrationDate
+    }
+    
+    Context ADBEndorsement Is Form {
+        Boolean excludeFromHighLevelOverride
+        String code
+        Boolean propagateOverride
+        String overrideReason
+        String description
+        Money overwriteOverrideAmount
+        Decimal percentageOverrideAmount
+        String overrideOtherReason
+        String number
+        Money flatOverrideAmount
+        Integer validForTerms
+        Boolean excludeFromTotal
+        String name
+        String premiumOverrideType
+        Integer startTerm
+        String category
+    }
+    
+    Context TripInterruptionEndorsement Is Form {
+        Boolean excludeFromHighLevelOverride
+        String code
+        Boolean propagateOverride
+        String overrideReason
+        String description
+        Money overwriteOverrideAmount
+        Decimal percentageOverrideAmount
+        String revision
+        String overrideOtherReason
+        String number
+        Money flatOverrideAmount
+        Integer validForTerms
+        Boolean excludeFromTotal
+        String name
+        String premiumOverrideType
+        Integer startTerm
+        String category
+        Integer tripInterExpense
+    }
+    
+    Context AutoVehicleDriver Is VehicleDriver {
+        String assignDriverType
+        UNKNOWN driver
+        Decimal percentOfUsage
+        String offerStatus
+        Child* ADBEndorsement : aDBEndorsementForms
+    }
+    
+    Context AutoMBICoverage Is GFCoverage {
+        String reason
+        Boolean excludeFromHighLevelOverride
+        String code
+        Money deductibleAmount
+        Boolean propagateOverride
+        String overrideReason
+        String description
+        Money overwriteOverrideAmount
+        Decimal percentageOverrideAmount
+        String duration
+        String overrideOtherReason
+        Money flatOverrideAmount
+        Integer validForTerms
+        Boolean excludeFromTotal
+        Money limitAmount
+        String premiumOverrideType
+        Integer startTerm
+        Date effectiveDate
+        Date expirationDate
+    }
+    
+    Context AutoAddressInfo Is Location {
+        String stateProvinceCd
+        String city
+        String streetNumber
+        String addressType
+        String postalCode
+        String countryCd
+        String county
+        String unitNumber
+        String zipPlus4Code
+        String registryEntityNumber
+        String streetName
+        String nationalId
+        String streetAddress
+        Boolean doNotSolicit
+        String addressLine1
+        String addressLine2
+        String registryTypeId
+        String addressLine3
+        Child AutoGeoCoord : geoposition
+    }
+    
+    Context AutoDriverInfo Is DriverInfo {
+        Boolean prefilled
+        String companyEmployeeNumber
+        Boolean reportsOrdered
+        Date trainingCompletionDate
+        Boolean companyEmployee
+        String reasonForExclusion
+        Date continuouslyWithCompany
+        Boolean included
+        String driverType
+        Boolean convictedOfFelonyInd
+        Child AutoDriverFillingInfo : fillingInfo
+        Child* AutoSuspensionInfo : suspensions
+        Child AutoDriverUnderwritingInfo : underwritingInfo
+        Child* AutoLicenseInfo : licenseInfo
+        Child AutoStudentInfo : studentInfo
+        Child* AutoClaimInfo : claims
+        Child* AutoViolationInfo : violations
+    }
+    
+    Context AutoGeoCoord Is GeoCoord {
+        Decimal latitude
+        Decimal coordAccuracy
+        Decimal longitude
+    }
+    
+    Context AutoSequences Is Sequences {
+        Integer max
+        String collection
+    }
+    
+    Context AutoBusinessDimensions Is PolicyBusinessDimensions {
+        String agency
+        String subProducer
+        UNKNOWN organization
+        String brand
+    }
+    
+    Context AutoVehicle Is PremiumOverrideHolder, Numbered, VehicleRiskItem {
+        String usageCd
+        Integer distanceForPleasurePerWeek
+        Boolean isGaragingAddressSameAsInsured
+        Date odometerReadingDate
+        Integer seqNo
+        String overrideReason
+        Boolean existingDamage
+        Decimal percentageOverrideAmount
+        String damageDescription
+        UNKNOWN registeredOwner
+        Boolean prefilled
+        Integer validForTerms
+        Boolean garageParked
+        String planCd
+        Money adjustedValue
+        String liabSymbol
+        Decimal adjustmentToValue
+        String premiumOverrideType
+        String pdSymbol
+        Boolean included
+        String biSymbol
+        Integer annualMiles
+        Integer odometerReading
+        String registeredStateCd
+        Boolean propagateOverride
+        Money statedAmt
+        Boolean isKitCar
+        Money marketValue
+        Money overwriteOverrideAmount
+        String plateNumber
+        String pipMedSymbol
+        Boolean businessUseInd
+        External Money marketValueOriginal
+        String offerStatus
+        Money costNew
+        Boolean farmOrRanchDisc
+        Boolean registeredAtDmv
+        String overrideOtherReason
+        Boolean vinMatch
+        Money flatOverrideAmount
+        String registrationType
+        String series
+        String businessUseDescription
+        Integer startTerm
+        Integer numDaysDrivenPerWeek
+        Integer declaredAnnualMiles
+        Integer distanceOneWay
+        Child* ReplacementCostEndorsement : replacementCostEndorsementForms
+        Child* AutoRACoverage : autoRACoverageCoverages
+        Child VehicleUnderwritingInfo
+        Child* AutoCOMPCoverage : autoCOMPCoverageCoverages
+        Child* AddPartsElecEquipEndorsement : addPartsElecEquipEndorsementForms
+        Child* AutoCOLLCoverage : autoCOLLCoverageCoverages
+        Child AutoVehicleEntity : vehicleBaseDetails
+        Child* AutoVehicleDriver : assignedDrivers
+        Child AutoAddressInfo : garagingAddress
+        Child* AutoRRCoverage : autoRRCoverageCoverages
+        Child* MiscellaneousTypesMotorhomesEndorsement : miscellaneousTypesMotorhomesEndorsementForms
+        Child* MBICoverageUserChoiceContainer : mBICoverageUserChoiceContainerCoverages
+        Child* AutoAdditionalInterestInfo : additionalInterests
+        Child* AutoMEDCoverage : autoMEDCoverageCoverages
+        Child* AutoSplitCoverageGroup : autoSplitCoverageGroupCoverageGroups
+        Child* AutoSingleCoverageGroup : autoSingleCoverageGroupCoverageGroups
+    }
+    
+    Context AutoPackagingDetail Is PackagingDetail {
+        String planCd
+        Boolean declineVariationInd
+        String declineVariationReason
+        String packageCd
+    }
+    
+    Context AutoLOB Is PremiumOverrideHolder, Sequencer, PersonalAutoLOB {
+        String overrideOtherReason
+        Money flatOverrideAmount
+        Integer validForTerms
+        Boolean propagateOverride
+        String lobCd
+        String overrideReason
+        String premiumOverrideType
+        Integer startTerm
+        Money overwriteOverrideAmount
+        Decimal percentageOverrideAmount
+        Child* AutoSequences : sequences
+        Child* AutoVehicle : riskItems
+    }
+    
+    Context AutoDocumentDeliveryOptions {
+        String paymentPlanAuth
+        String divertType
+        String noPrintType
+        String deliveryMethod
+        Boolean divert
+        String divertTo
+        Boolean policyApplication
+        Boolean suppressGeneration
+        Boolean suppressPrint
+        String noGenerationType
+    }
+    
+    Context AutoSuspensionInfo Is SuspensionInfo {
+        String violationCode
+        String violationType
+        Date suspensionDate
+        String violationPoints
+        Date reinstatementDate
+        Boolean includeInRating
+        String exclusionReason
+        String violationCodeDesc
+    }
+    
+    Context AutoCreditScoreInfo Is CreditScoreInfo {
+        String score
+        Boolean isCompanyAlert
+        Boolean ofacClearance
+    }
+    
+    Context AutoAccessTrackInfo Is PolicyAccessTrackInfo {
+        String updatedBy
+        String createdBy
+        String raw
+        Datetime updatedOn
+        Datetime createdOn
+    }
+    
+    Context AutoPDCoverage Is Coverage {
+        Boolean excludeFromHighLevelOverride
+        String code
+        Money deductibleAmount
+        Boolean propagateOverride
+        String overrideReason
+        Money overwriteOverrideAmount
+        Decimal percentageOverrideAmount
+        String overrideOtherReason
+        Money flatOverrideAmount
+        Integer validForTerms
+        Boolean excludeFromTotal
+        Money limitAmount
+        String premiumOverrideType
+        Integer startTerm
+    }
+    
+    Context MBICoverageUserChoiceContainer Is UserChoiceContainer {
+        Boolean userChoice
+        String reason
+        Boolean excludeFromHighLevelOverride
+        String code
+        Boolean propagateOverride
+        String overrideReason
+        Money overwriteOverrideAmount
+        Decimal percentageOverrideAmount
+        String offerStatus
+        String overrideOtherReason
+        Money flatOverrideAmount
+        Integer validForTerms
+        Boolean excludeFromTotal
+        String premiumOverrideType
+        Integer startTerm
+        Child AutoMBICoverage : coverage
+    }
+    
+    Context AutoSingleCoverageGroup Is CoverageGroup {
+        Boolean excludeFromHighLevelOverride
+        String code
+        Boolean propagateOverride
+        String overrideReason
+        Money overwriteOverrideAmount
+        Decimal percentageOverrideAmount
+        String offerStatus
+        String overrideOtherReason
+        Money flatOverrideAmount
+        Integer validForTerms
+        Boolean excludeFromTotal
+        String premiumOverrideType
+        Integer startTerm
+        Child* AutoCSLCoverage : autoCSLCoverageCoverages
+        Child* AutoUMCSLCoverage : autoUMCSLCoverageCoverages
+    }
+    
+    Context AutoCSLCoverage Is Coverage {
+        Boolean excludeFromHighLevelOverride
+        String code
+        Money deductibleAmount
+        Boolean propagateOverride
+        String overrideReason
+        Money overwriteOverrideAmount
+        Decimal percentageOverrideAmount
+        String overrideOtherReason
+        Money flatOverrideAmount
+        Integer validForTerms
+        Boolean excludeFromTotal
+        Money limitAmount
+        String premiumOverrideType
+        Integer startTerm
+    }
+    
+    Context AutoPersonEntity Is PersonBase {
+        String lastName
+        String firstName
+        Boolean deceased
+        String genderCd
+        String taxId
+        String middleName
+        String registryTypeId
+        String salutation
+        Date birthDate
+        String registryEntityNumber
+        Date deceasedDate
+        String maritalStatus
+        Child* AutoPolicyPersonLegalIdentity : legalIdentities
+        Child* AutoCommunicationInfo : communicationInfo
+    }
+    
+    Context AutoRACoverage Is Coverage {
+        Boolean excludeFromHighLevelOverride
+        String code
+        Money deductibleAmount
+        String level
+        Boolean propagateOverride
+        String overrideReason
+        Money overwriteOverrideAmount
+        Decimal percentageOverrideAmount
+        String overrideOtherReason
+        Money flatOverrideAmount
+        Integer validForTerms
+        Boolean excludeFromTotal
+        Money limitAmount
+        String premiumOverrideType
+        Integer startTerm
+    }
+    
+    Context AutoEmailInfo Is EmailInfo {
+        Datetime updatedOn
+        String type
+        String value
+        Boolean preferred
+    }
+    
+    Context ReplacementCostEndorsement Is Form {
+        Boolean excludeFromHighLevelOverride
+        String code
+        Boolean propagateOverride
+        String overrideReason
+        String description
+        Money overwriteOverrideAmount
+        Decimal percentageOverrideAmount
+        String overrideOtherReason
+        String number
+        Money flatOverrideAmount
+        Integer validForTerms
+        Boolean excludeFromTotal
+        String name
+        String premiumOverrideType
+        Integer startTerm
+        String category
+    }
+    
+    Context AutoLicenseInfo Is LicenseInfo {
+        Boolean permitBeforeLicense
+        String licenseStateCd
+        Integer totalDriverExpYears
+        String licenseStatusCd
+        Integer ageFirstLicensed
+        String licenseClass
+        Boolean revocationPending
+        Date dateFirstLicensed
+        String licenseNumber
+        String licenseTypeCd
+        Date dateLicensed
+    }
+    
+    Context VehicleUnderwritingInfo {
+        Boolean isEmergencyServices
+        Boolean isRacing
+        Boolean isPublicTransportation
+        Boolean isAutoSalesAgency
+        Boolean isCompanyCar
+        Boolean isParkingOperations
+        Boolean isRepairServiceStation
+        Boolean isVehicleCommercialUsed
+        Boolean isOfficeUse
+        Boolean isRentalToOthers
+    }
+    
+    Context AutoTransactionDetails Is TransactionDetails {
+        String txOtherReason
+        String txReasonCd
+        Date txCreateDate
+        String txType
+        Datetime txEffectiveDate
+    }
+    
+    Context AutoCOMPCoverage Is Coverage {
+        Boolean excludeFromHighLevelOverride
+        String code
+        Money deductibleAmount
+        Boolean propagateOverride
+        String overrideReason
+        Money overwriteOverrideAmount
+        Decimal percentageOverrideAmount
+        String overrideOtherReason
+        Money flatOverrideAmount
+        Integer validForTerms
+        Boolean excludeFromTotal
+        Money limitAmount
+        String premiumOverrideType
+        Integer startTerm
+    }
+    
+    Context AutoUMCSLCoverage Is Coverage {
+        Boolean excludeFromHighLevelOverride
+        String code
+        Money deductibleAmount
+        Boolean propagateOverride
+        String overrideReason
+        Money overwriteOverrideAmount
+        Decimal percentageOverrideAmount
+        String overrideOtherReason
+        Money flatOverrideAmount
+        Integer validForTerms
+        Boolean excludeFromTotal
+        Money deductible
+        Money limitAmount
+        String premiumOverrideType
+        Integer startTerm
+    }
+    
+    Context AutoBICoverage Is Coverage {
+        Boolean excludeFromHighLevelOverride
+        String code
+        Money deductibleAmount
+        Boolean propagateOverride
+        String overrideReason
+        String combinedLimit
+        Money overwriteOverrideAmount
+        Decimal percentageOverrideAmount
+        String overrideOtherReason
+        Money flatOverrideAmount
+        Integer validForTerms
+        Money additionalLimitAmount
+        Boolean excludeFromTotal
+        Money limitAmount
+        String premiumOverrideType
+        Integer startTerm
+    }
+    
+    Context AutoCOLLCoverage Is SeasonalPremiumHolderEntity {
+        Boolean excludeFromHighLevelOverride
+        String code
+        Money deductibleAmount
+        Boolean propagateOverride
+        String overrideReason
+        Money overwriteOverrideAmount
+        Decimal percentageOverrideAmount
+        String overrideOtherReason
+        Money flatOverrideAmount
+        Integer validForTerms
+        Boolean excludeFromTotal
+        String premiumOverrideType
+        Integer startTerm
+        Date effectiveDate
+        Date expirationDate
+    }
+    
+    Context AutoVehicleEntity Is Vehicle {
+        Boolean daytimeRunningLampsInd
+        String seriesCd
+        Integer firstRegistrationYear
+        Boolean purchasedNew
+        String noVinReasonCd
+        String registryEntityNumber
+        String performanceCd
+        String collSymbol
+        String antiLockBrakeCd
+        Money adjustedValue
+        String airBagStatusCd
+        Date purchasedDate
+        String model
+        String registryTypeId
+        Decimal adjustmentToValue
+        String make
+        String usageCd
+        Boolean recoveryDeviceInd
+        Boolean armoredInd
+        String fuelTypeCd
+        String vehicleIdentificationNumber
+        Money marketValue
+        Integer modelYear
+        String compSymbol
+        Integer enginePower
+        String securityOptionsCd
+        Money costNew
+        String typeCd
+        Boolean automaticBeltsInd
+        String bodyTypeCd
+        String vehSymbol
+        Integer manufactureYear
+        Child* AutoVehicleRegistrationRecord : registrationRecords
+    }
+    
+    Context AutoReportInfo {
+        Boolean ordered
+        Boolean response
+        String bandNumber
+        Date receiptDate
+        Boolean reorder
+        Date orderDate
+        Boolean order
+    }
+    
+    Context AutoPolicyPersonLegalIdentity Is PersonLegalIdentity {
+        String legalIdentityType
+        String legalIdentityValue
+    }
+    
+    Context AutoRRCoverage Is Coverage {
+        Boolean excludeFromHighLevelOverride
+        String code
+        Money deductibleAmount
+        Boolean propagateOverride
+        String overrideReason
+        String combinedLimit
+        Money overwriteOverrideAmount
+        Decimal percentageOverrideAmount
+        String overrideOtherReason
+        Money flatOverrideAmount
+        Integer validForTerms
+        Money additionalLimitAmount
+        Boolean excludeFromTotal
+        Money limitAmount
+        String premiumOverrideType
+        Integer startTerm
+    }
+    
+    Context AutoSplitCoverageGroup Is CoverageGroup {
+        Boolean excludeFromHighLevelOverride
+        String code
+        Boolean propagateOverride
+        String overrideReason
+        Money overwriteOverrideAmount
+        Decimal percentageOverrideAmount
+        String offerStatus
+        String overrideOtherReason
+        Money flatOverrideAmount
+        Integer validForTerms
+        Boolean excludeFromTotal
+        String premiumOverrideType
+        Integer startTerm
+        Child* AutoPDCoverage : autoPDCoverageCoverages
+        Child* AutoUMPDCoverage : autoUMPDCoverageCoverages
+        Child* AutoUMBICoverage : autoUMBICoverageCoverages
+        Child* AutoBICoverage : autoBICoverageCoverages
+    }
+    
+    Context AutoBLOB Is PnCBLOBContainer {
+        AutoLOB* lobs
+        String blobCd
+        Child* AutoLOB : lobs
+    }
+    
+    }

@@ -1,0 +1,34 @@
+Contexts {
+    Context Policy {
+        Child RiskItem
+    }
+    Contexts {
+        Context RiskItem {
+            String itemName
+            External String externalField
+        }
+    }
+}
+
+@Dimension('packageCd', 'Pizza')
+Rules{
+    @Dimension('planCd', 'Premium')
+    Rule 'rule1' On RiskItem.itemName {
+        Assert itemName = 'a'
+        Error 'error'
+        Overridable
+    }
+    @Dimension('packageCd', 'Barber')
+    Rules {
+        Rule 'rule2' On RiskItem.itemName {
+            Set Disabled
+        }
+    }
+}
+
+EntryPoints {
+    EntryPoint 'ep1' {'rule1'}
+    EntryPoints {
+        EntryPoint 'ep2' {'rule1', 'rule2'}
+    }
+}

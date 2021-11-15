@@ -1,0 +1,20 @@
+Namespace AutoPolicy
+
+Root Context Policy {
+     Child Person
+}
+
+Context Person {
+    String name
+    Child Address
+}
+
+Context Address {
+    String addrLineOne
+    Child Person
+    Child AddressDetails
+}
+
+Context AddressDetails {
+    String deliveryMethod
+}

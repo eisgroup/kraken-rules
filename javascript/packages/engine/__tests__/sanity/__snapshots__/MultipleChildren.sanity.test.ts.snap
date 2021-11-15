@@ -1,0 +1,354 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Engine Sanity multiple nested array test should apply default on nested structure: Results + reducer results 1`] = `
+Object {
+  "Field Metadata reduced results": Object {
+    "SecondaryInsured:1:name": Object {
+      "fieldType": "STRING",
+      "id": "SecondaryInsured:1:name",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "name",
+      "ruleResults": Array [],
+    },
+    "SecondaryInsured:2:name": Object {
+      "fieldType": "STRING",
+      "id": "SecondaryInsured:2:name",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "name",
+      "ruleResults": Array [],
+    },
+    "SecondaryInsured:3:name": Object {
+      "fieldType": "STRING",
+      "id": "SecondaryInsured:3:name",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "name",
+      "ruleResults": Array [],
+    },
+    "SecondaryInsured:4:name": Object {
+      "fieldType": "STRING",
+      "id": "SecondaryInsured:4:name",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "name",
+      "ruleResults": Array [],
+    },
+    "SecondaryInsured:5:name": Object {
+      "fieldType": "STRING",
+      "id": "SecondaryInsured:5:name",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "name",
+      "ruleResults": Array [],
+    },
+    "SecondaryInsured:6:name": Object {
+      "fieldType": "STRING",
+      "id": "SecondaryInsured:6:name",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "name",
+      "ruleResults": Array [],
+    },
+    "SecondaryInsured:7:name": Object {
+      "fieldType": "STRING",
+      "id": "SecondaryInsured:7:name",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "name",
+      "ruleResults": Array [],
+    },
+  },
+  "Raw results": Object {
+    "evaluationTimestamp": Any<Date>,
+    "results": Object {
+      "SecondaryInsured:1:name": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "1",
+          "contextName": "SecondaryInsured",
+          "fieldName": "name",
+          "fieldPath": "name",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "events": Array [
+                ValueChangedEvent {
+                  "attributeTarget": "name",
+                  "contextId": "1",
+                  "contextName": "SecondaryInsured",
+                  "newValue": "new",
+                  "previousValue": "mock",
+                },
+              ],
+              "type": 8,
+            },
+            "ruleInfo": RuleInfo {
+              "context": "SecondaryInsured",
+              "payloadtype": "DEFAULT",
+              "ruleName": "MultipleInsureds-default",
+              "targetPath": "name",
+            },
+          },
+        ],
+      },
+      "SecondaryInsured:2:name": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "2",
+          "contextName": "SecondaryInsured",
+          "fieldName": "name",
+          "fieldPath": "name",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "events": Array [
+                ValueChangedEvent {
+                  "attributeTarget": "name",
+                  "contextId": "2",
+                  "contextName": "SecondaryInsured",
+                  "newValue": "new",
+                  "previousValue": "mock",
+                },
+              ],
+              "type": 8,
+            },
+            "ruleInfo": RuleInfo {
+              "context": "SecondaryInsured",
+              "payloadtype": "DEFAULT",
+              "ruleName": "MultipleInsureds-default",
+              "targetPath": "name",
+            },
+          },
+        ],
+      },
+      "SecondaryInsured:3:name": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "3",
+          "contextName": "SecondaryInsured",
+          "fieldName": "name",
+          "fieldPath": "name",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "events": Array [
+                ValueChangedEvent {
+                  "attributeTarget": "name",
+                  "contextId": "3",
+                  "contextName": "SecondaryInsured",
+                  "newValue": "new",
+                  "previousValue": "mock",
+                },
+              ],
+              "type": 8,
+            },
+            "ruleInfo": RuleInfo {
+              "context": "SecondaryInsured",
+              "payloadtype": "DEFAULT",
+              "ruleName": "MultipleInsureds-default",
+              "targetPath": "name",
+            },
+          },
+        ],
+      },
+      "SecondaryInsured:4:name": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "4",
+          "contextName": "SecondaryInsured",
+          "fieldName": "name",
+          "fieldPath": "name",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "events": Array [
+                ValueChangedEvent {
+                  "attributeTarget": "name",
+                  "contextId": "4",
+                  "contextName": "SecondaryInsured",
+                  "newValue": "new",
+                  "previousValue": "mock",
+                },
+              ],
+              "type": 8,
+            },
+            "ruleInfo": RuleInfo {
+              "context": "SecondaryInsured",
+              "payloadtype": "DEFAULT",
+              "ruleName": "MultipleInsureds-default",
+              "targetPath": "name",
+            },
+          },
+        ],
+      },
+      "SecondaryInsured:5:name": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "5",
+          "contextName": "SecondaryInsured",
+          "fieldName": "name",
+          "fieldPath": "name",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "events": Array [
+                ValueChangedEvent {
+                  "attributeTarget": "name",
+                  "contextId": "5",
+                  "contextName": "SecondaryInsured",
+                  "newValue": "new",
+                  "previousValue": "mock",
+                },
+              ],
+              "type": 8,
+            },
+            "ruleInfo": RuleInfo {
+              "context": "SecondaryInsured",
+              "payloadtype": "DEFAULT",
+              "ruleName": "MultipleInsureds-default",
+              "targetPath": "name",
+            },
+          },
+        ],
+      },
+      "SecondaryInsured:6:name": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "6",
+          "contextName": "SecondaryInsured",
+          "fieldName": "name",
+          "fieldPath": "name",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "events": Array [
+                ValueChangedEvent {
+                  "attributeTarget": "name",
+                  "contextId": "6",
+                  "contextName": "SecondaryInsured",
+                  "newValue": "new",
+                  "previousValue": "mock",
+                },
+              ],
+              "type": 8,
+            },
+            "ruleInfo": RuleInfo {
+              "context": "SecondaryInsured",
+              "payloadtype": "DEFAULT",
+              "ruleName": "MultipleInsureds-default",
+              "targetPath": "name",
+            },
+          },
+        ],
+      },
+      "SecondaryInsured:7:name": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "7",
+          "contextName": "SecondaryInsured",
+          "fieldName": "name",
+          "fieldPath": "name",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "events": Array [
+                ValueChangedEvent {
+                  "attributeTarget": "name",
+                  "contextId": "7",
+                  "contextName": "SecondaryInsured",
+                  "newValue": "new",
+                  "previousValue": "mock",
+                },
+              ],
+              "type": 8,
+            },
+            "ruleInfo": RuleInfo {
+              "context": "SecondaryInsured",
+              "payloadtype": "DEFAULT",
+              "ruleName": "MultipleInsureds-default",
+              "targetPath": "name",
+            },
+          },
+        ],
+      },
+    },
+  },
+  "Validation results": Object {
+    "critical": Array [],
+    "info": Array [],
+    "warning": Array [],
+  },
+}
+`;

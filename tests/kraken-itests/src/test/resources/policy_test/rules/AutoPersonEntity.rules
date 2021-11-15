@@ -1,0 +1,16 @@
+Namespace PersonalAuto
+
+Include Base
+
+Rule "AutoPersonEntity-180710-hT7H8" On AutoPersonEntity.birthDate {
+  When birthDate != null
+  Assert Today() >= birthDate
+  Error "AutoPersonEntity-180710-hT7H8": "Date of Birth cannot be more than System Date"
+}
+
+Rule "PersonalAuto-181115-8tQ1j" On AutoPersonEntity.birthDate {
+  When birthDate != null
+  Assert PlusYears(birthDate, 20) <= Today()
+  Warn "PersonalAuto-181115-8tQ1j": "Person age is under 20"
+  Overridable
+}

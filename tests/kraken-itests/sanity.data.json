@@ -1,0 +1,401 @@
+{
+  "evaluations": [
+    {
+      "id": "ForRestrictionCache",
+      "entryPointName": "Policy:ForRestrictionCache"
+    },
+    {
+      "id": "Dimensional-no-dimensions",
+      "entryPointName": "Policy:Dimensional"
+    },
+    {
+      "id": "Dimensional-state-CA",
+      "entryPointName": "Policy:Dimensional",
+      "delta": true,
+      "context": {
+        "state": "CA"
+      }
+    },
+    {
+      "id": "Dimensional-state-AZ",
+      "entryPointName": "Policy:Dimensional",
+      "delta": true,
+      "context": {
+        "state": "AZ"
+      }
+    },
+    {
+      "id": "policy number must be empty",
+      "entryPointName": "Policy:policy number must be empty"
+    },
+    {
+      "id": "RuleOrder",
+      "entryPointName": "Policy:RuleOrder"
+    },
+    {
+      "id": "RuleOrderWithComplexField",
+      "entryPointName": "Policy:RuleOrderWithComplexField"
+    },
+    {
+      "id": "Expressions-Filter",
+      "entryPointName": "Policy:Expressions-Filter"
+    },
+    {
+      "id": "AccessibilityAutoPolicy",
+      "entryPointName": "Policy:AccessibilityAutoPolicy"
+    },
+    {
+      "id": "AssertionAutoPolicy",
+      "entryPointName": "Policy:AssertionAutoPolicy"
+    },
+    {
+      "id": "Cross-1",
+      "entryPointName": "Policy:Cross-1"
+    },
+    {
+      "id": "FunctionCheck-Assert-PolicyNumber",
+      "entryPointName": "Policy:FunctionCheck-Assert-PolicyNumber"
+    },
+    {
+      "id": "ExpressionContextCheck-Assert-CCR",
+      "entryPointName": "Policy:ExpressionContextCheck-Assert-CCR",
+      "context": {
+        "numbers": [
+          "first",
+          "second",
+          "third",
+          "fifth"
+        ],
+        "additional": {
+          "package": "Pizza"
+        }
+      }
+    },
+    {
+      "id": "ExpressionContextCheck-Condition",
+      "entryPointName": "Policy:ExpressionContextCheck-Condition",
+      "context": {
+        "dimensions": {
+          "plan": "Premium"
+        },
+        "numbers": [
+          "first",
+          "second",
+          "third",
+          "fifth"
+        ],
+        "additional": {
+          "package": "Pizza"
+        }
+      }
+    },
+    {
+      "id": "ExpressionContextCheck-Default",
+      "entryPointName": "Policy:ExpressionContextCheck-Default",
+      "context": {
+        "dimensions": {
+          "plan": "Premium"
+        },
+        "numbers": [
+          "first",
+          "second",
+          "third",
+          "fifth"
+        ],
+        "additional": {
+          "package": "Pizza"
+        }
+      }
+    },
+    {
+      "id": "ExpressionContextCheck-Assert",
+      "entryPointName": "Policy:ExpressionContextCheck-Assert",
+      "context": {
+        "dimensions": {
+          "plan": "Premium"
+        },
+        "numbers": [
+          "first",
+          "second",
+          "third",
+          "fifth"
+        ],
+        "additional": {
+          "package": "Pizza"
+        }
+      }
+    },
+    {
+      "id": "FunctionCheck-Default-With-Count",
+      "entryPointName": "Policy:FunctionCheck-Default-With-Count",
+      "context": {
+        "numbers": [
+          "first",
+          "second",
+          "third",
+          "fifth"
+        ]
+      }
+    },
+    {
+      "id": "FunctionCheck-Default-With-Sum",
+      "entryPointName": "Policy:FunctionCheck-Default-With-Sum"
+    },
+    {
+      "id": "FunctionCheck-Default-With-Avg",
+      "entryPointName": "Policy:FunctionCheck-Default-With-Avg"
+    },
+    {
+      "id": "FunctionCheck-Default-With-Min",
+      "entryPointName": "Policy:FunctionCheck-Default-With-Min"
+    },
+    {
+      "id": "FunctionCheck-Default-With-Max",
+      "entryPointName": "Policy:FunctionCheck-Default-With-Max"
+    },
+    {
+      "id": "FunctionCheck-Default-With-Substring",
+      "entryPointName": "Policy:FunctionCheck-Default-With-Substring"
+    },
+    {
+      "id": "FunctionCheck-Default-PolicyNumber",
+      "entryPointName": "Policy:FunctionCheck-Default-PolicyNumber"
+    },
+    {
+      "id": "FunctionCheck-RulesUsingFunctionOrderCheck",
+      "entryPointName": "Policy:FunctionCheck-RulesUsingFunctionOrderCheck"
+    },
+    {
+      "id": "FunctionCheck-Flat",
+      "entryPointName": "Policy:FunctionCheck-Flat"
+    },
+    {
+      "id": "Expressions_Date_Nested_Functions",
+      "entryPointName": "Policy:Expressions_Date_Nested_Functions"
+    },
+    {
+      "id": "Expressions_Flat_with_Predicate",
+      "entryPointName": "Policy:Expressions_Flat_with_Predicate"
+    },
+    {
+      "id": "Expressions_default_with_value_from_CCR_collection_count",
+      "entryPointName": "Policy:Expressions_default_with_value_from_CCR_collection_count"
+    },
+    {
+      "id": "Expressions_default_driverType_with_value_from_CCR_count_with_predicate",
+      "entryPointName": "Policy:Expressions_default_driverType_with_value_from_CCR_count_with_predicate"
+    },
+    {
+      "id": "Expressions_assert_with_proposition_operations",
+      "entryPointName": "Policy:Expressions_assert_with_proposition_operations"
+    },
+    {
+      "id": "Expressions_default_with_filter_count_result",
+      "entryPointName": "Policy:Expressions_default_with_filter_count_result"
+    },
+    {
+      "id": "Expressions_default_to_with_value_from_CCR_with_predicate",
+      "entryPointName": "Policy:Expressions_default_to_with_value_from_CCR_with_predicate"
+    },
+    {
+      "id": "Expressions_default_with_flat_and_filter_result_count",
+      "entryPointName": "Policy:Expressions_default_with_flat_and_filter_result_count"
+    },
+    {
+      "id": "Expressions_default_to_policy_state_with_if",
+      "entryPointName": "Policy:Expressions_default_to_policy_state_with_if"
+    },
+    {
+      "id": "Expressions_instanceof",
+      "entryPointName": "Policy:Expressions_instanceof"
+    },
+    {
+      "id": "Expressions_typeof",
+      "entryPointName": "Policy:Expressions_typeof"
+    },
+    {
+      "id": "Expressions_nested_for",
+      "entryPointName": "Policy:Expressions_nested_for"
+    },
+    {
+      "id": "Expressions_nested_filter",
+      "entryPointName": "Policy:Expressions_nested_filter"
+    },
+    {
+      "id": "Expressions_nested_mixed",
+      "entryPointName": "Policy:Expressions_nested_mixed"
+    },
+    {
+      "id": "Expressions_compare_sum",
+      "entryPointName": "Policy:Expressions_compare_sum"
+    },
+    {
+      "id": "InitAutoPolicy",
+      "entryPointName": "Policy:InitAutoPolicy"
+    },
+    {
+      "id": "LengthAutoPolicy",
+      "entryPointName": "Policy:LengthAutoPolicy"
+    },
+    {
+      "id": "PolicyCombined",
+      "entryPointName": "Policy:PolicyCombined"
+    },
+    {
+      "id": "R-CCR-assert-AutoPolicy-to-CreditCardInfo",
+      "entryPointName": "Policy:R-CCR-assert-AutoPolicy-to-CreditCardInfo"
+    },
+    {
+      "id": "R-CCR-assert-AutoPolicy-toCreditCard",
+      "entryPointName": "Policy:R-CCR-assert-AutoPolicy-toCreditCard"
+    },
+    {
+      "id": "R-CCR-assert-BillingAddress",
+      "entryPointName": "Policy:R-CCR-assert-BillingAddress"
+    },
+    {
+      "id": "R-CCR-assert-BillingAddress-toCreditCard",
+      "entryPointName": "Policy:R-CCR-assert-BillingAddress-toCreditCard"
+    },
+    {
+      "id": "R-CCR-assert-CreditCardInfo",
+      "entryPointName": "Policy:R-CCR-assert-CreditCardInfo"
+    },
+    {
+      "id": "R-CCR-assert-DriverInfo-CreditCardInfo",
+      "entryPointName": "Policy:R-CCR-assert-DriverInfo-CreditCardInfo"
+    },
+    {
+      "id": "R-CCR-assert-DriverInfo-PersonInfo",
+      "entryPointName": "Policy:R-CCR-assert-DriverInfo-PersonInfo"
+    },
+    {
+      "id": "R-CCR-assert-Party-Info",
+      "entryPointName": "Policy:R-CCR-assert-Party-Info"
+    },
+    {
+      "id": "R-CCR-assert-Vehicle-toAutoPolicy",
+      "entryPointName": "Policy:R-CCR-assert-Vehicle-toAutoPolicy"
+    },
+    {
+      "id": "R-CCR-default-CreditCardInfo-fromAutoPolicy",
+      "entryPointName": "Policy:R-CCR-default-CreditCardInfo-fromAutoPolicy"
+    },
+    {
+      "id": "R-CCR-default-condition-Policy-CreditCardInfo",
+      "entryPointName": "Policy:R-CCR-default-condition-Policy-CreditCardInfo"
+    },
+    {
+      "id": "R-CCR-Policy-PartyRole",
+      "entryPointName": "Policy:R-CCR-Policy-PartyRole"
+    },
+    {
+      "id": "R-CCR-Policy-ExPolicy",
+      "entryPointName": "Policy:R-CCR-Policy-ExPolicy"
+    },
+    {
+      "id": "Inheritance-CCR",
+      "entryPointName": "PolicyExtended:Inheritance-CCR"
+    },
+    {
+      "id": "RegExpAutoPolicy",
+      "entryPointName": "Policy:RegExpAutoPolicy"
+    },
+    {
+      "id": "UsagePayloadAutoPolicy",
+      "entryPointName": "Policy:UsagePayloadAutoPolicy"
+    },
+    {
+      "id": "Usage-UnknownField",
+      "entryPointName": "Policy:Usage-UnknownField"
+    },
+    {
+      "id": "SizePayload",
+      "entryPointName": "Policy:SizePayload"
+    },
+    {
+      "id": "SizeRangePayload",
+      "entryPointName": "Policy:SizeRangePayload"
+    },
+    {
+      "id": "VisibilityAutoPolicy",
+      "entryPointName": "Policy:VisibilityAutoPolicy"
+    },
+    {
+      "id": "assert-money",
+      "entryPointName": "Policy:assert-money"
+    },
+    {
+      "id": "default-money",
+      "entryPointName": "Policy:default-money"
+    },
+    {
+      "id": "complex-field-type-test",
+      "entryPointName": "Policy:complex-field-type-test"
+    },
+    {
+      "id": "MultipleInsureds-default",
+      "entryPointName": "Policy:MultipleInsureds-default"
+    },
+    {
+      "id": "ForEach_EntryPoint",
+      "entryPointName": "Policy:ForEach_EntryPoint"
+    },
+    {
+      "id": "ForSome_ForEvery_EntryPoint",
+      "entryPointName": "Policy:ForSome_ForEvery_EntryPoint"
+    },
+    {
+      "id": "SelfReference",
+      "entryPointName": "Policy:SelfReference"
+    },
+    {
+      "id": "AccessibilityCarCoverage",
+      "entryPointName": "Policy:AccessibilityCarCoverage"
+    },
+    {
+      "id": "AssertionCarCoverage",
+      "entryPointName": "Policy:AssertionCarCoverage"
+    },
+    {
+      "id": "InitCarCoverage",
+      "entryPointName": "Policy:InitCarCoverage"
+    },
+    {
+      "id": "UsagePayloadCarCoverage",
+      "entryPointName": "Policy:UsagePayloadCarCoverage"
+    },
+    {
+      "id": "VisibilityCarCoverage",
+      "entryPointName": "Policy:VisibilityCarCoverage"
+    },
+    {
+      "id": "ValidateInheritedMandatoryFields",
+      "entryPointName": "Policy:ValidateInheritedMandatoryFields"
+    },
+    {
+      "id": "ValidateInheritedDefaultField",
+      "entryPointName": "Policy:ValidateInheritedDefaultField"
+    },
+    {
+      "id": "ValidateInheritedPresentationFields",
+      "entryPointName": "Policy:ValidateInheritedPresentationFields"
+    },
+    {
+      "id": "AddressInfoLocalAndInheritedFieldRules",
+      "entryPointName": "Policy:AddressInfoLocalAndInheritedFieldRules"
+    },
+    {
+      "id": "Math",
+      "entryPointName": "Policy:Math"
+    },
+    {
+      "id": "Math_DevTesting",
+      "entryPointName": "Policy:Math_DevTesting"
+    },
+    {
+      "id": "Templates",
+      "entryPointName": "Policy:Templates"
+    }
+  ]
+}

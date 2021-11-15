@@ -1,0 +1,67 @@
+[
+  {
+    "name" : "Policy",
+    "isStrict" : false,
+    "children" : {
+      "Insured" : {
+        "targetName": "Insured",
+        "navigationExpression": "N/A"
+      },
+      "RiskItem" : {
+        "targetName": "RiskItem",
+        "navigationExpression": "N/A"
+      }
+    }
+  },
+  {
+    "name": "Insured",
+
+    "isStrict" : false,
+    "children": {
+      "InsuredAddress": {
+        "targetName": "InsuredAddress",
+        "navigationExpression": "N/A"
+      }
+    }
+  },
+  {
+    "name" : "InsuredAddress",
+    "isStrict" : false
+  },
+  {
+    "name" : "RiskItem",
+    "isStrict" : false,
+    "children" : {
+      "CoverageA" : {
+        "targetName": "CoverageA",
+        "navigationExpression": "N/A"
+      },
+      "CoverageB" : {
+        "targetName": "CoverageB",
+        "navigationExpression": "N/A"
+      }
+    }
+  },
+  {
+    "name" : "CoverageA",
+    "isStrict" : false
+  },
+  {
+    "name" : "CoverageB",
+    "isStrict" : false
+  },
+  {
+    "name" : "Claim",
+    "isStrict" : false,
+    "children": {
+      "Damage": {
+        "targetName": "Damage",
+        "navigationExpression": "N/A"
+      }
+    }
+  },
+  {
+    "name" : "Damage",
+    "isStrict" : false
+  }
+]

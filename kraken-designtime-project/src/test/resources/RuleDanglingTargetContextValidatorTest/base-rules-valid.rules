@@ -1,0 +1,10 @@
+Namespace Base
+
+EntryPoint "EP01" {
+    "RULE01"
+}
+
+Rule "RULE01" On PolicySummary.inceptionDate {
+    Default To Today()
+}
+

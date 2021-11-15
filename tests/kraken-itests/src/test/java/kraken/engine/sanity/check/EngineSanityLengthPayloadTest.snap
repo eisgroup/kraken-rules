@@ -1,0 +1,278 @@
+kraken.engine.sanity.check.EngineSanityLengthPayloadTest.shouldExecuteLengthAutoPolicyEntryPointWithEmptyData=[
+  {
+    "Party:1:relationToPrimaryInsured": {
+      "contextFieldInfo": {
+        "contextId": "1",
+        "contextName": "Party",
+        "fieldName": "relationToPrimaryInsured",
+        "fieldPath": "relationToPrimaryInsured"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0149A",
+            "context": "Party",
+            "targetPath": "relationToPrimaryInsured",
+            "payloadType": "LENGTH"
+          },
+          "payloadResult": {
+            "length": 20,
+            "success": true,
+            "messageCode": "code",
+            "message": "String contains more charactes than 20",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Party:2:relationToPrimaryInsured": {
+      "contextFieldInfo": {
+        "contextId": "2",
+        "contextName": "Party",
+        "fieldName": "relationToPrimaryInsured",
+        "fieldPath": "relationToPrimaryInsured"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0149A",
+            "context": "Party",
+            "targetPath": "relationToPrimaryInsured",
+            "payloadType": "LENGTH"
+          },
+          "payloadResult": {
+            "length": 20,
+            "success": true,
+            "messageCode": "code",
+            "message": "String contains more charactes than 20",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    }
+  }
+]
+
+
+kraken.engine.sanity.check.EngineSanityLengthPayloadTest.shouldExecuteLengthAutoPolicyEntryPointWithEqualLengthData=[
+  {
+    "Party:1:relationToPrimaryInsured": {
+      "contextFieldInfo": {
+        "contextId": "1",
+        "contextName": "Party",
+        "fieldName": "relationToPrimaryInsured",
+        "fieldPath": "relationToPrimaryInsured"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0149A",
+            "context": "Party",
+            "targetPath": "relationToPrimaryInsured",
+            "payloadType": "LENGTH"
+          },
+          "payloadResult": {
+            "length": 20,
+            "success": true,
+            "messageCode": "code",
+            "message": "String contains more charactes than 20",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Party:2:relationToPrimaryInsured": {
+      "contextFieldInfo": {
+        "contextId": "2",
+        "contextName": "Party",
+        "fieldName": "relationToPrimaryInsured",
+        "fieldPath": "relationToPrimaryInsured"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0149A",
+            "context": "Party",
+            "targetPath": "relationToPrimaryInsured",
+            "payloadType": "LENGTH"
+          },
+          "payloadResult": {
+            "length": 20,
+            "success": true,
+            "messageCode": "code",
+            "message": "String contains more charactes than 20",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    }
+  }
+]
+
+
+kraken.engine.sanity.check.EngineSanityLengthPayloadTest.shouldExecuteLengthAutoPolicyEntryPointWithNotValidData=[
+  {
+    "Party:1:relationToPrimaryInsured": {
+      "contextFieldInfo": {
+        "contextId": "1",
+        "contextName": "Party",
+        "fieldName": "relationToPrimaryInsured",
+        "fieldPath": "relationToPrimaryInsured"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0149A",
+            "context": "Party",
+            "targetPath": "relationToPrimaryInsured",
+            "payloadType": "LENGTH"
+          },
+          "payloadResult": {
+            "length": 20,
+            "success": false,
+            "messageCode": "code",
+            "message": "String contains more charactes than 20",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Party:2:relationToPrimaryInsured": {
+      "contextFieldInfo": {
+        "contextId": "2",
+        "contextName": "Party",
+        "fieldName": "relationToPrimaryInsured",
+        "fieldPath": "relationToPrimaryInsured"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0149A",
+            "context": "Party",
+            "targetPath": "relationToPrimaryInsured",
+            "payloadType": "LENGTH"
+          },
+          "payloadResult": {
+            "length": 20,
+            "success": false,
+            "messageCode": "code",
+            "message": "String contains more charactes than 20",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    }
+  }
+]
+
+
+kraken.engine.sanity.check.EngineSanityLengthPayloadTest.shouldExecuteLengthAutoPolicyEntryPointWithValidData=[
+  {
+    "Party:1:relationToPrimaryInsured": {
+      "contextFieldInfo": {
+        "contextId": "1",
+        "contextName": "Party",
+        "fieldName": "relationToPrimaryInsured",
+        "fieldPath": "relationToPrimaryInsured"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0149A",
+            "context": "Party",
+            "targetPath": "relationToPrimaryInsured",
+            "payloadType": "LENGTH"
+          },
+          "payloadResult": {
+            "length": 20,
+            "success": true,
+            "messageCode": "code",
+            "message": "String contains more charactes than 20",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Party:2:relationToPrimaryInsured": {
+      "contextFieldInfo": {
+        "contextId": "2",
+        "contextName": "Party",
+        "fieldName": "relationToPrimaryInsured",
+        "fieldPath": "relationToPrimaryInsured"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0149A",
+            "context": "Party",
+            "targetPath": "relationToPrimaryInsured",
+            "payloadType": "LENGTH"
+          },
+          "payloadResult": {
+            "length": 20,
+            "success": true,
+            "messageCode": "code",
+            "message": "String contains more charactes than 20",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    }
+  }
+]

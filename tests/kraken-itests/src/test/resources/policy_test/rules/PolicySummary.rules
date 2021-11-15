@@ -1,0 +1,16 @@
+Namespace Base
+
+Rule "PolicySummary-180709-c6LcI" On PolicySummary.rateEffectiveDate {
+  Set Mandatory
+  Error "PolicySummary-180709-c6LcI": "Rate Effective Date is required"
+}
+
+Rule "PolicySummary-201218-c4Ac1" On PolicySummary.rateEffectiveDate {
+  When overrideRateEffectiveDate = false
+  Reset To TermDetails.termEffectiveDate
+}
+
+Rule "PolicySummary-181220-HPOGL" On PolicySummary.rateEffectiveDate {
+  When overrideRateEffectiveDate = true
+  Default To TermDetails.termEffectiveDate
+}

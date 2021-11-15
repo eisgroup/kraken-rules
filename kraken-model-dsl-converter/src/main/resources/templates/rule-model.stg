@@ -1,0 +1,14 @@
+rule(rule) ::= <<
+<if(rule.metadata)>
+<rule.metadata.properties.__keys__:{k | @Dimension("<k>", <rule.metadata.properties.(k)>)}; separator="\n">
+<endif>
+Rule "<rule.name>" On <rule.context>.<rule.targetPath> {
+    <if(rule.description)>
+    Description "<rule.description>"
+    <endif>
+    <if(rule.condition)>
+    When <rule.condition.expression.expressionString>
+    <endif>
+    <rule.payload>
+}
+>>

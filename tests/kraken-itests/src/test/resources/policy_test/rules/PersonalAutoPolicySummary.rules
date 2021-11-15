@@ -1,0 +1,56 @@
+Namespace PersonalAuto
+
+Include Base
+
+Rule "PersonalAutoPolicySummary-180709-k1uVG" On PersonalAutoPolicySummary.riskStateCd {
+  When country = 'US' or country = 'CA'
+  Set Mandatory
+  Error "PersonalAutoPolicySummary-180709-k1uVG": "State/Province is mandatory"
+}
+
+Rule "PersonalAutoPolicySummary-180709-MeDui" On PersonalAutoPolicySummary.country {
+  Set Mandatory
+  Error "PersonalAutoPolicySummary-180709-MeDui": "Country is mandatory"
+}
+
+Rule "PersonalAutoPolicySummary-180710-XVhYY" On PersonalAutoPolicySummary.policyType {
+  Default To "STD"
+}
+
+Rule "PersonalAutoPolicySummary-180710-BH0X1" On PersonalAutoPolicySummary.overrideRateEffectiveDate {
+  Default To false
+}
+
+Rule "PersonalAutoPolicySummary-180710-XjZRC" On PersonalAutoPolicySummary.policySource {
+  Default To "NEW"
+}
+
+Rule "PersonalAutoPolicySummary-180710-z4zHv" On PersonalAutoPolicySummary.rateEffectiveDate {
+  When overrideRateEffectiveDate = false
+  Set Hidden
+}
+
+Rule "PersonalAutoPolicySummary-180710-m6HW8" On PersonalAutoPolicySummary.riskStateCd {
+  When AutoTransactionDetails.txType != 'NEW_BUSINESS'
+  Set Disabled
+}
+
+Rule "PersonalAutoPolicySummary-180726-M12ui" On PersonalAutoPolicySummary.currencyCd {
+  Set Mandatory
+  Error "PersonalAutoPolicySummary-180726-M12ui": "Currency is mandatory"
+}
+
+Rule "PersonalAutoPolicySummary-180709-Me12Qi" On PersonalAutoPolicySummary.policySource {
+  Set Mandatory
+  Error "PersonalAutoPolicySummary-180709-Me12Qi": "Source is mandatory"
+}
+
+Rule "PersonalAutoPolicyDetail-180726-rc21c" On PersonalAutoPolicySummary.policyNumber {
+  Set Mandatory
+  Error "PersonalAutoPolicyDetail-180726-rc21c": "Policy number is mandatory"
+}
+
+Rule "PersonalAutoPolicySummary-180710-yw2xr" On PersonalAutoPolicySummary.rateEffectiveDate {
+  When AutoTransactionDetails.txType != 'NEW_BUSINESS'
+  Set Disabled
+}

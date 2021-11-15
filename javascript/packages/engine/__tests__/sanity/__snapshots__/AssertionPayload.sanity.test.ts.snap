@@ -1,0 +1,1240 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Engine Sanity Assertion Payload Test should execute 'AssertionAutoPolicy' entrypoint with empty data: Results + reducer results 1`] = `
+Object {
+  "Field Metadata reduced results": Object {
+    "AddressInfo:7:doNotSolicit": Object {
+      "fieldType": "BOOLEAN",
+      "id": "AddressInfo:7:doNotSolicit",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "doNotSolicit",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "code",
+          "errorMessage": "Value didn't match asserton: doNotSolicit = true or doNotSolicit = false",
+          "isFailed": true,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "message": Object {
+              "errorCode": "code",
+              "errorMessage": "Value didn't match asserton: doNotSolicit = true or doNotSolicit = false",
+              "templateVariables": Array [],
+            },
+            "success": false,
+            "type": 1,
+            "validationSeverity": "critical",
+          },
+          "ruleName": "R0155",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+    "PersonInfo:4:firstName": Object {
+      "fieldType": "STRING",
+      "id": "PersonInfo:4:firstName",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "firstName",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "code",
+          "errorMessage": "Value didn't match asserton: firstName != lastName",
+          "isFailed": true,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "message": Object {
+              "errorCode": "code",
+              "errorMessage": "Value didn't match asserton: firstName != lastName",
+              "templateVariables": Array [],
+            },
+            "success": false,
+            "type": 1,
+            "validationSeverity": "critical",
+          },
+          "ruleName": "R0150",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+    "Policy:0:termNo": Object {
+      "fieldType": "INTEGER",
+      "id": "Policy:0:termNo",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "termDetails.termNo",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "rule-assertion-error",
+          "errorMessage": "Assertion failed",
+          "isFailed": undefined,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "error": Object {
+              "error": Object {
+                "message": "Expression: '((_nd(__dataObject__.termDetails.termNo) >= 0) && (_nd(__dataObject__.termDetails.termNo) < 100))' failed",
+                "severity": "info",
+              },
+              "kind": 2,
+            },
+            "type": 1,
+          },
+          "ruleName": "R0051",
+          "severity": undefined,
+          "templateVariables": Array [],
+        },
+      ],
+    },
+    "Vehicle:6:included": Object {
+      "fieldType": "BOOLEAN",
+      "id": "Vehicle:6:included",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "included",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "code",
+          "errorMessage": "Value didn't match asserton: included = true or included = false",
+          "isFailed": true,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "message": Object {
+              "errorCode": "code",
+              "errorMessage": "Value didn't match asserton: included = true or included = false",
+              "templateVariables": Array [],
+            },
+            "success": false,
+            "type": 1,
+            "validationSeverity": "critical",
+          },
+          "ruleName": "R0073",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+  },
+  "Raw results": Object {
+    "evaluationTimestamp": Any<Date>,
+    "results": Object {
+      "AddressInfo:7:doNotSolicit": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "7",
+          "contextName": "AddressInfo",
+          "fieldName": "doNotSolicit",
+          "fieldPath": "doNotSolicit",
+          "fieldType": "BOOLEAN",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "Value didn't match asserton: doNotSolicit = true or doNotSolicit = false",
+                "templateVariables": Array [],
+              },
+              "success": false,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": RuleInfo {
+              "context": "AddressInfo",
+              "payloadtype": "ASSERTION",
+              "ruleName": "R0155",
+              "targetPath": "doNotSolicit",
+            },
+          },
+        ],
+      },
+      "PersonInfo:4:firstName": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "4",
+          "contextName": "PersonInfo",
+          "fieldName": "firstName",
+          "fieldPath": "firstName",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "Value didn't match asserton: firstName != lastName",
+                "templateVariables": Array [],
+              },
+              "success": false,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": RuleInfo {
+              "context": "PersonInfo",
+              "payloadtype": "ASSERTION",
+              "ruleName": "R0150",
+              "targetPath": "firstName",
+            },
+          },
+        ],
+      },
+      "Policy:0:termNo": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "termNo",
+          "fieldPath": "termDetails.termNo",
+          "fieldType": "INTEGER",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "error": Object {
+                "error": Object {
+                  "message": "Expression: '((_nd(__dataObject__.termDetails.termNo) >= 0) && (_nd(__dataObject__.termDetails.termNo) < 100))' failed",
+                  "severity": "info",
+                },
+                "kind": 2,
+              },
+              "type": 1,
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "R0051",
+              "targetPath": "termNo",
+            },
+          },
+        ],
+      },
+      "Vehicle:6:included": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "6",
+          "contextName": "Vehicle",
+          "fieldName": "included",
+          "fieldPath": "included",
+          "fieldType": "BOOLEAN",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "Value didn't match asserton: included = true or included = false",
+                "templateVariables": Array [],
+              },
+              "success": false,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Vehicle",
+              "payloadtype": "ASSERTION",
+              "ruleName": "R0073",
+              "targetPath": "included",
+            },
+          },
+        ],
+      },
+    },
+  },
+  "Validation results": Object {
+    "critical": Array [
+      ResultErrorMessage {
+        "info": Object {
+          "getContextInstanceId": [Function],
+          "getContextName": [Function],
+        },
+        "message": "Value didn't match asserton: included = true or included = false",
+        "messageCode": "code",
+        "ruleName": "R0073",
+        "severity": "critical",
+        "templateVariables": Array [],
+      },
+      ResultErrorMessage {
+        "info": Object {
+          "getContextInstanceId": [Function],
+          "getContextName": [Function],
+        },
+        "message": "Value didn't match asserton: firstName != lastName",
+        "messageCode": "code",
+        "ruleName": "R0150",
+        "severity": "critical",
+        "templateVariables": Array [],
+      },
+      ResultErrorMessage {
+        "info": Object {
+          "getContextInstanceId": [Function],
+          "getContextName": [Function],
+        },
+        "message": "Value didn't match asserton: doNotSolicit = true or doNotSolicit = false",
+        "messageCode": "code",
+        "ruleName": "R0155",
+        "severity": "critical",
+        "templateVariables": Array [],
+      },
+    ],
+    "info": Array [],
+    "warning": Array [],
+  },
+}
+`;
+
+exports[`Engine Sanity Assertion Payload Test should execute 'AssertionAutoPolicy' entrypoint with not valid data with restriction: Results + reducer results 1`] = `
+Object {
+  "Field Metadata reduced results": Object {
+    "Vehicle:6:included": Object {
+      "fieldType": "BOOLEAN",
+      "id": "Vehicle:6:included",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "included",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "code",
+          "errorMessage": "Value didn't match asserton: included = true or included = false",
+          "isFailed": true,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "message": Object {
+              "errorCode": "code",
+              "errorMessage": "Value didn't match asserton: included = true or included = false",
+              "templateVariables": Array [],
+            },
+            "success": false,
+            "type": 1,
+            "validationSeverity": "critical",
+          },
+          "ruleName": "R0073",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+  },
+  "Raw results": Object {
+    "evaluationTimestamp": Any<Date>,
+    "results": Object {
+      "Vehicle:6:included": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "6",
+          "contextName": "Vehicle",
+          "fieldName": "included",
+          "fieldPath": "included",
+          "fieldType": "BOOLEAN",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "Value didn't match asserton: included = true or included = false",
+                "templateVariables": Array [],
+              },
+              "success": false,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Vehicle",
+              "payloadtype": "ASSERTION",
+              "ruleName": "R0073",
+              "targetPath": "included",
+            },
+          },
+        ],
+      },
+    },
+  },
+  "Validation results": Object {
+    "critical": Array [
+      ResultErrorMessage {
+        "info": Object {
+          "getContextInstanceId": [Function],
+          "getContextName": [Function],
+        },
+        "message": "Value didn't match asserton: included = true or included = false",
+        "messageCode": "code",
+        "ruleName": "R0073",
+        "severity": "critical",
+        "templateVariables": Array [],
+      },
+    ],
+    "info": Array [],
+    "warning": Array [],
+  },
+}
+`;
+
+exports[`Engine Sanity Assertion Payload Test should execute 'AssertionAutoPolicy' entrypoint with not valid data: Results + reducer results 1`] = `
+Object {
+  "Field Metadata reduced results": Object {
+    "AddressInfo:5:doNotSolicit": Object {
+      "fieldType": "BOOLEAN",
+      "id": "AddressInfo:5:doNotSolicit",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "doNotSolicit",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "code",
+          "errorMessage": "Value didn't match asserton: doNotSolicit = true or doNotSolicit = false",
+          "isFailed": true,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "message": Object {
+              "errorCode": "code",
+              "errorMessage": "Value didn't match asserton: doNotSolicit = true or doNotSolicit = false",
+              "templateVariables": Array [],
+            },
+            "success": false,
+            "type": 1,
+            "validationSeverity": "critical",
+          },
+          "ruleName": "R0155",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+    "PersonInfo:4:firstName": Object {
+      "fieldType": "STRING",
+      "id": "PersonInfo:4:firstName",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "firstName",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "code",
+          "errorMessage": "Value didn't match asserton: firstName != lastName",
+          "isFailed": true,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "message": Object {
+              "errorCode": "code",
+              "errorMessage": "Value didn't match asserton: firstName != lastName",
+              "templateVariables": Array [],
+            },
+            "success": false,
+            "type": 1,
+            "validationSeverity": "critical",
+          },
+          "ruleName": "R0150",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+    "Policy:0:termNo": Object {
+      "fieldType": "INTEGER",
+      "id": "Policy:0:termNo",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "termDetails.termNo",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "code",
+          "errorMessage": "Value didn't match asserton: termNo >= 0 and termNo < 100",
+          "isFailed": true,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "message": Object {
+              "errorCode": "code",
+              "errorMessage": "Value didn't match asserton: termNo >= 0 and termNo < 100",
+              "templateVariables": Array [],
+            },
+            "success": false,
+            "type": 1,
+            "validationSeverity": "critical",
+          },
+          "ruleName": "R0051",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+    "Vehicle:6:included": Object {
+      "fieldType": "BOOLEAN",
+      "id": "Vehicle:6:included",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "included",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "code",
+          "errorMessage": "Value didn't match asserton: included = true or included = false",
+          "isFailed": true,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "message": Object {
+              "errorCode": "code",
+              "errorMessage": "Value didn't match asserton: included = true or included = false",
+              "templateVariables": Array [],
+            },
+            "success": false,
+            "type": 1,
+            "validationSeverity": "critical",
+          },
+          "ruleName": "R0073",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+  },
+  "Raw results": Object {
+    "evaluationTimestamp": Any<Date>,
+    "results": Object {
+      "AddressInfo:5:doNotSolicit": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "5",
+          "contextName": "AddressInfo",
+          "fieldName": "doNotSolicit",
+          "fieldPath": "doNotSolicit",
+          "fieldType": "BOOLEAN",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "Value didn't match asserton: doNotSolicit = true or doNotSolicit = false",
+                "templateVariables": Array [],
+              },
+              "success": false,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": RuleInfo {
+              "context": "AddressInfo",
+              "payloadtype": "ASSERTION",
+              "ruleName": "R0155",
+              "targetPath": "doNotSolicit",
+            },
+          },
+        ],
+      },
+      "PersonInfo:4:firstName": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "4",
+          "contextName": "PersonInfo",
+          "fieldName": "firstName",
+          "fieldPath": "firstName",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "Value didn't match asserton: firstName != lastName",
+                "templateVariables": Array [],
+              },
+              "success": false,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": RuleInfo {
+              "context": "PersonInfo",
+              "payloadtype": "ASSERTION",
+              "ruleName": "R0150",
+              "targetPath": "firstName",
+            },
+          },
+        ],
+      },
+      "Policy:0:termNo": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "termNo",
+          "fieldPath": "termDetails.termNo",
+          "fieldType": "INTEGER",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "Value didn't match asserton: termNo >= 0 and termNo < 100",
+                "templateVariables": Array [],
+              },
+              "success": false,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "R0051",
+              "targetPath": "termNo",
+            },
+          },
+        ],
+      },
+      "Vehicle:6:included": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "6",
+          "contextName": "Vehicle",
+          "fieldName": "included",
+          "fieldPath": "included",
+          "fieldType": "BOOLEAN",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "Value didn't match asserton: included = true or included = false",
+                "templateVariables": Array [],
+              },
+              "success": false,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Vehicle",
+              "payloadtype": "ASSERTION",
+              "ruleName": "R0073",
+              "targetPath": "included",
+            },
+          },
+        ],
+      },
+    },
+  },
+  "Validation results": Object {
+    "critical": Array [
+      ResultErrorMessage {
+        "info": Object {
+          "getContextInstanceId": [Function],
+          "getContextName": [Function],
+        },
+        "message": "Value didn't match asserton: termNo >= 0 and termNo < 100",
+        "messageCode": "code",
+        "ruleName": "R0051",
+        "severity": "critical",
+        "templateVariables": Array [],
+      },
+      ResultErrorMessage {
+        "info": Object {
+          "getContextInstanceId": [Function],
+          "getContextName": [Function],
+        },
+        "message": "Value didn't match asserton: included = true or included = false",
+        "messageCode": "code",
+        "ruleName": "R0073",
+        "severity": "critical",
+        "templateVariables": Array [],
+      },
+      ResultErrorMessage {
+        "info": Object {
+          "getContextInstanceId": [Function],
+          "getContextName": [Function],
+        },
+        "message": "Value didn't match asserton: firstName != lastName",
+        "messageCode": "code",
+        "ruleName": "R0150",
+        "severity": "critical",
+        "templateVariables": Array [],
+      },
+      ResultErrorMessage {
+        "info": Object {
+          "getContextInstanceId": [Function],
+          "getContextName": [Function],
+        },
+        "message": "Value didn't match asserton: doNotSolicit = true or doNotSolicit = false",
+        "messageCode": "code",
+        "ruleName": "R0155",
+        "severity": "critical",
+        "templateVariables": Array [],
+      },
+    ],
+    "info": Array [],
+    "warning": Array [],
+  },
+}
+`;
+
+exports[`Engine Sanity Assertion Payload Test should execute 'AssertionAutoPolicy' entrypoint with valid data: Results + reducer results 1`] = `
+Object {
+  "Field Metadata reduced results": Object {
+    "AddressInfo:17:doNotSolicit": Object {
+      "fieldType": "BOOLEAN",
+      "id": "AddressInfo:17:doNotSolicit",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "doNotSolicit",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "code",
+          "errorMessage": "Value didn't match asserton: doNotSolicit = true or doNotSolicit = false",
+          "isFailed": false,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "message": Object {
+              "errorCode": "code",
+              "errorMessage": "Value didn't match asserton: doNotSolicit = true or doNotSolicit = false",
+              "templateVariables": Array [],
+            },
+            "success": true,
+            "type": 1,
+            "validationSeverity": "critical",
+          },
+          "ruleName": "R0155",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+    "AddressInfo:21:doNotSolicit": Object {
+      "fieldType": "BOOLEAN",
+      "id": "AddressInfo:21:doNotSolicit",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "doNotSolicit",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "code",
+          "errorMessage": "Value didn't match asserton: doNotSolicit = true or doNotSolicit = false",
+          "isFailed": false,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "message": Object {
+              "errorCode": "code",
+              "errorMessage": "Value didn't match asserton: doNotSolicit = true or doNotSolicit = false",
+              "templateVariables": Array [],
+            },
+            "success": true,
+            "type": 1,
+            "validationSeverity": "critical",
+          },
+          "ruleName": "R0155",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+    "BillingAddress:14:doNotSolicit": Object {
+      "fieldType": "BOOLEAN",
+      "id": "BillingAddress:14:doNotSolicit",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "doNotSolicit",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "code",
+          "errorMessage": "Value didn't match asserton: doNotSolicit = true or doNotSolicit = false",
+          "isFailed": false,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "message": Object {
+              "errorCode": "code",
+              "errorMessage": "Value didn't match asserton: doNotSolicit = true or doNotSolicit = false",
+              "templateVariables": Array [],
+            },
+            "success": true,
+            "type": 1,
+            "validationSeverity": "critical",
+          },
+          "ruleName": "R0155",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+    "PersonInfo:16:firstName": Object {
+      "fieldType": "STRING",
+      "id": "PersonInfo:16:firstName",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "firstName",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "code",
+          "errorMessage": "Value didn't match asserton: firstName != lastName",
+          "isFailed": false,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "message": Object {
+              "errorCode": "code",
+              "errorMessage": "Value didn't match asserton: firstName != lastName",
+              "templateVariables": Array [],
+            },
+            "success": true,
+            "type": 1,
+            "validationSeverity": "critical",
+          },
+          "ruleName": "R0150",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+    "Policy:12:termNo": Object {
+      "fieldType": "INTEGER",
+      "id": "Policy:12:termNo",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "termDetails.termNo",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "code",
+          "errorMessage": "Value didn't match asserton: termNo >= 0 and termNo < 100",
+          "isFailed": false,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "message": Object {
+              "errorCode": "code",
+              "errorMessage": "Value didn't match asserton: termNo >= 0 and termNo < 100",
+              "templateVariables": Array [],
+            },
+            "success": true,
+            "type": 1,
+            "validationSeverity": "critical",
+          },
+          "ruleName": "R0051",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+    "Vehicle:20:included": Object {
+      "fieldType": "BOOLEAN",
+      "id": "Vehicle:20:included",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "included",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "code",
+          "errorMessage": "Value didn't match asserton: included = true or included = false",
+          "isFailed": false,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "message": Object {
+              "errorCode": "code",
+              "errorMessage": "Value didn't match asserton: included = true or included = false",
+              "templateVariables": Array [],
+            },
+            "success": true,
+            "type": 1,
+            "validationSeverity": "critical",
+          },
+          "ruleName": "R0073",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+  },
+  "Raw results": Object {
+    "evaluationTimestamp": Any<Date>,
+    "results": Object {
+      "AddressInfo:17:doNotSolicit": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "17",
+          "contextName": "AddressInfo",
+          "fieldName": "doNotSolicit",
+          "fieldPath": "doNotSolicit",
+          "fieldType": "BOOLEAN",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "Value didn't match asserton: doNotSolicit = true or doNotSolicit = false",
+                "templateVariables": Array [],
+              },
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": RuleInfo {
+              "context": "AddressInfo",
+              "payloadtype": "ASSERTION",
+              "ruleName": "R0155",
+              "targetPath": "doNotSolicit",
+            },
+          },
+        ],
+      },
+      "AddressInfo:21:doNotSolicit": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "21",
+          "contextName": "AddressInfo",
+          "fieldName": "doNotSolicit",
+          "fieldPath": "doNotSolicit",
+          "fieldType": "BOOLEAN",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "Value didn't match asserton: doNotSolicit = true or doNotSolicit = false",
+                "templateVariables": Array [],
+              },
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": RuleInfo {
+              "context": "AddressInfo",
+              "payloadtype": "ASSERTION",
+              "ruleName": "R0155",
+              "targetPath": "doNotSolicit",
+            },
+          },
+        ],
+      },
+      "BillingAddress:14:doNotSolicit": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "14",
+          "contextName": "BillingAddress",
+          "fieldName": "doNotSolicit",
+          "fieldPath": "doNotSolicit",
+          "fieldType": "BOOLEAN",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "Value didn't match asserton: doNotSolicit = true or doNotSolicit = false",
+                "templateVariables": Array [],
+              },
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": RuleInfo {
+              "context": "AddressInfo",
+              "payloadtype": "ASSERTION",
+              "ruleName": "R0155",
+              "targetPath": "doNotSolicit",
+            },
+          },
+        ],
+      },
+      "PersonInfo:16:firstName": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "16",
+          "contextName": "PersonInfo",
+          "fieldName": "firstName",
+          "fieldPath": "firstName",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "Value didn't match asserton: firstName != lastName",
+                "templateVariables": Array [],
+              },
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": RuleInfo {
+              "context": "PersonInfo",
+              "payloadtype": "ASSERTION",
+              "ruleName": "R0150",
+              "targetPath": "firstName",
+            },
+          },
+        ],
+      },
+      "Policy:12:termNo": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "12",
+          "contextName": "Policy",
+          "fieldName": "termNo",
+          "fieldPath": "termDetails.termNo",
+          "fieldType": "INTEGER",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "Value didn't match asserton: termNo >= 0 and termNo < 100",
+                "templateVariables": Array [],
+              },
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "R0051",
+              "targetPath": "termNo",
+            },
+          },
+        ],
+      },
+      "Vehicle:20:included": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "20",
+          "contextName": "Vehicle",
+          "fieldName": "included",
+          "fieldPath": "included",
+          "fieldType": "BOOLEAN",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "Value didn't match asserton: included = true or included = false",
+                "templateVariables": Array [],
+              },
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Vehicle",
+              "payloadtype": "ASSERTION",
+              "ruleName": "R0073",
+              "targetPath": "included",
+            },
+          },
+        ],
+      },
+    },
+  },
+  "Validation results": Object {
+    "critical": Array [],
+    "info": Array [],
+    "warning": Array [],
+  },
+}
+`;

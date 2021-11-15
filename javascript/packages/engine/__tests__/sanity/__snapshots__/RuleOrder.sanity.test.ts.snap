@@ -1,0 +1,1024 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Engine Sanity rule order test should execute rules in order: Results + reducer results 1`] = `
+Object {
+  "Field Metadata reduced results": Object {
+    "BillingAddress:ba1:countryCd": Object {
+      "fieldType": "STRING",
+      "id": "BillingAddress:ba1:countryCd",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "countryCd",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "rule-mandatory-error",
+          "errorMessage": "Field is mandatory",
+          "isFailed": false,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "message": undefined,
+            "success": true,
+            "type": 64,
+            "usageType": "mandatory",
+            "validationSeverity": "critical",
+          },
+          "ruleName": "RULEORDER-BILLINGADDRESS-mandatory",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+    "COLLCoverage:cc1:code": Object {
+      "fieldType": "STRING",
+      "id": "COLLCoverage:cc1:code",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "code",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "rule-mandatory-error",
+          "errorMessage": "Field is mandatory",
+          "isFailed": false,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "message": undefined,
+            "success": true,
+            "type": 64,
+            "usageType": "mandatory",
+            "validationSeverity": "critical",
+          },
+          "ruleName": "RULEORDER-COLL-mandatory",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+    "CreditCardInfo:cci1:cardType": Object {
+      "fieldType": "STRING",
+      "id": "CreditCardInfo:cci1:cardType",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "cardType",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "rule-mandatory-error",
+          "errorMessage": "Field is mandatory",
+          "isFailed": false,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "message": undefined,
+            "success": true,
+            "type": 64,
+            "usageType": "mandatory",
+            "validationSeverity": "critical",
+          },
+          "ruleName": "RULEORDER-CREDITCARD-mandatory",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+    "Insured:i1:name": Object {
+      "fieldType": "STRING",
+      "id": "Insured:i1:name",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "name",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "rule-mandatory-error",
+          "errorMessage": "Field is mandatory",
+          "isFailed": false,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "message": undefined,
+            "success": true,
+            "type": 64,
+            "usageType": "mandatory",
+            "validationSeverity": "critical",
+          },
+          "ruleName": "RULEORDER-INSURED-mandatory",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+    "Party:p1:relationToPrimaryInsured": Object {
+      "fieldType": "STRING",
+      "id": "Party:p1:relationToPrimaryInsured",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "relationToPrimaryInsured",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "rule-mandatory-error",
+          "errorMessage": "Field is mandatory",
+          "isFailed": false,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "message": undefined,
+            "success": true,
+            "type": 64,
+            "usageType": "mandatory",
+            "validationSeverity": "critical",
+          },
+          "ruleName": "RULEORDER-PARTY-mandatory",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+    "Policy:0:policyNumber": Object {
+      "fieldType": "STRING",
+      "id": "Policy:0:policyNumber",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "policyNumber",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "rule-mandatory-error",
+          "errorMessage": "Field is mandatory",
+          "isFailed": false,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "message": undefined,
+            "success": true,
+            "type": 64,
+            "usageType": "mandatory",
+            "validationSeverity": "critical",
+          },
+          "ruleName": "RULEORDER-POLICY-mandatory",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+    "Policy:0:state": Object {
+      "fieldType": "STRING",
+      "id": "Policy:0:state",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "state",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "rule-assertion-error",
+          "errorMessage": "Assertion failed",
+          "isFailed": false,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "message": undefined,
+            "success": true,
+            "type": 1,
+            "validationSeverity": "critical",
+          },
+          "ruleName": "RULEORDER-Policy-state",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+    "Vehicle:v1:model": Object {
+      "fieldType": "STRING",
+      "id": "Vehicle:v1:model",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "model",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "rule-mandatory-error",
+          "errorMessage": "Field is mandatory",
+          "isFailed": false,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "message": undefined,
+            "success": true,
+            "type": 64,
+            "usageType": "mandatory",
+            "validationSeverity": "critical",
+          },
+          "ruleName": "RULEORDER-VEHICLE-mandatory",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+  },
+  "Raw results": Object {
+    "evaluationTimestamp": Any<Date>,
+    "results": Object {
+      "BillingAddress:ba1:countryCd": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "ba1",
+          "contextName": "BillingAddress",
+          "fieldName": "countryCd",
+          "fieldPath": "countryCd",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "events": Array [
+                ValueChangedEvent {
+                  "attributeTarget": "countryCd",
+                  "contextId": "ba1",
+                  "contextName": "BillingAddress",
+                  "newValue": "Address",
+                  "previousValue": undefined,
+                },
+              ],
+              "type": 8,
+            },
+            "ruleInfo": RuleInfo {
+              "context": "AddressInfo",
+              "payloadtype": "DEFAULT",
+              "ruleName": "RULEORDER-BILLINGADDRESS",
+              "targetPath": "countryCd",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": RuleInfo {
+              "context": "AddressInfo",
+              "payloadtype": "USAGE",
+              "ruleName": "RULEORDER-BILLINGADDRESS-mandatory",
+              "targetPath": "countryCd",
+            },
+          },
+        ],
+      },
+      "COLLCoverage:cc1:code": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "cc1",
+          "contextName": "COLLCoverage",
+          "fieldName": "code",
+          "fieldPath": "code",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "events": Array [
+                ValueChangedEvent {
+                  "attributeTarget": "code",
+                  "contextId": "cc1",
+                  "contextName": "COLLCoverage",
+                  "newValue": "PartyPartyAddress",
+                  "previousValue": undefined,
+                },
+              ],
+              "type": 8,
+            },
+            "ruleInfo": RuleInfo {
+              "context": "COLLCoverage",
+              "payloadtype": "DEFAULT",
+              "ruleName": "RULEORDER-COLL",
+              "targetPath": "code",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": RuleInfo {
+              "context": "COLLCoverage",
+              "payloadtype": "USAGE",
+              "ruleName": "RULEORDER-COLL-mandatory",
+              "targetPath": "code",
+            },
+          },
+        ],
+      },
+      "CreditCardInfo:cci1:cardType": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "cci1",
+          "contextName": "CreditCardInfo",
+          "fieldName": "cardType",
+          "fieldPath": "cardType",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "events": Array [
+                ValueChangedEvent {
+                  "attributeTarget": "cardType",
+                  "contextId": "cci1",
+                  "contextName": "CreditCardInfo",
+                  "newValue": "PartyAddress",
+                  "previousValue": undefined,
+                },
+              ],
+              "type": 8,
+            },
+            "ruleInfo": RuleInfo {
+              "context": "CreditCardInfo",
+              "payloadtype": "DEFAULT",
+              "ruleName": "RULEORDER-CREDITCARD",
+              "targetPath": "cardType",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": RuleInfo {
+              "context": "CreditCardInfo",
+              "payloadtype": "USAGE",
+              "ruleName": "RULEORDER-CREDITCARD-mandatory",
+              "targetPath": "cardType",
+            },
+          },
+        ],
+      },
+      "Insured:i1:name": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "i1",
+          "contextName": "Insured",
+          "fieldName": "name",
+          "fieldPath": "name",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "events": Array [
+                ValueChangedEvent {
+                  "attributeTarget": "name",
+                  "contextId": "i1",
+                  "contextName": "Insured",
+                  "newValue": "Party",
+                  "previousValue": undefined,
+                },
+              ],
+              "type": 8,
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Insured",
+              "payloadtype": "DEFAULT",
+              "ruleName": "RULEORDER-INSURED",
+              "targetPath": "name",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Insured",
+              "payloadtype": "USAGE",
+              "ruleName": "RULEORDER-INSURED-mandatory",
+              "targetPath": "name",
+            },
+          },
+        ],
+      },
+      "Party:p1:relationToPrimaryInsured": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "p1",
+          "contextName": "Party",
+          "fieldName": "relationToPrimaryInsured",
+          "fieldPath": "relationToPrimaryInsured",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "events": Array [
+                ValueChangedEvent {
+                  "attributeTarget": "relationToPrimaryInsured",
+                  "contextId": "p1",
+                  "contextName": "Party",
+                  "newValue": "Party",
+                  "previousValue": undefined,
+                },
+              ],
+              "type": 8,
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Party",
+              "payloadtype": "DEFAULT",
+              "ruleName": "RULEORDER-PARTY",
+              "targetPath": "relationToPrimaryInsured",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Party",
+              "payloadtype": "USAGE",
+              "ruleName": "RULEORDER-PARTY-mandatory",
+              "targetPath": "relationToPrimaryInsured",
+            },
+          },
+        ],
+      },
+      "Policy:0:policyNumber": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "policyNumber",
+          "fieldPath": "policyNumber",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "events": Array [
+                ValueChangedEvent {
+                  "attributeTarget": "policyNumber",
+                  "contextId": "0",
+                  "contextName": "Policy",
+                  "newValue": "PartyPartyAddress",
+                  "previousValue": undefined,
+                },
+              ],
+              "type": 8,
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Policy",
+              "payloadtype": "DEFAULT",
+              "ruleName": "RULEORDER-POLICY",
+              "targetPath": "policyNumber",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Policy",
+              "payloadtype": "USAGE",
+              "ruleName": "RULEORDER-POLICY-mandatory",
+              "targetPath": "policyNumber",
+            },
+          },
+        ],
+      },
+      "Policy:0:state": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "state",
+          "fieldPath": "state",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "RULEORDER-Policy-state",
+              "targetPath": "state",
+            },
+          },
+        ],
+      },
+      "Vehicle:v1:model": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "v1",
+          "contextName": "Vehicle",
+          "fieldName": "model",
+          "fieldPath": "model",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "events": Array [
+                ValueChangedEvent {
+                  "attributeTarget": "model",
+                  "contextId": "v1",
+                  "contextName": "Vehicle",
+                  "newValue": "PartyPartyAddress",
+                  "previousValue": undefined,
+                },
+              ],
+              "type": 8,
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Vehicle",
+              "payloadtype": "DEFAULT",
+              "ruleName": "RULEORDER-VEHICLE",
+              "targetPath": "model",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Vehicle",
+              "payloadtype": "USAGE",
+              "ruleName": "RULEORDER-VEHICLE-mandatory",
+              "targetPath": "model",
+            },
+          },
+        ],
+      },
+    },
+  },
+  "Validation results": Object {
+    "critical": Array [],
+    "info": Array [],
+    "warning": Array [],
+  },
+}
+`;
+
+exports[`Engine Sanity rule order test should execute rules with complex field expressions in order: Results + reducer results 1`] = `
+Object {
+  "Field Metadata reduced results": Object {
+    "BillingAddress:adi1:city": Object {
+      "fieldType": "STRING",
+      "id": "BillingAddress:adi1:city",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "city",
+      "ruleResults": Array [],
+    },
+    "BillingAddress:adi1:doNotSolicit": Object {
+      "fieldType": "BOOLEAN",
+      "id": "BillingAddress:adi1:doNotSolicit",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "doNotSolicit",
+      "ruleResults": Array [],
+    },
+    "PartyRole:pr1:limit": Object {
+      "fieldType": "DECIMAL",
+      "id": "PartyRole:pr1:limit",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "limit",
+      "ruleResults": Array [],
+    },
+    "Policy:0:policyNumber": Object {
+      "fieldType": "STRING",
+      "id": "Policy:0:policyNumber",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "policyNumber",
+      "ruleResults": Array [],
+    },
+    "RRCoverage:rr1:deductibleAmount": Object {
+      "fieldType": "DECIMAL",
+      "id": "RRCoverage:rr1:deductibleAmount",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "deductibleAmount",
+      "ruleResults": Array [],
+    },
+    "RRCoverage:rr1:limitAmount": Object {
+      "fieldType": "DECIMAL",
+      "id": "RRCoverage:rr1:limitAmount",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "limitAmount",
+      "ruleResults": Array [],
+    },
+  },
+  "Raw results": Object {
+    "evaluationTimestamp": Any<Date>,
+    "results": Object {
+      "BillingAddress:adi1:city": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "adi1",
+          "contextName": "BillingAddress",
+          "fieldName": "city",
+          "fieldPath": "city",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "events": Array [
+                ValueChangedEvent {
+                  "attributeTarget": "city",
+                  "contextId": "adi1",
+                  "contextName": "BillingAddress",
+                  "newValue": "San Diego",
+                  "previousValue": undefined,
+                },
+              ],
+              "type": 8,
+            },
+            "ruleInfo": RuleInfo {
+              "context": "AddressInfo",
+              "payloadtype": "DEFAULT",
+              "ruleName": "RuleOrderWithComplexField_AddressInfo_city",
+              "targetPath": "city",
+            },
+          },
+        ],
+      },
+      "BillingAddress:adi1:doNotSolicit": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "adi1",
+          "contextName": "BillingAddress",
+          "fieldName": "doNotSolicit",
+          "fieldPath": "doNotSolicit",
+          "fieldType": "BOOLEAN",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "events": Array [
+                ValueChangedEvent {
+                  "attributeTarget": "doNotSolicit",
+                  "contextId": "adi1",
+                  "contextName": "BillingAddress",
+                  "newValue": true,
+                  "previousValue": undefined,
+                },
+              ],
+              "type": 8,
+            },
+            "ruleInfo": RuleInfo {
+              "context": "AddressInfo",
+              "payloadtype": "DEFAULT",
+              "ruleName": "RuleOrderWithComplexField_AddressInfo_doNotSolicit",
+              "targetPath": "doNotSolicit",
+            },
+          },
+        ],
+      },
+      "PartyRole:pr1:limit": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "pr1",
+          "contextName": "PartyRole",
+          "fieldName": "limit",
+          "fieldPath": "limit",
+          "fieldType": "DECIMAL",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "events": Array [
+                ValueChangedEvent {
+                  "attributeTarget": "limit",
+                  "contextId": "pr1",
+                  "contextName": "PartyRole",
+                  "newValue": 100,
+                  "previousValue": undefined,
+                },
+              ],
+              "type": 8,
+            },
+            "ruleInfo": RuleInfo {
+              "context": "PartyRole",
+              "payloadtype": "DEFAULT",
+              "ruleName": "RuleOrderWithComplexField_PartyRole_limit",
+              "targetPath": "limit",
+            },
+          },
+        ],
+      },
+      "Policy:0:policyNumber": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "policyNumber",
+          "fieldPath": "policyNumber",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "events": Array [
+                ValueChangedEvent {
+                  "attributeTarget": "policyNumber",
+                  "contextId": "0",
+                  "contextName": "Policy",
+                  "newValue": "doNotSolicit is true",
+                  "previousValue": undefined,
+                },
+              ],
+              "type": 8,
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Policy",
+              "payloadtype": "DEFAULT",
+              "ruleName": "RuleOrderWithComplexField_Policy_policyNumber",
+              "targetPath": "policyNumber",
+            },
+          },
+        ],
+      },
+      "RRCoverage:rr1:deductibleAmount": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "rr1",
+          "contextName": "RRCoverage",
+          "fieldName": "deductibleAmount",
+          "fieldPath": "deductibleAmount",
+          "fieldType": "DECIMAL",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "events": Array [
+                ValueChangedEvent {
+                  "attributeTarget": "deductibleAmount",
+                  "contextId": "rr1",
+                  "contextName": "RRCoverage",
+                  "newValue": 10,
+                  "previousValue": undefined,
+                },
+              ],
+              "type": 8,
+            },
+            "ruleInfo": RuleInfo {
+              "context": "RRCoverage",
+              "payloadtype": "DEFAULT",
+              "ruleName": "RuleOrderWithComplexField_AddressInfo_street",
+              "targetPath": "deductibleAmount",
+            },
+          },
+        ],
+      },
+      "RRCoverage:rr1:limitAmount": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "rr1",
+          "contextName": "RRCoverage",
+          "fieldName": "limitAmount",
+          "fieldPath": "limitAmount",
+          "fieldType": "DECIMAL",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "events": Array [
+                ValueChangedEvent {
+                  "attributeTarget": "limitAmount",
+                  "contextId": "rr1",
+                  "contextName": "RRCoverage",
+                  "newValue": 10,
+                  "previousValue": undefined,
+                },
+              ],
+              "type": 8,
+            },
+            "ruleInfo": RuleInfo {
+              "context": "RRCoverage",
+              "payloadtype": "DEFAULT",
+              "ruleName": "RuleOrderWithComplexField_RRCoverage_limitAmount",
+              "targetPath": "limitAmount",
+            },
+          },
+        ],
+      },
+    },
+  },
+  "Validation results": Object {
+    "critical": Array [],
+    "info": Array [],
+    "warning": Array [],
+  },
+}
+`;

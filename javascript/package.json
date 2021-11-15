@@ -1,0 +1,29 @@
+{
+  "name": "root",
+  "version": "1.13.0",
+  "private": true,
+  "devDependencies": {
+    "@babel/cli": "7.1.5",
+    "@babel/core": "7.1.6",
+    "@babel/polyfill": "7.0.0",
+    "@babel/preset-env": "7.1.6",
+    "babel-plugin-add-header-comment": "1.0.3",
+    "chalk": "^4.1.0",
+    "colors": "^1.4.0",
+    "declarative-js": "3.8.15",
+    "lerna": "3.16.4",
+    "semver": "^7.3.2",
+    "typedoc": "^0.15.8",
+    "typedoc-plugin-lerna-packages": "^0.2.2",
+    "typedoc-plugin-mermaid": "^1.2.0"
+  },
+  "scripts": {
+    "licence-headers": "node scripts/addHeader.js ./packages/engine/__tests__ ./packages/engine/src ./packages/model/src ./packages/model-builder/src ./packages/demo-app/src",
+    "stage": "node scripts/stage",
+    "stage:l": "lerna version --force-publish --exact && lerna run release",
+    "release": "node scripts/publish",
+    "validate": "node scripts/validate-dependencies.js",
+    "change-version": "node scripts/change-version.js",
+    "docs": "node scripts/generate-docs-modules.js"
+  }
+}

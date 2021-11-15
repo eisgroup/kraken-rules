@@ -1,0 +1,31 @@
+Namespace TypeAdapter
+
+Rule "CoverageInheritance" On Coverage.coverageCd {
+    Reset To 'P000'
+}
+
+Rule "InsuredWrappedDefault" On Insured.name { 
+    Reset To 'resetName'
+}
+
+Rule "T01" On RiskItem.itemName { 
+    When true
+    Assert itemName = 'OPEL'
+    Error "code" : "Opel error message"
+}
+
+Rule "R011A" On CoverageA.limitAmount { 
+    Assert limitAmount >= 100
+    Error "code" : "limit amount must be more than 100$"
+}
+
+Rule "COVB" On CoverageB.limitAmount { 
+    Assert limitAmount >= 100
+    Error "code" : "limit amount must be more than 100$"
+}
+
+Rule "I01" On Insured.name { 
+    Assert name = 'Oak'
+    Error "code" : "name is not oak"
+}
+

@@ -1,0 +1,8 @@
+Namespace PersonalAuto
+
+Include Base
+
+Rule "AutoDriverInfo-180710-BMu37" On AutoDriverInfo.driverType {
+  Set Mandatory
+  Error "AutoDriverInfo-180710-BMu37": "Driver Type is mandatory"
+}

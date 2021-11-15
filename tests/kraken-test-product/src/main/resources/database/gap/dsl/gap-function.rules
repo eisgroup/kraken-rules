@@ -1,0 +1,221 @@
+Namespace Policy
+
+EntryPoint "FunctionCheck-Default-With-Count" {
+    "f-default-to-policyNumber-with-count", "f-default-to-policyNumber-with-count-of-policies"
+}
+
+Rule "f-default-to-policyNumber-with-count" On Policy.policyNumber {
+    Default To NumberToString(Count(context.numbers))
+}
+
+Rule "f-default-to-policyNumber-with-count-of-policies" On Policy.state {
+    Default To NumberToString(Count(policies))
+}
+
+EntryPoint "FunctionCheck-Default-With-Sum" {
+    "f-default-to-policyNumber-with-sum-of-vehicle-newValue"
+}
+
+Rule "f-default-to-policyNumber-with-sum-of-vehicle-newValue" On Policy.policyNumber {
+    Default To NumberToString(Sum({CreditCardInfo.cardCreditLimitAmount, CreditCardInfo.cvv}))
+}
+
+EntryPoint "FunctionCheck-Default-With-Avg" {
+    "f-default-to-policyNumber-with-avg-of-children-ages"
+}
+
+Rule "f-default-to-policyNumber-with-avg-of-children-ages" On Policy.policyNumber {
+    Default To NumberToString(Avg(Insured.childrenAges))
+}
+
+EntryPoint "FunctionCheck-Default-With-Max" {
+    "f-default-to-Vehicle-newValue-with-max-of-numbers"
+}
+
+Rule "f-default-to-Vehicle-newValue-with-max-of-numbers" On Vehicle.newValue {
+    Default To Max({costNew, modelYear, declaredAnnualMiles})
+}
+
+EntryPoint "FunctionCheck-Default-With-Min" {
+    "f-default-to-policyNumber-with-min-of-insured-children-ages"
+}
+
+Rule "f-default-to-policyNumber-with-min-of-insured-children-ages" On Policy.policyNumber {
+    Default To NumberToString(Min(Insured.childrenAges))
+}
+
+Rule "f-flat-assert" On Policy.policyNumber {
+    Assert Count(Vehicle[*].serviceHistory) = 3
+}
+
+EntryPoint "FunctionCheck-Flat" {
+    "f-flat-assert"
+}
+
+EntryPoint "FunctionCheck-Default-With-Substring" {
+    "f-default-to-policyNumber-with-substring-three-values", "f-default-to-state-with-substring-two-values"
+}
+
+Rule "f-default-to-policyNumber-with-substring-three-values" On Policy.policyNumber {
+    Default To Substring(CreditCardInfo.cardNumber, 5, 10)
+}
+
+Rule "f-default-to-state-with-substring-two-values" On Policy.state {
+    Default To Substring(CreditCardInfo.cardType, 8)
+}
+
+EntryPoint "FunctionCheck-Default-PolicyNumber" {
+    "f-default-to-policyNumber"
+}
+
+Rule "f-default-to-policyNumber" On Policy.policyNumber {
+    Default To Substring(termCd, 2)
+}
+
+EntryPoint "FunctionCheck-Assert-PolicyNumber" {
+    "f-concat-assert-policyNumber",
+    "f-length-assert-policyNumber",
+    "f-includes-in-string-assert-policyNumber",
+    "f-includes-in-array-assert-policyNumber",
+    "f-number-to-string-assert-policyNumber",
+    "f-money-to-string-assert-policyNumber",
+    "f-pad-left-assert-policyNumber",
+    "f-pad-right-assert-policyNumber",
+    "f-get-day-date-assert-policyNumber",
+    "f-get-month-date-assert-policyNumber",
+    "f-get-year-date-assert-policyNumber",
+    "f-format-date-assert-policyNumber",
+    "f-date-months-between-assert-policyNumber",
+    "f-lower-case-assert-policyNumber",
+    "f-upper-case-assert-policyNumber",
+    "f-trim-assert-policyNumber",
+    "f-starts-with-assert-policyNumber",
+    "f-ends-with-between-assert-policyNumber",
+    "f-join-assert-policyNumber",
+    "f-distinct-assert-policyNumber",
+    "f-isEmpty-assert-policyNumber",
+    "f-isBlank-assert-policyNumber",
+    "f-any-assert-policyNumber",
+    "f-all-assert-policyNumber",
+    "f-union-assert-policyNumber",
+    "f-intersection-assert-policyNumber",
+    "f-difference-assert-policyNumber",
+    "f-symmetricDifference-assert-policyNumber",
+    "f-numberSequence-assert-policyNumber"
+}
+
+Rule "f-concat-assert-policyNumber" On Policy.policyNumber {
+    Assert Concat({"a", "b", "c"}) = "abc"
+}
+
+Rule "f-lower-case-assert-policyNumber" On Policy.policyNumber {
+    Assert LowerCase("ABC") = "abc"
+}
+
+Rule "f-upper-case-assert-policyNumber" On Policy.policyNumber {
+    Assert UpperCase("abc") = "ABC"
+}
+
+Rule "f-trim-assert-policyNumber" On Policy.policyNumber {
+    Assert Trim("     ABC     ") = "ABC"
+}
+
+Rule "f-length-assert-policyNumber" On Policy.policyNumber {
+    Assert StringLength("abc") = 3
+}
+
+Rule "f-includes-in-string-assert-policyNumber" On Policy.policyNumber {
+    Assert Includes("abc", "a")
+}
+
+Rule "f-includes-in-array-assert-policyNumber" On Policy.policyNumber {
+    Assert Includes({"a", "b", "c"}, "a")
+}
+
+Rule "f-number-to-string-assert-policyNumber" On Policy.policyNumber {
+    Assert NumberToString(11) == "11"
+}
+
+Rule "f-money-to-string-assert-policyNumber" On Policy.policyNumber {
+    Assert NumberToString(CreditCardInfo.cardCreditLimitAmount) == "11"
+}
+
+Rule "f-pad-left-assert-policyNumber" On Policy.policyNumber {
+    Assert PadLeft("1", "0", 4) == "0001"
+}
+
+Rule "f-pad-right-assert-policyNumber" On Policy.policyNumber {
+    Assert PadRight("1", "0", 4) == "1000"
+}
+
+Rule "f-get-day-date-assert-policyNumber" On Policy.policyNumber {
+    Assert GetDay(Date(2011, 12, 31)) == 31
+}
+
+Rule "f-get-month-date-assert-policyNumber" On Policy.policyNumber {
+    Assert GetMonth(Date(2011, 12, 31)) == 12
+}
+
+Rule "f-get-year-date-assert-policyNumber" On Policy.policyNumber {
+    Assert GetYear(Date(2011, 12, 31)) == 2011
+}
+
+Rule "f-format-date-assert-policyNumber" On Policy.policyNumber {
+    Assert Format(Date(2011, 12, 31), "YYYY/MM/DD") == "2011/12/31"
+}
+
+Rule "f-date-months-between-assert-policyNumber" On Policy.policyNumber {
+    Assert NumberOfMonthsBetween(Date(2011, 12, 31), Date(2011, 10, 31)) == 2
+}
+
+Rule "f-starts-with-assert-policyNumber" On Policy.policyNumber {
+    Assert StartsWith("ABC", "A")
+}
+
+Rule "f-ends-with-between-assert-policyNumber" On Policy.policyNumber {
+    Assert EndsWith("ABC", "C")
+}
+
+Rule "f-join-assert-policyNumber" On Policy.policyNumber {
+    Assert "A" in Join({"A", "B"}, {"C"}) and "B" in Join({"A", "B"}, {"C"}) and "C" in Join({"A", "B"}, {"C"})
+}
+
+Rule "f-distinct-assert-policyNumber" On Policy.policyNumber {
+    Assert Count(Distinct({"a", "b", "b"})) = 2
+}
+
+Rule "f-isEmpty-assert-policyNumber" On Policy.policyNumber {
+    Assert IsEmpty("") and IsEmpty(policies) and !IsEmpty({"a", "b"})
+}
+
+Rule "f-isBlank-assert-policyNumber" On Policy.policyNumber {
+    Assert IsBlank("") and IsBlank("  ")
+}
+
+Rule "f-any-assert-policyNumber" On Policy.policyNumber {
+    Assert Any({true, false}) and !Any({false, false})
+}
+
+Rule "f-all-assert-policyNumber" On Policy.policyNumber {
+    Assert All({true, true}) and !All({true, false})
+}
+
+Rule "f-union-assert-policyNumber" On Policy.policyNumber {
+    Assert Count(Union({"a", "b"}, {"b", "c"})) = 3
+}
+
+Rule "f-intersection-assert-policyNumber" On Policy.policyNumber {
+    Assert Count(Intersection({"a", "b"}, {"b", "c"})) = 1 and Intersection({"a", "b"}, {"b", "c"})[0] = "b"
+}
+
+Rule "f-difference-assert-policyNumber" On Policy.policyNumber {
+    Assert Count(Difference({"a", "b"}, {"b", "c"})) = 1 and Difference({"a", "b"}, {"b", "c"})[0] = "a"
+}
+
+Rule "f-symmetricDifference-assert-policyNumber" On Policy.policyNumber {
+    Assert Count(SymmetricDifference({"a", "b"}, {"b", "c"})) = 2 and SymmetricDifference({"a", "b"}, {"b", "c"})[0] = "a" and SymmetricDifference({"a", "b"}, {"b", "c"})[1] = "c"
+}
+
+Rule "f-numberSequence-assert-policyNumber" On Policy.policyNumber {
+    Assert 15 in NumberSequence(0, 30, 5)
+}

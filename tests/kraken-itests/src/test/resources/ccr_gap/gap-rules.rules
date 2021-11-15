@@ -1,0 +1,32 @@
+Rule "R-CCR-assert-Policy-AddressInfo" On Policy.policyNumber {
+    Assert AddressInfo.countryCd = 'B' = this.policyNumber
+    Error "code" : "Value didn't match assertion"
+}
+
+Rule "R-CCR-assert-VehicleInfo-AddressLine" On VehicleInfo.info { 
+    Assert AddressLine.addressLine = 'B'
+    Error "code" : "Value didn't match assertion"
+}
+
+Rule "R-CCR-assert-Policy-BillingAddress" On Policy.policyNumber { 
+    Assert BillingAddress.countryCd = 'B'
+    Error "code" : "Value didn't match assertion"
+}
+
+Rule "R-CCR-usage-AddressInfo-Vehicle" On AddressInfo.street { 
+    When Vehicle.odometerReading > 5000
+    Set Mandatory
+    Error "code" : "When Vehicle.odometerReading > 5000  -  Address street is mandatory"
+}
+
+Rule "R-CCR-usage-Party-AddressInfo" On Party.relationToPrimaryInsured { 
+    When AddressInfo.street = null
+    Set Mandatory
+    Error "code" : "When AddressInfo.street = null  -  relationToPrimaryInsured is mandatory"
+}
+
+Rule "R-CCR-usage-PersonInfo-AddressInfo" On PersonInfo.sameHomeAddress { 
+    When AddressInfo.street = null and PersonInfo instanceof Info
+    Set Mandatory
+    Error "code" : "When AddressInfo.street = null  -  sameHomeAddress is mandatory"
+}

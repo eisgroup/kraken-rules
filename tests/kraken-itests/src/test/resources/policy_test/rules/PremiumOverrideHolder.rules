@@ -1,0 +1,7 @@
+Namespace Base
+
+Rule "PremiumOverrideHolder-190228-d7Lsa" On PremiumOverrideHolder.startTerm {
+  When validForTerms != null
+  Set Mandatory
+  Error "PremiumOverrideHolder-190228-d7Lsa": "Start term for premium override is required, if amount of override terms is set"
+}

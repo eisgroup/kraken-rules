@@ -1,0 +1,62 @@
+kraken.engine.sanity.check.EngineSanityComplexTypeTest.shouldReferenceComplexCollectionFieldType=[
+  {
+    "AddressInfo:-1:addressLines": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "AddressInfo",
+        "fieldName": "addressLines",
+        "fieldPath": "addressLines"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "ctype-addressLinesMustBeThree",
+            "context": "AddressInfo",
+            "targetPath": "addressLines",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": false,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Vehicle:-1:anubisCoverages": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Vehicle",
+        "fieldName": "anubisCoverages",
+        "fieldPath": "anubisCoverages"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "ctype-thereMustBeAnubisCoveragesAccessibleByProperty",
+            "context": "Vehicle",
+            "targetPath": "anubisCoverages",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    }
+  }
+]

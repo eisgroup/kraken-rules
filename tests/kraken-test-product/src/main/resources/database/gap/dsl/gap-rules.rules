@@ -1,0 +1,507 @@
+Namespace Policy
+
+Rule "R0001A" On Policy.policyNumber {
+    Set Mandatory
+    Error "code" : "Field is required"
+}
+
+Rule "R0001B" On Policy.policyNumber {
+    Set Disabled
+}
+
+Rule "R0002" On Policy.policyNumber {
+    Default To 'Q0001'
+}
+
+Rule "R0003" On Policy.policyNumber { 
+    Assert Matches "^Q[0-9]{4}$"
+    Error "code" : "String doesn't match Regular Expression: ^Q[0-9]{4}$"
+}
+
+Rule "R0003a" On Policy.policyNumber {
+    Assert Matches "^\d{10,13}$"
+    Error "code" : "String doesn't match Regular Expression: ^\d{10,13}$"
+}
+
+Rule "R0004" On Policy.state { 
+    Set Mandatory
+    Error "code" : "The field is mandatory"
+}
+
+Rule "R0005" On Policy.state {
+    When policyNumber = '666'
+    Default To 'Initialized'
+}
+
+Rule "R0005a" On Policy.state {
+    Default To 'Initialized'
+}
+
+Rule "R0006" On Policy.state { 
+    Set Hidden
+}
+
+Rule "R0007" On Policy.state { 
+    Assert Matches "^[A-Za-z]+$"
+    Error "code" : "String doesn't match Regular Expression: ^[A-Za-z]+$"
+}
+
+Rule "R0008" On Policy.createdFromPolicyRev { 
+    Set Mandatory
+    Error "code" : "The field is mandatory"
+}
+
+Rule "R0009" On Policy.createdFromPolicyRev { 
+    Default To 1
+}
+
+Rule "R0010" On Policy.createdFromPolicyRev { 
+    Set Hidden
+}
+
+Rule "R0011" On Policy.txType { 
+    Set Mandatory
+    Error "code" : "The field is mandatory"
+}
+
+Rule "R0012" On Policy.txType { 
+    Set Hidden
+}
+
+Rule "R0013" On Policy.txType { 
+    Default To 'NEW BUSINESS'
+}
+
+Rule "R0015" On Policy.txReason { 
+    Set Disabled
+}
+
+Rule "R0016" On Policy.txEffectiveDate { 
+    Set Mandatory
+    Error "code" : "The field is mandatory"
+}
+
+Rule "R0017" On Policy.txEffectiveDate { 
+    Default To 2018-04-30T10:56:56Z
+}
+
+Rule "R0020" On Policy.txCreateDate { 
+    Set Mandatory
+    Error "code" : "The field is mandatory"
+}
+
+Rule "R0021" On Policy.txCreateDate { 
+    Default To Today()
+}
+
+Rule "R0023" On Policy.txCreateDate { 
+    Set Disabled
+}
+
+Rule "R0028" On Policy.createdOn { 
+    Set Mandatory
+    Error "code" : "The field is mandatory"
+}
+
+Rule "R0030" On Policy.createdOn { 
+    Set Hidden
+}
+
+Rule "R0031" On Policy.createdOn { 
+    Default To Today()
+}
+
+Rule "R0032" On Policy.createdBy { 
+    Set Mandatory
+    Error "code" : "The field is mandatory"
+}
+
+Rule "R0034" On Policy.createdBy { 
+    Set Hidden
+}
+
+Rule "R0035" On Policy.updatedOn { 
+    Set Mandatory
+    Error "code" : "The field is mandatory"
+}
+
+Rule "R0037" On Policy.updatedOn { 
+    Reset To Today()
+}
+
+Rule "R0038" On Policy.updatedOn { 
+    Set Hidden
+}
+
+Rule "R0039" On Policy.updatedBy { 
+    Set Mandatory
+    Error "code" : "The field is mandatory"
+}
+
+Rule "R0040" On Policy.updatedBy { 
+    Reset To 'qa2'
+}
+
+Rule "R0041" On Policy.updatedBy { 
+    Set Hidden
+}
+
+Rule "R0042" On Policy.contractTermTypeCd { 
+    Set Mandatory
+    Error "code" : "The field is mandatory"
+}
+
+Rule "R0044" On Policy.effectiveDate { 
+    Set Mandatory
+    Error "code" : "The field is mandatory"
+}
+
+Rule "R0045" On Policy.effectiveDate { 
+    Default To Today()
+}
+
+Rule "R0047" On Policy.expirationDate { 
+    Set Mandatory
+    Error "code" : "The field is mandatory"
+}
+
+Rule "R0049" On Policy.expirationDate { 
+    When 'Quarter' = this.termCd
+    Reset To PlusMonths(Today(), 3)
+}
+
+Rule "R0050" On Policy.termNo { 
+    Set Mandatory
+    Error "code" : "The field is mandatory"
+}
+
+Rule "R0051" On Policy.termNo { 
+    Assert this.termNo >= 0 and this.termNo < 100
+    Error "code" : "Value didn't match asserton: termNo >= 0 and termNo < 100"
+}
+
+Rule "R0053" On Policy.termNo { 
+    Default To 0
+}
+
+Rule "R0054" On Policy.termCd { 
+    Set Mandatory
+    Error "code" : "The field is mandatory"
+}
+
+Rule "R0055" On Policy.termCd { 
+    Default To 'ANNUAL'
+}
+
+Rule "R0058" On Policy.termCd { 
+    Set Disabled
+}
+
+Rule "R0059" On CreditCardInfo.cardType { 
+    Assert Matches "^[A-Za-z]+$"
+    Error "code" : "String doesn't match Regular Expression: ^[A-Za-z]+$"
+}
+
+Rule "R-CCR-default-CreditCardInfo" On CreditCardInfo.cardCreditLimitAmount {
+    When Policy.policyCurrency = 'USD'
+    Reset To 2500
+}
+
+Rule "CCR-Assert-RRCoverage-fromVehicle" On RRCoverage.combinedLimit {
+    When combinedLimit = Vehicle.model
+    Assert Date(2011,11,11) > Today()
+}
+
+Rule "R-CCR-default-CreditCardInfo-fromAutoPolicy" On CreditCardInfo.cardNumber { 
+    Reset To Policy.policyCurrency
+}
+
+Rule "R-CCR-default-condition-Policy-CreditCardInfo" On Policy.policyNumber { 
+    When CreditCardInfo.cardType != 'VISA'
+    Reset To CreditCardInfo.cardType
+}
+
+Rule "R-CCR-Policy-PartyRole" On Policy.policyNumber { 
+    Assert Count(PartyRole) = 4
+    Error "code" : "Value didn't match assertion"
+}
+
+Rule "R-CCR-assert-BillingAddress" On BillingAddress.countryCd { 
+    Assert Policy.policyCurrency = this.countryCd
+    Error "code" : "Value didn't match assertion"
+}
+
+Rule "R-CCR-assert-BillingAddress-toCreditCard" On BillingAddress.countryCd { 
+    Assert CreditCardInfo.cardType = this.countryCd
+    Error "code" : "Value didn't match assertion"
+}
+
+Rule "R-CCR-assert-Vehicle-toAutoPolicy" On Vehicle.model { 
+    Assert Policy.policyCurrency = this.model
+    Error "code" : "Value didn't match assertion"
+}
+
+Rule "R-CCR-assert-AutoPolicy-to-CreditCardInfo" On Policy.policyCurrency { 
+    Assert CreditCardInfo.cardType = this.policyCurrency
+    Error "code" : "Value didn't match assertion"
+}
+
+Rule "R-CCR-assert-AutoPolicy-toCreditCard" On Policy.policyCurrency { 
+    Assert CreditCardInfo.cardType = this.policyCurrency
+    Error "code" : "Value didn't match assertion"
+}
+
+Rule "R-CCR-assert-CreditCardInfo" On Policy.policyNumber { 
+    Assert this.policyNumber = 'B' and CreditCardInfo.cardType = 'B'
+    Error "code" : "Value didn't match assertion"
+}
+
+Rule "R-CCR-assert-DriverInfo-PersonInfo" On DriverInfo.driverType { 
+    Assert PersonInfo.firstName = this.driverType
+    Error "code" : "Value didn't match assertion"
+}
+
+Rule "R-CCR-assert-DriverInfo-CreditCardInfo" On DriverInfo.driverType { 
+    Assert CreditCardInfo.cardType = this.driverType
+    Error "code" : "Value didn't match assertion"
+}
+
+Rule "R-CCR-assert-Policy-CreditCardInfo" On Policy.policyNumber { 
+    Assert CreditCardInfo.cardType = this.accountName
+    Error "code" : "Value didn't match assertion"
+}
+
+Rule "R-CCR-assert-PersonInfo-DriverInfo" On PersonInfo.firstName { 
+    Assert DriverInfo.driverType = this.firstName
+    Error "code" : "Value didn't match assertion"
+}
+
+Rule "R-CCR-assert-Party-PersonInfo-DriverInfo" On Party.relationToPrimaryInsured { 
+    Assert DriverInfo.driverType = PersonInfo.firstName
+    Error "code" : "Value didn't match assertion"
+}
+
+Rule "R-CCR-default-Policy-CreditCardInfo" On Policy.policyNumber { 
+    Reset To CreditCardInfo.cardType
+}
+
+Rule "R-CCR-assert-Policy-RentalCoverage" On Vehicle.model { 
+    Assert RentalCoverage.code = this.model
+    Error "code" : "Value didn't match assertion"
+}
+
+Rule "R-CCR-assert-Party-Info" On Party.relationToPrimaryInsured { 
+    Assert Info.additionalInfo = this.relationToPrimaryInsured
+    Error "code" : "Value didn't match assertion"
+}
+
+Rule "R-CCR-assert-PartyRole-AddressLine1-AddressInfo" On PartyRole.role { 
+    Assert AddressLine1.addressLine != AddressInfo.street
+    Error "code" : "Value didn't match assertion"
+}
+
+Rule "R-CCR-default-AddressLine-Policy" On AddressLine.addressLine { 
+    When Policy.state = 'CA'
+    Reset To 'notRequired'
+}
+
+Rule "R0062" On CreditCardInfo.cardNumber { 
+    When this.cardType = 'Visa'
+    Assert Matches "^4[0-9]{12}(?:[0-9]{3})?$"
+    Error "code" : "String doesn't match Regular Expression: ^4[0-9]{12}(?:[0-9]{3})?$"
+}
+
+Rule "R0063" On CreditCardInfo.cardNumber { 
+    When this.cardType = 'MasterCard'
+    Assert Matches "^(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}$"
+    Error "code" : "String doesn't match Regular Expression: ^(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}$"
+}
+
+Rule "R0066" On CreditCardInfo.cvv { 
+    When this.cardType = 'Visa' or this.cardType = 'MasterCard'
+    Assert Matches "^[0-9]{3}$"
+    Error "code" : "String doesn't match Regular Expression: ^[0-9]{3}$"
+}
+
+Rule "R0-assert-money" On CreditCardInfo.cardCreditLimitAmount {
+    When this.cardCreditLimitAmount > 2000
+    Assert this.cardCreditLimitAmount > 3000
+    Error "code" : "Value didn't match asserton: cardCreditLimitAmount > 3000"
+}
+
+Rule "R0-default-money" On CreditCardInfo.cardCreditLimitAmount {
+    Reset To cardCreditLimitAmount + 2500
+}
+
+Rule "R0072" On Vehicle.included { 
+    Default To false
+}
+
+Rule "R0073" On Vehicle.included { 
+    Assert this.included = true or this.included = false
+    Error "code" : "Value didn't match asserton: included = true or included = false"
+}
+
+Rule "R0074" On Vehicle.model { 
+    Set Mandatory
+    Error "code" : "The field is mandatory"
+}
+
+Rule "R0088" On Vehicle.purchasedDate { 
+    Set Mandatory
+    Error "code" : "The field is mandatory"
+}
+
+Rule "R0090" On Vehicle.purchasedDate { 
+    Assert this.purchasedDate < Today()
+    Error "code" : "Value didn't match asserton: purchasedDate < Today()"
+}
+
+Rule "R0148" On PartyRole.role { 
+    Set Mandatory
+    Error "code" : "The field is mandatory"
+}
+
+Rule "R0149" On Party.relationToPrimaryInsured { 
+    Set Mandatory
+    Error "code" : "The field is mandatory"
+}
+
+Rule "R0149A" On Party.relationToPrimaryInsured { 
+    Assert Length 20
+    Error "code" : "String contains more charactes than 20"
+}
+
+Rule "R0150" On PersonInfo.firstName { 
+    Assert this.firstName != this.lastName
+    Error "code" : "Value didn't match asserton: firstName != lastName"
+}
+
+Rule "R0155" On AddressInfo.doNotSolicit { 
+    Assert this.doNotSolicit = true or this.doNotSolicit = false
+    Error "code" : "Value didn't match asserton: doNotSolicit = true or doNotSolicit = false"
+}
+
+Rule "R0156" On AddressInfo.countryCd { 
+    Set Mandatory
+    Error "code" : "The field is mandatory"
+}
+
+Rule "R0156A" On BillingAddress.countryCd { 
+    Set Hidden
+}
+
+Rule "R0157" On AddressInfo.postalCode { 
+    Set Mandatory
+    Error "code" : "The field is mandatory"
+}
+
+Rule "R0157A" On AddressInfo.postalCode { 
+    Assert Matches "^\d{5}$"
+    Error "code" : "String doesn't match Regular Expression: ^\d{5}$"
+}
+
+Rule "R0158" On AddressInfo.city { 
+    Assert Matches "^[A-Za-z ]*$"
+    Error "code" : "String doesn't match Regular Expression: ^[A-Za-z ]*$"
+}
+
+Rule "R0170" On BillingAddress.city { 
+    Assert Matches "^[A-Za-z ]*$"
+    Error "code" : "String doesn't match Regular Expression: ^[A-Za-z ]*$"
+}
+
+Rule "date-condition-Policy.txEffectiveDate" On Policy.txEffectiveDate {
+    When PlusYears(2019-11-11, 1) >= AsDate(txEffectiveDate)
+    Assert false
+    Error "code" : "message"
+}
+
+Rule "date-assertion-Policy.txEffectiveDate" On Policy.txEffectiveDate {
+    Assert PlusYears(2019-11-11, 1) >= AsDate(txEffectiveDate)
+    Error "code" : "message"
+}
+
+Rule "R-CCR-Policy-ExPolicy" On Policy.policyCurrency { 
+    Assert policyNumber = 'P01'
+    Error "code" : "Value didn't match assertion"
+}
+
+Rule "Inheritance-CCR-01" On Policy.policyCurrency  {
+    Assert CreditCardInfo.cardType == policyCurrency
+}
+
+Rule "SelfCCR" On Policy.policyNumber  {
+    Assert Policy.policyNumber == "P1"
+}
+
+Rule "SelfImplicit" On Policy.policyNumber  {
+    Assert policyNumber == "P1"
+}
+
+Rule "SelfThis" On Policy.policyNumber  {
+    Assert this.policyNumber == "P1"
+}
+
+EntryPoint "SelfReference" {
+    "SelfCCR", "SelfImplicit", "SelfThis"
+}
+
+Rule "UnknownAttributeRule" On Policy.refToCustomer  {
+    Assert not(IsEmpty(refToCustomer))
+}
+
+EntryPoint "UnknownAttributeRule" {
+    "UnknownAttributeRule"
+}
+
+Rule "policy number must be empty" On Policy.policyNumber {
+    Assert Empty
+    Error "code" : "Field must be empty"
+}
+
+EntryPoint "policy number must be empty" {
+    "policy number must be empty"
+}
+
+Rule "ForRestrictionCache" On RRCoverage.code {
+    When Vehicle.modelYear == 2020
+    Set Disabled
+}
+
+EntryPoint "ForRestrictionCache" {
+    "ForRestrictionCache"
+}
+
+Rule "DefaultPolicyStateToVehicleState" On Policy.state {
+    Default To riskItems[0].vehicleState
+}
+
+EntryPoint "DefaultPolicyStateToVehicleState" {
+    "DefaultPolicyStateToVehicleState"
+}
+
+Rule "DefaultToLAWhenVehicleIsPresent" On Policy.state {
+    When riskItems[0] != null
+    Default to 'LA'
+}
+
+EntryPoint "DefaultToLAWhenVehicleIsPresent" {
+    "DefaultToLAWhenVehicleIsPresent"
+}
+
+Rule "DefaultStateToLastCollCoverageCode" On Policy.state {
+    Default to riskItems[0].collCoverages[Count(riskItems)].code
+}
+
+EntryPoint "DefaultStateToLastCollCoverageCode" {
+    "DefaultStateToLastCollCoverageCode"
+}
+
+Rule "DefaultStateToFirstCoverageCodeWithLimitAmountGreaterThanTen" On Policy.state {
+    Default to riskItems[0].collCoverages[limitAmount > 10][0].code
+}
+
+EntryPoint "DefaultStateToFirstCoverageCodeWithLimitAmountGreaterThanTen" {
+    "DefaultStateToFirstCoverageCodeWithLimitAmountGreaterThanTen"
+}

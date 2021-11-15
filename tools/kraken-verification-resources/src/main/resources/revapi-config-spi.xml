@@ -1,0 +1,50 @@
+<analysisConfiguration>
+
+    <revapi.java>
+        <missing-classes>
+            <behavior>ignore</behavior>
+        </missing-classes>
+    </revapi.java>
+
+    <!-- Annotation Based Filter -->
+    <revapi.java.filter.annotated>
+        <regex>false</regex>
+        <include>
+            <item>@kraken.annotations.SPI</item>
+        </include>
+    </revapi.java.filter.annotated>
+
+    <!-- Report -->
+    <revapi.reporter.text>
+        <minSeverity>POTENTIALLY_BREAKING</minSeverity>
+        <minCriticality>documented</minCriticality>
+        <output>out</output>
+        <template>revapi-output-template.ftl</template>
+    </revapi.reporter.text>
+
+    <revapi.differences>
+        <differences>
+            <item>
+                <code>java.method.addToInterface</code>
+                <ignore>true</ignore>
+            </item>
+            <item>
+                <code>java.annotation.added</code>
+                <ignore>true</ignore>
+            </item>
+            <item>
+                <code>java.annotation.attributeAdded</code>
+                <ignore>true</ignore>
+            </item>
+            <item>
+                <code>java.annotation.removed</code>
+                <ignore>true</ignore>
+            </item>
+            <item>
+                <code>java.annotation.attributeRemoved</code>
+                <ignore>true</ignore>
+            </item>
+        </differences>
+    </revapi.differences>
+
+</analysisConfiguration>

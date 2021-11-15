@@ -1,0 +1,35 @@
+Namespace Bar
+
+Include Base
+
+Contexts {
+    Root Context TestPolicy Is RootEntity {
+        String riskStateCd
+        String state
+        String packageCd
+        Date effectiveDate
+        Child* TestRiskItem : riskItems
+    }
+    
+    Context TestRiskItem {
+        String itemName
+        Boolean defaultItemName
+        Decimal value
+        Child TestAddressInfo : addressInfo
+        Child* TestCoverage : coverages
+    }
+    
+    Context TestAddressInfo {
+        String city
+        String street
+        String postalCode
+        Boolean doNotSolicit
+        String countryCd
+    }
+    
+    Context TestCoverage {
+        Money deductibleAmount
+        Money limitAmount
+    }
+    
+    }

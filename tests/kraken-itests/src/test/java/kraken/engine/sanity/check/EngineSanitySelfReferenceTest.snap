@@ -1,0 +1,71 @@
+kraken.engine.sanity.check.EngineSanitySelfReferenceTest.shouldReferenceSameContextAsRuleDefined=[
+  {
+    "Policy:-1:policyNumber": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "policyNumber",
+        "fieldPath": "policyNumber"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "SelfImplicit",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "SelfCCR",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "SelfThis",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    }
+  }
+]

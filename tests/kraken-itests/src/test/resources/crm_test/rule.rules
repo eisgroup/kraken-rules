@@ -1,0 +1,18 @@
+Namespace Base
+
+Rule "LegalEntityBase.legalId.0" On LegalEntityBase.legalId {
+    When BusinessDetails.businessType != 'SLPR'
+    Assert Matches "^\s*(\d{2}-\d{7})\s*$"
+    Error "LegalEntityBase.legalId.0": "Incorrect legalId format. 9 digits should be entered: XX-XXXXXXX"
+}
+
+Rule "SchedulingContactInfo.effectiveFromTo.0" On SchedulingContactInfo.effectiveFrom {
+  When effectiveFrom != null && effectiveTo != null
+  Assert effectiveFrom < effectiveTo
+  Error "SchedulingContactInfo.effectiveFromTo.0": "Effective To is less than Effective From"
+}
+
+EntryPoint "Test" {
+    "LegalEntityBase.legalId.0",
+    "SchedulingContactInfo.effectiveFromTo.0"
+}

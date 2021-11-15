@@ -1,0 +1,4 @@
+Namespace JsonShadow
+Include Shadow
+Root Context PolicyExtended { }
+

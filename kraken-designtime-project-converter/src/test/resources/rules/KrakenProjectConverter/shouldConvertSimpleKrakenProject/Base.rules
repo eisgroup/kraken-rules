@@ -1,0 +1,5 @@
+Namespace Base
+
+Context Identifiable {
+  Integer id
+}

@@ -1,0 +1,55 @@
+Namespace Policy
+
+Root Context Policy {
+  String policyCd
+  Money totalLimitAmount
+
+  Child* RiskItem
+}
+
+Context RiskItem {
+  String itemName
+
+  Child* Coverage
+}
+
+Context Coverage {
+  Decimal limitAmount
+}
+
+@Dimension("Package", "Empty")
+EntryPoint "Validation" {
+}
+
+EntryPoint "Validation" {
+  EntryPoint "PackageValidation",
+  "R01-Policy"
+}
+
+@Dimension("Package", "Premium")
+EntryPoint "PackageValidation" {
+  "R02-Policy-PackageSpecific"
+}
+
+@Dimension("Package", "Simple")
+EntryPoint "PackageValidation" {
+  "R02-Policy-PackageSpecific", "R03-Policy-Simple"
+}
+
+Rule "R01-Policy" On Policy.policyCd {
+  Assert Sum(Coverage.limitAmount) <= totalLimitAmount
+}
+
+@Dimension("Package", "Premium")
+Rule "R02-Policy-PackageSpecific" On Policy.policyCd {
+  Assert Policy.policyCd == null
+}
+
+@Dimension("Package", "Simple")
+Rule "R02-Policy-PackageSpecific" On Policy.policyCd {
+  Assert Policy.policyCd != null
+}
+
+Rule "R03-Policy-Simple" On Policy.policyCd {
+  Assert Policy.policyCd == "cd"
+}

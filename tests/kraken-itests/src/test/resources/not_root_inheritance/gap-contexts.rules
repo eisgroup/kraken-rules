@@ -1,0 +1,28 @@
+Context Policy {
+    String mock
+    Child RiskItem : riskItem
+}
+
+Context AutoPolicy Is Policy {
+    String mock
+    Child Vehicle : riskItem
+}
+
+Context PersonalAutoPolicy Is AutoPolicy {
+    String mock
+    Child Vehicle : riskItem
+}
+
+Root Context CanadaPersonalAutoPolicy Is PersonalAutoPolicy {
+    String mock
+    Child Vehicle : riskItem
+}
+
+Context RiskItem {
+    String mock
+}
+
+Context Vehicle Is RiskItem {
+    String mock
+}
+

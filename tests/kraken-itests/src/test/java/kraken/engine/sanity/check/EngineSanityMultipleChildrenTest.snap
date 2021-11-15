@@ -1,0 +1,249 @@
+kraken.engine.sanity.check.EngineSanityMultipleChildrenTest.shouldFlatAllElementsInSubArraysAndApplyDefaults=[
+  {
+    "SecondaryInsured:1:name": {
+      "contextFieldInfo": {
+        "contextId": "1",
+        "contextName": "SecondaryInsured",
+        "fieldName": "name",
+        "fieldPath": "name"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "MultipleInsureds-default",
+            "context": "SecondaryInsured",
+            "targetPath": "name",
+            "payloadType": "DEFAULT"
+          },
+          "payloadResult": {
+            "events": [
+              {
+                "attributeTarget": "name",
+                "contextName": "SecondaryInsured",
+                "contextId": "1",
+                "newValue": "new",
+                "previousValue": "mock"
+              }
+            ]
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "SecondaryInsured:2:name": {
+      "contextFieldInfo": {
+        "contextId": "2",
+        "contextName": "SecondaryInsured",
+        "fieldName": "name",
+        "fieldPath": "name"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "MultipleInsureds-default",
+            "context": "SecondaryInsured",
+            "targetPath": "name",
+            "payloadType": "DEFAULT"
+          },
+          "payloadResult": {
+            "events": [
+              {
+                "attributeTarget": "name",
+                "contextName": "SecondaryInsured",
+                "contextId": "2",
+                "newValue": "new",
+                "previousValue": "mock"
+              }
+            ]
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "SecondaryInsured:3:name": {
+      "contextFieldInfo": {
+        "contextId": "3",
+        "contextName": "SecondaryInsured",
+        "fieldName": "name",
+        "fieldPath": "name"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "MultipleInsureds-default",
+            "context": "SecondaryInsured",
+            "targetPath": "name",
+            "payloadType": "DEFAULT"
+          },
+          "payloadResult": {
+            "events": [
+              {
+                "attributeTarget": "name",
+                "contextName": "SecondaryInsured",
+                "contextId": "3",
+                "newValue": "new",
+                "previousValue": "mock"
+              }
+            ]
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "SecondaryInsured:4:name": {
+      "contextFieldInfo": {
+        "contextId": "4",
+        "contextName": "SecondaryInsured",
+        "fieldName": "name",
+        "fieldPath": "name"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "MultipleInsureds-default",
+            "context": "SecondaryInsured",
+            "targetPath": "name",
+            "payloadType": "DEFAULT"
+          },
+          "payloadResult": {
+            "events": [
+              {
+                "attributeTarget": "name",
+                "contextName": "SecondaryInsured",
+                "contextId": "4",
+                "newValue": "new",
+                "previousValue": "mock"
+              }
+            ]
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "SecondaryInsured:5:name": {
+      "contextFieldInfo": {
+        "contextId": "5",
+        "contextName": "SecondaryInsured",
+        "fieldName": "name",
+        "fieldPath": "name"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "MultipleInsureds-default",
+            "context": "SecondaryInsured",
+            "targetPath": "name",
+            "payloadType": "DEFAULT"
+          },
+          "payloadResult": {
+            "events": [
+              {
+                "attributeTarget": "name",
+                "contextName": "SecondaryInsured",
+                "contextId": "5",
+                "newValue": "new",
+                "previousValue": "mock"
+              }
+            ]
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "SecondaryInsured:6:name": {
+      "contextFieldInfo": {
+        "contextId": "6",
+        "contextName": "SecondaryInsured",
+        "fieldName": "name",
+        "fieldPath": "name"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "MultipleInsureds-default",
+            "context": "SecondaryInsured",
+            "targetPath": "name",
+            "payloadType": "DEFAULT"
+          },
+          "payloadResult": {
+            "events": [
+              {
+                "attributeTarget": "name",
+                "contextName": "SecondaryInsured",
+                "contextId": "6",
+                "newValue": "new",
+                "previousValue": "mock"
+              }
+            ]
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "SecondaryInsured:7:name": {
+      "contextFieldInfo": {
+        "contextId": "7",
+        "contextName": "SecondaryInsured",
+        "fieldName": "name",
+        "fieldPath": "name"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "MultipleInsureds-default",
+            "context": "SecondaryInsured",
+            "targetPath": "name",
+            "payloadType": "DEFAULT"
+          },
+          "payloadResult": {
+            "events": [
+              {
+                "attributeTarget": "name",
+                "contextName": "SecondaryInsured",
+                "contextId": "7",
+                "newValue": "new",
+                "previousValue": "mock"
+              }
+            ]
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    }
+  }
+]

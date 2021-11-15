@@ -1,0 +1,82 @@
+import "rule-model.stg"
+import "context-definition-model.stg"
+import "entrypoint-model.stg"
+import "external-context-definition-model.stg"
+import "external-context-model.stg"
+import "function-model.stg"
+
+krakenResource(krakenResource) ::= <<
+<namespace(krakenResource)>
+<includes(krakenResource)>
+<ruleImports(krakenResource)>
+<functionSignatures(krakenResource)>
+<entryPoints(krakenResource)>
+<rules(krakenResource)>
+<externalContextDefinitions(krakenResource)>
+<externalContexts(krakenResource)>
+<contexts(krakenResource)>
+>>
+
+namespace(krakenResource) ::= <<
+<if(emptyAsFalse.(krakenResource.namespace))>
+Namespace <krakenResource.namespace>
+<endif>
+>>
+
+includes(krakenResource) ::= <<
+<if(emptyAsFalse.(krakenResource.namespace))>
+<krakenResource.includes: {include | Include <include>}; separator="\n">
+<endif>
+>>
+
+ruleImports(krakenResource) ::= <<
+<if(emptyAsFalse.(krakenResource.namespace))>
+<krakenResource.ruleImports: {ruleImport | <ruleImport(ruleImport)>}; separator="\n">
+<endif>
+>>
+
+emptyAsFalse ::= [
+  "": false,
+  default: key
+]
+
+ruleImport(ruleImport) ::= <<
+Import Rule "<ruleImport.ruleName>" from <ruleImport.namespace>
+>>
+
+functionSignatures(krakenResource) ::= <<
+<if(strip(krakenResource.functionSignatures))>
+<krakenResource.functionSignatures: {f | <functionSignature(f)>}; separator="\n">
+<endif>
+>>
+
+contexts(krakenResource) ::= <<
+<if(strip(krakenResource.contextDefinitions))>
+<krakenResource.contextDefinitions: {context | <context(context)>}; separator="\n">
+<endif>
+>>
+
+externalContexts(krakenResource) ::= <<
+<if(krakenResource.externalContext)>
+ExternalContext {
+    <externalContext(krakenResource.externalContext)>
+}<endif>
+>>
+
+externalContextDefinitions(krakenResource) ::= <<
+<if(krakenResource.externalContextDefinitions)>
+<krakenResource.externalContextDefinitions: {extCtxDef | <externalContextDefinition(extCtxDef)>}; separator="\n\n">
+<endif>
+>>
+
+entryPoints(krakenResource) ::= <<
+<if(strip(krakenResource.entryPoints))>
+<krakenResource.entryPoints: {entryPoint | <entryPoint(entryPoint)>}; separator="\n">
+<endif>
+>>
+
+rules(krakenResource) ::= <<
+<if(strip(krakenResource.rules))>
+<krakenResource.rules: {rule | <rule(rule)>}; separator="\n">
+<endif>
+>>

@@ -1,0 +1,621 @@
+kraken.engine.sanity.check.EngineSanityRuleOrderTest.shouldValidateEvaluateRulesInOrder=[
+  {
+    "BillingAddress:-1:countryCd": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "BillingAddress",
+        "fieldName": "countryCd",
+        "fieldPath": "countryCd"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "RULEORDER-BILLINGADDRESS",
+            "context": "AddressInfo",
+            "targetPath": "countryCd",
+            "payloadType": "DEFAULT"
+          },
+          "payloadResult": {
+            "events": [
+              {
+                "attributeTarget": "countryCd",
+                "contextName": "BillingAddress",
+                "contextId": "-1",
+                "newValue": "Address"
+              }
+            ]
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "RULEORDER-BILLINGADDRESS-mandatory",
+            "context": "AddressInfo",
+            "targetPath": "countryCd",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "COLLCoverage:-1:code": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "COLLCoverage",
+        "fieldName": "code",
+        "fieldPath": "code"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "RULEORDER-COLL",
+            "context": "COLLCoverage",
+            "targetPath": "code",
+            "payloadType": "DEFAULT"
+          },
+          "payloadResult": {
+            "events": [
+              {
+                "attributeTarget": "code",
+                "contextName": "COLLCoverage",
+                "contextId": "-1",
+                "newValue": "PartyPartyAddress"
+              }
+            ]
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "RULEORDER-COLL-mandatory",
+            "context": "COLLCoverage",
+            "targetPath": "code",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "CreditCardInfo:-1:cardType": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "CreditCardInfo",
+        "fieldName": "cardType",
+        "fieldPath": "cardType"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "RULEORDER-CREDITCARD",
+            "context": "CreditCardInfo",
+            "targetPath": "cardType",
+            "payloadType": "DEFAULT"
+          },
+          "payloadResult": {
+            "events": [
+              {
+                "attributeTarget": "cardType",
+                "contextName": "CreditCardInfo",
+                "contextId": "-1",
+                "newValue": "PartyAddress"
+              }
+            ]
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "RULEORDER-CREDITCARD-mandatory",
+            "context": "CreditCardInfo",
+            "targetPath": "cardType",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Insured:-1:name": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Insured",
+        "fieldName": "name",
+        "fieldPath": "name"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "RULEORDER-INSURED",
+            "context": "Insured",
+            "targetPath": "name",
+            "payloadType": "DEFAULT"
+          },
+          "payloadResult": {
+            "events": [
+              {
+                "attributeTarget": "name",
+                "contextName": "Insured",
+                "contextId": "-1",
+                "newValue": "Party"
+              }
+            ]
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "RULEORDER-INSURED-mandatory",
+            "context": "Insured",
+            "targetPath": "name",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Party:-1:relationToPrimaryInsured": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Party",
+        "fieldName": "relationToPrimaryInsured",
+        "fieldPath": "relationToPrimaryInsured"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "RULEORDER-PARTY",
+            "context": "Party",
+            "targetPath": "relationToPrimaryInsured",
+            "payloadType": "DEFAULT"
+          },
+          "payloadResult": {
+            "events": [
+              {
+                "attributeTarget": "relationToPrimaryInsured",
+                "contextName": "Party",
+                "contextId": "-1",
+                "newValue": "Party"
+              }
+            ]
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "RULEORDER-PARTY-mandatory",
+            "context": "Party",
+            "targetPath": "relationToPrimaryInsured",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:policyNumber": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "policyNumber",
+        "fieldPath": "policyNumber"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "RULEORDER-POLICY",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "DEFAULT"
+          },
+          "payloadResult": {
+            "events": [
+              {
+                "attributeTarget": "policyNumber",
+                "contextName": "Policy",
+                "contextId": "-1",
+                "newValue": "PartyPartyAddress"
+              }
+            ]
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "RULEORDER-POLICY-mandatory",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:state": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "state",
+        "fieldPath": "state"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "RULEORDER-Policy-state",
+            "context": "Policy",
+            "targetPath": "state",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Vehicle:-1:model": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Vehicle",
+        "fieldName": "model",
+        "fieldPath": "model"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "RULEORDER-VEHICLE",
+            "context": "Vehicle",
+            "targetPath": "model",
+            "payloadType": "DEFAULT"
+          },
+          "payloadResult": {
+            "events": [
+              {
+                "attributeTarget": "model",
+                "contextName": "Vehicle",
+                "contextId": "-1",
+                "newValue": "PartyPartyAddress"
+              }
+            ]
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "RULEORDER-VEHICLE-mandatory",
+            "context": "Vehicle",
+            "targetPath": "model",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    }
+  }
+]
+
+
+kraken.engine.sanity.check.EngineSanityRuleOrderTest.shouldValidateRulesWithComplexFieldExpressionsInOrder=[
+  {
+    "BillingAddress:-1:city": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "BillingAddress",
+        "fieldName": "city",
+        "fieldPath": "city"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "RuleOrderWithComplexField_AddressInfo_city",
+            "context": "AddressInfo",
+            "targetPath": "city",
+            "payloadType": "DEFAULT"
+          },
+          "payloadResult": {
+            "events": [
+              {
+                "attributeTarget": "city",
+                "contextName": "BillingAddress",
+                "contextId": "-1",
+                "newValue": "San Diego"
+              }
+            ]
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "BillingAddress:-1:doNotSolicit": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "BillingAddress",
+        "fieldName": "doNotSolicit",
+        "fieldPath": "doNotSolicit"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "RuleOrderWithComplexField_AddressInfo_doNotSolicit",
+            "context": "AddressInfo",
+            "targetPath": "doNotSolicit",
+            "payloadType": "DEFAULT"
+          },
+          "payloadResult": {
+            "events": [
+              {
+                "attributeTarget": "doNotSolicit",
+                "contextName": "BillingAddress",
+                "contextId": "-1",
+                "newValue": true
+              }
+            ]
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "PartyRole:-1:limit": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "PartyRole",
+        "fieldName": "limit",
+        "fieldPath": "limit"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "RuleOrderWithComplexField_PartyRole_limit",
+            "context": "PartyRole",
+            "targetPath": "limit",
+            "payloadType": "DEFAULT"
+          },
+          "payloadResult": {
+            "events": [
+              {
+                "attributeTarget": "limit",
+                "contextName": "PartyRole",
+                "contextId": "-1",
+                "newValue": 100
+              }
+            ]
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:policyNumber": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "policyNumber",
+        "fieldPath": "policyNumber"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "RuleOrderWithComplexField_Policy_policyNumber",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "DEFAULT"
+          },
+          "payloadResult": {
+            "events": [
+              {
+                "attributeTarget": "policyNumber",
+                "contextName": "Policy",
+                "contextId": "-1",
+                "newValue": "doNotSolicit is true"
+              }
+            ]
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "RRCoverage:-1:deductibleAmount": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "RRCoverage",
+        "fieldName": "deductibleAmount",
+        "fieldPath": "deductibleAmount"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "RuleOrderWithComplexField_AddressInfo_street",
+            "context": "RRCoverage",
+            "targetPath": "deductibleAmount",
+            "payloadType": "DEFAULT"
+          },
+          "payloadResult": {
+            "events": [
+              {
+                "attributeTarget": "deductibleAmount",
+                "contextName": "RRCoverage",
+                "contextId": "-1",
+                "newValue": 10
+              }
+            ]
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "RRCoverage:-1:limitAmount": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "RRCoverage",
+        "fieldName": "limitAmount",
+        "fieldPath": "limitAmount"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "RuleOrderWithComplexField_RRCoverage_limitAmount",
+            "context": "RRCoverage",
+            "targetPath": "limitAmount",
+            "payloadType": "DEFAULT"
+          },
+          "payloadResult": {
+            "events": [
+              {
+                "attributeTarget": "limitAmount",
+                "contextName": "RRCoverage",
+                "contextId": "-1",
+                "newValue": 10
+              }
+            ]
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    }
+  }
+]

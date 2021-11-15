@@ -1,0 +1,11 @@
+Namespace PersonalAuto
+
+Include Base
+
+Rule "TripInterruptionEndorsement-180902-sd34" On TripInterruptionEndorsement.category {
+  Default To "Travel benefits"
+}
+
+Rule "TripInterruptionEndorsement-180902-xcv54" On TripInterruptionEndorsement.number {
+  Default To "P.A. 06 99 01 15"
+}

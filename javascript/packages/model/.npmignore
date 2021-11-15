@@ -1,0 +1,16 @@
+.vscode
+jest.debug.config.js
+jest.config.js
+tsconfig.json
+tslint.json
+node_modules
+index.ts
+target/coverage/
+target/tmp/
+target/tmp-debug/
+target/dist/tsjs
+*.log
+tsconfig.json
+tslint.json
+src/
+**/__tests__/**

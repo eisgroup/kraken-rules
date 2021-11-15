@@ -1,0 +1,35 @@
+Namespace PersonalAuto
+
+Include Base
+
+Rule "AutoVehicle-180710-8eLHn" On AutoVehicle.adjustmentToValue {
+  Default To 100
+}
+
+Rule "AutoVehicle-180709-i2vMm" On AutoVehicle.adjustmentToValue {
+  When adjustmentToValue != null
+  Assert adjustmentToValue >= 0 and adjustmentToValue <= 100
+  Error "AutoVehicle-180709-i2vMm": "The 'Adjustment to Value' must be integer within 100"
+}
+
+Rule "AutoVehicle-181015-i2SMm" On AutoVehicle.adjustedValue {
+  When adjustedValue != null
+  Assert adjustedValue >= 0 and adjustedValue <= 10000
+  Error "AutoVehicle-181015-i2SMm": "The 'Adjusted Value' must be within 10000"
+  Overridable
+}
+
+Rule "AutoVehicle-180709-8tW1j" On AutoVehicle.numDaysDrivenPerWeek {
+  When numDaysDrivenPerWeek != null
+  Assert 0 <= numDaysDrivenPerWeek and numDaysDrivenPerWeek <= 7
+  Error "AutoVehicle-180709-8tW1j": "Number of Days Commute per Week must be >= 0 and <= 7"
+}
+
+Rule "AutoVehicle-180709-VfhuG" On AutoVehicle.registeredStateCd {
+  Default To PolicySummary.riskStateCd
+}
+
+Rule "AutoVehicle-180710-nSeoF" On AutoVehicle.annualMiles {
+  When AutoVehicleEntity.usageCd = 'LC' or AutoVehicleEntity.usageCd = 'SC'
+  Set Hidden
+}

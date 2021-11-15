@@ -1,0 +1,10 @@
+Namespace AutoPolicy
+
+EntryPoint "EP01" {
+    "RULE01"
+}
+
+Rule "RULE01" On AddressDetails.deliveryMethod {
+    Default To "other"
+}
+

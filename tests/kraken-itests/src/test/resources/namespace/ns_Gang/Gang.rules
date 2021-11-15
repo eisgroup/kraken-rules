@@ -1,0 +1,12 @@
+Namespace Gang
+
+Include Base
+
+Rule "Gang-RegExp" On AddressInfo.addressType {
+    Assert Matches "[A-Z]{2}"
+}
+
+Rule "Gang-hide-RegExp" On AddressInfo.zipCode {
+    Assert Matches "[A-Z]{2}"
+}
+

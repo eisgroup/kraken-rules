@@ -1,0 +1,19 @@
+Namespace PersonalAuto
+
+Include Base
+
+Rule "ReplacementCostEndorsement-180902-ss34e1" On ReplacementCostEndorsement.category {
+  Default To "Replacement"
+}
+
+Rule "ReplacementCostEndorsement-180902-ss3aa" On ReplacementCostEndorsement.name {
+  Default To "Replacement Cost Endorsement"
+}
+
+Rule "ReplacementCostEndorsement-180902-aq12c" On ReplacementCostEndorsement.number {
+  Default To "P.A. 10 21 58 RP"
+}
+
+Rule "ReplacementCostEndorsement-180902-s2axc" On ReplacementCostEndorsement.description {
+  Default To "This protection is available only from an insurance agent or broker. To obtain it, you must add the additional coverage to your existing auto insurance policy when you buy a new vehicle. The endorsement must be added no later than three months after the purchase date. Note that some insurers will not sell this coverage if the vehicle is a demonstrator."
+}

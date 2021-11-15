@@ -1,0 +1,17 @@
+{
+    "name": "kraken-test-product-model-tree",
+    "version": "1.20.1-autocomplete.3",
+    "description": "",
+    "main": "target/index.js",
+    "types": "target/index.d.ts",
+    "author": "Pavel Surinin <psurinin@eisgroup.com> (http://eisgroup.com)",
+    "license": "Apache-2.0",
+    "devDependencies": {
+        "typescript": "4.2.4"
+    },
+    "scripts": {
+        "compile": "tsc",
+        "prepare": "npm run compile"
+    },
+    "private": true
+}

@@ -1,0 +1,22 @@
+Namespace Policy
+
+Rule "Usage-UnknownField" On Policy.refToCustomer {
+    Set Mandatory
+}
+
+EntryPoint "Usage-UnknownField" {
+    "Usage-UnknownField"
+}
+
+EntryPoint "complex-field-type-test" {
+    "ctype-addressLinesMustBeThree",
+    "ctype-thereMustBeAnubisCoveragesAccessibleByProperty"
+}
+
+Rule "ctype-addressLinesMustBeThree" On AddressInfo.addressLines {
+    Assert Count(addressLines) = 3
+}
+
+Rule "ctype-thereMustBeAnubisCoveragesAccessibleByProperty" On Vehicle.anubisCoverages {
+    Assert Count(anubisCoverages[*].limitAmount) = 2
+}

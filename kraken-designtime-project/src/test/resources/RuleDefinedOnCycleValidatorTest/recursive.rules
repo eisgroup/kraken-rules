@@ -1,0 +1,82 @@
+Namespace Recursive
+
+Root Context Policy {
+    Child Referer : referer
+}
+
+Context Referer {
+    String name
+    Child RefererInfo
+    Child SuperReferer
+}
+
+Context SuperReferer is Referer { }
+
+Context RefererInfo {
+    String referenceName
+    Child Referer
+    Child RefererInfo
+}
+
+// recursive context rule on self field
+Rule "update reference name []" On RefererInfo.referenceName {
+    Reset To Concat({referenceName, "-"})
+}
+
+Rule "assert reference name []" On RefererInfo.referenceName {
+    Assert EndsWith(referenceName, "-")
+}
+
+Rule "assert reference name [this]" On RefererInfo.referenceName {
+    Assert EndsWith(this.referenceName, "-")
+}
+
+Rule "assert reference name [CCR]" On RefererInfo.referenceName {
+    Assert EndsWith(RefererInfo.referenceName, "-")
+}
+
+EntryPoint "recursive context rule on self field" {
+    "update reference name []",
+    "assert reference name []",
+    "assert reference name [this]",
+    "assert reference name [CCR]"
+}
+
+// recursive context rule on recursive child field
+Rule "update referer name []" On Referer.name {
+    Reset To Concat({name, "-"})
+}
+
+Rule "assert referer name []" On Referer.name {
+    Assert EndsWith(name, "-")
+}
+
+Rule "assert referer name [this]" On Referer.name {
+    Assert EndsWith(this.name, "-")
+}
+
+Rule "assert referer name [ccr]" On Referer.name {
+    Assert EndsWith(Referer.name, "-")
+}
+
+EntryPoint "recursive context rule on child field" {
+    "update referer name []",
+    "assert referer name []",
+    "assert referer name [this]",
+    "assert referer name [ccr]"
+}
+
+// ccr on recursive extended child
+Rule "ccr on recursive extended child" on SuperReferer.name {
+    Description "should access own attribute 'name' by parent ccr"
+    Assert Referer.name = name
+}
+
+EntryPoint "ccr on recursive extended child" {
+    "ccr on recursive extended child"
+}
+
+EntryPoint "all recursive" {
+    EntryPoint "recursive context rule on self field",
+    EntryPoint "recursive context rule on child field"
+}

@@ -1,0 +1,51 @@
+Namespace Policy
+
+EntryPoint "ExpressionContextCheck-Condition" {
+    "ec-condition-dimensions",
+    "ec-condition-additional"
+}
+
+EntryPoint "ExpressionContextCheck-Default" {
+    "ec-default-dimensions",
+    "ec-default-additional"
+}
+
+EntryPoint "ExpressionContextCheck-Assert" {
+    "ec-assert-dimensions",
+    "ec-assert-additional"
+}
+
+EntryPoint "ExpressionContextCheck-Assert-CCR" {
+    "ec-assert-additional-ccr"
+}
+
+Rule "ec-condition-dimensions" On Policy.policyNumber {
+    When context.dimensions.plan = 'Premium'
+    Default To 'Premium'
+}
+
+Rule "ec-condition-additional" On Policy.txReason {
+    When context.additional.package = 'Pizza'
+    Default To 'Pizza'
+}
+
+Rule "ec-default-dimensions" On Policy.policyNumber {
+    When 1 != null
+    Default To context.dimensions.plan
+}
+
+Rule "ec-default-additional" On Policy.txReason {
+    Default To context.additional.package
+}
+
+Rule "ec-assert-dimensions" On Policy.policyNumber {
+    Assert context.dimensions.plan = policyNumber
+}
+
+Rule "ec-assert-additional" On Policy.txReason {
+    Assert context.additional.package = txReason
+}
+
+Rule "ec-assert-additional-ccr" On Policy.txReason {
+    Assert Insured.name = context.additional.package and context.additional.package = txReason
+}

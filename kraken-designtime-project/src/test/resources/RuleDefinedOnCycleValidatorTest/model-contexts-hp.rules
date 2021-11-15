@@ -1,0 +1,20 @@
+Namespace HomePolicy
+
+Root Context Policy {
+     Child Home
+}
+
+Context Home {
+    String type
+    Child Address
+}
+
+Context Address {
+    String addrLineOne
+    Child Home
+    Child AddressDetails
+}
+
+Context AddressDetails {
+    String deliveryMethod
+}

@@ -1,0 +1,1588 @@
+kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteOnUnknownTypeField=[
+  {
+    "Policy:-1:refToCustomer": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "refToCustomer",
+        "fieldPath": "refToCustomer"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "Usage-UnknownField",
+            "context": "Policy",
+            "targetPath": "refToCustomer",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": false,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    }
+  }
+]
+
+
+kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloadAutoPolicyEntryPointWithEmptyData=[
+  {
+    "AddressInfo:-1:countryCd": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "AddressInfo",
+        "fieldName": "countryCd",
+        "fieldPath": "countryCd"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0156",
+            "context": "AddressInfo",
+            "targetPath": "countryCd",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": false,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "AddressInfo:-1:postalCode": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "AddressInfo",
+        "fieldName": "postalCode",
+        "fieldPath": "postalCode"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0157",
+            "context": "AddressInfo",
+            "targetPath": "postalCode",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": false,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Party:1:relationToPrimaryInsured": {
+      "contextFieldInfo": {
+        "contextId": "1",
+        "contextName": "Party",
+        "fieldName": "relationToPrimaryInsured",
+        "fieldPath": "relationToPrimaryInsured"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0149",
+            "context": "Party",
+            "targetPath": "relationToPrimaryInsured",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": false,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "PartyRole:-1:role": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "PartyRole",
+        "fieldName": "role",
+        "fieldPath": "role"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0148",
+            "context": "PartyRole",
+            "targetPath": "role",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": false,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:contractTermTypeCd": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "contractTermTypeCd",
+        "fieldPath": "termDetails.contractTermTypeCd"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0042",
+            "context": "Policy",
+            "targetPath": "contractTermTypeCd",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": false,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:createdBy": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "createdBy",
+        "fieldPath": "accessTrackInfo.createdBy"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0032",
+            "context": "Policy",
+            "targetPath": "createdBy",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": false,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:createdFromPolicyRev": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "createdFromPolicyRev",
+        "fieldPath": "createdFromPolicyRev"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0008",
+            "context": "Policy",
+            "targetPath": "createdFromPolicyRev",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": false,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:createdOn": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "createdOn",
+        "fieldPath": "accessTrackInfo.createdOn"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0028",
+            "context": "Policy",
+            "targetPath": "createdOn",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": false,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:effectiveDate": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "effectiveDate",
+        "fieldPath": "termDetails.termEffectiveDate"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0044",
+            "context": "Policy",
+            "targetPath": "effectiveDate",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": false,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:expirationDate": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "expirationDate",
+        "fieldPath": "termDetails.termExpirationDate"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0047",
+            "context": "Policy",
+            "targetPath": "expirationDate",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": false,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:policyNumber": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "policyNumber",
+        "fieldPath": "policyNumber"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0001A",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": false,
+            "messageCode": "code",
+            "message": "Field is required",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:state": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "state",
+        "fieldPath": "state"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0004",
+            "context": "Policy",
+            "targetPath": "state",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": false,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:termCd": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "termCd",
+        "fieldPath": "termDetails.termCd"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0054",
+            "context": "Policy",
+            "targetPath": "termCd",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": false,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:termNo": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "termNo",
+        "fieldPath": "termDetails.termNo"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0050",
+            "context": "Policy",
+            "targetPath": "termNo",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": false,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:txCreateDate": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "txCreateDate",
+        "fieldPath": "transactionDetails.txCreateDate"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0020",
+            "context": "Policy",
+            "targetPath": "txCreateDate",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": false,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:txEffectiveDate": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "txEffectiveDate",
+        "fieldPath": "transactionDetails.txEffectiveDate"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0016",
+            "context": "Policy",
+            "targetPath": "txEffectiveDate",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": false,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:txType": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "txType",
+        "fieldPath": "transactionDetails.txType"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0011",
+            "context": "Policy",
+            "targetPath": "txType",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": false,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:updatedBy": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "updatedBy",
+        "fieldPath": "accessTrackInfo.updatedBy"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0039",
+            "context": "Policy",
+            "targetPath": "updatedBy",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": false,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:updatedOn": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "updatedOn",
+        "fieldPath": "accessTrackInfo.updatedOn"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0035",
+            "context": "Policy",
+            "targetPath": "updatedOn",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": false,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Vehicle:-1:model": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Vehicle",
+        "fieldName": "model",
+        "fieldPath": "model"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0074",
+            "context": "Vehicle",
+            "targetPath": "model",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": false,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Vehicle:-1:purchasedDate": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Vehicle",
+        "fieldName": "purchasedDate",
+        "fieldPath": "purchasedDate"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0088",
+            "context": "Vehicle",
+            "targetPath": "purchasedDate",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": false,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    }
+  }
+]
+
+
+kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloadAutoPolicyEntryPointWithValidData=[
+  {
+    "AddressInfo:-1:countryCd": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "AddressInfo",
+        "fieldName": "countryCd",
+        "fieldPath": "countryCd"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0156",
+            "context": "AddressInfo",
+            "targetPath": "countryCd",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "AddressInfo:-1:postalCode": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "AddressInfo",
+        "fieldName": "postalCode",
+        "fieldPath": "postalCode"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0157",
+            "context": "AddressInfo",
+            "targetPath": "postalCode",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "AddressInfo:2:countryCd": {
+      "contextFieldInfo": {
+        "contextId": "2",
+        "contextName": "AddressInfo",
+        "fieldName": "countryCd",
+        "fieldPath": "countryCd"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0156",
+            "context": "AddressInfo",
+            "targetPath": "countryCd",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "AddressInfo:2:postalCode": {
+      "contextFieldInfo": {
+        "contextId": "2",
+        "contextName": "AddressInfo",
+        "fieldName": "postalCode",
+        "fieldPath": "postalCode"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0157",
+            "context": "AddressInfo",
+            "targetPath": "postalCode",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "BillingAddress:-1:countryCd": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "BillingAddress",
+        "fieldName": "countryCd",
+        "fieldPath": "countryCd"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0156",
+            "context": "AddressInfo",
+            "targetPath": "countryCd",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "BillingAddress:-1:postalCode": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "BillingAddress",
+        "fieldName": "postalCode",
+        "fieldPath": "postalCode"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0157",
+            "context": "AddressInfo",
+            "targetPath": "postalCode",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Party:1:relationToPrimaryInsured": {
+      "contextFieldInfo": {
+        "contextId": "1",
+        "contextName": "Party",
+        "fieldName": "relationToPrimaryInsured",
+        "fieldPath": "relationToPrimaryInsured"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0149",
+            "context": "Party",
+            "targetPath": "relationToPrimaryInsured",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Party:3:relationToPrimaryInsured": {
+      "contextFieldInfo": {
+        "contextId": "3",
+        "contextName": "Party",
+        "fieldName": "relationToPrimaryInsured",
+        "fieldPath": "relationToPrimaryInsured"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0149",
+            "context": "Party",
+            "targetPath": "relationToPrimaryInsured",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "PartyRole:-1:role": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "PartyRole",
+        "fieldName": "role",
+        "fieldPath": "role"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0148",
+            "context": "PartyRole",
+            "targetPath": "role",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:contractTermTypeCd": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "contractTermTypeCd",
+        "fieldPath": "termDetails.contractTermTypeCd"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0042",
+            "context": "Policy",
+            "targetPath": "contractTermTypeCd",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:createdBy": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "createdBy",
+        "fieldPath": "accessTrackInfo.createdBy"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0032",
+            "context": "Policy",
+            "targetPath": "createdBy",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:createdFromPolicyRev": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "createdFromPolicyRev",
+        "fieldPath": "createdFromPolicyRev"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0008",
+            "context": "Policy",
+            "targetPath": "createdFromPolicyRev",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:createdOn": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "createdOn",
+        "fieldPath": "accessTrackInfo.createdOn"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0028",
+            "context": "Policy",
+            "targetPath": "createdOn",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:effectiveDate": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "effectiveDate",
+        "fieldPath": "termDetails.termEffectiveDate"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0044",
+            "context": "Policy",
+            "targetPath": "effectiveDate",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:expirationDate": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "expirationDate",
+        "fieldPath": "termDetails.termExpirationDate"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0047",
+            "context": "Policy",
+            "targetPath": "expirationDate",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:policyNumber": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "policyNumber",
+        "fieldPath": "policyNumber"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0001A",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "messageCode": "code",
+            "message": "Field is required",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:state": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "state",
+        "fieldPath": "state"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0004",
+            "context": "Policy",
+            "targetPath": "state",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:termCd": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "termCd",
+        "fieldPath": "termDetails.termCd"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0054",
+            "context": "Policy",
+            "targetPath": "termCd",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:termNo": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "termNo",
+        "fieldPath": "termDetails.termNo"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0050",
+            "context": "Policy",
+            "targetPath": "termNo",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:txCreateDate": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "txCreateDate",
+        "fieldPath": "transactionDetails.txCreateDate"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0020",
+            "context": "Policy",
+            "targetPath": "txCreateDate",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:txEffectiveDate": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "txEffectiveDate",
+        "fieldPath": "transactionDetails.txEffectiveDate"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0016",
+            "context": "Policy",
+            "targetPath": "txEffectiveDate",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:txType": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "txType",
+        "fieldPath": "transactionDetails.txType"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0011",
+            "context": "Policy",
+            "targetPath": "txType",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:updatedBy": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "updatedBy",
+        "fieldPath": "accessTrackInfo.updatedBy"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0039",
+            "context": "Policy",
+            "targetPath": "updatedBy",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:updatedOn": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "updatedOn",
+        "fieldPath": "accessTrackInfo.updatedOn"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0035",
+            "context": "Policy",
+            "targetPath": "updatedOn",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Vehicle:-1:model": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Vehicle",
+        "fieldName": "model",
+        "fieldPath": "model"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0074",
+            "context": "Vehicle",
+            "targetPath": "model",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Vehicle:-1:purchasedDate": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Vehicle",
+        "fieldName": "purchasedDate",
+        "fieldPath": "purchasedDate"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0088",
+            "context": "Vehicle",
+            "targetPath": "purchasedDate",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    }
+  }
+]
+
+
+kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayload_must_be_empty=[
+  {
+    "Policy:-1:policyNumber": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "policyNumber",
+        "fieldPath": "policyNumber"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "policy number must be empty",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mustBeEmpty",
+            "success": false,
+            "messageCode": "code",
+            "message": "Field must be empty",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    }
+  }
+]

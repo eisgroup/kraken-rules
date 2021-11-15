@@ -1,0 +1,12 @@
+entryPoint(entryPoint) ::= <<
+<if(entryPoint.metadata)>
+<entryPoint.metadata.properties.__keys__:{k | @Dimension("<k>", <entryPoint.metadata.properties.(k)>)}; separator="\n">
+<endif>
+<if(entryPoint.serverSideOnly)>
+@ServerSideOnly
+<endif>
+EntryPoint "<entryPoint.name>" {
+    <entryPoint.includedEntryPointNames: {includedEntryPointName | EntryPoint "<includedEntryPointName>"}; separator=",\n"><if(entryPoint.includedEntryPointNames)><if(entryPoint.ruleNames)>,<endif><endif>
+    <entryPoint.ruleNames: {ruleName | "<ruleName>"}; separator=",\n">
+}
+>>

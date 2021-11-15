@@ -1,0 +1,20 @@
+EntryPoint "R-CCR-assert-Policy-AddressInfo" {
+    "R-CCR-assert-Policy-AddressInfo"
+}
+
+EntryPoint "R-CCR-assert-VehicleInfo-AddressLine" {
+    "R-CCR-assert-VehicleInfo-AddressLine"
+}
+
+EntryPoint "R-CCR-assert-Policy-BillingAddress" {
+    "R-CCR-assert-Policy-BillingAddress"
+}
+
+EntryPoint "R-CCR-usage-AddressInfo-Vehicle" {
+    "R-CCR-usage-AddressInfo-Vehicle"
+}
+
+EntryPoint "R-CCR-usage-not-ambiguous-AddressInfo" {
+    "R-CCR-usage-PersonInfo-AddressInfo", "R-CCR-usage-Party-AddressInfo"
+}
+

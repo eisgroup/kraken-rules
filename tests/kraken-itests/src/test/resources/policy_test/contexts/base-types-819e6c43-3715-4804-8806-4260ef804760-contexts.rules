@@ -1,0 +1,514 @@
+Namespace Base
+
+Contexts {
+    Context LegalEntity Is LegalEntityBase {
+    }
+    
+    Root Context PolicySummary Is RootEntity {
+        Integer createdFromQuoteRev
+        String country
+        String currencyCd
+        String notes
+        String sendTo
+        String policySource
+        String policyNumber
+        String methodOfDelivery
+        String billingAccount
+        String policyFormCd
+        Boolean overrideRateEffectiveDate
+        String offerStatus
+        String riskStateCd
+        Date rateEffectiveDate
+        Date inceptionDate
+        Integer createdFromPolicyRev
+        String state
+        String productCd
+        UNKNOWN customer
+        Child PolicyAccessTrackInfo : accessTrackInfo
+        Child TermDetails
+        Child PackagingDetail
+        Child BLOBEntity : blob
+        Child PolicyBusinessDimensions : businessDimensions
+        Child PolicyDetail
+        Child TransactionDetails
+    }
+    
+    Context VehicleBase Is Party {
+        Boolean daytimeRunningLampsInd
+        String seriesCd
+        Integer firstRegistrationYear
+        Boolean purchasedNew
+        String noVinReasonCd
+        String performanceCd
+        String collSymbol
+        String antiLockBrakeCd
+        String airBagStatusCd
+        Date purchasedDate
+        String model
+        String make
+        String usageCd
+        Boolean recoveryDeviceInd
+        Boolean armoredInd
+        String vehicleIdentificationNumber
+        String fuelTypeCd
+        Integer modelYear
+        Integer enginePower
+        String compSymbol
+        String securityOptionsCd
+        String typeCd
+        Boolean automaticBeltsInd
+        String bodyTypeCd
+        String vehSymbol
+        Integer manufactureYear
+        Child* VehicleRegistrationRecord : registrationRecords
+    }
+    
+    Context PhoneInfo Is BaseContact {
+        String phoneExtension
+        String countryCd
+        String type
+        String value
+    }
+    
+    Context PolicyBusinessDimensions {
+        String agency
+        String subProducer
+        UNKNOWN organization
+        String brand
+    }
+    
+    Context LocationBase Is Party {
+        String nationalId
+        String stateProvinceCd
+        String city
+        String postalCode
+        String countryCd
+        String addressLine1
+        String addressLine2
+        String addressLine3
+        Child GeoCoord : geoposition
+    }
+    
+    Context GFCoverage Is Coverage {
+        String duration
+        String reason
+        String description
+        Date effectiveDate
+        Date expirationDate
+    }
+    
+    Context Vehicle Is VehicleBase {
+    }
+    
+    Context AccessTrackInfo {
+        String updatedBy
+        String createdBy
+        Datetime updatedOn
+        Datetime createdOn
+    }
+    
+    Context PolicyParty {
+        Child PolicyPerson : personInfo
+    }
+    
+    Context EmailInfo Is BaseContact {
+        String type
+        String value
+    }
+    
+    Context MergeableEntity {
+        UNKNOWN mergedFrom
+        UNKNOWN mergedTo
+    }
+    
+    Context AutoPolicyParty Is PolicyParty {
+        Child PriorCarrierInfo
+        Child InsuredInfo
+        Child CreditScoreInfo
+        Child DriverInfo
+    }
+    
+    Context ClaimInfo {
+        String claimType
+        Date claimDate
+        Boolean includeInRating
+        String exclusionReason
+        Money claimAmount
+        String faultInd
+    }
+    
+    Context BenefitsBLOBContainer Is BLOBEntity {
+    }
+    
+    Context PersonalAutoLOB Is LOBEntity {
+        String lobCd
+        Child* VehicleRiskItem : riskItems
+    }
+    
+    Context BaseContact {
+        Datetime updatedOn
+    }
+    
+    Context PartyRole {
+    }
+    
+    Context Sequencer {
+        Child* Sequences
+    }
+    
+    Context Numbered {
+        Integer seqNo
+    }
+    
+    Context Sequences {
+        Integer max
+        String collection
+    }
+    
+    Context VehicleRiskItem Is RiskItem {
+        Boolean vinMatch
+        String series
+        String plateNumber
+        Boolean included
+        Child VehicleBase : vehicleBaseDetails
+    }
+    
+    Context RegistryType {
+        String registryTypeId
+        String registryEntityNumber
+    }
+    
+    Context PolicyOrganization {
+        Child LegalEntityBase : organizationInfo
+        Child LocationBase : addressInfo
+    }
+    
+    Context PolicyDetail {
+        String versionDescription
+        String manualRenewOtherReason
+        String doNotRenewStatus
+        Boolean followUpRequired
+        String oosProcessingStage
+        String suspendOtherReason
+        Integer cancelNoticeDays
+        Boolean doNotRenew
+        String doNotRenewOtherReason
+        String declineOtherReason
+        String cancelNoticeReason
+        Date declineDate
+        String declineReason
+        String doNotRenewReason
+        String cancelNoticeOtherReason
+        String proposeNotes
+        String suspendReason
+        Boolean manualRenew
+        String supportingData
+        Date suspendDate
+        Boolean printNotice
+        String manualRenewReason
+        Boolean cancelNotice
+        Boolean currentQuoteInd
+        Date cancelNoticeDate
+        Integer archivedAtPolicyRevision
+    }
+    
+    Context PolicyPerson {
+        String employer
+        String otherName
+        String salutation
+        String title
+        String suffix
+        String employmentStatus
+        Child PersonBase : personBaseDetails
+        Child* LocationBase : addressInfo
+    }
+    
+    Context DriverInfo {
+        Boolean reportsOrdered
+        Boolean included
+        String driverType
+        Child* LicenseInfo
+        Child* ViolationInfo : violations
+        Child* SuspensionInfo : suspensions
+        Child* ClaimInfo : claims
+    }
+    
+    Context RootEntity {
+    }
+    
+    Context SeasonalPremiumHolderEntity Is PremiumHolderEntity {
+        Date effectiveDate
+        Date expirationDate
+    }
+    
+    Context PremiumHolderEntity Is PremiumOverrideHolder {
+        Boolean excludeFromHighLevelOverride
+        String code
+        Boolean excludeFromTotal
+    }
+    
+    Context PaymentPlan {
+    }
+    
+    Context VehicleDriver {
+        String offerStatus
+    }
+    
+    Context Person Is PersonBase {
+    }
+    
+    Context LicenseInfo {
+        String licenseStateCd
+        String licenseStatusCd
+        Integer ageFirstLicensed
+        String licenseClass
+        String licenseNumber
+        Date dateLicensed
+    }
+    
+    Context Form Is PremiumHolderEntity {
+        String number
+        String name
+        String description
+        String category
+    }
+    
+    Context LegalEntityBase Is Party {
+        String legalName
+        String taxIdentificationId
+        String publicName
+        Date dateStarted
+        String legalId
+        String dbaName
+    }
+    
+    Context LOBEntity {
+        String lobCd
+    }
+    
+    Context CommercialPnCBLOBContainer Is BLOBEntity {
+    }
+    
+    Context CoverageGroup Is PremiumHolderEntity {
+        String code
+        String offerStatus
+    }
+    
+    Context LinkedRegistryType Is RegistryType {
+        String relatedTypeId
+    }
+    
+    Context UserChoiceContainer Is PremiumHolderEntity {
+        Boolean userChoice
+        String reason
+        String offerStatus
+    }
+    
+    Context StudentInfo {
+        Boolean over100MilesFromHome
+        Boolean awayAtSchool
+        Boolean goodStudent
+        Boolean publicTransportationDiscount
+    }
+    
+    Context GeoCoord {
+        Decimal latitude
+        Decimal coordAccuracy
+        Decimal longitude
+    }
+    
+    Context Party Is RegistryType {
+    }
+    
+    Context VehicleRegistrationRecord {
+        String licensePlateNumber
+        Date registrationDate
+    }
+    
+    Context PolicyAccessTrackInfo Is AccessTrackInfo {
+        String updatedBy
+        String createdBy
+        String raw
+        Datetime updatedOn
+        Datetime createdOn
+    }
+    
+    Context ViolationInfo {
+        String violationCode
+        String violationType
+        String violationPoints
+        Boolean includeInRating
+        String exclusionReason
+        Date convictionDate
+        String violationCodeDesc
+    }
+    
+    Context PremiumOverrideHolder {
+        String overrideOtherReason
+        Money flatOverrideAmount
+        Integer validForTerms
+        Boolean propagateOverride
+        String overrideReason
+        String premiumOverrideType
+        Integer startTerm
+        Money overwriteOverrideAmount
+        Decimal percentageOverrideAmount
+    }
+    
+    Context PersonBase Is Party {
+        String firstName
+        String lastName
+        Boolean deceased
+        String genderCd
+        String taxId
+        String middleName
+        String salutation
+        Date birthDate
+        Date deceasedDate
+        String maritalStatus
+    }
+    
+    Context UnderwritingQuestions {
+        String code
+        String description
+    }
+    
+    Context AutoPolicySummary Is PolicySummary {
+        Child PrefillInfo
+        Child PnCBLOBContainer : blob
+        Child* AutoPolicyParty : parties
+    }
+    
+    Context Report Is LinkedRegistryType {
+        Date effectiveDate
+        Date expirationDate
+    }
+    
+    Context PrefillInfo {
+        Boolean ordered
+        String firstName
+        String lastName
+        String gender
+        Date dob
+        String middleName
+        Child LocationBase : address
+    }
+    
+    Context InsuredInfo {
+        Boolean primary
+    }
+    
+    Context Coverage Is PremiumHolderEntity {
+        Money deductibleAmount
+        Money limitAmount
+    }
+    
+    Context CreditScoreInfo {
+        String score
+    }
+    
+    Context PackagingDetail {
+        String planCd
+        Boolean declineVariationInd
+        String declineVariationReason
+        String packageCd
+    }
+    
+    Context StatefulEntity {
+        String status
+    }
+    
+    Context TransactionDetails {
+        String txOtherReason
+        String txReasonCd
+        Date txCreateDate
+        String txType
+        Datetime txEffectiveDate
+    }
+    
+    Context RegisteredOwnerInfo {
+    }
+    
+    Context AddressInfo {
+        String addressType
+    }
+    
+    Context RiskItem {
+        String offerStatus
+    }
+    
+    Context PriorCarrierInfo {
+        String carrierPolicyNo
+        String limitsBiPd
+        String carrierName
+        Money deductibles
+        String status
+    }
+    
+    Context MVRReportBase Is Report {
+        Date occurrenceDate
+        String accidentState
+        String accidentCity
+        Date accidentDate
+        String infractionType
+        String faultIndicator
+        String licenseStatus
+        String description
+        Date convictionDate
+        Date suspensionRevocationDate
+        Integer points
+    }
+    
+    Context MVRReport Is MVRReportBase {
+        String firstName
+        String lastName
+        String licenseNo
+        String licenseState
+        Date dob
+    }
+    
+    Context TermDetails {
+        Date termExpirationDate
+        Date termEffectiveDate
+        Integer termNo
+        String termCd
+    }
+    
+    Context InsuredOwnedProduct {
+    }
+    
+    Context BLOBEntity {
+        String blobCd
+    }
+    
+    Context PnCBLOBContainer Is BLOBEntity {
+        String blobCd
+        Child* LOBEntity : lobs
+    }
+    
+    Context SuspensionInfo {
+        String violationCode
+        String violationType
+        Date suspensionDate
+        String violationPoints
+        Date reinstatementDate
+        Boolean includeInRating
+        String exclusionReason
+        String violationCodeDesc
+    }
+    
+    Context CommunicationInfo {
+        Child* EmailInfo : emails
+        Child* PhoneInfo : phones
+    }
+    
+    Context Location Is LocationBase {
+        String addressType
+    }
+    
+    Context PersonLegalIdentity {
+        String legalIdentityType
+        String legalIdentityValue
+    }
+    
+    }

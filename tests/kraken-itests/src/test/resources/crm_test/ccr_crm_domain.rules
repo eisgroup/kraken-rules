@@ -1,0 +1,549 @@
+Namespace Base
+
+Contexts {
+    Context SchedulingContactInfo {
+        Date effectiveTo
+        Boolean temporary
+        Date effectiveFrom
+    }
+    
+    Context CustomerBillingInfo Is LinkableEntity {
+    }
+    
+    Context VehicleBase Is Party {
+        Boolean daytimeRunningLampsInd
+        String seriesCd
+        Integer firstRegistrationYear
+        Boolean purchasedNew
+        String noVinReasonCd
+        String performanceCd
+        String collSymbol
+        String antiLockBrakeCd
+        String airBagStatusCd
+        Date purchasedDate
+        String model
+        String make
+        String usageCd
+        Boolean recoveryDeviceInd
+        Boolean armoredInd
+        String vehicleIdentificationNumber
+        String fuelTypeCd
+        Integer modelYear
+        Integer enginePower
+        String compSymbol
+        String securityOptionsCd
+        String typeCd
+        Boolean automaticBeltsInd
+        String bodyTypeCd
+        String vehSymbol
+        Integer manufactureYear
+        Child* VehicleRegistrationRecord : registrationRecords
+    }
+    
+    Root Context Customer Is RootEntity {
+        String majorAccountId
+        UNKNOWN majorAccount
+        String majorAccountName
+        String state
+        String customerNumber
+        UNKNOWN mergedFrom
+        UNKNOWN mergedTo
+        Child AccessTrackInfo
+        Child* ProductOwned : productsOwned
+        Child* CustomerBillingInfo : billingInfos
+        Child* CustomerGroupInfo : customerGroupInfos
+        Child CrmCommunicationInfo : communicationInfo
+        Child* CustomerClaimInfo : claimInfos
+        Child* CustomerRelationship : relationships
+    }
+    
+    Context CrmEmail Is EmailInfo, ConsentableContact {
+        String type
+        String value
+    }
+    
+    Context PhoneInfo Is BaseContact {
+        String phoneExtension
+        String countryCd
+        String type
+        String value
+    }
+    
+    Context AccessProfile {
+        String* roles
+        String name
+        Date effectiveDate
+        Date expirationDate
+        Child DimensionScope : definedDimensionScope
+    }
+    
+    Context OrganizationAgencyContainer Is AgencyContainer {
+        UNKNOWN customer
+    }
+    
+    Context SecurityDomain Is RootEntity {
+        String domainCd
+        String name
+        UNKNOWN parentRef
+        Child* AccessProfile : definedAccessProfiles
+        Child* ConfiguredAccessProfile : configuredAccessProfiles
+    }
+    
+    Context LocationBase Is Party {
+        String nationalId
+        String stateProvinceCd
+        String city
+        String postalCode
+        String countryCd
+        String addressLine1
+        String addressLine2
+        String addressLine3
+        Child GeoCoord : geoposition
+    }
+    
+    Context AccessTrackInfo {
+        String updatedBy
+        String createdBy
+        Datetime updatedOn
+        Datetime createdOn
+    }
+    
+    Context IndividualCustomerAdditionalName {
+        String lastName
+    }
+    
+    Context ConsentInfo {
+        String consentStatus
+        Date consentDate
+    }
+    
+    Context EmailInfo Is BaseContact {
+        String type
+        String value
+    }
+    
+    Context MergeableEntity {
+        UNKNOWN mergedFrom
+        UNKNOWN mergedTo
+    }
+    
+    Context EntityAssociation {
+        String entityNumber
+        UNKNOWN link
+    }
+    
+    Context BusinessDetails {
+        String businessName
+        String businessType
+        Child LegalEntityBase : legalEntity
+    }
+    
+    Context CustomerAssociation {
+        UNKNOWN link
+        String customerNumber
+    }
+    
+    Context BaseContact {
+        Datetime updatedOn
+    }
+    
+    Context TargetCharacteristic {
+        String name
+    }
+    
+    Context RegistryType {
+        String registryTypeId
+        String registryEntityNumber
+    }
+    
+    Context GroupInfo Is RootEntity {
+        String groupName
+        String groupType
+        String groupId
+        Date negotiatedPolicyExpiration
+        String state
+        Datetime updatedOn
+        Datetime createdOn
+        Date effectiveDate
+        Date expirationDate
+        Child* CrmDimensionValueHolder : dimensions
+    }
+    
+    Context CustomerClaimInfo Is LinkableEntity {
+        Date dateOfLoss
+        String claimId
+        String status
+    }
+    
+    Context MajorAccount Is RootEntity {
+        String accountId
+        String name
+        String state
+        Datetime updatedOn
+        String serviceLevel
+        Datetime createdOn
+    }
+    
+    Context LinkableEntity {
+        String link
+    }
+    
+    Context CustomerAccount Is RootEntity {
+        String state
+        Datetime updatedOn
+        String type
+        String accountNumber
+        Datetime createdOn
+        UNKNOWN accountGroupInfos
+        Child* CustomerAssociation : customers
+    }
+    
+    Context DecimalTargetCharacteristic Is TargetCharacteristic {
+        Decimal from
+        Decimal to
+        Decimal* matches
+    }
+    
+    Context BusinessEntity {
+        Child BusinessDetails : details
+    }
+    
+    Context StringTargetCharacteristic Is TargetCharacteristic {
+        String from
+        String to
+        String* matches
+    }
+    
+    Context RootEntity {
+    }
+    
+    Context Campaign Is RootEntity {
+        UNKNOWN parent
+        Date endDate
+        String description
+        Datetime createdOn
+        Integer duration
+        String customerType
+        String divertTo
+        String state
+        String terminationReason
+        Decimal actualCost
+        UNKNOWN owner
+        String terminationExplain
+        Decimal expectedRevenue
+        Date suspendTo
+        Decimal budgetCost
+        String campaignId
+        String* targetRelationshipRoles
+        Datetime updatedOn
+        Boolean autoStart
+        String promotionCd
+        Boolean divertCampaignNotification
+        String name
+        String categoryCd
+        Date suspendFrom
+        Date startDate
+        Child* TargetCharacteristic : targetCharacteristics
+        Child* ProductInfo : products
+        Child* CampaignChannelInfo : channels
+    }
+    
+    Context CrmAddress Is Contact {
+        String subdivision
+        String inCareOf
+        String county
+        String addressValidatedInd
+        String attention
+        Child SchedulingContactInfo
+        Child LocationBase : location
+    }
+    
+    Context IndividualDetails {
+        Child PersonBase : person
+    }
+    
+    Context CustomerRelationship {
+        String designatedComment
+        String passwordPassphrase
+        String authorisationOption
+        String relationshipType
+        String answer
+        Boolean serviceRole
+        String relationshipDescription
+        UNKNOWN relatedCustomer
+        String* serviceRoleCds
+        String challengeQuestion
+        String passwordReminder
+    }
+    
+    Context IndividualAgencyContainer Is AgencyContainer {
+        UNKNOWN customer
+    }
+    
+    Context User Is RootEntity {
+        Integer authorityLevel
+        String uuid
+        Child* UserProfile : userProfiles
+    }
+    
+    Context UserProfile {
+        String profileId
+        UNKNOWN domain
+        Boolean defaultInd
+        Date effectiveDate
+        Date expirationDate
+        Child* UserOperationalAssignment : operationalAssignments
+    }
+    
+    Context LegalEntityBase Is Party {
+        String legalName
+        String taxIdentificationId
+        String publicName
+        Date dateStarted
+        String legalId
+        String dbaName
+    }
+    
+    Context EntityContainer Is RootEntity {
+        Datetime updatedOn
+        Datetime createdOn
+    }
+    
+    Context DateTargetCharacteristic Is TargetCharacteristic {
+        Date from
+        Date to
+        Date* matches
+    }
+    
+    Context LOBEntity {
+        String lobCd
+    }
+    
+    Context AgencyContainer Is EntityContainer {
+        String agency
+        String state
+        Child* ProductOwned : productsOwned
+        Child* CustomerBillingInfo : billingsInfo
+        Child* CustomerClaimInfo : claimsInfo
+        Child* CustomerRelationship : relationships
+    }
+    
+    Context LinkedRegistryType Is RegistryType {
+        String relatedTypeId
+    }
+    
+    Context GeoCoord {
+        Decimal latitude
+        Decimal coordAccuracy
+        Decimal longitude
+    }
+    
+    Context Party Is RegistryType {
+    }
+    
+    Context DimensionValue {
+        String dimensionValue
+    }
+    
+    Context UserOperationalAssignment {
+        Date effectiveDate
+        Date expirationDate
+        String configuredAccessProfileId
+    }
+    
+    Context VehicleRegistrationRecord {
+        String licensePlateNumber
+        Date registrationDate
+    }
+    
+    Context CrmCommunicationInfo {
+        String preferredContactMethod
+        Child* CrmWebAddress : webAddresses
+        Child* CrmAddress : addresses
+        Child* CrmEmail : emails
+        Child* CrmChat : chats
+        Child* CrmPhone : phones
+        Child* CrmSocialNet : socialNets
+    }
+    
+    Context Opportunity Is RootEntity {
+        String opportunityId
+        String likelihood
+        String channel
+        String description
+        String state
+        Datetime updatedOn
+        String closeReason
+        Datetime createdOn
+        Date effectiveDate
+        Child* ProductInfo : products
+        Child* OpportunityAssociation : associations
+    }
+    
+    Context DimensionScope {
+        Child* Dimension : dimensions
+    }
+    
+    Context PersonBase Is Party {
+        String firstName
+        String lastName
+        Boolean deceased
+        String genderCd
+        String taxId
+        String middleName
+        String salutation
+        Date birthDate
+        Date deceasedDate
+        String maritalStatus
+    }
+    
+    Context CrmChat Is Contact {
+        String type
+        String value
+    }
+    
+    Context CrmPhone Is PhoneInfo, ConsentableContact {
+        String* preferredTimesToContact
+        Date consentToTextDate
+        String phoneExtension
+        String type
+        String* preferredDaysToContact
+        String value
+        Child SchedulingContactInfo
+    }
+    
+    Context OrganizationCustomerBase Is Customer {
+        Boolean groupSponsor
+        Child BusinessDetails : details
+    }
+    
+    Context Communication Is RootEntity {
+        String languageCd
+        String performer
+        String channel
+        String description
+        String sourceCd
+        Datetime updatedOn
+        UNKNOWN thread
+        String type
+        String subCategoryCd
+        Datetime createdOn
+        String referenceDescription
+        String threadId
+        String categoryCd
+        String state
+        String outcome
+        String internalCallerCd
+        String direction
+        Child* ProductInfo : products
+        Child* EntityAssociation : associations
+    }
+    
+    Context CrmDimensionValueHolder {
+        String agency
+    }
+    
+    Context ProductInfo {
+        String lineOfBusiness
+        String productCd
+    }
+    
+    Context CrmWebAddress Is Contact {
+        String type
+        String value
+    }
+    
+    Context OrganizationAdditionalName {
+        String dbaName
+    }
+    
+    Context ConsentableContact Is Contact {
+        Child ConsentInfo
+    }
+    
+    Context CampaignChannelInfo {
+        String campaignChannelCd
+        String campaignSubChannelCd
+        String campaignMaterialCd
+    }
+    
+    Context Dimension {
+        String dimensionCd
+        Boolean unrestricted
+        Child* DimensionValue : dimensionValues
+    }
+    
+    Context StatefulEntity {
+        String status
+    }
+    
+    Context CampaignAssociation Is RootEntity {
+        UNKNOWN campaign
+        UNKNOWN customer
+    }
+    
+    Context Contact Is BaseContact {
+        String* communicationPreferences
+        Boolean doNotSolicit
+        String comment
+        Boolean preferred
+    }
+    
+    Context AddressInfo {
+        String addressType
+    }
+    
+    Context OpportunityAssociation Is EntityAssociation {
+        Decimal actualPremium
+    }
+    
+    Context ProductOwned Is LinkableEntity {
+        Date policyExpirationDate
+        String carrierNameDescription
+        String policyTypeCd
+        String policyNumber
+        String carrierNameCd
+    }
+    
+    Context CustomerGroupInfo {
+        String membershipNumber
+        UNKNOWN groupInfo
+    }
+    
+    Context IndividualCustomerBase Is Customer {
+        Child IndividualDetails : details
+        Child* ParticipationDetails : participations
+        Child* BusinessEntity : businessEntities
+    }
+    
+    Context ParticipationDetails {
+        Child CustomerAssociation : customer
+    }
+    
+    Context BLOBEntity {
+        String blobCd
+    }
+    
+    Context ConfiguredAccessProfile {
+        String* assignedRoles
+        String name
+        UNKNOWN basedOn
+        Child DimensionScope : assignedScope
+    }
+    
+    Context CrmSocialNet Is Contact {
+        String type
+        String value
+    }
+    
+    Context CommunicationInfo {
+        Child* EmailInfo : emails
+        Child* PhoneInfo : phones
+    }
+    
+    Context PersonLegalIdentity {
+        String legalIdentityType
+        String legalIdentityValue
+    }
+    
+    }

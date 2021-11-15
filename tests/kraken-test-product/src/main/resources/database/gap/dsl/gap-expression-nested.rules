@@ -1,0 +1,48 @@
+Namespace Policy
+
+EntryPoint "Expressions_nested_for" {
+    "Expressions_nested_for"
+}
+
+EntryPoint "Expressions_nested_filter" {
+     "Expressions_nested_filter"
+}
+
+EntryPoint "Expressions_nested_mixed" {
+     "Expressions_nested_mixed"
+}
+
+Rule "Expressions_nested_for" On Policy.totalPremium {
+    // total sum is 123
+    Reset To
+        Sum(for i in {1} return
+            i + Sum(for j in {10} return
+                i + j + Sum(for k in {100} return i + j + k)
+            )
+        )
+}
+
+Rule "Expressions_nested_filter" On Policy.termNo {
+    // termNo will be 100000 when odometerReading is 100000
+    // termNo will be 0 when odometerReading is not 100000
+    Reset To
+        Sum(
+            Vehicle[odometerReading ==
+                Sum(
+                    riskItems[odometerReading ==
+                        Sum(
+                            Vehicle[*].odometerReading[this == 100000]
+                        )
+                    ].odometerReading
+                )
+            ].odometerReading
+        )
+}
+
+Rule "Expressions_nested_mixed" On Policy.changePremium {
+    // changePremium is reset to odometerReading
+    Reset To
+        Sum(for i in {1} return
+            i * Sum(Vehicle[odometerReading == Sum(for j in {1} return i * j * odometerReading)].odometerReading)
+        )
+}

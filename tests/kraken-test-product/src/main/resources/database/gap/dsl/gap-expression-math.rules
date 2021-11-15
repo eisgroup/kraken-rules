@@ -1,0 +1,109 @@
+Namespace Policy
+
+EntryPoint "Math" {
+    "Math_calculation_totalLimit",
+    "Math_calculation_changePremium",
+    "Math_calculation_totalPremium"
+}
+
+Rule "Math_calculation_totalLimit" On Policy.totalLimit {
+    Reset To Abs((5 / 2) * -4) // = 10
+}
+
+Rule "Math_calculation_changePremium" On Policy.changePremium {
+    Reset To 2.2**(Ceil(10.1) % Floor(4.9)) - 2.648 // = 8
+}
+
+Rule "Math_calculation_totalPremium" On Policy.totalPremium {
+    // totalLimit = 10, changePremium = 8
+    // (8^-2 mod 0.01) * (10 / (1/3)) + 1.01 - 2.02 = (0.015625 mod 0.01) * 30 + 1.01 - 2.02 = 0.005625 * 30 - 1.01 = -0.84125
+    // Round(-0.84125, 4) = -0.8413
+    Reset To Round((Min(changePremium, totalLimit)**-2 % 0.01) * (Max(changePremium, totalLimit) / (1 / 3)) + 1.01 - 2.02, 4)
+}
+
+EntryPoint "Math_DevTesting" {
+    "Addition",
+    "Subtraction",
+    "Multiplication",
+    "Division",
+    "Modulus",
+    "Power",
+    "Huge"
+}
+
+// addition, result = 8 on "Policy Number"
+Rule "Addition" On Policy.policyNumber {
+    Reset To
+        NumberToString(
+            Round(1.5) +
+            Round(1.4) +
+            Floor(Round(Round(1.555, 2), 1)) +
+            Sign(Ceil(0.0000000000000001)) +
+            Floor(1.999999999999999) +
+            Sign(Abs(-0.9999999999999999))
+        )
+}
+
+// subtraction, result = 5 on "Tx Type"
+Rule "Subtraction" On Policy.txType {
+    Reset To
+        NumberToString(
+            Round(10.5) -
+            Round(1.4) -
+            Floor(Round(Round(1.555, 2), 1)) +
+            Sign(Ceil(0.0000000000000001)) -
+            Floor(1.999999999999999) -
+            Sign(Abs(-0.9999999999999999))
+        )
+}
+
+// multiplication, result = 0.117 on "Tx Reason" (0.9 * 0.1 * 1.3 * 1)
+Rule "Multiplication" On Policy.txReason {
+    Reset To
+        NumberToString(
+            Min(Ceil(0.0000000000000001), 0.9) *
+            Max(Floor(0.9999999999999999), 0.1) *
+            Min({Abs(-1.99), Sqrt(9), 1.5, 1.5 , 1.3}) *
+            Max({0.8, Sign(0.9999999)})
+        )
+}
+
+// division, result = 0.7363636363636364 on "Oos Processing Stage" (0.9 / 0.1 / 1.3 / 1)
+Rule "Division" On Policy.oosProcessingStage {
+    Reset To NumberToString(
+        Min(Ceil(0.0000000000000001), 0.9) /
+        Max(Floor(0.9999999999999999), 0.1) /
+        Min({Abs(-1.99), Sqrt(9), 1.5, 1.5, 1.3}) /
+        Max({0.8, Sign(0.9999999)})
+    )
+}
+
+// modulus, result = 0 on "Change Premium"
+Rule "Modulus" On Policy.changePremium {
+    Reset To 840.7 % 0.1
+}
+
+// power limit, result = >9000 on "Total Premium"
+Rule "Power" On Policy.totalPremium {
+    Reset To 95 ** 2.999999
+}
+
+// division (huge), result = w/e, on "Version Description", must not result in errors
+Rule "Huge" On Policy.versionDescription {
+    Reset To NumberToString(
+        1 /
+        0.0000000000000001 /
+        0.0000000000000001 /
+        0.0000000000000001 /
+        0.0000000000000001 /
+        0.0000000000000001 /
+        0.0000000000000001 /
+        0.0000000000000001 /
+        0.0000000000000001 /
+        0.0000000000000001 /
+        0.0000000000000001 /
+        0.0000000000000001 /
+        0.0000000000000001 /
+        0.0000000000000001
+    )
+}

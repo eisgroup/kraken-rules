@@ -1,0 +1,48 @@
+Namespace PersonalAuto
+
+Include Base
+
+Rule "AutoMBICoverage-181129-AQsJ7" On AutoMBICoverage.expirationDate {
+  When effectiveDate!=null and duration = '1YEAR'
+  Reset To PlusYears(effectiveDate, 1)
+}
+
+Rule "AutoMBICoverage-181129-dP3Ks" On AutoMBICoverage.expirationDate {
+  When effectiveDate!=null and duration = '3YEARS'
+  Reset To PlusYears(effectiveDate, 3)
+}
+
+Rule "AutoMBICoverage-181129-1gRQ9" On AutoMBICoverage.expirationDate {
+  When effectiveDate!=null and duration = '5YEARS'
+  Reset To PlusYears(effectiveDate, 5)
+}
+
+Rule "AutoMBICoverage-181129-ux3AR" On AutoMBICoverage.expirationDate {
+  When effectiveDate = null
+  Reset To null
+}
+
+Rule "AutoMBICoverage-181129-zo3Cg" On AutoMBICoverage.reason {
+  When AutoVehicleEntity.manufactureYear >= 2018
+  Reset To 'NEWCAR'
+}
+
+Rule "AutoMBICoverage-181129-bQtPN" On AutoMBICoverage.reason {
+  When effectiveDate = null
+  Reset To null
+}
+
+Rule "AutoMBICoverage-181129-L2SXA" On AutoMBICoverage.duration {
+  When AutoVehicleEntity.manufactureYear >= 2018
+  Reset To '3YEARS'
+}
+
+Rule "AutoMBICoverage-181129-W5nUw" On AutoMBICoverage.duration {
+  When effectiveDate = null
+  Reset To null
+}
+
+Rule "AutoMBICoverage-181129-c0MgS" On AutoMBICoverage.effectiveDate {
+  When AutoVehicleEntity.manufactureYear >= 2018
+  Default To AutoTransactionDetails.txEffectiveDate
+}

@@ -1,0 +1,25 @@
+Namespace Policy
+
+EntryPoint "ForEach_EntryPoint" {
+    "ForEach_Rule01",
+    "ForEach_Rule02"
+}
+
+Rule "ForEach_Rule01" On Vehicle.numDaysDrivenPerWeek {
+    Assert Max(for c in Policy.riskItems[*].anubisCoverages return c.limitAmount) = Min(Policy.riskItems[*].anubisCoverages[*].limitAmount)
+    Error "code":"Assertion failed: Max(for c in Policy.riskItems[*].anubisCoverages return c.limitAmount) = Min(Policy.riskItems[*].anubisCoverages[*].limitAmount)"
+}
+
+Rule "ForEach_Rule02" On Policy.changePremium {
+    Reset To Sum(for c in Vehicle[*].anubisCoverages return c.limitAmount * 10)
+}
+
+EntryPoint "ForSome_ForEvery_EntryPoint" {
+    "ForSome_ForEvery_Rule01"
+}
+
+Rule "ForSome_ForEvery_Rule01" On Policy.policyNumber {
+ When every c in Vehicle[*].anubisCoverages satisfies c.cultName = "CULT"
+ Assert some c in Vehicle[*].anubisCoverages satisfies c.limitAmount < Max(riskItems[*].anubisCoverages[*].limitAmount)
+ Error "code":"Assertion failed: some c in Vehicle[*].anubisCoverages satisfies c.limitAmount < Max(riskItems[*].anubisCoverages[*].limitAmount)"
+}

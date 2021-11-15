@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>parent-pom</artifactId>
+        <groupId>kraken</groupId>
+        <version>1.22.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>kraken-designtime-project</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>kraken</groupId>
+            <artifactId>kraken-utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>kraken</groupId>
+            <artifactId>kraken-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>kraken</groupId>
+            <artifactId>kraken-context-path</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>kraken</groupId>
+            <artifactId>kraken-model-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>kraken</groupId>
+            <artifactId>kraken-model-dsl</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>kraken</groupId>
+            <artifactId>kraken-expression-language</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>kraken</groupId>
+            <artifactId>kraken-designtime-project-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>kraken</groupId>
+            <artifactId>kraken-expression-language-mvel</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>kraken</groupId>
+            <artifactId>kraken-expression-language-interpreter</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-all</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>kraken</groupId>
+            <artifactId>kraken-model-impl</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+</project>

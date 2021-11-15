@@ -1,0 +1,52 @@
+Namespace Policy
+
+EntryPoint "Expressions-Filter" {
+    "Filter Primitive",
+    "Fold Filter Primitive",
+    "Filter CCR",
+    "Filter Collection field",
+    "Filter Collection Self CCR",
+    "Filter Collection Self CCR and fold",
+    "Filter Collection CCR and fold",
+    "Filter Collection field and fold",
+    "Filter Collection thiz field and fold",
+    "Filter Collection thiz field"
+}
+
+Rule "Filter Primitive" On Policy.policyNumber {
+    Assert Count(policies[this = "P01"]) = 1
+}
+
+Rule "Fold Filter Primitive" On Policy.policies {
+    Assert Count(Vehicle[*].model[this = "P01"]) = 1
+}
+
+Rule "Filter CCR" On Policy.policyCurrency {
+    Assert Count(policies[Insured.name = this]) = 1
+}
+
+Rule "Filter Collection thiz field" On Policy.createdFromPolicyRev {
+    Assert Count(Vehicle[this.model = "P01"]) = 1
+}
+
+Rule "Filter Collection Self CCR and fold" On Policy.txType {
+    Assert Count(Vehicle[Policy.policyNumber = model].model) = 1
+}
+
+Rule "Filter Collection CCR and fold" On Policy.txReason {
+    Assert Count(Vehicle[Policy.policyNumber = model].model) = 1
+}
+
+Rule "Filter Collection thiz field and fold" On Policy.txCreateDate {
+    Assert Count(Vehicle[this.model = "P01"].model) = 1
+}
+
+Rule "Filter Collection field" On Policy.state {
+    Assert Count(Vehicle[model = "P01"]) = 1
+}
+rule "Filter Collection field and fold" on Policy.txEffectiveDate {
+    assert Count(Vehicle[model = "P01"].model) = 1
+}
+RULE "Filter Collection Self CCR" ON Policy.updatedBy {
+    ASSERT Count(Vehicle[Policy.policyNumber = model]) = 1
+}

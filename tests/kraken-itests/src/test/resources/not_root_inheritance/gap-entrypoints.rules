@@ -1,0 +1,8 @@
+EntryPoint "not-root-policy" {
+    "R01"
+}
+
+EntryPoint "not-root-risk" {
+    "R02"
+}
+

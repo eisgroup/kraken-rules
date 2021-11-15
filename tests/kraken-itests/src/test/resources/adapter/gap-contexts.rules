@@ -1,0 +1,39 @@
+Namespace TypeAdapter
+
+Root Context Policy {
+    Child Insured : insured
+    Child* RiskItem : riskItems
+    Child InfoAdapterHolder : typeAdapterRiskItem
+}
+
+Context Insured {
+    String name
+    Child InsuredAddress : insuredAddress
+}
+
+Context InsuredAddress {
+}
+
+Context RiskItem {
+    String itemName
+    Child CoverageA : coverageAs
+    Child CoverageB : coverageB
+}
+
+@NotStrict Context CoverageA Is Coverage {
+}
+
+@NotStrict Context CoverageB Is Coverage {
+}
+
+
+@NotStrict Context Coverage {
+    Decimal limitAmount
+}
+
+Context InfoAdapterHolder {
+    Child RiskItem : riskItem
+    Child CoverageA : coverageAWrapper
+    Child CoverageB : extendedWrapper
+    Child* Insured : wrappedInsureds
+}

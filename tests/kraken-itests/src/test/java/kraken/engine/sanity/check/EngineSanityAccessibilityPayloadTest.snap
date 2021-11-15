@@ -1,0 +1,112 @@
+kraken.engine.sanity.check.EngineSanityAccessibilityPayloadTest.shouldExecuteAccessibilityAutoPolicyEntryPoint=[
+  {
+    "Policy:-1:policyNumber": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "policyNumber",
+        "fieldPath": "policyNumber"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0001B",
+            "context": "Policy",
+            "targetPath": "policyNumber",
+            "payloadType": "ACCESSIBILITY"
+          },
+          "payloadResult": {
+            "accessible": false
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:termCd": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "termCd",
+        "fieldPath": "termDetails.termCd"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0058",
+            "context": "Policy",
+            "targetPath": "termCd",
+            "payloadType": "ACCESSIBILITY"
+          },
+          "payloadResult": {
+            "accessible": false
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:txCreateDate": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "txCreateDate",
+        "fieldPath": "transactionDetails.txCreateDate"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0023",
+            "context": "Policy",
+            "targetPath": "txCreateDate",
+            "payloadType": "ACCESSIBILITY"
+          },
+          "payloadResult": {
+            "accessible": false
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "Policy:-1:txReason": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "txReason",
+        "fieldPath": "transactionDetails.txReason"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0015",
+            "context": "Policy",
+            "targetPath": "txReason",
+            "payloadType": "ACCESSIBILITY"
+          },
+          "payloadResult": {
+            "accessible": false
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    }
+  }
+]

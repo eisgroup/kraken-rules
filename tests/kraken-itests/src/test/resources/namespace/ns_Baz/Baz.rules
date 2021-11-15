@@ -1,0 +1,33 @@
+Namespace Baz
+
+Include Bar
+
+Import Rule "Gang-RegExp" from Gang
+
+Rule "Baz-RegExp" On TestPolicy.riskStateCd {
+    Assert Matches "[A-Z]{2}"
+}
+
+EntryPoints {
+    EntryPoint "constraints" {
+        "Baz-RegExp",
+        "Woo-RegExp",
+        "Constraint-TestPolicy.riskStateCd-RegExp",
+        "Constraint-TestPolicy.packageCd-Required",
+        "Constraint-TestPolicy.packageCd-Within",
+        "Constraint-TestRiskItem.value-Max",
+        "Constraint-TestRiskItem.value-Min",
+        "Base-RegExp"
+    }
+}
+
+Contexts {
+    Context TestAddressInfo Is AddressInfo{
+        String city
+        String street
+        String postalCode
+        Boolean doNotSolicit
+        String countryCd
+        String baz
+    }
+}

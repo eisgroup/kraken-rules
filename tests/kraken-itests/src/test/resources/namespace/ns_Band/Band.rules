@@ -1,0 +1,7 @@
+Namespace Band
+
+Include Base
+
+Rule "Band-Default" On AddressInfo.zipCode {
+    Default To "defaultZipCode"
+}

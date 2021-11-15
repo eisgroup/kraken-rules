@@ -1,0 +1,29 @@
+Namespace Base
+
+Contexts {
+    Context LOBEntity {
+        String lobCd
+    }
+    
+    Context BLOBEntity {
+        String blobCd
+    }
+    
+    Root Context RootEntity {
+    }
+    
+    Context AddressInfo {
+        String addressType
+        String zipCode
+    }
+    
+    }
+
+Rule "Base-RegExp" On AddressInfo.addressType {
+    Assert Matches "[A-Z]{2}"
+}
+
+
+EntryPoint "Base_EP" {
+    "Base-RegExp"
+}

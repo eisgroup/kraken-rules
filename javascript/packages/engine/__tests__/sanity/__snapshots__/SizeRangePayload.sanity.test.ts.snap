@@ -1,0 +1,280 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SizeRange payload sanity test should fail when size is less than min: Results + reducer results 1`] = `
+Object {
+  "Field Metadata reduced results": Object {
+    "Policy:0:policies": Object {
+      "fieldType": "STRING",
+      "id": "Policy:0:policies",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "policies",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "rule-size-range-error",
+          "errorMessage": "Array length is invalid",
+          "isFailed": true,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "max": 3,
+            "message": undefined,
+            "min": 2,
+            "success": false,
+            "type": 4,
+            "validationSeverity": "critical",
+          },
+          "ruleName": "SizePayloadRange",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+  },
+  "Raw results": Object {
+    "evaluationTimestamp": Any<Date>,
+    "results": Object {
+      "Policy:0:policies": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "policies",
+          "fieldPath": "policies",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "max": 3,
+              "message": undefined,
+              "min": 2,
+              "success": false,
+              "type": 4,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Policy",
+              "payloadtype": "SIZE_RANGE",
+              "ruleName": "SizePayloadRange",
+              "targetPath": "policies",
+            },
+          },
+        ],
+      },
+    },
+  },
+  "Validation results": Object {
+    "critical": Array [
+      ResultErrorMessage {
+        "info": Object {
+          "getContextInstanceId": [Function],
+          "getContextName": [Function],
+        },
+        "message": "Array length is invalid",
+        "messageCode": "rule-size-range-error",
+        "ruleName": "SizePayloadRange",
+        "severity": "critical",
+        "templateVariables": Array [],
+      },
+    ],
+    "info": Array [],
+    "warning": Array [],
+  },
+}
+`;
+
+exports[`SizeRange payload sanity test should fail when size is more than max: Results + reducer results 1`] = `
+Object {
+  "Field Metadata reduced results": Object {
+    "Policy:0:policies": Object {
+      "fieldType": "STRING",
+      "id": "Policy:0:policies",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "policies",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "rule-size-range-error",
+          "errorMessage": "Array length is invalid",
+          "isFailed": true,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "max": 3,
+            "message": undefined,
+            "min": 2,
+            "success": false,
+            "type": 4,
+            "validationSeverity": "critical",
+          },
+          "ruleName": "SizePayloadRange",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+  },
+  "Raw results": Object {
+    "evaluationTimestamp": Any<Date>,
+    "results": Object {
+      "Policy:0:policies": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "policies",
+          "fieldPath": "policies",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "max": 3,
+              "message": undefined,
+              "min": 2,
+              "success": false,
+              "type": 4,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Policy",
+              "payloadtype": "SIZE_RANGE",
+              "ruleName": "SizePayloadRange",
+              "targetPath": "policies",
+            },
+          },
+        ],
+      },
+    },
+  },
+  "Validation results": Object {
+    "critical": Array [
+      ResultErrorMessage {
+        "info": Object {
+          "getContextInstanceId": [Function],
+          "getContextName": [Function],
+        },
+        "message": "Array length is invalid",
+        "messageCode": "rule-size-range-error",
+        "ruleName": "SizePayloadRange",
+        "severity": "critical",
+        "templateVariables": Array [],
+      },
+    ],
+    "info": Array [],
+    "warning": Array [],
+  },
+}
+`;
+
+exports[`SizeRange payload sanity test should succeed when size is in range: Results + reducer results 1`] = `
+Object {
+  "Field Metadata reduced results": Object {
+    "Policy:0:policies": Object {
+      "fieldType": "STRING",
+      "id": "Policy:0:policies",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "policies",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "rule-size-range-error",
+          "errorMessage": "Array length is invalid",
+          "isFailed": false,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "max": 3,
+            "message": undefined,
+            "min": 2,
+            "success": true,
+            "type": 4,
+            "validationSeverity": "critical",
+          },
+          "ruleName": "SizePayloadRange",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+  },
+  "Raw results": Object {
+    "evaluationTimestamp": Any<Date>,
+    "results": Object {
+      "Policy:0:policies": Object {
+        "contextFieldInfo": ContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "policies",
+          "fieldPath": "policies",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": ConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "max": 3,
+              "message": undefined,
+              "min": 2,
+              "success": true,
+              "type": 4,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": RuleInfo {
+              "context": "Policy",
+              "payloadtype": "SIZE_RANGE",
+              "ruleName": "SizePayloadRange",
+              "targetPath": "policies",
+            },
+          },
+        ],
+      },
+    },
+  },
+  "Validation results": Object {
+    "critical": Array [],
+    "info": Array [],
+    "warning": Array [],
+  },
+}
+`;

@@ -1,0 +1,2087 @@
+kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckAccessibilityCarCoverage=[
+  {
+    "COLLCoverage:-1:deductibleAmount": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "COLLCoverage",
+        "fieldName": "deductibleAmount",
+        "fieldPath": "deductibleAmount"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0119",
+            "context": "CarCoverage",
+            "targetPath": "deductibleAmount",
+            "payloadType": "ACCESSIBILITY"
+          },
+          "payloadResult": {
+            "accessible": false
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "R0139",
+            "context": "CarCoverage",
+            "targetPath": "deductibleAmount",
+            "payloadType": "ACCESSIBILITY"
+          },
+          "payloadResult": {
+            "accessible": false
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "COLLCoverage:-1:effectiveDate": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "COLLCoverage",
+        "fieldName": "effectiveDate",
+        "fieldPath": "effectiveDate"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0104A",
+            "context": "COLLCoverage",
+            "targetPath": "effectiveDate",
+            "payloadType": "ACCESSIBILITY"
+          },
+          "payloadResult": {
+            "accessible": false
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "FullCoverage:-1:deductibleAmount": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "FullCoverage",
+        "fieldName": "deductibleAmount",
+        "fieldPath": "deductibleAmount"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0119",
+            "context": "CarCoverage",
+            "targetPath": "deductibleAmount",
+            "payloadType": "ACCESSIBILITY"
+          },
+          "payloadResult": {
+            "accessible": false
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "R0139",
+            "context": "CarCoverage",
+            "targetPath": "deductibleAmount",
+            "payloadType": "ACCESSIBILITY"
+          },
+          "payloadResult": {
+            "accessible": false
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "FullCoverage:-1:effectiveDate": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "FullCoverage",
+        "fieldName": "effectiveDate",
+        "fieldPath": "effectiveDate"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0104A",
+            "context": "COLLCoverage",
+            "targetPath": "effectiveDate",
+            "payloadType": "ACCESSIBILITY"
+          },
+          "payloadResult": {
+            "accessible": false
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "RRCoverage:-1:deductibleAmount": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "RRCoverage",
+        "fieldName": "deductibleAmount",
+        "fieldPath": "deductibleAmount"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0119",
+            "context": "CarCoverage",
+            "targetPath": "deductibleAmount",
+            "payloadType": "ACCESSIBILITY"
+          },
+          "payloadResult": {
+            "accessible": false
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "R0139",
+            "context": "CarCoverage",
+            "targetPath": "deductibleAmount",
+            "payloadType": "ACCESSIBILITY"
+          },
+          "payloadResult": {
+            "accessible": false
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    }
+  }
+]
+
+
+kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckAssertionCarCoverageOnValidData=[
+  {
+    "COLLCoverage:-1:expirationDate": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "COLLCoverage",
+        "fieldName": "expirationDate",
+        "fieldPath": "expirationDate"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0108",
+            "context": "COLLCoverage",
+            "targetPath": "expirationDate",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "messageCode": "code",
+            "message": "Value didn\u0027t match assertion expirationDate \u003e effectiveDate",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "COLLCoverage:-1:limitAmount": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "COLLCoverage",
+        "fieldName": "limitAmount",
+        "fieldPath": "limitAmount"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0117",
+            "context": "CarCoverage",
+            "targetPath": "limitAmount",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "messageCode": "code",
+            "message": "Value didn\u0027t match assertion limitAmount \u003e 1000 and limitAmount \u003c 1000000",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "FullCoverage:-1:expirationDate": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "FullCoverage",
+        "fieldName": "expirationDate",
+        "fieldPath": "expirationDate"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0108",
+            "context": "COLLCoverage",
+            "targetPath": "expirationDate",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "messageCode": "code",
+            "message": "Value didn\u0027t match assertion expirationDate \u003e effectiveDate",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "FullCoverage:-1:limitAmount": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "FullCoverage",
+        "fieldName": "limitAmount",
+        "fieldPath": "limitAmount"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0117",
+            "context": "CarCoverage",
+            "targetPath": "limitAmount",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "messageCode": "code",
+            "message": "Value didn\u0027t match assertion limitAmount \u003e 1000 and limitAmount \u003c 1000000",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "RRCoverage:-1:limitAmount": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "RRCoverage",
+        "fieldName": "limitAmount",
+        "fieldPath": "limitAmount"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0117",
+            "context": "CarCoverage",
+            "targetPath": "limitAmount",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "messageCode": "code",
+            "message": "Value didn\u0027t match assertion limitAmount \u003e 1000 and limitAmount \u003c 1000000",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    }
+  }
+]
+
+
+kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckInitCarCoverageOnValidPolicy=[
+  {
+    "COLLCoverage:-1:deductibleAmount": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "COLLCoverage",
+        "fieldName": "deductibleAmount",
+        "fieldPath": "deductibleAmount"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0123",
+            "context": "COLLCoverage",
+            "targetPath": "deductibleAmount",
+            "payloadType": "DEFAULT"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "NOT_APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "COLLCoverage:-1:effectiveDate": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "COLLCoverage",
+        "fieldName": "effectiveDate",
+        "fieldPath": "effectiveDate"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0101",
+            "context": "COLLCoverage",
+            "targetPath": "effectiveDate",
+            "payloadType": "DEFAULT"
+          },
+          "payloadResult": {
+            "events": []
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "COLLCoverage:-1:expirationDate": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "COLLCoverage",
+        "fieldName": "expirationDate",
+        "fieldPath": "expirationDate"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0107",
+            "context": "COLLCoverage",
+            "targetPath": "expirationDate",
+            "payloadType": "DEFAULT"
+          },
+          "payloadResult": {
+            "events": []
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "COLLCoverage:-1:limitAmount": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "COLLCoverage",
+        "fieldName": "limitAmount",
+        "fieldPath": "limitAmount"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0114",
+            "context": "CarCoverage",
+            "targetPath": "limitAmount",
+            "payloadType": "DEFAULT"
+          },
+          "payloadResult": {
+            "events": []
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "FullCoverage:-1:deductibleAmount": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "FullCoverage",
+        "fieldName": "deductibleAmount",
+        "fieldPath": "deductibleAmount"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0123",
+            "context": "COLLCoverage",
+            "targetPath": "deductibleAmount",
+            "payloadType": "DEFAULT"
+          },
+          "payloadResult": {
+            "events": [
+              {
+                "attributeTarget": "deductibleAmount",
+                "contextName": "FullCoverage",
+                "contextId": "-1",
+                "newValue": 20000,
+                "previousValue": 1000
+              }
+            ]
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "FullCoverage:-1:effectiveDate": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "FullCoverage",
+        "fieldName": "effectiveDate",
+        "fieldPath": "effectiveDate"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0101",
+            "context": "COLLCoverage",
+            "targetPath": "effectiveDate",
+            "payloadType": "DEFAULT"
+          },
+          "payloadResult": {
+            "events": []
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "FullCoverage:-1:expirationDate": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "FullCoverage",
+        "fieldName": "expirationDate",
+        "fieldPath": "expirationDate"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0107",
+            "context": "COLLCoverage",
+            "targetPath": "expirationDate",
+            "payloadType": "DEFAULT"
+          },
+          "payloadResult": {
+            "events": []
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "FullCoverage:-1:limitAmount": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "FullCoverage",
+        "fieldName": "limitAmount",
+        "fieldPath": "limitAmount"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0114",
+            "context": "CarCoverage",
+            "targetPath": "limitAmount",
+            "payloadType": "DEFAULT"
+          },
+          "payloadResult": {
+            "events": []
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "RRCoverage:-1:limitAmount": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "RRCoverage",
+        "fieldName": "limitAmount",
+        "fieldPath": "limitAmount"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0114",
+            "context": "CarCoverage",
+            "targetPath": "limitAmount",
+            "payloadType": "DEFAULT"
+          },
+          "payloadResult": {
+            "events": []
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    }
+  }
+]
+
+
+kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCarCoverageOnEmptyPolicy=[
+  {
+    "COLLCoverage:-1:code": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "COLLCoverage",
+        "fieldName": "code",
+        "fieldPath": "code"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0111",
+            "context": "CarCoverage",
+            "targetPath": "code",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": false,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "COLLCoverage:-1:deductibleAmount": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "COLLCoverage",
+        "fieldName": "deductibleAmount",
+        "fieldPath": "deductibleAmount"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0118",
+            "context": "CarCoverage",
+            "targetPath": "deductibleAmount",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": false,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "COLLCoverage:-1:effectiveDate": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "COLLCoverage",
+        "fieldName": "effectiveDate",
+        "fieldPath": "effectiveDate"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0099",
+            "context": "COLLCoverage",
+            "targetPath": "effectiveDate",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": false,
+            "messageCode": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "COLLCoverage:-1:expirationDate": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "COLLCoverage",
+        "fieldName": "expirationDate",
+        "fieldPath": "expirationDate"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0105",
+            "context": "COLLCoverage",
+            "targetPath": "expirationDate",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": false,
+            "messageCode": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "COLLCoverage:-1:limitAmount": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "COLLCoverage",
+        "fieldName": "limitAmount",
+        "fieldPath": "limitAmount"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0115",
+            "context": "CarCoverage",
+            "targetPath": "limitAmount",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": false,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "FullCoverage:-1:code": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "FullCoverage",
+        "fieldName": "code",
+        "fieldPath": "code"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0111",
+            "context": "CarCoverage",
+            "targetPath": "code",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": false,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "FullCoverage:-1:deductibleAmount": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "FullCoverage",
+        "fieldName": "deductibleAmount",
+        "fieldPath": "deductibleAmount"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0118",
+            "context": "CarCoverage",
+            "targetPath": "deductibleAmount",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": false,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "FullCoverage:-1:effectiveDate": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "FullCoverage",
+        "fieldName": "effectiveDate",
+        "fieldPath": "effectiveDate"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0099",
+            "context": "COLLCoverage",
+            "targetPath": "effectiveDate",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": false,
+            "messageCode": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "FullCoverage:-1:expirationDate": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "FullCoverage",
+        "fieldName": "expirationDate",
+        "fieldPath": "expirationDate"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0105",
+            "context": "COLLCoverage",
+            "targetPath": "expirationDate",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": false,
+            "messageCode": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "FullCoverage:-1:limitAmount": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "FullCoverage",
+        "fieldName": "limitAmount",
+        "fieldPath": "limitAmount"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0115",
+            "context": "CarCoverage",
+            "targetPath": "limitAmount",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": false,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "RRCoverage:-1:code": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "RRCoverage",
+        "fieldName": "code",
+        "fieldPath": "code"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0111",
+            "context": "CarCoverage",
+            "targetPath": "code",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": false,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "RRCoverage:-1:deductibleAmount": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "RRCoverage",
+        "fieldName": "deductibleAmount",
+        "fieldPath": "deductibleAmount"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0118",
+            "context": "CarCoverage",
+            "targetPath": "deductibleAmount",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": false,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "RRCoverage:-1:limitAmount": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "RRCoverage",
+        "fieldName": "limitAmount",
+        "fieldPath": "limitAmount"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0115",
+            "context": "CarCoverage",
+            "targetPath": "limitAmount",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": false,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    }
+  }
+]
+
+
+kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCarCoverageOnValidPolicy=[
+  {
+    "COLLCoverage:-1:code": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "COLLCoverage",
+        "fieldName": "code",
+        "fieldPath": "code"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0111",
+            "context": "CarCoverage",
+            "targetPath": "code",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "COLLCoverage:-1:deductibleAmount": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "COLLCoverage",
+        "fieldName": "deductibleAmount",
+        "fieldPath": "deductibleAmount"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0118",
+            "context": "CarCoverage",
+            "targetPath": "deductibleAmount",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "COLLCoverage:-1:effectiveDate": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "COLLCoverage",
+        "fieldName": "effectiveDate",
+        "fieldPath": "effectiveDate"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0099",
+            "context": "COLLCoverage",
+            "targetPath": "effectiveDate",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "messageCode": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "COLLCoverage:-1:expirationDate": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "COLLCoverage",
+        "fieldName": "expirationDate",
+        "fieldPath": "expirationDate"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0105",
+            "context": "COLLCoverage",
+            "targetPath": "expirationDate",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "messageCode": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "COLLCoverage:-1:limitAmount": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "COLLCoverage",
+        "fieldName": "limitAmount",
+        "fieldPath": "limitAmount"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0115",
+            "context": "CarCoverage",
+            "targetPath": "limitAmount",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "FullCoverage:-1:code": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "FullCoverage",
+        "fieldName": "code",
+        "fieldPath": "code"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0111",
+            "context": "CarCoverage",
+            "targetPath": "code",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "FullCoverage:-1:deductibleAmount": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "FullCoverage",
+        "fieldName": "deductibleAmount",
+        "fieldPath": "deductibleAmount"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0118",
+            "context": "CarCoverage",
+            "targetPath": "deductibleAmount",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "FullCoverage:-1:effectiveDate": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "FullCoverage",
+        "fieldName": "effectiveDate",
+        "fieldPath": "effectiveDate"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0099",
+            "context": "COLLCoverage",
+            "targetPath": "effectiveDate",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "messageCode": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "FullCoverage:-1:expirationDate": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "FullCoverage",
+        "fieldName": "expirationDate",
+        "fieldPath": "expirationDate"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0105",
+            "context": "COLLCoverage",
+            "targetPath": "expirationDate",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "messageCode": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "FullCoverage:-1:limitAmount": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "FullCoverage",
+        "fieldName": "limitAmount",
+        "fieldPath": "limitAmount"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0115",
+            "context": "CarCoverage",
+            "targetPath": "limitAmount",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "RRCoverage:-1:code": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "RRCoverage",
+        "fieldName": "code",
+        "fieldPath": "code"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0111",
+            "context": "CarCoverage",
+            "targetPath": "code",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "RRCoverage:-1:deductibleAmount": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "RRCoverage",
+        "fieldName": "deductibleAmount",
+        "fieldPath": "deductibleAmount"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0118",
+            "context": "CarCoverage",
+            "targetPath": "deductibleAmount",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "RRCoverage:-1:limitAmount": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "RRCoverage",
+        "fieldName": "limitAmount",
+        "fieldPath": "limitAmount"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0115",
+            "context": "CarCoverage",
+            "targetPath": "limitAmount",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    }
+  }
+]
+
+
+kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckVisibilityCarCoverage=[
+  {
+    "COLLCoverage:-1:code": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "COLLCoverage",
+        "fieldName": "code",
+        "fieldPath": "code"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0113",
+            "context": "CarCoverage",
+            "targetPath": "code",
+            "payloadType": "VISIBILITY"
+          },
+          "payloadResult": {
+            "visible": false
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "COLLCoverage:-1:effectiveDate": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "COLLCoverage",
+        "fieldName": "effectiveDate",
+        "fieldPath": "effectiveDate"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0104",
+            "context": "COLLCoverage",
+            "targetPath": "effectiveDate",
+            "payloadType": "VISIBILITY"
+          },
+          "payloadResult": {
+            "visible": false
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "COLLCoverage:-1:expirationDate": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "COLLCoverage",
+        "fieldName": "expirationDate",
+        "fieldPath": "expirationDate"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0110",
+            "context": "COLLCoverage",
+            "targetPath": "expirationDate",
+            "payloadType": "VISIBILITY"
+          },
+          "payloadResult": {
+            "visible": false
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "FullCoverage:-1:code": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "FullCoverage",
+        "fieldName": "code",
+        "fieldPath": "code"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0113",
+            "context": "CarCoverage",
+            "targetPath": "code",
+            "payloadType": "VISIBILITY"
+          },
+          "payloadResult": {
+            "visible": false
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "FullCoverage:-1:effectiveDate": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "FullCoverage",
+        "fieldName": "effectiveDate",
+        "fieldPath": "effectiveDate"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0104",
+            "context": "COLLCoverage",
+            "targetPath": "effectiveDate",
+            "payloadType": "VISIBILITY"
+          },
+          "payloadResult": {
+            "visible": false
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "FullCoverage:-1:expirationDate": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "FullCoverage",
+        "fieldName": "expirationDate",
+        "fieldPath": "expirationDate"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0110",
+            "context": "COLLCoverage",
+            "targetPath": "expirationDate",
+            "payloadType": "VISIBILITY"
+          },
+          "payloadResult": {
+            "visible": false
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "RRCoverage:-1:code": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "RRCoverage",
+        "fieldName": "code",
+        "fieldPath": "code"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0113",
+            "context": "CarCoverage",
+            "targetPath": "code",
+            "payloadType": "VISIBILITY"
+          },
+          "payloadResult": {
+            "visible": false
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    }
+  }
+]
+
+
+kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldEvaluateRulesOnLocalAndInheritedFields=[
+  {
+    "AddressInfo:-1:countryCd": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "AddressInfo",
+        "fieldName": "countryCd",
+        "fieldPath": "countryCd"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0156",
+            "context": "AddressInfo",
+            "targetPath": "countryCd",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "R0156",
+            "context": "AddressInfo",
+            "targetPath": "countryCd",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "AddressInfo:-1:postalCode": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "AddressInfo",
+        "fieldName": "postalCode",
+        "fieldPath": "postalCode"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0157A",
+            "context": "AddressInfo",
+            "targetPath": "postalCode",
+            "payloadType": "REGEX"
+          },
+          "payloadResult": {
+            "regExp": "^\\d{5}$",
+            "success": true,
+            "messageCode": "code",
+            "message": "String doesn\u0027t match Regular Expression: ^\\d{5}$",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "R0157A",
+            "context": "AddressInfo",
+            "targetPath": "postalCode",
+            "payloadType": "REGEX"
+          },
+          "payloadResult": {
+            "regExp": "^\\d{5}$",
+            "success": true,
+            "messageCode": "code",
+            "message": "String doesn\u0027t match Regular Expression: ^\\d{5}$",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "BillingAddress:-1:countryCd": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "BillingAddress",
+        "fieldName": "countryCd",
+        "fieldPath": "countryCd"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0156A",
+            "context": "BillingAddress",
+            "targetPath": "countryCd",
+            "payloadType": "VISIBILITY"
+          },
+          "payloadResult": {
+            "visible": false
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        },
+        {
+          "ruleInfo": {
+            "ruleName": "R0156",
+            "context": "AddressInfo",
+            "targetPath": "countryCd",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": true,
+            "messageCode": "code",
+            "message": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "BillingAddress:-1:postalCode": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "BillingAddress",
+        "fieldName": "postalCode",
+        "fieldPath": "postalCode"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0157A",
+            "context": "AddressInfo",
+            "targetPath": "postalCode",
+            "payloadType": "REGEX"
+          },
+          "payloadResult": {
+            "regExp": "^\\d{5}$",
+            "success": true,
+            "messageCode": "code",
+            "message": "String doesn\u0027t match Regular Expression: ^\\d{5}$",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    }
+  }
+]
+
+
+kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldSetDefaultValueOnInheritedField=[
+  {
+    "FullCoverage:-1:deductibleAmount": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "FullCoverage",
+        "fieldName": "deductibleAmount",
+        "fieldPath": "deductibleAmount"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0171",
+            "context": "COLLCoverage",
+            "targetPath": "deductibleAmount",
+            "payloadType": "DEFAULT"
+          },
+          "payloadResult": {
+            "events": [
+              {
+                "attributeTarget": "deductibleAmount",
+                "contextName": "FullCoverage",
+                "contextId": "-1",
+                "newValue": 1000
+              }
+            ]
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "FullCoverage:-1:limitAmount": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "FullCoverage",
+        "fieldName": "limitAmount",
+        "fieldPath": "limitAmount"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0114",
+            "context": "CarCoverage",
+            "targetPath": "limitAmount",
+            "payloadType": "DEFAULT"
+          },
+          "payloadResult": {
+            "events": [
+              {
+                "attributeTarget": "limitAmount",
+                "contextName": "FullCoverage",
+                "contextId": "-1",
+                "newValue": 1000
+              }
+            ]
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    }
+  }
+]
+
+
+kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldValidateInheritedMandatoryFields=[
+  {
+    "FullCoverage:-1:code": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "FullCoverage",
+        "fieldName": "code",
+        "fieldPath": "code"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0111",
+            "context": "CarCoverage",
+            "targetPath": "code",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": false,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "FullCoverage:-1:deductibleAmount": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "FullCoverage",
+        "fieldName": "deductibleAmount",
+        "fieldPath": "deductibleAmount"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0118",
+            "context": "CarCoverage",
+            "targetPath": "deductibleAmount",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": false,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "FullCoverage:-1:effectiveDate": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "FullCoverage",
+        "fieldName": "effectiveDate",
+        "fieldPath": "effectiveDate"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0099",
+            "context": "COLLCoverage",
+            "targetPath": "effectiveDate",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": false,
+            "messageCode": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "FullCoverage:-1:expirationDate": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "FullCoverage",
+        "fieldName": "expirationDate",
+        "fieldPath": "expirationDate"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0105",
+            "context": "COLLCoverage",
+            "targetPath": "expirationDate",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": false,
+            "messageCode": "The field is mandatory",
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "FullCoverage:-1:limitAmount": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "FullCoverage",
+        "fieldName": "limitAmount",
+        "fieldPath": "limitAmount"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0115",
+            "context": "CarCoverage",
+            "targetPath": "limitAmount",
+            "payloadType": "USAGE"
+          },
+          "payloadResult": {
+            "usageType": "mandatory",
+            "success": false,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    }
+  }
+]
+
+
+kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldValidateInheritedPresentationFields=[
+  {
+    "COLLCoverage:-1:code": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "COLLCoverage",
+        "fieldName": "code",
+        "fieldPath": "code"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0113",
+            "context": "CarCoverage",
+            "targetPath": "code",
+            "payloadType": "VISIBILITY"
+          },
+          "payloadResult": {
+            "visible": false
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    },
+    "COLLCoverage:-1:deductibleAmount": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "COLLCoverage",
+        "fieldName": "deductibleAmount",
+        "fieldPath": "deductibleAmount"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "R0119",
+            "context": "CarCoverage",
+            "targetPath": "deductibleAmount",
+            "payloadType": "ACCESSIBILITY"
+          },
+          "payloadResult": {
+            "accessible": false
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          }
+        }
+      ]
+    }
+  }
+]

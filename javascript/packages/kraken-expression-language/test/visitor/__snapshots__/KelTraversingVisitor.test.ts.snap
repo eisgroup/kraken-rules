@@ -1,0 +1,451 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`KelTraversingVisitor context queues should visit function -> ccr -> filter -> ccr  1`] = `
+Array [
+  Object {
+    "customProps": Object {},
+    "method": "visitExpression",
+    "text": "Count(Coverage[this.amt<Policy.info.maxAmt])<EOF>",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitReferenceValue",
+    "text": "Count(Coverage[this.amt<Policy.info.maxAmt])",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitFunction",
+    "text": "Count(Coverage[this.amt<Policy.info.maxAmt])",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitFunctionCall",
+    "text": "Count(Coverage[this.amt<Policy.info.maxAmt])",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "unwrapScalarType",
+    "text": undefined,
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitReferenceValue",
+    "text": "Coverage[this.amt<Policy.info.maxAmt]",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitFilter",
+    "text": "Coverage[this.amt<Policy.info.maxAmt]",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitIdentifierReference",
+    "text": "Coverage",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitIdentifier",
+    "text": "Coverage",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "unwrapTypeForIteration",
+    "text": undefined,
+  },
+  Object {
+    "customProps": Object {},
+    "method": "unwrapArrayType",
+    "text": undefined,
+  },
+  Object {
+    "customProps": Object {},
+    "method": "createScope",
+    "text": undefined,
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitNumericalComparisonPredicate",
+    "text": "this.amt<Policy.info.maxAmt",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitNumericalComparison",
+    "text": "this.amt<Policy.info.maxAmt",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "getNumericalComparisonType",
+    "text": "this.amt<Policy.info.maxAmt",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "_visitTwoChildren",
+    "text": "this.amt<Policy.info.maxAmt",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitReferenceValue",
+    "text": "this.amt",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitIdentifierReference",
+    "text": "amt",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitIdentifier",
+    "text": "amt",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitReferenceValue",
+    "text": "Policy.info.maxAmt",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitPath",
+    "text": "Policy.info.maxAmt",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitPath",
+    "text": "Policy.info",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitIdentifierReference",
+    "text": "Policy",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitIdentifier",
+    "text": "Policy",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "createScope",
+    "text": undefined,
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitIdentifierReference",
+    "text": "info",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitIdentifier",
+    "text": "info",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "createScope",
+    "text": undefined,
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitIdentifierReference",
+    "text": "maxAmt",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitIdentifier",
+    "text": "maxAmt",
+  },
+]
+`;
+
+exports[`KelTraversingVisitor context queues should visit nested reference values 1`] = `
+Array [
+  Object {
+    "customProps": Object {},
+    "method": "visitExpression",
+    "text": "Coverage[this.amt<Policy.info.maxAmt]<EOF>",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitReferenceValue",
+    "text": "Coverage[this.amt<Policy.info.maxAmt]",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitFilter",
+    "text": "Coverage[this.amt<Policy.info.maxAmt]",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitIdentifierReference",
+    "text": "Coverage",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitIdentifier",
+    "text": "Coverage",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "unwrapTypeForIteration",
+    "text": undefined,
+  },
+  Object {
+    "customProps": Object {},
+    "method": "unwrapArrayType",
+    "text": undefined,
+  },
+  Object {
+    "customProps": Object {},
+    "method": "createScope",
+    "text": undefined,
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitNumericalComparisonPredicate",
+    "text": "this.amt<Policy.info.maxAmt",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitNumericalComparison",
+    "text": "this.amt<Policy.info.maxAmt",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "getNumericalComparisonType",
+    "text": "this.amt<Policy.info.maxAmt",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "_visitTwoChildren",
+    "text": "this.amt<Policy.info.maxAmt",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitReferenceValue",
+    "text": "this.amt",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitIdentifierReference",
+    "text": "amt",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitIdentifier",
+    "text": "amt",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitReferenceValue",
+    "text": "Policy.info.maxAmt",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitPath",
+    "text": "Policy.info.maxAmt",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitPath",
+    "text": "Policy.info",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitIdentifierReference",
+    "text": "Policy",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitIdentifier",
+    "text": "Policy",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "createScope",
+    "text": undefined,
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitIdentifierReference",
+    "text": "info",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitIdentifier",
+    "text": "info",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "createScope",
+    "text": undefined,
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitIdentifierReference",
+    "text": "maxAmt",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitIdentifier",
+    "text": "maxAmt",
+  },
+]
+`;
+
+exports[`KelTraversingVisitor context queues should visit num comparison [inverted] 1`] = `
+Array [
+  Object {
+    "customProps": Object {},
+    "method": "visitExpression",
+    "text": "Coverage.amt<1<EOF>",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitNumericalComparison",
+    "text": "Coverage.amt<1",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "getNumericalComparisonType",
+    "text": "Coverage.amt<1",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "_visitTwoChildren",
+    "text": "Coverage.amt<1",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitReferenceValue",
+    "text": "Coverage.amt",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitPath",
+    "text": "Coverage.amt",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitIdentifierReference",
+    "text": "Coverage",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitIdentifier",
+    "text": "Coverage",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "createScope",
+    "text": undefined,
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitIdentifierReference",
+    "text": "amt",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitIdentifier",
+    "text": "amt",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitChildren",
+    "text": "1",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "shouldVisitNextChild",
+    "text": "1",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitDecimal",
+    "text": "1",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "aggregateResult",
+    "text": undefined,
+  },
+]
+`;
+
+exports[`KelTraversingVisitor context queues should visit num comparison 1`] = `
+Array [
+  Object {
+    "customProps": Object {},
+    "method": "visitExpression",
+    "text": "1<Coverage.amt<EOF>",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitNumericalComparison",
+    "text": "1<Coverage.amt",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "getNumericalComparisonType",
+    "text": "1<Coverage.amt",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "_visitTwoChildren",
+    "text": "1<Coverage.amt",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitChildren",
+    "text": "1",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "shouldVisitNextChild",
+    "text": "1",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitDecimal",
+    "text": "1",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "aggregateResult",
+    "text": undefined,
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitReferenceValue",
+    "text": "Coverage.amt",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitPath",
+    "text": "Coverage.amt",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitIdentifierReference",
+    "text": "Coverage",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitIdentifier",
+    "text": "Coverage",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "createScope",
+    "text": undefined,
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitIdentifierReference",
+    "text": "amt",
+  },
+  Object {
+    "customProps": Object {},
+    "method": "visitIdentifier",
+    "text": "amt",
+  },
+]
+`;

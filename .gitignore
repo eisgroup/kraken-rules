@@ -1,0 +1,70 @@
+#use global syntax for excludes
+syntax: glob
+#exclude intelliJ files
+.idea
+.vagrant
+.node
+*.iml
+#exclude eclipse files
+.settings
+.metadata
+.workspace
+*.project
+*.classpath
+*.springBeans
+*.springWebflow
+maven-eclipse.xml
+#common tools files
+*.pmd
+*.checkstyle
+target
+generated
+__bundles__
+*/test-product-model-tree/src/kraken_model_tree_GLOBAL.ts
+*/sanity/_SanityDimensions.ts
+# Logs
+logs
+*.log
+# Runtime data
+pids
+*.pid
+*.seed
+# Coverage tools
+lib-cov
+coverage
+# Dependency directory
+node_modules
+# Generated code
+gen
+dist
+transpiled
+build
+generated
+plugin_gen.xml
+plugin.xml_gen
+*.tgz
+# Mac OSX
+.DS_Store
+# Eclipse Trace
+*._trace
+# Eclipse XText & Xtend
+*/xtend-gen/*
+*/xtext-gen/*
+*/src-gen/*
+#Gateway selection
+*/gateway/Gateway.js
+# Deployment scripts
+docker/dev/connect.bat
+# git
+*.orig
+.vscode
+**tmp**
+kraken-expression-language/dependency-reduced-pom.xml
+kraken-model-dsl/dependency-reduced-pom.xml
+*.versionsBackup
+# exclude ANTLR4 grammar copies
+kraken-model-dsl/src/main/antlr4/kraken/model/dsl/Common.g4
+kraken-model-dsl/src/main/antlr4/kraken/model/dsl/Value.g4
+
+# generated dimensions file in ui tests
+_SanityDimensions.ts

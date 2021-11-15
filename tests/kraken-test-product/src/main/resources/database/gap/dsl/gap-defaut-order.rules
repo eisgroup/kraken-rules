@@ -1,0 +1,116 @@
+Namespace Policy
+
+EntryPoint "RuleOrder" {
+    "RULEORDER-COLL-mandatory",
+    "RULEORDER-VEHICLE-mandatory",
+    "RULEORDER-POLICY-mandatory",
+    "RULEORDER-INSURED-mandatory",
+    "RULEORDER-CREDITCARD-mandatory",
+    "RULEORDER-BILLINGADDRESS-mandatory",
+    "RULEORDER-PARTY-mandatory",
+    "RULEORDER-COLL",
+    "RULEORDER-VEHICLE",
+    "RULEORDER-POLICY",
+    "RULEORDER-INSURED",
+    "RULEORDER-CREDITCARD",
+    "RULEORDER-BILLINGADDRESS",
+    "RULEORDER-PARTY",
+    "RULEORDER-Policy-state"
+}
+
+Rule "RULEORDER-COLL" On COLLCoverage.code {
+    Reset To Vehicle.model
+}
+
+Rule "RULEORDER-VEHICLE" On Vehicle.model {
+    Reset To Policy.policyNumber
+}
+
+Rule "RULEORDER-POLICY" On Policy.policyNumber {
+    Reset To Concat({Insured.name, CreditCardInfo.cardType})
+}
+
+Rule "RULEORDER-CREDITCARD" On CreditCardInfo.cardType {
+    Reset To Concat({Concat(Party[*].relationToPrimaryInsured), BillingAddress.countryCd})
+}
+
+Rule "RULEORDER-BILLINGADDRESS" On AddressInfo.countryCd {
+    Reset To "Address"
+}
+
+Rule "RULEORDER-INSURED" On Insured.name {
+    Reset To Concat(Party[*].relationToPrimaryInsured)
+}
+
+Rule "RULEORDER-PARTY" On Party.relationToPrimaryInsured {
+    Reset To "Party"
+}
+
+Rule "RULEORDER-COLL-mandatory" On COLLCoverage.code {
+    Set Mandatory
+}
+
+Rule "RULEORDER-VEHICLE-mandatory" On Vehicle.model {
+    Set Mandatory
+}
+
+Rule "RULEORDER-POLICY-mandatory" On Policy.policyNumber {
+    Set Mandatory
+}
+
+Rule "RULEORDER-CREDITCARD-mandatory" On CreditCardInfo.cardType {
+    Set Mandatory
+}
+
+Rule "RULEORDER-BILLINGADDRESS-mandatory" On AddressInfo.countryCd {
+    Set Mandatory
+}
+
+Rule "RULEORDER-INSURED-mandatory" On Insured.name {
+    Set Mandatory
+}
+
+Rule "RULEORDER-PARTY-mandatory" On Party.relationToPrimaryInsured {
+    Set Mandatory
+}
+
+Rule "RULEORDER-Policy-state" On Policy.state {
+    Assert Insured.haveChildren
+}
+
+EntryPoint "RuleOrderWithComplexField" {
+    "RuleOrderWithComplexField_Policy_policyNumber",
+    "RuleOrderWithComplexField_AddressInfo_doNotSolicit",
+    "RuleOrderWithComplexField_PartyRole_limit",
+    "RuleOrderWithComplexField_AddressInfo_city",
+    "RuleOrderWithComplexField_RRCoverage_limitAmount",
+    "RuleOrderWithComplexField_AddressInfo_street"
+}
+
+Rule "RuleOrderWithComplexField_Policy_policyNumber" On Policy.policyNumber {
+    When Insured.addressInfo.doNotSolicit
+    Default To "doNotSolicit is true"
+}
+
+Rule "RuleOrderWithComplexField_AddressInfo_doNotSolicit" On AddressInfo.doNotSolicit {
+    Default To every item in Policy.riskItems satisfies item.rentalCoverage.limitAmount > StringLength(city)
+}
+Rule "RuleOrderWithComplexField_PartyRole_limit" On PartyRole.limit {
+    Default To 100
+}
+
+Rule "RuleOrderWithComplexField_AddressInfo_city" On AddressInfo.city {
+    Default To "San Diego"
+}
+
+Rule "RuleOrderWithComplexField_RRCoverage_limitAmount" On RRCoverage.limitAmount {
+    When every role in Policy.parties[*].roles satisfies role.limit > deductibleAmount
+    Default To 10
+}
+
+Rule "RuleOrderWithComplexField_AddressInfo_street" On RRCoverage.deductibleAmount {
+    Default To 10
+}
+
+
+

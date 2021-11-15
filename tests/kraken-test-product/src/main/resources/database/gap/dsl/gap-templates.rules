@@ -1,0 +1,25 @@
+Namespace Policy
+
+EntryPoint "Templates" {
+    "Templates_R01_Policy.policyNumber",
+    "Templates_R02_Policy.txEffectiveDate",
+    "Templates_R03_Policy.state"
+}
+
+Rule "Templates_R01_Policy.policyNumber" On Policy.policyNumber {
+    Assert false
+    Error "R01-ERROR" :
+      "Policy number '${Policy.policyNumber}' must be in vehicle models, but vehicle models are: ${Vehicle.model}"
+}
+
+Rule "Templates_R02_Policy.txEffectiveDate" On Policy.txEffectiveDate {
+    Assert txEffectiveDate > 2021-01-01T10:00:00Z
+    Error "R02-ERROR" :
+        "Transaction effective date must be later than ${2021-01-01T10:00:00Z} but was ${txEffectiveDate}"
+}
+
+Rule "Templates_R03_Policy.state" On Policy.state {
+    Assert false
+    Error "R03-ERROR" :
+        "\${nothingtoseehere} ${} ${true} ${false} ${null} ${'string'} ${\"string\"} ${10.123} ${Date(\"2020-01-01\")} ${2021-01-01T10:00:00Z} ${Concat(for i in {'a', 'b', 'c'} return UpperCase(i))}"
+}

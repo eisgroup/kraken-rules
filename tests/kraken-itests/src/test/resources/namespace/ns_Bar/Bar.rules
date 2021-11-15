@@ -1,0 +1,43 @@
+Namespace Bar
+
+Include Base
+
+Rule "Bar-0001" On TestCoverage.deductibleAmount {
+    Assert deductibleAmount <= 100
+    Error "RULE0001-code" : "Maximum value of field 'deductibleAmount' is '100.00'"
+}
+
+Rule "RULE0002" On TestRiskItem.itemName {
+    When defaultItemName = true
+    Default To "default"
+}
+
+Rule "R-CCR-coverage-to-riskitem" On TestCoverage.deductibleAmount {
+    Assert deductibleAmount <= 100 and TestRiskItem.itemName = 'Name'
+    Error "R-CCR-coverage-to-riskitem-code" : "Maximum value of field 'deductibleAmount' is '100.00'"
+}
+
+Rule "R-CCR-addressinfo-to-testpolicy" On TestAddressInfo.countryCd {
+    Assert countryCd = "CA" and TestPolicy.state = 'CA'
+    Error "R-CCR-addressinfo-to-testpolicy-code" : "CountryCd should be CA and state should be CA"
+}
+
+Rule "R-ExpressionContext" On TestAddressInfo.countryCd {
+    Reset To context.dimensions.state
+}
+
+EntryPoint "dataGather" {
+    "RULE0001", "RULE0002"
+}
+
+EntryPoint "R-CCR-coverage-to-riskitem" {
+    "R-CCR-coverage-to-riskitem"
+}
+
+EntryPoint "R-CCR-addressinfo-to-testpolicy" {
+    "R-CCR-addressinfo-to-testpolicy"
+}
+
+EntryPoint "ExpressionContext" {
+    "R-ExpressionContext"
+}

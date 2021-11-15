@@ -1,0 +1,68 @@
+Namespace PolicyExtended
+
+Include Policy
+
+Root Context PolicyExtended Is Policy {
+    Child CreditCardInfoExtended : billingInfo.creditCardInfo
+    Child* VehicleExtended : riskItems
+    Child* PartyExtended : parties
+}
+
+Context CreditCardInfoExtended Is CreditCardInfo {
+    Child BillingAddressExtended : billingAddress
+}
+
+Context BillingAddressExtended Is BillingAddress {
+}
+
+Context VehicleExtended Is Vehicle {
+    Child* COLLCoverageExtended : collCoverages
+    Child* FullCoverageExtended : fullCoverages
+    Child RRCoverageExtended : rentalCoverage
+    Child AddressInfoExtended : addressInfo
+}
+
+Context PartyExtended Is Party {
+    Child* PartyRoleExtended : roles
+    Child PersonInfoExtended : personInfo
+    Child DriverInfoExtended : driverInfo
+}
+
+Context PartyRoleExtended Is PartyRole {
+}
+
+Context CarCoverageExtended Is CarCoverage {
+}
+
+Context RRCoverageExtended Is RRCoverage {
+}
+
+Context COLLCoverageExtended Is CarCoverageExtended, COLLCoverage {
+}
+
+Context DriverCoverageExtended Is DriverCoverage {
+}
+
+Context FullCoverageExtended Is FullCoverage, COLLCoverageExtended, DriverCoverageExtended {
+}
+
+Context PersonInfoExtended Is PersonInfo {
+    Child AddressInfoExtended : addressInfo
+}
+
+Context AddressInfoExtended Is AddressInfo {
+    Child AddressLine1Extended : addressLine1
+    Child AddressLine2Extended : addressLine2
+}
+
+Context AddressLineExtended Is AddressLine {
+}
+
+Context AddressLine1Extended Is AddressLineExtended, AddressLine1 {
+}
+
+Context AddressLine2Extended Is AddressLineExtended, AddressLine2 {
+}
+
+Context DriverInfoExtended Is DriverInfo {
+}

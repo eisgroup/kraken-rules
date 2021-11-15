@@ -1,0 +1,32 @@
+context(context) ::= <<
+<strict(context)>
+<if(context.root)>Root <endif>Context <context.name><parentDefinitions(context.parentDefinitions)> {
+    <context.contextFields.__keys__: {key | <field(context.contextFields.(key))>}; separator="\n">
+    <context.children.__keys__: {key | <children(context.children.(key))>}; separator="\n">
+}
+>>
+
+strict(context) ::= <<
+<if(!context.strict)>
+@NotStrict<endif>
+>>
+
+parentDefinitions(parentDefinitions) ::= <<
+<if(parentDefinitions)> Is <endif><parentDefinitions: {parent | <parent>}; separator=", ">
+>>
+
+children(children) ::= <<
+Child<children.cardinality> <children.targetName><expression(children.navigationExpression)>
+>>
+
+field(field) ::= <<
+<external(field.external)><field.fieldType><field.cardinality> <field.name><expression(field.fieldPath)>
+>>
+
+external(external) ::= <<
+<if(external)>External <endif>
+>>
+
+expression(expression) ::= <<
+<if(expression)> : <expression><endif>
+>>

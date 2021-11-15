@@ -1,0 +1,9 @@
+externalContextDefinition(extCtxDefinition) ::= <<
+ExternalEntity <extCtxDefinition.name> {
+    <extCtxDefinition.attributes.__keys__: {key | <attribute(extCtxDefinition.attributes.(key))>}; separator="\n">
+}
+>>
+
+attribute(attribute) ::= <<
+<attribute.type.type><attribute.type.cardinality> <attribute.name>
+>>

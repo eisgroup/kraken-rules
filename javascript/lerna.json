@@ -1,0 +1,17 @@
+{
+  "packages": [
+    "packages/*"
+  ],
+  "command": {
+    "version": {
+      "amend": true,
+      "exact": true,
+      "ignore-scripts": true,
+      "no-push": true
+    },
+    "run": {
+      "stream": true
+    }
+  },
+  "version": "1.20.1-autocomplete.3"
+}

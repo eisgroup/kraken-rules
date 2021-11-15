@@ -1,0 +1,234 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FieldMetadataReducer should contain 2 field metadatas 1`] = `
+Object {
+  "2": Object {
+    "fieldType": "STRING",
+    "id": "2",
+    "info": Object {
+      "getContextInstanceId": [Function],
+      "getContextName": [Function],
+    },
+    "isDisabled": undefined,
+    "isHidden": undefined,
+    "resolvedTargetPath": "transactionDetails.txType",
+    "ruleResults": Array [],
+  },
+  "3": Object {
+    "fieldType": "STRING",
+    "id": "3",
+    "info": Object {
+      "getContextInstanceId": [Function],
+      "getContextName": [Function],
+    },
+    "isDisabled": undefined,
+    "isHidden": undefined,
+    "resolvedTargetPath": "accessTrackInfo.updatedBy",
+    "ruleResults": Array [
+      Object {
+        "errorCode": "assert-generated",
+        "errorMessage": "Value didn't match assertion: ",
+        "isFailed": true,
+        "isOverridable": true,
+        "isOverridden": false,
+        "payloadResult": Object {
+          "message": Object {
+            "errorCode": "assert-generated",
+            "errorMessage": "Value didn't match assertion: ",
+            "templateVariables": Array [],
+          },
+          "success": false,
+          "type": 1,
+          "validationSeverity": "critical",
+        },
+        "ruleName": "mock",
+        "severity": "critical",
+        "templateVariables": Array [],
+      },
+    ],
+  },
+  "4": Object {
+    "fieldType": "INTEGER",
+    "id": "4",
+    "info": Object {
+      "getContextInstanceId": [Function],
+      "getContextName": [Function],
+    },
+    "isDisabled": undefined,
+    "isHidden": undefined,
+    "resolvedTargetPath": "termDetails.termNo",
+    "ruleResults": Array [],
+  },
+  "present1": Object {
+    "fieldType": "STRING",
+    "id": "present1",
+    "info": Object {
+      "getContextInstanceId": [Function],
+      "getContextName": [Function],
+    },
+    "isDisabled": true,
+    "isHidden": undefined,
+    "resolvedTargetPath": "state",
+    "ruleResults": Array [],
+  },
+  "present2": Object {
+    "fieldType": "STRING",
+    "id": "present2",
+    "info": Object {
+      "getContextInstanceId": [Function],
+      "getContextName": [Function],
+    },
+    "isDisabled": undefined,
+    "isHidden": true,
+    "resolvedTargetPath": "termDetails.termCd",
+    "ruleResults": Array [],
+  },
+}
+`;
+
+exports[`FieldMetadataReducer should reduce mandatory results 1`] = `
+Array [
+  Object {
+    "errorCode": "usage-generated",
+    "errorMessage": "The field is mandatory",
+    "isFailed": false,
+    "isOverridable": false,
+    "isOverridden": false,
+    "payloadResult": Object {
+      "message": Object {
+        "errorCode": "usage-generated",
+        "errorMessage": "The field is mandatory",
+        "templateVariables": Array [],
+      },
+      "success": true,
+      "type": 64,
+      "usageType": "mandatory",
+      "validationSeverity": "critical",
+    },
+    "ruleName": "mandatory-critical-true",
+    "severity": "critical",
+    "templateVariables": Array [],
+  },
+  Object {
+    "errorCode": "usage-generated",
+    "errorMessage": "The field is mandatory",
+    "isFailed": true,
+    "isOverridable": false,
+    "isOverridden": false,
+    "payloadResult": Object {
+      "message": Object {
+        "errorCode": "usage-generated",
+        "errorMessage": "The field is mandatory",
+        "templateVariables": Array [],
+      },
+      "success": false,
+      "type": 64,
+      "usageType": "mandatory",
+      "validationSeverity": "critical",
+    },
+    "ruleName": "mandatory-critical-false",
+    "severity": "critical",
+    "templateVariables": Array [],
+  },
+]
+`;
+
+exports[`FieldMetadataReducer should return results for one field with overridden values 1`] = `
+Object {
+  "policy:0:state": Object {
+    "fieldType": "STRING",
+    "id": "policy:0:state",
+    "info": Object {
+      "getContextInstanceId": [Function],
+      "getContextName": [Function],
+    },
+    "isDisabled": undefined,
+    "isHidden": undefined,
+    "resolvedTargetPath": "state",
+    "ruleResults": Array [
+      Object {
+        "errorCode": "limit-generated",
+        "errorMessage": "String contains more characters than 5",
+        "isFailed": true,
+        "isOverridable": true,
+        "isOverridden": true,
+        "payloadResult": Object {
+          "length": 5,
+          "message": Object {
+            "errorCode": "limit-generated",
+            "errorMessage": "String contains more characters than 5",
+            "templateVariables": Array [],
+          },
+          "success": false,
+          "type": 16,
+          "validationSeverity": "critical",
+        },
+        "ruleName": "length-ov-critical",
+        "severity": "critical",
+        "templateVariables": Array [],
+      },
+      Object {
+        "errorCode": "assert-generated",
+        "errorMessage": "Value didn't match assertion: false",
+        "isFailed": true,
+        "isOverridable": true,
+        "isOverridden": false,
+        "payloadResult": Object {
+          "message": Object {
+            "errorCode": "assert-generated",
+            "errorMessage": "Value didn't match assertion: false",
+            "templateVariables": Array [],
+          },
+          "success": false,
+          "type": 1,
+          "validationSeverity": "critical",
+        },
+        "ruleName": "assert-ov-critical",
+        "severity": "critical",
+        "templateVariables": Array [],
+      },
+      Object {
+        "errorCode": "assert-generated",
+        "errorMessage": "Value didn't match assertion: false",
+        "isFailed": true,
+        "isOverridable": false,
+        "isOverridden": false,
+        "payloadResult": Object {
+          "message": Object {
+            "errorCode": "assert-generated",
+            "errorMessage": "Value didn't match assertion: false",
+            "templateVariables": Array [],
+          },
+          "success": false,
+          "type": 1,
+          "validationSeverity": "critical",
+        },
+        "ruleName": "assert-critical",
+        "severity": "critical",
+        "templateVariables": Array [],
+      },
+      Object {
+        "errorCode": "limit-generated",
+        "errorMessage": "String contains more characters than 5",
+        "isFailed": true,
+        "isOverridable": true,
+        "isOverridden": false,
+        "payloadResult": Object {
+          "length": 5,
+          "message": Object {
+            "errorCode": "limit-generated",
+            "errorMessage": "String contains more characters than 5",
+            "templateVariables": Array [],
+          },
+          "success": false,
+          "type": 16,
+          "validationSeverity": "warning",
+        },
+        "ruleName": "length-ov-warning",
+        "severity": "warning",
+        "templateVariables": Array [],
+      },
+    ],
+  },
+}
+`;

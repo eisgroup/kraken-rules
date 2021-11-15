@@ -1,0 +1,29 @@
+{
+    "name": "kraken-model",
+    "version": "1.20.1-autocomplete.3",
+    "description": "Kraken model types",
+    "main": "target/dist/js/src/index.js",
+    "types": "target/dist/definitions/src/index.d.ts",
+    "author": "Pavel Surinin <psurinin@eisgroup.com> (http://eisgroup.com)",
+    "license": "Apache-2.0",
+    "devDependencies": {
+        "@babel/cli": "7.1.5",
+        "@types/node": "13.9.0",
+        "jsdom": "11.3.0",
+        "jsdom-global": "3.0.2",
+        "rimraf": "2.6.3",
+        "ts-node": "4.1.0",
+        "tslint": "5.18.0",
+        "typescript": "4.2.4"
+    },
+    "scripts": {
+        "lint": "tslint -c tslint.json -p tsconfig.json -t stylish",
+        "compile": "tsc -d",
+        "babel": "babel target/dist/tsjs/ --out-dir target/dist/js/ --config-file ../../babel.config.js --delete-dir-on-start --ignore ./target/dist/tsjs/__tests__",
+        "del:compiled": "rimraf target",
+        "build": "npm run lint && npm run compile",
+        "prepare": "npm run lint && npm run del:compiled && npm run build && npm run babel",
+        "release": "npm publish"
+    },
+    "gitHead": "062c5a631397863ca184c6a9bd65a50f279433e5"
+}

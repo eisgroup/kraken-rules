@@ -1,0 +1,35 @@
+Namespace Foo
+
+Include Base
+
+Rules {
+    Rule "Constraint-TestPolicy.riskStateCd-RegExp" On TestPolicy.riskStateCd {
+        Assert Matches "[A-Z]{2}"
+    }
+    
+    Rule "Constraint-TestPolicy.packageCd-Required" On TestPolicy.packageCd {
+        Set Mandatory
+    }
+    
+    Rule "Constraint-TestPolicy.packageCd-Within" On TestPolicy.packageCd {
+        Assert packageCd = 'pizza' or packageCd = 'barber'
+        Error "Constraint-TestPolicy.packageCd-Within-code" : "Value must be any of these values: 'pizza', 'barber'"
+    }
+    
+    Rule "Constraint-TestRiskItem.value-Max" On TestRiskItem.value {
+        Assert value <= 100.00
+        Error "Constraint-TestRiskItem.value-Max-code" : "Maximum value is 100.00"
+    }
+    
+    Rule "Constraint-TestRiskItem.value-Min" On TestRiskItem.value {
+        Assert value >= 10.00
+        Error "Constraint-TestRiskItem.value-Min-code" : "Minimum value is 10.00"
+    }
+    
+    }
+EntryPoints {
+    EntryPoint "constraints" {
+        "Constraint-TestPolicy.riskStateCd-RegExp", "Constraint-TestPolicy.packageCd-Required", "Constraint-TestPolicy.packageCd-Within", "Constraint-TestRiskItem.value-Max", "Constraint-TestRiskItem.value-Min"
+    }
+    
+    }

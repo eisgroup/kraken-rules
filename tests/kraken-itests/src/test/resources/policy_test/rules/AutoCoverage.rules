@@ -1,0 +1,73 @@
+Namespace PersonalAuto
+
+Include Base
+
+Rule "AutoCSLCoverage-180725-74tu2j" On AutoCSLCoverage.code {
+  Set Mandatory
+  Error "AutoCSLCoverage-180725-74tu2j": "Code is required"
+}
+
+Rule "AutoCOMPCoverage-180722-122ej" On AutoCOMPCoverage.deductibleAmount {
+  Set Mandatory
+  Error "AutoCOMPCoverage-180722-122ej": "Deductible is required"
+}
+
+Rule "AutoCOMPCoverage-180725-5rra4g" On AutoCOMPCoverage.code {
+  Set Mandatory
+  Error "AutoCOMPCoverage-180725-5rra4g": "Code is required"
+}
+
+Rule "AutoCOLLCoverage-180725-51Ra4g" On AutoCOLLCoverage.code {
+  Set Mandatory
+  Error "AutoCOLLCoverage-180725-51Ra4g": "Code is required"
+}
+
+Rule "AutoRRCoverage-180725-7hWa4g" On AutoRRCoverage.code {
+  Set Mandatory
+  Error "AutoRRCoverage-180725-7hWa4g": "Code is required"
+}
+
+Rule "AutoRRCoverage-180725-7tW31j" On AutoRRCoverage.limitAmount {
+  Set Mandatory
+  Error "AutoRRCoverage-180725-7tW31j": "Limit is required"
+}
+
+Rule "AutoRACoverage-180722-12W1j" On AutoRACoverage.level {
+  Set Mandatory
+  Error "AutoRACoverage-180722-12W1j": "Level is required"
+}
+
+Rule "AutoRACoverage-180725-7hWa4g" On AutoRACoverage.code {
+  Set Mandatory
+  Error "AutoRACoverage-180725-7hWa4g": "Code is required"
+}
+
+Rule "AutoUMBICoverage-180725-75W14g" On AutoUMBICoverage.code {
+  Set Mandatory
+  Error "AutoUMBICoverage-180725-75W14g": "Code is required"
+}
+
+Rule "AutoUMCSLCoverage-180725-74W22j" On AutoUMCSLCoverage.code {
+  Set Mandatory
+  Error "AutoUMCSLCoverage-180725-74W22j": "Code is required"
+}
+
+Rule "AutoUMPDCoverage-180725-79W21j" On AutoUMPDCoverage.code {
+  Set Mandatory
+  Error "AutoUMPDCoverage-180725-79W21j": "Code is required"
+}
+
+Rule "AutoBICoverage-180725-70W11j" On AutoBICoverage.code {
+  Set Mandatory
+  Error "AutoBICoverage-180725-70W11j": "Code is required"
+}
+
+Rule "AutoPDCoverage-180725-78W21j" On AutoPDCoverage.code {
+  Set Mandatory
+  Error "AutoPDCoverage-180725-78W21j": "Code is required"
+}
+
+Rule "AutoMEDCoverage-180725-77W11j" On AutoMEDCoverage.limitAmount {
+  Set Mandatory
+  Error "AutoMEDCoverage-180725-77W11j": "Limit is required"
+}

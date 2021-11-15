@@ -1,0 +1,390 @@
+Namespace Policy
+
+entrypoint "MandatoryPolicyNumber" {
+    "R0001A"
+}
+
+entryPoint "FirstNameNotEqualToLastName" {
+    "R0150"
+}
+
+EntryPoint "ValidateInheritedMandatoryFields" {
+    "R0111", "R0115", "R0118", "R0105", "R0099"
+}
+
+ENTRYPOINT "ValidateInheritedDefaultField" {
+    "R0114", "R0171"
+}
+
+EntryPoint "ValidateInheritedPresentationFields" {
+    "R0113", "R0119"
+}
+
+EntryPoint "AddressInfoLocalAndInheritedFieldRules" {
+    "R0156", "R0156A", "R0157A"
+}
+
+EntryPoint "Cross-1" {
+    "R-CCR-default-CreditCardInfo"
+}
+
+EntryPoint "CCR-Assert-RRCoverage-fromVehicle" {
+    "CCR-Assert-RRCoverage-fromVehicle"
+}
+
+EntryPoint "R-CCR-Policy-PartyRole" {
+    "R-CCR-Policy-PartyRole"
+}
+
+EntryPoint "R-CCR-assert-BillingAddress" {
+    "R-CCR-assert-BillingAddress"
+}
+
+EntryPoint "R-CCR-assert-BillingAddress-toCreditCard" {
+    "R-CCR-assert-BillingAddress-toCreditCard"
+}
+
+EntryPoint "R-CCR-assert-Vehicle-toAutoPolicy" {
+    "R-CCR-assert-Vehicle-toAutoPolicy"
+}
+
+EntryPoint "R-CCR-assert-AutoPolicy-toCreditCard" {
+    "R-CCR-assert-AutoPolicy-toCreditCard"
+}
+
+EntryPoint "R-CCR-assert-AutoPolicy-to-CreditCardInfo" {
+    "R-CCR-assert-AutoPolicy-to-CreditCardInfo"
+}
+
+EntryPoint "R-CCR-assert-CreditCardInfo" {
+    "R-CCR-assert-CreditCardInfo"
+}
+
+EntryPoint "R-CCR-assert-DriverInfo-PersonInfo" {
+    "R-CCR-assert-DriverInfo-PersonInfo"
+}
+
+EntryPoint "R-CCR-assert-Policy-CreditCardInfo" {
+    "R-CCR-assert-Policy-CreditCardInfo"
+}
+
+EntryPoint "R-CCR-assert-Policy-RentalCoverage" {
+    "R-CCR-assert-Policy-RentalCoverage"
+}
+
+EntryPoint "R-CCR-assert-Party-Info" {
+    "R-CCR-assert-Party-Info"
+}
+
+EntryPoint "R-CCR-assert-DriverInfo-CreditCardInfo" {
+    "R-CCR-assert-DriverInfo-CreditCardInfo"
+}
+
+EntryPoint "R-CCR-default-CreditCardInfo-fromAutoPolicy" {
+    "R-CCR-default-CreditCardInfo-fromAutoPolicy"
+}
+
+EntryPoint "R-CCR-default-condition-Policy-CreditCardInfo" {
+    "R-CCR-default-condition-Policy-CreditCardInfo"
+}
+
+EntryPoint "R-CCR-default-Policy-CreditCardInfo" {
+    "R-CCR-default-Policy-CreditCardInfo"
+}
+
+EntryPoint "R-CCR-assert-PersonInfo-DriverInfo" {
+    "R-CCR-assert-PersonInfo-DriverInfo"
+}
+
+EntryPoint "R-CCR-assert-Party-PersonInfo-DriverInfo" {
+    "R-CCR-assert-Party-PersonInfo-DriverInfo"
+}
+
+EntryPoint "R-CCR-assert-PartyRole-AddressLine1-AddressInfo" {
+    "R-CCR-assert-PartyRole-AddressLine1-AddressInfo"
+}
+
+EntryPoint "R-CCR-default-AddressLine-Policy" {
+    "R-CCR-default-AddressLine-Policy"
+}
+
+EntryPoint "R-CCR-Policy-ExPolicy" {
+    "R-CCR-Policy-ExPolicy"
+}
+
+EntryPoint "dates" {
+    "date-assertion-Policy.txEffectiveDate", "date-condition-Policy.txEffectiveDate"
+}
+
+EntryPoint "InitDeductibleAmount" {
+    "R0171", "R0174"
+}
+
+EntryPoint "DefaultPolicyNumber" {
+    "R0002"
+}
+
+EntryPoint "CoverageAssertion" {
+    "R0117"
+}
+
+EntryPoint "CreditCardInfoRegExp" {
+    "R0066", "R0063", "R0062", "R0059"
+}
+
+EntryPoint "CarCoverageUsage" {
+    "R0111", "R0115", "R0118"
+}
+
+EntryPoint "AutoPolicyDefault" {
+    "R0021", "R0031", "R0040", "R0053", "R0055"
+}
+
+EntryPoint "AutoPolicyDefaultAndAssert" {
+    "R0053", "R0051"
+}
+
+EntryPoint "PartyLength" {
+    "R0149A"
+}
+
+EntryPoint "NoRules" {
+
+}
+
+EntryPoint "ResetRules" {
+    "R0037", "R0040", "R0049"
+}
+
+EntryPoint "ValidAddressInfoCity" {
+    "R0158"
+}
+
+EntryPoint "ValidBillingAddressCity" {
+    "R0170"
+}
+
+EntryPoint "ValidFullCoverage" {
+    "R0111"
+}
+
+EntryPoint "assert-money" {
+    "R0-assert-money"
+}
+
+EntryPoint "default-money" {
+    "R0-default-money"
+}
+
+
+EntryPoint "ValidPolicyNumber" {
+    "R0003"
+}
+
+
+EntryPoint "ValidPolicyNumber2" {
+    "R0003a"
+}
+
+EntryPoint "EvaluateFourRulesOnFourFields" {
+    "R0003", "R0007", "R0008", "R0011"
+}
+
+EntryPoint "EvaluateTwoRulesOnFiveFields" {
+    "R0148", "R0149"
+}
+
+EntryPoint "EvaluateRuleOnTwoFields" {
+    "R0149"
+}
+
+EntryPoint "InitAutoPolicy" {
+    "R0002", "R0005", "R0005a", "R0009", "R0013", "R0017", "R0021", "R0031", "R0037", "R0040", "R0045", "R0049", "R0053", "R0055", "R0072"
+}
+
+EntryPoint "AccessibilityAutoPolicy" {
+    "R0023", "R0058", "R0015", "R0001B"
+}
+
+EntryPoint "VisibilityAutoPolicy" {
+    "R0006", "R0010", "R0012", "R0030", "R0034", "R0038", "R0041"
+}
+
+EntryPoint "UsagePayloadAutoPolicy" {
+    "R0001A", "R0004", "R0008", "R0011", "R0016", "R0020", "R0028", "R0032", "R0035", "R0039", "R0042", "R0044", "R0047", "R0050", "R0054", "R0074", "R0088", "R0148", "R0149", "R0156", "R0157"
+}
+
+EntryPoint "RegExpAutoPolicy" {
+    "R0003", "R0007", "R0059", "R0062", "R0063", "R0066", "R0157A", "R0158"
+}
+
+EntryPoint "AssertionAutoPolicy" {
+    "R0051", "R0073", "R0150", "R0155"
+}
+
+EntryPoint "LengthAutoPolicy" {
+    "R0149A"
+}
+
+EntryPoint "PolicyCombined" {
+    EntryPoint "AssertionAutoPolicy",
+    EntryPoint "UsagePayloadAutoPolicy"
+}
+
+EntryPoint "All" {
+    'Expressions_assert_with_proposition_operations',
+    'Expressions_compare_sum_rule',
+    'Expressions_default_driverType_with_value_from_CCR_count_with_predicate',
+    'Expressions_default_to_date_with_nested_functions',
+    'Expressions_default_to_date_with_nested_functions_when_plus_year_0',
+    'Expressions_default_to_policy_state_with_if',
+    'Expressions_default_to_with_value_from_CCR_collection_count',
+    'Filter CCR',
+    'Filter Collection CCR and fold',
+    'Filter Collection Self CCR',
+    'Filter Collection Self CCR and fold',
+    'Filter Collection field',
+    'Filter Collection field and fold',
+    'Filter Collection thiz field',
+    'Filter Collection thiz field and fold',
+    'Filter Primitive',
+    'Fold Filter Primitive',
+    'MultipleInsureds-default',
+    'R-CCR-Policy-ExPolicy',
+    'R-CCR-Policy-PartyRole',
+    'R-CCR-assert-AutoPolicy-to-CreditCardInfo',
+    'R-CCR-assert-AutoPolicy-toCreditCard',
+    'R-CCR-assert-BillingAddress',
+    'R-CCR-assert-BillingAddress-toCreditCard',
+    'R-CCR-assert-CreditCardInfo',
+    'R-CCR-assert-DriverInfo-CreditCardInfo',
+    'R-CCR-assert-DriverInfo-PersonInfo',
+    'R-CCR-assert-Party-Info',
+    'R-CCR-assert-Party-PersonInfo-DriverInfo',
+    'R-CCR-assert-PartyRole-AddressLine1-AddressInfo',
+    'R-CCR-assert-PersonInfo-DriverInfo',
+    'R-CCR-assert-Policy-CreditCardInfo',
+    'R-CCR-assert-Policy-RentalCoverage',
+    'R-CCR-assert-Vehicle-toAutoPolicy',
+    'R-CCR-default-AddressLine-Policy',
+    'R-CCR-default-CreditCardInfo',
+    'R-CCR-default-CreditCardInfo-fromAutoPolicy',
+    'R0-assert-money',
+    'R0001A',
+    'R0001B',
+    'R0003',
+    'R0003a',
+    'R0004',
+    'R0005',
+    'R0006',
+    'R0007',
+    'R0008',
+    'R0009',
+    'R0010',
+    'R0011',
+    'R0012',
+    'R0013',
+    'R0015',
+    'R0016',
+    'R0017',
+    'R0020',
+    'R0023',
+    'R0028',
+    'R0030',
+    'R0031',
+    'R0032',
+    'R0034',
+    'R0035',
+    'R0037',
+    'R0038',
+    'R0039',
+    'R0040',
+    'R0041',
+    'R0042',
+    'R0044',
+    'R0047',
+    'R0049',
+    'R0050',
+    'R0051',
+    'R0053',
+    'R0054',
+    'R0055',
+    'R0058',
+    'R0059',
+    'R0062',
+    'R0063',
+    'R0066',
+    'R0072',
+    'R0073',
+    'R0074',
+    'R0088',
+    'R0090',
+    'R0099',
+    'R0101',
+    'R0102',
+    'R0104',
+    'R0104A',
+    'R0105',
+    'R0107',
+    'R0108',
+    'R0110',
+    'R0111',
+    'R0113',
+    'R0114',
+    'R0115',
+    'R0117',
+    'R0118',
+    'R0119',
+    'R0121',
+    'R0122',
+    'R0123',
+    'R0139',
+    'R0141',
+    'R0142',
+    'R0148',
+    'R0149',
+    'R0149A',
+    'R0150',
+    'R0155',
+    'R0156',
+    'R0156A',
+    'R0157',
+    'R0157A',
+    'R0158',
+    'R0170',
+    'R0174',
+    'SizePayloadEquals',
+    'SizePayloadMax',
+    'SizePayloadMin',
+    'SizePayloadRange',
+    'Usage-UnknownField',
+    'ctype-addressLinesMustBeThree',
+    'ctype-thereMustBeAnubisCoveragesAccessibleByProperty',
+    'date-assertion-Policy.txEffectiveDate',
+    'date-condition-Policy.txEffectiveDate',
+    'ec-assert-additional',
+    'ec-assert-additional-ccr',
+    'ec-assert-dimensions',
+    'ec-condition-additional',
+    'ec-condition-dimensions',
+    'f-concat-assert-policyNumber',
+    'f-date-months-between-assert-policyNumber',
+    'f-default-to-Vehicle-newValue-with-max-of-numbers',
+    'f-ends-with-between-assert-policyNumber',
+    'f-flat-assert',
+    'f-format-date-assert-policyNumber',
+    'f-get-day-date-assert-policyNumber',
+    'f-get-month-date-assert-policyNumber',
+    'f-get-year-date-assert-policyNumber',
+    'f-includes-in-array-assert-policyNumber',
+    'f-includes-in-string-assert-policyNumber',
+    'f-length-assert-policyNumber',
+    'f-lower-case-assert-policyNumber',
+    'f-money-to-string-assert-policyNumber',
+    'f-number-to-string-assert-policyNumber',
+    'f-pad-left-assert-policyNumber',
+    'f-pad-right-assert-policyNumber',
+    'f-starts-with-assert-policyNumber',
+    'f-trim-assert-policyNumber',
+    'f-upper-case-assert-policyNumber'
+}

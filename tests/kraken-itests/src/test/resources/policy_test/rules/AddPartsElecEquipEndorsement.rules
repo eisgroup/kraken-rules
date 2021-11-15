@@ -1,0 +1,19 @@
+Namespace PersonalAuto
+
+Include Base
+
+Rule "AddPartsElecEquipEndorsement-180902-F2qr4" On AddPartsElecEquipEndorsement.category {
+  Default To "Vehicle equipment"
+}
+
+Rule "AddPartsElecEquipEndorsement-180902-F31wk" On AddPartsElecEquipEndorsement.name {
+  Default To "Additional Custom Parts and Electronic Equipment Endorsement"
+}
+
+Rule "AddPartsElecEquipEndorsement-180902-Fw34" On AddPartsElecEquipEndorsement.number {
+  Default To "P.A. 00 03 04 91"
+}
+
+Rule "AddPartsElecEquipEndorsement-180902-Fcs12e" On AddPartsElecEquipEndorsement.description {
+  Default To "Covers permanently installed custom parts or equipment, devices, accessories, enhancements and changes other than those installed by the original manufacturer, that alter the performance or appearance of your vehicle"
+}

@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "target": "es2015",
+    "strictNullChecks": true,
+    "module": "commonjs",
+    "declaration": true,
+    "declarationDir": "target/dist/definitions/src/",
+    "outDir": "target/dist/js/src/",
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "pretty": true,
+    "noUnusedLocals": true,
+    "noImplicitThis": true,
+    "noEmitOnError": true,
+    "noImplicitReturns": true,
+    "types": [
+      "node"
+    ]
+  },
+  "compileOnSave": true,
+  "buildOnSave": true,
+  "exclude": [
+    "node_modules",
+    "target"
+  ],
+  "filesGlob": [
+    "**/*.ts",
+    "**/*.tsx",
+    "!node_modules/**",
+    "!target/**"
+  ]
+}

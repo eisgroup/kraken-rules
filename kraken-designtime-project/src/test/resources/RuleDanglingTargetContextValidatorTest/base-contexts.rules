@@ -1,0 +1,18 @@
+Namespace Base
+
+Context Policy {
+
+}
+
+Root Context PolicySummary is Policy {
+    Date inceptionDate
+    Child PolicyDetails
+}
+
+Context PolicyDetails {
+
+}
+
+Context OtherContext {
+    String name
+}

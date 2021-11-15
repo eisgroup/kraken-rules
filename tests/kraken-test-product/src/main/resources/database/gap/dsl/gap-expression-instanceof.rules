@@ -1,0 +1,21 @@
+Namespace Policy
+
+EntryPoint "Expressions_instanceof" {
+    "Expressions_instanceof_secretLimitAmount"
+}
+
+EntryPoint "Expressions_typeof" {
+    "Expressions_typeof_coherence"
+}
+
+Rule "Expressions_instanceof_secretLimitAmount" On Policy.state {
+    When some anubis in Vehicle[*].anubisCoverages satisfies anubis typeof AnubisSecretCoverage
+    Assert Sum(for secretAnubis in Vehicle[*].anubisCoverages[this instanceof AnubisSecretCoverage] return ((AnubisSecretCoverage) secretAnubis).secretLimitAmount) == 330
+    Error "Expressions_instanceof_secretLimitAmount_code" : "Sum of secretLimitAmount must be 330"
+}
+
+Rule "Expressions_typeof_coherence" On CarCoverage.limitAmount {
+    When !(CarCoverage typeof COLLCoverage) and GetType(CarCoverage) != "COLLCoverage"
+    Assert CarCoverage.limitAmount > 100
+    Error "Expressions_typeof_coherence_code" : "For every CarCoverage except COLLCoverage limitAmount must be > 100"
+}

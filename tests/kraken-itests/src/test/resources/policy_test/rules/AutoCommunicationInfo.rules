@@ -1,0 +1,13 @@
+Namespace PersonalAuto
+
+Include Base
+
+Rule "AutoCommunicationInfo-180722-2tW11j" On AutoCommunicationInfo.emailTypeCd {
+  Set Mandatory
+  Error "AutoCommunicationInfo-180722-2tW11j": "Email type is required"
+}
+
+Rule "AutoCommunicationInfo-180722-1tW11j" On AutoCommunicationInfo.phoneTypeCd {
+  Set Mandatory
+  Error "AutoCommunicationInfo-180722-1tW11j": "Phone type is required"
+}
