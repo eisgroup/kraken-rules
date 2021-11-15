@@ -1,7 +1,6 @@
 # 🦑 Kraken 🦑
 
   - [Writing Sanity test](#writing-sanity-test)
-  - [Commit Gating (CG)](#commit-gating-cg)
   - [Test Application](#test-application)
     - [UI](#ui)
     - [Backend](#backend)
