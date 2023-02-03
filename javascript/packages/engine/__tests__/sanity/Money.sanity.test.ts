@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /*
  *  Copyright 2019 EIS Ltd and/or one of its affiliates.
  *
@@ -14,48 +15,48 @@
  *  limitations under the License.
  */
 
-import { sanityMocks } from "./_AutoPolicyObject.mocks";
-import { sanityEngine } from "./_SanityEngine";
+import { sanityMocks } from './_AutoPolicyObject.mocks'
+import { sanityEngine } from './_SanityEngine'
 
-describe("Engine Sanity Money", () => {
-    const { empty } = sanityMocks;
-    it("should set default money amount 2500 USD", async () => {
-        const data = empty();
+describe('Engine Sanity Money', () => {
+    const { empty } = sanityMocks
+    it('should set default money amount 2500 USD', async () => {
+        const data = empty()
         data.billingInfo!.creditCardInfo!.cardCreditLimitAmount = {
-            amount : 0,
-            currency: "USD"
-        };
+            amount: 0,
+            currency: 'USD',
+        }
 
-        sanityEngine.evaluate(data, "default-money");
-        const money = data!.billingInfo!.creditCardInfo!.cardCreditLimitAmount!;
+        sanityEngine.evaluate(data, 'default-money')
+        const money = data!.billingInfo!.creditCardInfo!.cardCreditLimitAmount!
 
-        expect(money["amount"]).toBe(2500);
-        expect(money["currency"]).toBe("USD");
-    });
-    it("should fail condition expression with empty data (limit > 2000)", async () => {
-        const results = sanityEngine.evaluate(empty(), "assert-money");
-        expect(results.getApplicableResults()).toHaveLength(0);
-        expect(results).k_toHaveExpressionsFailures(1);
-    });
-    it("should not execute rule due to failed condition (limit > 2000)", async () => {
-        const data = empty();
+        expect(money['amount']).toBe(2500)
+        expect(money['currency']).toBe('USD')
+    })
+    it('should fail condition expression with empty data (limit > 2000)', async () => {
+        const results = sanityEngine.evaluate(empty(), 'assert-money')
+        expect(results.getApplicableResults()).toHaveLength(0)
+        expect(results).k_toHaveExpressionsFailures(1)
+    })
+    it('should not execute rule due to failed condition (limit > 2000)', async () => {
+        const data = empty()
         data.billingInfo!.creditCardInfo!.cardCreditLimitAmount = {
             amount: 1500,
-            currency: "USD"
-        };
-        const results = sanityEngine.evaluate(data, "assert-money");
-        expect(results.getApplicableResults()).toHaveLength(0);
-        expect(results).k_toHaveExpressionsFailures(0);
-    });
-    it("should execute money assertion rule (limit > 3000)", async () => {
-        const data = empty();
+            currency: 'USD',
+        }
+        const results = sanityEngine.evaluate(data, 'assert-money')
+        expect(results.getApplicableResults()).toHaveLength(0)
+        expect(results).k_toHaveExpressionsFailures(0)
+    })
+    it('should execute money assertion rule (limit > 3000)', async () => {
+        const data = empty()
         data.billingInfo!.creditCardInfo!.cardCreditLimitAmount = {
             amount: 2500,
-            currency: "USD"
-        };
-        const results = sanityEngine.evaluate(data, "assert-money");
-        expect(results).not.k_toHaveExpressionsFailures();
-        expect(results.getApplicableResults()).toHaveLength(1);
-        expect(results.getApplicableResults()[0]).not.k_toBeValidRuleResult();
-    });
-});
+            currency: 'USD',
+        }
+        const results = sanityEngine.evaluate(data, 'assert-money')
+        expect(results).not.k_toHaveExpressionsFailures()
+        expect(results.getApplicableResults()).toHaveLength(1)
+        expect(results.getApplicableResults()[0]).not.k_toBeValidRuleResult()
+    })
+})

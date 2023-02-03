@@ -1,0 +1,51 @@
+Namespace Policy
+
+EntryPoint "Expressions_kel_functions" {
+    "Expressions_kel_functions-01",
+    "Expressions_kel_functions-02"
+}
+
+Rule "Expressions_kel_functions-01" On Policy.totalLimit {
+    When MinLimit(this) = 25
+    Default To CalculateTotalLimit(Policy)
+}
+
+Rule "Expressions_kel_functions-02" On Policy.totalLimit {
+    Assert Fibonacci(10) = 55
+}
+
+/**
+  Calculates n-th number of a fibonacci sequence.
+
+  @parameter n - number of a fibonacci sequence, starting from 0
+  @example Fibonacci(0)
+    @result 0
+  @example Fibonacci(1)
+    @result 1
+  @example Fibonacci(6)
+    @result 8
+  @since 1.33.0
+*/
+Function Fibonacci(Number n) : Number {
+    if n=0 or n=1
+    then n
+    else Fibonacci(n-2) + Fibonacci(n-1)
+}
+
+Function CalculateTotalLimit(Policy policy) : Number {
+    set coverages to GetCoverages(policy)
+    return Sum(coverages.limitAmount)
+}
+
+Function MinLimit(Policy policy) : Number {
+    set coverages to GetCoverages(policy)
+    return MinLimitCoverages(coverages)
+}
+
+Function GetCoverages(Policy policy) : CarCoverage[] {
+    policy.riskItems.collCoverages
+}
+
+Function MinLimitCoverages(CarCoverage[] coverages) : Number {
+    Min(coverages.limitAmount)
+}

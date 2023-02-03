@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 import kraken.runtime.model.context.RuntimeContextDefinition;
@@ -92,11 +93,20 @@ public class RuntimeProjectRepository implements RuntimeRuleRepository, RuntimeC
             return;
         }
 
-        dimensionFilteringService.filterEntryPoints(entryPoints, context)
-                .ifPresent(ep -> {
-                    collectRules(ep, context, collectedRules);
-                    collectDynamicRules(ep.getName(), context, collectedRules);
-                });
+        resolveEntryPoint(entryPoints, context)
+            .ifPresent(ep -> {
+                collectRules(ep, context, collectedRules);
+                collectDynamicRules(ep.getName(), context, collectedRules);
+            });
+    }
+
+    private Optional<RuntimeEntryPoint> resolveEntryPoint(List<RuntimeEntryPoint> entryPoints,
+                                                          Map<String, Object> context) {
+        if (entryPoints.size() == 1 && entryPoints.iterator().next().getMetadata().getProperties().isEmpty()) {
+            return Optional.of(entryPoints.iterator().next());
+        }
+
+        return dimensionFilteringService.filterEntryPoints(krakenProject.getNamespace(), entryPoints, context);
     }
 
     private void collectDynamicRules(String entryPointName, Map<String, Object> context, Map<String, RuntimeRule> collectedRules) {
@@ -104,13 +114,22 @@ public class RuntimeProjectRepository implements RuntimeRuleRepository, RuntimeC
                 .forEach(rule -> collectRuleOrLogWarningIfAlreadyExists(entryPointName, rule, collectedRules));
     }
 
-    private void collectRules(RuntimeEntryPoint entryPoint, Map<String, Object> context, Map<String, RuntimeRule> collectedRules) {
-        for(String ruleName : entryPoint.getRuleNames()) {
+    private void collectRules(RuntimeEntryPoint entryPoint, Map<String, Object> context,
+                              Map<String, RuntimeRule> collectedRules) {
+        for (String ruleName : entryPoint.getRuleNames()) {
             List<RuntimeRule> rules = krakenProject.getRuleVersions().get(ruleName);
-            dimensionFilteringService.filterRules(rules, context)
-                    .ifPresent(rule -> collectRuleOrLogWarningIfAlreadyExists(entryPoint.getName(), rule, collectedRules));
+
+            if (rules.size() == 1 && !rules.iterator().next().getDimensionSet().isDimensional()) {
+                collectRuleOrLogWarningIfAlreadyExists(entryPoint.getName(), rules.iterator().next(), collectedRules);
+            } else {
+                dimensionFilteringService.filterRules(krakenProject.getNamespace(), rules, context)
+                    .ifPresent(rule ->
+                        collectRuleOrLogWarningIfAlreadyExists(entryPoint.getName(), rule, collectedRules));
+            }
+
         }
-        for(String includedEntryPoint : entryPoint.getIncludedEntryPoints()) {
+
+        for (String includedEntryPoint : entryPoint.getIncludedEntryPoints()) {
             collectRules(includedEntryPoint, context, collectedRules);
         }
     }

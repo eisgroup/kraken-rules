@@ -22,7 +22,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
-import kraken.el.ast.validation.AstError;
+import kraken.el.Value;
+import kraken.el.ast.validation.AstMessage;
 import kraken.el.ast.validation.AstValidatingVisitor;
 
 /**
@@ -40,7 +41,9 @@ public class Ast {
 
     private final Collection<Reference> references;
 
-    private final AtomicReference<Collection<AstError>> syntaxErrorsReference = new AtomicReference<>();
+    private final AtomicReference<Collection<AstMessage>> validationMessages = new AtomicReference<>();
+
+    private final Collection<AstMessage> generationErrors;
 
     public Ast(Expression expression) {
         this.expression = expression;
@@ -48,18 +51,37 @@ public class Ast {
         this.references = new ArrayList<>();
 
         this.astType = determineAstType(expression);
+        this.generationErrors = new ArrayList<>();
     }
 
-    public Ast(Expression expression, Map<String, Function> functions, Collection<Reference> references) {
+    public Ast(Expression expression,
+               Map<String, Function> functions,
+               Collection<Reference> references,
+               Collection<AstMessage> generationErrors) {
         this.functions = Objects.requireNonNull(functions);
         this.references = Objects.requireNonNull(references);
         this.expression = Objects.requireNonNull(expression);
-
+        this.generationErrors = Objects.requireNonNull(generationErrors);
         this.astType = determineAstType(expression);
+    }
+
+    public boolean isValueBlock() {
+        return expression instanceof ValueBlock;
     }
 
     public Expression getExpression() {
         return expression;
+    }
+
+    public boolean isTemplate() {
+        return expression instanceof Template;
+    }
+
+    public Template asTemplate() {
+        if(isTemplate()) {
+            return (Template) expression;
+        }
+        throw new IllegalStateException("Expression is not template: " + expression);
     }
 
     public AstType getAstType() {
@@ -82,34 +104,44 @@ public class Ast {
         return references;
     }
 
+    /**
+     *
+     * @return errors found during AST generation
+     */
+    public Collection<AstMessage> getGenerationErrors() {
+        return generationErrors;
+    }
+
     public Object getCompiledLiteralValue() {
-        if(AstType.LITERAL == astType) {
+        if(expression instanceof LiteralExpression) {
             return ((LiteralExpression) expression).getValue();
         }
         return null;
     }
 
     public String getCompiledLiteralValueType() {
-        if(AstType.LITERAL == astType) {
-            if(expression instanceof Null) {
-                return null;
-            }
-            return ((LiteralExpression) expression).getEvaluationType().getName();
+        if(expression instanceof Null) {
+            return null;
+        }
+        if(expression instanceof LiteralExpression) {
+            return expression.getEvaluationType().getName();
         }
         return null;
     }
 
-    public Collection<AstError> getSyntaxErrors() {
-        Collection<AstError> syntaxErrors = syntaxErrorsReference.get();
-        if(syntaxErrors == null) {
+    public Collection<AstMessage> getValidationMessages() {
+        Collection<AstMessage> messages = validationMessages.get();
+        if(messages == null) {
             AstValidatingVisitor validatingVisitor = new AstValidatingVisitor();
             validatingVisitor.visit(this.expression);
-            syntaxErrors = validatingVisitor.getSyntaxErrors();
-            if (!syntaxErrorsReference.compareAndSet(null, syntaxErrors)) {
-                return syntaxErrorsReference.get();
+            messages = new ArrayList<>();
+            messages.addAll(validatingVisitor.getMessages());
+            messages.addAll(generationErrors);
+            if (!validationMessages.compareAndSet(null, messages)) {
+                return validationMessages.get();
             }
         }
-        return syntaxErrors;
+        return messages;
     }
 
     private AstType determineAstType(Expression expression) {
@@ -120,13 +152,20 @@ public class Ast {
         } else if (expression instanceof Identifier
                 && ((Identifier) expression).isSimpleBeanPath()
                 && ((Identifier) expression).isReferenceInCurrentScope()) {
-            return AstType.PROPERTY;
+            return ((Identifier) expression).getIdentifierParts().length == 1
+                ? AstType.PROPERTY
+                : AstType.PATH;
         } else if (expression instanceof Path
                 && ((Path) expression).isSimpleBeanPath()
                 && ((Path) expression).isReferenceInCurrentScope()) {
             return AstType.PATH;
         }
+
         return AstType.COMPLEX;
     }
 
+    @Override
+    public String toString() {
+        return expression.toString();
+    }
 }

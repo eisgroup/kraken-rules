@@ -26,16 +26,8 @@ import kraken.runtime.model.rule.payload.validation.SizeRangePayload;
 @API
 public class SizeRangePayloadResult extends ValidationPayloadResult {
 
-    private int min;
-    private int max;
-
-    /**
-     * @deprecated use {@link #SizeRangePayloadResult(Boolean, SizeRangePayload, List)} instead.
-     */
-    @Deprecated(since = "1.14.0", forRemoval = true)
-    public SizeRangePayloadResult(Boolean success, SizeRangePayload payload) {
-        this(success, payload, List.of());
-    }
+    private final int min;
+    private final int max;
 
     public SizeRangePayloadResult(Boolean success, SizeRangePayload payload, List<String> templateVariables) {
         super(success, payload, templateVariables);

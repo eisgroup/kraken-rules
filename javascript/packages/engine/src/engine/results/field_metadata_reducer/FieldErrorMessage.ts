@@ -1,5 +1,5 @@
 /*
- *  Copyright 2018 EIS Ltd and/or one of its affiliates.
+ *  Copyright 2022 EIS Ltd and/or one of its affiliates.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,8 +14,15 @@
  *  limitations under the License.
  */
 
-import { PayloadResultType } from "../PayloadResult";
-import { Payloads } from "kraken-model";
+/*
+ * Copyright © 2022 EIS Group and/or one of its affiliates. All rights reserved. Unpublished work under U.S.
+ * copyright laws.
+ * CONFIDENTIAL AND TRADE SECRET INFORMATION. No portion of this work may be copied, distributed, modified,
+ *  or incorporated into any other media without EIS Group prior written consent.
+ */
+
+import { PayloadResultType } from 'kraken-engine-api'
+import { Payloads } from 'kraken-model'
 
 /**
  * Contains validation error message from result of validation rule evaluation
@@ -26,7 +33,6 @@ export class FieldErrorMessage {
         public readonly message: string,
         public readonly errorCode: string,
         public readonly payloadResultType: PayloadResultType,
-        public readonly severity?: Payloads.Validation.ValidationSeverity
-    ) {
-    }
+        public readonly severity?: Payloads.Validation.ValidationSeverity,
+    ) {}
 }

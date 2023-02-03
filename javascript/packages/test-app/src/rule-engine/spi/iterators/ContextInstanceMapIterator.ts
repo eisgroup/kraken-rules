@@ -16,24 +16,23 @@
 
 /**
  * Iterator are used in Kraken java implementation. For now there is no use cases of using iterator
- * so this code in this folder is not included in any engine process.
+ * so this code in this folder is not included in any engine  process.
  * It is kept in case some use cases of iterator will appear.
  * Also this folder is excluded to collect coverage from in jest config.
  */
-import { ContextInstanceIterator } from "./ContextInstanceIterator";
-import { ContextInstanceListIterator } from "./ContextInstanceListIterator";
+import { ContextInstanceIterator } from './ContextInstanceIterator'
+import { ContextInstanceListIterator } from './ContextInstanceListIterator'
 
-export class ContextInstanceMapIterator<K = any> implements ContextInstanceIterator<string, K> {
-
-    private map: { [key: string]: K };
-    private iterator: ContextInstanceIterator<number, string>;
+export class ContextInstanceMapIterator<K = unknown> implements ContextInstanceIterator<string, K> {
+    private map: { [key: string]: K }
+    private iterator: ContextInstanceIterator<number, string>
 
     constructor(obj: { [key: string]: K }) {
-        this.map = { ...obj };
-        this.iterator = new ContextInstanceListIterator(Object.keys(obj));
+        this.map = { ...obj }
+        this.iterator = new ContextInstanceListIterator(Object.keys(obj))
     }
 
-    hasNext: () => boolean = () => this.iterator.hasNext();
-    next: () => K = () => this.map[this.iterator.next()];
-    index: () => string = () => Object.keys(this.map)[this.iterator.index()];
+    hasNext: () => boolean = () => this.iterator.hasNext()
+    next: () => K = () => this.map[this.iterator.next()]
+    index: () => string = () => Object.keys(this.map)[this.iterator.index()]
 }

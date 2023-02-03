@@ -14,35 +14,35 @@
  *  limitations under the License.
  */
 
-import * as React from "react";
-import { Row } from "antd";
+import * as React from 'react'
+import { Row } from 'antd'
 
-import { InnerInputsComponentProps, SingleField } from "../core/field/SingleField";
-import { renderers } from "../core/RenderInputFunctions";
+import { InnerInputsComponentProps, SingleField } from '../core/field/SingleField'
+import { renderers } from '../core/RenderInputFunctions'
 
-import { TestProduct } from "kraken-test-product";
-import domain = TestProduct.kraken.testproduct.domain;
-import { withMetadata } from "../core/ContextHOC";
+import { TestProduct } from 'kraken-test-product'
+import domain = TestProduct.kraken.testproduct.domain
+import { withMetadata } from '../core/ContextHOC'
 
 export class Component extends React.Component<InnerInputsComponentProps<domain.AddressInfo>> {
     onDoNotSolicitChange = (doNotSolicit: boolean) => {
-        this.props.onChange(Object.assign({}, this.props.value, { doNotSolicit }));
+        this.props.onChange(Object.assign({}, this.props.value, { doNotSolicit }))
     }
 
     onCountryCdChange = (event: React.FormEvent<HTMLInputElement>) => {
-        this.props.onChange(Object.assign({}, this.props.value, { countryCd: event.currentTarget.value }));
+        this.props.onChange(Object.assign({}, this.props.value, { countryCd: event.currentTarget.value }))
     }
 
     onPostalCodeChange = (event: React.FormEvent<HTMLInputElement>) => {
-        this.props.onChange(Object.assign({}, this.props.value, { postalCode: event.currentTarget.value }));
+        this.props.onChange(Object.assign({}, this.props.value, { postalCode: event.currentTarget.value }))
     }
 
     onCityChange = (event: React.FormEvent<HTMLInputElement>) => {
-        this.props.onChange(Object.assign({}, this.props.value, { city: event.currentTarget.value }));
+        this.props.onChange(Object.assign({}, this.props.value, { city: event.currentTarget.value }))
     }
 
     onStreetChange = (event: React.FormEvent<HTMLInputElement>) => {
-        this.props.onChange(Object.assign({}, this.props.value, { street: event.currentTarget.value }));
+        this.props.onChange(Object.assign({}, this.props.value, { street: event.currentTarget.value }))
     }
 
     render(): JSX.Element {
@@ -51,51 +51,46 @@ export class Component extends React.Component<InnerInputsComponentProps<domain.
                 <SingleField
                     id={this.props.id}
                     value={this.props.value.doNotSolicit}
-                    contextName="AddressInfo"
-                    modelFieldName="doNotSolicit"
+                    contextName='AddressInfo'
+                    modelFieldName='doNotSolicit'
                     onChange={this.onDoNotSolicitChange}
-
                     renderInput={renderers.boolean}
                 />
                 <SingleField
                     id={this.props.id}
                     value={this.props.value.countryCd}
-                    contextName="AddressInfo"
-                    modelFieldName="countryCd"
+                    contextName='AddressInfo'
+                    modelFieldName='countryCd'
                     onChange={this.onCountryCdChange}
-
                     renderInput={renderers.input}
                 />
                 <SingleField
                     id={this.props.id}
                     value={this.props.value.postalCode}
-                    contextName="AddressInfo"
-                    modelFieldName="postalCode"
+                    contextName='AddressInfo'
+                    modelFieldName='postalCode'
                     onChange={this.onPostalCodeChange}
-
                     renderInput={renderers.input}
                 />
                 <SingleField
                     id={this.props.id}
                     value={this.props.value.city}
-                    contextName="AddressInfo"
-                    modelFieldName="city"
+                    contextName='AddressInfo'
+                    modelFieldName='city'
                     onChange={this.onCityChange}
-
                     renderInput={renderers.input}
                 />
                 <SingleField
                     id={this.props.id}
                     value={this.props.value.street}
-                    contextName="AddressInfo"
-                    modelFieldName="street"
+                    contextName='AddressInfo'
+                    modelFieldName='street'
                     onChange={this.onStreetChange}
-
                     renderInput={renderers.input}
                 />
             </Row>
-        );
+        )
     }
 }
 
-export const AddressInfo = withMetadata(Component);
+export const AddressInfo = withMetadata(Component)

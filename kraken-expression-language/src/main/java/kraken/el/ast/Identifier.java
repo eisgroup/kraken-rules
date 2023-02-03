@@ -17,7 +17,9 @@ package kraken.el.ast;
 
 import kraken.el.ast.token.Token;
 import kraken.el.scope.Scope;
+import kraken.el.scope.ScopeType;
 import kraken.el.scope.symbol.VariableSymbol;
+import kraken.el.scope.type.Type;
 
 import static kraken.el.scope.type.Type.UNKNOWN;
 
@@ -26,19 +28,23 @@ import static kraken.el.scope.type.Type.UNKNOWN;
  */
 public class Identifier extends Reference {
 
-    private String identifierToken;
+    private final String identifierToken;
 
-    private String identifier;
+    private final String identifier;
 
-    public Identifier(String identifier, Scope scope, Token token) {
-        this(identifier, identifier, scope, token);
+    private final String[] identifierParts;
+
+    public Identifier(String identifier, Scope scope, Type evaluationType, Token token) {
+        this(identifier, identifier, scope, evaluationType, token);
     }
 
-    public Identifier(String identifierToken, String identifier, Scope scope, Token token) {
-        super(NodeType.IDENTIFIER, scope, scope.resolveReferenceSymbol(identifierToken).map(VariableSymbol::getType).orElse(UNKNOWN), token);
+    public Identifier(String identifierToken, String identifier, Scope scope, Type evaluationType, Token token) {
+        super(NodeType.IDENTIFIER, scope, evaluationType, token);
 
         this.identifier = identifier;
         this.identifierToken = identifierToken;
+
+        this.identifierParts = identifier.split("\\.");
     }
 
     public String getIdentifier() {
@@ -49,9 +55,38 @@ public class Identifier extends Reference {
         return identifierToken;
     }
 
+    public String[] getIdentifierParts() {
+        return identifierParts;
+    }
+
     @Override
-    String getFirstToken() {
-        return identifierToken;
+    public boolean isReferenceInCurrentScope() {
+        return scope.isReferenceInCurrentScope(identifierToken);
+    }
+
+    @Override
+    public boolean isReferenceInGlobalScope() {
+        return scope.isReferenceInGlobalScope(identifierToken);
+    }
+
+    @Override
+    public ScopeType findScopeTypeOfReference() {
+        return scope.findScopeTypeOfReference(identifierToken);
+    }
+
+    @Override
+    public boolean isSimpleBeanPath() {
+        return true;
+    }
+
+    @Override
+    public boolean isSimplePath() {
+        return true;
+    }
+
+    @Override
+    public Reference getFirstReference() {
+        return this;
     }
 
     @Override
@@ -59,8 +94,4 @@ public class Identifier extends Reference {
         return identifier;
     }
 
-    @Override
-    public boolean isSimpleBeanPath() {
-        return true;
-    }
 }

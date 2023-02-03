@@ -31,7 +31,9 @@ import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.hamcrest.core.IsCollectionContaining.hasItems;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.text.IsEqualIgnoringCase.equalToIgnoringCase;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Context parsing test for {@link KrakenDSLModelParser} that verifies if {@link ContextDefinition} are parsed correctly
@@ -62,11 +64,13 @@ public class KrakenModelDSLParserContextTest {
         assertThat(model.getContextDefinitions(), hasSize(1));
 
         ContextDefinition contextDefinition = model.getContextDefinitions().get(0);
+
         assertThat(contextDefinition.getName(), equalTo("Policy"));
         assertThat(contextDefinition.isStrict(), is(true));
         assertThat(contextDefinition.getChildren().values(), empty());
         assertThat(contextDefinition.getContextFields().values(), empty());
         assertThat(contextDefinition.getParentDefinitions(), empty());
+        assertFalse(contextDefinition.isSystem());
     }
 
     @Test
@@ -77,6 +81,41 @@ public class KrakenModelDSLParserContextTest {
 
         assertThat(model.getContextDefinitions().get(0).getName(), equalTo("Policy"));
         assertThat(model.getContextDefinitions().get(1).getName(), equalTo("RiskItem"));
+    }
+
+    @Test
+    public void shouldParseSystemContext() {
+        Resource model = parseResource("Contexts{System Context LinkAttribute{}}");
+
+        assertThat(model.getContextDefinitions(), hasSize(1));
+
+        ContextDefinition contextDefinition = model.getContextDefinitions().get(0);
+
+        assertThat(contextDefinition.getName(), equalTo("LinkAttribute"));
+        assertTrue(contextDefinition.isSystem());
+    }
+
+    @Test
+    public void shouldParseSystemContextFields() {
+        Resource model = parseResource("Contexts{System Context LinkAttribute{ String stringAttr Coverage coverage}}");
+
+        assertThat(model.getContextDefinitions(), hasSize(1));
+
+        ContextDefinition contextDefinition = model.getContextDefinitions().get(0);
+
+        assertThat(contextDefinition.getContextFields().values(), hasSize(2));
+
+        ContextField name = contextDefinition.getContextFields().get("stringAttr");
+        assertThat(name.getName(), equalTo("stringAttr"));
+        assertThat(name.getCardinality(), is(Cardinality.SINGLE));
+        assertThat(name.getFieldPath(), equalTo("stringAttr"));
+        assertThat(name.getFieldType(), is(PrimitiveFieldDataType.STRING.toString()));
+
+        ContextField ages = contextDefinition.getContextFields().get("coverage");
+        assertThat(ages.getName(), equalTo("coverage"));
+        assertThat(ages.getCardinality(), is(Cardinality.SINGLE));
+        assertThat(ages.getFieldPath(), equalTo("coverage"));
+        assertThat(ages.getFieldType(), is("Coverage"));
     }
 
     @Test

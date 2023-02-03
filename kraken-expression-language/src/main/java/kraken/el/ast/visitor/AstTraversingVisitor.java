@@ -82,9 +82,7 @@ public class AstTraversingVisitor extends QueuedAstVisitor<Expression> {
     public Expression visit(If anIf) {
         visit(anIf.getCondition());
         visit(anIf.getThenExpression());
-        if(anIf.getElseExpression().isPresent()) {
-            visit(anIf.getElseExpression().get());
-        }
+        anIf.getElseExpression().ifPresent(this::visit);
         return anIf;
     }
 
@@ -239,6 +237,9 @@ public class AstTraversingVisitor extends QueuedAstVisitor<Expression> {
 
     @Override
     public Expression visit(ReferenceValue reference) {
+        if(reference.getThisNode() != null) {
+            visit(reference.getThisNode());
+        }
         visit(reference.getReference());
         return reference;
     }
@@ -254,6 +255,11 @@ public class AstTraversingVisitor extends QueuedAstVisitor<Expression> {
     }
 
     @Override
+    public Expression visit(Empty empty) {
+        return empty;
+    }
+
+    @Override
     public Expression visit(This aThis) {
         return aThis;
     }
@@ -262,6 +268,22 @@ public class AstTraversingVisitor extends QueuedAstVisitor<Expression> {
     public Expression visit(Template template) {
         template.getTemplateExpressions().forEach(this::visit);
         return template;
+    }
+
+    @Override
+    public Expression visit(ValueBlock valueBlock) {
+        valueBlock.getVariables().forEach(this::visit);
+
+        visit(valueBlock.getValue());
+
+        return valueBlock;
+    }
+
+    @Override
+    public Expression visit(Variable variable) {
+        visit(variable.getValue());
+
+        return variable;
     }
 
     private Expression visitBinaryExpression(BinaryExpression e) {

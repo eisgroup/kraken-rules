@@ -15,11 +15,11 @@
  */
 package kraken.facade;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
+import kraken.dimensions.DimensionSet;
+import kraken.runtime.EvaluationMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import kraken.config.TestAppConfig;
 import kraken.config.TestAppPropertiesConfig;
 import kraken.el.scope.Scope;
@@ -68,22 +68,26 @@ public class Facade {
     @Autowired
     private KrakenProjectRepository krakenProjectRepository;
 
-    @ApiOperation(value = "Get EntryPointBundle by name and dimensions", response = String.class)
+    @Operation(summary = "Get EntryPointBundle by name and dimensions")
     @PostMapping(value = "/bundle/{entrypoint}", produces = "application/json")
     public String loadBundle(
             @RequestBody BundleRequest request,
-            @PathVariable("entrypoint") String entrypoint,
-            @RequestParam(name = "isDelta", defaultValue = "false") boolean isDelta
+            @PathVariable("entrypoint") String entrypoint
     ) {
         final EntryPointBundle bundle = entryPointBundleFactory.build(
                 TestProduct.toEntryPointName(entrypoint),
                 Optional.ofNullable(request.getDimensions()).orElse(new HashMap<>()),
-                isDelta
+                Optional.ofNullable(request.getExcludes())
+                    .map(excludes -> excludes.stream()
+                        .map(DimensionSet::createForDimensions)
+                        .collect(Collectors.toSet()))
+                    .orElse(Set.of()),
+                EvaluationMode.ALL
         );
         return GsonUtils.prettyGson().toJson(bundle);
     }
 
-    @ApiOperation(value = "Get EntryPoint by name", response = EntryPoint.class)
+    @Operation(summary = "Get EntryPoint by name")
     @GetMapping("/entrypoint/{name}")
     public EntryPoint loadEntryPoint(@PathVariable String name) {
         return getKrakenProject().getEntryPoints().stream()
@@ -92,7 +96,7 @@ public class Facade {
                 .orElseThrow(() -> new KrakenRestRepoException(name, EntryPoint.class));
     }
 
-    @ApiOperation(value = "Get Rule by name", response = Rule.class)
+    @Operation(summary = "Get Rule by name")
     @GetMapping("/rule/{name}")
     public Rule loadRule(@PathVariable String name) {
         return getKrakenProject().getRules().stream()
@@ -101,26 +105,26 @@ public class Facade {
                 .orElseThrow(() -> new KrakenRestRepoException(name, Rule.class));
     }
 
-    @ApiOperation(value = "Get ContextDefinition by name and dimensions", response = ContextDefinition.class)
+    @Operation(summary = "Get ContextDefinition by name and dimensions")
     @GetMapping("/context/{name}")
     public ContextDefinition loadContext(@PathVariable String name) {
         return Optional.ofNullable(getKrakenProject().getContextProjection(name))
                 .orElseThrow(() -> new KrakenRestRepoException(name, ContextDefinition.class));
     }
 
-    @ApiOperation(value = "Get all EntryPoints", response = EntryPoint.class)
+    @Operation(summary = "Get all EntryPoints")
     @GetMapping("/entrypoint/all")
     public Collection<EntryPoint> loadEntryPoints() {
         return getKrakenProject().getEntryPoints();
     }
 
-    @ApiOperation(value = "Get all Rules", response = EntryPoint.class)
+    @Operation(summary = "Get all Rules")
     @GetMapping("/rule/all")
     public Collection<Rule> loadRules() {
         return getKrakenProject().getRules();
     }
 
-    @ApiOperation(value = "Get all Context definitions", response = ContextDefinition.class)
+    @Operation(summary = "Get all Context definitions")
     @GetMapping("/context/all")
     public Collection<ContextDefinition> loadEntryContexts() {
         return getKrakenProject().getContextDefinitions().values();
@@ -128,26 +132,23 @@ public class Facade {
 
     @GetMapping("/scope/type-registry")
     public String getTypeRegistry() {
-        KrakenProject krakenProject = krakenProjectRepository.getKrakenProject("Policy");
+        KrakenProject krakenProject = getKrakenProject();
         ScopeBuilder scopeBuilder = ScopeBuilderProvider.forProject(krakenProject);
-        Scope scope = scopeBuilder.buildScope(krakenProject.getContextProjection("Policy"));
-        return ScopeSerialization.serializeTypeRegistry(new TypeRegistry(
-            scope.getParentScope().getAllTypes(),
-            "Policy"
-        ));
+        Scope scope = scopeBuilder.buildScope(krakenProject.getContextDefinitions().get("Policy"));
+        return ScopeSerialization.serializeTypeRegistry(new TypeRegistry(scope.getAllTypes()));
     }
 
 
     @GetMapping("/scope/{contextName}")
     public String getScope(@PathVariable String contextName) {
-        KrakenProject krakenProject = krakenProjectRepository.getKrakenProject("Policy");
+        KrakenProject krakenProject = getKrakenProject();
         ScopeBuilder scopeBuilder = ScopeBuilderProvider.forProject(krakenProject);
-        Scope scope = scopeBuilder.buildScope(krakenProject.getContextProjection(contextName));
+        Scope scope = scopeBuilder.buildScope(krakenProject.getContextDefinitions().get(contextName));
         return ScopeSerialization.serializeScope(scope);
     }
 
 
-        @GetMapping("/build/properties")
+    @GetMapping("/build/properties")
     public Map<String, String> getBuildProperties() {
         Map<String, String> buildProperties = new HashMap<>();
         buildProperties.put("number", properties.getBuildNumber());
@@ -155,7 +156,7 @@ public class Facade {
         buildProperties.put("startTime", properties.getBuildStartTime());
         buildProperties.put("revision", properties.getBuildRevision());
         buildProperties.put("version", properties.getProjectVersion());
-        buildProperties.put("branch", properties.getBuildRevision());
+        buildProperties.put("branch", properties.getBranch());
         return buildProperties;
     }
 

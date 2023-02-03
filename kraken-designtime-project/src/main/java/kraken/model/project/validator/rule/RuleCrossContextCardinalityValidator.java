@@ -28,15 +28,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import kraken.context.path.ContextPath;
-import kraken.context.path.ContextPathExtractor;
 import kraken.cross.context.path.CrossContextPath;
-import kraken.cross.context.path.CrossContextPathsResolver;
 import kraken.model.Rule;
 import kraken.model.context.Cardinality;
 import kraken.model.project.KrakenProject;
 import kraken.model.project.ccr.CrossContextService;
 import kraken.model.project.ccr.CrossContextServiceProvider;
-import kraken.model.project.ccr.CrossContextServiceSupplier;
 import kraken.model.project.dependencies.FieldDependency;
 import kraken.model.project.dependencies.RuleDependencyExtractor;
 import kraken.model.project.validator.ValidationMessage;
@@ -52,7 +49,7 @@ import kraken.utils.dto.Pair;
  * @author psurinin@eisgroup.com
  * @since 1.0.36
  */
-public class RuleCrossContextCardinalityValidator {
+public class RuleCrossContextCardinalityValidator implements RuleValidator {
 
     private static final Logger logger = LoggerFactory.getLogger(RuleCrossContextCardinalityValidator.class);
 
@@ -69,31 +66,41 @@ public class RuleCrossContextCardinalityValidator {
         this.dependencyExtractor = new RuleDependencyExtractor(krakenProject);
     }
 
+    @Override
     public void validate(Rule rule, ValidationSession session) {
-        List<String> dependantContexts = dependencyExtractor.extractDependencies(rule).stream()
-                .filter(FieldDependency::isContextDependency)
+        List<String> ccrDependencies = dependencyExtractor.extractDependencies(rule).stream()
+                .filter(FieldDependency::isCcrDependency)
                 .map(FieldDependency::getContextName)
                 .distinct()
                 .collect(Collectors.toList());
 
         List<ContextPath> rulePaths = crossContextService.getPathsFor(rule.getContext());
 
-        logger.trace("For rule '{}' found dependant context definitions: {}", rule.getFullName(), dependantContexts);
+        logger.trace("For rule '{}' found cross context dependencies: {}", rule.getFullName(), ccrDependencies);
 
-        dependantContexts.forEach(dependantContext -> {
+        ccrDependencies.forEach(ccr -> {
             Map<Cardinality, List<Pair<String, CrossContextPath>>> grouped =
                     rulePaths.stream()
                             .filter(isRuleContextSource(rule.getContext(), krakenProject))
                             .flatMap(contextPath -> crossContextService
-                                    .resolvePaths(contextPath, dependantContext).stream()
+                                    .resolvePaths(contextPath, ccr).stream()
                                     .map(crossContextPath -> new Pair<>(contextPath.getPathAsString(), crossContextPath)))
                             .collect(Collectors.groupingBy(pair -> pair.right.getCardinality()));
 
             if (grouped.size() > 1) {
-                String message = createMessage(rule, dependantContext, grouped);
+                String message = createMessage(rule, ccr, grouped);
                 session.add(new ValidationMessage(rule, message, ERROR));
             }
         });
+    }
+
+    @Override
+    public boolean canValidate(Rule rule) {
+        return rule.getName() != null
+            && rule.getContext() != null
+            && krakenProject.getContextDefinitions().containsKey(rule.getContext())
+            && rule.getTargetPath() != null
+            && krakenProject.getContextProjection(rule.getContext()).getContextFields().containsKey(rule.getTargetPath());
     }
 
     private Predicate<ContextPath> isRuleContextSource(String ruleContext, KrakenProject krakenProject) {

@@ -14,15 +14,15 @@
  *  limitations under the License.
  */
 
-import { DataContext } from "../DataContext";
-import { Contexts } from "kraken-model";
-import Cardinality = Contexts.Cardinality;
+import { Contexts } from 'kraken-model'
+import Cardinality = Contexts.Cardinality
+import { DataContext } from '../DataContext'
 /**
  * Information to extract external {@link DataContext} references (Cross component references)
  */
 export interface ReferenceExtractionInfo {
-    readonly dependencyName: string;
-    readonly extractionRoot: DataContext;
-    readonly extractionPath: string[];
-    readonly cardinality: Cardinality;
+    readonly dependencyName: string
+    readonly extractionRoot: DataContext
+    readonly extractionPath: string[]
+    readonly cardinality: Cardinality
 }

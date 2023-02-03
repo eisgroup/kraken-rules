@@ -23,18 +23,13 @@ import kraken.el.scope.type.Type;
 public class TypeRegistry {
 
     private final Map<String, Type> typeRegistry;
-    private final String namespace;
 
-    public TypeRegistry(Map<String, Type> typeRegistry, String namespace) {
+    public TypeRegistry(Map<String, Type> typeRegistry) {
         this.typeRegistry = typeRegistry;
-        this.namespace = namespace;
     }
 
     public Map<String, Type> getTypeRegistry() {
         return typeRegistry;
     }
 
-    public String getNamespace() {
-        return namespace;
-    }
 }

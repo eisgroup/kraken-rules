@@ -15,7 +15,25 @@
  */
 package kraken.runtime.context;
 
-import com.google.common.collect.ImmutableList;
+import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.mockito.Mockito.mock;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import kraken.runtime.EvaluationConfig;
+import kraken.runtime.EvaluationSession;
 import kraken.runtime.engine.context.data.DataContext;
 import kraken.runtime.engine.context.data.DataContextBuilder;
 import kraken.runtime.engine.context.data.ExtractedChildDataContextBuilder;
@@ -28,95 +46,61 @@ import kraken.runtime.engine.context.info.navpath.DataNavigationContextInstanceI
 import kraken.runtime.engine.context.info.navpath.DataNavigationContextInstanceInfoResolver;
 import kraken.runtime.engine.context.type.registry.TypeRegistry;
 import kraken.runtime.expressions.KrakenExpressionEvaluator;
-import kraken.runtime.repository.RuntimeContextRepository;
+import kraken.runtime.expressions.KrakenTypeProvider;
 import kraken.test.TestResources;
-import kraken.testproduct.domain.AccessTrackInfo;
 import kraken.testproduct.domain.AddressInfo;
-import kraken.testproduct.domain.PersonInfo;
-import kraken.testproduct.domain.Policy;
 import kraken.testproduct.domain.BillingInfo;
 import kraken.testproduct.domain.CreditCardInfo;
 import kraken.testproduct.domain.DriverInfo;
 import kraken.testproduct.domain.Party;
 import kraken.testproduct.domain.PartyRole;
+import kraken.testproduct.domain.PersonInfo;
+import kraken.testproduct.domain.Policy;
 import kraken.testproduct.domain.PolicyDetail;
 import kraken.testproduct.domain.TermDetails;
-import kraken.testproduct.domain.TransactionDetails;
 import kraken.testproduct.domain.meta.Identifiable;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static org.hamcrest.CoreMatchers.allOf;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 
 /**
  * Created by rimas on 25/01/17.
  */
 public class ContextDataExtractorTest {
 
+    private DataContextBuilder dataContextBuilder;
+
     private ContextDataExtractor contextDataExtractor;
-
-    private Policy policy;
-
-    private DataContext rootContext;
 
     @Before
     public void setUp() {
-        policy = new Policy();
-        BillingInfo billingInfo = new BillingInfo();
-        billingInfo.setCreditCardInfo(new CreditCardInfo());
-        policy.setBillingInfo(billingInfo);
-        policy.setAccessTrackInfo(new AccessTrackInfo());
-        policy.setTransactionDetails(new TransactionDetails());
-        Party party1 = new Party("1");
-        party1.setDriverInfo(new DriverInfo());
-        PersonInfo personInfo = new PersonInfo();
-        personInfo.setAddressInfo(new AddressInfo());
-        party1.setPersonInfo(personInfo);
-        party1.setRoles(ImmutableList.of(new PartyRole(), new PartyRole()));
-        Party party2 = new Party("2");
-        party2.setRoles(ImmutableList.of(new PartyRole()));
-        policy.setParties(ImmutableList.of(party1, party2));
-        policy.setPolicyDetail(new PolicyDetail());
-        policy.setRiskItems(new ArrayList<>());
-        policy.setTermDetails(new TermDetails());
-
-        final TestResources testResources =
-                TestResources.create(TestResources.Info.TEST_PRODUCT);
-        final RuntimeContextRepository runtimeContextRepository =
-                testResources.getRuntimeContextRepository();
-        final DataNavigationContextInstanceInfoResolver instanceInfoResolver =
-                new DataNavigationContextInstanceInfoResolver();
+        var testResources = TestResources.create(TestResources.Info.TEST_PRODUCT);
+        var runtimeContextRepository = testResources.getRuntimeContextRepository();
+        var instanceInfoResolver = new DataNavigationContextInstanceInfoResolver();
         instanceInfoResolver.setInfoResolver(new MockInfoResolver());
-        final DataContextBuilder dataContextBuilder =
-                new DataContextBuilder(
-                        runtimeContextRepository,
-                        instanceInfoResolver
-                );
-        rootContext = dataContextBuilder.buildFromRoot(policy);
-        contextDataExtractor = new ContextDataExtractor(
-                runtimeContextRepository,
-                testResources.getModelTree(),
-                new ExtractedChildDataContextBuilder(
-                        dataContextBuilder,
-                        new ContextExtractionResultBuilder(TypeRegistry.builder().build()),
-                        new KrakenExpressionEvaluator())
-                );
+
+        var session = new EvaluationSession(
+            new EvaluationConfig(),
+            Collections.emptyMap(),
+            mock(KrakenTypeProvider.class),
+            Map.of(),
+            testResources.getKrakenProject().getNamespace()
+        );
+        this.dataContextBuilder = new DataContextBuilder(runtimeContextRepository, instanceInfoResolver);
+        this.contextDataExtractor = new ContextDataExtractor(
+            runtimeContextRepository,
+            testResources.getModelTree(),
+            new ExtractedChildDataContextBuilder(
+                dataContextBuilder,
+                new ContextExtractionResultBuilder(TypeRegistry.builder().build()),
+                new KrakenExpressionEvaluator(),
+                session
+            )
+        );
     }
 
     @Test
     public void resolveChildContextShouldResolveImmediateChild() {
+        Policy policy = policy();
+        DataContext rootContext = dataContextBuilder.buildFromRoot(policy);
+
         String childContextName = "CreditCardInfo";
         List<DataContext> childContexts = contextDataExtractor.extractByName(
                 childContextName,
@@ -130,7 +114,20 @@ public class ContextDataExtractorTest {
     }
 
     @Test
+    public void resolveResolveNoChildContextIfNavigationExpressionThrowsError() {
+        Policy policy = policy();
+        policy.setBillingInfo(null);
+
+        var policyContext = dataContextBuilder.buildFromRoot(policy);
+        var contexts = contextDataExtractor.extractByName("CreditCardInfo", policyContext);
+        assertThat(contexts, hasSize(0));
+    }
+
+    @Test
     public void resolveChildContextShouldResolveLeaf() {
+        Policy policy = policy();
+        DataContext rootContext = dataContextBuilder.buildFromRoot(policy);
+
         String childContextName = "DriverInfo";
         List<DataContext> childContexts = contextDataExtractor.extractByName(
                 childContextName,
@@ -148,6 +145,9 @@ public class ContextDataExtractorTest {
 
     @Test
     public void  resolveChildContextShouldResolveLeafWhenRestrictionIsUsed() {
+        Policy policy = policy();
+        DataContext rootContext = dataContextBuilder.buildFromRoot(policy);
+
         PersonInfo personInfo = policy.getParties().get(0).getPersonInfo();
         ContextInstanceInfo contextInstanceInfo = new DataNavigationContextInstanceInfo(personInfo.getClass().getSimpleName(),
                 personInfo.getId(), "");
@@ -169,6 +169,9 @@ public class ContextDataExtractorTest {
 
     @Test
     public void resolveChildContextShouldResolveChildCollection() {
+        Policy policy = policy();
+        DataContext rootContext = dataContextBuilder.buildFromRoot(policy);
+
         String childContextName = "Party";
         List<DataContext> childContexts = contextDataExtractor.extractByName(
                 childContextName,
@@ -194,6 +197,9 @@ public class ContextDataExtractorTest {
 
     @Test
     public void resolveChildContextShouldResolveLeafsInDifferentCollections() {
+        Policy policy = policy();
+        DataContext rootContext = dataContextBuilder.buildFromRoot(policy);
+
         String childContextName = "PartyRole";
         List<DataContext> childContexts = contextDataExtractor.extractByName(
                 childContextName,
@@ -226,6 +232,9 @@ public class ContextDataExtractorTest {
 
     @Test
     public void resolveChildContextShouldResolveCollectionInCollectionWhenRestrictionIsUsed() {
+        Policy policy = policy();
+        DataContext rootContext = dataContextBuilder.buildFromRoot(policy);
+
         Party party = policy.getParties().get(0);
         final NodeInstanceInfo instanceInfo = NodeInstanceInfo.from(
                 new DataNavigationContextInstanceInfo(
@@ -264,6 +273,26 @@ public class ContextDataExtractorTest {
             return ((Identifiable) data).getId();
         }
 
+    }
+
+    private Policy policy() {
+        Policy policy = new Policy();
+        BillingInfo billingInfo = new BillingInfo();
+        billingInfo.setCreditCardInfo(new CreditCardInfo());
+        policy.setBillingInfo(billingInfo);
+        Party party1 = new Party("1");
+        party1.setDriverInfo(new DriverInfo());
+        PersonInfo personInfo = new PersonInfo();
+        personInfo.setAddressInfo(new AddressInfo());
+        party1.setPersonInfo(personInfo);
+        party1.setRoles(List.of(new PartyRole(), new PartyRole()));
+        Party party2 = new Party("2");
+        party2.setRoles(List.of(new PartyRole()));
+        policy.setParties(List.of(party1, party2));
+        policy.setPolicyDetail(new PolicyDetail());
+        policy.setRiskItems(new ArrayList<>());
+        policy.setTermDetails(new TermDetails());
+        return policy;
     }
 
 }

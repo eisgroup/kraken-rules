@@ -17,6 +17,7 @@ package kraken.el.ast;
 
 import kraken.el.ast.token.Token;
 import kraken.el.scope.Scope;
+import kraken.el.scope.ScopeType;
 import kraken.el.scope.type.ArrayType;
 import kraken.el.scope.type.Type;
 
@@ -25,12 +26,12 @@ import kraken.el.scope.type.Type;
  */
 public class AccessByIndex extends Reference {
 
-    private Reference collection;
+    private final Reference collection;
 
-    private Expression indexExpression;
+    private final Expression indexExpression;
 
-    public AccessByIndex(Reference collection, Expression indexExpression, Scope scope, Token token) {
-        super(NodeType.ACCESS_BY_INDEX, scope, determineEvaluationType(collection), token);
+    public AccessByIndex(Reference collection, Expression indexExpression, Scope scope, Type evaluationType, Token token) {
+        super(NodeType.ACCESS_BY_INDEX, scope, evaluationType, token);
 
         this.collection = collection;
         this.indexExpression = indexExpression;
@@ -45,8 +46,33 @@ public class AccessByIndex extends Reference {
     }
 
     @Override
-    String getFirstToken() {
-        return collection.getFirstToken();
+    public boolean isReferenceInCurrentScope() {
+        return collection.isReferenceInCurrentScope();
+    }
+
+    @Override
+    public boolean isReferenceInGlobalScope() {
+        return collection.isReferenceInGlobalScope();
+    }
+
+    @Override
+    public ScopeType findScopeTypeOfReference() {
+        return collection.findScopeTypeOfReference();
+    }
+
+    @Override
+    public boolean isSimpleBeanPath() {
+        return false;
+    }
+
+    @Override
+    public boolean isSimplePath() {
+        return false;
+    }
+
+    @Override
+    public Reference getFirstReference() {
+        return collection.getFirstReference();
     }
 
     @Override
@@ -54,13 +80,4 @@ public class AccessByIndex extends Reference {
         return String.format("%s[%s]", collection, indexExpression);
     }
 
-    private static Type determineEvaluationType(Reference reference) {
-        if(reference.getEvaluationType() instanceof ArrayType) {
-            return ((ArrayType) reference.getEvaluationType()).getElementType();
-        }
-        if(reference.getEvaluationType() == Type.ANY) {
-            return Type.ANY;
-        }
-        return Type.UNKNOWN;
-    }
 }

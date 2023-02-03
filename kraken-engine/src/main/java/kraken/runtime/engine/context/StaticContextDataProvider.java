@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 
 import kraken.context.model.tree.ContextModelTree;
 import kraken.cross.context.path.CrossContextPathsResolver;
+import kraken.runtime.EvaluationSession;
 import kraken.runtime.engine.context.data.DataContext;
 import kraken.runtime.engine.context.data.DataContextBuilder;
 import kraken.runtime.engine.context.data.ExtractedChildDataContextBuilder;
@@ -74,10 +75,11 @@ public class StaticContextDataProvider implements ContextDataProvider {
             ContextInstanceInfoResolver contextInstanceInfoResolver,
             KrakenExpressionEvaluator krakenExpressionEvaluator,
             TypeRegistry typeRegistry,
-            Object data
+            Object data,
+            EvaluationSession session
     ) {
         return create(crossContextPathsResolver, contextRepository, contextModelTree, contextInstanceInfoResolver, krakenExpressionEvaluator,
-                typeRegistry, data, null);
+                typeRegistry, data, null, session);
     }
 
     public static ContextDataProvider create(
@@ -88,7 +90,8 @@ public class StaticContextDataProvider implements ContextDataProvider {
             KrakenExpressionEvaluator krakenExpressionEvaluator,
             TypeRegistry typeRegistry,
             Object data,
-            Object node
+            Object node,
+            EvaluationSession session
     ) {
         NodeInstanceInfo nodeInstanceInfo = createNodeContext(node, contextInstanceInfoResolver);
 
@@ -101,7 +104,8 @@ public class StaticContextDataProvider implements ContextDataProvider {
                 new ExtractedChildDataContextBuilder(
                         dataContextBuilder,
                         new ContextExtractionResultBuilder(typeRegistry),
-                        krakenExpressionEvaluator
+                        krakenExpressionEvaluator,
+                        session
                 )
         );
         return new StaticContextDataProvider(crossContextPathsResolver, root, nodeInstanceInfo, contextDataExtractor);
@@ -125,6 +129,7 @@ public class StaticContextDataProvider implements ContextDataProvider {
                 new DataContextReferenceUpdater(crossContextPathsResolver, getReferencedContext, dependencies);
         dataContexts.forEach(updater::update);
         log(targetContextName, dataContexts);
+
         return dataContexts;
     }
 

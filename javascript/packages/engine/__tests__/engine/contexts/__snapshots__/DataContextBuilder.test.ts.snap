@@ -53,7 +53,6 @@ DataContext {
       "Party": [Circular],
     },
   },
-  "externalReferences": Object {},
   "id": "Party:3",
   "info": Object {
     "getContextInstanceId": [Function],
@@ -176,6 +175,12 @@ DataContext {
         "fieldPath": "termDetails.termExpirationDate",
         "fieldType": "DATE",
         "name": "expirationDate",
+      },
+      "numberOfInsureds": Object {
+        "cardinality": "MULTIPLE",
+        "fieldPath": "numberOfInsureds",
+        "fieldType": "INTEGER",
+        "name": "numberOfInsureds",
       },
       "oosProcessingStage": Object {
         "cardinality": "SINGLE",
@@ -432,7 +437,6 @@ DataContext {
       "AddressInfo": [Circular],
     },
   },
-  "externalReferences": Object {},
   "id": "AddressInfo:iai1",
   "info": Object {
     "getContextInstanceId": [Function],
@@ -613,6 +617,12 @@ DataContext {
           "fieldPath": "termDetails.termExpirationDate",
           "fieldType": "DATE",
           "name": "expirationDate",
+        },
+        "numberOfInsureds": Object {
+          "cardinality": "MULTIPLE",
+          "fieldPath": "numberOfInsureds",
+          "fieldType": "INTEGER",
+          "name": "numberOfInsureds",
         },
         "oosProcessingStage": Object {
           "cardinality": "SINGLE",

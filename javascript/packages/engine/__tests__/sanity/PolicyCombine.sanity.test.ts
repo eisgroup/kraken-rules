@@ -14,15 +14,18 @@
  *  limitations under the License.
  */
 
-import { sanityMocks } from "./_AutoPolicyObject.mocks";
-import { sanityEngine } from "./_SanityEngine";
+import { sanityMocks } from './_AutoPolicyObject.mocks'
+import { sanityEngine } from './_SanityEngine'
+import { FieldMetadataReducer } from '../../src'
 
-describe("Engine Sanity Policy Combined Test", () => {
-    const { valid } = sanityMocks;
+describe('Engine Sanity Policy Combined Test', () => {
+    const { valid } = sanityMocks
     it("should execute 'PolicyCombined' entrypoint", () => {
-        const results = sanityEngine.evaluate(valid(), "PolicyCombined");
-        expect(results).k_toMatchResultsStats({ total: 32, critical: 0});
-        expect(results).k_toHaveExpressionsFailures(0);
-        expect(results).k_toMatchResultsSnapshots();
-    });
-});
+        const results = sanityEngine.evaluate(valid(), 'PolicyCombined')
+        const fieldResults = new FieldMetadataReducer().reduce(results)
+
+        expect(results).k_toMatchResultsStats({ total: 32, critical: 0 })
+        expect(results).k_toHaveExpressionsFailures(0)
+        expect({ entryPointResults: results, fieldResults }).k_toMatchResultsSnapshots()
+    })
+})

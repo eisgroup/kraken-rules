@@ -17,36 +17,55 @@ package kraken.model.project.dependencies;
 
 import java.util.Objects;
 
+import javax.annotation.Nullable;
+
 /**
- * Indicates detected dependency between two fields
+ * Represents a dependency on context or context field
  *
  * @author rimas
  * @since 1.0
  */
 public class FieldDependency {
 
-    private String contextName;
+    private final String contextName;
 
-    private String path;
+    private final String fieldName;
 
-    private boolean contextDependency;
+    private final boolean ccrDependency;
 
-    public FieldDependency(String contextName, String path, boolean contextDependency) {
+    private final boolean selfDependency;
+
+    public FieldDependency(String contextName, @Nullable String fieldName, boolean ccrDependency, boolean selfDependency) {
         this.contextName = contextName;
-        this.path = path;
-        this.contextDependency = contextDependency;
+        this.fieldName = fieldName;
+        this.ccrDependency = ccrDependency;
+        this.selfDependency = selfDependency;
     }
 
     public String getContextName() {
         return contextName;
     }
 
-    public String getPath() {
-        return path;
+    @Nullable
+    public String getFieldName() {
+        return fieldName;
     }
 
-    public boolean isContextDependency() {
-        return contextDependency;
+    /**
+     *
+     * @return true if dependency is resolved from a cross context reference.
+     * Reference to rule target context is NOT a cross context reference but rather a {@link #isSelfDependency()}
+     */
+    public boolean isCcrDependency() {
+        return ccrDependency;
+    }
+
+    /**
+     *
+     * @return true if dependency is resolved from a reference to target context or a field of target context
+     */
+    public boolean isSelfDependency() {
+        return selfDependency;
     }
 
     @Override
@@ -58,18 +77,21 @@ public class FieldDependency {
             return false;
         }
         FieldDependency that = (FieldDependency) o;
-        return Objects.equals(contextName, that.contextName) &&
-                Objects.equals(path, that.path) &&
-                Objects.equals(contextDependency, that.contextDependency);
+        return contextName.equals(that.contextName)
+            && Objects.equals(fieldName, that.fieldName)
+            && ccrDependency == that.ccrDependency
+            && selfDependency == that.selfDependency;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(contextName, path, contextDependency);
+        return Objects.hash(contextName, fieldName, ccrDependency, selfDependency);
     }
 
     @Override
     public String toString() {
-        return contextName + '.' + path;
+        return fieldName != null
+            ? contextName + '.' + fieldName
+            : contextName;
     }
 }

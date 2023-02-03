@@ -27,7 +27,10 @@ import kraken.model.project.exception.IllegalKrakenProjectStateException;
 import kraken.model.project.validator.context.ContextDefinitionValidator;
 import kraken.model.project.validator.context.ExternalContextValidator;
 import kraken.model.project.validator.entrypoint.EntryPointDefinitionValidator;
+import kraken.model.project.validator.function.FunctionBodyValidator;
+import kraken.model.project.validator.function.FunctionDocumentationValidator;
 import kraken.model.project.validator.function.FunctionSignatureValidator;
+import kraken.model.project.validator.function.FunctionValidator;
 import kraken.model.project.validator.rule.RuleDefinitionValidator;
 
 /**
@@ -91,7 +94,17 @@ public final class KrakenProjectValidationService {
 
         FunctionSignatureValidator functionSignatureValidator = new FunctionSignatureValidator(krakenProject);
         functionSignatureValidator.validate(validationSession);
-        if(validationSession.hasFunctionSignatureError()) {
+        FunctionValidator functionValidator = new FunctionValidator(krakenProject);
+        functionValidator.validate(validationSession);
+        if(validationSession.hasFunctionSignatureError() || validationSession.hasFunctionError()) {
+            return validationSession.result();
+        }
+
+        FunctionBodyValidator functionBodyValidator = new FunctionBodyValidator(krakenProject);
+        functionBodyValidator.validate(validationSession);
+        FunctionDocumentationValidator documentationValidator = new FunctionDocumentationValidator(krakenProject);
+        documentationValidator.validate(validationSession);
+        if(validationSession.hasFunctionError()) {
             return validationSession.result();
         }
 
@@ -169,6 +182,9 @@ public final class KrakenProjectValidationService {
         }
         if(krakenProject.getFunctionSignatures() == null) {
             throw new IllegalKrakenProjectStateException("FunctionSignatures in KrakenProject must not be null");
+        }
+        if(krakenProject.getFunctions() == null) {
+            throw new IllegalKrakenProjectStateException("Functions in KrakenProject must not be null");
         }
         if(!krakenProject.getContextDefinitions().containsKey(krakenProject.getRootContextName())) {
             throw new IllegalKrakenProjectStateException("Root Context is " + krakenProject.getRootContextName() +

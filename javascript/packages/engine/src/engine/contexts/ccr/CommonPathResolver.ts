@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-import { PathToNode } from "./PathToNode";
+import { PathToNode } from './PathToNode'
 
 /**
  * Service to resolve common path of two {@link PathToNode}s.
@@ -38,9 +38,9 @@ export class CommonPathResolver {
     resolveCommon(from: PathToNode, to: PathToNode): PathToNode {
         for (let index = 0; index < from.length; index++) {
             if (from[index] !== to[index]) {
-                return from.slice(0, index);
+                return from.slice(0, index)
             }
         }
-        return from;
+        return from
     }
 }

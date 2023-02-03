@@ -14,10 +14,10 @@
  *  limitations under the License.
  */
 
-import { DataContext } from "../contexts/data/DataContext";
-import { PayloadResult } from "../results/PayloadResult";
-import { ExecutionSession } from "../ExecutionSession";
-import { Payloads, Rule } from "kraken-model";
+import { PayloadResult } from 'kraken-engine-api'
+import { ExecutionSession } from '../ExecutionSession'
+import { Payloads, Rule } from 'kraken-model'
+import { DataContext } from '../contexts/data/DataContext'
 
 /**
  * Handles rule payload logic defined in specific {@link Payloads.Payload} type
@@ -29,7 +29,7 @@ export interface RulePayloadHandler {
      *
      * @return  supported class type, must extend {@link Payloads.Payload}
      */
-    handlesPayloadType(): Payloads.PayloadType;
+    handlesPayloadType(): Payloads.PayloadType
     /**
      * Executes rule logic specified in payload instance on provided data context instance
      * and produced payload result instance for this particular execution.
@@ -38,6 +38,6 @@ export interface RulePayloadHandler {
         payload: Payloads.Payload,
         rule: Rule,
         dataContext: DataContext,
-        session?: ExecutionSession
-    ): PayloadResult;
+        session?: ExecutionSession,
+    ): PayloadResult
 }

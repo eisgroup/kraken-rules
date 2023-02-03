@@ -7,7 +7,7 @@
 
     <artifactId>kraken-bom</artifactId>
     <groupId>kraken</groupId>
-    <version>1.22.0-SNAPSHOT</version>
+    <version>1.42.4-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Kraken Bill Of Materials</name>
@@ -15,6 +15,11 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>kraken</groupId>
+                <artifactId>kraken-version</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <dependency>
                 <groupId>kraken</groupId>
                 <artifactId>kraken-annotations</artifactId>
@@ -47,17 +52,17 @@
             </dependency>
             <dependency>
                 <groupId>kraken</groupId>
-                <artifactId>kraken-expression-language-function-java</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>kraken</groupId>
-                <artifactId>kraken-expression-language-interpreter</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>kraken</groupId>
                 <artifactId>kraken-expression-language-serialization</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>kraken</groupId>
+                <artifactId>kraken-function-generator-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>kraken</groupId>
+                <artifactId>kraken-function-generator-plugin</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -68,11 +73,6 @@
             <dependency>
                 <groupId>kraken</groupId>
                 <artifactId>kraken-api</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>kraken</groupId>
-                <artifactId>kraken-expression-language-mvel</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -180,6 +180,33 @@
                 <groupId>kraken.tools</groupId>
                 <artifactId>kraken-verification-resources</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>kraken</groupId>
+                <artifactId>kraken-documentation-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>kraken</groupId>
+                <artifactId>kraken-documentation-plugin</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>kraken.tracer</groupId>
+                <artifactId>kraken-tracer</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>kraken</groupId>
+                <artifactId>kraken-test-utils</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>kraken.tracer</groupId>
+                <artifactId>kraken-tracer</artifactId>
+                <version>${project.version}</version>
+                <classifier>tests</classifier>
+                <type>test-jar</type>
             </dependency>
         </dependencies>
     </dependencyManagement>

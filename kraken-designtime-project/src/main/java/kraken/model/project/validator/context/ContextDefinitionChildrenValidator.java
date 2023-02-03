@@ -15,6 +15,8 @@
  */
 package kraken.model.project.validator.context;
 
+import java.util.Map;
+
 import kraken.model.context.ContextDefinition;
 import kraken.model.project.KrakenProject;
 import kraken.model.project.validator.Severity;
@@ -33,16 +35,32 @@ public final class ContextDefinitionChildrenValidator {
     }
 
     public void validate(ValidationSession session) {
-        for(ContextDefinition contextDefinition : krakenProject.getContextDefinitions().values()) {
-            contextDefinition.getChildren().values().stream()
-                    .filter(c -> !krakenProject.getContextDefinitions().containsKey(c.getTargetName()))
-                    .forEach(c -> session.add(new ValidationMessage(contextDefinition,
-                            String.format("child '%s' is not valid because such context does not exist",
-                                    c.getTargetName()),
-                            Severity.ERROR)
-                    ));
+        Map<String, ContextDefinition> allContextDefinitions = krakenProject.getContextDefinitions();
 
-        }
+        allContextDefinitions.values()
+            .forEach(contextDefinition -> contextDefinition.getChildren().values()
+                .forEach(contextNavigation -> {
+                    ContextDefinition childContext = allContextDefinitions.get(contextNavigation.getTargetName());
+
+                    if (childContext == null) {
+                        session.add(new ValidationMessage(
+                            contextDefinition,
+                            String.format("child '%s' is not valid because such context does not exist",
+                                contextNavigation.getTargetName()),
+                            Severity.ERROR)
+                        );
+                    } else if (childContext.isSystem()) {
+                        String messageTemplate = "child '%s' is not valid because it is a system context."
+                            + " System context cannot be used a child in another context";
+
+                        session.add(new ValidationMessage(
+                            contextDefinition,
+                            String.format(messageTemplate, contextNavigation.getTargetName()),
+                            Severity.ERROR)
+                        );
+                    }
+                })
+            );
     }
 
 }

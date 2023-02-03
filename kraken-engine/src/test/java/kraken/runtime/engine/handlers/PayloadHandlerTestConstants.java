@@ -15,10 +15,15 @@
  */
 package kraken.runtime.engine.handlers;
 
-import java.util.Collections;
+import static org.mockito.Mockito.mock;
 
+import java.util.Collections;
+import java.util.Map;
+
+import kraken.el.TypeProvider;
 import kraken.runtime.EvaluationConfig;
 import kraken.runtime.EvaluationSession;
+import kraken.runtime.expressions.KrakenTypeProvider;
 
 /**
  * @author psurinin
@@ -26,5 +31,11 @@ import kraken.runtime.EvaluationSession;
 class PayloadHandlerTestConstants {
 
     static final EvaluationSession SESSION =
-            new EvaluationSession(new EvaluationConfig(), Collections.emptyMap(), null);
+            new EvaluationSession(
+                new EvaluationConfig("USD"),
+                Collections.emptyMap(),
+                mock(KrakenTypeProvider.class),
+                Map.of(),
+                ""
+            );
 }

@@ -1,209 +1,4284 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`KelService should provide completion 1`] = `
+exports[`KelService should provide completion for current scope 1`] = `
 Array [
   Object {
-    "evaluationType": "String",
-    "evaluationTypeCardinality": "single",
-    "info": "String",
-    "text": "versionDescription",
-    "type": "reference",
-  },
-  Object {
-    "evaluationType": "Referer",
-    "evaluationTypeCardinality": "single",
-    "info": "Referer",
-    "text": "referer",
-    "type": "reference",
-  },
-  Object {
-    "evaluationType": "String",
-    "evaluationTypeCardinality": "single",
-    "info": "String",
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "relevanceOrder": 1,
     "text": "accountName",
     "type": "reference",
   },
   Object {
-    "evaluationType": "String",
-    "evaluationTypeCardinality": "single",
-    "info": "String",
-    "text": "policyNumber",
-    "type": "reference",
-  },
-  Object {
-    "evaluationType": "String[]",
-    "evaluationTypeCardinality": "multiple",
-    "info": "String[]",
-    "text": "policies",
-    "type": "reference",
-  },
-  Object {
-    "evaluationType": "String",
-    "evaluationTypeCardinality": "single",
-    "info": "String",
-    "text": "oosProcessingStage",
-    "type": "reference",
-  },
-  Object {
-    "evaluationType": "Date",
-    "evaluationTypeCardinality": "single",
-    "info": "Date",
-    "text": "createdOn",
-    "type": "reference",
-  },
-  Object {
-    "evaluationType": "String",
-    "evaluationTypeCardinality": "single",
-    "info": "String",
-    "text": "state",
-    "type": "reference",
-  },
-  Object {
-    "evaluationType": "String",
-    "evaluationTypeCardinality": "single",
-    "info": "String",
-    "text": "termCd",
-    "type": "reference",
-  },
-  Object {
-    "evaluationType": "DateTime",
-    "evaluationTypeCardinality": "single",
-    "info": "DateTime",
-    "text": "txEffectiveDate",
-    "type": "reference",
-  },
-  Object {
-    "evaluationType": "String",
-    "evaluationTypeCardinality": "single",
-    "info": "String",
-    "text": "policyCurrency",
-    "type": "reference",
-  },
-  Object {
-    "evaluationType": "Date",
-    "evaluationTypeCardinality": "single",
-    "info": "Date",
-    "text": "expirationDate",
-    "type": "reference",
-  },
-  Object {
-    "evaluationType": "Unknown",
-    "evaluationTypeCardinality": "single",
-    "info": "Unknown",
-    "text": "refToCustomer",
-    "type": "reference",
-  },
-  Object {
-    "evaluationType": "String",
-    "evaluationTypeCardinality": "single",
-    "info": "String",
-    "text": "updatedBy",
-    "type": "reference",
-  },
-  Object {
-    "evaluationType": "Vehicle[]",
-    "evaluationTypeCardinality": "multiple",
-    "info": "Vehicle[]",
-    "text": "riskItems",
-    "type": "reference",
-  },
-  Object {
-    "evaluationType": "Number",
-    "evaluationTypeCardinality": "single",
-    "info": "Number",
-    "text": "totalPremium",
-    "type": "reference",
-  },
-  Object {
-    "evaluationType": "String",
-    "evaluationTypeCardinality": "single",
-    "info": "String",
-    "text": "txType",
-    "type": "reference",
-  },
-  Object {
-    "evaluationType": "Date",
-    "evaluationTypeCardinality": "single",
-    "info": "Date",
-    "text": "updatedOn",
-    "type": "reference",
-  },
-  Object {
-    "evaluationType": "Number",
-    "evaluationTypeCardinality": "single",
-    "info": "Number",
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "relevanceOrder": 1,
     "text": "changePremium",
     "type": "reference",
   },
   Object {
-    "evaluationType": "Number",
-    "evaluationTypeCardinality": "single",
-    "info": "Number",
-    "text": "totalLimit",
-    "type": "reference",
-  },
-  Object {
-    "evaluationType": "String",
-    "evaluationTypeCardinality": "single",
-    "info": "String",
-    "text": "createdBy",
-    "type": "reference",
-  },
-  Object {
-    "evaluationType": "Number",
-    "evaluationTypeCardinality": "single",
-    "info": "Number",
-    "text": "createdFromPolicyRev",
-    "type": "reference",
-  },
-  Object {
-    "evaluationType": "String",
-    "evaluationTypeCardinality": "single",
-    "info": "String",
-    "text": "txReason",
-    "type": "reference",
-  },
-  Object {
-    "evaluationType": "Date",
-    "evaluationTypeCardinality": "single",
-    "info": "Date",
-    "text": "txCreateDate",
-    "type": "reference",
-  },
-  Object {
-    "evaluationType": "Boolean",
-    "evaluationTypeCardinality": "single",
-    "info": "Boolean",
-    "text": "currentQuoteInd",
-    "type": "reference",
-  },
-  Object {
-    "evaluationType": "Party[]",
-    "evaluationTypeCardinality": "multiple",
-    "info": "Party[]",
-    "text": "parties",
-    "type": "reference",
-  },
-  Object {
-    "evaluationType": "String",
-    "evaluationTypeCardinality": "single",
-    "info": "String",
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "relevanceOrder": 1,
     "text": "contractTermTypeCd",
     "type": "reference",
   },
   Object {
-    "evaluationType": "Number",
-    "evaluationTypeCardinality": "single",
-    "info": "Number",
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "relevanceOrder": 1,
+    "text": "createdBy",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "relevanceOrder": 1,
+    "text": "createdFromPolicyRev",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Date",
+    },
+    "relevanceOrder": 1,
+    "text": "createdOn",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Boolean",
+    },
+    "relevanceOrder": 1,
+    "text": "currentQuoteInd",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Date",
+    },
+    "relevanceOrder": 1,
+    "text": "effectiveDate",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Date",
+    },
+    "relevanceOrder": 1,
+    "text": "expirationDate",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "Number[]",
+    },
+    "relevanceOrder": 1,
+    "text": "numberOfInsureds",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "relevanceOrder": 1,
+    "text": "oosProcessingStage",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "Party[]",
+    },
+    "relevanceOrder": 1,
+    "text": "parties",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "String[]",
+    },
+    "relevanceOrder": 1,
+    "text": "policies",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "relevanceOrder": 1,
+    "text": "policyCurrency",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "relevanceOrder": 1,
+    "text": "policyNumber",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Unknown",
+    },
+    "relevanceOrder": 1,
+    "text": "refToCustomer",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Referer",
+    },
+    "relevanceOrder": 1,
+    "text": "referer",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "Vehicle[]",
+    },
+    "relevanceOrder": 1,
+    "text": "riskItems",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "relevanceOrder": 1,
+    "text": "state",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "relevanceOrder": 1,
+    "text": "termCd",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "relevanceOrder": 1,
     "text": "termNo",
     "type": "reference",
   },
   Object {
-    "evaluationType": "Date",
-    "evaluationTypeCardinality": "single",
-    "info": "Date",
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "relevanceOrder": 1,
+    "text": "totalLimit",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "relevanceOrder": 1,
+    "text": "totalPremium",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Date",
+    },
+    "relevanceOrder": 1,
+    "text": "txCreateDate",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "DateTime",
+    },
+    "relevanceOrder": 1,
+    "text": "txEffectiveDate",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "relevanceOrder": 1,
+    "text": "txReason",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "relevanceOrder": 1,
+    "text": "txType",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "relevanceOrder": 1,
+    "text": "updatedBy",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Date",
+    },
+    "relevanceOrder": 1,
+    "text": "updatedOn",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "relevanceOrder": 1,
+    "text": "versionDescription",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "AddressInfo | AddressInfo[]",
+    },
+    "relevanceOrder": 2,
+    "text": "AddressInfo",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "AddressLine | AddressLine[]",
+    },
+    "relevanceOrder": 2,
+    "text": "AddressLine",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "AddressLine1 | AddressLine1[]",
+    },
+    "relevanceOrder": 2,
+    "text": "AddressLine1",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "AddressLine2 | AddressLine2[]",
+    },
+    "relevanceOrder": 2,
+    "text": "AddressLine2",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "BillingAddress",
+    },
+    "relevanceOrder": 2,
+    "text": "BillingAddress",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "COLLCoverage[]",
+    },
+    "relevanceOrder": 2,
+    "text": "COLLCoverage",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "CarCoverage",
+    },
+    "relevanceOrder": 2,
+    "text": "CarCoverage",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "CreditCardInfo",
+    },
+    "relevanceOrder": 2,
+    "text": "CreditCardInfo",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "DriverCoverage[]",
+    },
+    "relevanceOrder": 2,
+    "text": "DriverCoverage",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "DriverInfo[]",
+    },
+    "relevanceOrder": 2,
+    "text": "DriverInfo",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "FullCoverage[]",
+    },
+    "relevanceOrder": 2,
+    "text": "FullCoverage",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Info",
+    },
+    "relevanceOrder": 2,
+    "text": "Info",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Insured",
+    },
+    "relevanceOrder": 2,
+    "text": "Insured",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "Party[]",
+    },
+    "relevanceOrder": 2,
+    "text": "Party",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "PartyRole[]",
+    },
+    "relevanceOrder": 2,
+    "text": "PartyRole",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "PersonInfo[]",
+    },
+    "relevanceOrder": 2,
+    "text": "PersonInfo",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "PersonNameInfo[]",
+    },
+    "relevanceOrder": 2,
+    "text": "PersonNameInfo",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Policy",
+    },
+    "relevanceOrder": 2,
+    "text": "Policy",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "RRCoverage[]",
+    },
+    "relevanceOrder": 2,
+    "text": "RRCoverage",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Referer",
+    },
+    "relevanceOrder": 2,
+    "text": "Referer",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "RefererInfo",
+    },
+    "relevanceOrder": 2,
+    "text": "RefererInfo",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "RentalCoverage[]",
+    },
+    "relevanceOrder": 2,
+    "text": "RentalCoverage",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "SecondaryInsured[]",
+    },
+    "relevanceOrder": 2,
+    "text": "SecondaryInsured",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "SuperReferer",
+    },
+    "relevanceOrder": 2,
+    "text": "SuperReferer",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "TransactionDetails",
+    },
+    "relevanceOrder": 2,
+    "text": "TransactionDetails",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "Vehicle[]",
+    },
+    "relevanceOrder": 2,
+    "text": "Vehicle",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "Any",
+    },
+    "relevanceOrder": 2,
+    "text": "context",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "Abs(Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Abs",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Boolean",
+    },
+    "info": "All(Boolean[])",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "Boolean[]",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "All",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Boolean",
+    },
+    "info": "Any(Boolean[])",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "Boolean[]",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Any",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Date",
+    },
+    "info": "AsDate(DateTime)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "DateTime",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "AsDate",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "DateTime",
+    },
+    "info": "AsTime(Date)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Date",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "AsTime",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "Avg(Number[])",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "Number[]",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Avg",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "CalculateTotalLimit(Policy)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Policy",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "CalculateTotalLimit",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "Ceil(Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Ceil",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "info": "Concat(Any[])",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "Any[]",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Concat",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "info": "ConcatInsuredNameWithCreditCardInfo(Insured, CreditCardInfo)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Insured",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "CreditCardInfo",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "ConcatInsuredNameWithCreditCardInfo",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "info": "ConcatPartyRelations(Party[])",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "Party[]",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "ConcatPartyRelations",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "Count(Any)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "Any",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Count",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Date",
+    },
+    "info": "Date(String)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "String",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Date",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Date",
+    },
+    "info": "Date(Number, Number, Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Date",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "DateTime",
+    },
+    "info": "DateTime(String)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "String",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "DateTime",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "<T>[]",
+    },
+    "info": "Difference(<T>[], <T>[])",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "<T>[]",
+      },
+      Object {
+        "assignableToArray": true,
+        "typeName": "<T>[]",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Difference",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "<T>[]",
+    },
+    "info": "Distinct(<T>[])",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "<T>[]",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Distinct",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Boolean",
+    },
+    "info": "EndsWith(String, String)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "String",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "String",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "EndsWith",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "Fibonacci(Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Fibonacci",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "<T>[]",
+    },
+    "info": "Flat(<T>[][])",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "<T>[][]",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Flat",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "Floor(Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Floor",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "info": "Format(Date, String)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Date",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "String",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Format",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "FromMoney(Money)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Money",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "FromMoney",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "GenericCoverageLimit(CarCoverage)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "CarCoverage",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "GenericCoverageLimit",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "Number[]",
+    },
+    "info": "GenericCoverageLimits(CarCoverage[])",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "CarCoverage[]",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "GenericCoverageLimits",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "CarCoverage",
+    },
+    "info": "GetCarCoverage(Policy)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Policy",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "GetCarCoverage",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "CarCoverage[]",
+    },
+    "info": "GetCoverages(Policy)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Policy",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "GetCoverages",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "GetDay(Date | DateTime)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Date | DateTime",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "GetDay",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "info": "GetFirstElement(String[])",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "String[]",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "GetFirstElement",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "GetMonth(Date | DateTime)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Date | DateTime",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "GetMonth",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "info": "GetName(Any)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "Any",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "GetName",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "info": "GetType(Any)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "Any",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "GetType",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "info": "GetVehicleModel(Vehicle)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Vehicle",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "GetVehicleModel",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "GetYear(Date | DateTime)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Date | DateTime",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "GetYear",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Boolean",
+    },
+    "info": "Includes(Any, Any)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "Any",
+      },
+      Object {
+        "assignableToArray": true,
+        "typeName": "Any",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Includes",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "<T>[]",
+    },
+    "info": "Intersection(<T>[], <T>[])",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "<T>[]",
+      },
+      Object {
+        "assignableToArray": true,
+        "typeName": "<T>[]",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Intersection",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Boolean",
+    },
+    "info": "IsBlank(String)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "String",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "IsBlank",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Boolean",
+    },
+    "info": "IsDateBetween(Date, Date, Date)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Date",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Date",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Date",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "IsDateBetween",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Boolean",
+    },
+    "info": "IsEmpty(Any)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "Any",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "IsEmpty",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "<T>[]",
+    },
+    "info": "Join(<T>[], <T>[])",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "<T>[]",
+      },
+      Object {
+        "assignableToArray": true,
+        "typeName": "<T>[]",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Join",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "info": "LowerCase(String)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "String",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "LowerCase",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "<T>",
+    },
+    "info": "Max(<T>[])",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "<T>[]",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Max",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "<T>",
+    },
+    "info": "Max(<T>, <T>)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "<T>",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "<T>",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Max",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "<T>",
+    },
+    "info": "Min(<T>[])",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "<T>[]",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Min",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "<T>",
+    },
+    "info": "Min(<T>, <T>)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "<T>",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "<T>",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Min",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "MinLimit(Policy)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Policy",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "MinLimit",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "MinLimitCoverages(CarCoverage[])",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "CarCoverage[]",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "MinLimitCoverages",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "DateTime",
+    },
+    "info": "Now()",
+    "parameterTypes": Array [],
+    "relevanceOrder": 2,
+    "text": "Now",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "NumberOfDaysBetween(Date, Date)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Date",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Date",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "NumberOfDaysBetween",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "NumberOfMonthsBetween(Date, Date)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Date",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Date",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "NumberOfMonthsBetween",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "NumberOfYearsBetween(Date, Date)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Date",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Date",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "NumberOfYearsBetween",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "Number[]",
+    },
+    "info": "NumberSequence(Number, Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "NumberSequence",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "Number[]",
+    },
+    "info": "NumberSequence(Number, Number, Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "NumberSequence",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "info": "NumberToString(Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "NumberToString",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "info": "PadLeft(String, String, Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "String",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "String",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "PadLeft",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "info": "PadRight(String, String, Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "String",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "String",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "PadRight",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "<T>",
+    },
+    "info": "PlusDays(<T>, Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "<T>",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "PlusDays",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "<T>",
+    },
+    "info": "PlusMonths(<T>, Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "<T>",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "PlusMonths",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "<T>",
+    },
+    "info": "PlusYears(<T>, Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "<T>",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "PlusYears",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "Round(Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Round",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "Round(Number, Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Round",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "RoundEven(Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "RoundEven",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "RoundEven(Number, Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "RoundEven",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "Sign(Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Sign",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "Sqrt(Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Sqrt",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Boolean",
+    },
+    "info": "StartsWith(String, String)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "String",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "String",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "StartsWith",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "StringLength(String)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "String",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "StringLength",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "info": "Substring(String, Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "String",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Substring",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "info": "Substring(String, Number, Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "String",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Substring",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "Sum(Number[])",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "Number[]",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Sum",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "<T>[]",
+    },
+    "info": "SymmetricDifference(<T>[], <T>[])",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "<T>[]",
+      },
+      Object {
+        "assignableToArray": true,
+        "typeName": "<T>[]",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "SymmetricDifference",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Date",
+    },
+    "info": "Today()",
+    "parameterTypes": Array [],
+    "relevanceOrder": 2,
+    "text": "Today",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "info": "Trim(String)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "String",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Trim",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "<T>[]",
+    },
+    "info": "Union(<T>[], <T>[])",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "<T>[]",
+      },
+      Object {
+        "assignableToArray": true,
+        "typeName": "<T>[]",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Union",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "info": "UpperCase(String)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "String",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "UpperCase",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "<T>",
+    },
+    "info": "WithDay(<T>, Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "<T>",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "WithDay",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "<T>",
+    },
+    "info": "WithMonth(<T>, Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "<T>",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "WithMonth",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "<T>",
+    },
+    "info": "WithYear(<T>, Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "<T>",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "WithYear",
+    "type": "function",
+  },
+  Object {
+    "info": "starts iteration block which returns a result obtained by applying a function on each element of the collection",
+    "text": "for",
+    "type": "keyword",
+  },
+  Object {
+    "info": "starts iteration block which performs a predicate logic using existential quantifier",
+    "text": "some",
+    "type": "keyword",
+  },
+  Object {
+    "info": "starts iteration block which performs a predicate logic using universal quantifier",
+    "text": "every",
+    "type": "keyword",
+  },
+  Object {
+    "info": "matches string value against the regular expression",
+    "text": "matches",
+    "type": "keyword",
+  },
+  Object {
+    "info": "negates the boolean value",
+    "text": "not",
+    "type": "keyword",
+  },
+  Object {
+    "info": "checks if the value is in the collection",
+    "text": "in",
+    "type": "keyword",
+  },
+  Object {
+    "info": "checks if both sides are true, same as \`&&\`",
+    "text": "and",
+    "type": "keyword",
+  },
+  Object {
+    "info": "checks if at least one side is true, same as \`||\`",
+    "text": "or",
+    "type": "keyword",
+  },
+  Object {
+    "info": "equivalent to no value, which can be used to check if property has no value, for example \`currencyCd = null\`",
+    "text": "null",
+    "type": "keyword",
+  },
+  Object {
+    "info": "positive boolean value",
+    "text": "true",
+    "type": "keyword",
+  },
+  Object {
+    "info": "negative boolean value",
+    "text": "false",
+    "type": "keyword",
+  },
+  Object {
+    "info": "current scope object",
+    "text": "this",
+    "type": "keyword",
+  },
+  Object {
+    "info": "returns value from iteration or from expression",
+    "text": "return",
+    "type": "keyword",
+  },
+  Object {
+    "info": "checks if object is an instance of expected type",
+    "text": "instanceof",
+    "type": "keyword",
+  },
+  Object {
+    "info": "checks if object type is equal to expected type",
+    "text": "typeof",
+    "type": "keyword",
+  },
+  Object {
+    "info": "defines a variable, must be followed by a variable name and then keyword \`to\`",
+    "text": "set",
+    "type": "keyword",
+  },
+  Object {
+    "info": "assigns value to a variable, must be followed by a value statement",
+    "text": "to",
+    "type": "keyword",
+  },
+  Object {
+    "info": "starts a flow control",
+    "text": "if",
+    "type": "keyword",
+  },
+  Object {
+    "info": "flow control keyword used to select branch for truthy expression",
+    "text": "then",
+    "type": "keyword",
+  },
+  Object {
+    "info": "flow control keyword used to select branch for falsy expression",
+    "text": "else",
+    "type": "keyword",
+  },
+]
+`;
+
+exports[`KelService should provide completion for incomplete path end 1`] = `
+Array [
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "relevanceOrder": 1,
+    "text": "accountName",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "relevanceOrder": 1,
+    "text": "changePremium",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "relevanceOrder": 1,
+    "text": "contractTermTypeCd",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "relevanceOrder": 1,
+    "text": "createdBy",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "relevanceOrder": 1,
+    "text": "createdFromPolicyRev",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Date",
+    },
+    "relevanceOrder": 1,
+    "text": "createdOn",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Boolean",
+    },
+    "relevanceOrder": 1,
+    "text": "currentQuoteInd",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Date",
+    },
+    "relevanceOrder": 1,
     "text": "effectiveDate",
     "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Date",
+    },
+    "relevanceOrder": 1,
+    "text": "expirationDate",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "Number[]",
+    },
+    "relevanceOrder": 1,
+    "text": "numberOfInsureds",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "relevanceOrder": 1,
+    "text": "oosProcessingStage",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "Party[]",
+    },
+    "relevanceOrder": 1,
+    "text": "parties",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "String[]",
+    },
+    "relevanceOrder": 1,
+    "text": "policies",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "relevanceOrder": 1,
+    "text": "policyCurrency",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "relevanceOrder": 1,
+    "text": "policyNumber",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Unknown",
+    },
+    "relevanceOrder": 1,
+    "text": "refToCustomer",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Referer",
+    },
+    "relevanceOrder": 1,
+    "text": "referer",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "Vehicle[]",
+    },
+    "relevanceOrder": 1,
+    "text": "riskItems",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "relevanceOrder": 1,
+    "text": "state",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "relevanceOrder": 1,
+    "text": "termCd",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "relevanceOrder": 1,
+    "text": "termNo",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "relevanceOrder": 1,
+    "text": "totalLimit",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "relevanceOrder": 1,
+    "text": "totalPremium",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Date",
+    },
+    "relevanceOrder": 1,
+    "text": "txCreateDate",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "DateTime",
+    },
+    "relevanceOrder": 1,
+    "text": "txEffectiveDate",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "relevanceOrder": 1,
+    "text": "txReason",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "relevanceOrder": 1,
+    "text": "txType",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "relevanceOrder": 1,
+    "text": "updatedBy",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Date",
+    },
+    "relevanceOrder": 1,
+    "text": "updatedOn",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "relevanceOrder": 1,
+    "text": "versionDescription",
+    "type": "reference",
+  },
+]
+`;
+
+exports[`KelService should provide completion for incomplete path within 1`] = `
+Array [
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "relevanceOrder": 1,
+    "text": "accountName",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "relevanceOrder": 1,
+    "text": "changePremium",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "relevanceOrder": 1,
+    "text": "contractTermTypeCd",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "relevanceOrder": 1,
+    "text": "createdBy",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "relevanceOrder": 1,
+    "text": "createdFromPolicyRev",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Date",
+    },
+    "relevanceOrder": 1,
+    "text": "createdOn",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Boolean",
+    },
+    "relevanceOrder": 1,
+    "text": "currentQuoteInd",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Date",
+    },
+    "relevanceOrder": 1,
+    "text": "effectiveDate",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Date",
+    },
+    "relevanceOrder": 1,
+    "text": "expirationDate",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "Number[]",
+    },
+    "relevanceOrder": 1,
+    "text": "numberOfInsureds",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "relevanceOrder": 1,
+    "text": "oosProcessingStage",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "Party[]",
+    },
+    "relevanceOrder": 1,
+    "text": "parties",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "String[]",
+    },
+    "relevanceOrder": 1,
+    "text": "policies",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "relevanceOrder": 1,
+    "text": "policyCurrency",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "relevanceOrder": 1,
+    "text": "policyNumber",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Unknown",
+    },
+    "relevanceOrder": 1,
+    "text": "refToCustomer",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Referer",
+    },
+    "relevanceOrder": 1,
+    "text": "referer",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "Vehicle[]",
+    },
+    "relevanceOrder": 1,
+    "text": "riskItems",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "relevanceOrder": 1,
+    "text": "state",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "relevanceOrder": 1,
+    "text": "termCd",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "relevanceOrder": 1,
+    "text": "termNo",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "relevanceOrder": 1,
+    "text": "totalLimit",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "relevanceOrder": 1,
+    "text": "totalPremium",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Date",
+    },
+    "relevanceOrder": 1,
+    "text": "txCreateDate",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "DateTime",
+    },
+    "relevanceOrder": 1,
+    "text": "txEffectiveDate",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "relevanceOrder": 1,
+    "text": "txReason",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "relevanceOrder": 1,
+    "text": "txType",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "relevanceOrder": 1,
+    "text": "updatedBy",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Date",
+    },
+    "relevanceOrder": 1,
+    "text": "updatedOn",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "relevanceOrder": 1,
+    "text": "versionDescription",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "AddressInfo | AddressInfo[]",
+    },
+    "relevanceOrder": 2,
+    "text": "AddressInfo",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "AddressLine | AddressLine[]",
+    },
+    "relevanceOrder": 2,
+    "text": "AddressLine",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "AddressLine1 | AddressLine1[]",
+    },
+    "relevanceOrder": 2,
+    "text": "AddressLine1",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "AddressLine2 | AddressLine2[]",
+    },
+    "relevanceOrder": 2,
+    "text": "AddressLine2",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "BillingAddress",
+    },
+    "relevanceOrder": 2,
+    "text": "BillingAddress",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "COLLCoverage[]",
+    },
+    "relevanceOrder": 2,
+    "text": "COLLCoverage",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "CarCoverage",
+    },
+    "relevanceOrder": 2,
+    "text": "CarCoverage",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "CreditCardInfo",
+    },
+    "relevanceOrder": 2,
+    "text": "CreditCardInfo",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "DriverCoverage[]",
+    },
+    "relevanceOrder": 2,
+    "text": "DriverCoverage",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "DriverInfo[]",
+    },
+    "relevanceOrder": 2,
+    "text": "DriverInfo",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "FullCoverage[]",
+    },
+    "relevanceOrder": 2,
+    "text": "FullCoverage",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Info",
+    },
+    "relevanceOrder": 2,
+    "text": "Info",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Insured",
+    },
+    "relevanceOrder": 2,
+    "text": "Insured",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "Party[]",
+    },
+    "relevanceOrder": 2,
+    "text": "Party",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "PartyRole[]",
+    },
+    "relevanceOrder": 2,
+    "text": "PartyRole",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "PersonInfo[]",
+    },
+    "relevanceOrder": 2,
+    "text": "PersonInfo",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "PersonNameInfo[]",
+    },
+    "relevanceOrder": 2,
+    "text": "PersonNameInfo",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Policy",
+    },
+    "relevanceOrder": 2,
+    "text": "Policy",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "RRCoverage[]",
+    },
+    "relevanceOrder": 2,
+    "text": "RRCoverage",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Referer",
+    },
+    "relevanceOrder": 2,
+    "text": "Referer",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "RefererInfo",
+    },
+    "relevanceOrder": 2,
+    "text": "RefererInfo",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "RentalCoverage[]",
+    },
+    "relevanceOrder": 2,
+    "text": "RentalCoverage",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "SecondaryInsured[]",
+    },
+    "relevanceOrder": 2,
+    "text": "SecondaryInsured",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "SuperReferer",
+    },
+    "relevanceOrder": 2,
+    "text": "SuperReferer",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "TransactionDetails",
+    },
+    "relevanceOrder": 2,
+    "text": "TransactionDetails",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "Vehicle[]",
+    },
+    "relevanceOrder": 2,
+    "text": "Vehicle",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "Any",
+    },
+    "relevanceOrder": 2,
+    "text": "context",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "Abs(Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Abs",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Boolean",
+    },
+    "info": "All(Boolean[])",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "Boolean[]",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "All",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Boolean",
+    },
+    "info": "Any(Boolean[])",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "Boolean[]",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Any",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Date",
+    },
+    "info": "AsDate(DateTime)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "DateTime",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "AsDate",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "DateTime",
+    },
+    "info": "AsTime(Date)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Date",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "AsTime",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "Avg(Number[])",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "Number[]",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Avg",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "CalculateTotalLimit(Policy)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Policy",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "CalculateTotalLimit",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "Ceil(Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Ceil",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "info": "Concat(Any[])",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "Any[]",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Concat",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "info": "ConcatInsuredNameWithCreditCardInfo(Insured, CreditCardInfo)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Insured",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "CreditCardInfo",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "ConcatInsuredNameWithCreditCardInfo",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "info": "ConcatPartyRelations(Party[])",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "Party[]",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "ConcatPartyRelations",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "Count(Any)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "Any",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Count",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Date",
+    },
+    "info": "Date(String)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "String",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Date",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Date",
+    },
+    "info": "Date(Number, Number, Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Date",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "DateTime",
+    },
+    "info": "DateTime(String)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "String",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "DateTime",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "<T>[]",
+    },
+    "info": "Difference(<T>[], <T>[])",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "<T>[]",
+      },
+      Object {
+        "assignableToArray": true,
+        "typeName": "<T>[]",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Difference",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "<T>[]",
+    },
+    "info": "Distinct(<T>[])",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "<T>[]",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Distinct",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Boolean",
+    },
+    "info": "EndsWith(String, String)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "String",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "String",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "EndsWith",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "Fibonacci(Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Fibonacci",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "<T>[]",
+    },
+    "info": "Flat(<T>[][])",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "<T>[][]",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Flat",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "Floor(Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Floor",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "info": "Format(Date, String)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Date",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "String",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Format",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "FromMoney(Money)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Money",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "FromMoney",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "GenericCoverageLimit(CarCoverage)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "CarCoverage",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "GenericCoverageLimit",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "Number[]",
+    },
+    "info": "GenericCoverageLimits(CarCoverage[])",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "CarCoverage[]",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "GenericCoverageLimits",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "CarCoverage",
+    },
+    "info": "GetCarCoverage(Policy)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Policy",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "GetCarCoverage",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "CarCoverage[]",
+    },
+    "info": "GetCoverages(Policy)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Policy",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "GetCoverages",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "GetDay(Date | DateTime)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Date | DateTime",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "GetDay",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "info": "GetFirstElement(String[])",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "String[]",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "GetFirstElement",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "GetMonth(Date | DateTime)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Date | DateTime",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "GetMonth",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "info": "GetName(Any)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "Any",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "GetName",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "info": "GetType(Any)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "Any",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "GetType",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "info": "GetVehicleModel(Vehicle)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Vehicle",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "GetVehicleModel",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "GetYear(Date | DateTime)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Date | DateTime",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "GetYear",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Boolean",
+    },
+    "info": "Includes(Any, Any)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "Any",
+      },
+      Object {
+        "assignableToArray": true,
+        "typeName": "Any",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Includes",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "<T>[]",
+    },
+    "info": "Intersection(<T>[], <T>[])",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "<T>[]",
+      },
+      Object {
+        "assignableToArray": true,
+        "typeName": "<T>[]",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Intersection",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Boolean",
+    },
+    "info": "IsBlank(String)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "String",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "IsBlank",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Boolean",
+    },
+    "info": "IsDateBetween(Date, Date, Date)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Date",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Date",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Date",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "IsDateBetween",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Boolean",
+    },
+    "info": "IsEmpty(Any)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "Any",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "IsEmpty",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "<T>[]",
+    },
+    "info": "Join(<T>[], <T>[])",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "<T>[]",
+      },
+      Object {
+        "assignableToArray": true,
+        "typeName": "<T>[]",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Join",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "info": "LowerCase(String)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "String",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "LowerCase",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "<T>",
+    },
+    "info": "Max(<T>[])",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "<T>[]",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Max",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "<T>",
+    },
+    "info": "Max(<T>, <T>)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "<T>",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "<T>",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Max",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "<T>",
+    },
+    "info": "Min(<T>[])",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "<T>[]",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Min",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "<T>",
+    },
+    "info": "Min(<T>, <T>)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "<T>",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "<T>",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Min",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "MinLimit(Policy)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Policy",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "MinLimit",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "MinLimitCoverages(CarCoverage[])",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "CarCoverage[]",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "MinLimitCoverages",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "DateTime",
+    },
+    "info": "Now()",
+    "parameterTypes": Array [],
+    "relevanceOrder": 2,
+    "text": "Now",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "NumberOfDaysBetween(Date, Date)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Date",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Date",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "NumberOfDaysBetween",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "NumberOfMonthsBetween(Date, Date)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Date",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Date",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "NumberOfMonthsBetween",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "NumberOfYearsBetween(Date, Date)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Date",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Date",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "NumberOfYearsBetween",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "Number[]",
+    },
+    "info": "NumberSequence(Number, Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "NumberSequence",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "Number[]",
+    },
+    "info": "NumberSequence(Number, Number, Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "NumberSequence",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "info": "NumberToString(Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "NumberToString",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "info": "PadLeft(String, String, Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "String",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "String",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "PadLeft",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "info": "PadRight(String, String, Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "String",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "String",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "PadRight",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "<T>",
+    },
+    "info": "PlusDays(<T>, Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "<T>",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "PlusDays",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "<T>",
+    },
+    "info": "PlusMonths(<T>, Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "<T>",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "PlusMonths",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "<T>",
+    },
+    "info": "PlusYears(<T>, Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "<T>",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "PlusYears",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "Round(Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Round",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "Round(Number, Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Round",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "RoundEven(Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "RoundEven",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "RoundEven(Number, Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "RoundEven",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "Sign(Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Sign",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "Sqrt(Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Sqrt",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Boolean",
+    },
+    "info": "StartsWith(String, String)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "String",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "String",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "StartsWith",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "StringLength(String)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "String",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "StringLength",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "info": "Substring(String, Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "String",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Substring",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "info": "Substring(String, Number, Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "String",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Substring",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Number",
+    },
+    "info": "Sum(Number[])",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "Number[]",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Sum",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "<T>[]",
+    },
+    "info": "SymmetricDifference(<T>[], <T>[])",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "<T>[]",
+      },
+      Object {
+        "assignableToArray": true,
+        "typeName": "<T>[]",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "SymmetricDifference",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Date",
+    },
+    "info": "Today()",
+    "parameterTypes": Array [],
+    "relevanceOrder": 2,
+    "text": "Today",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "info": "Trim(String)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "String",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Trim",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": true,
+      "typeName": "<T>[]",
+    },
+    "info": "Union(<T>[], <T>[])",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": true,
+        "typeName": "<T>[]",
+      },
+      Object {
+        "assignableToArray": true,
+        "typeName": "<T>[]",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "Union",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "String",
+    },
+    "info": "UpperCase(String)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "String",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "UpperCase",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "<T>",
+    },
+    "info": "WithDay(<T>, Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "<T>",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "WithDay",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "<T>",
+    },
+    "info": "WithMonth(<T>, Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "<T>",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "WithMonth",
+    "type": "function",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "<T>",
+    },
+    "info": "WithYear(<T>, Number)",
+    "parameterTypes": Array [
+      Object {
+        "assignableToArray": false,
+        "typeName": "<T>",
+      },
+      Object {
+        "assignableToArray": false,
+        "typeName": "Number",
+      },
+    ],
+    "relevanceOrder": 2,
+    "text": "WithYear",
+    "type": "function",
+  },
+  Object {
+    "info": "starts iteration block which returns a result obtained by applying a function on each element of the collection",
+    "text": "for",
+    "type": "keyword",
+  },
+  Object {
+    "info": "starts iteration block which performs a predicate logic using existential quantifier",
+    "text": "some",
+    "type": "keyword",
+  },
+  Object {
+    "info": "starts iteration block which performs a predicate logic using universal quantifier",
+    "text": "every",
+    "type": "keyword",
+  },
+  Object {
+    "info": "matches string value against the regular expression",
+    "text": "matches",
+    "type": "keyword",
+  },
+  Object {
+    "info": "negates the boolean value",
+    "text": "not",
+    "type": "keyword",
+  },
+  Object {
+    "info": "checks if the value is in the collection",
+    "text": "in",
+    "type": "keyword",
+  },
+  Object {
+    "info": "checks if both sides are true, same as \`&&\`",
+    "text": "and",
+    "type": "keyword",
+  },
+  Object {
+    "info": "checks if at least one side is true, same as \`||\`",
+    "text": "or",
+    "type": "keyword",
+  },
+  Object {
+    "info": "equivalent to no value, which can be used to check if property has no value, for example \`currencyCd = null\`",
+    "text": "null",
+    "type": "keyword",
+  },
+  Object {
+    "info": "positive boolean value",
+    "text": "true",
+    "type": "keyword",
+  },
+  Object {
+    "info": "negative boolean value",
+    "text": "false",
+    "type": "keyword",
+  },
+  Object {
+    "info": "current scope object",
+    "text": "this",
+    "type": "keyword",
+  },
+  Object {
+    "info": "returns value from iteration or from expression",
+    "text": "return",
+    "type": "keyword",
+  },
+  Object {
+    "info": "checks if object is an instance of expected type",
+    "text": "instanceof",
+    "type": "keyword",
+  },
+  Object {
+    "info": "checks if object type is equal to expected type",
+    "text": "typeof",
+    "type": "keyword",
+  },
+  Object {
+    "info": "defines a variable, must be followed by a variable name and then keyword \`to\`",
+    "text": "set",
+    "type": "keyword",
+  },
+  Object {
+    "info": "assigns value to a variable, must be followed by a value statement",
+    "text": "to",
+    "type": "keyword",
+  },
+  Object {
+    "info": "starts a flow control",
+    "text": "if",
+    "type": "keyword",
+  },
+  Object {
+    "info": "flow control keyword used to select branch for truthy expression",
+    "text": "then",
+    "type": "keyword",
+  },
+  Object {
+    "info": "flow control keyword used to select branch for falsy expression",
+    "text": "else",
+    "type": "keyword",
   },
 ]
 `;

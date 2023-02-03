@@ -14,6 +14,6 @@
  *  limitations under the License.
  */
 
-export * from "./PayloadBuilder";
-export * from "./RulesBuilder";
-export * from "./ContextDefinitionBuilder";
+export * from './PayloadBuilder'
+export * from './RulesBuilder'
+export * from './ContextDefinitionBuilder'

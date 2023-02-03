@@ -14,46 +14,49 @@
  *  limitations under the License.
  */
 
-import { Payloads, Rule } from "kraken-model";
-import PayloadType = Payloads.PayloadType;
-import SizeRangePayload = Payloads.Validation.SizeRangePayload;
-import { RulePayloadHandler } from "./RulePayloadHandler";
-import { ExpressionEvaluator } from "../runtime/expressions/ExpressionEvaluator";
-import { DataContext } from "../contexts/data/DataContext";
-import { SizeRangePayloadResult, payloadResultCreator } from "../results/PayloadResult";
-import { Expressions } from "../runtime/expressions/Expressions";
-import { expressionFactory } from "../runtime/expressions/ExpressionFactory";
-import { ExpressionEvaluationResult } from "../runtime/expressions/ExpressionEvaluationResult";
-import { ExecutionSession } from "../ExecutionSession";
+import { Payloads, Rule } from 'kraken-model'
+import PayloadType = Payloads.PayloadType
+import SizeRangePayload = Payloads.Validation.SizeRangePayload
+import { RulePayloadHandler } from './RulePayloadHandler'
+import { ExpressionEvaluator } from '../runtime/expressions/ExpressionEvaluator'
+import { SizeRangePayloadResult, ExpressionEvaluationResult } from 'kraken-engine-api'
+import { Expressions } from '../runtime/expressions/Expressions'
+import { expressionFactory } from '../runtime/expressions/ExpressionFactory'
+import { ExecutionSession } from '../ExecutionSession'
+import { DataContext } from '../contexts/data/DataContext'
+import { payloadResultCreator } from '../results/PayloadResultCreator'
 
 export class SizeRangePayloadHandler implements RulePayloadHandler {
-    constructor(private readonly evaluator: ExpressionEvaluator) { }
+    constructor(private readonly evaluator: ExpressionEvaluator) {}
 
     handlesPayloadType(): PayloadType {
-        return PayloadType.SIZE_RANGE;
+        return PayloadType.SIZE_RANGE
     }
     executePayload(
-        payload: SizeRangePayload, rule: Rule, dataContext: DataContext, session: ExecutionSession
+        payload: SizeRangePayload,
+        rule: Rule,
+        dataContext: DataContext,
+        session: ExecutionSession,
     ): SizeRangePayloadResult {
-        const expression = expressionFactory.fromPath(Expressions.createPathResolver(dataContext)(rule.targetPath));
-        const exResult = this.evaluator.evaluate(expression, dataContext);
+        const expression = expressionFactory.fromPath(Expressions.createPathResolver(dataContext)(rule.targetPath))
+        const exResult = this.evaluator.evaluate(expression, dataContext)
         if (ExpressionEvaluationResult.isError(exResult)) {
-            throw new Error(`Failed to extract attribute ${expression}`);
+            throw new Error(`Failed to extract attribute ${expression}`)
         }
-        let target = exResult.success;
+        let target = exResult.success
         const templateVariables = this.evaluator.evaluateTemplateVariables(
             payload.errorMessage,
             dataContext,
-            session.expressionContext
-        );
-        const result = (success: boolean) => payloadResultCreator.sizeRange(payload, success, templateVariables);
-        // tslint:disable-next-line
+            session.expressionContext,
+        )
+        const result = (success: boolean) => payloadResultCreator.sizeRange(payload, success, templateVariables)
+
         if (target == undefined) {
-            target = [];
+            target = []
         }
         if (Array.isArray(target)) {
-            return result(target.length >= payload.min && target.length <= payload.max);
+            return result(target.length >= payload.min && target.length <= payload.max)
         }
-        return result(true);
+        return result(true)
     }
 }

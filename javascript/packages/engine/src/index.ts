@@ -13,43 +13,82 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-import { krakenConfig } from "./config";
-krakenConfig.init();
+import { krakenConfig } from './config'
+krakenConfig.init()
 
 // spi
-export * from "./engine/contexts/info/DataObjectInfoResolver";
-export * from "./engine/contexts/info/ContextInstanceInfoResolver";
-export * from "./engine/contexts/info/ContextInstanceInfo";
+export * from './engine/contexts/info/DataObjectInfoResolver'
+export * from './engine/contexts/info/ContextInstanceInfoResolver'
 
 // engine
-export * from "./engine/executer/SyncEngine";
-export * from "./repository/RepoClientCache";
-export { registry } from "./engine/runtime/expressions/ExpressionEvaluator";
-export { FunctionScope } from "./engine/runtime/expressions/functionLibrary/Registry";
+export * from './engine/executer/SyncEngine'
 
-// entry point results
-export * from "./dto/EntryPointResult";
-export * from "./dto/RuleEvaluationResults";
-export { FieldEvaluationResult } from "./dto/FieldEvaluationResult";
-export * from "./dto/ConditionEvaluationResult";
-export { DataContext } from "./engine/contexts/data/DataContext";
-export { DataContextTypes } from "./engine/contexts/data/DataContext.types";
-export * from "./engine/results/Events";
-export * from "./engine/results/PayloadResult";
+export * from './bundle-cache/EntryPointBundleCache'
+export * from './bundle-cache/delta-cache/RepoClientCache'
+export * from './bundle-cache/delta-cache/DeltaBundleCache'
+export * from './bundle-cache/dimension-set-cache/DimensionSetBundleCache'
+export * from './bundle-cache/dimension-set-cache/DimensionSetCacheLogger'
+export * from './bundle-cache/expression-context-manager/ExpressionContextManager'
+export * from './bundle-cache/expression-context-manager/ExpressionContextManagerImpl'
 
-export * from "./models/EntryPointBundle";
-export * from "./models/ContextModelTree";
+export { registry, KelFunction, FunctionParameter } from './engine/runtime/expressions/ExpressionEvaluator'
+export { FunctionScope } from './engine/runtime/expressions/functionLibrary/Registry'
+export * from './engine/runtime/EvaluationMode'
 
-// reducer
-export * from "./engine/results/Reducer";
-export * from "./engine/results/Localization";
-export * from "./engine/results/RuleOverride";
-export * from "./engine/results/RuleInfo";
-export * from "./engine/results/Events";
-export * from "./engine/results/RuleOverrideContextExtractor";
-export * from "./engine/results/PayloadResult";
+// Payload result utils
+export * from './engine/results/PayloadResultCreator'
+export * from './engine/results/PayloadResultTypeChecker'
+export { ValueChangedEvent } from './engine/results/ValueChangedEvent'
+
+// Condition result utils
+export { conditionEvaluationTypeChecker } from './dto/DefaultConditionEvaluationResult'
+
+export { DataContext } from './engine/contexts/data/DataContext'
+export { DataContextTypes } from './engine/contexts/data/DataContext.types'
 
 // field metadata reducer
-export * from "./engine/results/field_metadata_reducer/FieldMetadataReducer";
-export * from "./engine/results/field_metadata_reducer/FieldMetadata";
-export * from "./engine/results/field_metadata_reducer/FieldErrorMessage";
+export * from './engine/results/field_metadata_reducer/FieldErrorMessage'
+
+export * from './models/EntryPointBundle'
+export * from './models/ContextModelTree'
+
+// reducer
+export * from './engine/results/RuleOverrideContextExtractor'
+export * from './engine/results/Reducer'
+export * from './engine/results/Localization'
+
+// field metadata reducer
+export * from './engine/results/field_metadata_reducer/FieldMetadataReducer'
+
+// error
+export * from './error/KrakenRuntimeError'
+
+// re-export
+export {
+    ContextInstanceInfo,
+    RuleOverride,
+    RuleInfo,
+    ContextFieldInfo,
+    EntryPointResult,
+    ConditionEvaluationResult,
+    FieldEvaluationResult,
+    RuleEvaluationResults,
+    PayloadResultType,
+    PayloadResult,
+    ErrorAwarePayloadResult,
+    ErrorMessage,
+    ValidationPayloadResult,
+    AccessibilityPayloadResult,
+    VisibilityPayloadResult,
+    DefaultValuePayloadResult,
+    AssertionPayloadResult,
+    SizePayloadResult,
+    SizeRangePayloadResult,
+    LengthPayloadResult,
+    RegExpPayloadResult,
+    UsagePayloadResult,
+    RuleEvent,
+    FieldMetadata,
+    FieldMetadataResult,
+    ConditionEvaluation,
+} from 'kraken-engine-api'

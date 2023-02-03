@@ -27,7 +27,8 @@ import static kraken.model.dsl.KrakenDSLModelParser.parseResource;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertThrows;
 
 /**
  * @author mulevicius
@@ -41,20 +42,22 @@ public class KrakenModelDSLParserNamespaceTest {
         assertThat(model.getNamespace(), is("foo"));
     }
 
-    @Test(expected = LineParseCancellationException.class)
+    @Test
     public void shouldFailToParseNamespaceOnly() {
-        parseResource("Namespae foo Rules{ Rules{}}");
+        assertThrows(LineParseCancellationException.class,
+                () -> parseResource("Namespae foo Rules{ Rules{}}"));
     }
 
-
-    @Test(expected = DSLParsingException.class)
+    @Test
     public void shouldNotAllowIncludesWithoutNamespace() {
-        parseResource("Include foo Include bar Include baz Rules{ Rules{}} EntryPoints{ EntryPoints{} } Contexts{} Rules{} EntryPoints{} Contexts{ Contexts{}}");
+        assertThrows(DSLParsingException.class,
+                () -> parseResource("Include foo Include bar Include baz Rules{ Rules{}} EntryPoints{ EntryPoints{} } Contexts{} Rules{} EntryPoints{} Contexts{ Contexts{}}"));
     }
 
-    @Test(expected = DSLParsingException.class)
+    @Test
     public void shouldNotAllowImportsWithoutNamespace() {
-        parseResource("Import Rule \"foo\" from baz Rules{ Rules{}} EntryPoints{ EntryPoints{} } Contexts{} Rules{} EntryPoints{} Contexts{ Contexts{}}");
+        assertThrows(DSLParsingException.class,
+                () -> parseResource("Import Rule \"foo\" from baz Rules{ Rules{}} EntryPoints{ EntryPoints{} } Contexts{} Rules{} EntryPoints{} Contexts{ Contexts{}}"));
     }
 
     @Test

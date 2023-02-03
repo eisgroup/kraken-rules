@@ -14,8 +14,8 @@
  *  limitations under the License.
  */
 
-export type PrimitiveType = boolean | number | string;
-export type PrimitiveArrayType = boolean[] | number[] | string[];
+export type PrimitiveType = boolean | number | string
+export type PrimitiveArrayType = boolean[] | number[] | string[]
 
 /**
  * Utility class to help set value to object by provided path.
@@ -32,9 +32,7 @@ export type PrimitiveArrayType = boolean[] | number[] | string[];
  * )
  */
 export class DeepSetter {
-
-    constructor(private data: object) {
-    }
+    constructor(private data: object) {}
 
     /**
      * Creates {@link DeepSetter} instance with deep copy of data.
@@ -42,7 +40,7 @@ export class DeepSetter {
      * @returns {DeepSetter}    {@link DeepSetter} instance
      */
     static on(data: object): DeepSetter {
-        return new DeepSetter(Object.assign({}, data));
+        return new DeepSetter(Object.assign({}, data))
     }
 
     /**
@@ -53,25 +51,26 @@ export class DeepSetter {
      * @returns {DeepSetter}                                return instance with changed data
      */
     set(value: PrimitiveType | PrimitiveArrayType, path: string): DeepSetter {
-        const pathArray = path.split(".");
-        let obj: any = this.data;
-        let i = 0;
+        const pathArray = path.split('.')
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        let obj = this.data as any
+        let i = 0
         for (i; i < pathArray.length - 1; i++) {
             if (pathArray[i] in obj) {
-                obj = obj[pathArray[i]];
+                obj = obj[pathArray[i]]
             } else {
-                obj[pathArray[i]] = isNaN(parseInt(pathArray[i + 1], 0)) ? {} : [];
-                obj = obj[pathArray[i]];
+                obj[pathArray[i]] = isNaN(parseInt(pathArray[i + 1], 0)) ? {} : []
+                obj = obj[pathArray[i]]
             }
         }
-        obj[pathArray[i]] = value;
-        return this;
+        obj[pathArray[i]] = value
+        return this
     }
 
     /**
      * Returns data object with new values
      */
     get(): object {
-        return this.data;
+        return this.data
     }
 }

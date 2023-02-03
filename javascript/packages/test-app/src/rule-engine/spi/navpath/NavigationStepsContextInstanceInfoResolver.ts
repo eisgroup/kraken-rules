@@ -14,11 +14,11 @@
  *  limitations under the License.
  */
 
-import { NavigationStepsContextInstanceInfo } from "./NavigationStepsContextInstanceInfo";
-import { NavigationStep, NavigationStepType } from "./NavigationStep";
-import { toBe } from "declarative-js";
-import { Contexts } from "kraken-model";
-import { ContextInstanceInfoResolver, DataObjectInfoResolver, ContextInstanceInfo } from "kraken-typescript-engine";
+import { NavigationStepsContextInstanceInfo } from './NavigationStepsContextInstanceInfo'
+import { NavigationStep, NavigationStepType } from './NavigationStep'
+import { toBe } from 'declarative-js'
+import { Contexts } from 'kraken-model'
+import { ContextInstanceInfoResolver, DataObjectInfoResolver, ContextInstanceInfo } from 'kraken-typescript-engine'
 
 /**
  * Implementation of {@link ContextInstanceInfoResolver} SPI, using {@link NavigationStepsContextInstanceInfo}
@@ -28,16 +28,14 @@ import { ContextInstanceInfoResolver, DataObjectInfoResolver, ContextInstanceInf
  * apply rule results
  */
 export class NavigationStepsContextInstanceInfoResolver implements ContextInstanceInfoResolver<string[]> {
-
-    constructor(private readonly resolver: DataObjectInfoResolver) { }
+    constructor(private readonly resolver: DataObjectInfoResolver) {}
 
     /**
      * @override
      */
     resolveRootInfo(dataObject: object): ContextInstanceInfo {
-        const { resolver } = this;
-        return new NavigationStepsContextInstanceInfo(
-            resolver.resolveName(dataObject), resolver.resolveId(dataObject));
+        const { resolver } = this
+        return new NavigationStepsContextInstanceInfo(resolver.resolveName(dataObject), resolver.resolveId(dataObject))
     }
 
     /**
@@ -48,30 +46,31 @@ export class NavigationStepsContextInstanceInfoResolver implements ContextInstan
         target: Contexts.ContextDefinition,
         source: Contexts.ContextDefinition,
         parentInfo: ContextInstanceInfo,
-        index?: number
+        index?: number,
     ): ContextInstanceInfo {
-        const { resolveName, resolveId } = this.resolver;
-        const { navigationExpression } = source.children[target.name];
-        const info = (parentInfo as NavigationStepsContextInstanceInfo)
-            .addExtractionStep(resolveName(dataObject), resolveId(dataObject), navigationExpression.expressionString);
+        const { resolveName, resolveId } = this.resolver
+        const { navigationExpression } = source.children[target.name]
+        const info = (parentInfo as NavigationStepsContextInstanceInfo).addExtractionStep(
+            resolveName(dataObject),
+            resolveId(dataObject),
+            navigationExpression.expressionString,
+        )
         if (index !== null && index !== undefined) {
-            return info.addListExtractionStep(index);
+            return info.addListExtractionStep(index)
         }
-        return info;
+        return info
     }
 
     /**
      * @override
      */
     resolveAncestorInfo(
-        //@ts-ignore
-        dataObject: object,
+        _dataObject: object,
         ancestor: Contexts.ContextDefinition,
-        //@ts-ignore
-        child: ContextDefinition,
-        childInfo: ContextInstanceInfo
+        _child: Contexts.ContextDefinition,
+        childInfo: ContextInstanceInfo,
     ): ContextInstanceInfo {
-        return (childInfo as NavigationStepsContextInstanceInfo).addInheritanceStep(ancestor.name);
+        return (childInfo as NavigationStepsContextInstanceInfo).addInheritanceStep(ancestor.name)
     }
 
     /**
@@ -79,24 +78,26 @@ export class NavigationStepsContextInstanceInfoResolver implements ContextInstan
      */
     processContextInstanceInfo(info: ContextInstanceInfo): string[] {
         if (info instanceof NavigationStepsContextInstanceInfo) {
-            const instanceInfo = (info as NavigationStepsContextInstanceInfo);
-            const steps = instanceInfo.navigationSteps
-                .map(this.toNavigationString)
-                .filter(toBe.present) as string[];
-            return ["this", ...steps];
+            const instanceInfo = info as NavigationStepsContextInstanceInfo
+            const steps = instanceInfo.navigationSteps.map(this.toNavigationString).filter(toBe.present) as string[]
+            return ['this', ...steps]
         }
-        throw new Error("Unsupported type of ContextInstanceInfo");
+        throw new Error('Unsupported type of ContextInstanceInfo')
     }
 
     /**
      * @override
      */
-    validateContextDataObject = (d: object) => this.resolver.validate(d);
+    validateContextDataObject = (d: object) => this.resolver.validate(d)
 
     private toNavigationString(step: NavigationStep): string | undefined {
-        const { type } = step;
-        if (type === NavigationStepType.EXTRACTION) { return step.expression as string; }
-        if (type === NavigationStepType.LIST_INDEX) { return "[" + (step.expression as number) + "]"; }
-        return undefined;
+        const { type } = step
+        if (type === NavigationStepType.EXTRACTION) {
+            return step.expression as string
+        }
+        if (type === NavigationStepType.LIST_INDEX) {
+            return '[' + (step.expression as number) + ']'
+        }
+        return undefined
     }
 }

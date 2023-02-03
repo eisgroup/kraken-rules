@@ -36,14 +36,4 @@ public interface KrakenProjectRepository {
      */
     KrakenProject getKrakenProject(String namespace);
 
-    /**
-     *
-     * @param namespace
-     * @return true if {@link KrakenProject} exists for the namespace.
-     * @deprecated use {@link #getKrakenProject(String)} instead to see if KrakenProject exists
-     */
-    @Deprecated(since = "1.21.0", forRemoval = true)
-    default boolean hasKrakenProject(String namespace) {
-        return true;
-    };
 }

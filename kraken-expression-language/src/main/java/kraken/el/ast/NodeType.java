@@ -19,6 +19,8 @@ package kraken.el.ast;
  * @author mulevicius
  */
 public enum NodeType {
+    VALUE_BLOCK("ValueBlock"),
+    VARIABLE("Variable"),
     ADDITION("Addition", "+"),
     SUBTRACTION("Subtraction", "-"),
     MULTIPLICATION("Multiplication", "*"),
@@ -47,6 +49,7 @@ public enum NodeType {
     DATE("Date"),
     DATETIME("Datetime"),
     NULL("Null"),
+    EMPTY("Empty"),
 
     INLINE_MAP("InlineMap"),
     INLINE_ARRAY("InlineArray"),
@@ -68,9 +71,10 @@ public enum NodeType {
     TYPEOF("TypeOf", "typeof"),
     CAST("Cast"),
 
-    TEMPLATE("Template");
+    TEMPLATE("Template")
+    ;
 
-    private String name;
+    private final String name;
 
     private String operator;
 

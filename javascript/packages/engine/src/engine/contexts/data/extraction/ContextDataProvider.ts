@@ -13,10 +13,10 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-import { DataContext } from "../DataContext";
-import { requireDefinedValue } from "../../../../utils/Utils";
-import { ContextDataExtractor } from "./ContextDataExtractor.types";
-import { logger } from "../../../../utils/DevelopmentLogger";
+
+import { requireDefinedValue } from '../../../../utils/Utils'
+import { ContextDataExtractor } from './ContextDataExtractor.types'
+import { DataContext } from '../DataContext'
 
 /**
  * Resolves context data instance for rule in given root context
@@ -31,25 +31,23 @@ export interface ContextDataProvider {
      * @param {Dependency[]} dependencies   dependencies, that will be extracted and added to context instance
      * @returns {DataContext[]}             context definition instances, that were extracted
      */
-    resolveContextData: (contextName: string) => DataContext[];
+    resolveContextData: (contextName: string) => DataContext[]
 }
 
 export class ContextDataProviderImpl implements ContextDataProvider {
     constructor(
         private readonly root: DataContext,
         private readonly dataExtractor: ContextDataExtractor,
-        private readonly restriction?: DataContext
+        private readonly restriction?: DataContext,
     ) {
-        requireDefinedValue(root, "Root dataContext must be defined");
-        requireDefinedValue(dataExtractor, "ContextDataExtractor must be defined");
+        requireDefinedValue(root, 'Root dataContext must be defined')
+        requireDefinedValue(dataExtractor, 'ContextDataExtractor must be defined')
     }
 
     /**
      * @override
      */
     public resolveContextData(contextName: string): DataContext[] {
-        const extractedDataContexts = this.dataExtractor.extractByName(contextName, this.root, this.restriction);
-        logger.debug(`Extracted '${extractedDataContexts.length}' context definition '${contextName}' instances`);
-        return extractedDataContexts;
+        return this.dataExtractor.extractByName(contextName, this.root, this.restriction)
     }
 }

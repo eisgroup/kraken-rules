@@ -15,8 +15,7 @@
  */
 package kraken.runtime.repository.factory;
 
-import kraken.runtime.repository.RuntimeContextRepository;
-import kraken.runtime.repository.RuntimeRuleRepository;
+import kraken.runtime.repository.RuntimeProjectRepository;
 
 /**
  * @author mulevicius
@@ -26,16 +25,9 @@ public interface RuntimeRepositoryFactory {
     /**
      *
      * @param namespace
-     * @return provides namespace specific Rule repository so that Kraken Engine can be decoupled
+     * @return provides namespace specific repository so that Kraken Engine can be decoupled
      *          from namespace related implementation details
      */
-    RuntimeRuleRepository resolveRuleRepository(String namespace);
+    RuntimeProjectRepository resolveRepository(String namespace);
 
-    /**
-     *
-     * @param namespace
-     * @return provides namespace specific Rule repository so that Kraken Engine can be decoupled
-     *          from namespace related implementation details
-     */
-    RuntimeContextRepository resolveContextRepository(String namespace);
 }

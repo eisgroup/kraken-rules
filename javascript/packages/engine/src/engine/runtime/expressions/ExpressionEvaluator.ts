@@ -13,23 +13,21 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-import { Reducer } from "declarative-js";
+import { Reducer } from 'declarative-js'
 
-import { DataContext } from "../../contexts/data/DataContext";
-import { FunctionRegistry, FunctionDeclaration } from "./functionLibrary/Registry";
-import { RuntimeExpression } from "./RuntimeExpression";
-import { pathAccessor } from "./PathAccessor";
-import { ComplexEvaluator } from "./ComplexEvaluator";
-import { ExpressionEvaluationResult, ExpressionEvaluationResult as Expression } from "./ExpressionEvaluationResult";
-import { ErrorCode, KrakenRuntimeError } from "../../../error/KrakenRuntimeError";
-import { Payloads } from "kraken-model";
-import ErrorMessage = Payloads.Validation.ErrorMessage;
-import { expressionFactory } from "./ExpressionFactory";
-import { Numbers } from "./math/Numbers";
-import { dateFunctions } from "./functionLibrary/DateFunctions";
-import { Moneys } from "./math/Moneys";
-
-const EMPTY = Object.create(null);
+import { FunctionRegistry, FunctionDeclaration } from './functionLibrary/Registry'
+import { RuntimeExpression } from './RuntimeExpression'
+import { pathAccessor } from './PathAccessor'
+import { ComplexEvaluator } from './ComplexEvaluator'
+import { ExpressionEvaluationResult, ExpressionEvaluationResult as Expression } from 'kraken-engine-api'
+import { Payloads } from 'kraken-model'
+import ErrorMessage = Payloads.Validation.ErrorMessage
+import { expressionFactory } from './ExpressionFactory'
+import { Numbers } from './math/Numbers'
+import { dateFunctions } from './functionLibrary/DateFunctions'
+import { Moneys } from './math/Moneys'
+import { DataContext } from '../../contexts/data/DataContext'
+import { ErrorCode, KrakenRuntimeError } from '../../../error/KrakenRuntimeError'
 
 /**
  * Global expression functions registry.
@@ -46,10 +44,38 @@ const EMPTY = Object.create(null);
  * });
  * ```
  */
-export const registry = FunctionRegistry.INSTANCE;
+export const registry = FunctionRegistry.INSTANCE
+
+/**
+ * Represents a single KEL function which may be invoked from kraken rule expressions.
+ * Usually KelFunction instance should not be created manually,
+ * but rather obtained from KEL Function defined in Kraken DSL and then generated to javascript
+ * by using maven plugin tools provided for this purpose.
+ */
+export interface KelFunction {
+    /**
+     * Name of the function by which it may be invoked in kraken rule expression
+     */
+    name: string
+    /**
+     * a list of parameters that function uses
+     */
+    parameters: FunctionParameter[]
+    /**
+     * A body which contains function logic implemented in javascript language.
+     * Body must not have a return statement. A final javascript code is obtained by 'return (<body>)'
+     */
+    body: string
+}
+
+/**
+ * Represents a single parameter of {@link KelFunction}
+ */
+export interface FunctionParameter {
+    name: string
+}
 
 export class ExpressionEvaluator {
-
     /**
      * This evaluator will not have functions defined in runtime,
      * after creating engine instance. It will have all functions defined
@@ -60,9 +86,9 @@ export class ExpressionEvaluator {
      *
      * @since 11.2
      */
-    static DEFAULT = new ExpressionEvaluator();
+    static DEFAULT = new ExpressionEvaluator()
 
-    readonly #evaluator: ComplexEvaluator;
+    readonly #evaluator: ComplexEvaluator
 
     /**
      * Ability to add function, to be accessible in expression evaluation context.
@@ -71,16 +97,16 @@ export class ExpressionEvaluator {
      * {@link FunctionRegistry#createInstanceFunctions} construct additional functions
      *
      * @param functions to add in expression evaluation context.
+     * @param kelFunctions to add to expression evaluation context
      * @see FunctionRegistry#createInstanceFunctions
      * @since 11.2
      */
-    constructor(
-        functions: FunctionDeclaration[] = []
-    ) {
-        const evaluationFunctions = functions.map(f => f.name)
+    constructor(functions: FunctionDeclaration[] = [], kelFunctions: KelFunction[] = []) {
+        const evaluationFunctions = functions
+            .map(f => f.name)
             .reduce(Reducer.zip(functions.map(f => f.function)), [])
-            .map(fd => ({ name: fd[0], fx: fd[1] }));
-        this.#evaluator = new ComplexEvaluator(evaluationFunctions);
+            .map(fd => ({ name: fd[0], fx: fd[1] }))
+        this.#evaluator = new ComplexEvaluator(evaluationFunctions, kelFunctions)
     }
 
     /**
@@ -99,78 +125,53 @@ export class ExpressionEvaluator {
      *          {@code -Infinity} or {@code +Infinity}
      */
     evaluate(
-        expression: RuntimeExpression, dataContext: DataContext, context?: Record<string, unknown>
+        expression: RuntimeExpression,
+        dataContext: DataContext,
+        context?: Record<string, unknown>,
     ): Expression.Result {
         switch (expression.type) {
-            case "PropertyExpression":
-                return Expression.expressionSuccess((dataContext.dataObject as any)[expression.expression]);
-            case "PathExpression":
-                return Expression.expressionSuccess(pathAccessor.access(dataContext.dataObject, expression.expression));
-            case "LiteralExpression":
-                if (expression.valueType === "Date" || expression.valueType === "DateTime") {
-                    return Expression.expressionSuccess(new Date(expression.value as string));
+            case 'PropertyExpression':
+                return Expression.expressionSuccess(dataContext.dataObject[expression.expression])
+            case 'PathExpression':
+                return Expression.expressionSuccess(pathAccessor.access(dataContext.dataObject, expression.expression))
+            case 'LiteralExpression':
+                if (expression.valueType === 'Date' || expression.valueType === 'DateTime') {
+                    return Expression.expressionSuccess(new Date(expression.value as string))
                 }
-                return Expression.expressionSuccess(expression.value);
-            case "ComplexExpression":
+                return Expression.expressionSuccess(expression.value)
+            case 'ComplexExpression':
                 return this.#evaluator.evaluate({
                     expressionContext: {
                         dataObject: dataContext.dataObject,
                         references: dataContext.externalReferenceObjects.references,
-                        context
+                        context,
                     },
-                    expression: expression.expression
-                });
+                    expression: expression.expression,
+                })
             default:
                 throw new KrakenRuntimeError(
                     ErrorCode.UNKNOWN_EXPRESSION_TYPE,
-                    `Evaluation of expression ${JSON.stringify(expression)} is not supported`
-                );
+                    `Evaluation of expression ${JSON.stringify(expression)} is not supported`,
+                )
         }
     }
     /**
-     * Set value to object by {@Link RuntimeExpression}.
+     * Set value to object at path.
      *
-     * @param expression    access {@Link RuntimeExpression}. LiteralExpression is forbidden to use.
-     *                      For ComplexExpression cross context references are disabled here.
+     * @param path    path to set value at
      * @param dataObject    object to modify and set value.
      * @param value         value to set in object
-     * @param context       optional parameter, that provides external context. Can be
-     *                      Accessed from ComplexExpression.
-     * @returns value that was passed in paramter to set. If {@code undefined} is
+     * @returns value that was passed in parameter to set. If {@code undefined} is
      *          returned, value was not set or value to set was {@code undefined}.
      * @throws  Error when LiteralExpression or other expression
-     *          that is not supported is used as expression paramter
+     *          that is not supported is used as expression parameter
      * @throws  error on invalid complex expression. The cause can be invalid expression context,
      *          invalid complex expression or invalid complex expression result for {@code NaN},
      *          {@code -Infinity} or {@code +Infinity}
      */
-    evaluateSet(
-        expression: RuntimeExpression, dataObject: object, value: any, context?: Record<string, unknown>
-    ): Expression.Result {
-        switch (expression.type) {
-            case "PropertyExpression":
-                (dataObject as any)[expression.expression] = value;
-                return Expression.expressionSuccess(value);
-            case "PathExpression":
-                return Expression.expressionSuccess(
-                    pathAccessor.accessAndSet(dataObject, expression.expression, value)
-                );
-            case "ComplexExpression":
-                return this.#evaluator.evaluate({
-                    expressionContext: {
-                        setValue: value,
-                        dataObject: dataObject,
-                        references: EMPTY,
-                        context
-                    },
-                    expression: `${expression.expression}=__defaultValue__`
-                });
-            default:
-                throw new KrakenRuntimeError(
-                    ErrorCode.ILLEGAL_EXPRESSION_TYPE,
-                    `Access by '${expression.type}' type expression is not supported.`
-                );
-        }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    evaluateSet(path: string, dataObject: any, value: unknown): Expression.Result {
+        return Expression.expressionSuccess(pathAccessor.accessAndSet(dataObject, path, value))
     }
 
     /**
@@ -186,34 +187,42 @@ export class ExpressionEvaluator {
      * @returns a list of formatted values obtained by evaluating message template expressions
      */
     evaluateTemplateVariables(
-        message: ErrorMessage | undefined, dataContext: DataContext, context?: Record<string, unknown>
+        message: ErrorMessage | undefined,
+        dataContext: DataContext,
+        context?: Record<string, unknown>,
     ): string[] {
         return message
             ? message.templateExpressions
-                .map(p => this.evaluate(expressionFactory.fromExpression(p), dataContext, context))
-                .map(result => ExpressionEvaluationResult.isError(result) ? undefined : result.success)
-                .map(ExpressionEvaluator.render)
-            : [];
+                  .map(p => this.evaluate(expressionFactory.fromExpression(p), dataContext, context))
+                  .map(result => (ExpressionEvaluationResult.isError(result) ? undefined : result.success))
+                  .map(ExpressionEvaluator.render)
+            : []
     }
 
-    private static render(value: any | undefined): string {
-        // tslint:disable-next-line: triple-equals
+    /**
+     * Rebuilds registered functions in the evaluator.
+     */
+    rebuildFunctions(): void {
+        this.#evaluator.rebuildFunctionInvokerIfNeeded()
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    static render(value: any | undefined): string {
         if (value == undefined) {
-            return "";
+            return ''
         }
-        if (typeof value === "number") {
-            return Numbers.toString(value);
+        if (typeof value === 'number') {
+            return Numbers.toString(value)
         }
         if (value instanceof Date) {
-            return dateFunctions.Format(value, "YYYY-MM-DD hh:mm:ss");
+            return dateFunctions.Format(value, 'YYYY-MM-DD hh:mm:ss')
         }
         if (Moneys.isMoney(value)) {
-            return ExpressionEvaluator.render(value.amount);
+            return ExpressionEvaluator.render(value.amount)
         }
         if (Array.isArray(value)) {
-            return "[" + value.map(ExpressionEvaluator.render).join(", ") + "]";
+            return '[' + value.map(ExpressionEvaluator.render).join(', ') + ']'
         }
-        return value.toString();
+        return value.toString()
     }
-
 }

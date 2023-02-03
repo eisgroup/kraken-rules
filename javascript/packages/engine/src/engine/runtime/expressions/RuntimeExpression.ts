@@ -14,13 +14,12 @@
  *  limitations under the License.
  */
 
-import { Expressions } from "kraken-model";
+import { Expressions } from 'kraken-model'
 
 /**
  * Expression object generic type used for runtime expression evaluation.
  */
-export type RuntimeExpression =
-    PropertyExpression | LiteralExpression | ComplexExpression | PathExpression;
+export type RuntimeExpression = PropertyExpression | LiteralExpression | ComplexExpression | PathExpression
 
 /**
  * Expression type that must be used to access property directly as computed property.
@@ -29,8 +28,8 @@ export type RuntimeExpression =
  * let data = { a: 1 }
  */
 export interface PropertyExpression {
-    type: "PropertyExpression";
-    expression: string;
+    type: 'PropertyExpression'
+    expression: string
 }
 
 /**
@@ -40,8 +39,8 @@ export interface PropertyExpression {
  *  let data = { a: { b: 1 } }
  */
 export interface PathExpression {
-    type: "PathExpression";
-    expression: string;
+    type: 'PathExpression'
+    expression: string
 }
 
 /**
@@ -49,14 +48,14 @@ export interface PathExpression {
  * Value can be type of {@code number} | {@code string} | {@code null} | {@code undefined}
  */
 export interface LiteralExpression {
-    type: "LiteralExpression";
-    value: Expressions.LiteralExpression["compiledLiteralValue"];
+    type: 'LiteralExpression'
+    value: Expressions.LiteralExpression['compiledLiteralValue']
 
     /**
      * Indicates type of a literal. Can be: String, Number, Boolean, Date, DateTime.
      * If value is not available then literal is null value.
      */
-    valueType? : Expressions.LiteralExpression["compiledLiteralValueType"];
+    valueType?: Expressions.LiteralExpression['compiledLiteralValueType']
 }
 
 /**
@@ -67,6 +66,6 @@ export interface LiteralExpression {
  * let expression = "context.isNew ? Today() : Insured.birthDate"
  */
 export interface ComplexExpression {
-    type: "ComplexExpression";
-    expression: string;
+    type: 'ComplexExpression'
+    expression: string
 }

@@ -25,7 +25,7 @@ import kraken.annotations.API;
 /**
  * Marks function implementation or a whole {@link FunctionLibrary} as native implementation.
  * Native implementation does not have to be explicitly declared in the project
- * and are available to be used in expressions implicitly.
+ * and is available to be used in expressions implicitly.
  *
  * @author mulevicius
  */

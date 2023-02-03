@@ -28,31 +28,42 @@ import kraken.model.project.validator.ValidationSession;
 /**
  * @author Pavel Surinin
  */
-public class RuleDefinedOnCycleValidator {
+public class RuleDefinedOnCycleValidator implements RuleValidator {
+
+    private final KrakenProject krakenProject;
 
     private final CrossContextService crossContextService;
 
     public RuleDefinedOnCycleValidator(KrakenProject krakenProject) {
+        this.krakenProject = krakenProject;
+
         this.crossContextService = CrossContextServiceProvider.forProject(krakenProject);
     }
 
+    @Override
     public void validate(Rule rule, ValidationSession session) {
         var cycled = crossContextService.getAllCycles().stream()
                 .flatMap(x -> x.getNodeNames().stream())
                 .collect(Collectors.toSet());
 
         String cycleString = String.join(", ", cycled);
-        String template = "Rule '%s' is defined on '%s', " +
+        String template = "is defined on '%s', " +
                 "which is included in a recursive data structure between: '%s'. " +
                 "Defining rules on recursive Context Definition is not supported.";
 
         if(cycled.contains(rule.getContext())) {
             session.add(new ValidationMessage(
                 rule,
-                String.format(template, rule.getName(), rule.getContext(), cycleString),
+                String.format(template, rule.getContext(), cycleString),
                 Severity.ERROR
             ));
         }
     }
 
+    @Override
+    public boolean canValidate(Rule rule) {
+        return rule.getName() != null
+            && rule.getContext() != null
+            && krakenProject.getContextDefinitions().containsKey(rule.getContext());
+    }
 }

@@ -1,5 +1,5 @@
 /*
- *  Copyright 2017 EIS Ltd and/or one of its affiliates.
+ *  Copyright 2022 EIS Ltd and/or one of its affiliates.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,29 +15,42 @@
  */
 package kraken.model.dsl.model;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import javax.annotation.Nullable;
+
 /**
- * Represents signature of a function specified in Kraken DSL
+ * Represents function implementation specified in Kraken DSL
  *
  * @author mulevicius
  */
 public class DSLFunction {
 
-    private String functionName;
+    private final String functionName;
 
-    private String returnType;
+    private final String returnType;
 
-    private List<DSLFunctionParameter> parameters;
+    private final List<DSLFunctionParameter> parameters;
+
+    private final List<DSLGenericTypeBound> genericTypeBounds;
+
+    private final DSLExpression body;
+
+    private final DSLFunctionDocumentation documentation;
 
     public DSLFunction(String functionName,
                        String returnType,
-                       List<DSLFunctionParameter> parameters) {
+                       List<DSLFunctionParameter> parameters,
+                       List<DSLGenericTypeBound> genericTypeBounds,
+                       DSLExpression body,
+                       @Nullable DSLFunctionDocumentation documentation) {
         this.functionName = Objects.requireNonNull(functionName);
         this.returnType = Objects.requireNonNull(returnType);
         this.parameters = Objects.requireNonNull(parameters);
+        this.genericTypeBounds = Objects.requireNonNull(genericTypeBounds);
+        this.body = Objects.requireNonNull(body);
+        this.documentation = documentation;
     }
 
     public String getFunctionName() {
@@ -49,6 +62,19 @@ public class DSLFunction {
     }
 
     public List<DSLFunctionParameter> getParameters() {
-        return Collections.unmodifiableList(parameters);
+        return parameters;
+    }
+
+    public List<DSLGenericTypeBound> getGenericTypeBounds() {
+        return genericTypeBounds;
+    }
+
+    public DSLExpression getBody() {
+        return body;
+    }
+
+    @Nullable
+    public DSLFunctionDocumentation getDocumentation() {
+        return documentation;
     }
 }

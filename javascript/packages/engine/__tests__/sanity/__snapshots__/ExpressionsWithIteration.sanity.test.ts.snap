@@ -1,26 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Engine Expressions Sanity Test shouldEvaluateDeeplyNestedFilterExpression: Results + reducer results 1`] = `
+exports[`Engine Expressions Sanity Test shouldEvaluateDeeplyNestedFilterExpression 1`] = `
 Object {
-  "Field Metadata reduced results": Object {
-    "Policy:0:termNo": Object {
-      "fieldType": "INTEGER",
-      "id": "Policy:0:termNo",
-      "info": Object {
-        "getContextInstanceId": [Function],
-        "getContextName": [Function],
-      },
-      "isDisabled": undefined,
-      "isHidden": undefined,
-      "resolvedTargetPath": "termDetails.termNo",
-      "ruleResults": Array [],
-    },
-  },
-  "Raw results": Object {
+  "entryPointResults": Object {
     "evaluationTimestamp": Any<Date>,
     "results": Object {
       "Policy:0:termNo": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "0",
           "contextName": "Policy",
           "fieldName": "termNo",
@@ -29,7 +15,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -46,7 +32,7 @@ Object {
               ],
               "type": 8,
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "Policy",
               "payloadtype": "DEFAULT",
               "ruleName": "Expressions_nested_filter",
@@ -57,35 +43,30 @@ Object {
       },
     },
   },
-  "Validation results": Object {
-    "critical": Array [],
-    "info": Array [],
-    "warning": Array [],
-  },
-}
-`;
-
-exports[`Engine Expressions Sanity Test shouldEvaluateDeeplyNestedLoopExpression: Results + reducer results 1`] = `
-Object {
-  "Field Metadata reduced results": Object {
-    "Policy:0:totalPremium": Object {
-      "fieldType": "DECIMAL",
-      "id": "Policy:0:totalPremium",
+  "fieldResults": Object {
+    "Policy:0:termNo": Object {
+      "fieldType": "INTEGER",
+      "id": "Policy:0:termNo",
       "info": Object {
         "getContextInstanceId": [Function],
         "getContextName": [Function],
       },
       "isDisabled": undefined,
       "isHidden": undefined,
-      "resolvedTargetPath": "transactionDetails.totalPremium",
+      "resolvedTargetPath": "termDetails.termNo",
       "ruleResults": Array [],
     },
   },
-  "Raw results": Object {
+}
+`;
+
+exports[`Engine Expressions Sanity Test shouldEvaluateDeeplyNestedLoopExpression 1`] = `
+Object {
+  "entryPointResults": Object {
     "evaluationTimestamp": Any<Date>,
     "results": Object {
       "Policy:0:totalPremium": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "0",
           "contextName": "Policy",
           "fieldName": "totalPremium",
@@ -94,7 +75,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -111,7 +92,7 @@ Object {
               ],
               "type": 8,
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "Policy",
               "payloadtype": "DEFAULT",
               "ruleName": "Expressions_nested_for",
@@ -122,35 +103,30 @@ Object {
       },
     },
   },
-  "Validation results": Object {
-    "critical": Array [],
-    "info": Array [],
-    "warning": Array [],
-  },
-}
-`;
-
-exports[`Engine Expressions Sanity Test shouldEvaluateDeeplyNestedMixedExpression: Results + reducer results 1`] = `
-Object {
-  "Field Metadata reduced results": Object {
-    "Policy:0:changePremium": Object {
+  "fieldResults": Object {
+    "Policy:0:totalPremium": Object {
       "fieldType": "DECIMAL",
-      "id": "Policy:0:changePremium",
+      "id": "Policy:0:totalPremium",
       "info": Object {
         "getContextInstanceId": [Function],
         "getContextName": [Function],
       },
       "isDisabled": undefined,
       "isHidden": undefined,
-      "resolvedTargetPath": "transactionDetails.changePremium",
+      "resolvedTargetPath": "transactionDetails.totalPremium",
       "ruleResults": Array [],
     },
   },
-  "Raw results": Object {
+}
+`;
+
+exports[`Engine Expressions Sanity Test shouldEvaluateDeeplyNestedMixedExpression 1`] = `
+Object {
+  "entryPointResults": Object {
     "evaluationTimestamp": Any<Date>,
     "results": Object {
       "Policy:0:changePremium": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "0",
           "contextName": "Policy",
           "fieldName": "changePremium",
@@ -159,7 +135,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -176,7 +152,7 @@ Object {
               ],
               "type": 8,
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "Policy",
               "payloadtype": "DEFAULT",
               "ruleName": "Expressions_nested_mixed",
@@ -187,10 +163,19 @@ Object {
       },
     },
   },
-  "Validation results": Object {
-    "critical": Array [],
-    "info": Array [],
-    "warning": Array [],
+  "fieldResults": Object {
+    "Policy:0:changePremium": Object {
+      "fieldType": "DECIMAL",
+      "id": "Policy:0:changePremium",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "transactionDetails.changePremium",
+      "ruleResults": Array [],
+    },
   },
 }
 `;

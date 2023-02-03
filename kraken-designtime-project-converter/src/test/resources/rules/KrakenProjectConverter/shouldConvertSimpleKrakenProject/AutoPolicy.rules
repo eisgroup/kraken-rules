@@ -18,11 +18,19 @@ EntryPoint "Validation" {
 }
 
 Rule "AssertRule" On AutoPolicy.policyCd {
-  Assert Sum(CarCoverage[*].limitAmount) <= maxLimitAmount
+  Assert Sum(Limits(CarCoverage)) <= maxLimitAmount
 }
 
 @Dimension("PackageCd", "Pizza")
 Rule "AssertRule" On AutoPolicy.policyCd {
   When PackageDetails.planCd == "Pizza"
-  Assert every limit in CarCoverage[*].limitAmount satisfies limit < maxLimitAmount
+  Assert every limit in Limits(CarCoverage) satisfies limit < maxLimitAmount
+}
+
+Function Limits(Coverage[] coverages) : Number[] {
+  coverages.limitAmount
+}
+
+Function Plan(PackageDetails packageDetails) : String {
+  packageDetails.planCd
 }

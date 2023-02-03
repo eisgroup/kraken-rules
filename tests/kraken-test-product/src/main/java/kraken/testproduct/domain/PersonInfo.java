@@ -15,20 +15,7 @@
  */
 package kraken.testproduct.domain;
 
-public class PersonInfo extends Info {
-
-    private String firstName;
-
-    private String lastName;
-
-    public PersonInfo() {
-    }
-
-    public PersonInfo(String firstName, String lastName, AddressInfo addressInfo) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.addressInfo = addressInfo;
-    }
+public class PersonInfo extends PersonNameInfo {
 
     private Integer age;
 
@@ -38,20 +25,12 @@ public class PersonInfo extends Info {
 
     private AddressInfo addressInfo;
 
-    public String getFirstName() {
-        return firstName;
+    public PersonInfo() {
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public PersonInfo(String firstName, String lastName, AddressInfo addressInfo) {
+        super(firstName, lastName);
+        this.addressInfo = addressInfo;
     }
 
     public Integer getAge() {

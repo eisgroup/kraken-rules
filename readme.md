@@ -1,6 +1,7 @@
 # 🦑 Kraken 🦑
 
   - [Writing Sanity test](#writing-sanity-test)
+  - [Commit Gating (CG)](#commit-gating-cg)
   - [Test Application](#test-application)
     - [UI](#ui)
     - [Backend](#backend)
@@ -148,20 +149,18 @@ To use demo application with latest changes first start backend app, then ui app
 To start application run this commands:
 ```bash
 cd javascript
-npm install
-npx lerna bootstrap
+yarn
+yarn bootstrap
 cd packages/test-app
-npm run serve
+yarn run serve
 ```
 Application will start on `localhost:5000`
 
 ### Backend
 
-To build run this commands:
+To start backend application:
 ```bash
-cd kraken-spring-rest
-mvn clean install
-mvn spring-boot:run
+mvn -f kraken-spring-rest spring-boot:run
 ```
 
 Application will start on `localhost:8888`

@@ -24,7 +24,6 @@ import java.lang.annotation.Target;
  *         <ul>
  *             <li>String[]</li>
  *             <li>Coverage[]</li>
- *             <li>Any[]</li>
  *             <li>&lt;T&gt;[]</li>
  *         </ul>
  *     </li>

@@ -13,65 +13,72 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+import { AssertionPayloadResult } from 'kraken-engine-api'
+import { Payloads } from 'kraken-model'
+import { PayloadBuilder, RulesBuilder } from 'kraken-model-builder'
 
-import { AssertionPayloadHandler } from "../../../src/engine/handlers/AssertionPayloadHandler";
-import { Payloads } from "kraken-model";
-import { DataContext } from "../../../src/engine/contexts/data/DataContext";
-import { mock } from "../../mock";
-import { AssertionPayloadResult, payloadResultTypeChecker } from "../../../src/engine/results/PayloadResult";
-import { RulesBuilder, PayloadBuilder } from "kraken-model-builder";
+import { DataContext } from '../../../src/engine/contexts/data/DataContext'
+import { AssertionPayloadHandler } from '../../../src/engine/handlers/AssertionPayloadHandler'
+import { payloadResultTypeChecker } from '../../../src/engine/results/PayloadResultTypeChecker'
+import { mock } from '../../mock'
 
-let dataContext: DataContext;
-const handler = new AssertionPayloadHandler(mock.evaluator);
-const { session } = mock;
-const { Policy } = mock.modelTreeJson.contexts;
+let dataContext: DataContext
+const handler = new AssertionPayloadHandler(mock.evaluator)
+const { session } = mock
+const { Policy } = mock.modelTreeJson.contexts
 
 beforeEach(() => {
-    dataContext = mock.data.dataContextEmpty();
-});
-describe("assertionPayloadHandler", () => {
-    it("should create instance", () => {
-        expect(handler.handlesPayloadType()).toBe(Payloads.PayloadType.ASSERTION);
-    });
-    it("should return payload payloadResult with type AssertionPayloadResult", () => {
-        const rule = RulesBuilder.create().setName("R001")
+    dataContext = mock.data.dataContextEmpty()
+})
+describe('assertionPayloadHandler', () => {
+    it('should create instance', () => {
+        expect(handler.handlesPayloadType()).toBe(Payloads.PayloadType.ASSERTION)
+    })
+    it('should return payload payloadResult with type AssertionPayloadResult', () => {
+        const rule = RulesBuilder.create()
+            .setName('R001')
             .setContext(Policy.name)
             .setTargetPath(Policy.fields.state.name)
-            .setPayload(PayloadBuilder.asserts().that("false"))
-            .build();
+            .setPayload(PayloadBuilder.asserts().that('false'))
+            .build()
         const result = handler.executePayload(
             rule.payload as Payloads.Validation.AssertionPayload,
             rule,
             dataContext,
-            session);
-        expect(payloadResultTypeChecker.isAssertion(result)).toBeTruthy();
-    });
-    it("should execute payload", () => {
-        const rule = RulesBuilder.create().setName("R001")
+            session,
+        )
+        expect(payloadResultTypeChecker.isAssertion(result)).toBeTruthy()
+    })
+    it('should execute payload', () => {
+        const rule = RulesBuilder.create()
+            .setName('R001')
             .setContext(Policy.name)
             .setTargetPath(Policy.fields.state.name)
-            .setPayload(PayloadBuilder.asserts().that("__dataObject__.state != null", "assertion failed"))
-            .build();
+            .setPayload(PayloadBuilder.asserts().that('__dataObject__.state != null', 'assertion failed'))
+            .build()
         const result = handler.executePayload(
             rule.payload as Payloads.Validation.AssertionPayload,
             rule,
             dataContext,
-            session) as AssertionPayloadResult;
-        expect(result.message!.errorMessage).toBe("assertion failed");
-        expect(result.success).toBeFalsy();
-    });
-    it("should execute payload with no err message and return false", () => {
-        const ruleNoError = RulesBuilder.create().setName("R001")
+            session,
+        ) as AssertionPayloadResult
+        expect(result.message?.errorMessage).toBe('assertion failed')
+        expect(result.success).toBeFalsy()
+    })
+    it('should execute payload with no err message and return false', () => {
+        const ruleNoError = RulesBuilder.create()
+            .setName('R001')
             .setContext(Policy.name)
             .setTargetPath(Policy.fields.state.name)
-            .setPayload(PayloadBuilder.asserts().that("false", "message"))
-            .build();
+            .setPayload(PayloadBuilder.asserts().that('false', 'message'))
+            .build()
         const result = handler.executePayload(
             ruleNoError.payload as Payloads.Validation.AssertionPayload,
             ruleNoError,
             dataContext,
-            session) as AssertionPayloadResult;
-        expect(result.message!.errorMessage).toBe("message");
-        expect(result.success).toBeFalsy();
-    });
-});
+            session,
+        ) as AssertionPayloadResult
+        expect(result.message?.errorMessage).toBe('message')
+        expect(result.success).toBeFalsy()
+    })
+})

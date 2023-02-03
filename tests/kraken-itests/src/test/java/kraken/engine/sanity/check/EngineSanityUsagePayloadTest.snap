@@ -26,7 +26,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteOnUnknownTy
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     }
@@ -57,6 +58,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -64,7 +66,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -89,6 +92,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -96,7 +100,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -121,6 +126,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -128,7 +134,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -153,6 +160,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -160,7 +168,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -185,6 +194,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -192,7 +202,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -217,6 +228,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -224,7 +236,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -249,6 +262,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -256,7 +270,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -281,6 +296,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -288,7 +304,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -313,6 +330,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -320,7 +338,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -345,6 +364,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -352,7 +372,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -377,6 +398,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "Field is required",
             "templateVariables": [],
+            "messageTemplate": "Field is required",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -384,7 +406,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -409,6 +432,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -416,7 +440,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -441,6 +466,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -448,7 +474,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -473,6 +500,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -480,7 +508,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -505,6 +534,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -512,7 +542,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -537,6 +568,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -544,7 +576,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -569,6 +602,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -576,7 +610,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -601,6 +636,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -608,7 +644,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -633,6 +670,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -640,7 +678,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -665,6 +704,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -672,7 +712,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -697,6 +738,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -704,7 +746,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     }
@@ -735,6 +778,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -742,7 +786,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -767,6 +812,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -774,7 +820,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -799,6 +846,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -806,7 +854,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -831,6 +880,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -838,7 +888,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -863,6 +914,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -870,7 +922,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -895,6 +948,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -902,7 +956,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -927,6 +982,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -934,7 +990,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -959,6 +1016,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -966,7 +1024,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -991,6 +1050,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -998,7 +1058,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1023,6 +1084,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1030,7 +1092,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1055,6 +1118,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1062,7 +1126,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1087,6 +1152,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1094,7 +1160,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1119,6 +1186,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1126,7 +1194,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1151,6 +1220,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1158,7 +1228,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1183,6 +1254,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1190,7 +1262,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1215,6 +1288,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "Field is required",
             "templateVariables": [],
+            "messageTemplate": "Field is required",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1222,7 +1296,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1247,6 +1322,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1254,7 +1330,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1279,6 +1356,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1286,7 +1364,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1311,6 +1390,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1318,7 +1398,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1343,6 +1424,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1350,7 +1432,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1375,6 +1458,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1382,7 +1466,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1407,6 +1492,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1414,7 +1500,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1439,6 +1526,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1446,7 +1534,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1471,6 +1560,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1478,7 +1568,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1503,6 +1594,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1510,7 +1602,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1535,6 +1628,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1542,7 +1636,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     }
@@ -1573,6 +1668,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "Field must be empty",
             "templateVariables": [],
+            "messageTemplate": "Field must be empty",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1580,7 +1676,8 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     }

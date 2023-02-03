@@ -15,13 +15,13 @@
  */
 package kraken.model.project;
 
+import java.util.Collection;
+
 import kraken.annotations.API;
 import kraken.model.dsl.read.DSLReader;
 import kraken.model.project.builder.ResourceKrakenProjectBuilder;
 import kraken.model.project.validator.KrakenProjectValidationService;
 import kraken.model.resource.Resource;
-
-import java.util.Collection;
 
 /**
  * API for retrieving {@code KrakenProjectFactory} instances.

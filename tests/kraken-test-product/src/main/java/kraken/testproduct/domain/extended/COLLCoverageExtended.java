@@ -22,30 +22,20 @@ import java.time.LocalDate;
 
 public class COLLCoverageExtended extends COLLCoverage {
 
-    private LocalDate effectiveDate;
-
-    private LocalDate expirationDate;
-
     public COLLCoverageExtended() {
     }
 
-    public COLLCoverageExtended(String code, BigDecimal limitAmount, BigDecimal deductibleAmount, LocalDate effectiveDate, LocalDate expirationDate) {
+    public COLLCoverageExtended(BigDecimal limitAmount) {
+        super(limitAmount);
+    }
+
+    public COLLCoverageExtended(String code, BigDecimal limitAmount, BigDecimal deductibleAmount,
+                                LocalDate effectiveDate,
+                                LocalDate expirationDate) {
         super(code, limitAmount, deductibleAmount, effectiveDate, expirationDate);
     }
 
-    public LocalDate getEffectiveDate() {
-        return effectiveDate;
-    }
-
-    public void setEffectiveDate(LocalDate effectiveDate) {
-        this.effectiveDate = effectiveDate;
-    }
-
-    public LocalDate getExpirationDate() {
-        return expirationDate;
-    }
-
-    public void setExpirationDate(LocalDate expirationDate) {
-        this.expirationDate = expirationDate;
+    public COLLCoverageExtended(LocalDate effectiveDate, LocalDate expirationDate) {
+        super(effectiveDate, expirationDate);
     }
 }

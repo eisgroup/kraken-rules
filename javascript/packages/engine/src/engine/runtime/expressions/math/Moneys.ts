@@ -14,13 +14,18 @@
  *  limitations under the License.
  */
 
-export const Moneys = {
-    isMoney
-};
+import { Contexts } from 'kraken-model'
 
-function isMoney(value: any): boolean {
-    return typeof value === "object"
-        && Object.prototype.hasOwnProperty.call(value, "amount")
-        && Object.prototype.hasOwnProperty.call(value, "currency")
-        && Object.getOwnPropertyNames(value).length === 2;
+export const Moneys = {
+    isMoney,
+}
+
+function isMoney(value: unknown): value is Contexts.MoneyType {
+    return (
+        value != undefined &&
+        typeof value === 'object' &&
+        Object.prototype.hasOwnProperty.call(value, 'amount') &&
+        Object.prototype.hasOwnProperty.call(value, 'currency') &&
+        Object.getOwnPropertyNames(value).length === 2
+    )
 }

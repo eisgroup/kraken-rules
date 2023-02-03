@@ -30,14 +30,23 @@ public class DSLContext {
 
     private boolean root;
 
+    private boolean system;
+
     private Collection<String> inheritedContexts;
 
     private Collection<DSLContextField> fields;
 
     private Collection<DSLContextChild> children;
 
-    public DSLContext(String name, boolean strict, boolean root, Collection<String> inheritedContexts, Collection<DSLContextField> fields, Collection<DSLContextChild> children) {
+    public DSLContext(String name,
+                      boolean strict,
+                      boolean root,
+                      boolean system,
+                      Collection<String> inheritedContexts,
+                      Collection<DSLContextField> fields,
+                      Collection<DSLContextChild> children) {
         this.name = Objects.requireNonNull(name);
+        this.system = system;
         this.strict = strict;
         this.root = root;
         this.inheritedContexts = Objects.requireNonNull(inheritedContexts);
@@ -68,4 +77,9 @@ public class DSLContext {
     public boolean isRoot() {
         return root;
     }
+
+    public boolean isSystem() {
+        return system;
+    }
+    
 }

@@ -27,17 +27,9 @@ import kraken.runtime.model.rule.payload.validation.SizePayload;
 @API
 public class SizePayloadResult extends ValidationPayloadResult {
 
-    private int size;
+    private final int size;
 
-    private SizeOrientation sizeOrientation;
-
-    /**
-     * @deprecated use {@link #SizePayloadResult(Boolean, SizePayload, List)} instead.
-     */
-    @Deprecated(since = "1.14.0", forRemoval = true)
-    public SizePayloadResult(Boolean success, SizePayload payload) {
-        this(success, payload, List.of());
-    }
+    private final SizeOrientation sizeOrientation;
 
     public SizePayloadResult(Boolean success, SizePayload payload, List<String> templateVariables) {
         super(success, payload, templateVariables);

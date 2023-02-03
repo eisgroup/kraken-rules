@@ -9,8 +9,8 @@ EntryPoint "Expressions_typeof" {
 }
 
 Rule "Expressions_instanceof_secretLimitAmount" On Policy.state {
-    When some anubis in Vehicle[*].anubisCoverages satisfies anubis typeof AnubisSecretCoverage
-    Assert Sum(for secretAnubis in Vehicle[*].anubisCoverages[this instanceof AnubisSecretCoverage] return ((AnubisSecretCoverage) secretAnubis).secretLimitAmount) == 330
+    When some anubis in Vehicle.anubisCoverages satisfies anubis typeof AnubisSecretCoverage
+    Assert Sum(for secretAnubis in Vehicle.anubisCoverages[this instanceof AnubisSecretCoverage] return secretAnubis.secretLimitAmount) == 330
     Error "Expressions_instanceof_secretLimitAmount_code" : "Sum of secretLimitAmount must be 330"
 }
 

@@ -14,4 +14,4 @@
  *  limitations under the License.
  */
 
-export type PathToNode = string[];
+export type PathToNode = string[]

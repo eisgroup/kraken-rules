@@ -14,64 +14,74 @@
  *  limitations under the License.
  */
 
-import { ContextDataExtractorImpl } from "../../../src/engine/contexts/data/extraction/ContextDataExtractorImpl";
-import { mock } from "../../mock";
-import { ExtractedChildDataContextBuilder } from "../../../src/engine/contexts/data/ExtractedChildDataContextBuilder";
-import { TestProduct } from "kraken-test-product";
+import { ContextDataExtractorImpl } from '../../../src/engine/contexts/data/extraction/ContextDataExtractorImpl'
+import { mock } from '../../mock'
+import { ExtractedChildDataContextBuilder } from '../../../src/engine/contexts/data/ExtractedChildDataContextBuilder'
+import { TestProduct } from 'kraken-test-product'
 
-const extractor: ContextDataExtractorImpl = mock.contextDataExtractor;
-const { Policy, DriverInfo, Party, PartyRole } = mock.modelTreeJson.contexts;
+const extractor: ContextDataExtractorImpl = mock.contextDataExtractor
+const { Policy, DriverInfo, Party, PartyRole, CreditCardInfo } = mock.modelTreeJson.contexts
 
-describe("ContextDataExtractor", () => {
-    it("should extract root context by name from object", () => {
-        const contexts = extractor.extractByName(Policy.name, mock.data.dataContextEmpty());
-        expect(contexts[0].contextName).toMatch(Policy.name);
-        expect(contexts).toHaveLength(1);
-    });
-    it("should extract in array extended context", () => {
-        const dc = mock.data.dataContextEmpty();
-        const contexts = extractor.extractByName(PartyRole.name, dc);
-        expect(contexts).toHaveLength(1);
-        expect(contexts[0].contextName).toMatch(PartyRole.name);
-    });
-    it("should extract address context with restriction", () => {
+describe('ContextDataExtractor', () => {
+    it('should extract root context by name from object', () => {
+        const contexts = extractor.extractByName(Policy.name, mock.data.dataContextEmpty())
+        expect(contexts[0].contextName).toMatch(Policy.name)
+        expect(contexts).toHaveLength(1)
+    })
+    it('should extract in array extended context', () => {
+        const dc = mock.data.dataContextEmpty()
+        const contexts = extractor.extractByName(PartyRole.name, dc)
+        expect(contexts).toHaveLength(1)
+        expect(contexts[0].contextName).toMatch(PartyRole.name)
+    })
+    it('should extract address context with restriction', () => {
         const ex = new ContextDataExtractorImpl(
             mock.modelTree,
-            new ExtractedChildDataContextBuilder(mock.contextBuilder, mock.evaluator)
-        );
-        const dataContext = mock.data.dataContextEmpty();
-        const policy = dataContext.dataObject as TestProduct.kraken.testproduct.domain.Policy;
-        policy.parties!.push({
+            new ExtractedChildDataContextBuilder(mock.contextBuilder, mock.evaluator),
+        )
+        const dataContext = mock.data.dataContextEmpty()
+        const policy = dataContext.dataObject as TestProduct.kraken.testproduct.domain.Policy
+        policy.parties?.push({
             cd: Party.name,
-            id: "newPartyId",
+            id: 'newPartyId',
             driverInfo: {
-                id: "newPartyId-driverInfo",
-                cd: DriverInfo.name
-            }
-        });
-        const contexts = ex.extractByName(Party.name, dataContext);
-        expect(contexts).toHaveLength(2);
-        const restriction = contexts.find(dc => dc.contextId === "newPartyId");
-        expect(restriction).toBeDefined();
+                id: 'newPartyId-driverInfo',
+                cd: DriverInfo.name,
+            },
+        })
+        const contexts = ex.extractByName(Party.name, dataContext)
+        expect(contexts).toHaveLength(2)
+        const restriction = contexts.find(dc => dc.contextId === 'newPartyId')
+        expect(restriction).toBeDefined()
 
-        const infos = ex.extractByName(DriverInfo.name, dataContext, restriction);
-        expect(infos).toHaveLength(1);
-        expect(infos[0].contextId).toBe("newPartyId-driverInfo");
-    });
+        const infos = ex.extractByName(DriverInfo.name, dataContext, restriction)
+        expect(infos).toHaveLength(1)
+        expect(infos[0].contextId).toBe('newPartyId-driverInfo')
+    })
 
-    it("should throw when childContextName is undefined", () => {
-        // @ts-expect-error
-        expect(() => extractor.extractByName(undefined, mock.data.dataContextEmptyExtended()))
-            .toThrow("childContextName");
-        expect(() => extractor.extractByName("", mock.data.dataContextEmptyExtended())).toThrow("childContextName");
-    });
+    it('should throw when childContextName is undefined', () => {
+        // @ts-expect-error testing negative case
+        expect(() => extractor.extractByName(undefined, mock.data.dataContextEmptyExtended())).toThrow(
+            'childContextName',
+        )
+        expect(() => extractor.extractByName('', mock.data.dataContextEmptyExtended())).toThrow('childContextName')
+    })
 
-    it("should throw when root is undefined", () => {
-        // @ts-expect-error
-        expect(() => extractor.extractByName("Person", undefined)).toThrow("root");
-    });
+    it('should throw when root is undefined', () => {
+        // @ts-expect-error testing negative case
+        expect(() => extractor.extractByName('Person', undefined)).toThrow('root')
+    })
 
-    it("should throw when invalid child name provided", () => {
-        expect(() => extractor.extractByName("NotValid", mock.data.dataContextEmptyExtended())).toThrow("NotValid");
-    });
-});
+    it('should throw when invalid child name provided', () => {
+        expect(() => extractor.extractByName('NotValid', mock.data.dataContextEmptyExtended())).toThrow('NotValid')
+    })
+    it('should extract no context if navigation expression returns error', () => {
+        const dataContext = mock.data.dataContextExplicit({
+            id: 'Policy-0',
+            cd: 'Policy',
+        })
+
+        const contexts = extractor.extractByName(CreditCardInfo.name, dataContext)
+        expect(contexts).toHaveLength(0)
+    })
+})

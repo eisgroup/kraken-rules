@@ -15,7 +15,7 @@
  */
 package kraken.engine.sanity.check;
 
-import kraken.el.functions.DateFunctions;
+import kraken.el.functionregistry.functions.DateFunctions;
 import kraken.runtime.KrakenRuntimeException;
 import kraken.runtime.engine.EntryPointResult;
 import kraken.testproduct.domain.AccessTrackInfo;
@@ -30,14 +30,14 @@ import kraken.utils.MockAutoPolicyBuilder;
 import org.junit.Test;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import static kraken.testing.matchers.KrakenMatchers.hasValueChangeEvents;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertThrows;
 
 public final class EngineSanityDefaultValuePayloadTest extends SanityEngineBaseTest {
 
@@ -82,12 +82,12 @@ public final class EngineSanityDefaultValuePayloadTest extends SanityEngineBaseT
         assertThat(result, hasValueChangeEvents(13));
     }
 
-    @Test(expected = KrakenRuntimeException.class)
+    @Test
     public void shouldFailWhenTwoRulesEvaluatedOnSameField() {
         // second default rule is activated when policyNumber is '666'
         Policy data = new Policy();
         data.setPolicyNumber("666");
-        engine.evaluate(data, "InitAutoPolicy");
+        assertThrows(KrakenRuntimeException.class, () -> engine.evaluate(data, "InitAutoPolicy"));
     }
 
     @Test

@@ -106,7 +106,7 @@ import kraken.model.validation.UsagePayload;
  *
  * @author mulevicius
  */
-public class RulePayloadCompatibilityValidator {
+public class RulePayloadCompatibilityValidator implements RuleValidator {
 
     private static final List<PayloadCompatibility> payloadCompatibility = List.of(
             forPayload(DefaultValuePayload.class, f -> isPrimitiveType(f.getFieldType()) && f.getCardinality() == SINGLE),
@@ -136,6 +136,7 @@ public class RulePayloadCompatibilityValidator {
         this.krakenProject = krakenProject;
     }
 
+    @Override
     public void validate(Rule rule, ValidationSession session) {
         ContextDefinition contextDefinition = krakenProject.getContextProjection(rule.getContext());
         if(!contextDefinition.isStrict()) {
@@ -149,7 +150,7 @@ public class RulePayloadCompatibilityValidator {
                 .allMatch(p -> p.isCompatible(contextField));
         if(!isCompatible) {
             String messageFormat = "%s cannot be applied on %s.%s because type '%s' and cardinality '%s' " +
-                    "is incompatible with the payload type ";
+                    "is incompatible with the payload type.";
             String message = String.format(
                     messageFormat,
                     rule.getPayload().getPayloadType().getTypeName(),
@@ -166,7 +167,7 @@ public class RulePayloadCompatibilityValidator {
             .allMatch(p -> p.isWarningCompatible(contextField));
         if(!isWarningCompatible) {
             String messageFormat = "%s cannot be applied on %s.%s because type '%s' and cardinality '%s' " +
-                "is incompatible with the payload type. In the future, such configuration will not be supported. ";
+                "is incompatible with the payload type. In the future, such configuration will not be supported.";
             String message = String.format(
                 messageFormat,
                 rule.getPayload().getPayloadType().getTypeName(),
@@ -177,6 +178,16 @@ public class RulePayloadCompatibilityValidator {
             );
             session.add(new ValidationMessage(rule, message, Severity.WARNING));
         }
+    }
+
+    @Override
+    public boolean canValidate(Rule rule) {
+        return rule.getName() != null
+            && rule.getContext() != null
+            && krakenProject.getContextDefinitions().containsKey(rule.getContext())
+            && rule.getTargetPath() != null
+            && krakenProject.getContextProjection(rule.getContext()).getContextFields().containsKey(rule.getTargetPath())
+            && rule.getPayload() != null;
     }
 
     static class PayloadCompatibility {

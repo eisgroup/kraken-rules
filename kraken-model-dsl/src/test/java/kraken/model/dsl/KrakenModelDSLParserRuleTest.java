@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import kraken.model.Rule;
 import kraken.model.derive.DefaultValuePayload;
 import kraken.model.derive.DefaultingType;
+import kraken.model.dsl.error.LineParseCancellationException;
 import kraken.model.resource.Resource;
 import kraken.model.state.AccessibilityPayload;
 import kraken.model.validation.AssertionPayload;
@@ -31,8 +32,6 @@ import kraken.model.validation.SizeRangePayload;
 import kraken.model.validation.UsagePayload;
 import kraken.model.validation.UsageType;
 import kraken.model.validation.ValidationSeverity;
-import org.hamcrest.core.IsEqual;
-import org.hamcrest.core.IsNull;
 import org.junit.Test;
 
 import static kraken.model.dsl.KrakenDSLModelParser.parseResource;
@@ -40,7 +39,8 @@ import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.core.IsNull.nullValue;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertThrows;
 
 /**
  * Rule parsing test for {@link KrakenDSLModelParser} that verifies if {@link Rule} are parsed correctly
@@ -62,6 +62,8 @@ public class KrakenModelDSLParserRuleTest {
         assertThat(rule.getCondition(), nullValue());
         assertThat(rule.getPayload(), instanceOf(AccessibilityPayload.class));
         assertThat(rule.getRuleVariationId(), notNullValue());
+        assertThat(rule.getPriority(), nullValue());
+        assertThat(rule.getMetadata().getUri(), equalTo(model.getUri()));
     }
 
     @Test
@@ -84,6 +86,48 @@ public class KrakenModelDSLParserRuleTest {
 
         Rule rule = model.getRules().get(0);
         assertThat(rule.getDescription(), equalTo("Rule description"));
+    }
+
+    @Test
+    public void shouldParseRuleWithDescriptionAndPriority() {
+        Resource model = parseResource("Rule 'rule1' On Coverage.limitAmount "
+            + "{ Description 'Rule description' Priority 1 Default To 100 }");
+
+        Rule rule = model.getRules().get(0);
+        assertThat(rule.getDescription(), equalTo("Rule description"));
+        assertThat(rule.getPriority(), equalTo(1));
+    }
+
+    @Test
+    public void shouldParseRuleWithMinPriority() {
+        Resource model = parseResource("Rule 'rule1' On Coverage.limitAmount { Priority MIN Default To 100 }");
+
+        Rule rule = model.getRules().get(0);
+        assertThat(rule.getPriority(), equalTo(Integer.MIN_VALUE));
+    }
+
+    @Test
+    public void shouldParseRuleWithMaxPriority() {
+        Resource model = parseResource("Rule 'rule1' On Coverage.limitAmount { Priority MAX Default To 100 }");
+
+        Rule rule = model.getRules().get(0);
+        assertThat(rule.getPriority(), equalTo(Integer.MAX_VALUE));
+    }
+
+    @Test
+    public void shouldParseRuleWithPositivePriority() {
+        Resource model = parseResource("Rule 'rule1' On Coverage.limitAmount { Priority 10 Default To 100 }");
+
+        Rule rule = model.getRules().get(0);
+        assertThat(rule.getPriority(), equalTo(10));
+    }
+
+    @Test
+    public void shouldParseRuleWithNegativePriority() {
+        Resource model = parseResource("Rule 'rule1' On Coverage.limitAmount { Priority -10 Default To 100 }");
+
+        Rule rule = model.getRules().get(0);
+        assertThat(rule.getPriority(), equalTo(-10));
     }
 
     @Test
@@ -196,6 +240,12 @@ public class KrakenModelDSLParserRuleTest {
         assertThat(rule.getPayload(), instanceOf(SizePayload.class));
         assertThat(((SizePayload) rule.getPayload()).getOrientation(), is(SizeOrientation.MAX));
         assertThat(((SizePayload) rule.getPayload()).getSize(), is(1));
+    }
+
+    @Test
+    public void shouldThrowIfDslIsNotParseable() {
+        assertThrows(LineParseCancellationException.class,
+                () -> parseResource("Rule 'rule1' On Coverage.limits { Assert Size Max 1"));
     }
 
     @Test

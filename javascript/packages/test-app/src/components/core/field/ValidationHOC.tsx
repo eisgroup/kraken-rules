@@ -14,125 +14,123 @@
  *  limitations under the License.
  */
 
-import * as React from "react";
-import { FieldProps } from "./FieldComponent";
-import { FieldModelInfo } from "./FieldModelInfo";
+import * as React from 'react'
+import { FieldProps } from './FieldComponent'
+import { FieldModelInfo } from './FieldModelInfo'
 
-import { Alert } from "antd";
-import "antd/lib/alert/style";
-import "antd/lib/col/style";
-import "antd/lib/icon/style";
-import "antd/lib/tag/style";
-import { SingleFieldProps, InputValue } from "./SingleField";
-import { FieldStructure } from "./FieldStructure";
-import { startCase } from "lodash";
-import { KRAKEN_MODEL_TREE_POLICY } from "kraken-test-product-model-tree";
+import { Alert } from 'antd'
+import 'antd/lib/alert/style'
+import 'antd/lib/col/style'
+import 'antd/lib/icon/style'
+import 'antd/lib/tag/style'
+import { SingleFieldProps, InputValue } from './SingleField'
+import { FieldStructure } from './FieldStructure'
+import { startCase } from 'lodash'
+import { KRAKEN_MODEL_TREE_POLICY } from 'kraken-test-product-model-tree'
 
 interface State {
-    field: Field;
+    field: Field
 }
 
 interface Field {
-    fieldType: string;
-    cardinality: string;
+    fieldType: string
+    cardinality: string
 }
 
 function resolveFieldId(contextName: string, id: string, modelFieldName: string): string {
-    return `${contextName}:${id}:${modelFieldName}`;
+    return `${contextName}:${id}:${modelFieldName}`
 }
 
-// tslint:disable-next-line:typedef
 export function withValidation(Node: React.ComponentType<FieldProps>) {
     return class WithValidation extends React.PureComponent<SingleFieldProps, State> {
         constructor(props: SingleFieldProps) {
-            super(props);
+            super(props)
             this.state = {
                 field: {
-                    fieldType: "not found",
-                    cardinality: "not found"
-                }
-            };
+                    fieldType: 'not found',
+                    cardinality: 'not found',
+                },
+            }
         }
 
         componentDidMount(): void {
-            const field = KRAKEN_MODEL_TREE_POLICY.contexts[this.props.contextName].fields[this.props.modelFieldName];
-            this.setState({ field: { cardinality: field.cardinality, fieldType: field.fieldType } });
+            const field = KRAKEN_MODEL_TREE_POLICY.contexts[this.props.contextName].fields[this.props.modelFieldName]
+            this.setState({ field: { cardinality: field.cardinality, fieldType: field.fieldType } })
         }
 
         isApplicable = (): boolean => {
-            const { metadata, contextName, id, modelFieldName } = this.props;
-            const key = resolveFieldId(contextName, id, modelFieldName);
+            const { metadata, contextName, id, modelFieldName } = this.props
+            const key = resolveFieldId(contextName, id, modelFieldName)
             if (metadata && metadata[key]) {
-                return !metadata[key].isApplicable;
+                return !metadata[key].isApplicable
             }
-            return false;
+            return false
         }
 
         inputStyle = () => {
-            const { metadata, contextName, id, modelFieldName } = this.props;
-            const key = resolveFieldId(contextName, id, modelFieldName);
+            const { metadata, contextName, id, modelFieldName } = this.props
+            const key = resolveFieldId(contextName, id, modelFieldName)
             if (metadata && metadata[key]) {
-                const border = metadata[key].errMessage ? "2px solid red" : "";
-                return { border };
+                const border = metadata[key].errMessage ? '2px solid red' : ''
+                return { border }
             }
-            return { display: "table" };
+            return { display: 'table' }
         }
 
         isVisible = (): boolean => {
-            const { metadata, contextName, id, modelFieldName } = this.props;
-            const key = resolveFieldId(contextName, id, modelFieldName);
+            const { metadata, contextName, id, modelFieldName } = this.props
+            const key = resolveFieldId(contextName, id, modelFieldName)
             if (metadata && metadata[key]) {
-                return metadata[key].isVisible;
+                return metadata[key].isVisible
             }
-            return true;
+            return true
         }
 
         renderError = (): JSX.Element => {
-            const { metadata, contextName, id, modelFieldName } = this.props;
-            const key = resolveFieldId(contextName, id, modelFieldName);
+            const { metadata, contextName, id, modelFieldName } = this.props
+            const key = resolveFieldId(contextName, id, modelFieldName)
             if (metadata && metadata[key] && metadata[key].errMessage) {
-                return <Alert
-                    className="input-width"
-                    message={metadata[key].errMessage}
-                    type="error"
-                    showIcon={true}
-                />;
+                return <Alert className='input-width' message={metadata[key].errMessage} type='error' showIcon={true} />
             }
 
-            return null;
+            return null
         }
 
-        modelInfo = () => <FieldModelInfo
-            id={this.props.id}
-            contextName={this.props.contextName}
-            fieldInfo={this.state.field}
-            fieldName={this.props.modelFieldName}
-        />
+        modelInfo = () => (
+            <FieldModelInfo
+                id={this.props.id}
+                contextName={this.props.contextName}
+                fieldInfo={this.state.field}
+                fieldName={this.props.modelFieldName}
+            />
+        )
 
-        curryInput = (props: { value: InputValue, onChange: (e: {}) => void }) => this.props.renderInput({
-            disabled: this.isApplicable(),
-            style: this.inputStyle(),
-            value: props.value,
-            onChange: props.onChange,
-            className: "input-width",
-            selections: this.props.selections
-        })
+        curryInput = (props: { value: InputValue; onChange: (_e: unknown) => void }) =>
+            this.props.renderInput({
+                disabled: this.isApplicable(),
+                style: this.inputStyle(),
+                value: props.value,
+                onChange: props.onChange,
+                className: 'input-width',
+                selections: this.props.selections,
+            })
 
         render(): JSX.Element {
-
-            const { info } = this.props;
-            const isVisible = this.isVisible();
-            return <FieldStructure isVisible={isVisible}>
-                <Node
-                    onChange={this.props.onChange}
-                    value={this.props.value}
-                    renderInput={this.curryInput}
-                    error={this.renderError}
-                    fieldInfo={this.modelInfo}
-                    info={info}
-                    label={startCase(this.props.modelFieldName)}
-                />
-            </FieldStructure>;
+            const { info } = this.props
+            const isVisible = this.isVisible()
+            return (
+                <FieldStructure isVisible={isVisible}>
+                    <Node
+                        onChange={this.props.onChange}
+                        value={this.props.value}
+                        renderInput={this.curryInput}
+                        error={this.renderError}
+                        fieldInfo={this.modelInfo}
+                        info={info}
+                        label={startCase(this.props.modelFieldName)}
+                    />
+                </FieldStructure>
+            )
         }
-    };
+    }
 }

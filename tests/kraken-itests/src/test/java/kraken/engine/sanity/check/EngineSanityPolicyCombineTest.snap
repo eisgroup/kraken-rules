@@ -21,6 +21,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -28,7 +29,8 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         },
         {
           "ruleInfo": {
@@ -43,6 +45,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -50,7 +53,8 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -74,6 +78,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "Value didn\u0027t match asserton: doNotSolicit \u003d true or doNotSolicit \u003d false",
             "templateVariables": [],
+            "messageTemplate": "Value didn\u0027\u0027t match asserton: doNotSolicit \u003d true or doNotSolicit \u003d false",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -81,7 +86,8 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         },
         {
           "ruleInfo": {
@@ -95,6 +101,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "Value didn\u0027t match asserton: doNotSolicit \u003d true or doNotSolicit \u003d false",
             "templateVariables": [],
+            "messageTemplate": "Value didn\u0027\u0027t match asserton: doNotSolicit \u003d true or doNotSolicit \u003d false",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -102,7 +109,8 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -127,6 +135,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -134,7 +143,8 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         },
         {
           "ruleInfo": {
@@ -149,6 +159,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -156,7 +167,8 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -181,6 +193,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -188,7 +201,8 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -212,6 +226,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "Value didn\u0027t match asserton: doNotSolicit \u003d true or doNotSolicit \u003d false",
             "templateVariables": [],
+            "messageTemplate": "Value didn\u0027\u0027t match asserton: doNotSolicit \u003d true or doNotSolicit \u003d false",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -219,7 +234,8 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -244,6 +260,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -251,7 +268,8 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -276,6 +294,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -283,7 +302,8 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -308,6 +328,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -315,7 +336,8 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -340,6 +362,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -347,7 +370,8 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -371,6 +395,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "Value didn\u0027t match asserton: firstName !\u003d lastName",
             "templateVariables": [],
+            "messageTemplate": "Value didn\u0027\u0027t match asserton: firstName !\u003d lastName",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -378,7 +403,8 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -403,6 +429,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -410,7 +437,8 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -435,6 +463,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -442,7 +471,8 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -467,6 +497,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -474,7 +505,8 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -499,6 +531,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -506,7 +539,8 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -531,6 +565,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -538,7 +573,8 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -563,6 +599,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -570,7 +607,8 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -595,6 +633,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "Field is required",
             "templateVariables": [],
+            "messageTemplate": "Field is required",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -602,7 +641,8 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -627,6 +667,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -634,7 +675,8 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -659,6 +701,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -666,7 +709,8 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -690,6 +734,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "Value didn\u0027t match asserton: termNo \u003e\u003d 0 and termNo \u003c 100",
             "templateVariables": [],
+            "messageTemplate": "Value didn\u0027\u0027t match asserton: termNo \u003e\u003d 0 and termNo \u003c 100",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -697,7 +742,8 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         },
         {
           "ruleInfo": {
@@ -712,6 +758,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -719,7 +766,8 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -744,6 +792,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -751,7 +800,8 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -776,6 +826,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -783,7 +834,8 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -808,6 +860,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -815,7 +868,8 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -840,6 +894,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -847,7 +902,8 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -872,6 +928,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -879,7 +936,8 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -903,6 +961,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "Value didn\u0027t match asserton: included \u003d true or included \u003d false",
             "templateVariables": [],
+            "messageTemplate": "Value didn\u0027\u0027t match asserton: included \u003d true or included \u003d false",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -910,7 +969,8 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -935,6 +995,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -942,7 +1003,8 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -967,6 +1029,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -974,7 +1037,8 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     }

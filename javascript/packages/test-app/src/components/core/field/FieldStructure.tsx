@@ -14,20 +14,18 @@
  *  limitations under the License.
  */
 
-import * as React from "react";
+import * as React from 'react'
 
-import { Col } from "antd";
-import "antd/lib/col/style";
+import { Col } from 'antd'
+import 'antd/lib/col/style'
 
 export interface FieldStructureProps {
-    isVisible: boolean;
+    isVisible: boolean
 }
 
-export const FieldStructure = (props: React.Props<FieldStructureProps> & FieldStructureProps) => props.isVisible
-    ? (
+export const FieldStructure = (props: React.Props<FieldStructureProps> & FieldStructureProps) =>
+    props.isVisible ? (
         <Col xs={12} sm={12} md={8} lg={6} xl={4}>
             {props.children}
         </Col>
-    )
-
-    : null;
+    ) : null

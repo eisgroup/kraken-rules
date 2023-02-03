@@ -15,9 +15,10 @@
  */
 package kraken.model.dsl.visitor;
 
-import java.util.Collections;
 import java.util.Map;
 
+import kraken.el.EvaluationContext;
+import kraken.el.Expression;
 import kraken.el.ExpressionLanguage;
 import kraken.el.KrakenKel;
 import kraken.el.TargetEnvironment;
@@ -33,6 +34,8 @@ import kraken.model.dsl.model.DSLMetadata;
  */
 public class DSLMetadataVisitor extends KrakenDSLBaseVisitor<DSLMetadata> {
 
+    private final EvaluationContext evaluationContext = new EvaluationContext();
+
     private final ExpressionLanguage expressionLanguage = KrakenKel.create(TargetEnvironment.JAVA);
 
     @Override
@@ -45,14 +48,14 @@ public class DSLMetadataVisitor extends KrakenDSLBaseVisitor<DSLMetadata> {
     }
 
     private String key(String expression) {
-        return String.valueOf(expressionLanguage.evaluate(translated(expression), null, Collections.emptyMap()));
+        return String.valueOf(expressionLanguage.evaluate(translated(expression), evaluationContext));
     }
 
     private Object value(String expression) {
-        return expressionLanguage.evaluate(translated(expression), null, Collections.emptyMap());
+        return expressionLanguage.evaluate(translated(expression), evaluationContext);
     }
 
-    private String translated(String expression) {
+    private Expression translated(String expression) {
         Ast ast = AstBuilder.from(expression, Scope.dynamic());
         return expressionLanguage.translate(ast);
     }

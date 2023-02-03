@@ -29,7 +29,7 @@ import java.util.Locale;
 
 /**
  * Used by {@link DSLModelConverter} to render/adapt {@link ContextNavigation}, {@link ContextField} and {@link Cardinality}
- * when converting {@link kraken.model.dsl.KrakenDSLModel} to Dsl <code>string</code>
+ * when converting {@link kraken.model.resource.Resource} to Dsl <code>string</code>
  *
  * @author avasiliauskas
  */

@@ -15,9 +15,8 @@
  */
 
 export function requireDefinedValue<T>(obj: T, errorMessage?: string): NonNullable<T> {
-    // tslint:disable-next-line
     if (obj == null) {
-        throw new Error(`Value cannot be null or undefined.\n${errorMessage || ""}`);
+        throw new Error(`Value cannot be null or undefined.\n${errorMessage || ''}`)
     }
-    return obj as NonNullable<T>;
+    return obj as NonNullable<T>
 }

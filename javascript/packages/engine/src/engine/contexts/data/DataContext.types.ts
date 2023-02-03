@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 EIS Ltd and/or one of its affiliates.
+ *  Copyright 2022 EIS Ltd and/or one of its affiliates.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,11 +14,18 @@
  *  limitations under the License.
  */
 
-import { Contexts } from "kraken-model";
-import { DataContext } from "./DataContext";
+/*
+ * Copyright © 2022 EIS Group and/or one of its affiliates. All rights reserved. Unpublished work under U.S.
+ * copyright laws.
+ * CONFIDENTIAL AND TRADE SECRET INFORMATION. No portion of this work may be copied, distributed, modified,
+ * or incorporated into any other media without EIS Group prior written consent.
+ */
+
+import { Contexts } from 'kraken-model'
+import { DataContext } from './DataContext'
 
 export namespace DataContextTypes {
-    export type ReferenceDataContextObject = Record<string, DataContext[]>;
-    export type ExternalReferences = Record<Contexts.Cardinality, ReferenceDataContextObject>;
-    export type ExternalObjectReferences = Record<string, object | object[] | undefined>;
+    export type ReferenceDataContextObject = Record<string, DataContext[]>
+    export type ExternalReferences = Record<Contexts.Cardinality, ReferenceDataContextObject>
+    export type ExternalObjectReferences = Record<string, object | object[] | undefined>
 }

@@ -22,7 +22,7 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.hamcrest.core.IsCollectionContaining.hasItems;
 import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.Map;
 import java.util.Set;
@@ -91,10 +91,12 @@ public class KrakenModelDSLParserEntryPointTest {
         EntryPoint ep1 = model.getEntryPoints().get(0);
         assertThat(ep1.getName(), equalTo("ep1"));
         assertThat(ep1.getRuleNames(), hasItems("rule1", "rule2"));
+        assertThat(ep1.getMetadata().getUri(), equalTo(model.getUri()));
 
         EntryPoint ep2 = model.getEntryPoints().get(1);
         assertThat(ep2.getName(), equalTo("ep2"));
         assertThat(ep2.getRuleNames(), hasItems("rule3"));
+        assertThat(ep2.getMetadata().getUri(), equalTo(model.getUri()));
     }
 
     @Test

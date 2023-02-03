@@ -1,8 +1,93 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Engine Sanity Length Payload Test should execute 'LengthAutoPolicy' entrypoint and reduce results: Results + reducer results 1`] = `
+exports[`Engine Sanity Length Payload Test should execute 'LengthAutoPolicy' entrypoint and reduce results 1`] = `
 Object {
-  "Field Metadata reduced results": Object {
+  "entryPointResults": Object {
+    "evaluationTimestamp": Any<Date>,
+    "results": Object {
+      "Party:15:relationToPrimaryInsured": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "15",
+          "contextName": "Party",
+          "fieldName": "relationToPrimaryInsured",
+          "fieldPath": "relationToPrimaryInsured",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "length": 20,
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "String contains more charactes than 20",
+                "templateVariables": Array [],
+              },
+              "success": true,
+              "type": 16,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Party",
+              "payloadtype": "LENGTH",
+              "ruleName": "R0149A",
+              "targetPath": "relationToPrimaryInsured",
+            },
+          },
+        ],
+      },
+      "Party:18:relationToPrimaryInsured": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "18",
+          "contextName": "Party",
+          "fieldName": "relationToPrimaryInsured",
+          "fieldPath": "relationToPrimaryInsured",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "length": 20,
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "String contains more charactes than 20",
+                "templateVariables": Array [],
+              },
+              "success": true,
+              "type": 16,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Party",
+              "payloadtype": "LENGTH",
+              "ruleName": "R0149A",
+              "targetPath": "relationToPrimaryInsured",
+            },
+          },
+        ],
+      },
+    },
+  },
+  "fieldResults": Object {
     "Party:15:relationToPrimaryInsured": Object {
       "fieldType": "STRING",
       "id": "Party:15:relationToPrimaryInsured",
@@ -72,12 +157,17 @@ Object {
       ],
     },
   },
-  "Raw results": Object {
+}
+`;
+
+exports[`Engine Sanity Length Payload Test should execute 'LengthAutoPolicy' entrypoint with empty data 1`] = `
+Object {
+  "entryPointResults": Object {
     "evaluationTimestamp": Any<Date>,
     "results": Object {
-      "Party:15:relationToPrimaryInsured": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "15",
+      "Party:1:relationToPrimaryInsured": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "1",
           "contextName": "Party",
           "fieldName": "relationToPrimaryInsured",
           "fieldPath": "relationToPrimaryInsured",
@@ -85,7 +175,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -106,7 +196,7 @@ Object {
               "type": 16,
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "Party",
               "payloadtype": "LENGTH",
               "ruleName": "R0149A",
@@ -115,9 +205,9 @@ Object {
           },
         ],
       },
-      "Party:18:relationToPrimaryInsured": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "18",
+      "Party:3:relationToPrimaryInsured": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "3",
           "contextName": "Party",
           "fieldName": "relationToPrimaryInsured",
           "fieldPath": "relationToPrimaryInsured",
@@ -125,7 +215,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -146,7 +236,7 @@ Object {
               "type": 16,
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "Party",
               "payloadtype": "LENGTH",
               "ruleName": "R0149A",
@@ -157,17 +247,7 @@ Object {
       },
     },
   },
-  "Validation results": Object {
-    "critical": Array [],
-    "info": Array [],
-    "warning": Array [],
-  },
-}
-`;
-
-exports[`Engine Sanity Length Payload Test should execute 'LengthAutoPolicy' entrypoint with empty data: Results + reducer results 1`] = `
-Object {
-  "Field Metadata reduced results": Object {
+  "fieldResults": Object {
     "Party:1:relationToPrimaryInsured": Object {
       "fieldType": "STRING",
       "id": "Party:1:relationToPrimaryInsured",
@@ -237,12 +317,17 @@ Object {
       ],
     },
   },
-  "Raw results": Object {
+}
+`;
+
+exports[`Engine Sanity Length Payload Test should execute 'LengthAutoPolicy' entrypoint with equal length data 1`] = `
+Object {
+  "entryPointResults": Object {
     "evaluationTimestamp": Any<Date>,
     "results": Object {
-      "Party:1:relationToPrimaryInsured": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "1",
+      "Party:15:relationToPrimaryInsured": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "15",
           "contextName": "Party",
           "fieldName": "relationToPrimaryInsured",
           "fieldPath": "relationToPrimaryInsured",
@@ -250,7 +335,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -271,7 +356,7 @@ Object {
               "type": 16,
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "Party",
               "payloadtype": "LENGTH",
               "ruleName": "R0149A",
@@ -280,9 +365,9 @@ Object {
           },
         ],
       },
-      "Party:3:relationToPrimaryInsured": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "3",
+      "Party:18:relationToPrimaryInsured": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "18",
           "contextName": "Party",
           "fieldName": "relationToPrimaryInsured",
           "fieldPath": "relationToPrimaryInsured",
@@ -290,7 +375,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -311,7 +396,7 @@ Object {
               "type": 16,
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "Party",
               "payloadtype": "LENGTH",
               "ruleName": "R0149A",
@@ -322,17 +407,7 @@ Object {
       },
     },
   },
-  "Validation results": Object {
-    "critical": Array [],
-    "info": Array [],
-    "warning": Array [],
-  },
-}
-`;
-
-exports[`Engine Sanity Length Payload Test should execute 'LengthAutoPolicy' entrypoint with equal length data: Results + reducer results 1`] = `
-Object {
-  "Field Metadata reduced results": Object {
+  "fieldResults": Object {
     "Party:15:relationToPrimaryInsured": Object {
       "fieldType": "STRING",
       "id": "Party:15:relationToPrimaryInsured",
@@ -402,12 +477,17 @@ Object {
       ],
     },
   },
-  "Raw results": Object {
+}
+`;
+
+exports[`Engine Sanity Length Payload Test should execute 'LengthAutoPolicy' entrypoint with not valid data 1`] = `
+Object {
+  "entryPointResults": Object {
     "evaluationTimestamp": Any<Date>,
     "results": Object {
-      "Party:15:relationToPrimaryInsured": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "15",
+      "Party:1:relationToPrimaryInsured": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "1",
           "contextName": "Party",
           "fieldName": "relationToPrimaryInsured",
           "fieldPath": "relationToPrimaryInsured",
@@ -415,7 +495,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -432,11 +512,11 @@ Object {
                 "errorMessage": "String contains more charactes than 20",
                 "templateVariables": Array [],
               },
-              "success": true,
+              "success": false,
               "type": 16,
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "Party",
               "payloadtype": "LENGTH",
               "ruleName": "R0149A",
@@ -445,9 +525,9 @@ Object {
           },
         ],
       },
-      "Party:18:relationToPrimaryInsured": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "18",
+      "Party:3:relationToPrimaryInsured": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "3",
           "contextName": "Party",
           "fieldName": "relationToPrimaryInsured",
           "fieldPath": "relationToPrimaryInsured",
@@ -455,7 +535,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -472,11 +552,11 @@ Object {
                 "errorMessage": "String contains more charactes than 20",
                 "templateVariables": Array [],
               },
-              "success": true,
+              "success": false,
               "type": 16,
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "Party",
               "payloadtype": "LENGTH",
               "ruleName": "R0149A",
@@ -487,17 +567,7 @@ Object {
       },
     },
   },
-  "Validation results": Object {
-    "critical": Array [],
-    "info": Array [],
-    "warning": Array [],
-  },
-}
-`;
-
-exports[`Engine Sanity Length Payload Test should execute 'LengthAutoPolicy' entrypoint with not valid data: Results + reducer results 1`] = `
-Object {
-  "Field Metadata reduced results": Object {
+  "fieldResults": Object {
     "Party:1:relationToPrimaryInsured": Object {
       "fieldType": "STRING",
       "id": "Party:1:relationToPrimaryInsured",
@@ -567,12 +637,17 @@ Object {
       ],
     },
   },
-  "Raw results": Object {
+}
+`;
+
+exports[`Engine Sanity Length Payload Test should execute 'LengthAutoPolicy' entrypoint with valid data 1`] = `
+Object {
+  "entryPointResults": Object {
     "evaluationTimestamp": Any<Date>,
     "results": Object {
-      "Party:1:relationToPrimaryInsured": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "1",
+      "Party:15:relationToPrimaryInsured": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "15",
           "contextName": "Party",
           "fieldName": "relationToPrimaryInsured",
           "fieldPath": "relationToPrimaryInsured",
@@ -580,7 +655,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -597,11 +672,11 @@ Object {
                 "errorMessage": "String contains more charactes than 20",
                 "templateVariables": Array [],
               },
-              "success": false,
+              "success": true,
               "type": 16,
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "Party",
               "payloadtype": "LENGTH",
               "ruleName": "R0149A",
@@ -610,9 +685,9 @@ Object {
           },
         ],
       },
-      "Party:3:relationToPrimaryInsured": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "3",
+      "Party:18:relationToPrimaryInsured": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "18",
           "contextName": "Party",
           "fieldName": "relationToPrimaryInsured",
           "fieldPath": "relationToPrimaryInsured",
@@ -620,7 +695,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -637,11 +712,11 @@ Object {
                 "errorMessage": "String contains more charactes than 20",
                 "templateVariables": Array [],
               },
-              "success": false,
+              "success": true,
               "type": 16,
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "Party",
               "payloadtype": "LENGTH",
               "ruleName": "R0149A",
@@ -652,40 +727,7 @@ Object {
       },
     },
   },
-  "Validation results": Object {
-    "critical": Array [
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "String contains more charactes than 20",
-        "messageCode": "code",
-        "ruleName": "R0149A",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "String contains more charactes than 20",
-        "messageCode": "code",
-        "ruleName": "R0149A",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-    ],
-    "info": Array [],
-    "warning": Array [],
-  },
-}
-`;
-
-exports[`Engine Sanity Length Payload Test should execute 'LengthAutoPolicy' entrypoint with valid data: Results + reducer results 1`] = `
-Object {
-  "Field Metadata reduced results": Object {
+  "fieldResults": Object {
     "Party:15:relationToPrimaryInsured": Object {
       "fieldType": "STRING",
       "id": "Party:15:relationToPrimaryInsured",
@@ -754,96 +796,6 @@ Object {
         },
       ],
     },
-  },
-  "Raw results": Object {
-    "evaluationTimestamp": Any<Date>,
-    "results": Object {
-      "Party:15:relationToPrimaryInsured": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "15",
-          "contextName": "Party",
-          "fieldName": "relationToPrimaryInsured",
-          "fieldPath": "relationToPrimaryInsured",
-          "fieldType": "STRING",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "length": 20,
-              "message": Object {
-                "errorCode": "code",
-                "errorMessage": "String contains more charactes than 20",
-                "templateVariables": Array [],
-              },
-              "success": true,
-              "type": 16,
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Party",
-              "payloadtype": "LENGTH",
-              "ruleName": "R0149A",
-              "targetPath": "relationToPrimaryInsured",
-            },
-          },
-        ],
-      },
-      "Party:18:relationToPrimaryInsured": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "18",
-          "contextName": "Party",
-          "fieldName": "relationToPrimaryInsured",
-          "fieldPath": "relationToPrimaryInsured",
-          "fieldType": "STRING",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "length": 20,
-              "message": Object {
-                "errorCode": "code",
-                "errorMessage": "String contains more charactes than 20",
-                "templateVariables": Array [],
-              },
-              "success": true,
-              "type": 16,
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Party",
-              "payloadtype": "LENGTH",
-              "ruleName": "R0149A",
-              "targetPath": "relationToPrimaryInsured",
-            },
-          },
-        ],
-      },
-    },
-  },
-  "Validation results": Object {
-    "critical": Array [],
-    "info": Array [],
-    "warning": Array [],
   },
 }
 `;

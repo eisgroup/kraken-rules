@@ -18,10 +18,7 @@ package kraken.converter.translation.ast;
 import kraken.el.ast.Expression;
 import kraken.el.ast.Identifier;
 import kraken.el.ast.visitor.AstRewritingVisitor;
-import kraken.el.scope.type.ArrayType;
 import kraken.el.scope.type.Type;
-import kraken.model.context.PrimitiveFieldDataType;
-import kraken.model.context.SystemDataTypes;
 import kraken.model.project.KrakenProject;
 
 /**
@@ -40,15 +37,19 @@ public class ReferencesAppendingRewritingVisitor extends AstRewritingVisitor {
 
     @Override
     public Expression visit(Identifier identifier) {
-        Type evaluationType = identifier.getEvaluationType() instanceof ArrayType
-                ? ((ArrayType) identifier.getEvaluationType()).getElementType()
-                : identifier.getEvaluationType();
+        Type evaluationType = identifier.getEvaluationType().unwrapArrayType();
 
-        if(!PrimitiveFieldDataType.isPrimitiveType(evaluationType.getName())
-                && !SystemDataTypes.isSystemDataType(evaluationType.getName())
-                && krakenProject.getContextDefinitions().containsKey(identifier.getIdentifier())
+        if(!evaluationType.isPrimitive()
+                && !evaluationType.isDynamic()
+                && krakenProject.getContextDefinitions().containsKey(identifier.getIdentifierToken())
                 && identifier.isReferenceInGlobalScope()) {
-            return new Identifier(identifier.getIdentifier(), "__references__." + identifier.getIdentifier(), identifier.getScope(), identifier.getToken());
+            return new Identifier(
+                identifier.getIdentifierToken(),
+                "__references__." + identifier.getIdentifier(),
+                identifier.getScope(),
+                identifier.getEvaluationType(),
+                identifier.getToken()
+            );
         }
 
         return super.visit(identifier);

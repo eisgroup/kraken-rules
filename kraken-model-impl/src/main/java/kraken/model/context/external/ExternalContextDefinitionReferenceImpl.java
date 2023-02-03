@@ -16,6 +16,7 @@
 package kraken.model.context.external;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Default implementation of {@code ExternalContextDefinitionReference}.
@@ -37,6 +38,26 @@ public final class ExternalContextDefinitionReferenceImpl implements ExternalCon
     @Override
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        ExternalContextDefinitionReferenceImpl that = (ExternalContextDefinitionReferenceImpl) o;
+
+        return Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 
 }

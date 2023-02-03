@@ -15,7 +15,22 @@
  */
 
 export interface Dependency {
-    contextName: string;
-    targetPath: string;
-    contextDependency: boolean;
+    contextName: string
+
+    /**
+     * Can be undefined if dependency is to a context without field name
+     */
+    fieldName?: string
+
+    /**
+     *
+     * Indicates if dependency is resolved from a cross context reference.
+     * Reference to rule target context is NOT a cross context reference but rather a {@link #selfDependency}.
+     */
+    ccrDependency: boolean
+
+    /**
+     * Indicates if dependency is resolved from a reference to target context or a field of target context.
+     */
+    selfDependency: boolean
 }

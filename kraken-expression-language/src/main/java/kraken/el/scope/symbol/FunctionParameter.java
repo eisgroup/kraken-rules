@@ -15,9 +15,9 @@
  */
 package kraken.el.scope.symbol;
 
-import kraken.el.scope.type.Type;
-
 import java.util.Objects;
+
+import kraken.el.scope.type.Type;
 
 /**
  * @author mulevicius
@@ -33,6 +33,10 @@ public class FunctionParameter {
         this.type = type;
     }
 
+    /**
+     *
+     * @return index of function parameter; 0 indexed
+     */
     public int getParameterIndex() {
         return parameterIndex;
     }

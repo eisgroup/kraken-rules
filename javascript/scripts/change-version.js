@@ -1,22 +1,8 @@
-const { execSync } = require("child_process");
-const semver = require("semver");
 const Logger = require('./__internal__/log')
 const logger = new Logger('change-versions.js')
 const fs = require('fs')
 const path = require('path')
-const version = process.argv.indexOf('-v') !== -1
-    ? process.argv[process.argv.indexOf('-v') + 1]
-    : undefined
-
-function validateVersion(v) {
-    if (!v) {
-        throw new Error(logger.error("Version must be defined"))
-    }
-    if (!semver.valid(v, { loose: true })) {
-        throw new Error(logger.error(`'${v}' is not a valid SemVer version`))
-    }
-    logger.log(`Version '${v}' is valid`)
-}
+const { VERSION } = require('./version');
 
 function setVersion(v) {
     logger.log(`Setting version '${v}'`);
@@ -67,7 +53,14 @@ function setVersion(v) {
 
     logger.log('Updating lerna.json')
     fs.writeFileSync(filePath, JSON.stringify(lerna, null, 2))
+
+    const rootFilePath = path.join('package.json');
+    const rootFile = fs.readFileSync(rootFilePath, { encoding: 'UTF-8' });
+    const rootPackageJson = JSON.parse(rootFile)
+    rootPackageJson.version = v
+
+    logger.log('Updating root package.json')
+    fs.writeFileSync(rootFilePath, JSON.stringify(rootPackageJson, null, 2))
 }
 
-validateVersion(version)
-setVersion(version)
+setVersion(VERSION)

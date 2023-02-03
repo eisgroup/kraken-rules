@@ -26,6 +26,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import kraken.annotations.API;
+import kraken.model.Function;
 import kraken.model.FunctionSignature;
 import kraken.model.Rule;
 import kraken.model.context.ContextDefinition;
@@ -63,6 +64,8 @@ public final class Resource {
 
     private final List<FunctionSignature> functionSignatures;
 
+    private final List<Function> functions;
+
     private final URI uri;
 
     /**
@@ -77,6 +80,7 @@ public final class Resource {
      * @param externalContext            External context bound to this resource.
      * @param externalContextDefinitions ContextDefinition for external context.
      * @param functionSignatures         A list of function signatures that the rules can use from this namespace.
+     * @param functions                  A list of functions implemented in this resource
      * @param uri                        Identifies a resource.
      */
     public Resource(String namespace,
@@ -88,6 +92,7 @@ public final class Resource {
                     ExternalContext externalContext,
                     @Nonnull List<ExternalContextDefinition> externalContextDefinitions,
                     @Nonnull List<FunctionSignature> functionSignatures,
+                    @Nonnull List<Function> functions,
                     @Nonnull URI uri) {
         this.namespace = namespace == null ? Namespaced.GLOBAL : namespace;
         this.externalContext = externalContext;
@@ -98,6 +103,7 @@ public final class Resource {
         this.includes = Objects.requireNonNull(includes);
         this.ruleImports = Objects.requireNonNull(ruleImports);
         this.functionSignatures = Objects.requireNonNull(functionSignatures);
+        this.functions = Objects.requireNonNull(functions);
         this.uri = Objects.requireNonNull(uri);
     }
 
@@ -112,19 +118,21 @@ public final class Resource {
      * @param ruleImports                Rule import applicable for this resource.
      * @param externalContext            External context bound to this resource.
      * @param externalContextDefinitions ContextDefinition for external context.
+     * @param functionSignatures         A list of function signatures that the rules can use from this namespace.
      * @param uri                        Identifies a resource.
-     * @deprecated  Use {@link #Resource(String, List, List, List, List, List, ExternalContext, List, List, URI)} instead.
+     * @deprecated  Use {@link #Resource(String, List, List, List, List, List, ExternalContext, List, List, List, URI)} instead.
      */
-    @Deprecated(since = "1.17.0", forRemoval = true)
+    @Deprecated(since = "1.33.0", forRemoval = true)
     public Resource(String namespace,
-                    List<ContextDefinition> contextDefinitions,
-                    List<EntryPoint> entryPoints,
-                    List<Rule> rules,
-                    List<String> includes,
-                    List<RuleImport> ruleImports,
+                    @Nonnull List<ContextDefinition> contextDefinitions,
+                    @Nonnull List<EntryPoint> entryPoints,
+                    @Nonnull List<Rule> rules,
+                    @Nonnull List<String> includes,
+                    @Nonnull List<RuleImport> ruleImports,
                     ExternalContext externalContext,
-                    List<ExternalContextDefinition> externalContextDefinitions,
-                    URI uri) {
+                    @Nonnull List<ExternalContextDefinition> externalContextDefinitions,
+                    @Nonnull List<FunctionSignature> functionSignatures,
+                    @Nonnull URI uri) {
         this(
             namespace == null ? Namespaced.GLOBAL : namespace,
             contextDefinitions,
@@ -134,33 +142,9 @@ public final class Resource {
             new ArrayList<>(ruleImports),
             externalContext,
             externalContextDefinitions,
+            functionSignatures,
             List.of(),
             uri
-        );
-    }
-
-    /**
-     * @deprecated  Use {@link #Resource(String, List, List, List, List, List, ExternalContext, List, List, URI)} instead.
-     */
-    @Deprecated(since = "1.15.0", forRemoval = true)
-    public Resource(String namespace,
-                    List<ContextDefinition> contextDefinitions,
-                    List<EntryPoint> entryPoints,
-                    List<Rule> rules,
-                    Collection<String> includes,
-                    Collection<RuleImport> ruleImports,
-                    ExternalContext externalContext,
-                    List<ExternalContextDefinition> externalContextDefinitions) {
-        this(
-            namespace,
-            contextDefinitions,
-            entryPoints,
-            rules,
-            new ArrayList<>(includes),
-            new ArrayList<>(ruleImports),
-            externalContext,
-            externalContextDefinitions,
-            ResourceUtils.randomResourceUri()
         );
     }
 
@@ -201,6 +185,10 @@ public final class Resource {
         return functionSignatures;
     }
 
+    public List<Function> getFunctions() {
+        return functions;
+    }
+
     public URI getUri() {
         return uri;
     }
@@ -224,6 +212,7 @@ public final class Resource {
             resource.externalContext != null ? factory.cloneExternalContext(resource.externalContext) : null,
             resource.externalContextDefinitions.stream().map(factory::cloneExternalContextDefinition).collect(Collectors.toList()),
             resource.functionSignatures.stream().map(factory::cloneFunctionSignature).collect(Collectors.toList()),
+            resource.functions.stream().map(factory::cloneFunction).collect(Collectors.toList()),
             resource.uri
         );
     }

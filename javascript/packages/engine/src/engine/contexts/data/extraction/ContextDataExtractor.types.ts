@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-import { DataContext } from "../DataContext";
+import { DataContext } from '../DataContext'
 
 /**
  * Extracts ContextDefinition instances from  provided DataContext.
@@ -49,7 +49,7 @@ export interface ContextDataExtractor {
      *                          RiskItem2 {@link DataContext}
      * @returns {DataContext[]} {@link DataContext}s by provided parameters.
      */
-    extractByPath(root: DataContext, path: string[]): DataContext[];
+    extractByPath(root: DataContext, path: string[]): DataContext[]
 
     /**
      * Founds ContextDefinition instances by provided path in parameters.
@@ -62,5 +62,5 @@ export interface ContextDataExtractor {
      * @param path  Path to ContextDefinition instance, represented by strings
      * @return      DataContexts, that are found by path.
      */
-    extractByName(childContextName: string, root: DataContext, restriction?: DataContext): DataContext[];
+    extractByName(childContextName: string, root: DataContext, restriction?: DataContext): DataContext[]
 }

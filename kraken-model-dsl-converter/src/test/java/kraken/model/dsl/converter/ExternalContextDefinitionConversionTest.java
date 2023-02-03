@@ -71,6 +71,133 @@ public class ExternalContextDefinitionConversionTest {
     }
 
     @Test
+    public void shouldConvertSingleExternalContextsWithPrimitiveTypeFieldsMultiple() {
+        ExternalContextDefinition externalContext = createExternalContext(
+                "ExternalContextDefinition",
+                "PhysicalNamespace",
+                createAttribute(
+                        "stringAttribute",
+                        createAttributeType("String", true, Cardinality.MULTIPLE)
+                ),
+                createAttribute(
+                        "intAttribute",
+                        createAttributeType("Integer", true, Cardinality.MULTIPLE)
+                ),
+                createAttribute(
+                        "decimalAttribute",
+                        createAttributeType("Decimal", true, Cardinality.MULTIPLE)
+                ),
+                createAttribute(
+                        "dates",
+                        createAttributeType("Date", true, Cardinality.MULTIPLE)
+                ),
+                createAttribute(
+                        "times",
+                        createAttributeType("DateTime", true, Cardinality.MULTIPLE)
+                ),
+                createAttribute(
+                        "booleanAttribute",
+                        createAttributeType("Boolean", true, Cardinality.MULTIPLE)
+                ),
+                createAttribute(
+                        "moneyAttribute",
+                        createAttributeType("Money", true, Cardinality.MULTIPLE)
+                )
+        );
+
+        String convertedString = convert(externalContext);
+
+        assertEquals(
+                "ExternalEntity ExternalContextDefinition {" + SEPARATOR +
+                        "    DateTime* times" + SEPARATOR +
+                        "    Money* moneyAttribute" + SEPARATOR +
+                        "    Decimal* decimalAttribute" + SEPARATOR +
+                        "    Boolean* booleanAttribute" + SEPARATOR +
+                        "    Date* dates" + SEPARATOR +
+                        "    String* stringAttribute" + SEPARATOR +
+                        "    Integer* intAttribute" + SEPARATOR +
+                        "}" + SEPARATOR + SEPARATOR, convertedString);
+    }
+
+    @Test
+    public void shouldConvertSingleExternalContextsWithPrimitiveTypeFieldsSingle() {
+        ExternalContextDefinition externalContext = createExternalContext(
+                "ExternalContextDefinition",
+                "PhysicalNamespace",
+                createAttribute(
+                        "string_Attribute",
+                        createAttributeType("String", true, Cardinality.SINGLE)
+                ),
+                createAttribute(
+                        "int-Attribute1",
+                        createAttributeType("Integer", true, Cardinality.SINGLE)
+                ),
+                createAttribute(
+                        "decimalAttribute",
+                        createAttributeType("Decimal", true, Cardinality.SINGLE)
+                ),
+                createAttribute(
+                        "dates2022",
+                        createAttributeType("Date", true, Cardinality.SINGLE)
+                ),
+                createAttribute(
+                        "timesAfter5PM",
+                        createAttributeType("DateTime", true, Cardinality.SINGLE)
+                ),
+                createAttribute(
+                        "booleanAttribute",
+                        createAttributeType("Boolean", true, Cardinality.SINGLE)
+                ),
+                createAttribute(
+                        "moneyAttributeUSD",
+                        createAttributeType("Money", true, Cardinality.SINGLE)
+                )
+        );
+
+        String convertedString = convert(externalContext);
+
+        assertEquals(
+                "ExternalEntity ExternalContextDefinition {" + SEPARATOR +
+                        "    Integer int-Attribute1" + SEPARATOR +
+                        "    Decimal decimalAttribute" + SEPARATOR +
+                        "    Boolean booleanAttribute" + SEPARATOR +
+                        "    String string_Attribute" + SEPARATOR +
+                        "    Date dates2022" + SEPARATOR +
+                        "    Money moneyAttributeUSD" + SEPARATOR +
+                        "    DateTime timesAfter5PM" + SEPARATOR +
+                        "}" + SEPARATOR + SEPARATOR, convertedString);
+    }
+
+    @Test
+    public void shouldConvertSingleExternalContextsWitUnknownTypeFields() {
+        ExternalContextDefinition externalContext = createExternalContext(
+                "ExternalContextDefinition",
+                "PhysicalNamespace",
+                createAttribute(
+                        "unknown-type-attribute",
+                        createAttributeType("Unknown", false, Cardinality.MULTIPLE)
+                ),
+                createAttribute(
+                        "hasOtherRiskFactors",
+                        createAttributeType("RiskItem", false, Cardinality.MULTIPLE)
+                ),
+                createAttribute(
+                        "unknownTypeAttribute",
+                        createAttributeType("Unknown", false, Cardinality.SINGLE)
+                )
+        );
+
+        String convertedString = convert(externalContext);
+
+        assertEquals(
+                "ExternalEntity ExternalContextDefinition {" + SEPARATOR +
+                        "    Unknown* unknown-type-attribute" + SEPARATOR +
+                        "    RiskItem* hasOtherRiskFactors" + SEPARATOR +
+                        "    Unknown unknownTypeAttribute" + SEPARATOR +
+                        "}" + SEPARATOR + SEPARATOR, convertedString);
+    }
+
+    @Test
     public void shouldConvertMultipleExternalContexts() {
         ExternalContextDefinition eCtx = createExternalContext("ExternalContextDefinition", "PhysicalNamespace",
                 createAttribute("otherContext",
@@ -83,7 +210,7 @@ public class ExternalContextDefinitionConversionTest {
         String convertedString = convert(eCtx, othCtx);
 
         assertEquals(
-                        "ExternalEntity ExternalContextDefinition {" + SEPARATOR +
+                "ExternalEntity ExternalContextDefinition {" + SEPARATOR +
                         "    OtherContext otherContext" + SEPARATOR +
                         "}" + SEPARATOR + SEPARATOR +
                         "ExternalEntity OtherContext {" + SEPARATOR +

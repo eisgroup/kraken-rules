@@ -24,8 +24,8 @@ import kraken.el.scope.type.Type;
  */
 public abstract class BinaryExpression extends Expression {
 
-    private Expression left;
-    private Expression right;
+    private final Expression left;
+    private final Expression right;
 
     public BinaryExpression(Expression left, Expression right, NodeType nodeType, Scope scope, Type evaluationType, Token token) {
         super(nodeType, scope, evaluationType, token);

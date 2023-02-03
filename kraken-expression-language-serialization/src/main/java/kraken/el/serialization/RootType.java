@@ -23,8 +23,6 @@ public class RootType extends Type {
     public RootType(Type type) {
         super(
             type.getName(),
-            type.isPrimitive(),
-            type.isKnown(),
             type.getProperties(),
             type.getExtendedTypes()
         );

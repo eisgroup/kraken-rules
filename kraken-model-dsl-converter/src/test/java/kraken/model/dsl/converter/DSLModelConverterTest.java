@@ -173,41 +173,28 @@ public class DSLModelConverterTest {
                 .build();
         final String convert = converter.convert(resource);
         assertEquals(
-                "Namespace fake_namespace" +
-                        System.lineSeparator() +
-                        System.lineSeparator() +
-                        "Include fake_include_1" +
-                        System.lineSeparator() +
-                        "Include fake_include_2" +
-                        System.lineSeparator() +
-                        System.lineSeparator() +
-                        "Import Rule \"R1\" from NS1" + System.lineSeparator() +
-                        "Import Rule \"R2\" from NS1" + System.lineSeparator() +
-                        "Import Rule \"R3\" from NS1" + System.lineSeparator() +
-                        "Import Rule \"R1\" from NS2" + System.lineSeparator() +
-                        "Import Rule \"R2\" from NS2" + System.lineSeparator() +
-                        "Import Rule \"R3\" from NS2" + System.lineSeparator() +
-                        System.lineSeparator() +
-                        "EntryPoint \"fake\" {" +
-                        System.lineSeparator() +
-                        "    \"B1\"," + System.lineSeparator() +
-                        "    \"B2\"," + System.lineSeparator() +
-                        "    \"B3\"" + System.lineSeparator() +
-                        "}" +
-                        System.lineSeparator() +
-                        System.lineSeparator() +
-                        "Rule \"fake\" On context.path {" +
-                        System.lineSeparator() +
-                        "    Assert String expression" +
-                        System.lineSeparator() +
-                        "}" +
-                        System.lineSeparator() +
-                        System.lineSeparator() +
-                        "Context fake {" +
-                        System.lineSeparator() +
-                        "}" +
-                        System.lineSeparator(),
-                convert);
+            "Namespace fake_namespace" + System.lineSeparator() + System.lineSeparator() +
+            "Include fake_include_1" + System.lineSeparator() +
+            "Include fake_include_2" + System.lineSeparator() + System.lineSeparator() +
+            "Import Rule \"R1\" from NS1" + System.lineSeparator() +
+            "Import Rule \"R2\" from NS1" + System.lineSeparator() +
+            "Import Rule \"R3\" from NS1" + System.lineSeparator() +
+            "Import Rule \"R1\" from NS2" + System.lineSeparator() +
+            "Import Rule \"R2\" from NS2" + System.lineSeparator() +
+            "Import Rule \"R3\" from NS2" + System.lineSeparator() + System.lineSeparator() +
+            "EntryPoint \"fake\" {" + System.lineSeparator() +
+            "    \"B1\"," + System.lineSeparator() +
+            "    \"B2\"," + System.lineSeparator() +
+            "    \"B3\"" + System.lineSeparator() +
+            "}" + System.lineSeparator() + System.lineSeparator() +
+            "Rule \"fake\" On context.path {" + System.lineSeparator() +
+            "    Description \"description\"" + System.lineSeparator() +
+            "    Priority 99" + System.lineSeparator() +
+            "    Assert String expression" + System.lineSeparator() +
+            "}" + System.lineSeparator() + System.lineSeparator() +
+            "Context fake {" + System.lineSeparator() +
+            "}" + System.lineSeparator(),
+            convert);
     }
 
     @Test
@@ -225,6 +212,28 @@ public class DSLModelConverterTest {
                         "    \"B1\"," + System.lineSeparator() +
                         "    \"B2\"," + System.lineSeparator() +
                         "    \"B3\"" + System.lineSeparator() +
+                        "}" + System.lineSeparator() + System.lineSeparator(),
+                convert);
+    }
+
+    @Test
+    public void shouldConvertModelWithReusedEntryPoint() {
+        EntryPoint entryPointSpecific = factory.createEntryPoint();
+        entryPointSpecific.setName("fake specific");
+        entryPointSpecific.setIncludedEntryPointNames(Arrays.asList("fake"));
+        entryPointSpecific.setRuleNames(Arrays.asList("A1", "A2", "A3"));
+        entryPointSpecific.setPhysicalNamespace("whatever");
+
+        Resource resource = ResourceBuilder.getInstance()
+                .addEntryPoint(entryPointSpecific)
+                .build();
+        final String convert = converter.convert(resource);
+        assertEquals(
+                "EntryPoint \"fake specific\" {" + System.lineSeparator() +
+                        "    EntryPoint \"fake\"," + System.lineSeparator() +
+                        "    \"A1\"," + System.lineSeparator() +
+                        "    \"A2\"," + System.lineSeparator() +
+                        "    \"A3\"" + System.lineSeparator() +
                         "}" + System.lineSeparator() + System.lineSeparator(),
                 convert);
     }
@@ -254,8 +263,10 @@ public class DSLModelConverterTest {
     private Rule rule() {
         Rule rule = factory.createRule();
         rule.setName("fake");
+        rule.setDescription("description");
         rule.setContext("context");
         rule.setTargetPath("path");
+        rule.setPriority(99);
         rule.setPhysicalNamespace("whatever");
         AssertionPayload assertionPayload = factory.createAssertionPayload();
         Expression expression = factory.createExpression();

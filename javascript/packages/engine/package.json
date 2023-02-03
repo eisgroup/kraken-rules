@@ -1,22 +1,25 @@
 {
     "name": "kraken-typescript-engine",
-    "version": "1.20.1-autocomplete.3",
+    "version": "1.42.4-stage.0",
     "description": "",
     "main": "target/dist/js/src/index.js",
     "types": "target/dist/definitions/src/index.d.ts",
     "author": "Pavel Surinin <psurinin@eisgroup.com> (http://eisgroup.com)",
     "license": "Apache-2.0",
+    "publishConfig": {
+        "registry": "https://genesis-npm-release.exigengroup.com/repository/genesis-npm-release/"
+    },
+    "typedocMain": "src/index.ts",
     "dependencies": {
         "bignumber.js": "9.0.1",
         "declarative-js": "3.8.15",
         "fast-deep-equal": "2.0.1",
-        "kraken-model": "1.20.1-autocomplete.3",
-        "moment": "2.24.0"
+        "kraken-engine-api": "1.42.4-stage.0",
+        "kraken-model": "1.42.4-stage.0",
+        "moment": "2.29.4"
     },
     "devDependencies": {
-        "@babel/cli": "7.1.5",
         "@types/jest": "26.0.22",
-        "@types/kraken-test-product": "1.20.1-autocomplete.3",
         "@types/lodash": "4.14.116",
         "@types/node": "13.9.0",
         "child_process": "1.0.2",
@@ -24,27 +27,32 @@
         "jest": "26.6.3",
         "jsdom": "11.3.0",
         "jsdom-global": "3.0.2",
-        "kraken-model-builder": "1.20.1-autocomplete.3",
-        "kraken-test-product-model-tree": "1.20.1-autocomplete.3",
+        "kraken-jest-matchers": "1.42.4-stage.0",
+        "kraken-model-builder": "1.42.4-stage.0",
+        "kraken-test-product": "1.42.4-stage.0",
+        "kraken-test-product-model-tree": "1.42.4-stage.0",
         "prettier": "1.14.3",
-        "rimraf": "2.6.3",
+        "rimraf": "3.0.2",
         "ts-jest": "26.5.0",
         "ts-node": "4.1.0",
-        "tslint": "5.18.0",
         "typescript": "4.2.4"
     },
     "scripts": {
-        "ci-versions": "echo \"typescript version\" && tsc -v && echo \"jest version\" && jest -v && echo \"tslint version\" && tslint -v",
+        "ci-versions": "echo \"typescript version\" && tsc -v && echo \"jest version\" && jest -v",
         "test": "jest -c jest.config.js",
         "test:coverage": "jest -c jest.config.js --coverage",
-        "lint": "tslint -c tslint.json -p tsconfig.json -t stylish",
+        "lint": "eslint src __tests__",
         "compile": "node generate-version && tsc --pretty",
-        "babel": "babel target/dist/tsjs/ --out-dir target/dist/js/ --config-file ../../babel.config.js --delete-dir-on-start --ignore ./target/dist/tsjs/__tests__",
-        "babelDev": "babel target/dist/tsjs/ --out-dir target/dist/js/ --config-file ../../babel.config.js --ignore ./target/dist/tsjs/__tests__",
+        "postcompile": "yarn transpile",
+        "transpile": "echo 'no transpile'",
         "del:compiled": "rimraf target/dist",
-        "build": "npm run compile && npm run lint && npm run test:coverage",
-        "prepare": "npm run ci-versions && npm run del:compiled && npm run compile && npm run lint -- --fix && npm run test:coverage && npm run babel",
-        "release": "npm publish"
+        "build": "yarn run compile && yarn run lint && yarn run test:coverage",
+        "prepare": "yarn run ci-versions && yarn run del:compiled && yarn run compile && yarn run lint -- --fix && yarn run test:coverage",
+        "release": "yarn publish"
     },
-    "gitHead": "062c5a631397863ca184c6a9bd65a50f279433e5"
+    "files": [
+        "target/dist/definitions",
+        "target/dist/js"
+    ],
+    "gitHead": "6d16f79f76d6b73678a70625923b852dd9726865"
 }

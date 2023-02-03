@@ -14,40 +14,39 @@
  *  limitations under the License.
  */
 
-import { Contexts } from "kraken-model";
-import ContextDefinition = Contexts.ContextDefinition;
+import { Contexts } from 'kraken-model'
+import ContextDefinition = Contexts.ContextDefinition
 
 export namespace ContextModelTree {
-
     /**
      * Context definition model that is used in runtime rules processing.
      * Contains context repository,
      */
-    // tslint:disable-next-line: no-shadowed-variable
+
     export interface ContextModelTree {
         /**
          * Metadata of generated ContextModelTree
          */
-        metadata: Metadata;
+        metadata: Metadata
         /**
          * All available valid paths for context definitions
          * key - context definition name
          * value - paths from root
          */
-        pathsToNodes: Record<string, ContextPath[]>;
+        pathsToNodes: Record<string, ContextPath[]>
 
-        contexts: Record<string, ContextDefinition>;
+        contexts: Record<string, ContextDefinition>
     }
 
     export interface Metadata {
-        namespace: string;
-        targetEnvironment: TargetEnvironment;
+        namespace: string
+        targetEnvironment: TargetEnvironment
     }
 
     /**
      * Enumerates all Target Environments supported by Kraken for rule execution
      */
-    export type TargetEnvironment = "JAVA" | "JAVASCRIPT";
+    export type TargetEnvironment = 'JAVA' | 'JAVASCRIPT'
 
     /**
      * Path represented as context definition names
@@ -56,6 +55,6 @@ export namespace ContextModelTree {
         /**
          * Names of the context definitions
          */
-        path: string[];
+        path: string[]
     }
 }

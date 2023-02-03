@@ -14,23 +14,27 @@
  *  limitations under the License.
  */
 
-import { Moneys } from "../../../../../src/engine/runtime/expressions/math/Moneys";
+import { Moneys } from '../../../../../src/engine/runtime/expressions/math/Moneys'
 
-describe("Moneys", () => {
-    describe("isMoney", () => {
-        it("should return true for money object", () => {
-            expect(Moneys.isMoney({"amount" : 10, "currency" : "USD"})).toBeTruthy();
-        });
-        it("should return false for incomplete object", () => {
-            expect(Moneys.isMoney({"amount" : 10 })).toBeFalsy();
-            expect(Moneys.isMoney({"currency" : "USD"})).toBeFalsy();
-        });
-        it("should return false for empty object", () => {
-            expect(Moneys.isMoney({})).toBeFalsy();
-        });
-        it("should return false for other object", () => {
-            expect(Moneys.isMoney({"amount" : 10, "currency" : "USD", "smth" : "smth"})).toBeFalsy();
-            expect(Moneys.isMoney({"smth" : "smth"})).toBeFalsy();
-        });
-    });
-});
+describe('Moneys', () => {
+    describe('isMoney', () => {
+        it('should return true for money object', () => {
+            expect(Moneys.isMoney({ amount: 10, currency: 'USD' })).toBeTruthy()
+        })
+        it('should return false for incomplete object', () => {
+            expect(Moneys.isMoney({ amount: 10 })).toBeFalsy()
+            expect(Moneys.isMoney({ currency: 'USD' })).toBeFalsy()
+        })
+        it('should return false for empty object', () => {
+            expect(Moneys.isMoney({})).toBeFalsy()
+        })
+        it('should return false for null', () => {
+            expect(Moneys.isMoney(null)).toBeFalsy()
+            expect(Moneys.isMoney(undefined)).toBeFalsy()
+        })
+        it('should return false for other object', () => {
+            expect(Moneys.isMoney({ amount: 10, currency: 'USD', smth: 'smth' })).toBeFalsy()
+            expect(Moneys.isMoney({ smth: 'smth' })).toBeFalsy()
+        })
+    })
+})

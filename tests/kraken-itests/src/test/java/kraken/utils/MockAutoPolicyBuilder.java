@@ -15,12 +15,11 @@
  */
 package kraken.utils;
 
-import kraken.el.functions.DateFunctions;
+import kraken.el.functionregistry.functions.DateFunctions;
 import kraken.testproduct.domain.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 

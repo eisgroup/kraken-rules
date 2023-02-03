@@ -28,7 +28,7 @@ export enum NavigationStepType {
     /**
      * this step type represents accessing inherited parent context from child
      */
-    PARENT_ACCESS
+    PARENT_ACCESS,
 }
 
 /**
@@ -37,10 +37,10 @@ export enum NavigationStepType {
  * or indexing within results of extraction.
  */
 export class NavigationStep {
-
     constructor(
         readonly type: NavigationStepType,
         readonly contextName: string,
         readonly contextId: string,
-        readonly expression?: string | number) { }
+        readonly expression?: string | number,
+    ) {}
 }

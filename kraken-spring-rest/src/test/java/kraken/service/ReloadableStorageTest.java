@@ -28,7 +28,7 @@ import static kraken.model.EntryPointName.QA2;
 import static kraken.utils.TestUtils.createMockRules;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * @author psurinin@eisgroup.com

@@ -14,230 +14,346 @@
  *  limitations under the License.
  */
 
-import { SyncEngine } from "../../../src/engine/executer/SyncEngine";
-import { mock } from "../../mock";
-import { RepoClientCache } from "../../../src/repository/RepoClientCache";
-import { registry } from "../../../src/engine/runtime/expressions/ExpressionEvaluator";
-import { EntryPointBundle } from "../../../src/models/EntryPointBundle";
-import { RulesBuilder, PayloadBuilder } from "kraken-model-builder";
-import { AssertionPayloadResult } from "../../../src/engine/results/PayloadResult";
-import { RuleEvaluationResults } from "../../../src/dto/RuleEvaluationResults";
+import { SyncEngine } from '../../../src/engine/executer/SyncEngine'
+import { mock } from '../../mock'
+import { registry } from '../../../src/engine/runtime/expressions/ExpressionEvaluator'
+import { PayloadBuilder, RulesBuilder } from 'kraken-model-builder'
+import { AssertionPayloadResult, RuleEvaluationResults } from 'kraken-engine-api'
+import { Payloads } from 'kraken-model'
+import UsageType = Payloads.Validation.UsageType
+import PayloadType = Payloads.PayloadType
+import { EvaluationMode } from '../../../src/engine/runtime/EvaluationMode'
+import { DimensionSetBundleCache } from '../../../src/bundle-cache/dimension-set-cache/DimensionSetBundleCache'
+import { EntryPointBundle, ExpressionContextManagerImpl } from '../../../src'
 
-let engine: SyncEngine;
+let engine: SyncEngine
 
-const customFunctionName = "Log";
-const customFunction = jest.fn();
-const Policy = mock.modelTreeJson.contexts.Policy;
-const CreditCardInfo = mock.modelTreeJson.contexts.CreditCardInfo;
+const customFunctionName = 'Log'
+const customFunction = jest.fn()
+const Policy = mock.modelTreeJson.contexts.Policy
+const CreditCardInfo = mock.modelTreeJson.contexts.CreditCardInfo
 
 beforeEach(() => {
-    const cache = new RepoClientCache();
-    const addBundleForDefaultDimension = cache.addBundleForDimension({});
+    const cache = new DimensionSetBundleCache({ logWarning: () => void 0 }, new ExpressionContextManagerImpl())
+    cache.setExpressionContext({})
+
+    function addBundleForDefaultDimension(bundleEvaluation: EntryPointBundle.EntryPointEvaluation) {
+        cache.add(
+            bundleEvaluation.entryPointName,
+            {},
+            { evaluation: bundleEvaluation, engineVersion: '1', expressionContext: {} },
+        )
+    }
     addBundleForDefaultDimension({
-        entryPointName: "Empty",
-        entryPointBundle: {
-            engineVersion: "1",
-            "evaluation": {
-                delta: false,
-                rules: [], entryPointName: "CreditCardInfo", rulesOrder: {}
-            },
-            "expressionContext": {}
-        } as EntryPointBundle.EntryPointBundle
-    });
+        delta: false,
+        rules: [],
+        entryPointName: 'CreditCardInfo',
+        fieldOrder: [],
+    })
     addBundleForDefaultDimension({
-        entryPointName: "CreditCardInfo",
-        entryPointBundle: {
-            engineVersion: "1",
-            "evaluation": {
-                delta: false,
-                rulesOrder: {
-                    r01: 0,
-                    r02: 1
-                },
-                rules: [
-                    new RulesBuilder()
-                        .setContext(CreditCardInfo.name)
-                        .setName("r01")
-                        .setTargetPath(CreditCardInfo.fields.cardNumber.name)
-                        .setPayload(PayloadBuilder.accessibility().notAccessible())
-                        .build(),
-                    new RulesBuilder()
-                        .setContext(CreditCardInfo.name)
-                        .setName("r02")
-                        .setTargetPath(CreditCardInfo.fields.cardNumber.name)
-                        .setPayload(PayloadBuilder.visibility().notVisible())
-                        .build()
-                ],
-                entryPointName: "CreditCardInfo"
-            },
-            "expressionContext": {}
-        } as EntryPointBundle.EntryPointBundle
-    });
+        delta: false,
+        fieldOrder: [],
+        rules: [
+            new RulesBuilder()
+                .setContext(CreditCardInfo.name)
+                .setName('r01')
+                .setTargetPath(CreditCardInfo.fields.cardNumber.name)
+                .setPayload(PayloadBuilder.accessibility().notAccessible())
+                .build(),
+            new RulesBuilder()
+                .setContext(CreditCardInfo.name)
+                .setName('r02')
+                .setTargetPath(CreditCardInfo.fields.cardNumber.name)
+                .setPayload(PayloadBuilder.visibility().notVisible())
+                .build(),
+        ],
+        entryPointName: 'CreditCardInfo',
+    })
     addBundleForDefaultDimension({
-        entryPointName: "CustomFunction",
-        entryPointBundle: {
-            engineVersion: "1",
-            evaluation: {
-                delta: false,
-                rulesOrder: {
-                    customFunction: 0
-                },
-                entryPointName: "CustomFunction",
-                rules: [
-                    new RulesBuilder()
-                        .setContext(Policy.name)
-                        .setName("customFunction")
-                        .setTargetPath(Policy.fields.state.name)
-                        .setPayload(PayloadBuilder.asserts().that(customFunctionName + "()"))
-                        .build()
-                ]
-            },
-            expressionContext: {}
-        }
-    });
-    const instanceExpression = "_t(__dataObject__, 'Policy') " +
-        "&& _i(__dataObject__, 'Policy') " +
-        "&& GetType(__dataObject__) == 'Policy'";
+        delta: false,
+        fieldOrder: [`${Policy.name}.${Policy.fields.policyNumber.name}`],
+        rules: [
+            new RulesBuilder()
+                .setContext(Policy.name)
+                .setName('Eval_Accessibility')
+                .setTargetPath(Policy.fields.policyNumber.name)
+                .setPayload(PayloadBuilder.accessibility().notAccessible())
+                .build(),
+            new RulesBuilder()
+                .setContext(Policy.name)
+                .setName('Eval_Visibility')
+                .setTargetPath(Policy.fields.policyNumber.name)
+                .setPayload(PayloadBuilder.visibility().notVisible())
+                .build(),
+            new RulesBuilder()
+                .setContext(Policy.name)
+                .setName('Eval_Usage')
+                .setTargetPath(Policy.fields.policyNumber.name)
+                .setPayload(PayloadBuilder.usage().is(UsageType.mandatory))
+                .build(),
+            new RulesBuilder()
+                .setContext(Policy.name)
+                .setName('Eval_Default')
+                .setTargetPath(Policy.fields.policyNumber.name)
+                .setPayload(PayloadBuilder.default().to('P0001'))
+                .build(),
+            new RulesBuilder()
+                .setContext(Policy.name)
+                .setName('Eval_Assert')
+                .setTargetPath(Policy.fields.policyNumber.name)
+                .setPayload(PayloadBuilder.asserts().that('policyNumber == "P0001"'))
+                .build(),
+            new RulesBuilder()
+                .setContext(Policy.name)
+                .setName('Eval_RegExp')
+                .setTargetPath(Policy.fields.policyNumber.name)
+                .setPayload(PayloadBuilder.regExp().match('[A-Z]+'))
+                .build(),
+            new RulesBuilder()
+                .setContext(Policy.name)
+                .setName('Eval_Length')
+                .setTargetPath(Policy.fields.policyNumber.name)
+                .setPayload(PayloadBuilder.lengthLimit().limit(5))
+                .build(),
+            new RulesBuilder()
+                .setContext(Policy.name)
+                .setName('Eval_Size')
+                .setTargetPath(Policy.fields.riskItems.name)
+                .setPayload(PayloadBuilder.size().min(0))
+                .build(),
+            new RulesBuilder()
+                .setContext(Policy.name)
+                .setName('Eval_SizeRange')
+                .setTargetPath(Policy.fields.riskItems.name)
+                .setPayload(PayloadBuilder.size().range(0, 1))
+                .build(),
+        ],
+        entryPointName: 'EvalOptionsTest',
+    })
     addBundleForDefaultDimension({
-        entryPointName: "InstanceFunctions",
-        entryPointBundle: {
-            engineVersion: "1",
-            evaluation: {
-                delta: false,
-                entryPointName: "InstanceFunctions",
-                rules: [
-                    new RulesBuilder()
-                        .setContext(Policy.name)
-                        .setName("R-InstanceFunctions")
-                        .setTargetPath(Policy.fields.state.name)
-                        .setPayload(PayloadBuilder.asserts().that(instanceExpression))
-                        .build()
-                ],
-                rulesOrder: {
-                    "R-InstanceFunctions": 0
-                }
-            },
-            expressionContext: {}
-        }
-    });
+        delta: false,
+        fieldOrder: [],
+        entryPointName: 'CustomFunction',
+        rules: [
+            new RulesBuilder()
+                .setContext(Policy.name)
+                .setName('customFunction')
+                .setTargetPath(Policy.fields.state.name)
+                .setPayload(PayloadBuilder.asserts().that('this.' + customFunctionName + '()'))
+                .build(),
+        ],
+    })
+    const instanceExpression =
+        "this._t(__dataObject__, 'Policy') " +
+        "&& this._i(__dataObject__, 'Policy') " +
+        "&& this.GetType(__dataObject__) == 'Policy'"
     addBundleForDefaultDimension({
-        entryPointName: "ExternalContext",
-        entryPointBundle: {
-            engineVersion: "1",
-            evaluation: {
-                delta: false,
-                rulesOrder: {
-                    "ExternalContext": 0
-                },
-                entryPointName: "ExternalContext",
-                rules: [
-                    new RulesBuilder()
-                        .setContext(Policy.name)
-                        .setName("ExternalContext")
-                        .setTargetPath(Policy.fields.state.name)
-                        .setPayload(PayloadBuilder.asserts().that("context.external.key == 'value'"))
-                        .build()
-                ]
-            },
-            expressionContext: {}
-        }
-    });
+        delta: false,
+        entryPointName: 'InstanceFunctions',
+        rules: [
+            new RulesBuilder()
+                .setContext(Policy.name)
+                .setName('R-InstanceFunctions')
+                .setTargetPath(Policy.fields.state.name)
+                .setPayload(PayloadBuilder.asserts().that(instanceExpression))
+                .build(),
+        ],
+        fieldOrder: [],
+    })
+    addBundleForDefaultDimension({
+        delta: false,
+        fieldOrder: [],
+        entryPointName: 'ExternalContext',
+        rules: [
+            new RulesBuilder()
+                .setContext(Policy.name)
+                .setName('ExternalContext')
+                .setTargetPath(Policy.fields.state.name)
+                .setPayload(PayloadBuilder.asserts().that("context.external.key == 'value'"))
+                .build(),
+        ],
+    })
+    addBundleForDefaultDimension({
+        delta: false,
+        fieldOrder: [],
+        entryPointName: 'function rebuilding',
+        rules: [
+            new RulesBuilder()
+                .setContext(Policy.name)
+                .setName('function rebuilding')
+                .setTargetPath(Policy.fields.state.name)
+                .setPayload(PayloadBuilder.asserts().that('this.custom()'))
+                .build(),
+        ],
+    })
+    addBundleForDefaultDimension({
+        delta: false,
+        fieldOrder: [],
+        entryPointName: 'Empty',
+        rules: [],
+    })
     engine = new SyncEngine({
         cache: cache,
         dataInfoResolver: mock.spi.dataResolver,
         contextInstanceInfoResolver: mock.spi.instance,
-        modelTree: mock.modelTree
-    });
-});
+        modelTree: mock.modelTree,
+        functions: mock.policyFunctions,
+    })
+})
 
-describe("SyncEngine", () => {
-    it("should evaluate rule with external data", () => {
-        const results = engine.evaluate(
-            mock.data.empty(),
-            "ExternalContext",
-            {
-                currencyCd: "USD",
-                context: {
-                    externalData: {
-                        key: "value"
-                    }
-                }
-            });
-        const payloadResult = (
-            (
-                results.getAllRuleResults()[0] as RuleEvaluationResults.ValidationRuleEvaluationResult
-            )
-                .payloadResult as AssertionPayloadResult
-        );
-        expect(payloadResult.error).toBeUndefined();
-        expect(payloadResult.success).toBeTruthy();
-    });
-    it("should evaluate instance functions", () => {
-        const results = engine.evaluate(
-            mock.data.empty(),
-            "InstanceFunctions",
-            mock.evaluationConfig
-        );
-        expect(results).k_toHaveExpressionsFailures(0);
-    });
-    it("should add custom function to registry and execute it", () => {
+describe('SyncEngine', () => {
+    it('should evaluate rule with external data', () => {
+        const results = engine.evaluate(mock.data.empty(), 'ExternalContext', {
+            currencyCd: 'USD',
+            context: {
+                externalData: {
+                    key: 'value',
+                },
+            },
+        })
+        const payloadResult = (results.getAllRuleResults()[0] as RuleEvaluationResults.ValidationRuleEvaluationResult)
+            .payloadResult as AssertionPayloadResult
+        expect(payloadResult.error).toBeUndefined()
+        expect(payloadResult.success).toBeTruthy()
+    })
+    it('should evaluate instance functions', () => {
+        const results = engine.evaluate(mock.data.empty(), 'InstanceFunctions', mock.evaluationConfig)
+        expect(results).k_toHaveExpressionsFailures(0)
+    })
+    it('should add custom function to registry and execute it', () => {
         registry.add({
             name: customFunctionName,
-            function: customFunction
-        });
-        engine.evaluate(
-            mock.data.empty(),
-            "CustomFunction",
-            mock.evaluationConfig
-        );
-        expect(customFunction).toHaveBeenCalledTimes(1);
-    });
-    it("should throw an error when no currency code is provided", () => {
-        expect(() => engine.evaluate({}, "", { currencyCd: "", context: {} })).toThrow();
-    });
-    it("should when restriction is invalid Context instance", () => {
-        expect(() => engine.evaluateSubTree({}, { cd: "", noid: 0 }, "", mock.evaluationConfig))
-            .toThrow("Restriction node is invalid Context instance");
-    });
-    it("should evaluate with empty entryPoint bundle", () => {
-        const result = engine.evaluate(mock.data.empty(),
-            "Empty",
-            mock.evaluationConfig);
-        expect(result.getAllRuleResults().length).toBe(0);
-        expect(Object.keys(result.getFieldResults()).length).toBe(0);
-    });
-    it("should evaluate 2 rules on same context", () => {
+            function: customFunction,
+        })
+        engine.evaluate(mock.data.empty(), 'CustomFunction', mock.evaluationConfig)
+        expect(customFunction).toHaveBeenCalledTimes(1)
+    })
+    it('should throw an error when no currency code is provided', () => {
+        expect(() => engine.evaluate({}, '', { currencyCd: '', context: {} })).toThrow()
+    })
+    it('should when restriction is invalid Context instance', () => {
+        expect(() => engine.evaluateSubTree({}, { cd: '', noid: 0 }, '', mock.evaluationConfig)).toThrow(
+            'Restriction node is invalid Context instance',
+        )
+    })
+    it('should evaluate with empty entryPoint bundle', () => {
+        const result = engine.evaluate(mock.data.empty(), 'Empty', mock.evaluationConfig)
+        expect(result.getAllRuleResults().length).toBe(0)
+        expect(Object.keys(result.getFieldResults()).length).toBe(0)
+    })
+    it('should evaluate 2 rules on same context', () => {
         const data = mock.data.dataContextCustom({
             billingInfo: {
                 creditCardInfo: {
                     cd: mock.modelTreeJson.contexts.CreditCardInfo.name,
-                    id: "cci1"
-                }
-            }
-        });
-        const results = engine.evaluate(data.dataObject, "CreditCardInfo", mock.evaluationConfig);
-        expect(Object.keys(results.getFieldResults())).toHaveLength(1);
-        const id = `${CreditCardInfo.name}:cci1:${CreditCardInfo.fields.cardNumber.name}`;
-        expect(results.getFieldResults()[id]).toBeDefined();
-        expect(results.getFieldResults()[id].ruleResults).toHaveLength(2);
-    });
+                    id: 'cci1',
+                },
+            },
+        })
+        const results = engine.evaluate(data.dataObject, 'CreditCardInfo', mock.evaluationConfig)
+        expect(Object.keys(results.getFieldResults())).toHaveLength(1)
+        const id = `${CreditCardInfo.name}:cci1:${CreditCardInfo.fields.cardNumber.name}`
+        expect(results.getFieldResults()[id]).toBeDefined()
+        expect(results.getFieldResults()[id].ruleResults).toHaveLength(2)
+    })
     // run this test when console.setup.js configuration is disabled
     // this feature can be tested only with logs ;\
-    it("evaluation id usage", () => {
+    it('evaluation id usage', () => {
         const data = mock.data.dataContextCustom({
             billingInfo: {
                 creditCardInfo: {
                     cd: mock.modelTreeJson.contexts.CreditCardInfo.name,
-                    id: "cci1"
-                }
-            }
-        });
-        engine.evaluate(data.dataObject, "CreditCardInfo", { ...mock.evaluationConfig, evaluationId: "11" });
-        engine.evaluate(data.dataObject, "CreditCardInfo", { ...mock.evaluationConfig, evaluationId: "11" });
-        engine.evaluate(data.dataObject, "CreditCardInfo", { ...mock.evaluationConfig, evaluationId: "12" });
-        engine.evaluate(data.dataObject, "CreditCardInfo", { ...mock.evaluationConfig, evaluationId: "12" });
-        engine.evaluate(data.dataObject, "CreditCardInfo", { ...mock.evaluationConfig });
-        engine.evaluate(data.dataObject, "CreditCardInfo", { ...mock.evaluationConfig, evaluationId: "11" });
-        engine.evaluate(data.dataObject, "CreditCardInfo", { ...mock.evaluationConfig, evaluationId: "11" });
-    });
-});
+                    id: 'cci1',
+                },
+            },
+        })
+        engine.evaluate(data.dataObject, 'CreditCardInfo', { ...mock.evaluationConfig, evaluationId: '11' })
+        engine.evaluate(data.dataObject, 'CreditCardInfo', { ...mock.evaluationConfig, evaluationId: '11' })
+        engine.evaluate(data.dataObject, 'CreditCardInfo', { ...mock.evaluationConfig, evaluationId: '12' })
+        engine.evaluate(data.dataObject, 'CreditCardInfo', { ...mock.evaluationConfig, evaluationId: '12' })
+        engine.evaluate(data.dataObject, 'CreditCardInfo', { ...mock.evaluationConfig })
+        engine.evaluate(data.dataObject, 'CreditCardInfo', { ...mock.evaluationConfig, evaluationId: '11' })
+        engine.evaluate(data.dataObject, 'CreditCardInfo', { ...mock.evaluationConfig, evaluationId: '11' })
+    })
+
+    it('Should only evaluate rules applicable for inquiry evaluation mode', () => {
+        const data = mock.data.dataContextCustom({
+            riskItems: [
+                {
+                    model: 'WV',
+                },
+            ],
+        })
+
+        const epResult = engine.evaluate(data.dataObject, 'EvalOptionsTest', {
+            ...mock.evaluationConfig,
+            evaluationMode: EvaluationMode.INQUIRY,
+        })
+
+        const resultTypes = epResult.getApplicableResults().map(ruleResult => ruleResult.ruleInfo.payloadtype)
+
+        expect(resultTypes).toHaveLength(2)
+        expect(resultTypes).toEqual(expect.arrayContaining([PayloadType.ACCESSIBILITY, PayloadType.VISIBILITY]))
+    })
+
+    it('Should only evaluate rules applicable for presentational evaluation mode', () => {
+        const data = mock.data.dataContextCustom({
+            riskItems: [
+                {
+                    model: 'WV',
+                },
+            ],
+        })
+
+        const epResult = engine.evaluate(data.dataObject, 'EvalOptionsTest', {
+            ...mock.evaluationConfig,
+            evaluationMode: EvaluationMode.PRESENTATIONAL,
+        })
+
+        const resultTypes = epResult.getApplicableResults().map(ruleResult => ruleResult.ruleInfo.payloadtype)
+
+        expect(resultTypes).toHaveLength(4)
+        expect(resultTypes).toEqual(
+            expect.arrayContaining([
+                PayloadType.ACCESSIBILITY,
+                PayloadType.VISIBILITY,
+                PayloadType.DEFAULT,
+                PayloadType.USAGE,
+            ]),
+        )
+    })
+
+    it('Should evaluate all rules by default', () => {
+        const data = mock.data.dataContextCustom({
+            riskItems: [
+                {
+                    model: 'WV',
+                },
+            ],
+        })
+
+        const epResult = engine.evaluate(data.dataObject, 'EvalOptionsTest', {
+            ...mock.evaluationConfig,
+        })
+
+        const resultTypes = epResult.getApplicableResults().map(ruleResult => ruleResult.ruleInfo.payloadtype)
+
+        expect(resultTypes).toHaveLength(9)
+        expect(resultTypes).toEqual(expect.arrayContaining(Object.keys(PayloadType)))
+    })
+
+    it('should evaluate custom function registered after engine creation', () => {
+        const data = mock.data.empty()
+
+        registry.add({
+            name: 'custom',
+            function(): boolean {
+                return false
+            },
+        })
+
+        const result = engine.evaluate(data, 'function rebuilding', { currencyCd: 'eur', context: {} })
+
+        expect(result).k_toHaveExpressionsFailures(0)
+    })
+})

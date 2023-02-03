@@ -18,8 +18,8 @@
  * @see {@link Metadata}
  */
 export interface Metadata {
-    type: string;
+    type: string
     properties: {
-        [propertyName: string]: any;
-    };
+        [propertyName: string]: unknown
+    }
 }

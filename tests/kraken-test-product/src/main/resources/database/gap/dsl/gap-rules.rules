@@ -432,6 +432,9 @@ Rule "Inheritance-CCR-01" On Policy.policyCurrency  {
 }
 
 Rule "SelfCCR" On Policy.policyNumber  {
+    When
+      set p to Policy
+      return p.policyNumber == "P1"
     Assert Policy.policyNumber == "P1"
 }
 
@@ -504,4 +507,32 @@ Rule "DefaultStateToFirstCoverageCodeWithLimitAmountGreaterThanTen" On Policy.st
 
 EntryPoint "DefaultStateToFirstCoverageCodeWithLimitAmountGreaterThanTen" {
     "DefaultStateToFirstCoverageCodeWithLimitAmountGreaterThanTen"
+}
+
+Rule "validate state when vehicle model year is 2020" On Policy.state {
+    When Vehicle[0].modelYear == 2020
+    Assert false
+}
+
+Rule "default state when vehicle model year is 2020" On Policy.state {
+    When Vehicle[0].modelYear == 2020
+    Default To "CA"
+}
+
+Rule "hide state when vehicle model year is 2020" On Policy.state {
+    When Vehicle[0].modelYear == 2020
+    Set Hidden
+}
+
+Rule "disable state when vehicle model year is 2020" On Policy.state {
+    When Vehicle[0].modelYear == 2020
+    Set Disabled
+}
+
+
+EntryPoint "test ignored" {
+    "hide state when vehicle model year is 2020",
+    "default state when vehicle model year is 2020",
+    "disable state when vehicle model year is 2020",
+    "validate state when vehicle model year is 2020"
 }

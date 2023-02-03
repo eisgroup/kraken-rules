@@ -14,27 +14,26 @@
  *  limitations under the License.
  */
 
-import { DataContext } from "../DataContext";
-import { DataContextUpdater, DataContextDependency } from "./DataContextUpdater";
+import { DataContextUpdater, DataContextDependency } from './DataContextUpdater'
+import { DataContext } from '../DataContext'
 
 export class CachingDataContextUpdater implements DataContextUpdater {
+    private readonly cache = new Set<string>()
+    private readonly dcCache = new WeakSet<DataContext>()
 
-    private readonly cache = new Set<string>();
-    private readonly dcCache = new WeakSet<DataContext>();
-
-    constructor(private readonly dataContextUpdater: DataContextUpdater) { }
+    constructor(private readonly dataContextUpdater: DataContextUpdater) {}
 
     update(dataContext: DataContext, dependency: DataContextDependency): void {
-        const key = createCacheKey(dataContext, dependency);
+        const key = createCacheKey(dataContext, dependency)
         if (this.dcCache.has(dataContext) && this.cache.has(key)) {
-            return;
+            return
         }
-        this.dcCache.add(dataContext);
-        this.cache.add(key);
-        this.dataContextUpdater.update(dataContext, dependency);
+        this.dcCache.add(dataContext)
+        this.cache.add(key)
+        this.dataContextUpdater.update(dataContext, dependency)
     }
 }
 
 function createCacheKey(dataContext: DataContext, dependency: DataContextDependency): string {
-    return `${dataContext.contextId}:${dependency.contextName}`;
+    return `${dataContext.contextId}:${dependency.contextName}`
 }

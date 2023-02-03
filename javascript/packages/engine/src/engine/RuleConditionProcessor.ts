@@ -14,35 +14,35 @@
  *  limitations under the License.
  */
 
-import { Condition } from "kraken-model";
-import { ConditionEvaluationResult, ConditionEvaluation } from "../dto/ConditionEvaluationResult";
-import { ExpressionEvaluator } from "./runtime/expressions/ExpressionEvaluator";
-import { expressionFactory } from "./runtime/expressions/ExpressionFactory";
-import { DataContext } from "./contexts/data/DataContext";
-import { ExecutionSession } from "./ExecutionSession";
-import { ExpressionEvaluationResult } from "./runtime/expressions/ExpressionEvaluationResult";
+import { Condition } from 'kraken-model'
+import { ConditionEvaluationResult, ConditionEvaluation, ExpressionEvaluationResult } from 'kraken-engine-api'
+import { ExpressionEvaluator } from './runtime/expressions/ExpressionEvaluator'
+import { expressionFactory } from './runtime/expressions/ExpressionFactory'
+import { ExecutionSession } from './ExecutionSession'
+import { DataContext } from './contexts/data/DataContext'
+import { DefaultConditionEvaluationResult } from '../dto/DefaultConditionEvaluationResult'
 
 export class RuleConditionProcessor {
-    constructor(private readonly evaluator: ExpressionEvaluator) { }
+    constructor(private readonly evaluator: ExpressionEvaluator) {}
 
     evaluateCondition(
         dataContext: DataContext,
         session: ExecutionSession,
-        condition?: Condition
+        condition?: Condition,
     ): ConditionEvaluationResult {
         if (!condition) {
-            return ConditionEvaluationResult.of(ConditionEvaluation.APPLICABLE);
+            return DefaultConditionEvaluationResult.of(ConditionEvaluation.APPLICABLE)
         }
         const expressionResult = this.evaluator.evaluate(
             expressionFactory.fromExpression(condition.expression),
             dataContext,
-            session.expressionContext
-        );
+            session.expressionContext,
+        )
         if (ExpressionEvaluationResult.isError(expressionResult)) {
-            return ConditionEvaluationResult.fromError(expressionResult);
+            return DefaultConditionEvaluationResult.fromError(expressionResult)
         }
-        return Boolean(expressionResult.success)
-            ? ConditionEvaluationResult.of(ConditionEvaluation.APPLICABLE)
-            : ConditionEvaluationResult.of(ConditionEvaluation.NOT_APPLICABLE);
+        return expressionResult.success
+            ? DefaultConditionEvaluationResult.of(ConditionEvaluation.APPLICABLE)
+            : DefaultConditionEvaluationResult.of(ConditionEvaluation.NOT_APPLICABLE)
     }
 }

@@ -14,17 +14,17 @@
  *  limitations under the License.
  */
 
-import { FieldEvaluationResultImpl, FieldEvaluationResultUtils } from "../../src/dto/FieldEvaluationResult";
-import { mock } from "../mock";
-import { ContextFieldInfo } from "../../src/dto/ContextFieldInfo";
+import { FieldEvaluationResultImpl, FieldEvaluationResultUtils } from '../../src/dto/DefaultFieldEvaluationResult'
+import { mock } from '../mock'
+import { DefaultContextFieldInfo } from '../../src/dto/DefaultContextFieldInfo'
 
-describe("FieldEvaluationResult", () => {
-    it("should return id", () => {
-        const dataContext = mock.dataContextEmpty();
+describe('FieldEvaluationResult', () => {
+    it('should return id', () => {
+        const dataContext = mock.dataContextEmpty()
         const fieldEvaluationResult = new FieldEvaluationResultImpl(
-            new ContextFieldInfo(dataContext, "state"),
-            []
-        );
-        expect(FieldEvaluationResultUtils.targetId(fieldEvaluationResult)).toBe("Policy:0:state");
-    });
-});
+            new DefaultContextFieldInfo(dataContext, 'state'),
+            [],
+        )
+        expect(FieldEvaluationResultUtils.targetId(fieldEvaluationResult)).toBe('Policy:0:state')
+    })
+})

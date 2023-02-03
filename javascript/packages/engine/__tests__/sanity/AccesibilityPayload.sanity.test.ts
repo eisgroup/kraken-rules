@@ -14,15 +14,23 @@
  *  limitations under the License.
  */
 
-import { sanityMocks } from "./_AutoPolicyObject.mocks";
-import { sanityEngine } from "./_SanityEngine";
+import { sanityMocks } from './_AutoPolicyObject.mocks'
+import { sanityEngine } from './_SanityEngine'
+import { FieldMetadataReducer } from '../../src/engine/results/field_metadata_reducer/FieldMetadataReducer'
+import { MatchableResults } from 'kraken-jest-matchers'
 
-describe("Engine Sanity Accessibility Payload Test", () => {
-    const { empty } = sanityMocks;
+describe('Engine Sanity Accessibility Payload Test', () => {
+    const { empty } = sanityMocks
     it("should execute 'AccessibilityAutoPolicy' entrypoint", () => {
-        const results = sanityEngine.evaluate(empty(), "AccessibilityAutoPolicy");
-        expect(results).k_toMatchResultsStats({ total: 4, disabled: 4 });
-        expect(results).k_toHaveExpressionsFailures(0);
-        expect(results).k_toMatchResultsSnapshots();
-    });
-});
+        const results = sanityEngine.evaluate(empty(), 'AccessibilityAutoPolicy')
+        const fieldResults = new FieldMetadataReducer().reduce(results)
+        const matchableResults = {
+            entryPointResults: results,
+            fieldResults,
+        } as MatchableResults
+
+        expect(results).k_toMatchResultsStats({ total: 4, disabled: 4 })
+        expect(results).k_toHaveExpressionsFailures(0)
+        expect(matchableResults).k_toMatchResultsSnapshots()
+    })
+})

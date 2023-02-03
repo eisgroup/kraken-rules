@@ -15,10 +15,12 @@
  */
 package kraken.model.project.validator.function;
 
-import static kraken.model.project.KrakenProjectMocks.function;
+import static kraken.model.project.KrakenProjectMocks.bound;
+import static kraken.model.project.KrakenProjectMocks.functionSignature;
 import static kraken.model.project.KrakenProjectMocks.krakenProject;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.collection.IsEmptyCollection.empty;
 
 import java.util.List;
 
@@ -27,7 +29,6 @@ import org.junit.Test;
 import kraken.model.project.KrakenProject;
 import kraken.model.project.validator.ValidationMessage;
 import kraken.model.project.validator.ValidationSession;
-import kraken.model.project.validator.context.ExternalContextValidator;
 
 /**
  * @author mulevicius
@@ -37,18 +38,18 @@ public class FunctionSignatureValidatorTest {
     @Test
     public void shouldValidateFunctionSignatures() {
         KrakenProject krakenProject = krakenProject(List.of(), List.of(), List.of(), List.of(
-            function("SQRT", "Number", List.of("Number"))
+            functionSignature("SQRT", "Number", List.of("Number"))
         ));
 
         List<ValidationMessage> validationMessages = validate(krakenProject);
 
-        assertThat(validationMessages, hasSize(0));
+        assertThat(validationMessages, empty());
     }
 
     @Test
     public void shouldFailWhenReturnTypeDoesNotExist() {
         KrakenProject krakenProject = krakenProject(List.of(), List.of(), List.of(), List.of(
-            function("SQRT", "MissingEntity[]", List.of("Number"))
+            functionSignature("SQRT", "MissingEntity[]", List.of("Number"))
         ));
 
         List<ValidationMessage> validationMessages = validate(krakenProject);
@@ -59,7 +60,42 @@ public class FunctionSignatureValidatorTest {
     @Test
     public void shouldFailWhenParameterTypesDoesNotExist() {
         KrakenProject krakenProject = krakenProject(List.of(), List.of(), List.of(), List.of(
-            function("SQRT", "Number", List.of("MissingEntity[]", "MissingOtherEntity"))
+            functionSignature("SQRT", "Number", List.of("MissingEntity[]", "MissingOtherEntity"))
+        ));
+
+        List<ValidationMessage> validationMessages = validate(krakenProject);
+
+        assertThat(validationMessages, hasSize(2));
+    }
+
+    @Test
+    public void shouldAllowGenericFunctionSignature() {
+        KrakenProject krakenProject = krakenProject(List.of(), List.of(), List.of(), List.of(
+            functionSignature("GetFirst", "<T>", List.of("<T>[]"))
+        ));
+
+        List<ValidationMessage> validationMessages = validate(krakenProject);
+
+        assertThat(validationMessages, hasSize(0));
+    }
+
+    @Test
+    public void shouldFailWhenGenericsAreDuplicated() {
+        KrakenProject krakenProject = krakenProject(List.of(), List.of(), List.of(), List.of(
+            functionSignature("First", "<T>", List.of("<T>[]"),
+                List.of(bound("T", "Number"), bound("T", "String")))
+        ));
+
+        List<ValidationMessage> validationMessages = validate(krakenProject);
+
+        assertThat(validationMessages, hasSize(1));
+    }
+
+    @Test
+    public void shouldFailWhenGenericsAreMixedWithUnion() {
+        KrakenProject krakenProject = krakenProject(List.of(), List.of(), List.of(), List.of(
+            functionSignature("First", "<T> | String", List.of("<T>[] | String"),
+                List.of(bound("T", "Number")))
         ));
 
         List<ValidationMessage> validationMessages = validate(krakenProject);

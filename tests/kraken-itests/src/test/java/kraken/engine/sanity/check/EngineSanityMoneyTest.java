@@ -28,7 +28,7 @@ import javax.money.MonetaryAmount;
 
 import static kraken.testing.matchers.KrakenMatchers.*;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class EngineSanityMoneyTest extends SanityEngineBaseTest {
 

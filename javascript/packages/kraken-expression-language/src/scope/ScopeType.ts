@@ -1,1 +1,1 @@
-export type ScopeType = "GLOBAL" | "LOCAL" | "PATH" | "FILTER" | "FOR RETURN EXPRESSION";
+export type ScopeType = 'GLOBAL' | 'LOCAL' | 'PATH' | 'FILTER' | 'VARIABLES_MAP'

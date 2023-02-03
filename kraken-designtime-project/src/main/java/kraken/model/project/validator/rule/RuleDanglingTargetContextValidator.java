@@ -16,11 +16,8 @@
 package kraken.model.project.validator.rule;
 
 import java.text.MessageFormat;
-import java.util.HashSet;
-import java.util.Set;
 
 import kraken.model.Rule;
-import kraken.model.context.ContextDefinition;
 import kraken.model.project.KrakenProject;
 import kraken.model.project.validator.Severity;
 import kraken.model.project.validator.ValidationMessage;
@@ -29,41 +26,28 @@ import kraken.model.project.validator.ValidationSession;
 /**
  * @author mulevicius
  */
-public class RuleDanglingTargetContextValidator {
-
-    private final Set<String> accessibleContextsFromRoot = new HashSet<>();
+public class RuleDanglingTargetContextValidator implements RuleValidator {
 
     private final KrakenProject krakenProject;
 
     public RuleDanglingTargetContextValidator(KrakenProject krakenProject) {
         this.krakenProject = krakenProject;
-
-        ContextDefinition root = krakenProject.getContextDefinitions().get(krakenProject.getRootContextName());
-        collectAccessibleContextDefinitions(root);
     }
 
+    @Override
     public void validate(Rule rule, ValidationSession session) {
-        if(!accessibleContextsFromRoot.contains(rule.getContext())) {
+        if(!krakenProject.getConnectedContextDefinitions().contains(rule.getContext())) {
             String template = "applied on ContextDefinition ''{0}'' which is not related to Root Context ''{1}''";
             String message = MessageFormat.format(template, rule.getContext(), krakenProject.getRootContextName());
             session.add(new ValidationMessage(rule, message, Severity.ERROR));
         }
     }
 
-    private void collectAccessibleContextDefinitions(ContextDefinition contextDefinition) {
-        if(accessibleContextsFromRoot.contains(contextDefinition.getName())) {
-            return;
-        }
-
-        accessibleContextsFromRoot.add(contextDefinition.getName());
-
-        contextDefinition.getParentDefinitions().stream()
-                .map(inherited -> krakenProject.getContextDefinitions().get(inherited))
-                .forEach(inheritedContext -> collectAccessibleContextDefinitions(inheritedContext));
-
-        contextDefinition.getChildren().values().stream()
-                .map(child -> krakenProject.getContextDefinitions().get(child.getTargetName()))
-                .forEach(childContext -> collectAccessibleContextDefinitions(childContext));
+    @Override
+    public boolean canValidate(Rule rule) {
+        return rule.getName() != null
+            && rule.getContext() != null
+            && krakenProject.getContextDefinitions().containsKey(rule.getContext());
     }
 
 }

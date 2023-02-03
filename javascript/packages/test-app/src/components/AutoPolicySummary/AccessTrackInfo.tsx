@@ -14,33 +14,33 @@
  *  limitations under the License.
  */
 
-import * as React from "react";
-import { Row } from "antd";
-import { Moment } from "moment";
+import * as React from 'react'
+import { Row } from 'antd'
+import { Moment } from 'moment'
 
-import { InnerInputsComponentProps, SingleField } from "../core/field/SingleField";
-import { trans } from "../core/DateUtils";
-import { renderers } from "../core/RenderInputFunctions";
+import { InnerInputsComponentProps, SingleField } from '../core/field/SingleField'
+import { trans } from '../core/DateUtils'
+import { renderers } from '../core/RenderInputFunctions'
 
-import { TestProduct } from "kraken-test-product";
-import domain = TestProduct.kraken.testproduct.domain;
-import { withMetadata } from "../core/ContextHOC";
+import { TestProduct } from 'kraken-test-product'
+import domain = TestProduct.kraken.testproduct.domain
+import { withMetadata } from '../core/ContextHOC'
 
 class Component extends React.Component<InnerInputsComponentProps<domain.AccessTrackInfo>> {
     onCreatedOnChange = (e: Moment) => {
-        this.props.onChange(Object.assign({}, this.props.value, { createdOn: trans.toDate(e) }));
+        this.props.onChange(Object.assign({}, this.props.value, { createdOn: trans.toDate(e) }))
     }
 
     onCreatedByChange = (event: React.FormEvent<HTMLInputElement>) => {
-        this.props.onChange(Object.assign({}, this.props.value, { createdBy: event.currentTarget.value }));
+        this.props.onChange(Object.assign({}, this.props.value, { createdBy: event.currentTarget.value }))
     }
 
     onUpdatedOnChange = (e: Moment) => {
-        this.props.onChange(Object.assign({}, this.props.value, { updatedOn: trans.toDate(e) }));
+        this.props.onChange(Object.assign({}, this.props.value, { updatedOn: trans.toDate(e) }))
     }
 
     onUpdatedByChange = (event: React.FormEvent<HTMLInputElement>) => {
-        this.props.onChange(Object.assign({}, this.props.value, { updatedBy: event.currentTarget.value }));
+        this.props.onChange(Object.assign({}, this.props.value, { updatedBy: event.currentTarget.value }))
     }
 
     render(): JSX.Element {
@@ -49,42 +49,38 @@ class Component extends React.Component<InnerInputsComponentProps<domain.AccessT
                 <SingleField
                     id={this.props.id}
                     value={trans.toMoment(this.props.value.createdOn)}
-                    contextName="Policy"
-                    modelFieldName="createdOn"
+                    contextName='Policy'
+                    modelFieldName='createdOn'
                     onChange={this.onCreatedOnChange}
-
                     renderInput={renderers.date}
                 />
                 <SingleField
                     id={this.props.id}
                     value={this.props.value.createdBy}
-                    contextName="Policy"
-                    modelFieldName="createdBy"
+                    contextName='Policy'
+                    modelFieldName='createdBy'
                     onChange={this.onCreatedByChange}
-
                     renderInput={renderers.input}
                 />
                 <SingleField
                     id={this.props.id}
                     value={trans.toMoment(this.props.value.updatedOn)}
-                    contextName="Policy"
-                    modelFieldName="updatedOn"
+                    contextName='Policy'
+                    modelFieldName='updatedOn'
                     onChange={this.onUpdatedOnChange}
-
                     renderInput={renderers.date}
                 />
                 <SingleField
                     id={this.props.id}
                     value={this.props.value.updatedBy}
-                    contextName="Policy"
-                    modelFieldName="updatedBy"
+                    contextName='Policy'
+                    modelFieldName='updatedBy'
                     onChange={this.onUpdatedByChange}
-
                     renderInput={renderers.input}
                 />
             </Row>
-        );
+        )
     }
 }
 
-export const AccessTrackInfo = withMetadata(Component);
+export const AccessTrackInfo = withMetadata(Component)

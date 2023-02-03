@@ -15,23 +15,26 @@
  */
 package kraken.runtime.engine.dto.bundle;
 
-import java.io.IOException;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Properties;
+import static java.util.Objects.requireNonNull;
 
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import kraken.Kraken;
+import kraken.dimensions.DimensionSet;
+import kraken.runtime.EvaluationMode;
 import kraken.runtime.engine.core.EntryPointData;
 import kraken.runtime.engine.core.EntryPointEvaluation;
 import kraken.runtime.engine.core.EntryPointOrderedEvaluationFactory;
+import kraken.runtime.engine.dto.bundle.trace.EntryPointBundleBuildOperation;
 import kraken.runtime.model.rule.RuntimeRule;
-import kraken.runtime.repository.RuntimeContextRepository;
-import kraken.runtime.repository.RuntimeRuleRepository;
+import kraken.runtime.repository.RuntimeProjectRepository;
 import kraken.runtime.repository.factory.RuntimeProjectRepositoryFactory;
+import kraken.tracer.Tracer;
 import kraken.utils.Namespaces;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * @author psurinin
@@ -39,8 +42,7 @@ import static java.util.Objects.requireNonNull;
  */
 public final class EntryPointBundleFactory {
 
-    private static final Logger logger = LoggerFactory.getLogger(EntryPointBundleFactory.class);
-    private RuntimeProjectRepositoryFactory runtimeProjectRepositoryFactory;
+    private final RuntimeProjectRepositoryFactory runtimeProjectRepositoryFactory;
 
     public EntryPointBundleFactory(RuntimeProjectRepositoryFactory runtimeProjectRepositoryFactory) {
         this.runtimeProjectRepositoryFactory = requireNonNull(runtimeProjectRepositoryFactory);
@@ -54,45 +56,60 @@ public final class EntryPointBundleFactory {
      * @param entryPointName full entry point name with namespace prefixed
      * @param context        to resolve {@link RuntimeRule}s.
      */
-    public EntryPointBundle build(String entryPointName, Map<String, Object> context) {
-        return build(entryPointName, context, false);
+    public EntryPointBundle build(
+            String entryPointName,
+            Map<String, Object> context,
+            Set<DimensionSet> excludes,
+            EvaluationMode evaluationMode
+    ) {
+        return doBuild(entryPointName, context, evaluationMode, excludes);
     }
 
-    /**
-     * Builds {@link EntryPointBundle}, containing all Kraken model data for specified entry point name.
-     * Constructed bundle is used by core rule engine to evaluate rules.
-     * Executed each time entry point evaluation is requested from backend.
-     *
-     * @param entryPointName full entry point name with namespace prefixed
-     * @param context        to resolve {@link RuntimeRule}s.
-     * @param isDelta        flag to filter out static rules and send only dimensional rules.
-     *                       {@link RuntimeRule#isDimensional()}
-     * @return
-     */
-    public EntryPointBundle build(String entryPointName, Map<String, Object> context, boolean isDelta) {
+    private EntryPointBundle doBuild(String entryPointName,
+                                     Map<String, Object> context,
+                                     EvaluationMode evaluationMode,
+                                     Set<DimensionSet> excludes) {
         Objects.requireNonNull(entryPointName);
         Objects.requireNonNull(context);
+        Objects.requireNonNull(evaluationMode);
 
-        String namespace = Namespaces.toNamespaceName(entryPointName);
-        RuntimeContextRepository contextRepository = runtimeProjectRepositoryFactory.resolveContextRepository(namespace);
-        RuntimeRuleRepository ruleRepository = runtimeProjectRepositoryFactory.resolveRuleRepository(namespace);
+        return Tracer.doOperation(
+            new EntryPointBundleBuildOperation(entryPointName, excludes),
+            () -> {
+                String namespace = Namespaces.toNamespaceName(entryPointName);
+                RuntimeProjectRepository repository = runtimeProjectRepositoryFactory.resolveRepository(namespace);
 
-        String simpleEntryPointName = Namespaces.toSimpleName(entryPointName);
-        Map<String, RuntimeRule> rules = ruleRepository.resolveRules(simpleEntryPointName, context);
-        EntryPointData entryPointData = new EntryPointData(entryPointName, rules);
-        EntryPointOrderedEvaluationFactory evaluationFactory = new EntryPointOrderedEvaluationFactory(contextRepository);
-        EntryPointEvaluation entryPointEvaluation = evaluationFactory.create(entryPointData, entryPointName, isDelta);
+                String simpleEntryPointName = Namespaces.toSimpleName(entryPointName);
+                Map<String, RuntimeRule> rules = filterRules(
+                    repository.resolveRules(simpleEntryPointName, context),
+                    evaluationMode
+                );
 
-        String version = null;
-        try {
-            final Properties properties = new Properties();
-            properties.load(this.getClass().getClassLoader().getResourceAsStream("project.properties"));
-            version = properties.getProperty("version");
-        } catch (IOException e) {
-            logger.error("Failed to load 'project.properties' file", e);
+                EntryPointData entryPointData
+                    = new EntryPointData(entryPointName, rules);
+                EntryPointOrderedEvaluationFactory evaluationFactory
+                    = createEvaluationFactory(repository);
+                EntryPointEvaluation entryPointEvaluation
+                    = evaluationFactory.create(entryPointData, excludes);
+
+                return new EntryPointBundle(entryPointEvaluation, context, Kraken.VERSION);
+            }
+        );
+    }
+
+    private Map<String, RuntimeRule> filterRules(Map<String, RuntimeRule> allRules, EvaluationMode evaluationMode) {
+        if (evaluationMode == EvaluationMode.ALL) {
+            return allRules;
         }
 
-        return new EntryPointBundle(entryPointEvaluation, context, version);
+        return allRules.entrySet()
+            .stream()
+            .filter(entry -> evaluationMode.isSupported(entry.getValue().getPayload().getType()))
+            .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
+    }
+
+    private EntryPointOrderedEvaluationFactory createEvaluationFactory(RuntimeProjectRepository repository) {
+        return new EntryPointOrderedEvaluationFactory(repository);
     }
 
 }

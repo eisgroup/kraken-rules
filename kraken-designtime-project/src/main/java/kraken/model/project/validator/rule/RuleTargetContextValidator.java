@@ -30,7 +30,7 @@ import kraken.model.project.validator.ValidationSession;
 /**
  * @author mulevicius
  */
-public final class RuleTargetContextValidator {
+public final class RuleTargetContextValidator implements RuleValidator {
 
     private final KrakenProject krakenProject;
 
@@ -38,10 +38,16 @@ public final class RuleTargetContextValidator {
         this.krakenProject = krakenProject;
     }
 
+    @Override
     public void validate(Rule rule, ValidationSession session) {
         ContextDefinition contextDefinition = krakenProject.getContextDefinitions().get(rule.getContext());
         if (contextDefinition == null) {
             String message = String.format("missing ContextDefinition with name '%s'", rule.getContext());
+            session.add(new ValidationMessage(rule, message, Severity.ERROR));
+        } else if (contextDefinition.isSystem()) {
+            String message = String.format(
+                "cannot be applied on system ContextDefinition '%s'.",
+                rule.getContext());
             session.add(new ValidationMessage(rule, message, Severity.ERROR));
         } else if (contextDefinition.isStrict()) {
             ContextField contextField = krakenProject.getContextProjection(contextDefinition.getName())
@@ -59,6 +65,8 @@ public final class RuleTargetContextValidator {
 
         if(krakenProject.getRuleVersions().containsKey(rule.getName())) {
             List<Rule> rulesAppliedOnDifferentAttribute = krakenProject.getRuleVersions().get(rule.getName()).stream()
+                .filter(r -> r.getContext() != null)
+                .filter(r -> r.getTargetPath() != null)
                 .filter(
                     r -> !r.getContext().equals(rule.getContext()) || !r.getTargetPath().equals(rule.getTargetPath()))
                 .collect(Collectors.toList());
@@ -67,10 +75,16 @@ public final class RuleTargetContextValidator {
                 Set<String> appliedOn = rulesAppliedOnDifferentAttribute.stream()
                     .map(r -> r.getContext() + "." + r.getTargetPath())
                     .collect(Collectors.toSet());
-                String msg = rule.getName() + " has version applied on different context or attribute: " + appliedOn;
+                String msg = "has version applied on different context or attribute: " + appliedOn;
                 session.add(new ValidationMessage(rule, msg, Severity.ERROR));
             }
         }
     }
 
+    @Override
+    public boolean canValidate(Rule rule) {
+        return rule.getName() != null
+            && rule.getContext() != null
+            && rule.getTargetPath() != null;
+    }
 }

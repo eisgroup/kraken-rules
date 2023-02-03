@@ -17,27 +17,26 @@ package kraken.el.ast;
 
 import kraken.el.ast.token.Token;
 import kraken.el.scope.Scope;
-import kraken.el.scope.type.ArrayType;
+import kraken.el.scope.ScopeType;
+import kraken.el.scope.type.Type;
 
 /**
  * @author mulevicius
  */
 public class Path extends Reference {
 
-    private Reference object;
+    private final Reference object;
 
-    private Reference property;
+    private final Reference property;
 
-    public Path(Reference object, Reference property, Scope scope, Token token) {
-        super(NodeType.PATH,
-                scope,
-                object.getEvaluationType() instanceof ArrayType && !(property.getEvaluationType() instanceof ArrayType)
-                        ? ArrayType.of(property.getEvaluationType())
-                        : property.getEvaluationType(),
-                token
-        );
+    private final boolean nullSafe;
+
+    public Path(Reference object, Reference property, boolean nullSafe, Scope scope, Type evaluationType, Token token) {
+        super(NodeType.PATH, scope, evaluationType, token);
+
         this.object = object;
         this.property = property;
+        this.nullSafe = nullSafe;
     }
 
     public Reference getObject() {
@@ -48,22 +47,48 @@ public class Path extends Reference {
         return property;
     }
 
+    public boolean isNullSafe() {
+        return nullSafe;
+    }
+
+    @Override
+    public boolean isReferenceInCurrentScope() {
+        return object.isReferenceInCurrentScope();
+    }
+
+    @Override
+    public boolean isReferenceInGlobalScope() {
+        return object.isReferenceInGlobalScope();
+    }
+
+    @Override
+    public ScopeType findScopeTypeOfReference() {
+        return object.findScopeTypeOfReference();
+    }
+
     /**
      *
      * @return true if this path is simple bean path expression that does not contain filters, folds, array access, ...
      */
     @Override
     public boolean isSimpleBeanPath() {
-        return !(object.getEvaluationType() instanceof ArrayType) && object.isSimpleBeanPath() && property.isSimpleBeanPath();
+        return !object.getEvaluationType().isAssignableToArray()
+            && object.isSimpleBeanPath() && property.isSimpleBeanPath();
     }
 
     @Override
-    String getFirstToken() {
-        return object.getFirstToken();
+    public boolean isSimplePath() {
+        return object.isSimplePath() && property.isSimplePath();
+    }
+
+    @Override
+    public Reference getFirstReference() {
+        return object.getFirstReference();
     }
 
     @Override
     public String toString() {
-        return object + "." + property;
+        String pathSeparator = nullSafe ? "?." : ".";
+        return object + pathSeparator + property;
     }
 }

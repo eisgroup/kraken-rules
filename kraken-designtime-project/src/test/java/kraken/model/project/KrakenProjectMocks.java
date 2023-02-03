@@ -21,10 +21,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import kraken.el.scope.type.Type;
+import kraken.model.Expression;
+import kraken.model.Function;
+import kraken.model.FunctionDocumentation;
+import kraken.model.FunctionParameter;
 import kraken.model.FunctionSignature;
+import kraken.model.GenericTypeBound;
 import kraken.model.Rule;
 import kraken.model.context.Cardinality;
 import kraken.model.context.ContextDefinition;
@@ -122,6 +127,15 @@ public class KrakenProjectMocks {
     public static ContextDefinition toContextDefinition(String name) {
         ContextDefinition contextDefinition = factory.createContextDefinition();
         contextDefinition.setName(name);
+        return contextDefinition;
+    }
+
+    public static ContextDefinition toSystemContextDefinition(String name) {
+        ContextDefinition contextDefinition = factory.createContextDefinition();
+        contextDefinition.setName(name);
+        contextDefinition.setSystem(true);
+        contextDefinition.setStrict(true);
+
         return contextDefinition;
     }
 
@@ -227,6 +241,36 @@ public class KrakenProjectMocks {
         applyPhysicalNamespace(ns, rules);
         applyPhysicalNamespace(ns, functionSignatures);
 
+        return resource(
+            ns,
+            contextDefinitions,
+            externalContext,
+            externalContextDefinitions,
+            entryPoints,
+            rules,
+            includes,
+            ruleImports,
+            functionSignatures,
+            List.of()
+        );
+    }
+
+    public static Resource resource(String ns,
+                                    List<ContextDefinition> contextDefinitions,
+                                    ExternalContext externalContext,
+                                    List<ExternalContextDefinition> externalContextDefinitions,
+                                    List<EntryPoint> entryPoints,
+                                    List<Rule> rules,
+                                    List<String> includes,
+                                    List<RuleImport> ruleImports,
+                                    List<FunctionSignature> functionSignatures,
+                                    List<Function> functions) {
+        applyPhysicalNamespace(ns, externalContextDefinitions);
+        applyPhysicalNamespace(ns, contextDefinitions);
+        applyPhysicalNamespace(ns, entryPoints);
+        applyPhysicalNamespace(ns, rules);
+        applyPhysicalNamespace(ns, functionSignatures);
+
         return new Resource(
             ns,
             contextDefinitions,
@@ -237,6 +281,7 @@ public class KrakenProjectMocks {
             externalContext,
             externalContextDefinitions,
             functionSignatures,
+            functions,
             ResourceUtils.randomResourceUri()
         );
     }
@@ -247,6 +292,23 @@ public class KrakenProjectMocks {
                                     List<ExternalContextDefinition> externalContextDefinitions) {
         return resource(ns, contextDefinitions, externalContext, externalContextDefinitions,
             List.of(), List.of(), List.of(), List.of());
+    }
+
+    public static Resource resourceWithFunctions(String ns, List<Function> functions, List<String> includes) {
+        applyPhysicalNamespace(ns, functions);
+
+        return resource(
+            ns,
+            contextDefinitionsWithRoot("Policy"),
+            null,
+            List.of(),
+            List.of(),
+            List.of(),
+            includes,
+            List.of(),
+            List.of(),
+            functions
+        );
     }
 
     private static <T extends Namespaced> void applyPhysicalNamespace(String ns, List<T> namespacedItems) {
@@ -279,6 +341,45 @@ public class KrakenProjectMocks {
         );
     }
 
+    public static KrakenProject krakenProjectWithFunctions(List<ContextDefinition> contextDefinitions,
+                                                           List<FunctionSignature> functionSignatures,
+                                                           List<Function> functions) {
+        return krakenProject(
+            contextDefinitions,
+            null,
+            List.of(),
+            List.of(),
+            List.of(),
+            functionSignatures,
+            functions
+        );
+    }
+
+    public static KrakenProject krakenProjectWithFunctions(List<Function> functions) {
+        return krakenProject(
+            List.of(),
+            null,
+            List.of(),
+            List.of(),
+            List.of(),
+            List.of(),
+            functions
+        );
+    }
+
+    public static KrakenProject krakenProjectWithFunctions(List<FunctionSignature> functionSignatures,
+                                                           List<Function> functions) {
+        return krakenProject(
+            List.of(),
+            null,
+            List.of(),
+            List.of(),
+            List.of(),
+            functionSignatures,
+            functions
+        );
+    }
+
     public static KrakenProject krakenProject(List<ContextDefinition> contextDefinitions,
                                               ExternalContext externalContext,
                                               List<ExternalContextDefinition> externalContextDefinitions,
@@ -300,6 +401,17 @@ public class KrakenProjectMocks {
                                               List<EntryPoint> entryPoints,
                                               List<Rule> rules,
                                               List<FunctionSignature> functionSignatures) {
+        return krakenProject(contextDefinitions, externalContext, externalContextDefinitions, entryPoints, rules,
+            functionSignatures, List.of());
+    }
+
+    public static KrakenProject krakenProject(List<ContextDefinition> contextDefinitions,
+                                              ExternalContext externalContext,
+                                              List<ExternalContextDefinition> externalContextDefinitions,
+                                              List<EntryPoint> entryPoints,
+                                              List<Rule> rules,
+                                              List<FunctionSignature> functionSignatures,
+                                              List<Function> functions) {
         List<ContextDefinition> allContextDefinitions = new ArrayList<>(contextDefinitions);
         if(allContextDefinitions.isEmpty()) {
             ContextDefinition contextDefinition = factory.createContextDefinition();
@@ -316,9 +428,10 @@ public class KrakenProjectMocks {
             entryPoints,
             rules,
             externalContext,
-            externalContextDefinitions.stream().collect(Collectors.toMap(ExternalContextDefinition::getName, Function.identity())),
+            externalContextDefinitions.stream().collect(Collectors.toMap(ExternalContextDefinition::getName, c -> c)),
             null,
-            functionSignatures
+            functionSignatures,
+            functions
         );
     }
 
@@ -363,7 +476,7 @@ public class KrakenProjectMocks {
         ExternalContextDefinition externalContextDefinition = factory.createExternalContextDefinition();
         externalContextDefinition.setName(name);
         externalContextDefinition.setAttributes(attributes.stream()
-                .collect(Collectors.toMap(ExternalContextDefinitionAttribute::getName, Function.identity())));
+                .collect(Collectors.toMap(ExternalContextDefinitionAttribute::getName, c -> c)));
 
         return externalContextDefinition;
     }
@@ -554,12 +667,59 @@ public class KrakenProjectMocks {
         return entryPoint;
     }
 
-    public static FunctionSignature function(String name, String returnType, List<String> parameterTypes) {
+    public static GenericTypeBound bound(String generic, String bound) {
+        GenericTypeBound genericTypeBound = factory.createGenericTypeBound();
+        genericTypeBound.setGeneric(generic);
+        genericTypeBound.setBound(bound);
+        return genericTypeBound;
+    }
+
+    public static FunctionSignature functionSignature(String name, String returnType, List<String> parameterTypes) {
+        return functionSignature(name, returnType, parameterTypes, List.of());
+    }
+
+    public static FunctionSignature functionSignature(String name,
+                                                      String returnType,
+                                                      List<String> parameterTypes,
+                                                      List<GenericTypeBound> bounds) {
         FunctionSignature functionSignature = factory.createFunctionSignature();
         functionSignature.setName(name);
         functionSignature.setReturnType(returnType);
         functionSignature.setParameterTypes(parameterTypes);
+        functionSignature.setGenericTypeBounds(bounds);
         return functionSignature;
     }
 
+    public static FunctionParameter parameter(String name, String type) {
+        FunctionParameter parameter = factory.createFunctionParameter();
+        parameter.setName(name);
+        parameter.setType(type);
+        return parameter;
+    }
+    public static Function function(String name, String body) {
+        return function(name, List.of(), body);
+    }
+    public static Function function(String name, List<FunctionParameter> parameters, String body) {
+        return function(name, Type.ANY.getName(), parameters, body);
+    }
+    public static Function function(String name, String returnType, List<FunctionParameter> parameters, String body) {
+        return function(name, returnType, parameters, body, List.of());
+    }
+    public static Function function(String name, String returnType, List<FunctionParameter> parameters, String body,
+                                    List<GenericTypeBound> bounds) {
+        return function(name, returnType, parameters, body, bounds, null);
+    }
+    public static Function function(String name, String returnType, List<FunctionParameter> parameters, String body,
+                                    List<GenericTypeBound> bounds, FunctionDocumentation documentation) {
+        Function function = factory.createFunction();
+        function.setName(name);
+        function.setReturnType(returnType);
+        function.setParameters(parameters);
+        function.setGenericTypeBounds(bounds);
+        Expression functionBody = factory.createExpression();
+        functionBody.setExpressionString(body);
+        function.setBody(functionBody);
+        function.setDocumentation(documentation);
+        return function;
+    }
 }

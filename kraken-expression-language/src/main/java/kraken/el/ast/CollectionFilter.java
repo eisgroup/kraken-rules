@@ -15,8 +15,12 @@
  */
 package kraken.el.ast;
 
+import javax.annotation.Nullable;
+
 import kraken.el.ast.token.Token;
 import kraken.el.scope.Scope;
+import kraken.el.scope.ScopeType;
+import kraken.el.scope.type.Type;
 
 /**
  * Represent collection filter reference expression.
@@ -29,8 +33,8 @@ public class CollectionFilter extends Reference {
     private final Reference collection;
     private final Expression predicate;
 
-    public CollectionFilter(Reference collection, Expression predicate, Scope scope, Token token) {
-        super(NodeType.COLLECTION_FILTER, scope, collection.getEvaluationType(), token);
+    public CollectionFilter(Reference collection, Expression predicate, Scope scope, Type evaluationType, Token token) {
+        super(NodeType.COLLECTION_FILTER, scope, evaluationType, token);
 
         this.collection = collection;
         this.predicate = predicate;
@@ -44,13 +48,39 @@ public class CollectionFilter extends Reference {
      *
      * @return predicate or null if collection filter selects all
      */
+    @Nullable
     public Expression getPredicate() {
         return predicate;
     }
 
     @Override
-    String getFirstToken() {
-        return collection.getFirstToken();
+    public boolean isReferenceInCurrentScope() {
+        return collection.isReferenceInCurrentScope();
+    }
+
+    @Override
+    public boolean isReferenceInGlobalScope() {
+        return collection.isReferenceInGlobalScope();
+    }
+
+    @Override
+    public ScopeType findScopeTypeOfReference() {
+        return collection.findScopeTypeOfReference();
+    }
+
+    @Override
+    public boolean isSimpleBeanPath() {
+        return false;
+    }
+
+    @Override
+    public boolean isSimplePath() {
+        return false;
+    }
+
+    @Override
+    public Reference getFirstReference() {
+        return collection.getFirstReference();
     }
 
     @Override

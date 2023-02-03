@@ -21,6 +21,7 @@ import kraken.runtime.engine.context.info.SimpleDataObjectInfoResolver;
 import kraken.runtime.engine.context.type.ContextTypeAdapter;
 import kraken.runtime.engine.context.type.IterableContextTypeAdapter;
 import kraken.test.TestResources;
+import kraken.testproduct.domain.Policy;
 import kraken.testproduct.domain.meta.Identifiable;
 import kraken.utils.MockAutoPolicyBuilder;
 
@@ -42,19 +43,8 @@ public abstract class SanityEngineBaseTest extends EngineBaseTest {
         return TestResources.create(TestResources.Info.TEST_PRODUCT);
     }
 
-    @Override
-    protected Object getDataObject() {
+    protected Policy getDataObject() {
         return new MockAutoPolicyBuilder().addEmptyAutoPolicy().build();
-    }
-
-    @Override
-    protected List<IterableContextTypeAdapter> getIterableTypeAdapters() {
-        return new ArrayList<>();
-    }
-
-    @Override
-    protected List<ContextTypeAdapter> getInstanceTypeAdapters() {
-        return new ArrayList<>();
     }
 
     private static final class MockInfoResolver extends SimpleDataObjectInfoResolver {

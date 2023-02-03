@@ -14,43 +14,45 @@
  *  limitations under the License.
  */
 
-import { Layout } from "antd";
-import * as React from "react";
-import { fetch, BuildInfo } from "./rule-engine/api";
+import { Layout } from 'antd'
+import * as React from 'react'
+import { fetch, BuildInfo } from './rule-engine/api'
 
-import "./components/AutoPolicySummary/Policy.less";
+import './components/AutoPolicySummary/Policy.less'
 
-import { AutoPolicySummaryContainer } from "./components/AutoPolicySummary/Policy.container";
-import { ErrorBoundary } from "./ErrorBoundary";
+import { AutoPolicySummaryContainer } from './components/AutoPolicySummary/Policy.container'
+import { ErrorBoundary } from './ErrorBoundary'
 
-const { Header, Footer, Content } = Layout;
+const { Header, Footer, Content } = Layout
 
 const styles = {
     header: {
-        fontSize: "24px",
-        padding: "10px",
-        background: "white",
-        color: "dark-grey"
+        fontSize: '24px',
+        padding: '10px',
+        background: 'white',
+        color: 'dark-grey',
     },
     content: {
-        padding: "10px",
-        background: "url(\"https://www.toptal.com/designers/subtlepatterns/patterns/bright_squares.png\")"
+        padding: '10px',
+        background: 'url("https://www.toptal.com/designers/subtlepatterns/patterns/bright_squares.png")',
     },
     footer: {
-        padding: "10px",
-        background: "#070f13d1",
-        color: "white"
-    }
-};
+        padding: '10px',
+        background: '#070f13d1',
+        color: 'white',
+    },
+}
 
 export const App = () => {
-    const [info, setInfo] = React.useState<undefined | BuildInfo>(undefined);
+    const [info, setInfo] = React.useState<undefined | BuildInfo>(undefined)
     React.useEffect(() => {
-        fetch.buildInfo().then(bi => setInfo(bi));
-    }, []);
+        fetch.buildInfo().then(bi => setInfo(bi))
+    }, [])
     return (
         <Layout>
-            <Header style={styles.header}><b>Auto Policy</b></Header>
+            <Header style={styles.header}>
+                <b>Auto Policy</b>
+            </Header>
             <ErrorBoundary>
                 <Content style={styles.content}>
                     <AutoPolicySummaryContainer />
@@ -63,5 +65,5 @@ export const App = () => {
                 </Footer>
             </ErrorBoundary>
         </Layout>
-    );
-};
+    )
+}

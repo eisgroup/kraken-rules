@@ -14,46 +14,50 @@
  *  limitations under the License.
  */
 
-import { RulePayloadHandler } from "./RulePayloadHandler";
-import { ExpressionEvaluator } from "../runtime/expressions/ExpressionEvaluator";
-import { DataContext } from "../contexts/data/DataContext";
-import { RegExpPayloadResult, payloadResultCreator } from "../results/PayloadResult";
+import { RulePayloadHandler } from './RulePayloadHandler'
+import { ExpressionEvaluator } from '../runtime/expressions/ExpressionEvaluator'
+import { RegExpPayloadResult, ExpressionEvaluationResult } from 'kraken-engine-api'
 
-import { Expressions } from "../runtime/expressions/Expressions";
+import { Expressions } from '../runtime/expressions/Expressions'
 
-import { Payloads, Rule } from "kraken-model";
-import PayloadType = Payloads.PayloadType;
+import { Payloads, Rule } from 'kraken-model'
+import PayloadType = Payloads.PayloadType
 
-import { expressionFactory } from "../runtime/expressions/ExpressionFactory";
-import { ExpressionEvaluationResult } from "../runtime/expressions/ExpressionEvaluationResult";
-import { ExecutionSession } from "../ExecutionSession";
+import { expressionFactory } from '../runtime/expressions/ExpressionFactory'
+import { ExecutionSession } from '../ExecutionSession'
+import { DataContext } from '../contexts/data/DataContext'
+import { payloadResultCreator } from '../results/PayloadResultCreator'
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function isSuccess(value: any, payload: Payloads.Validation.RegExpPayload): boolean {
-    return value === "" || value === undefined || value === null
+    return value === '' || value === undefined || value === null
         ? true
-        : new RegExp(payload.regExp).test(value.toString());
+        : new RegExp(payload.regExp).test(value.toString())
 }
 
 export class RegExpPayloadHandler implements RulePayloadHandler {
-    constructor(private readonly evaluator: ExpressionEvaluator) { }
+    constructor(private readonly evaluator: ExpressionEvaluator) {}
 
     handlesPayloadType(): Payloads.PayloadType {
-        return PayloadType.REGEX;
+        return PayloadType.REGEX
     }
     executePayload(
-        payload: Payloads.Validation.RegExpPayload, rule: Rule, dataContext: DataContext, session: ExecutionSession
+        payload: Payloads.Validation.RegExpPayload,
+        rule: Rule,
+        dataContext: DataContext,
+        session: ExecutionSession,
     ): RegExpPayloadResult {
-        const expression = expressionFactory.fromPath(Expressions.createPathResolver(dataContext)(rule.targetPath));
-        const result = this.evaluator.evaluate(expression, dataContext);
+        const expression = expressionFactory.fromPath(Expressions.createPathResolver(dataContext)(rule.targetPath))
+        const result = this.evaluator.evaluate(expression, dataContext)
         if (ExpressionEvaluationResult.isError(result)) {
-            throw new Error(`Failed to evaluate regular expression: '${expression}'`);
+            throw new Error(`Failed to evaluate regular expression: '${expression}'`)
         }
-        const value = result.success;
+        const value = result.success
         const templateVariables = this.evaluator.evaluateTemplateVariables(
             payload.errorMessage,
             dataContext,
-            session.expressionContext
-        );
-        return payloadResultCreator.regexp(payload, isSuccess(value, payload), templateVariables);
+            session.expressionContext,
+        )
+        return payloadResultCreator.regexp(payload, isSuccess(value, payload), templateVariables)
     }
 }

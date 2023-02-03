@@ -25,7 +25,8 @@ kraken.engine.sanity.check.EngineSanityComplexTypeTest.shouldReferenceComplexCol
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -54,7 +55,8 @@ kraken.engine.sanity.check.EngineSanityComplexTypeTest.shouldReferenceComplexCol
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     }

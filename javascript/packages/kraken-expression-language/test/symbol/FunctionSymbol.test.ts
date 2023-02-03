@@ -1,34 +1,47 @@
-import { FunctionSymbol } from "../../src/symbol/FunctionSymbol";
-import { ArrayType } from "../../src/type/ArrayType";
-import { GenericType } from "../../src/type/GenericType";
-import { instance } from "../test-data/test-data";
+import { FunctionSymbol } from '../../src/symbol/FunctionSymbol'
+import { instance } from '../test-data/test-data'
+import { ArrayType, Type, UnionType } from '../../src/type/Types'
 
-describe("FunctionSymbol", () => {
-    describe("findGenericParameter", () => {
-        it("should fail to find generic parameter", () => {
-            const FromMoney = find("FromMoney");
-            expect(() => FromMoney.findGenericParameter(
-                GenericType.createGeneric("T")
-            )).toThrow("T");
-        });
-        it("should find generic array type", () => {
-            const SymmetricDifference = find("SymmetricDifference");
-            const fp = SymmetricDifference.findGenericParameter(
-                GenericType.createGeneric("T")
-            );
-            expect(fp).toBeDefined();
-            expect(fp.parameterIndex).toBe(0);
-            expect(fp.type).toBeInstanceOf(ArrayType);
-            expect(fp.type.name).toBe("T[]");
-        });
-    });
-});
+describe('FunctionSymbol', () => {
+    describe('resolveGenericRewrites', () => {
+        it('should resolve generic rewrites', () => {
+            const SymmetricDifference = find('SymmetricDifference')
+            const rewrites = SymmetricDifference.resolveGenericRewrites([
+                ArrayType.createArray(Type.STRING),
+                ArrayType.createArray(Type.STRING),
+            ])
+            expect(rewrites['<T>']).toBe(Type.STRING)
+        })
+        it('should resolve nested generic rewrites', () => {
+            const SymmetricDifference = find('SymmetricDifference')
+            const rewrites = SymmetricDifference.resolveGenericRewrites([
+                ArrayType.createArray(ArrayType.createArray(Type.STRING)),
+                ArrayType.createArray(ArrayType.createArray(Type.STRING)),
+            ])
+            expect(rewrites['<T>']).toStrictEqual(ArrayType.createArray(Type.STRING))
+        })
+        it('should resolve dynamic generic rewrites', () => {
+            const SymmetricDifference = find('SymmetricDifference')
+            const rewrites = SymmetricDifference.resolveGenericRewrites([Type.ANY, Type.ANY])
+            expect(rewrites['<T>']).toBe(Type.ANY)
+        })
+        it('should resolve union generic rewrites', () => {
+            const SymmetricDifference = find('SymmetricDifference')
+            const rewrites = SymmetricDifference.resolveGenericRewrites([
+                ArrayType.createArray(UnionType.createUnion(Type.DATE, Type.DATETIME)),
+                ArrayType.createArray(UnionType.createUnion(Type.DATE, Type.DATETIME)),
+            ])
+            expect(rewrites['<T>']).toStrictEqual(UnionType.createUnion(Type.DATE, Type.DATETIME))
+        })
+    })
+})
 
 function find(fnName: string): FunctionSymbol {
-    const { functions } = instance.policy.parentScope!.type.properties;
-    const fn = functions.find(fx => fx.name === fnName);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const { functions } = instance.policy.parentScope!.type.properties
+    const fn = functions.find(fx => fx.name === fnName)
     if (!fn) {
-        throw new Error(`Function '${fnName}' did not found`);
+        throw new Error(`Function '${fnName}' did not found`)
     }
-    return fn;
+    return fn
 }

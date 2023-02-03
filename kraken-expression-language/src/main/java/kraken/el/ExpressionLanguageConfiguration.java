@@ -21,13 +21,6 @@ package kraken.el;
 public class ExpressionLanguageConfiguration {
 
     /**
-     * Limits allowed custom functions in expressions by target.
-     * Functions will be limited by values provided in {@link kraken.el.functionregistry.ExpressionTarget}
-     * on implementation of {@link kraken.el.functionregistry.FunctionLibrary}
-     */
-    private final String expressionTarget;
-
-    /**
      * Enables automatic iteration of function invocation.
      * Function invocation will be iterated over each collection parameter value
      * if function signature accepts singular value instead of collection.
@@ -43,16 +36,10 @@ public class ExpressionLanguageConfiguration {
      */
     private final boolean strictTypeMode;
 
-    public ExpressionLanguageConfiguration(String expressionTarget,
-                                           boolean allowAutomaticIterationWhenInvokingFunctions,
+    public ExpressionLanguageConfiguration(boolean allowAutomaticIterationWhenInvokingFunctions,
                                            boolean strictTypeMode) {
-        this.expressionTarget = expressionTarget;
         this.allowAutomaticIterationWhenInvokingFunctions = allowAutomaticIterationWhenInvokingFunctions;
         this.strictTypeMode = strictTypeMode;
-    }
-
-    public String getExpressionTarget() {
-        return expressionTarget;
     }
 
     public boolean isAllowAutomaticIterationWhenInvokingFunctions() {
@@ -69,16 +56,9 @@ public class ExpressionLanguageConfiguration {
 
     public static final class Builder {
 
-        private String expressionTarget;
-
         private boolean allowAutomaticIterationWhenInvokingFunctions;
 
         private boolean strictTypeMode;
-
-        public Builder forExpressionTarget(String expressionTarget) {
-            this.expressionTarget = expressionTarget;
-            return this;
-        }
 
         public Builder strictTypeMode() {
             this.strictTypeMode = true;
@@ -92,9 +72,8 @@ public class ExpressionLanguageConfiguration {
 
         public ExpressionLanguageConfiguration build() {
             return new ExpressionLanguageConfiguration(
-                    expressionTarget,
-                    allowAutomaticIterationWhenInvokingFunctions,
-                    strictTypeMode
+                allowAutomaticIterationWhenInvokingFunctions,
+                strictTypeMode
             );
         }
 

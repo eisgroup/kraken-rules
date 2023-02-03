@@ -26,7 +26,7 @@ import static kraken.model.dsl.KrakenDSLModelParser.parseResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * Unit tests to test parsing of {@code ExternalContext} elements.

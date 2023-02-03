@@ -22,19 +22,20 @@
  * @param {string} path
  * @return property value by provided path or {@code undefined}
  */
-function access(object: Record<string, any>, path: string): any {
-    let currentObject = object;
-    const pathArray = path.split(".");
-    let pathIndex = 0;
-    let canGoDeep = true;
+function access(object: Record<string, unknown>, path: string): unknown {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let currentObject: any = object
+    const pathArray = path.split('.')
+    let pathIndex = 0
+    let canGoDeep = true
     while (canGoDeep) {
-        currentObject = currentObject[pathArray[pathIndex]];
-        pathIndex++;
+        currentObject = currentObject[pathArray[pathIndex]]
+        pathIndex++
         if (pathIndex === pathArray.length || currentObject === undefined) {
-            canGoDeep = false;
+            canGoDeep = false
         }
     }
-    return currentObject;
+    return currentObject
 }
 /**
  * Set property by provided path as string separated by dot.
@@ -44,23 +45,23 @@ function access(object: Record<string, any>, path: string): any {
  * @param {string} path
  * @return new property value by provided path or {@code undefined}
  */
-function accessAndSet(object: Record<string, any>, path: string, value: any): any {
-    let currentObject = object;
-    const pathArray = path.split(".");
-    let pathIndex = 0;
-    const canGoDeep = true;
+function accessAndSet(object: Record<string, unknown>, path: string, value: unknown): unknown {
+    let currentObject = object
+    const pathArray = path.split('.')
+    let pathIndex = 0
+    const canGoDeep = true
     while (canGoDeep) {
         if (pathIndex === pathArray.length - 1) {
-            currentObject[pathArray[pathIndex]] = value;
-            return value;
+            currentObject[pathArray[pathIndex]] = value
+            return value
         }
-        currentObject = currentObject[pathArray[pathIndex]];
-        pathIndex++;
+        currentObject = currentObject[pathArray[pathIndex]] as Record<string, unknown>
+        pathIndex++
         if (currentObject === undefined) {
-            return undefined;
+            return undefined
         }
     }
-    return currentObject;
+    return currentObject
 }
 
 /**
@@ -68,5 +69,6 @@ function accessAndSet(object: Record<string, any>, path: string, value: any): an
  * separated by dot.
  */
 export const pathAccessor = {
-    access, accessAndSet
-};
+    access,
+    accessAndSet,
+}

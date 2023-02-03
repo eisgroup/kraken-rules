@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-import { Expressions } from "./Expressions";
+import { Expressions } from './Expressions'
 
 /**
  * Models data context object on which rules are defined and executed.
@@ -22,12 +22,11 @@ import { Expressions } from "./Expressions";
  */
 
 export namespace Contexts {
-
     export interface ContextDefinition {
-        name: string;
-        children?: Record<string, ContextNavigation>;
-        fields?: Record<string, ContextField>;
-        inheritedContexts: string[];
+        name: string
+        children?: Record<string, ContextNavigation>
+        fields?: Record<string, ContextField>
+        inheritedContexts: string[]
     }
 
     /**
@@ -37,56 +36,59 @@ export namespace Contexts {
      * Context fields are defined only for strict data context definitions.
      */
     export interface ContextField {
-        name: string;
-        cardinality: Cardinality;
-        fieldType: string;
-        fieldPath: string;
+        name: string
+        cardinality: Cardinality
+        fieldType: string
+        fieldPath: string
     }
 
     export interface ContextNavigation {
-        targetName: string;
-        navigationExpression: Expressions.PathExpression | Expressions.ComplexExpression;
-        cardinality: Cardinality;
+        targetName: string
+        navigationExpression: Expressions.PathExpression | Expressions.ComplexExpression
+        cardinality: Cardinality
     }
 
-    export type Cardinality = "SINGLE" | "MULTIPLE";
+    export type Cardinality = 'SINGLE' | 'MULTIPLE'
 
-    export type MoneyType = { amount: number, currency: string };
-    export type KrakenPrimitive = number | string | boolean | Date | MoneyType;
-    export type PrimitiveDataType = "INTEGER"
-        | "DECIMAL"
-        | "STRING"
-        | "BOOLEAN"
-        | "DATE"
-        | "DATETIME"
-        | "UUID"
-        | "MONEY";
+    export type MoneyType = { amount: number; currency: string }
+    export type KrakenPrimitive = number | string | boolean | Date | MoneyType
+    export type PrimitiveDataType =
+        | 'INTEGER'
+        | 'DECIMAL'
+        | 'STRING'
+        | 'BOOLEAN'
+        | 'DATE'
+        | 'DATETIME'
+        | 'UUID'
+        | 'MONEY'
 
-    export type SystemDataType = "UNKNOWN";
+    export type SystemDataType = 'UNKNOWN'
+
+    const systemDataType: SystemDataType = 'UNKNOWN'
 
     const primitiveDataTypes = new Set<PrimitiveDataType>([
-        "BOOLEAN",
-        "DATE",
-        "DATETIME",
-        "DECIMAL",
-        "INTEGER",
-        "MONEY",
-        "STRING",
-        "UUID"
-    ]);
+        'BOOLEAN',
+        'DATE',
+        'DATETIME',
+        'DECIMAL',
+        'INTEGER',
+        'MONEY',
+        'STRING',
+        'UUID',
+    ])
 
     export const fieldTypeChecker = {
         isPrimitive(type: string): type is PrimitiveDataType {
-            return primitiveDataTypes.has(type as any);
+            return primitiveDataTypes.has(type as PrimitiveDataType)
         },
         isSystem(type: string): type is SystemDataType {
-            return primitiveDataTypes.has(type as any);
+            return systemDataType === type
         },
-        isUnknownType(type: string): type is "UNKNOWN" {
-            return type === "UNKNOWN";
+        isUnknownType(type: string): type is 'UNKNOWN' {
+            return type === 'UNKNOWN'
         },
-        isMoney(type: string): type is "MONEY" {
-            return type === "MONEY" as PrimitiveDataType;
-        }
-    };
+        isMoney(type: string): type is 'MONEY' {
+            return type === 'MONEY'
+        },
+    }
 }

@@ -41,10 +41,26 @@ public class Literals {
         return str.substring(1, str.length() - 1);
     }
 
+    /**
+     * Converts text from dsl domain to string domain. Opposite of {@link Literals#deescape(String)}
+     *
+     * @param str to escape
+     */
     public static String escape(String str) {
         return str.replace("\\\"", "\"")
                 .replace("\\'", "'")
                 .replace("\\\\", "\\");
+    }
+
+    /**
+     * Converts text from string domain to dsl domain. Opposite of {@link Literals#escape(String)}
+     *
+     * @param str to deescape
+     */
+    public static String deescape(String str) {
+        return str.replace("\\", "\\\\")
+            .replace("\"", "\\\"")
+            .replace("'", "\\'");
     }
 
     public static Boolean getBoolean(String boolStr) {

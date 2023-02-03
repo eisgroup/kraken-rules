@@ -135,7 +135,9 @@ public class ContextDefinitionConversionTest {
         ContextNavigation contextNavigation1 = createContextNavigation("child1", "targetPath", Cardinality.SINGLE);
         ContextNavigation contextNavigation2 = createContextNavigation("child2", "child2", Cardinality.MULTIPLE);
         ContextNavigation contextNavigation3 = createContextNavigation("Child3", "child3", Cardinality.MULTIPLE);
-        contextDefinition.setChildren(toLinkedMap(ContextNavigation::getTargetName, contextNavigation1, contextNavigation2, contextNavigation3));
+        contextDefinition.setChildren(toLinkedMap(
+                ContextNavigation::getTargetName, contextNavigation1, contextNavigation2, contextNavigation3
+        ));
         String convertedContext = convert(contextDefinition);
         assertEquals(
                         "@NotStrict" +
@@ -199,6 +201,162 @@ public class ContextDefinitionConversionTest {
                         "    String* field2 : notMatchingPath" +
                         System.lineSeparator() +
                         "    Boolean Field3 : field3" +
+                        System.lineSeparator() +
+                        "}" +
+                        System.lineSeparator(),
+                convertedContext
+        );
+    }
+
+    @Test
+    public void shouldConvertRootContextWithFieldsWithParent() {
+        ContextDefinition contextDefinition = RULES_MODEL_FACTORY.createContextDefinition();
+        contextDefinition.setName("ContextWithFields");
+        contextDefinition.setStrict(false);
+        contextDefinition.setRoot(true);
+        contextDefinition.setParentDefinitions(Collections.singleton("ContextParent"));
+        ContextField contextField1 = createContextField("field1", "Integer", "field1", Cardinality.MULTIPLE);
+        ContextField contextField2 = createContextField("field2", "String", "notMatchingPath", Cardinality.SINGLE);
+        ContextField contextField3 = createContextField("field3", "Boolean", "field3", Cardinality.MULTIPLE);
+        ContextField contextField4 = createContextField("field4", "Decimal", "field4", Cardinality.SINGLE);
+        ContextField contextField5 = createContextField("field5", "RiskItem", "field5", Cardinality.SINGLE);
+        contextDefinition.setContextFields(toLinkedMap(
+                ContextField::getName, contextField1, contextField2, contextField3, contextField4, contextField5
+        ));
+
+        String convertedContext = convert(contextDefinition);
+        assertEquals(
+                "@NotStrict" +
+                        System.lineSeparator() +
+                        "Root Context ContextWithFields Is ContextParent {" +
+                        System.lineSeparator() +
+                        "    Integer* field1" +
+                        System.lineSeparator() +
+                        "    String field2 : notMatchingPath" +
+                        System.lineSeparator() +
+                        "    Boolean* field3" +
+                        System.lineSeparator() +
+                        "    Decimal field4" +
+                        System.lineSeparator() +
+                        "    RiskItem field5" +
+                        System.lineSeparator() +
+                        "}" +
+                        System.lineSeparator(),
+                convertedContext
+        );
+    }
+
+    @Test
+    public void shouldConvertRootContextWithDateTimeMoneyFieldsWithParent() {
+        ContextDefinition contextDefinition = RULES_MODEL_FACTORY.createContextDefinition();
+        contextDefinition.setName("ContextWithFields");
+        contextDefinition.setStrict(false);
+        contextDefinition.setRoot(true);
+        contextDefinition.setParentDefinitions(Collections.singleton("Parent"));
+        ContextField contextField1 = createContextField("field1", "Date", "notMatchingPath", Cardinality.SINGLE);
+        ContextField contextField2 = createContextField("field2", "DateTime", "field2", Cardinality.SINGLE);
+        ContextField contextField3 = createContextField("field3", "Money", "field3", Cardinality.SINGLE);
+        contextDefinition.setContextFields(toLinkedMap(
+                ContextField::getName, contextField1, contextField2, contextField3
+        ));
+
+        String convertedContext = convert(contextDefinition);
+        assertEquals(
+                "@NotStrict" +
+                        System.lineSeparator() +
+                        "Root Context ContextWithFields Is Parent {" +
+                        System.lineSeparator() +
+                        "    Date field1 : notMatchingPath" +
+                        System.lineSeparator() +
+                        "    DateTime field2" +
+                        System.lineSeparator() +
+                        "    Money field3" +
+                        System.lineSeparator() +
+                        "}" +
+                        System.lineSeparator(),
+                convertedContext
+        );
+    }
+
+    @Test
+    public void shouldConvertRootContextWithDateTimeMoneyFieldsWithChild() {
+        ContextDefinition contextDefinition = RULES_MODEL_FACTORY.createContextDefinition();
+        contextDefinition.setName("ContextWithFields");
+        contextDefinition.setStrict(false);
+        contextDefinition.setRoot(true);
+        ContextNavigation contextNavigation = createContextNavigation("child", "child_expression", Cardinality.MULTIPLE);
+        contextDefinition.setChildren(toLinkedMap(ContextNavigation::getTargetName, contextNavigation));
+        ContextField contextField1 = createContextField("field1", "Date", "field1", Cardinality.MULTIPLE);
+        ContextField contextField2 = createContextField("field2", "DateTime", "field2", Cardinality.MULTIPLE);
+        ContextField contextField3 = createContextField("field3", "Money", "field3", Cardinality.MULTIPLE);
+        contextDefinition.setContextFields(toLinkedMap(
+                ContextField::getName, contextField1, contextField2, contextField3
+        ));
+
+        String convertedContext = convert(contextDefinition);
+        assertEquals(
+                "@NotStrict" +
+                        System.lineSeparator() +
+                        "Root Context ContextWithFields {" +
+                        System.lineSeparator() +
+                        "    Date* field1" +
+                        System.lineSeparator() +
+                        "    DateTime* field2" +
+                        System.lineSeparator() +
+                        "    Money* field3" +
+                        System.lineSeparator() +
+                        "    Child* child : child_expression" +
+                        System.lineSeparator() +
+                        "}" +
+                        System.lineSeparator(),
+                convertedContext
+        );
+    }
+
+    @Test
+    public void shouldConvertContextWithUnknownFieldWithParentAndChild() {
+        ContextDefinition contextDefinition = RULES_MODEL_FACTORY.createContextDefinition();
+        contextDefinition.setName("ContextWithFields");
+        contextDefinition.setStrict(false);
+        contextDefinition.setParentDefinitions(Collections.singleton("Parent"));
+        ContextNavigation contextNavigation = createContextNavigation("child", "child_expression02", Cardinality.MULTIPLE);
+        contextDefinition.setChildren(toLinkedMap(ContextNavigation::getTargetName, contextNavigation));
+        ContextField contextField1 = createContextField("field1", "Unknown", "notMatchingPath", Cardinality.MULTIPLE);
+        contextDefinition.setContextFields(toLinkedMap(ContextField::getName, contextField1));
+
+        String convertedContext = convert(contextDefinition);
+        assertEquals(
+                "@NotStrict" +
+                        System.lineSeparator() +
+                        "Context ContextWithFields Is Parent {" +
+                        System.lineSeparator() +
+                        "    Unknown* field1 : notMatchingPath" +
+                        System.lineSeparator() +
+                        "    Child* child : child_expression02" +
+                        System.lineSeparator() +
+                        "}" +
+                        System.lineSeparator(),
+                convertedContext
+        );
+    }
+
+    @Test
+    public void shouldConvertStrictRootContextWithExternalFields() {
+        ContextDefinition contextDefinition = RULES_MODEL_FACTORY.createContextDefinition();
+        contextDefinition.setName("ContextWithFields");
+        contextDefinition.setStrict(true);
+        contextDefinition.setRoot(true);
+        ContextField contextField1 = createContextField(true, "field1", "Unknown", "notMatchingPath", Cardinality.SINGLE);
+        ContextField contextField2 = createContextField(true, "field2", "CostEndorsement", "field2", Cardinality.SINGLE);
+        contextDefinition.setContextFields(toLinkedMap(ContextField::getName, contextField1, contextField2));
+
+        String convertedContext = convert(contextDefinition);
+        assertEquals(
+                "Root Context ContextWithFields {" +
+                        System.lineSeparator() +
+                        "    External Unknown field1 : notMatchingPath" +
+                        System.lineSeparator() +
+                        "    External CostEndorsement field2" +
                         System.lineSeparator() +
                         "}" +
                         System.lineSeparator(),

@@ -14,52 +14,41 @@
  *  limitations under the License.
  */
 
-import { EntryPointBundle as Bundle } from "../src/models/EntryPointBundle";
-import EntryPointBundle = Bundle.EntryPointBundle;
-import { Rule } from "kraken-model";
-import { ENGINE_VERSION } from "../src/engine/generated/engineVersion";
+import { EntryPointBundle } from '../src/models/EntryPointBundle'
+import { Rule } from 'kraken-model'
 
 export class MockBundleBuilder {
     static builder(): MockBundleBuilder {
-        return new MockBundleBuilder();
+        return new MockBundleBuilder()
     }
 
-    private rules: Rule[] = [];
-    private rulesOrder: Record<string, number> = {};
-    private entryPointName: string = "test";
-    private delta = false;
+    private rules: Rule[] = []
+    private rulesOrder: Record<string, number> = {}
+    private entryPointName = 'test'
+    private delta = false
 
     addRule(rule: Rule): this {
-        this.rules.push(rule);
-        this.rulesOrder[rule.name] = Object.keys(this.rulesOrder).length;
-        return this;
-    }
-
-    addOrder(ruleName: string): this {
-        this.rulesOrder[ruleName] = Object.keys(this.rulesOrder).length;
-        return this;
+        this.rules.push(rule)
+        this.rulesOrder[rule.name] = Object.keys(this.rulesOrder).length
+        return this
     }
 
     setEntryPointName(entryPointName: string): this {
-        this.entryPointName = entryPointName;
-        return this;
+        this.entryPointName = entryPointName
+        return this
     }
 
     setDelta(): this {
-        this.delta = true;
-        return this;
+        this.delta = true
+        return this
     }
 
-    build = (): EntryPointBundle => {
+    build = (): EntryPointBundle.EntryPointEvaluation => {
         return {
-            engineVersion: ENGINE_VERSION,
-            evaluation: {
-                delta: this.delta,
-                entryPointName: this.entryPointName,
-                rules: this.rules,
-                rulesOrder: this.rulesOrder
-            },
-            expressionContext: {}
-        };
+            delta: this.delta,
+            entryPointName: this.entryPointName,
+            rules: this.rules,
+            fieldOrder: [],
+        }
     }
 }

@@ -14,22 +14,22 @@
  *  limitations under the License.
  */
 
-import * as React from "react";
-import { Row } from "antd";
+import * as React from 'react'
+import { Row } from 'antd'
 
-import { InnerInputsComponentProps, SingleField } from "../core/field/SingleField";
-import { renderers } from "../core/RenderInputFunctions";
+import { InnerInputsComponentProps, SingleField } from '../core/field/SingleField'
+import { renderers } from '../core/RenderInputFunctions'
 
-import { TestProduct } from "kraken-test-product";
-import domain = TestProduct.kraken.testproduct.domain;
-import { withMetadata } from "../core/ContextHOC";
+import { TestProduct } from 'kraken-test-product'
+import domain = TestProduct.kraken.testproduct.domain
+import { withMetadata } from '../core/ContextHOC'
 
 export class Component extends React.Component<InnerInputsComponentProps<domain.PartyRole>> {
     onRoleChange = (event: React.FormEvent<HTMLInputElement>) => {
-        this.props.onChange(Object.assign({}, this.props.value, { role: event.currentTarget.value }));
+        this.props.onChange(Object.assign({}, this.props.value, { role: event.currentTarget.value }))
     }
     onLimitChange = (limit: React.ReactText) => {
-        this.props.onChange(Object.assign({}, this.props.value, { limit }));
+        this.props.onChange(Object.assign({}, this.props.value, { limit }))
     }
     render(): JSX.Element {
         return (
@@ -37,22 +37,22 @@ export class Component extends React.Component<InnerInputsComponentProps<domain.
                 <SingleField
                     id={this.props.id}
                     value={this.props.value.role}
-                    contextName="PartyRole"
-                    modelFieldName="role"
+                    contextName='PartyRole'
+                    modelFieldName='role'
                     onChange={this.onRoleChange}
                     renderInput={renderers.input}
                 />
                 <SingleField
                     id={this.props.id}
                     value={this.props.value.limit}
-                    contextName="PartyRole"
-                    modelFieldName="limit"
+                    contextName='PartyRole'
+                    modelFieldName='limit'
                     onChange={this.onLimitChange}
                     renderInput={renderers.inputNumber}
                 />
             </Row>
-        );
+        )
     }
 }
 
-export const PartyRole = withMetadata(Component);
+export const PartyRole = withMetadata(Component)

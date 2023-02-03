@@ -1,8 +1,96 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Engine Sanity Self reference Test should execute SelfReference entry point: Results + reducer results 1`] = `
+exports[`Engine Sanity Self reference Test should execute SelfReference entry point 1`] = `
 Object {
-  "Field Metadata reduced results": Object {
+  "entryPointResults": Object {
+    "evaluationTimestamp": Any<Date>,
+    "results": Object {
+      "Policy:0:policyNumber": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "policyNumber",
+          "fieldPath": "policyNumber",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "SelfImplicit",
+              "targetPath": "policyNumber",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "SelfCCR",
+              "targetPath": "policyNumber",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "SelfThis",
+              "targetPath": "policyNumber",
+            },
+          },
+        ],
+      },
+    },
+  },
+  "fieldResults": Object {
     "Policy:0:policyNumber": Object {
       "fieldType": "STRING",
       "id": "Policy:0:policyNumber",
@@ -64,99 +152,6 @@ Object {
         },
       ],
     },
-  },
-  "Raw results": Object {
-    "evaluationTimestamp": Any<Date>,
-    "results": Object {
-      "Policy:0:policyNumber": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "0",
-          "contextName": "Policy",
-          "fieldName": "policyNumber",
-          "fieldPath": "policyNumber",
-          "fieldType": "STRING",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 1,
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "ASSERTION",
-              "ruleName": "SelfImplicit",
-              "targetPath": "policyNumber",
-            },
-          },
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 1,
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "ASSERTION",
-              "ruleName": "SelfCCR",
-              "targetPath": "policyNumber",
-            },
-          },
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 1,
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "ASSERTION",
-              "ruleName": "SelfThis",
-              "targetPath": "policyNumber",
-            },
-          },
-        ],
-      },
-    },
-  },
-  "Validation results": Object {
-    "critical": Array [],
-    "info": Array [],
-    "warning": Array [],
   },
 }
 `;

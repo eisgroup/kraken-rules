@@ -1,8 +1,853 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Engine Sanity Usage Payload Test should execute 'UsageAutoPolicy' entrypoint with empty data: Results + reducer results 1`] = `
+exports[`Engine Sanity Usage Payload Test should execute 'UsageAutoPolicy' entrypoint with empty data 1`] = `
 Object {
-  "Field Metadata reduced results": Object {
+  "entryPointResults": Object {
+    "evaluationTimestamp": Any<Date>,
+    "results": Object {
+      "AddressInfo:7:countryCd": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "7",
+          "contextName": "AddressInfo",
+          "fieldName": "countryCd",
+          "fieldPath": "countryCd",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "The field is mandatory",
+                "templateVariables": Array [],
+              },
+              "success": false,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "AddressInfo",
+              "payloadtype": "USAGE",
+              "ruleName": "R0156",
+              "targetPath": "countryCd",
+            },
+          },
+        ],
+      },
+      "AddressInfo:7:postalCode": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "7",
+          "contextName": "AddressInfo",
+          "fieldName": "postalCode",
+          "fieldPath": "postalCode",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "The field is mandatory",
+                "templateVariables": Array [],
+              },
+              "success": false,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "AddressInfo",
+              "payloadtype": "USAGE",
+              "ruleName": "R0157",
+              "targetPath": "postalCode",
+            },
+          },
+        ],
+      },
+      "Party:3:relationToPrimaryInsured": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "3",
+          "contextName": "Party",
+          "fieldName": "relationToPrimaryInsured",
+          "fieldPath": "relationToPrimaryInsured",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "The field is mandatory",
+                "templateVariables": Array [],
+              },
+              "success": false,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Party",
+              "payloadtype": "USAGE",
+              "ruleName": "R0149",
+              "targetPath": "relationToPrimaryInsured",
+            },
+          },
+        ],
+      },
+      "PartyRole:5:role": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "5",
+          "contextName": "PartyRole",
+          "fieldName": "role",
+          "fieldPath": "role",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "The field is mandatory",
+                "templateVariables": Array [],
+              },
+              "success": false,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "PartyRole",
+              "payloadtype": "USAGE",
+              "ruleName": "R0148",
+              "targetPath": "role",
+            },
+          },
+        ],
+      },
+      "Policy:0:contractTermTypeCd": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "contractTermTypeCd",
+          "fieldPath": "termDetails.contractTermTypeCd",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "The field is mandatory",
+                "templateVariables": Array [],
+              },
+              "success": false,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "USAGE",
+              "ruleName": "R0042",
+              "targetPath": "contractTermTypeCd",
+            },
+          },
+        ],
+      },
+      "Policy:0:createdBy": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "createdBy",
+          "fieldPath": "accessTrackInfo.createdBy",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "The field is mandatory",
+                "templateVariables": Array [],
+              },
+              "success": false,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "USAGE",
+              "ruleName": "R0032",
+              "targetPath": "createdBy",
+            },
+          },
+        ],
+      },
+      "Policy:0:createdFromPolicyRev": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "createdFromPolicyRev",
+          "fieldPath": "createdFromPolicyRev",
+          "fieldType": "INTEGER",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "The field is mandatory",
+                "templateVariables": Array [],
+              },
+              "success": false,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "USAGE",
+              "ruleName": "R0008",
+              "targetPath": "createdFromPolicyRev",
+            },
+          },
+        ],
+      },
+      "Policy:0:createdOn": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "createdOn",
+          "fieldPath": "accessTrackInfo.createdOn",
+          "fieldType": "DATE",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "The field is mandatory",
+                "templateVariables": Array [],
+              },
+              "success": false,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "USAGE",
+              "ruleName": "R0028",
+              "targetPath": "createdOn",
+            },
+          },
+        ],
+      },
+      "Policy:0:effectiveDate": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "effectiveDate",
+          "fieldPath": "termDetails.termEffectiveDate",
+          "fieldType": "DATE",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "The field is mandatory",
+                "templateVariables": Array [],
+              },
+              "success": false,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "USAGE",
+              "ruleName": "R0044",
+              "targetPath": "effectiveDate",
+            },
+          },
+        ],
+      },
+      "Policy:0:expirationDate": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "expirationDate",
+          "fieldPath": "termDetails.termExpirationDate",
+          "fieldType": "DATE",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "The field is mandatory",
+                "templateVariables": Array [],
+              },
+              "success": false,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "USAGE",
+              "ruleName": "R0047",
+              "targetPath": "expirationDate",
+            },
+          },
+        ],
+      },
+      "Policy:0:policyNumber": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "policyNumber",
+          "fieldPath": "policyNumber",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "Field is required",
+                "templateVariables": Array [],
+              },
+              "success": false,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "USAGE",
+              "ruleName": "R0001A",
+              "targetPath": "policyNumber",
+            },
+          },
+        ],
+      },
+      "Policy:0:state": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "state",
+          "fieldPath": "state",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "The field is mandatory",
+                "templateVariables": Array [],
+              },
+              "success": false,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "USAGE",
+              "ruleName": "R0004",
+              "targetPath": "state",
+            },
+          },
+        ],
+      },
+      "Policy:0:termCd": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "termCd",
+          "fieldPath": "termDetails.termCd",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "The field is mandatory",
+                "templateVariables": Array [],
+              },
+              "success": false,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "USAGE",
+              "ruleName": "R0054",
+              "targetPath": "termCd",
+            },
+          },
+        ],
+      },
+      "Policy:0:termNo": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "termNo",
+          "fieldPath": "termDetails.termNo",
+          "fieldType": "INTEGER",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "The field is mandatory",
+                "templateVariables": Array [],
+              },
+              "success": false,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "USAGE",
+              "ruleName": "R0050",
+              "targetPath": "termNo",
+            },
+          },
+        ],
+      },
+      "Policy:0:txCreateDate": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "txCreateDate",
+          "fieldPath": "transactionDetails.txCreateDate",
+          "fieldType": "DATE",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "The field is mandatory",
+                "templateVariables": Array [],
+              },
+              "success": false,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "USAGE",
+              "ruleName": "R0020",
+              "targetPath": "txCreateDate",
+            },
+          },
+        ],
+      },
+      "Policy:0:txEffectiveDate": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "txEffectiveDate",
+          "fieldPath": "transactionDetails.txEffectiveDate",
+          "fieldType": "DATETIME",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "The field is mandatory",
+                "templateVariables": Array [],
+              },
+              "success": false,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "USAGE",
+              "ruleName": "R0016",
+              "targetPath": "txEffectiveDate",
+            },
+          },
+        ],
+      },
+      "Policy:0:txType": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "txType",
+          "fieldPath": "transactionDetails.txType",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "The field is mandatory",
+                "templateVariables": Array [],
+              },
+              "success": false,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "USAGE",
+              "ruleName": "R0011",
+              "targetPath": "txType",
+            },
+          },
+        ],
+      },
+      "Policy:0:updatedBy": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "updatedBy",
+          "fieldPath": "accessTrackInfo.updatedBy",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "The field is mandatory",
+                "templateVariables": Array [],
+              },
+              "success": false,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "USAGE",
+              "ruleName": "R0039",
+              "targetPath": "updatedBy",
+            },
+          },
+        ],
+      },
+      "Policy:0:updatedOn": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "updatedOn",
+          "fieldPath": "accessTrackInfo.updatedOn",
+          "fieldType": "DATE",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "The field is mandatory",
+                "templateVariables": Array [],
+              },
+              "success": false,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "USAGE",
+              "ruleName": "R0035",
+              "targetPath": "updatedOn",
+            },
+          },
+        ],
+      },
+      "Vehicle:6:model": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "6",
+          "contextName": "Vehicle",
+          "fieldName": "model",
+          "fieldPath": "model",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "The field is mandatory",
+                "templateVariables": Array [],
+              },
+              "success": false,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Vehicle",
+              "payloadtype": "USAGE",
+              "ruleName": "R0074",
+              "targetPath": "model",
+            },
+          },
+        ],
+      },
+      "Vehicle:6:purchasedDate": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "6",
+          "contextName": "Vehicle",
+          "fieldName": "purchasedDate",
+          "fieldPath": "purchasedDate",
+          "fieldType": "DATE",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "The field is mandatory",
+                "templateVariables": Array [],
+              },
+              "success": false,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Vehicle",
+              "payloadtype": "USAGE",
+              "ruleName": "R0088",
+              "targetPath": "purchasedDate",
+            },
+          },
+        ],
+      },
+    },
+  },
+  "fieldResults": Object {
     "AddressInfo:7:countryCd": Object {
       "fieldType": "STRING",
       "id": "AddressInfo:7:countryCd",
@@ -718,12 +1563,17 @@ Object {
       ],
     },
   },
-  "Raw results": Object {
+}
+`;
+
+exports[`Engine Sanity Usage Payload Test should execute 'UsageAutoPolicy' entrypoint with valid data 1`] = `
+Object {
+  "entryPointResults": Object {
     "evaluationTimestamp": Any<Date>,
     "results": Object {
-      "AddressInfo:7:countryCd": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "7",
+      "AddressInfo:17:countryCd": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "17",
           "contextName": "AddressInfo",
           "fieldName": "countryCd",
           "fieldPath": "countryCd",
@@ -731,7 +1581,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -747,12 +1597,12 @@ Object {
                 "errorMessage": "The field is mandatory",
                 "templateVariables": Array [],
               },
-              "success": false,
+              "success": true,
               "type": 64,
               "usageType": "mandatory",
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "AddressInfo",
               "payloadtype": "USAGE",
               "ruleName": "R0156",
@@ -761,9 +1611,9 @@ Object {
           },
         ],
       },
-      "AddressInfo:7:postalCode": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "7",
+      "AddressInfo:17:postalCode": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "17",
           "contextName": "AddressInfo",
           "fieldName": "postalCode",
           "fieldPath": "postalCode",
@@ -771,7 +1621,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -787,12 +1637,12 @@ Object {
                 "errorMessage": "The field is mandatory",
                 "templateVariables": Array [],
               },
-              "success": false,
+              "success": true,
               "type": 64,
               "usageType": "mandatory",
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "AddressInfo",
               "payloadtype": "USAGE",
               "ruleName": "R0157",
@@ -801,17 +1651,17 @@ Object {
           },
         ],
       },
-      "Party:3:relationToPrimaryInsured": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "3",
-          "contextName": "Party",
-          "fieldName": "relationToPrimaryInsured",
-          "fieldPath": "relationToPrimaryInsured",
+      "AddressInfo:21:countryCd": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "21",
+          "contextName": "AddressInfo",
+          "fieldName": "countryCd",
+          "fieldPath": "countryCd",
           "fieldType": "STRING",
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -827,12 +1677,172 @@ Object {
                 "errorMessage": "The field is mandatory",
                 "templateVariables": Array [],
               },
-              "success": false,
+              "success": true,
               "type": 64,
               "usageType": "mandatory",
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
+              "context": "AddressInfo",
+              "payloadtype": "USAGE",
+              "ruleName": "R0156",
+              "targetPath": "countryCd",
+            },
+          },
+        ],
+      },
+      "AddressInfo:21:postalCode": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "21",
+          "contextName": "AddressInfo",
+          "fieldName": "postalCode",
+          "fieldPath": "postalCode",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "The field is mandatory",
+                "templateVariables": Array [],
+              },
+              "success": true,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "AddressInfo",
+              "payloadtype": "USAGE",
+              "ruleName": "R0157",
+              "targetPath": "postalCode",
+            },
+          },
+        ],
+      },
+      "BillingAddress:14:countryCd": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "14",
+          "contextName": "BillingAddress",
+          "fieldName": "countryCd",
+          "fieldPath": "countryCd",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "The field is mandatory",
+                "templateVariables": Array [],
+              },
+              "success": true,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "AddressInfo",
+              "payloadtype": "USAGE",
+              "ruleName": "R0156",
+              "targetPath": "countryCd",
+            },
+          },
+        ],
+      },
+      "BillingAddress:14:postalCode": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "14",
+          "contextName": "BillingAddress",
+          "fieldName": "postalCode",
+          "fieldPath": "postalCode",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "The field is mandatory",
+                "templateVariables": Array [],
+              },
+              "success": true,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "AddressInfo",
+              "payloadtype": "USAGE",
+              "ruleName": "R0157",
+              "targetPath": "postalCode",
+            },
+          },
+        ],
+      },
+      "Party:15:relationToPrimaryInsured": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "15",
+          "contextName": "Party",
+          "fieldName": "relationToPrimaryInsured",
+          "fieldPath": "relationToPrimaryInsured",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "The field is mandatory",
+                "templateVariables": Array [],
+              },
+              "success": true,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
               "context": "Party",
               "payloadtype": "USAGE",
               "ruleName": "R0149",
@@ -841,17 +1851,17 @@ Object {
           },
         ],
       },
-      "PartyRole:5:role": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "5",
-          "contextName": "PartyRole",
-          "fieldName": "role",
-          "fieldPath": "role",
+      "Party:18:relationToPrimaryInsured": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "18",
+          "contextName": "Party",
+          "fieldName": "relationToPrimaryInsured",
+          "fieldPath": "relationToPrimaryInsured",
           "fieldType": "STRING",
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -867,12 +1877,52 @@ Object {
                 "errorMessage": "The field is mandatory",
                 "templateVariables": Array [],
               },
-              "success": false,
+              "success": true,
               "type": 64,
               "usageType": "mandatory",
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Party",
+              "payloadtype": "USAGE",
+              "ruleName": "R0149",
+              "targetPath": "relationToPrimaryInsured",
+            },
+          },
+        ],
+      },
+      "PartyRole:19:role": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "19",
+          "contextName": "PartyRole",
+          "fieldName": "role",
+          "fieldPath": "role",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "The field is mandatory",
+                "templateVariables": Array [],
+              },
+              "success": true,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
               "context": "PartyRole",
               "payloadtype": "USAGE",
               "ruleName": "R0148",
@@ -881,9 +1931,9 @@ Object {
           },
         ],
       },
-      "Policy:0:contractTermTypeCd": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "0",
+      "Policy:12:contractTermTypeCd": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "12",
           "contextName": "Policy",
           "fieldName": "contractTermTypeCd",
           "fieldPath": "termDetails.contractTermTypeCd",
@@ -891,7 +1941,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -907,12 +1957,12 @@ Object {
                 "errorMessage": "The field is mandatory",
                 "templateVariables": Array [],
               },
-              "success": false,
+              "success": true,
               "type": 64,
               "usageType": "mandatory",
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "Policy",
               "payloadtype": "USAGE",
               "ruleName": "R0042",
@@ -921,9 +1971,9 @@ Object {
           },
         ],
       },
-      "Policy:0:createdBy": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "0",
+      "Policy:12:createdBy": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "12",
           "contextName": "Policy",
           "fieldName": "createdBy",
           "fieldPath": "accessTrackInfo.createdBy",
@@ -931,7 +1981,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -947,12 +1997,12 @@ Object {
                 "errorMessage": "The field is mandatory",
                 "templateVariables": Array [],
               },
-              "success": false,
+              "success": true,
               "type": 64,
               "usageType": "mandatory",
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "Policy",
               "payloadtype": "USAGE",
               "ruleName": "R0032",
@@ -961,9 +2011,9 @@ Object {
           },
         ],
       },
-      "Policy:0:createdFromPolicyRev": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "0",
+      "Policy:12:createdFromPolicyRev": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "12",
           "contextName": "Policy",
           "fieldName": "createdFromPolicyRev",
           "fieldPath": "createdFromPolicyRev",
@@ -971,7 +2021,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -987,12 +2037,12 @@ Object {
                 "errorMessage": "The field is mandatory",
                 "templateVariables": Array [],
               },
-              "success": false,
+              "success": true,
               "type": 64,
               "usageType": "mandatory",
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "Policy",
               "payloadtype": "USAGE",
               "ruleName": "R0008",
@@ -1001,9 +2051,9 @@ Object {
           },
         ],
       },
-      "Policy:0:createdOn": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "0",
+      "Policy:12:createdOn": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "12",
           "contextName": "Policy",
           "fieldName": "createdOn",
           "fieldPath": "accessTrackInfo.createdOn",
@@ -1011,7 +2061,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -1027,12 +2077,12 @@ Object {
                 "errorMessage": "The field is mandatory",
                 "templateVariables": Array [],
               },
-              "success": false,
+              "success": true,
               "type": 64,
               "usageType": "mandatory",
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "Policy",
               "payloadtype": "USAGE",
               "ruleName": "R0028",
@@ -1041,9 +2091,9 @@ Object {
           },
         ],
       },
-      "Policy:0:effectiveDate": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "0",
+      "Policy:12:effectiveDate": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "12",
           "contextName": "Policy",
           "fieldName": "effectiveDate",
           "fieldPath": "termDetails.termEffectiveDate",
@@ -1051,7 +2101,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -1067,12 +2117,12 @@ Object {
                 "errorMessage": "The field is mandatory",
                 "templateVariables": Array [],
               },
-              "success": false,
+              "success": true,
               "type": 64,
               "usageType": "mandatory",
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "Policy",
               "payloadtype": "USAGE",
               "ruleName": "R0044",
@@ -1081,9 +2131,9 @@ Object {
           },
         ],
       },
-      "Policy:0:expirationDate": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "0",
+      "Policy:12:expirationDate": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "12",
           "contextName": "Policy",
           "fieldName": "expirationDate",
           "fieldPath": "termDetails.termExpirationDate",
@@ -1091,7 +2141,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -1107,12 +2157,12 @@ Object {
                 "errorMessage": "The field is mandatory",
                 "templateVariables": Array [],
               },
-              "success": false,
+              "success": true,
               "type": 64,
               "usageType": "mandatory",
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "Policy",
               "payloadtype": "USAGE",
               "ruleName": "R0047",
@@ -1121,9 +2171,9 @@ Object {
           },
         ],
       },
-      "Policy:0:policyNumber": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "0",
+      "Policy:12:policyNumber": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "12",
           "contextName": "Policy",
           "fieldName": "policyNumber",
           "fieldPath": "policyNumber",
@@ -1131,7 +2181,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -1147,12 +2197,12 @@ Object {
                 "errorMessage": "Field is required",
                 "templateVariables": Array [],
               },
-              "success": false,
+              "success": true,
               "type": 64,
               "usageType": "mandatory",
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "Policy",
               "payloadtype": "USAGE",
               "ruleName": "R0001A",
@@ -1161,9 +2211,9 @@ Object {
           },
         ],
       },
-      "Policy:0:state": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "0",
+      "Policy:12:state": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "12",
           "contextName": "Policy",
           "fieldName": "state",
           "fieldPath": "state",
@@ -1171,7 +2221,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -1187,12 +2237,12 @@ Object {
                 "errorMessage": "The field is mandatory",
                 "templateVariables": Array [],
               },
-              "success": false,
+              "success": true,
               "type": 64,
               "usageType": "mandatory",
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "Policy",
               "payloadtype": "USAGE",
               "ruleName": "R0004",
@@ -1201,9 +2251,9 @@ Object {
           },
         ],
       },
-      "Policy:0:termCd": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "0",
+      "Policy:12:termCd": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "12",
           "contextName": "Policy",
           "fieldName": "termCd",
           "fieldPath": "termDetails.termCd",
@@ -1211,7 +2261,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -1227,12 +2277,12 @@ Object {
                 "errorMessage": "The field is mandatory",
                 "templateVariables": Array [],
               },
-              "success": false,
+              "success": true,
               "type": 64,
               "usageType": "mandatory",
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "Policy",
               "payloadtype": "USAGE",
               "ruleName": "R0054",
@@ -1241,9 +2291,9 @@ Object {
           },
         ],
       },
-      "Policy:0:termNo": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "0",
+      "Policy:12:termNo": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "12",
           "contextName": "Policy",
           "fieldName": "termNo",
           "fieldPath": "termDetails.termNo",
@@ -1251,7 +2301,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -1267,12 +2317,12 @@ Object {
                 "errorMessage": "The field is mandatory",
                 "templateVariables": Array [],
               },
-              "success": false,
+              "success": true,
               "type": 64,
               "usageType": "mandatory",
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "Policy",
               "payloadtype": "USAGE",
               "ruleName": "R0050",
@@ -1281,9 +2331,9 @@ Object {
           },
         ],
       },
-      "Policy:0:txCreateDate": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "0",
+      "Policy:12:txCreateDate": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "12",
           "contextName": "Policy",
           "fieldName": "txCreateDate",
           "fieldPath": "transactionDetails.txCreateDate",
@@ -1291,7 +2341,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -1307,12 +2357,12 @@ Object {
                 "errorMessage": "The field is mandatory",
                 "templateVariables": Array [],
               },
-              "success": false,
+              "success": true,
               "type": 64,
               "usageType": "mandatory",
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "Policy",
               "payloadtype": "USAGE",
               "ruleName": "R0020",
@@ -1321,9 +2371,9 @@ Object {
           },
         ],
       },
-      "Policy:0:txEffectiveDate": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "0",
+      "Policy:12:txEffectiveDate": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "12",
           "contextName": "Policy",
           "fieldName": "txEffectiveDate",
           "fieldPath": "transactionDetails.txEffectiveDate",
@@ -1331,7 +2381,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -1347,12 +2397,12 @@ Object {
                 "errorMessage": "The field is mandatory",
                 "templateVariables": Array [],
               },
-              "success": false,
+              "success": true,
               "type": 64,
               "usageType": "mandatory",
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "Policy",
               "payloadtype": "USAGE",
               "ruleName": "R0016",
@@ -1361,9 +2411,9 @@ Object {
           },
         ],
       },
-      "Policy:0:txType": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "0",
+      "Policy:12:txType": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "12",
           "contextName": "Policy",
           "fieldName": "txType",
           "fieldPath": "transactionDetails.txType",
@@ -1371,7 +2421,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -1387,12 +2437,12 @@ Object {
                 "errorMessage": "The field is mandatory",
                 "templateVariables": Array [],
               },
-              "success": false,
+              "success": true,
               "type": 64,
               "usageType": "mandatory",
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "Policy",
               "payloadtype": "USAGE",
               "ruleName": "R0011",
@@ -1401,9 +2451,9 @@ Object {
           },
         ],
       },
-      "Policy:0:updatedBy": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "0",
+      "Policy:12:updatedBy": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "12",
           "contextName": "Policy",
           "fieldName": "updatedBy",
           "fieldPath": "accessTrackInfo.updatedBy",
@@ -1411,7 +2461,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -1427,12 +2477,12 @@ Object {
                 "errorMessage": "The field is mandatory",
                 "templateVariables": Array [],
               },
-              "success": false,
+              "success": true,
               "type": 64,
               "usageType": "mandatory",
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "Policy",
               "payloadtype": "USAGE",
               "ruleName": "R0039",
@@ -1441,9 +2491,9 @@ Object {
           },
         ],
       },
-      "Policy:0:updatedOn": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "0",
+      "Policy:12:updatedOn": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "12",
           "contextName": "Policy",
           "fieldName": "updatedOn",
           "fieldPath": "accessTrackInfo.updatedOn",
@@ -1451,7 +2501,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -1467,12 +2517,12 @@ Object {
                 "errorMessage": "The field is mandatory",
                 "templateVariables": Array [],
               },
-              "success": false,
+              "success": true,
               "type": 64,
               "usageType": "mandatory",
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "Policy",
               "payloadtype": "USAGE",
               "ruleName": "R0035",
@@ -1481,9 +2531,9 @@ Object {
           },
         ],
       },
-      "Vehicle:6:model": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "6",
+      "Vehicle:20:model": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "20",
           "contextName": "Vehicle",
           "fieldName": "model",
           "fieldPath": "model",
@@ -1491,7 +2541,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -1507,12 +2557,12 @@ Object {
                 "errorMessage": "The field is mandatory",
                 "templateVariables": Array [],
               },
-              "success": false,
+              "success": true,
               "type": 64,
               "usageType": "mandatory",
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "Vehicle",
               "payloadtype": "USAGE",
               "ruleName": "R0074",
@@ -1521,9 +2571,9 @@ Object {
           },
         ],
       },
-      "Vehicle:6:purchasedDate": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "6",
+      "Vehicle:20:purchasedDate": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "20",
           "contextName": "Vehicle",
           "fieldName": "purchasedDate",
           "fieldPath": "purchasedDate",
@@ -1531,7 +2581,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -1547,12 +2597,12 @@ Object {
                 "errorMessage": "The field is mandatory",
                 "templateVariables": Array [],
               },
-              "success": false,
+              "success": true,
               "type": 64,
               "usageType": "mandatory",
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "Vehicle",
               "payloadtype": "USAGE",
               "ruleName": "R0088",
@@ -1563,249 +2613,7 @@ Object {
       },
     },
   },
-  "Validation results": Object {
-    "critical": Array [
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "The field is mandatory",
-        "messageCode": "code",
-        "ruleName": "R0008",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "The field is mandatory",
-        "messageCode": "code",
-        "ruleName": "R0028",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "The field is mandatory",
-        "messageCode": "code",
-        "ruleName": "R0039",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "The field is mandatory",
-        "messageCode": "code",
-        "ruleName": "R0149",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "Field is required",
-        "messageCode": "code",
-        "ruleName": "R0001A",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "The field is mandatory",
-        "messageCode": "code",
-        "ruleName": "R0011",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "The field is mandatory",
-        "messageCode": "code",
-        "ruleName": "R0044",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "The field is mandatory",
-        "messageCode": "code",
-        "ruleName": "R0088",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "The field is mandatory",
-        "messageCode": "code",
-        "ruleName": "R0020",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "The field is mandatory",
-        "messageCode": "code",
-        "ruleName": "R0042",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "The field is mandatory",
-        "messageCode": "code",
-        "ruleName": "R0032",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "The field is mandatory",
-        "messageCode": "code",
-        "ruleName": "R0054",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "The field is mandatory",
-        "messageCode": "code",
-        "ruleName": "R0004",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "The field is mandatory",
-        "messageCode": "code",
-        "ruleName": "R0016",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "The field is mandatory",
-        "messageCode": "code",
-        "ruleName": "R0148",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "The field is mandatory",
-        "messageCode": "code",
-        "ruleName": "R0035",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "The field is mandatory",
-        "messageCode": "code",
-        "ruleName": "R0156",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "The field is mandatory",
-        "messageCode": "code",
-        "ruleName": "R0047",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "The field is mandatory",
-        "messageCode": "code",
-        "ruleName": "R0157",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "The field is mandatory",
-        "messageCode": "code",
-        "ruleName": "R0074",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "The field is mandatory",
-        "messageCode": "code",
-        "ruleName": "R0050",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-    ],
-    "info": Array [],
-    "warning": Array [],
-  },
-}
-`;
-
-exports[`Engine Sanity Usage Payload Test should execute 'UsageAutoPolicy' entrypoint with valid data: Results + reducer results 1`] = `
-Object {
-  "Field Metadata reduced results": Object {
+  "fieldResults": Object {
     "AddressInfo:17:countryCd": Object {
       "fieldType": "STRING",
       "id": "AddressInfo:17:countryCd",
@@ -2691,612 +3499,17 @@ Object {
       ],
     },
   },
-  "Raw results": Object {
+}
+`;
+
+exports[`Engine Sanity Usage Payload Test should execute must be empty payload 1`] = `
+Object {
+  "entryPointResults": Object {
     "evaluationTimestamp": Any<Date>,
     "results": Object {
-      "AddressInfo:17:countryCd": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "17",
-          "contextName": "AddressInfo",
-          "fieldName": "countryCd",
-          "fieldPath": "countryCd",
-          "fieldType": "STRING",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": Object {
-                "errorCode": "code",
-                "errorMessage": "The field is mandatory",
-                "templateVariables": Array [],
-              },
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "AddressInfo",
-              "payloadtype": "USAGE",
-              "ruleName": "R0156",
-              "targetPath": "countryCd",
-            },
-          },
-        ],
-      },
-      "AddressInfo:17:postalCode": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "17",
-          "contextName": "AddressInfo",
-          "fieldName": "postalCode",
-          "fieldPath": "postalCode",
-          "fieldType": "STRING",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": Object {
-                "errorCode": "code",
-                "errorMessage": "The field is mandatory",
-                "templateVariables": Array [],
-              },
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "AddressInfo",
-              "payloadtype": "USAGE",
-              "ruleName": "R0157",
-              "targetPath": "postalCode",
-            },
-          },
-        ],
-      },
-      "AddressInfo:21:countryCd": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "21",
-          "contextName": "AddressInfo",
-          "fieldName": "countryCd",
-          "fieldPath": "countryCd",
-          "fieldType": "STRING",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": Object {
-                "errorCode": "code",
-                "errorMessage": "The field is mandatory",
-                "templateVariables": Array [],
-              },
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "AddressInfo",
-              "payloadtype": "USAGE",
-              "ruleName": "R0156",
-              "targetPath": "countryCd",
-            },
-          },
-        ],
-      },
-      "AddressInfo:21:postalCode": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "21",
-          "contextName": "AddressInfo",
-          "fieldName": "postalCode",
-          "fieldPath": "postalCode",
-          "fieldType": "STRING",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": Object {
-                "errorCode": "code",
-                "errorMessage": "The field is mandatory",
-                "templateVariables": Array [],
-              },
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "AddressInfo",
-              "payloadtype": "USAGE",
-              "ruleName": "R0157",
-              "targetPath": "postalCode",
-            },
-          },
-        ],
-      },
-      "BillingAddress:14:countryCd": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "14",
-          "contextName": "BillingAddress",
-          "fieldName": "countryCd",
-          "fieldPath": "countryCd",
-          "fieldType": "STRING",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": Object {
-                "errorCode": "code",
-                "errorMessage": "The field is mandatory",
-                "templateVariables": Array [],
-              },
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "AddressInfo",
-              "payloadtype": "USAGE",
-              "ruleName": "R0156",
-              "targetPath": "countryCd",
-            },
-          },
-        ],
-      },
-      "BillingAddress:14:postalCode": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "14",
-          "contextName": "BillingAddress",
-          "fieldName": "postalCode",
-          "fieldPath": "postalCode",
-          "fieldType": "STRING",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": Object {
-                "errorCode": "code",
-                "errorMessage": "The field is mandatory",
-                "templateVariables": Array [],
-              },
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "AddressInfo",
-              "payloadtype": "USAGE",
-              "ruleName": "R0157",
-              "targetPath": "postalCode",
-            },
-          },
-        ],
-      },
-      "Party:15:relationToPrimaryInsured": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "15",
-          "contextName": "Party",
-          "fieldName": "relationToPrimaryInsured",
-          "fieldPath": "relationToPrimaryInsured",
-          "fieldType": "STRING",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": Object {
-                "errorCode": "code",
-                "errorMessage": "The field is mandatory",
-                "templateVariables": Array [],
-              },
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Party",
-              "payloadtype": "USAGE",
-              "ruleName": "R0149",
-              "targetPath": "relationToPrimaryInsured",
-            },
-          },
-        ],
-      },
-      "Party:18:relationToPrimaryInsured": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "18",
-          "contextName": "Party",
-          "fieldName": "relationToPrimaryInsured",
-          "fieldPath": "relationToPrimaryInsured",
-          "fieldType": "STRING",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": Object {
-                "errorCode": "code",
-                "errorMessage": "The field is mandatory",
-                "templateVariables": Array [],
-              },
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Party",
-              "payloadtype": "USAGE",
-              "ruleName": "R0149",
-              "targetPath": "relationToPrimaryInsured",
-            },
-          },
-        ],
-      },
-      "PartyRole:19:role": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "19",
-          "contextName": "PartyRole",
-          "fieldName": "role",
-          "fieldPath": "role",
-          "fieldType": "STRING",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": Object {
-                "errorCode": "code",
-                "errorMessage": "The field is mandatory",
-                "templateVariables": Array [],
-              },
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "PartyRole",
-              "payloadtype": "USAGE",
-              "ruleName": "R0148",
-              "targetPath": "role",
-            },
-          },
-        ],
-      },
-      "Policy:12:contractTermTypeCd": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "12",
-          "contextName": "Policy",
-          "fieldName": "contractTermTypeCd",
-          "fieldPath": "termDetails.contractTermTypeCd",
-          "fieldType": "STRING",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": Object {
-                "errorCode": "code",
-                "errorMessage": "The field is mandatory",
-                "templateVariables": Array [],
-              },
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "USAGE",
-              "ruleName": "R0042",
-              "targetPath": "contractTermTypeCd",
-            },
-          },
-        ],
-      },
-      "Policy:12:createdBy": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "12",
-          "contextName": "Policy",
-          "fieldName": "createdBy",
-          "fieldPath": "accessTrackInfo.createdBy",
-          "fieldType": "STRING",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": Object {
-                "errorCode": "code",
-                "errorMessage": "The field is mandatory",
-                "templateVariables": Array [],
-              },
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "USAGE",
-              "ruleName": "R0032",
-              "targetPath": "createdBy",
-            },
-          },
-        ],
-      },
-      "Policy:12:createdFromPolicyRev": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "12",
-          "contextName": "Policy",
-          "fieldName": "createdFromPolicyRev",
-          "fieldPath": "createdFromPolicyRev",
-          "fieldType": "INTEGER",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": Object {
-                "errorCode": "code",
-                "errorMessage": "The field is mandatory",
-                "templateVariables": Array [],
-              },
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "USAGE",
-              "ruleName": "R0008",
-              "targetPath": "createdFromPolicyRev",
-            },
-          },
-        ],
-      },
-      "Policy:12:createdOn": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "12",
-          "contextName": "Policy",
-          "fieldName": "createdOn",
-          "fieldPath": "accessTrackInfo.createdOn",
-          "fieldType": "DATE",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": Object {
-                "errorCode": "code",
-                "errorMessage": "The field is mandatory",
-                "templateVariables": Array [],
-              },
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "USAGE",
-              "ruleName": "R0028",
-              "targetPath": "createdOn",
-            },
-          },
-        ],
-      },
-      "Policy:12:effectiveDate": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "12",
-          "contextName": "Policy",
-          "fieldName": "effectiveDate",
-          "fieldPath": "termDetails.termEffectiveDate",
-          "fieldType": "DATE",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": Object {
-                "errorCode": "code",
-                "errorMessage": "The field is mandatory",
-                "templateVariables": Array [],
-              },
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "USAGE",
-              "ruleName": "R0044",
-              "targetPath": "effectiveDate",
-            },
-          },
-        ],
-      },
-      "Policy:12:expirationDate": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "12",
-          "contextName": "Policy",
-          "fieldName": "expirationDate",
-          "fieldPath": "termDetails.termExpirationDate",
-          "fieldType": "DATE",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": Object {
-                "errorCode": "code",
-                "errorMessage": "The field is mandatory",
-                "templateVariables": Array [],
-              },
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "USAGE",
-              "ruleName": "R0047",
-              "targetPath": "expirationDate",
-            },
-          },
-        ],
-      },
-      "Policy:12:policyNumber": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "12",
+      "Policy:0:policyNumber": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "0",
           "contextName": "Policy",
           "fieldName": "policyNumber",
           "fieldPath": "policyNumber",
@@ -3304,7 +3517,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -3317,436 +3530,26 @@ Object {
             "payloadResult": Object {
               "message": Object {
                 "errorCode": "code",
-                "errorMessage": "Field is required",
+                "errorMessage": "Field must be empty",
                 "templateVariables": Array [],
               },
-              "success": true,
+              "success": false,
               "type": 64,
-              "usageType": "mandatory",
+              "usageType": "mustBeEmpty",
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "Policy",
               "payloadtype": "USAGE",
-              "ruleName": "R0001A",
+              "ruleName": "policy number must be empty",
               "targetPath": "policyNumber",
-            },
-          },
-        ],
-      },
-      "Policy:12:state": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "12",
-          "contextName": "Policy",
-          "fieldName": "state",
-          "fieldPath": "state",
-          "fieldType": "STRING",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": Object {
-                "errorCode": "code",
-                "errorMessage": "The field is mandatory",
-                "templateVariables": Array [],
-              },
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "USAGE",
-              "ruleName": "R0004",
-              "targetPath": "state",
-            },
-          },
-        ],
-      },
-      "Policy:12:termCd": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "12",
-          "contextName": "Policy",
-          "fieldName": "termCd",
-          "fieldPath": "termDetails.termCd",
-          "fieldType": "STRING",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": Object {
-                "errorCode": "code",
-                "errorMessage": "The field is mandatory",
-                "templateVariables": Array [],
-              },
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "USAGE",
-              "ruleName": "R0054",
-              "targetPath": "termCd",
-            },
-          },
-        ],
-      },
-      "Policy:12:termNo": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "12",
-          "contextName": "Policy",
-          "fieldName": "termNo",
-          "fieldPath": "termDetails.termNo",
-          "fieldType": "INTEGER",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": Object {
-                "errorCode": "code",
-                "errorMessage": "The field is mandatory",
-                "templateVariables": Array [],
-              },
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "USAGE",
-              "ruleName": "R0050",
-              "targetPath": "termNo",
-            },
-          },
-        ],
-      },
-      "Policy:12:txCreateDate": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "12",
-          "contextName": "Policy",
-          "fieldName": "txCreateDate",
-          "fieldPath": "transactionDetails.txCreateDate",
-          "fieldType": "DATE",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": Object {
-                "errorCode": "code",
-                "errorMessage": "The field is mandatory",
-                "templateVariables": Array [],
-              },
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "USAGE",
-              "ruleName": "R0020",
-              "targetPath": "txCreateDate",
-            },
-          },
-        ],
-      },
-      "Policy:12:txEffectiveDate": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "12",
-          "contextName": "Policy",
-          "fieldName": "txEffectiveDate",
-          "fieldPath": "transactionDetails.txEffectiveDate",
-          "fieldType": "DATETIME",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": Object {
-                "errorCode": "code",
-                "errorMessage": "The field is mandatory",
-                "templateVariables": Array [],
-              },
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "USAGE",
-              "ruleName": "R0016",
-              "targetPath": "txEffectiveDate",
-            },
-          },
-        ],
-      },
-      "Policy:12:txType": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "12",
-          "contextName": "Policy",
-          "fieldName": "txType",
-          "fieldPath": "transactionDetails.txType",
-          "fieldType": "STRING",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": Object {
-                "errorCode": "code",
-                "errorMessage": "The field is mandatory",
-                "templateVariables": Array [],
-              },
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "USAGE",
-              "ruleName": "R0011",
-              "targetPath": "txType",
-            },
-          },
-        ],
-      },
-      "Policy:12:updatedBy": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "12",
-          "contextName": "Policy",
-          "fieldName": "updatedBy",
-          "fieldPath": "accessTrackInfo.updatedBy",
-          "fieldType": "STRING",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": Object {
-                "errorCode": "code",
-                "errorMessage": "The field is mandatory",
-                "templateVariables": Array [],
-              },
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "USAGE",
-              "ruleName": "R0039",
-              "targetPath": "updatedBy",
-            },
-          },
-        ],
-      },
-      "Policy:12:updatedOn": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "12",
-          "contextName": "Policy",
-          "fieldName": "updatedOn",
-          "fieldPath": "accessTrackInfo.updatedOn",
-          "fieldType": "DATE",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": Object {
-                "errorCode": "code",
-                "errorMessage": "The field is mandatory",
-                "templateVariables": Array [],
-              },
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "USAGE",
-              "ruleName": "R0035",
-              "targetPath": "updatedOn",
-            },
-          },
-        ],
-      },
-      "Vehicle:20:model": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "20",
-          "contextName": "Vehicle",
-          "fieldName": "model",
-          "fieldPath": "model",
-          "fieldType": "STRING",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": Object {
-                "errorCode": "code",
-                "errorMessage": "The field is mandatory",
-                "templateVariables": Array [],
-              },
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Vehicle",
-              "payloadtype": "USAGE",
-              "ruleName": "R0074",
-              "targetPath": "model",
-            },
-          },
-        ],
-      },
-      "Vehicle:20:purchasedDate": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "20",
-          "contextName": "Vehicle",
-          "fieldName": "purchasedDate",
-          "fieldPath": "purchasedDate",
-          "fieldType": "DATE",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": Object {
-                "errorCode": "code",
-                "errorMessage": "The field is mandatory",
-                "templateVariables": Array [],
-              },
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Vehicle",
-              "payloadtype": "USAGE",
-              "ruleName": "R0088",
-              "targetPath": "purchasedDate",
             },
           },
         ],
       },
     },
   },
-  "Validation results": Object {
-    "critical": Array [],
-    "info": Array [],
-    "warning": Array [],
-  },
-}
-`;
-
-exports[`Engine Sanity Usage Payload Test should execute must be empty payload: Results + reducer results 1`] = `
-Object {
-  "Field Metadata reduced results": Object {
+  "fieldResults": Object {
     "Policy:0:policyNumber": Object {
       "fieldType": "STRING",
       "id": "Policy:0:policyNumber",
@@ -3782,20 +3585,25 @@ Object {
       ],
     },
   },
-  "Raw results": Object {
+}
+`;
+
+exports[`Engine Sanity Usage Payload Test should execute rule on unknown field type 1`] = `
+Object {
+  "entryPointResults": Object {
     "evaluationTimestamp": Any<Date>,
     "results": Object {
-      "Policy:0:policyNumber": Object {
-        "contextFieldInfo": ContextFieldInfo {
+      "Policy:0:refToCustomer": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "0",
           "contextName": "Policy",
-          "fieldName": "policyNumber",
-          "fieldPath": "policyNumber",
-          "fieldType": "STRING",
+          "fieldName": "refToCustomer",
+          "fieldPath": "refToCustomer",
+          "fieldType": "UNKNOWN",
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -3806,50 +3614,24 @@ Object {
               "overrideGroup": undefined,
             },
             "payloadResult": Object {
-              "message": Object {
-                "errorCode": "code",
-                "errorMessage": "Field must be empty",
-                "templateVariables": Array [],
-              },
+              "message": undefined,
               "success": false,
               "type": 64,
-              "usageType": "mustBeEmpty",
+              "usageType": "mandatory",
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "Policy",
               "payloadtype": "USAGE",
-              "ruleName": "policy number must be empty",
-              "targetPath": "policyNumber",
+              "ruleName": "Usage-UnknownField",
+              "targetPath": "refToCustomer",
             },
           },
         ],
       },
     },
   },
-  "Validation results": Object {
-    "critical": Array [
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "Field must be empty",
-        "messageCode": "code",
-        "ruleName": "policy number must be empty",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-    ],
-    "info": Array [],
-    "warning": Array [],
-  },
-}
-`;
-
-exports[`Engine Sanity Usage Payload Test should execute rule on unknown field type: Results + reducer results 1`] = `
-Object {
-  "Field Metadata reduced results": Object {
+  "fieldResults": Object {
     "Policy:0:refToCustomer": Object {
       "fieldType": "UNKNOWN",
       "id": "Policy:0:refToCustomer",
@@ -3881,11 +3663,16 @@ Object {
       ],
     },
   },
-  "Raw results": Object {
+}
+`;
+
+exports[`Engine Sanity Usage Payload Test should execute rule on unknown field type 2`] = `
+Object {
+  "entryPointResults": Object {
     "evaluationTimestamp": Any<Date>,
     "results": Object {
       "Policy:0:refToCustomer": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "0",
           "contextName": "Policy",
           "fieldName": "refToCustomer",
@@ -3894,7 +3681,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -3911,7 +3698,7 @@ Object {
               "usageType": "mandatory",
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "Policy",
               "payloadtype": "USAGE",
               "ruleName": "Usage-UnknownField",
@@ -3922,29 +3709,7 @@ Object {
       },
     },
   },
-  "Validation results": Object {
-    "critical": Array [
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "Field is mandatory",
-        "messageCode": "rule-mandatory-error",
-        "ruleName": "Usage-UnknownField",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-    ],
-    "info": Array [],
-    "warning": Array [],
-  },
-}
-`;
-
-exports[`Engine Sanity Usage Payload Test should execute rule on unknown field type: Results + reducer results 2`] = `
-Object {
-  "Field Metadata reduced results": Object {
+  "fieldResults": Object {
     "Policy:0:refToCustomer": Object {
       "fieldType": "UNKNOWN",
       "id": "Policy:0:refToCustomer",
@@ -3959,12 +3724,12 @@ Object {
         Object {
           "errorCode": "rule-mandatory-error",
           "errorMessage": "Field is mandatory",
-          "isFailed": false,
+          "isFailed": true,
           "isOverridable": false,
           "isOverridden": false,
           "payloadResult": Object {
             "message": undefined,
-            "success": true,
+            "success": false,
             "type": 64,
             "usageType": "mandatory",
             "validationSeverity": "critical",
@@ -3975,52 +3740,6 @@ Object {
         },
       ],
     },
-  },
-  "Raw results": Object {
-    "evaluationTimestamp": Any<Date>,
-    "results": Object {
-      "Policy:0:refToCustomer": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "0",
-          "contextName": "Policy",
-          "fieldName": "refToCustomer",
-          "fieldPath": "refToCustomer",
-          "fieldType": "UNKNOWN",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "USAGE",
-              "ruleName": "Usage-UnknownField",
-              "targetPath": "refToCustomer",
-            },
-          },
-        ],
-      },
-    },
-  },
-  "Validation results": Object {
-    "critical": Array [],
-    "info": Array [],
-    "warning": Array [],
   },
 }
 `;

@@ -23,8 +23,10 @@ import java.util.Objects;
  * Represents default message that will be set in rule validation result when rule itself do not have specific message specified
  *
  * @author mulevicius
+ * @deprecated Implementation of this does not support localization. Use {@link ValidationMessageProvider} instead.
  */
 @API
+@Deprecated(since = "1.24.0", forRemoval = true)
 public class DefaultMessage {
 
     private String code;

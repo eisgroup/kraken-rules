@@ -15,7 +15,6 @@
  */
 
 export namespace Expressions {
-
     /**
      * Models expression to be used in rules model
      */
@@ -23,81 +22,78 @@ export namespace Expressions {
         /**
          * Expression type for expressionString
          */
-        expressionType: ExpressionType;
-
+        expressionType: ExpressionType
     }
 
     export interface ComplexExpression extends BaseExpression {
-        expressionType: "COMPLEX";
+        expressionType: 'COMPLEX'
 
         /**
          * Expression in Kraken Expression Language
          * Translated expression to be executed at target environment.
          */
-        expressionString: string;
+        expressionString: string
 
-        expressionVariables?: ExpressionVariable[];
-
+        expressionVariables?: ExpressionVariable[]
     }
 
     export interface ExpressionVariable {
-        name: string;
-        type: ExpressionVariableType;
+        name: string
+        type: ExpressionVariableType
     }
 
-    export type ExpressionVariableType = "CROSS_CONTEXT";
+    export type ExpressionVariableType = 'CROSS_CONTEXT'
 
     export interface LiteralExpression extends BaseExpression {
-        expressionType: "LITERAL";
+        expressionType: 'LITERAL'
 
         /**
          * If 'expressionType' is {@link ExpressionType#LITERAL}, then number,
          * string, boolean or null will be 'compiledLiteralValue'. Otherwise this field
          * will be {@code undefined}
          */
-        compiledLiteralValue: number | string | boolean | null;
+        compiledLiteralValue: number | string | boolean | null
 
         /**
          * Indicates type of a literal. Can be: String, Number, Boolean, Date, DateTime.
          * If value is not available then literal is null value.
          */
-        compiledLiteralValueType? : "String" | "Number" | "Boolean" | "Date" | "DateTime";
+        compiledLiteralValueType?: 'String' | 'Number' | 'Boolean' | 'Date' | 'DateTime'
     }
 
     export interface PathExpression extends BaseExpression {
-        expressionType: "PATH";
+        expressionType: 'PATH'
 
         /**
          * Expression in Kraken Expression Language
          * Translated expression to be executed at target environment.
          */
-        expressionString: string;
-
+        expressionString: string
     }
 
     export type ExpressionType =
         /**
          * Indicates that expression is a simple path that consists of one or more identifiers separated by dot
          */
-        "PATH"
+        | 'PATH'
         /**
          * Indicates that expression is more complex that any other simple types or that type cannot be determined
          */
-        | "COMPLEX"
+        | 'COMPLEX'
         /**
          * Indicates that expression was a simple literal, like string, number or boolean
          */
-        | "LITERAL";
+        | 'LITERAL'
 
-    export type Expression = LiteralExpression | ComplexExpression | PathExpression;
+    export type Expression = LiteralExpression | ComplexExpression | PathExpression
 
     export function isPath(e: Expression): e is PathExpression {
-        return e.expressionType === "PATH";
+        return e.expressionType === 'PATH'
     }
     export function isComplex(e: Expression): e is ComplexExpression {
-        return e.expressionType === "COMPLEX";
+        return e.expressionType === 'COMPLEX'
     }
     export function isLiteral(e: Expression): e is LiteralExpression {
-        return e.expressionType === "LITERAL";
+        return e.expressionType === 'LITERAL'
     }
 }

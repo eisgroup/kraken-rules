@@ -14,18 +14,19 @@
  *  limitations under the License.
  */
 
-import { EvaluationConfig } from "./executer/SyncEngine";
+import { EvaluationConfig } from './executer/SyncEngine'
 
 export class ExecutionSession {
-    public readonly currencyCd: string;
-    public readonly expressionContext: Record<string, unknown>;
-    public readonly timestamp: Date;
+    public readonly currencyCd: string
+    public readonly expressionContext: Record<string, unknown>
+    public readonly timestamp: Date
     constructor(evaluationConfig: EvaluationConfig, expressionContext: Record<string, unknown>) {
-        this.currencyCd = evaluationConfig.currencyCd;
+        this.currencyCd = evaluationConfig.currencyCd
         this.expressionContext = {
             external: { ...evaluationConfig.context.externalData },
-            ...expressionContext
-        };
-        this.timestamp = new Date();
+            dimensions: { ...evaluationConfig.context.dimensions },
+            ...expressionContext,
+        }
+        this.timestamp = new Date()
     }
 }

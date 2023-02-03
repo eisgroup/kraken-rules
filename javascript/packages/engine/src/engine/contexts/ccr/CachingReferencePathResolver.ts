@@ -14,36 +14,35 @@
  *  limitations under the License.
  */
 
-import { ReferencePathResolver } from "./ReferencePathResolver";
-import { PathToNode } from "./PathToNode";
-import { ContextReference } from "./ContextReference";
+import { ReferencePathResolver } from './ReferencePathResolver'
+import { PathToNode } from './PathToNode'
+import { ContextReference } from './ContextReference'
 
 /**
  * Caches reference resolution results
  * @since 1.1.1
  */
 export class CachingReferencePathResolver implements ReferencePathResolver {
-
-    private readonly referencePathResolver: ReferencePathResolver;
-    private readonly cache: Map<string, ContextReference>;
+    private readonly referencePathResolver: ReferencePathResolver
+    private readonly cache: Map<string, ContextReference>
 
     constructor(referencePathResolver: ReferencePathResolver) {
-        this.referencePathResolver = referencePathResolver;
-        this.cache = new Map();
+        this.referencePathResolver = referencePathResolver
+        this.cache = new Map()
     }
 
     /**
      * @override
      */
     resolveReferencePath(origin: PathToNode, targetContextName: string): ContextReference {
-        const key = `${origin.join(".")}:${targetContextName}`;
+        const key = `${origin.join('.')}:${targetContextName}`
         if (this.cache.has(key)) {
-            return this.cache.get(key)!;
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            return this.cache.get(key)!
         } else {
-            const reference = this.referencePathResolver.resolveReferencePath(origin, targetContextName);
-            this.cache.set(key, reference);
-            return reference;
+            const reference = this.referencePathResolver.resolveReferencePath(origin, targetContextName)
+            this.cache.set(key, reference)
+            return reference
         }
     }
-
 }

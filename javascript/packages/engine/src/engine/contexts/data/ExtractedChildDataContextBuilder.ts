@@ -13,87 +13,78 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-import { toBe } from "declarative-js";
-import { Contexts } from "kraken-model";
-import ContextDefinition = Contexts.ContextDefinition;
-import { DataContextBuilder } from "./DataContextBuilder";
-import { DataContext } from "./DataContext";
-import { requireDefinedValue } from "../../../utils/Utils";
-import { ExpressionEvaluator } from "../../runtime/expressions/ExpressionEvaluator";
-import { expressionFactory } from "../../runtime/expressions/ExpressionFactory";
-import { ExpressionEvaluationResult } from "../../runtime/expressions/ExpressionEvaluationResult";
-import { ErrorCode, KrakenRuntimeError } from "../../../error/KrakenRuntimeError";
+import { toBe } from 'declarative-js'
+import { Contexts } from 'kraken-model'
+import ContextDefinition = Contexts.ContextDefinition
+import { DataContextBuilder } from './DataContextBuilder'
+import { requireDefinedValue } from '../../../utils/Utils'
+import { ExpressionEvaluator } from '../../runtime/expressions/ExpressionEvaluator'
+import { expressionFactory } from '../../runtime/expressions/ExpressionFactory'
+import { ExpressionEvaluationResult } from 'kraken-engine-api'
+import { DataContext } from './DataContext'
 
 export interface ContextChildExtractionInfo {
-    parentContextDefinition: ContextDefinition;
-    parentDataContext: DataContext;
-    childContextName: string;
+    parentContextDefinition: ContextDefinition
+    parentDataContext: DataContext
+    childContextName: string
 }
 
 export class ExtractedChildDataContextBuilder {
-
     constructor(
         private readonly dataContextBuilder: DataContextBuilder,
-        private readonly expressionEvaluator: ExpressionEvaluator
+        private readonly expressionEvaluator: ExpressionEvaluator,
     ) {
-        this.resolveImmediateChildren = this.resolveImmediateChildren.bind(this);
-        this.extract = this.extract.bind(this);
+        this.resolveImmediateChildren = this.resolveImmediateChildren.bind(this)
+        this.extract = this.extract.bind(this)
     }
 
     resolveImmediateChildren(info: ContextChildExtractionInfo): DataContext[] {
-        const { childContextName, parentDataContext } = info;
-        const result = this.extract(info);
-        const toDataContext = this.createDataContextFactory(childContextName, parentDataContext);
+        const { childContextName, parentDataContext } = info
+        const result = this.extract(info)
+        const toDataContext = this.createDataContextFactory(childContextName, parentDataContext)
         if (Array.isArray(result)) {
-            return result.filter(toBe.present).map(toDataContext);
+            return result.filter(toBe.present).map(toDataContext)
         }
-        return [toDataContext(result)];
+        return [toDataContext(result)]
     }
 
     private createDataContextFactory(
         childContextName: string,
-        parentDataContext: DataContext
+        parentDataContext: DataContext,
     ): (dataObject: object, index?: number) => DataContext {
-        const { dataContextBuilder } = this;
+        const { dataContextBuilder } = this
         return function _createDataContextFactory(dataObject: object, index?: number): DataContext {
-            return dataContextBuilder.buildFromExtractedObject(
-                dataObject, childContextName, parentDataContext, index
-            );
-        };
+            return dataContextBuilder.buildFromExtractedObject(dataObject, childContextName, parentDataContext, index)
+        }
     }
     private extract(info: ContextChildExtractionInfo): object | object[] {
-        const children = requireDefinedValue(info.parentContextDefinition.children, "Children cannot be null");
-        const navigation = children[info.childContextName];
+        const children = requireDefinedValue(info.parentContextDefinition.children, 'Children cannot be null')
+        const navigation = children[info.childContextName]
         const expressionResult = this.expressionEvaluator.evaluate(
             expressionFactory.fromNavigation(navigation),
-            info.parentDataContext
-        );
-        if (ExpressionEvaluationResult.isError(expressionResult)) {
-            throw new KrakenRuntimeError(
-                ErrorCode.EXTRACT_EXPRESSION_FAILED,
-                `Extraction of an attribute '${navigation}' failed`
-            );
-        }
-        const extracted = expressionResult.success;
+            info.parentDataContext,
+        )
+
+        const extracted = ExpressionEvaluationResult.isError(expressionResult) ? undefined : expressionResult.success
 
         if (extracted === undefined) {
-            return [];
+            return []
         }
         if (Array.isArray(extracted)) {
-            return flat(extracted);
+            return flat(extracted)
         }
-        return extracted;
+        return extracted as object | object[]
     }
 }
 
-function flat(array: any[]): any[] {
-    return array.reduce((pv: any[], cv) => {
+function flat(array: unknown[]): unknown[] {
+    return array.reduce((pv: unknown[], cv) => {
         if (Array.isArray(cv)) {
-            return pv.concat(flat(cv));
+            return pv.concat(flat(cv))
         }
         if (cv) {
-            return pv.concat(cv);
+            return pv.concat(cv)
         }
-        return pv;
-    }, []);
+        return pv
+    }, [])
 }

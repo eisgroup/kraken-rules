@@ -27,7 +27,8 @@ kraken.engine.sanity.check.EngineSanitySizePayloadTest.shouldFailWithSize3=[
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         },
         {
           "ruleInfo": {
@@ -48,7 +49,8 @@ kraken.engine.sanity.check.EngineSanitySizePayloadTest.shouldFailWithSize3=[
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         },
         {
           "ruleInfo": {
@@ -69,7 +71,8 @@ kraken.engine.sanity.check.EngineSanitySizePayloadTest.shouldFailWithSize3=[
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     }
@@ -106,7 +109,8 @@ kraken.engine.sanity.check.EngineSanitySizePayloadTest.shouldHandleNullCollectio
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         },
         {
           "ruleInfo": {
@@ -127,7 +131,8 @@ kraken.engine.sanity.check.EngineSanitySizePayloadTest.shouldHandleNullCollectio
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         },
         {
           "ruleInfo": {
@@ -148,7 +153,8 @@ kraken.engine.sanity.check.EngineSanitySizePayloadTest.shouldHandleNullCollectio
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     }
@@ -185,7 +191,8 @@ kraken.engine.sanity.check.EngineSanitySizePayloadTest.shouldSucceedWithSize2=[
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         },
         {
           "ruleInfo": {
@@ -206,7 +213,8 @@ kraken.engine.sanity.check.EngineSanitySizePayloadTest.shouldSucceedWithSize2=[
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         },
         {
           "ruleInfo": {
@@ -227,7 +235,8 @@ kraken.engine.sanity.check.EngineSanitySizePayloadTest.shouldSucceedWithSize2=[
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     }

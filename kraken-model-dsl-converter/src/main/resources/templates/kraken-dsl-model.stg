@@ -3,6 +3,7 @@ import "context-definition-model.stg"
 import "entrypoint-model.stg"
 import "external-context-definition-model.stg"
 import "external-context-model.stg"
+import "function-signature-model.stg"
 import "function-model.stg"
 
 krakenResource(krakenResource) ::= <<
@@ -10,6 +11,7 @@ krakenResource(krakenResource) ::= <<
 <includes(krakenResource)>
 <ruleImports(krakenResource)>
 <functionSignatures(krakenResource)>
+<functions(krakenResource)>
 <entryPoints(krakenResource)>
 <rules(krakenResource)>
 <externalContextDefinitions(krakenResource)>
@@ -41,12 +43,18 @@ emptyAsFalse ::= [
 ]
 
 ruleImport(ruleImport) ::= <<
-Import Rule "<ruleImport.ruleName>" from <ruleImport.namespace>
+Import Rule "<ruleImport.ruleName; format="deescapeString">" from <ruleImport.namespace>
 >>
 
 functionSignatures(krakenResource) ::= <<
 <if(strip(krakenResource.functionSignatures))>
 <krakenResource.functionSignatures: {f | <functionSignature(f)>}; separator="\n">
+<endif>
+>>
+
+functions(krakenResource) ::= <<
+<if(strip(krakenResource.functions))>
+<krakenResource.functions: {f | <function(f)>}; separator="\n">
 <endif>
 >>
 

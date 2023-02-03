@@ -1,10 +1,8 @@
-
 export class Deque<T> {
-
-    #values: T[];
+    #values: T[]
 
     constructor(init: T[]) {
-        this.#values = init;
+        this.#values = init
     }
 
     /**
@@ -12,8 +10,8 @@ export class Deque<T> {
      * @returns last element
      */
     last(): T {
-        const v = this.#values;
-        return v[v.length - 1];
+        const v = this.#values
+        return v[v.length - 1]
     }
 
     /**
@@ -21,8 +19,8 @@ export class Deque<T> {
      * @returns first element
      */
     peek(): T {
-        const v = this.#values;
-        return v[0];
+        const v = this.#values
+        return v[0]
     }
 
     /**
@@ -30,8 +28,12 @@ export class Deque<T> {
      * after pop elements are [2,1]
      * @returns first element and removes it
      */
-    pop(): T | undefined {
-        return this.#values.shift();
+    pop(): T {
+        const popped = this.#values.shift()
+        if (!popped) {
+            throw new Error('Error while popping item from stack, because stack is empty')
+        }
+        return popped
     }
 
     /**
@@ -40,13 +42,13 @@ export class Deque<T> {
      * @param v element to insert in the start
      */
     push(v: T): void {
-        this.#values = [v, ...this.#values];
+        this.#values = [v, ...this.#values]
     }
 
     /**
      * @returns an Array of elements in the Deque
      */
     toArray(): T[] {
-        return [...this.#values];
+        return [...this.#values]
     }
 }

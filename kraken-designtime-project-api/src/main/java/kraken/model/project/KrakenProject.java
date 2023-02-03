@@ -16,11 +16,13 @@
 
 package kraken.model.project;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import kraken.annotations.API;
+import kraken.model.Function;
 import kraken.model.FunctionSignature;
 import kraken.model.Rule;
 import kraken.model.context.ContextDefinition;
@@ -38,74 +40,63 @@ import kraken.model.entrypoint.EntryPoint;
 public interface KrakenProject {
 
     /**
-     *
      * @return uniquely identifies contents of this project instance;
      */
     UUID getIdentifier();
 
     /**
-     *
      * @return namespace that this KrakenProject.
      */
     String getNamespace();
 
     /**
-     *
      * @return name of {@link ContextDefinition} which is a root node in ContextDefinition tree
      */
     String getRootContextName();
 
     /**
-     *
      * @return External context bound to this Kraken project.
      */
     ExternalContext getExternalContext();
 
     /**
-     *
      * @return all instances of {@link ContextDefinition} applicable for this KrakenProject
      */
     Map<String, ContextDefinition> getContextDefinitions();
 
     /**
-     *
      * @return all instances of {@link ExternalContextDefinition} applicable for this KrakenProject
      */
     Map<String, ExternalContextDefinition> getExternalContextDefinitions();
 
     /**
-     *
      * @return all instances of {@link EntryPoint} applicable for this KrakenProject
      */
     List<EntryPoint> getEntryPoints();
 
     /**
-     *
      * @return all instances of {@link Rule} applicable for this KrakenProject
      */
     List<Rule> getRules();
 
     /**
-     *
      * @return all instances of {@link EntryPoint} grouped by name where key is {@link EntryPoint#getName()}
-     *          and value is all implementations with same name applicable for this KrakenProject.
+     *     and value is all implementations with same name applicable for this KrakenProject.
      */
     Map<String, List<EntryPoint>> getEntryPointVersions();
 
     /**
-     *
      * @return all instances of {@link Rule} grouped by name where key is {@link Rule#getName()}
-     *          and value is all implementations with same name applicable for this KrakenProject.
+     *     and value is all implementations with same name applicable for this KrakenProject.
      */
     Map<String, List<Rule>> getRuleVersions();
 
     /**
-     *
      * @return a projected view of {@link ContextDefinition} with processed inheritance by merging
-     *          {@link ContextDefinition#getChildren()},
-     *          {@link ContextDefinition#getContextFields()},
-     *          and {@link ContextDefinition#getParentDefinitions()}
-     *          from inherited contexts.
+     *     {@link ContextDefinition#getChildren()},
+     *     {@link ContextDefinition#getContextFields()},
+     *     and {@link ContextDefinition#getParentDefinitions()}
+     *     from inherited contexts.
      */
     ContextDefinition getContextProjection(String contextName);
 
@@ -115,9 +106,27 @@ public interface KrakenProject {
     NamespaceTree getNamespaceTree();
 
     /**
-     *
-     * @return a list of available functions to be used in rules defined in this KrakenProject
+     * @return a list of available functions to be used in rules defined in this KrakenProject.
+     * A function implementation must exist at runtime for each function signature defined.
      */
     List<FunctionSignature> getFunctionSignatures();
+
+    /**
+     *
+     * @return a list of function implementations to be used in rules defined in this KrakenProject
+     */
+    List<Function> getFunctions();
+
+    /**
+     * Connected context definitions, are connected via
+     * direct parent -> child connection ({@link ContextDefinition#getChildren()}),
+     * and parent -> child on inherited contexts.
+     * Context definitions {@link KrakenProject#getContextDefinitions()},
+     * can contain not connected entries. Connection is calculated from @{@link KrakenProject#getRootContextName()}.
+     *
+     * @return collection of {@link ContextDefinition#getName()}
+     * @since 1.0.28
+     */
+    Collection<String> getConnectedContextDefinitions();
 
 }

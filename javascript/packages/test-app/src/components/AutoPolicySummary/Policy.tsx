@@ -14,87 +14,87 @@
  *  limitations under the License.
  */
 
-import * as React from "react";
+import * as React from 'react'
 
-import "antd/lib/radio/style";
-import "antd/lib/input/style";
-import "antd/lib/input-number/style";
-import "antd/lib/date-picker/style";
-import "antd/lib/button/style";
-import "antd/lib/spin/style";
-import "antd/lib/select/style";
-import "antd/lib/collapse/style";
-import "antd/lib/row/style";
-import "antd/lib/list/style";
-import "antd/lib/notification/style";
-import "antd/lib/slider/style";
+import 'antd/lib/radio/style'
+import 'antd/lib/input/style'
+import 'antd/lib/input-number/style'
+import 'antd/lib/date-picker/style'
+import 'antd/lib/button/style'
+import 'antd/lib/spin/style'
+import 'antd/lib/select/style'
+import 'antd/lib/collapse/style'
+import 'antd/lib/row/style'
+import 'antd/lib/list/style'
+import 'antd/lib/notification/style'
+import 'antd/lib/slider/style'
 
-import { Button, Spin, Row, Select, Collapse, Popover, Radio } from "antd";
+import { Button, Spin, Row, Select, Collapse } from 'antd'
 
-import { SingleField, ManyFields } from "../core/field/SingleField";
-import { renderers } from "../core/RenderInputFunctions";
-import { entryPointNames } from "../../common/constants";
+import { SingleField, ManyFields } from '../core/field/SingleField'
+import { renderers } from '../core/RenderInputFunctions'
+import { entryPointNames } from '../../common/constants'
 
-import { AutoPolicyViewState, EvaluationResponse } from "./Policy.container";
-import { TransactionDetails } from "./TransactionDetails";
-import { PolicyDetails } from "./PolicyDetails";
-import { TermDetails } from "./TermDetails";
-import { AccessTrackInfo } from "./AccessTrackInfo";
-import { CreditCardInfo } from "./CreditCardInfo";
-import { Insured } from "./Insured";
-import { Vehicle } from "./Vehicle";
-import { Party } from "./Party";
-import { UIResultModal } from "./modals/UIResultModal";
-import { BackendResultModal } from "./modals/BackendResultModal";
-import { ModelModal } from "./modals/ModelModal";
-import { ImportModal } from "./modals/ImportModal";
+import { AutoPolicyViewState, EvaluationResponse } from './Policy.container'
+import { TransactionDetails } from './TransactionDetails'
+import { PolicyDetails } from './PolicyDetails'
+import { TermDetails } from './TermDetails'
+import { AccessTrackInfo } from './AccessTrackInfo'
+import { CreditCardInfo } from './CreditCardInfo'
+import { Insured } from './Insured'
+import { Vehicle } from './Vehicle'
+import { Party } from './Party'
+import { UIResultModal } from './modals/UIResultModal'
+import { BackendResultModal } from './modals/BackendResultModal'
+import { ModelModal } from './modals/ModelModal'
+import { ImportModal } from './modals/ImportModal'
 
-import { TestProduct } from "kraken-test-product";
-import domain = TestProduct.kraken.testproduct.domain;
-import { ErrorBoundary } from "../../ErrorBoundary";
-import { ContextDefinitionInfo } from "../core/field/ContextDefinitionInfo";
-import { EntityBox } from "../core/EntityBox";
-import { Referer } from "./Referer";
-import { ExpressionTreeModal } from "./modals/ExpressionTreeModal";
+import { TestProduct } from 'kraken-test-product'
+import domain = TestProduct.kraken.testproduct.domain
+import { ErrorBoundary } from '../../ErrorBoundary'
+import { ContextDefinitionInfo } from '../core/field/ContextDefinitionInfo'
+import { EntityBox } from '../core/EntityBox'
+import { Referer } from './Referer'
+import { ExpressionTreeModal } from './modals/ExpressionTreeModal'
 
 export interface AutoPolicyCallbackFunctionProps {
-    onClickShowExpressionModal: () => void;
-    onClickShowUIResultModal: () => void;
-    onClickShowBackendResultModal: () => void;
-    onClickShowModelModal: () => void;
-    onClickShowImportModal: () => void;
-    onImportableModelSubmit: () => void;
-    onImportableModelChange: (e: React.FormEvent<HTMLTextAreaElement>) => void;
-    onValidationEntryPointChange: (validationEntryPointName: string) => void;
-    validate: () => void;
-    onClickExportCurrentState: () => void;
-    onClickResetUI: () => void;
-    onStateChange: (state: string) => void;
-    onPolicyChange: (e: React.FormEvent<HTMLInputElement>) => void;
-    onCreatedFromPolicyRevChange: (e: React.ReactText) => void;
-    onPoliciesChange: (e: string[]) => void;
-    onTransDetailsChange: (det: domain.TransactionDetails) => void;
-    onPolicyDetailsChange: (det: domain.PolicyDetail) => void;
-    onTermDetailsChange: (det: domain.TermDetails) => void;
-    onAccessTrackInfoChange: (accessTrackInfo: domain.AccessTrackInfo) => void;
-    onCreditCardInfoChange: (creditCardInfo: domain.CreditCardInfo) => void;
-    onInsuredChange: (insured: domain.Insured) => void;
-    onVehicleChange: (changedVehicleIndex: Number) => (det: domain.Vehicle) => void;
-    onPartyChange: (party: domain.Party) => void;
-    onRefToCustomerChange: (e: React.FormEvent<HTMLInputElement>) => void;
-    onClickResetEntryPoint: () => void;
-    onRefererChange: (r: domain.Referer) => void;
+    onClickShowExpressionModal: () => void
+    onClickShowUIResultModal: () => void
+    onClickShowBackendResultModal: () => void
+    onClickShowModelModal: () => void
+    onClickShowImportModal: () => void
+    onImportableModelSubmit: () => void
+    onImportableModelChange: (e: React.FormEvent<HTMLTextAreaElement>) => void
+    onValidationEntryPointChange: (validationEntryPointName: string) => void
+    validate: () => void
+    onClickExportCurrentState: () => void
+    onClickResetUI: () => void
+    onStateChange: (state: string) => void
+    onPolicyChange: (e: React.FormEvent<HTMLInputElement>) => void
+    onCreatedFromPolicyRevChange: (e: React.ReactText) => void
+    onPoliciesChange: (e: string[]) => void
+    onTransDetailsChange: (det: domain.TransactionDetails) => void
+    onPolicyDetailsChange: (det: domain.PolicyDetail) => void
+    onTermDetailsChange: (det: domain.TermDetails) => void
+    onAccessTrackInfoChange: (accessTrackInfo: domain.AccessTrackInfo) => void
+    onCreditCardInfoChange: (creditCardInfo: domain.CreditCardInfo) => void
+    onInsuredChange: (insured: domain.Insured) => void
+    onVehicleChange: (changedVehicleIndex: number) => (det: domain.Vehicle) => void
+    onPartyChange: (party: domain.Party) => void
+    onRefToCustomerChange: (e: React.FormEvent<HTMLInputElement>) => void
+    onClickResetEntryPoint: () => void
+    onRefererChange: (r: domain.Referer) => void
 }
 
 export interface AutoPolicyProps extends AutoPolicyCallbackFunctionProps {
-    autoPolicyViewState: AutoPolicyViewState & EvaluationResponse;
+    autoPolicyViewState: AutoPolicyViewState & EvaluationResponse
 }
 
 export class Policy extends React.Component<AutoPolicyProps> {
     render(): JSX.Element {
-        const { autoPolicyViewState } = this.props;
+        const { autoPolicyViewState } = this.props
         return (
-            <Spin spinning={false} size="large">
+            <Spin spinning={false} size='large'>
                 {/* <Spin spinning={autoPolicyViewState.isLoading} size="large"> */}
                 <div>
                     <b>{autoPolicyViewState.buildInfo && autoPolicyViewState.buildInfo.date}</b>
@@ -130,9 +130,9 @@ export class Policy extends React.Component<AutoPolicyProps> {
                         onImportableModelChange={this.props.onImportableModelChange}
                         importableModelState={autoPolicyViewState.importableModelState}
                     />
-                    <div id="buttonPanel">
+                    <div id='buttonPanel'>
                         <Select
-                            className="entry-point-name-select"
+                            className='entry-point-name-select'
                             defaultValue={entryPointNames.UI}
                             onChange={this.props.onValidationEntryPointChange}
                             style={{ width: 200 }}
@@ -145,92 +145,90 @@ export class Policy extends React.Component<AutoPolicyProps> {
                         </Select>
                         <Button
                             loading={this.props.autoPolicyViewState.isLoading}
-                            type="dashed"
-                            icon="code-o"
+                            type='dashed'
+                            icon='code-o'
                             onClick={this.props.validate}
                         >
                             Validate
                         </Button>
-                        <Button type="dashed" icon="eye-o" onClick={this.props.onClickShowUIResultModal}>
+                        <Button type='dashed' icon='eye-o' onClick={this.props.onClickShowUIResultModal}>
                             UI result
                         </Button>
                         <Button
-                            type={this.props.autoPolicyViewState.isBackendFailed ? "danger" : "dashed"}
-                            icon="eye-o"
+                            type={this.props.autoPolicyViewState.isBackendFailed ? 'danger' : 'dashed'}
+                            icon='eye-o'
                             onClick={this.props.onClickShowBackendResultModal}
                         >
                             Backend result
                         </Button>
-                        <Button type="dashed" icon="eye-o" onClick={this.props.onClickShowModelModal}>
+                        <Button type='dashed' icon='eye-o' onClick={this.props.onClickShowModelModal}>
                             Model
                         </Button>
-                        <Button type="dashed" icon="experiment" onClick={this.props.onClickShowExpressionModal}>
+                        <Button type='dashed' icon='experiment' onClick={this.props.onClickShowExpressionModal}>
                             Expression
                         </Button>
-                        <Button type="dashed" icon="upload" onClick={this.props.onClickShowImportModal}>
+                        <Button type='dashed' icon='upload' onClick={this.props.onClickShowImportModal}>
                             Import model
                         </Button>
-                        <Button type="dashed" icon="download" onClick={this.props.onClickExportCurrentState}>
+                        <Button type='dashed' icon='download' onClick={this.props.onClickExportCurrentState}>
                             Export state
                         </Button>
-                        <Button type="danger" icon="delete" onClick={this.props.onClickResetUI}>
+                        <Button type='danger' icon='delete' onClick={this.props.onClickResetUI}>
                             Reset form
                         </Button>
-                        <Button type="danger" icon="reload" onClick={this.props.onClickResetEntryPoint}>
+                        <Button type='danger' icon='reload' onClick={this.props.onClickResetEntryPoint}>
                             Reset EntryPoint
                         </Button>
                         <br />
                         <span>
-                            Status <b id="status">{autoPolicyViewState.isLoading ? "Loading" : "OK"}</b>&nbsp;
+                            Status <b id='status'>{autoPolicyViewState.isLoading ? 'Loading' : 'OK'}</b>&nbsp;
                         </span>
                         <br />
                     </div>
                     <ErrorBoundary>
-                        <EntityBox title="Policy" >
-                            <ContextDefinitionInfo contextName="Policy" />
+                        <EntityBox title='Policy'>
+                            <ContextDefinitionInfo contextName='Policy' />
                             <Row>
                                 <SingleField
                                     id={autoPolicyViewState.autoPolicy.id}
                                     value={autoPolicyViewState.autoPolicy.state}
-                                    contextName="Policy"
-                                    modelFieldName="state"
+                                    contextName='Policy'
+                                    modelFieldName='state'
                                     onChange={this.props.onStateChange}
-                                    // tslint:disable-next-line: max-line-length
                                     info="dimension: state, use 'Dimensional' entrypoint to get rules based on that dimension"
                                     renderInput={renderers.select}
-                                    selections={["CA", "AZ"]}
-
+                                    selections={['CA', 'AZ']}
                                 />
                                 <SingleField
                                     id={autoPolicyViewState.autoPolicy.id}
                                     value={autoPolicyViewState.autoPolicy.policyNumber}
-                                    contextName="Policy"
-                                    modelFieldName="policyNumber"
+                                    contextName='Policy'
+                                    modelFieldName='policyNumber'
                                     onChange={this.props.onPolicyChange}
                                     renderInput={renderers.input}
                                 />
                                 <SingleField
                                     id={autoPolicyViewState.autoPolicy.id}
                                     value={autoPolicyViewState.autoPolicy.createdFromPolicyRev}
-                                    contextName="Policy"
-                                    modelFieldName="createdFromPolicyRev"
+                                    contextName='Policy'
+                                    modelFieldName='createdFromPolicyRev'
                                     onChange={this.props.onCreatedFromPolicyRevChange}
                                     renderInput={renderers.inputNumber}
                                 />
                                 <SingleField
                                     id={autoPolicyViewState.autoPolicy.id}
                                     value={autoPolicyViewState.autoPolicy.refToCustomer}
-                                    contextName="Policy"
-                                    modelFieldName="refToCustomer"
+                                    contextName='Policy'
+                                    modelFieldName='refToCustomer'
                                     onChange={this.props.onRefToCustomerChange}
                                     renderInput={renderers.inputDisabled}
-                                    info="This field is readonly"
+                                    info='This field is readonly'
                                 />
                                 <ManyFields
                                     id={autoPolicyViewState.autoPolicy.id}
                                     value={autoPolicyViewState.autoPolicy.policies}
-                                    contextName="Policy"
-                                    modelFieldName="policies"
+                                    contextName='Policy'
+                                    modelFieldName='policies'
                                     onChange={this.props.onPoliciesChange}
                                     renderInput={renderers.input}
                                 />
@@ -256,34 +254,34 @@ export class Policy extends React.Component<AutoPolicyProps> {
                                 onChange={this.props.onAccessTrackInfoChange}
                             />
                         </EntityBox>
-                        <EntityBox title="Referer" >
-                            <ContextDefinitionInfo contextName="Referer" />
+                        <EntityBox title='Referer'>
+                            <ContextDefinitionInfo contextName='Referer' />
                             <Referer
                                 id={autoPolicyViewState.autoPolicy.referer.id}
                                 value={autoPolicyViewState.autoPolicy.referer}
                                 onChange={this.props.onRefererChange}
                             />
                         </EntityBox>
-                        <EntityBox title="CreditCardInfo" >
-                            <ContextDefinitionInfo contextName="CreditCardInfo" />
+                        <EntityBox title='CreditCardInfo'>
+                            <ContextDefinitionInfo contextName='CreditCardInfo' />
                             <CreditCardInfo
                                 id={autoPolicyViewState.autoPolicy.billingInfo.creditCardInfo.id}
                                 value={autoPolicyViewState.autoPolicy.billingInfo.creditCardInfo}
                                 onChange={this.props.onCreditCardInfoChange}
                             />
                         </EntityBox>
-                        <EntityBox title="Insured" >
-                            <ContextDefinitionInfo contextName="Insured" />
+                        <EntityBox title='Insured'>
+                            <ContextDefinitionInfo contextName='Insured' />
                             <Insured
                                 id={autoPolicyViewState.autoPolicy.insured.id}
                                 value={autoPolicyViewState.autoPolicy.insured}
                                 onChange={this.props.onInsuredChange}
                             />
                         </EntityBox>
-                        <EntityBox title="Risk Items" >
+                        <EntityBox title='Risk Items'>
                             <Collapse>
                                 {autoPolicyViewState.autoPolicy.riskItems.map((riskItem, index) => (
-                                    <Collapse.Panel header={"Vehicle " + index} key={riskItem.id}>
+                                    <Collapse.Panel header={'Vehicle ' + index} key={riskItem.id}>
                                         <Vehicle
                                             id={autoPolicyViewState.autoPolicy.riskItems[index].id}
                                             value={autoPolicyViewState.autoPolicy.riskItems[index]}
@@ -293,7 +291,7 @@ export class Policy extends React.Component<AutoPolicyProps> {
                                 ))}
                             </Collapse>
                         </EntityBox>
-                        <EntityBox title="Party" >
+                        <EntityBox title='Party'>
                             <Party
                                 id={autoPolicyViewState.autoPolicy.parties[0].id}
                                 value={autoPolicyViewState.autoPolicy.parties[0]}
@@ -302,7 +300,7 @@ export class Policy extends React.Component<AutoPolicyProps> {
                         </EntityBox>
                     </ErrorBoundary>
                 </div>
-            </Spin >
-        );
+            </Spin>
+        )
     }
 }

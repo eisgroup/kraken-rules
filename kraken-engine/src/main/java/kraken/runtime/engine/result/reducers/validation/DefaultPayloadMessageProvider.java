@@ -31,8 +31,10 @@ import kraken.runtime.engine.result.ValidationPayloadResult;
  * Provides default messages. Can be extended to override only specific payload messages.
  *
  * @author mulevicius
+ * @deprecated this implementation does not support localization. Use {@link DefaultValidationMessageProvider} instead.
  */
 @API
+@Deprecated(since = "1.24.0", forRemoval = true)
 public class DefaultPayloadMessageProvider implements PayloadMessageProvider {
 
     @Override

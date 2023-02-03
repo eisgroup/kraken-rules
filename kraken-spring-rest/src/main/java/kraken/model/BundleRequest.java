@@ -17,6 +17,7 @@
 package kraken.model;
 
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author psurinin@eisgroup.com
@@ -25,16 +26,21 @@ import java.util.Map;
 public class BundleRequest {
 
     private Map<String, Object> dimensions;
+    private Set<Set<String>> excludes;
 
     public BundleRequest() {
     }
 
-    public BundleRequest(Map<String, Object> dimensions) {
+    public BundleRequest(Map<String, Object> dimensions, Set<Set<String>> excludes) {
         this.dimensions = dimensions;
+        this.excludes = excludes;
     }
 
     public Map<String, Object> getDimensions() {
         return dimensions;
+    }
+    public Set<Set<String>> getExcludes() {
+        return excludes;
     }
 
 }

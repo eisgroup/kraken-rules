@@ -25,6 +25,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import kraken.el.functionregistry.FunctionHeader;
+import kraken.model.Function;
 import kraken.model.FunctionSignature;
 import kraken.model.Rule;
 import kraken.model.context.ContextDefinition;
@@ -110,6 +111,9 @@ public final class NamespaceNode {
                     .stream()
                     .filter(extDef -> !namespacedResource.getExternalContextDefinitions().containsKey(extDef.getName()))
                     .forEach(extDef -> namespaceProjection.getExternalContextDefinitions().add(extDef));
+            childNamespaceProjection.getFunctionSignatures().entrySet().stream()
+                    .filter(e -> !namespacedResource.getFunctionSignatures().containsKey(e.getKey()))
+                    .forEach(e -> namespaceProjection.getFunctionSignatures().put(e.getKey(), e.getValue()));
             childNamespaceProjection.getFunctions().entrySet().stream()
                     .filter(e -> !namespacedResource.getFunctions().containsKey(e.getKey()))
                     .forEach(e -> namespaceProjection.getFunctions().put(e.getKey(), e.getValue()));
@@ -132,6 +136,9 @@ public final class NamespaceNode {
         );
         namespaceProjection.getEntryPoints().addAll(
             namespacedResource.getEntryPoints().values().stream().flatMap(ep -> ep.stream()).collect(Collectors.toList())
+        );
+        namespaceProjection.getFunctionSignatures().putAll(
+            namespacedResource.getFunctionSignatures()
         );
         namespaceProjection.getFunctions().putAll(
             namespacedResource.getFunctions()
@@ -242,7 +249,8 @@ public final class NamespaceNode {
         private final Set<ExternalContextDefinition> externalContextDefinitions = new HashSet<>();
         private final Set<EntryPoint> entryPoints = new HashSet<>();
         private final Set<Rule> rules = new HashSet<>();
-        private final Map<FunctionHeader, FunctionSignature> functions = new HashMap<>();
+        private final Map<FunctionHeader, FunctionSignature> functionSignatures = new HashMap<>();
+        private final Map<String, Function> functions = new HashMap<>();
 
         NamespaceProjection(String namespace) {
             this.namespace = namespace;
@@ -278,7 +286,11 @@ public final class NamespaceNode {
             return rules;
         }
 
-        Map<FunctionHeader, FunctionSignature> getFunctions() {
+        Map<FunctionHeader, FunctionSignature> getFunctionSignatures() {
+            return functionSignatures;
+        }
+
+        Map<String, Function> getFunctions() {
             return functions;
         }
     }

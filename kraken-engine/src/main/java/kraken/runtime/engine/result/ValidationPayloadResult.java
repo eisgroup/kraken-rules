@@ -31,23 +31,17 @@ import kraken.runtime.model.rule.payload.validation.ValidationPayload;
 @API
 public abstract class ValidationPayloadResult implements PayloadResult {
 
-    private Boolean success;
+    private final Boolean success;
 
-    private String messageCode;
+    private final String messageCode;
 
-    private String message;
+    private final String message;
 
-    private List<String> templateVariables;
+    private final List<String> templateVariables;
 
-    private ValidationSeverity validationSeverity;
+    private final String messageTemplate;
 
-    /**
-     * @deprecated use {@link #ValidationPayloadResult(Boolean, ValidationPayload, List)} instead.
-     */
-    @Deprecated(since = "1.14.0", forRemoval = true)
-    public ValidationPayloadResult(Boolean success, ValidationPayload payload) {
-        this(success, payload, List.of());
-    }
+    private final ValidationSeverity validationSeverity;
 
     public ValidationPayloadResult(Boolean success, ValidationPayload payload, List<String> templateVariables) {
         this.success = success;
@@ -61,6 +55,24 @@ public abstract class ValidationPayloadResult implements PayloadResult {
         this.message = payload.getErrorMessage() != null
             ? formatMessage(payload.getErrorMessage().getTemplateParts(), templateVariables)
             : null;
+
+        if (payload.getErrorMessage() == null) {
+            this.messageTemplate = null;
+        } else {
+            List<String> templateParts = payload.getErrorMessage().getTemplateParts();
+            if (templateParts.isEmpty()) {
+                this.messageTemplate = "";
+            } else {
+                StringBuilder templateBuilder = new StringBuilder();
+                for (int i = 0; i < templateParts.size(); i++) {
+                    templateBuilder.append(escapeMessageFormatSymbols(templateParts.get(i)));
+                    if (i < templateParts.size() - 1) {
+                        templateBuilder.append("{").append(i).append("}");
+                    }
+                }
+                this.messageTemplate = templateBuilder.toString();
+            }
+        }
     }
 
     private String formatMessage(List<String> templateParts, List<String> templateVariables) {
@@ -97,4 +109,11 @@ public abstract class ValidationPayloadResult implements PayloadResult {
         return validationSeverity;
     }
 
+    public String getMessageTemplate() {
+        return messageTemplate;
+    }
+
+    private static String escapeMessageFormatSymbols(String unescaped) {
+        return unescaped.replace("'", "''").replace("{", "'{'").replace("}", "'}'");
+    }
 }

@@ -15,6 +15,9 @@
  */
 package kraken.runtime.engine.context.data;
 
+import kraken.runtime.EvaluationSession;
+import kraken.runtime.engine.context.StaticContextDataProvider;
+import kraken.runtime.expressions.KrakenExpressionEvaluationException;
 import kraken.runtime.model.context.ContextNavigation;
 import kraken.runtime.engine.context.extraction.ContextChildExtractionInfo;
 import kraken.runtime.engine.context.extraction.instance.ContextExtractionResultBuilder;
@@ -23,10 +26,15 @@ import kraken.runtime.expressions.KrakenExpressionEvaluator;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author psurinin
  */
 public class ExtractedChildDataContextBuilder {
+
+    private final static Logger logger = LoggerFactory.getLogger(ExtractedChildDataContextBuilder.class);
 
     private final DataContextBuilder dataContextBuilder;
 
@@ -34,14 +42,18 @@ public class ExtractedChildDataContextBuilder {
 
     private final KrakenExpressionEvaluator evaluator;
 
+    private final EvaluationSession session;
+
     public ExtractedChildDataContextBuilder(
             DataContextBuilder dataContextBuilder,
             ContextExtractionResultBuilder childBuilder,
-            KrakenExpressionEvaluator evaluator
+            KrakenExpressionEvaluator evaluator,
+            EvaluationSession session
     ) {
         this.dataContextBuilder = dataContextBuilder;
         this.childBuilder = childBuilder;
         this.evaluator = evaluator;
+        this.session = session;
     }
 
     public List<DataContext> resolveImmediateChildren(ContextChildExtractionInfo info) {
@@ -51,16 +63,27 @@ public class ExtractedChildDataContextBuilder {
     }
 
     private List<DataContext> resolveExtractedChildren(ContextChildExtractionInfo info) {
-        ContextNavigation contextNavigation = info.getFrom()
-                .getChildren()
-                .get(info.getChildContextName());
+        ContextNavigation contextNavigation = info.getFrom().getChildren().get(info.getChildContextName());
 
-        Object extractedChild = evaluator.evaluateNavigationExpression(contextNavigation, info.getParentDataContext().getDataObject());
+        Object extractedChild = evaluateNavigationExpression(contextNavigation, info);
 
         return childBuilder.buildFrom(extractedChild).stream()
-                .map(instance -> dataContextBuilder.buildFromExtractedObject(instance, info))
+            .map(instance -> dataContextBuilder.buildFromExtractedObject(instance, info))
             .collect(Collectors.toList());
-}
+    }
+
+    private Object evaluateNavigationExpression(ContextNavigation contextNavigation, ContextChildExtractionInfo info) {
+        try {
+            return evaluator.evaluateNavigationExpression(contextNavigation, info.getParentDataContext(), session);
+        } catch (KrakenExpressionEvaluationException e) {
+            logger.trace(
+                "Error while evaluating navigation expression: {}. No object will be extracted.",
+                contextNavigation.getNavigationExpression().getExpressionString(),
+                e
+            );
+            return null;
+        }
+    }
 
     private List<DataContext> resolveInheritedChildren(ContextChildExtractionInfo info) {
         // if its a step up on inheritance tree, just create data context with same object and different name

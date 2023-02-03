@@ -14,15 +14,15 @@
  *  limitations under the License.
  */
 
-import { requireDefinedValue } from "../../src/utils/Utils";
+import { requireDefinedValue } from '../../src/utils/Utils'
 
-describe("Nullable or empty objects validation", () => {
-    it("should should require defined value", () => {
-        const array: never[] = [];
-        expect(requireDefinedValue(1)).toBe(1);
-        expect(requireDefinedValue("1")).toBe("1");
-        expect(requireDefinedValue(array)).toBe(array);
-        expect(() => requireDefinedValue(undefined)).toThrow();
-        expect(() => requireDefinedValue(undefined, "value is undefined")).toThrow("value is undefined");
-    });
-});
+describe('Nullable or empty objects validation', () => {
+    it('should should require defined value', () => {
+        const array: never[] = []
+        expect(requireDefinedValue(1)).toBe(1)
+        expect(requireDefinedValue('1')).toBe('1')
+        expect(requireDefinedValue(array)).toBe(array)
+        expect(() => requireDefinedValue(undefined)).toThrow()
+        expect(() => requireDefinedValue(undefined, 'value is undefined')).toThrow('value is undefined')
+    })
+})

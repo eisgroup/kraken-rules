@@ -14,39 +14,39 @@
  *  limitations under the License.
  */
 
-import { CachingDataContextUpdater } from "../../../../../src/engine/contexts/data/updater/CachingDataContextUpdater";
-import { DataContextUpdater } from "../../../../../src/engine/contexts/data/updater/DataContextUpdater";
-import { mock } from "../../../../mock";
+import { CachingDataContextUpdater } from '../../../../../src/engine/contexts/data/updater/CachingDataContextUpdater'
+import { DataContextUpdater } from '../../../../../src/engine/contexts/data/updater/DataContextUpdater'
+import { mock } from '../../../../mock'
 
-describe("CachingDataContextUpdater", () => {
-    let updater: DataContextUpdater;
-    let spy: jest.Mock;
+describe('CachingDataContextUpdater', () => {
+    let updater: DataContextUpdater
+    let spy: jest.Mock
     beforeEach(() => {
-        spy = jest.fn();
+        spy = jest.fn()
         updater = new CachingDataContextUpdater({
             update: (root, deps) => {
-                spy(root, deps);
-                return undefined;
-            }
-        });
-    });
-    it("should call once per dependency", () => {
-        updater.update(mock.dataContextEmpty(), { contextName: "test" });
-        expect(spy).toHaveBeenCalledTimes(1);
-    });
-    it("should call once per same dependency", () => {
-        const dc = mock.dataContextEmpty();
-        updater.update(dc, { contextName: "test" });
-        updater.update(dc, { contextName: "test" });
-        expect(spy).toHaveBeenCalledTimes(1);
-    });
-    it("should call once per data context with same dependency", () => {
-        const a = mock.dataContextEmpty();
-        updater.update(mock.dataContextEmpty(), { contextName: "a" });
-        updater.update(a, { contextName: "a" });
-        updater.update(a, { contextName: "b" });
-        updater.update(a, { contextName: "a" });
-        updater.update(a, { contextName: "b" });
-        expect(spy).toHaveBeenCalledTimes(3);
-    });
-});
+                spy(root, deps)
+                return undefined
+            },
+        })
+    })
+    it('should call once per dependency', () => {
+        updater.update(mock.dataContextEmpty(), { contextName: 'test' })
+        expect(spy).toHaveBeenCalledTimes(1)
+    })
+    it('should call once per same dependency', () => {
+        const dc = mock.dataContextEmpty()
+        updater.update(dc, { contextName: 'test' })
+        updater.update(dc, { contextName: 'test' })
+        expect(spy).toHaveBeenCalledTimes(1)
+    })
+    it('should call once per data context with same dependency', () => {
+        const a = mock.dataContextEmpty()
+        updater.update(mock.dataContextEmpty(), { contextName: 'a' })
+        updater.update(a, { contextName: 'a' })
+        updater.update(a, { contextName: 'b' })
+        updater.update(a, { contextName: 'a' })
+        updater.update(a, { contextName: 'b' })
+        expect(spy).toHaveBeenCalledTimes(3)
+    })
+})

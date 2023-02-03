@@ -15,10 +15,19 @@
  */
 package kraken.runtime.engine;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import kraken.context.Context;
 import kraken.context.model.tree.ContextModelTree;
 import kraken.context.model.tree.repository.ContextModelTreeRepository;
 import kraken.el.TargetEnvironment;
+import kraken.el.functionregistry.FunctionHeader;
+import kraken.el.functionregistry.KelFunction;
+import kraken.el.functionregistry.KelFunction.Parameter;
 import kraken.runtime.EvaluationConfig;
 import kraken.runtime.EvaluationSession;
 import kraken.runtime.RuleEngine;
@@ -30,16 +39,14 @@ import kraken.runtime.engine.context.type.registry.TypeRegistry;
 import kraken.runtime.engine.dto.bundle.EntryPointBundle;
 import kraken.runtime.engine.dto.bundle.EntryPointBundleFactory;
 import kraken.runtime.engine.evaluation.loop.EvaluationLoop;
+import kraken.runtime.engine.trace.RuleEngineInvocationOperation;
 import kraken.runtime.expressions.KrakenExpressionEvaluator;
 import kraken.runtime.expressions.KrakenTypeProvider;
-import kraken.runtime.expressions.KrakenTypeProviderFactory;
 import kraken.runtime.logging.KrakenDataLogger;
+import kraken.runtime.repository.RuntimeProjectRepository;
 import kraken.runtime.repository.factory.RuntimeProjectRepositoryFactory;
+import kraken.tracer.Tracer;
 import kraken.utils.Namespaces;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 
 /**
  * Default implementation for {@link RuleEngine}
@@ -54,7 +61,6 @@ public class RuleEngineImpl implements RuleEngine {
     private EvaluationLoop evaluationLoop;
     private EntryPointBundleFactory entryPointBundleFactory;
     private ContextInstanceInfoResolver contextInstanceInfoResolver;
-    private KrakenTypeProviderFactory krakenTypeProviderFactory;
     private TypeRegistry typeRegistry;
     private KrakenDataLogger dataLogger;
     private KrakenExpressionEvaluator krakenExpressionEvaluator;
@@ -67,32 +73,37 @@ public class RuleEngineImpl implements RuleEngine {
 
     @Override
     public EntryPointResult evaluate(Object data, String entryPointName, EvaluationConfig evaluationConfig) {
-        ContextModelTree contextModelTree = modelTree(entryPointName);
-        EntryPointBundle bundle = buildEntryPointBundle(entryPointName, evaluationConfig);
-        String namespace = Namespaces.toNamespaceName(entryPointName);
-        KrakenTypeProvider krakenTypeProvider = krakenTypeProviderFactory.resolveKrakenTypeProvider(namespace);
-        EvaluationSession session = new EvaluationSession(evaluationConfig, evaluationConfig.getContext(), krakenTypeProvider);
-        logInputData(session.getSessionToken(), data, entryPointName, evaluationConfig.getContext());
-        logEffectiveRules(session.getSessionToken(), bundle);
-        if(noRulesArePresent(bundle)){
-            return new EntryPointResult();
-        }
-        final ContextDataProvider provider = StaticContextDataProvider.create(
-                crossContextPathsResolverFactory.resolve(contextModelTree),
-                runtimeProjectRepositoryFactory.resolveContextRepository(namespace),
-                contextModelTree,
-                contextInstanceInfoResolver,
-                krakenExpressionEvaluator,
-                typeRegistry,
-                data
-        );
-        final EntryPointResult entryPointResult = evaluationLoop.evaluate(
-                bundle.getEvaluation(),
-                provider,
-                session
-        );
-        logEvaluationResults(session.getSessionToken(), entryPointName, entryPointResult);
-        return entryPointResult;
+        return Tracer.doOperation(
+            new RuleEngineInvocationOperation(entryPointName, data, evaluationConfig),
+            () -> {
+                String namespace = Namespaces.toNamespaceName(entryPointName);
+                RuntimeProjectRepository repository = runtimeProjectRepositoryFactory.resolveRepository(namespace);
+                EvaluationSession session = createEvaluationSession(evaluationConfig, repository, namespace);
+                logInputData(session.getSessionToken(), data, entryPointName, evaluationConfig.getContext());
+                EntryPointBundle bundle = buildEntryPointBundle(entryPointName, evaluationConfig);
+                logEffectiveRules(session.getSessionToken(), bundle);
+                if (noRulesArePresent(bundle)) {
+                    return new EntryPointResult();
+                }
+                ContextModelTree contextModelTree = modelTree(namespace);
+                final ContextDataProvider provider = StaticContextDataProvider.create(
+                    crossContextPathsResolverFactory.resolve(contextModelTree),
+                    repository,
+                    contextModelTree,
+                    contextInstanceInfoResolver,
+                    krakenExpressionEvaluator,
+                    typeRegistry,
+                    data,
+                    session
+                );
+                final EntryPointResult entryPointResult = evaluationLoop.evaluate(
+                    bundle.getEvaluation(),
+                    provider,
+                    session
+                );
+                logEvaluationResults(session.getSessionToken(), entryPointName, entryPointResult);
+                return entryPointResult;
+            });
     }
 
     @Override
@@ -101,30 +112,36 @@ public class RuleEngineImpl implements RuleEngine {
     }
 
     @Override
-    public EntryPointResult evaluateSubtree(Object data, Object node, String entryPointName, EvaluationConfig evaluationConfig) {
-        ContextModelTree contextModelTree = modelTree(entryPointName);
-        EntryPointBundle bundle = buildEntryPointBundle(entryPointName, evaluationConfig);
-        String namespace = Namespaces.toNamespaceName(entryPointName);
-        KrakenTypeProvider krakenTypeProvider = krakenTypeProviderFactory.resolveKrakenTypeProvider(namespace);
-        EvaluationSession session = new EvaluationSession(evaluationConfig, evaluationConfig.getContext(), krakenTypeProvider);
-        logInputData(session.getSessionToken(), data, node, entryPointName, evaluationConfig.getContext());
-        logEffectiveRules(session.getSessionToken(), bundle);
-        if(noRulesArePresent(bundle)){
-            return new EntryPointResult();
-        }
-        final ContextDataProvider provider = StaticContextDataProvider.create(
-                crossContextPathsResolverFactory.resolve(contextModelTree),
-                runtimeProjectRepositoryFactory.resolveContextRepository(namespace),
-                contextModelTree,
-                contextInstanceInfoResolver,
-                krakenExpressionEvaluator,
-                typeRegistry,
-                data,
-                node
-        );
-        EntryPointResult entryPointResult = evaluationLoop.evaluate(bundle.getEvaluation(), provider, session);
-        logEvaluationResults(session.getSessionToken(), entryPointName, entryPointResult);
-        return entryPointResult;
+    public EntryPointResult evaluateSubtree(Object data, Object node, String entryPointName,
+                                            EvaluationConfig evaluationConfig) {
+        return Tracer.doOperation(
+            new RuleEngineInvocationOperation(entryPointName, data, node, evaluationConfig),
+            () -> {
+                String namespace = Namespaces.toNamespaceName(entryPointName);
+                RuntimeProjectRepository repository = runtimeProjectRepositoryFactory.resolveRepository(namespace);
+                EvaluationSession session = createEvaluationSession(evaluationConfig, repository, namespace);
+                logInputData(session.getSessionToken(), data, node, entryPointName, evaluationConfig.getContext());
+                EntryPointBundle bundle = buildEntryPointBundle(entryPointName, evaluationConfig);
+                logEffectiveRules(session.getSessionToken(), bundle);
+                if (noRulesArePresent(bundle)) {
+                    return new EntryPointResult();
+                }
+                ContextModelTree contextModelTree = modelTree(namespace);
+                final ContextDataProvider provider = StaticContextDataProvider.create(
+                    crossContextPathsResolverFactory.resolve(contextModelTree),
+                    repository,
+                    contextModelTree,
+                    contextInstanceInfoResolver,
+                    krakenExpressionEvaluator,
+                    typeRegistry,
+                    data,
+                    node,
+                    session
+                );
+                EntryPointResult entryPointResult = evaluationLoop.evaluate(bundle.getEvaluation(), provider, session);
+                logEvaluationResults(session.getSessionToken(), entryPointName, entryPointResult);
+                return entryPointResult;
+            });
     }
 
     public void setEvaluationLoop(EvaluationLoop evaluationLoop) {
@@ -151,10 +168,6 @@ public class RuleEngineImpl implements RuleEngine {
         this.krakenExpressionEvaluator = krakenExpressionEvaluator;
     }
 
-    public void setKrakenTypeProviderFactory(KrakenTypeProviderFactory krakenTypeProviderFactory) {
-        this.krakenTypeProviderFactory = krakenTypeProviderFactory;
-    }
-
     public void setRuntimeProjectRepositoryFactory(RuntimeProjectRepositoryFactory runtimeProjectRepositoryFactory) {
         this.runtimeProjectRepositoryFactory = runtimeProjectRepositoryFactory;
     }
@@ -163,8 +176,17 @@ public class RuleEngineImpl implements RuleEngine {
         this.crossContextPathsResolverFactory = crossContextPathsResolverFactory;
     }
 
+    public void setContextModelTreeProvider(ContextModelTreeRepository contextModelTreeRepository) {
+        this.contextModelTreeRepository = contextModelTreeRepository;
+    }
+
     private EntryPointBundle buildEntryPointBundle(String entryPointName, EvaluationConfig evaluationConfig) {
-        return entryPointBundleFactory.build(entryPointName, bundleContext(evaluationConfig.getContext()));
+        return entryPointBundleFactory.build(
+            entryPointName,
+            bundleContext(evaluationConfig.getContext()),
+            Set.of(),
+            evaluationConfig.getEvaluationMode()
+        );
     }
 
     private Map<String, Object> bundleContext(Map<String, Object> context) {
@@ -177,8 +199,8 @@ public class RuleEngineImpl implements RuleEngine {
         return bundle.getEvaluation().getRules().isEmpty();
     }
 
-    private ContextModelTree modelTree(String entryPointName) {
-        return contextModelTreeRepository.get(Namespaces.toNamespaceName(entryPointName), TargetEnvironment.JAVA);
+    private ContextModelTree modelTree(String namespace) {
+        return contextModelTreeRepository.get(namespace, TargetEnvironment.JAVA);
     }
 
     private void logInputData(String sessionToken, Object data, String entryPointName, Map<String, Object> context) {
@@ -201,7 +223,23 @@ public class RuleEngineImpl implements RuleEngine {
                 .ifPresent(logger -> logger.logEvaluationResults(sessionToken, entryPointName, entryPointResult));
     }
 
-    public void setContextModelTreeProvider(ContextModelTreeRepository contextModelTreeRepository) {
-        this.contextModelTreeRepository = contextModelTreeRepository;
+    private EvaluationSession createEvaluationSession(EvaluationConfig evaluationConfig,
+                                                      RuntimeProjectRepository repository,
+                                                      String namespace) {
+        KrakenTypeProvider krakenTypeProvider = new KrakenTypeProvider(contextInstanceInfoResolver, repository);
+        Map<FunctionHeader, KelFunction> functions = repository.getKrakenProject().getFunctions().values().stream()
+            .map(f -> new KelFunction(
+                f.getName(),
+                f.getParameters().stream().map(p -> new Parameter(p.getName())).collect(Collectors.toList()),
+                f.getBody().getAst()
+            ))
+            .collect(Collectors.toMap(KelFunction::header, f -> f));
+        return new EvaluationSession(
+            evaluationConfig,
+            evaluationConfig.getContext(),
+            krakenTypeProvider,
+            functions,
+            namespace
+        );
     }
 }

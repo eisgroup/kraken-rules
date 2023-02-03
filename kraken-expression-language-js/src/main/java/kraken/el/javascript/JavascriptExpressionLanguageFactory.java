@@ -37,8 +37,4 @@ public class JavascriptExpressionLanguageFactory implements ExpressionLanguageFa
         return "javascript";
     }
 
-    @Override
-    public boolean isPrimary() {
-        return true;
-    }
 }

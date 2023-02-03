@@ -26,59 +26,64 @@
  */
 export interface KrakenConfig {
     logger: {
-        debug: boolean,
-        info: boolean,
-        error: boolean,
-        warning: boolean,
-        entriesCount: number,
-        getLogs(): void,
+        debug: boolean
+        info: boolean
+        error: boolean
+        warning: boolean
+        entriesCount: number
+        logs: string[]
+        getLogs(): void
         clear(): void
-    };
+    }
+}
+type WithKraken = {
+    Kraken: KrakenConfig
 }
 
 function init(): void {
-    const logger: KrakenConfig["logger"] = {
+    const logger: KrakenConfig['logger'] = {
         debug: false,
         info: true,
         error: true,
         warning: true,
         entriesCount: 2000,
+        logs: [],
         clear(): void {
-            const config = (global as any)["Kraken"];
+            const config = (global as unknown as WithKraken).Kraken
             if (config.logger.logs) {
-                config.logger.logs = [];
+                config.logger.logs = []
             }
         },
         getLogs(): void {
-            const config = (global as any)["Kraken"];
+            const config = (global as unknown as WithKraken).Kraken
             // applicable only for the browser
             if (config.logger.logs && document && window) {
-                const blob = new Blob([config.logger.logs.join("\n")], { type: "text/plain" });
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement("a");
-                a.style.display = "none";
-                a.href = url;
-                a.download = `kraken-logs-${new Date().getTime()}.txt`;
-                document.body.appendChild(a);
-                a.click();
-                window.URL.revokeObjectURL(url);
-                document.body.removeChild(a);
+                const blob = new Blob([config.logger.logs.join('\n')], { type: 'text/plain' })
+                const url = window.URL.createObjectURL(blob)
+                const a = document.createElement('a')
+                a.style.display = 'none'
+                a.href = url
+                a.download = `kraken-logs-${new Date().getTime()}.txt`
+                document.body.appendChild(a)
+                a.click()
+                window.URL.revokeObjectURL(url)
+                document.body.removeChild(a)
             }
-        }
-    };
+        },
+    }
     if (global) {
-        (global as any)["Kraken"] = {
-            logger
-        };
-        return;
+        ;(global as unknown as WithKraken).Kraken = {
+            logger,
+        }
+        return
     }
 }
 
 function getConfig(): KrakenConfig {
     if (global) {
-        return (global as any)["Kraken"] as KrakenConfig;
+        return (global as unknown as { Kraken: KrakenConfig })['Kraken']
     }
-    throw new Error("Kraken configuration was not initialized");
+    throw new Error('Kraken configuration was not initialized')
 }
 
-export const krakenConfig = { init, getConfig };
+export const krakenConfig = { init, getConfig }

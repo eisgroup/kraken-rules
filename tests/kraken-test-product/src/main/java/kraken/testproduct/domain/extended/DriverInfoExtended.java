@@ -21,33 +21,6 @@ import java.time.LocalDate;
 
 public class DriverInfoExtended extends DriverInfo {
 
-    private String driverType;
-
-    private Boolean convictedOfFelonyInd;
-
-    private LocalDate trainingCompletionDate;
-
-    public String getDriverType() {
-        return driverType;
-    }
-
-    public void setDriverType(String driverType) {
-        this.driverType = driverType;
-    }
-
-    public Boolean getConvicted() {
-        return convictedOfFelonyInd;
-    }
-
-    public void setConvicted(Boolean convicted) {
-        this.convictedOfFelonyInd = convicted;
-    }
-
-    public LocalDate getTrainingCompletionDate() {
-        return trainingCompletionDate;
-    }
-
-    public void setTrainingCompletionDate(LocalDate trainingCompletionDate) {
-        this.trainingCompletionDate = trainingCompletionDate;
+    public DriverInfoExtended() {
     }
 }

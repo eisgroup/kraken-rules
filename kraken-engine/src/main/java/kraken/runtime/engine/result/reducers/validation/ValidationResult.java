@@ -33,58 +33,73 @@ public class ValidationResult {
     /**
      * Name of the rule which generated error message
      */
-    private String ruleName;
+    private final String ruleName;
 
     /**
      * Error message text.
      * If message is a template then this is already a formatted message
      * with all placeholders replaced with template variables.
      */
-    private String message;
+    private final String message;
 
     /**
      * Error message code
      */
-    private String messageCode;
+    private final String messageCode;
 
     /**
      * If message is a template then this is an ordered list of evaluated and formatted template placeholder expressions.
      * Can be used as a values for indexed placeholders when formatting localized message.
      */
-    private List<String> templateVariables;
+    private final List<String> templateVariables;
+
+    /**
+     * MessageFormat compatible template created from default error message
+     */
+    private final String messageTemplate;
 
     /**
      * Information about field, instance containing this field
      */
-    private ContextFieldInfo contextFieldInfo;
+    private final ContextFieldInfo contextFieldInfo;
 
     /**
      * Error message severity
      */
-    private ValidationSeverity severity;
+    private final ValidationSeverity severity;
 
     /**
-     * @deprecated use {@link #ValidationResult(String, String, String, List, ValidationSeverity, ContextFieldInfo)} instead.
+     * @deprecated use {@link #ValidationResult(String, String, String, List, String, ValidationSeverity, ContextFieldInfo)} instead.
      */
-    @Deprecated(since = "1.14.0", forRemoval = true)
-    public ValidationResult(String ruleName,
-                            String message,
-                            String messageCode,
-                            ValidationSeverity severity,
-                            ContextFieldInfo contextFieldInfo) {
-        this(ruleName, message, messageCode, List.of(), severity, contextFieldInfo);
-    }
-
+    @Deprecated(since = "1.42.0", forRemoval = true)
     public ValidationResult(String ruleName,
                             String message,
                             String messageCode,
                             List<String> templateVariables,
                             ValidationSeverity severity,
                             ContextFieldInfo contextFieldInfo) {
+        this(ruleName,
+            message,
+            messageCode,
+            templateVariables,
+            message.replace("'", "''").replace("{", "'{'").replace("}", "'}'"),
+            severity,
+            contextFieldInfo
+        );
+    }
+
+    public ValidationResult(String ruleName,
+                            String message,
+                            String messageCode,
+                            List<String> templateVariables,
+                            String messageTemplate,
+                            ValidationSeverity severity,
+                            ContextFieldInfo contextFieldInfo) {
         this.ruleName = ruleName;
         this.message = message;
         this.messageCode = messageCode;
         this.templateVariables = templateVariables;
+        this.messageTemplate = messageTemplate;
         this.contextFieldInfo = contextFieldInfo;
         this.severity = severity;
     }
@@ -97,9 +112,9 @@ public class ValidationResult {
         return message;
     }
 
-    public String getMessageCode() {
-        return messageCode;
-    }
+    public String getMessageTemplate() { return messageTemplate; }
+
+    public String getMessageCode() { return messageCode; }
 
     public List<String> getTemplateVariables() {
         return templateVariables;

@@ -17,8 +17,6 @@ package kraken.el.ast;
 
 import kraken.el.ast.token.Token;
 import kraken.el.scope.Scope;
-import kraken.el.scope.type.ArrayType;
-import kraken.el.scope.type.Type;
 
 /**
  * @author mulevicius
@@ -26,19 +24,14 @@ import kraken.el.scope.type.Type;
  */
 public class ForEach extends Expression {
 
-    private String var;
+    private final String var;
 
-    private Expression collection;
+    private final Expression collection;
 
-    private Expression returnExpression;
+    private final Expression returnExpression;
 
     public ForEach(String var, Expression collection, Expression returnExpression, Scope scope, Token token) {
-        super(NodeType.FOR,
-                scope,
-                returnExpression.getEvaluationType() instanceof ArrayType
-                        ? returnExpression.getEvaluationType()
-                        : ArrayType.of(returnExpression.getEvaluationType()),
-                token);
+        super(NodeType.FOR, scope, returnExpression.getEvaluationType().wrapArrayType(), token);
 
         this.var = var;
         this.collection = collection;
@@ -59,6 +52,6 @@ public class ForEach extends Expression {
 
     @Override
     public String toString() {
-        return "for " + var + " in " + collection + " return " + returnExpression;
+        return "(for " + var + " in " + collection + " return " + returnExpression + ")";
     }
 }

@@ -123,6 +123,7 @@ public class RuleCrossContextDependencyValidatorTest {
             null,
             Map.of(),
             null,
+            List.of(),
             List.of()
         );
     }

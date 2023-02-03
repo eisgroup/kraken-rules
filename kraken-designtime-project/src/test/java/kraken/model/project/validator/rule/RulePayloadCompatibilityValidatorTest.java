@@ -59,7 +59,7 @@ import static kraken.model.project.validator.rule.RulePayloadCompatibilityValida
 import static kraken.model.project.validator.rule.RulePayloadCompatibilityValidatorTest.IsPayloadCompatibleWith.compatibleWithSinglePrimitive;
 import static kraken.model.project.validator.rule.RulePayloadCompatibilityValidatorTest.IsPayloadCompatibleWith.compatibleWithSingleSystem;
 import static org.hamcrest.CoreMatchers.not;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * @author mulevicius

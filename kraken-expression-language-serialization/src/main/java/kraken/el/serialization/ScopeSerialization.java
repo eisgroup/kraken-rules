@@ -37,7 +37,6 @@ public class ScopeSerialization {
         .useRuntimeType(true)
         .exclude("allTypes", Scope.class)
         .withConverter(TypeProxyConverter.instance, TypeRef.class)
-//        .withConverter(TypeProxyConverter.instance, Type.class)
         .create();
 
     public static String serializeTypeRegistry(TypeRegistry typeRegistry) {

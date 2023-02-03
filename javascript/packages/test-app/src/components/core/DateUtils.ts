@@ -14,20 +14,18 @@
  *  limitations under the License.
  */
 
-import moment = require("moment");
-import { Moment } from "moment";
+import moment = require('moment')
+import { Moment } from 'moment'
 
 export const trans = {
     toMoment: (date: Date | undefined) => date && moment(date),
-    toDate: (date: Moment | undefined) => date && new Date(
-        date.year(), date.month(), date.date()
-    ),
+    toDate: (date: Moment | undefined) => date && new Date(date.year(), date.month(), date.date()),
     toDateTime: (date: Moment | undefined) => {
         if (date) {
-            const d = date.toDate();
-            d.setMilliseconds(0);
-            return d;
+            const d = date.toDate()
+            d.setMilliseconds(0)
+            return d
         }
-        return date;
-    }
-};
+        return date
+    },
+}

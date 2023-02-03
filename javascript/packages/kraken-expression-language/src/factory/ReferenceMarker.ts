@@ -3,6 +3,6 @@
  * Full data must be resolved.
  */
 export interface ReferenceMarker {
-    __proxy: true;
-    name: string;
+    __proxy: true
+    name: string
 }

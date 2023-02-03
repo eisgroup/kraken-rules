@@ -25,7 +25,8 @@ kraken.engine.sanity.check.EngineSanityExpressionsTest.shouldAssertWithPropositi
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     }
@@ -65,7 +66,8 @@ kraken.engine.sanity.check.EngineSanityExpressionsTest.shouldDefaultWithValueFro
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     }
@@ -105,7 +107,8 @@ kraken.engine.sanity.check.EngineSanityExpressionsTest.shouldEvaluateFlatWithPre
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     }
@@ -140,7 +143,8 @@ kraken.engine.sanity.check.EngineSanityExpressionsTest.shouldExecuteFilterExpres
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -169,7 +173,8 @@ kraken.engine.sanity.check.EngineSanityExpressionsTest.shouldExecuteFilterExpres
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -198,7 +203,8 @@ kraken.engine.sanity.check.EngineSanityExpressionsTest.shouldExecuteFilterExpres
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -227,7 +233,8 @@ kraken.engine.sanity.check.EngineSanityExpressionsTest.shouldExecuteFilterExpres
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -256,7 +263,8 @@ kraken.engine.sanity.check.EngineSanityExpressionsTest.shouldExecuteFilterExpres
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -285,7 +293,8 @@ kraken.engine.sanity.check.EngineSanityExpressionsTest.shouldExecuteFilterExpres
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -314,7 +323,8 @@ kraken.engine.sanity.check.EngineSanityExpressionsTest.shouldExecuteFilterExpres
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -343,7 +353,8 @@ kraken.engine.sanity.check.EngineSanityExpressionsTest.shouldExecuteFilterExpres
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -372,7 +383,8 @@ kraken.engine.sanity.check.EngineSanityExpressionsTest.shouldExecuteFilterExpres
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -401,7 +413,8 @@ kraken.engine.sanity.check.EngineSanityExpressionsTest.shouldExecuteFilterExpres
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     }
@@ -441,7 +454,8 @@ kraken.engine.sanity.check.EngineSanityExpressionsTest.shouldFindServiceHistoryA
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     }

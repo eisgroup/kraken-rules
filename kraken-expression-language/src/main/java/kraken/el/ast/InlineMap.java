@@ -18,6 +18,7 @@ package kraken.el.ast;
 import kraken.el.ast.token.Token;
 import kraken.el.scope.Scope;
 import kraken.el.scope.SymbolTable;
+import kraken.el.scope.symbol.Symbol;
 import kraken.el.scope.symbol.VariableSymbol;
 import kraken.el.scope.type.Type;
 
@@ -30,7 +31,7 @@ import java.util.stream.Collectors;
  */
 public class InlineMap extends Expression {
 
-    private List<KeyValuePair> keyValuePairs;
+    private final List<KeyValuePair> keyValuePairs;
 
     public InlineMap(List<KeyValuePair> keyValuePairs, Scope scope, Token token) {
         super(NodeType.INLINE_MAP, scope, buildMapType(keyValuePairs), token);
@@ -48,16 +49,16 @@ public class InlineMap extends Expression {
                         List.of(),
                         keyValuePairs.stream()
                                 .map(keyValuePair -> new VariableSymbol(keyValuePair.getKey(), keyValuePair.getValue().getEvaluationType()))
-                                .collect(Collectors.toMap(r -> r.getName(), r -> r))
+                                .collect(Collectors.toMap(Symbol::getName, r -> r))
                 )
         );
     }
 
     public static class KeyValuePair {
 
-        private String key;
+        private final String key;
 
-        private Expression value;
+        private final Expression value;
 
         public KeyValuePair(String key, Expression value) {
             this.key = key;

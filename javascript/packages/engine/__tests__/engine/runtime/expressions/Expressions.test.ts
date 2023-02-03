@@ -14,34 +14,36 @@
  *  limitations under the License.
  */
 
-import { mock } from "../../../mock";
-import { Expressions } from "../../../../src/engine/runtime/expressions/Expressions";
-import { DataContext } from "../../../../src/engine/contexts/data/DataContext";
+import { mock } from '../../../mock'
+import { Expressions } from '../../../../src/engine/runtime/expressions/Expressions'
+import { DataContext } from '../../../../src/engine/contexts/data/DataContext'
 
-describe("Expressions", () => {
-    it("should change field name to path once", () => {
-        const expression = "aaa";
-        const resolved = Expressions.createPathResolver(new DataContext(
-            "id",
-            "name",
-            {},
-            mock.contextInstanceInfo,
-            {
-                "aaa": {
-                    name: "aaa",
-                    fieldType: "string",
-                    cardinality: "SINGLE",
-                    fieldPath: "bbb"
+describe('Expressions', () => {
+    it('should change field name to path once', () => {
+        const expression = 'aaa'
+        const resolved = Expressions.createPathResolver(
+            new DataContext(
+                'id',
+                'name',
+                {},
+                mock.contextInstanceInfo,
+                {
+                    aaa: {
+                        name: 'aaa',
+                        fieldType: 'string',
+                        cardinality: 'SINGLE',
+                        fieldPath: 'bbb',
+                    },
+                    bbb: {
+                        name: 'bbb',
+                        fieldType: 'string',
+                        cardinality: 'SINGLE',
+                        fieldPath: 'ccc',
+                    },
                 },
-                "bbb": {
-                    name: "bbb",
-                    fieldType: "string",
-                    cardinality: "SINGLE",
-                    fieldPath: "ccc"
-                }
-            },
-            undefined
-        ))(expression);
-        expect(resolved).toBe("bbb");
-    });
-});
+                undefined,
+            ),
+        )(expression)
+        expect(resolved).toBe('bbb')
+    })
+})

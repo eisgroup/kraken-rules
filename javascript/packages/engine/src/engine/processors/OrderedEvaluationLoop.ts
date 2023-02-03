@@ -13,230 +13,285 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-import { Reducer } from "declarative-js";
-import toObject = Reducer.toObject;
-import flat = Reducer.flat;
+import { Payloads, Rule } from 'kraken-model'
 
-import { Rule, Expressions, Payloads, Condition } from "kraken-model";
+import { EntryPointResult, FieldEvaluationResult, RuleEvaluationResults } from 'kraken-engine-api'
+import { ContextDataProviderFactory } from '../contexts/data/extraction/ContextDataProviderFactory'
+import { DataContextBuilder } from '../contexts/data/DataContextBuilder'
+import { ExecutionSession } from '../ExecutionSession'
 
-import { EntryPointResult } from "../../dto/EntryPointResult";
-import { ContextDataProviderFactory } from "../contexts/data/extraction/ContextDataProviderFactory";
-import { DataContext } from "../contexts/data/DataContext";
-import { DataContextBuilder } from "../contexts/data/DataContextBuilder";
-import { ExecutionSession } from "../ExecutionSession";
+import { EntryPointBundle } from '../../models/EntryPointBundle'
 
-import { EntryPointBundle } from "../../models/EntryPointBundle";
-import EntryPointEvaluation = EntryPointBundle.EntryPointEvaluation;
+import { RuleEvaluation, RulePayloadProcessor } from '../RulePayloadProcessor'
+import { ContextDataExtractor } from '../contexts/data/extraction/ContextDataExtractor.types'
+import { logger } from '../../utils/DevelopmentLogger'
+import { DataContext } from '../contexts/data/DataContext'
+import { ErrorCode, KrakenRuntimeError } from '../../error/KrakenRuntimeError'
+import { payloadResultTypeChecker } from '../results/PayloadResultTypeChecker'
+import { conditionEvaluationTypeChecker } from '../../dto/DefaultConditionEvaluationResult'
+import { ContextDataProvider } from '../contexts/data/extraction/ContextDataProvider'
+import { DefaultEntryPointResult } from '../../dto/DefaultEntryPointResult'
+import { DefaultContextFieldInfo } from '../../dto/DefaultContextFieldInfo'
+import { ErrorAwarePayloadResult } from 'kraken-engine-api/src'
+import EntryPointEvaluation = EntryPointBundle.EntryPointEvaluation
 
-import { RuleEvaluationResults } from "../../dto/RuleEvaluationResults";
-import RuleEvaluationResult = RuleEvaluationResults.RuleEvaluationResult;
+import RuleEvaluationResult = RuleEvaluationResults.RuleEvaluationResult
+import isNotApplicable = RuleEvaluationResults.isNotApplicable
+import PayloadType = Payloads.PayloadType
 
-import { RulePayloadProcessor } from "../RulePayloadProcessor";
-import { FieldEvaluationResult } from "../../dto/FieldEvaluationResult";
-import { ConditionEvaluationResult } from "../../dto/ConditionEvaluationResult";
-import { payloadResultTypeChecker } from "../results/PayloadResult";
-import { ContextDataExtractor } from "../contexts/data/extraction/ContextDataExtractor.types";
-import { ContextFieldInfo } from "../../dto/ContextFieldInfo";
-import { logger } from "../../utils/DevelopmentLogger";
-import {
-    DataContextDependency,
-    DataContextUpdater
-} from "../contexts/data/updater/DataContextUpdater";
-import { RuleConditionProcessor } from "../RuleConditionProcessor";
-import { RuleInfo } from "../results/RuleInfo";
-import { ErrorCode, KrakenRuntimeError } from "../../error/KrakenRuntimeError";
-
-export interface RuleEvaluation {
-    rule: Rule;
-    dataContext: DataContext;
+type RuleOnInstanceEvaluationResult = {
+    result: RuleEvaluationResult
+    dataContext: DataContext
 }
 
-export interface RuleEvaluationInstance {
-    dataContext: DataContext;
-    result: RuleEvaluationResult;
+type FieldEvaluation = {
+    field: string
+    // holds evaluations per data context where key is contextId
+    evaluations: Record<string, RuleEvaluation[]>
 }
 
-/**
- * Evaluates rules in order from {@link EntryPointEvaluation#rules}
- * @since 1.0.29
- */
 export class OrderedEvaluationLoop {
-
     static getInstance(options: {
-        dataContextUpdater: DataContextUpdater,
-        ruleConditionProcessor: RuleConditionProcessor,
-        rulePayloadProcessor: RulePayloadProcessor,
-        contextDataExtractor: ContextDataExtractor,
-        contextBuilder: DataContextBuilder,
-        restriction?: {}
-    }
-    ): OrderedEvaluationLoop {
+        rulePayloadProcessor: RulePayloadProcessor
+        contextDataExtractor: ContextDataExtractor
+        contextBuilder: DataContextBuilder
+        restriction?: object
+    }): OrderedEvaluationLoop {
         return new OrderedEvaluationLoop(
-            options.ruleConditionProcessor,
             options.rulePayloadProcessor,
-            new ContextDataProviderFactory(
-                options.contextDataExtractor,
-                options.contextBuilder,
-                options.restriction
-            ),
-            options.dataContextUpdater
-        );
+            new ContextDataProviderFactory(options.contextDataExtractor, options.contextBuilder, options.restriction),
+        )
     }
 
     constructor(
-        private readonly ruleConditionProcessor: RuleConditionProcessor,
         private readonly rulePayloadProcessor: RulePayloadProcessor,
         private readonly contextDataProviderFactory: ContextDataProviderFactory,
-        private readonly dataContextUpdater: DataContextUpdater
-    ) {
-    }
+    ) {}
 
     evaluate(evaluation: EntryPointEvaluation, data: object, session: ExecutionSession): EntryPointResult {
-        const dataProvider = this.contextDataProviderFactory.createContextProvider(data);
+        const dataProvider = this.contextDataProviderFactory.createContextProvider(data)
 
-        logger.group("Context instance extraction");
-        const evalInstances = evaluation.rules
-            .map(rule => {
-                const groupName = `Rule: ${rule.name}`;
-                logger.debug(groupName);
-                const rei = dataProvider
-                    .resolveContextData(rule.context)
-                    .map(dataContext => ({ rule, dataContext }));
-                return rei;
-            });
-        logger.groupEnd("Context instance extraction");
+        const defaultResults = this.evaluateDefaultRules(evaluation, dataProvider, session)
+        const otherResults = this.evaluateRules(evaluation, dataProvider, session)
 
-        logger.group("Rules evaluation");
-        const results = evalInstances
-            .reduce(flat, [])
-            .map(rule => {
-                // tslint:disable-next-line: max-line-length
-                logger.debug(`Processing: rule '${rule.rule.name}', on ${rule.dataContext.contextName}:${rule.dataContext.contextId}`);
-                const result = this.evaluateRule(rule, session);
-                return {
-                    contextFieldInfo: new ContextFieldInfo(rule.dataContext, result.ruleInfo.targetPath),
-                    ruleResults: [result]
-                };
-            })
-            .reduce(toObject(resultId, f => f, concatRuleResults), {});
-        validate(results);
-        logger.groupEnd("Rules evaluation");
+        const results: Record<string, FieldEvaluationResult> = {}
+        defaultResults.forEach(r => this.addResult(r, results))
+        otherResults.forEach(r => this.addResult(r, results))
 
-        logger.info({ results });
-        return new EntryPointResult(results);
+        this.validateDefaultsOnOneField(results)
+
+        logger.info({ results })
+        return new DefaultEntryPointResult(results)
     }
 
-    private evaluateRule(ruleEvaluation: RuleEvaluation, session: ExecutionSession): RuleEvaluationResult {
-        extractConditionDependencies(ruleEvaluation.rule.condition)
-            .forEach(dependency => this.dataContextUpdater.update(
-                ruleEvaluation.dataContext,
-                dependency
-            ));
-        const conditionResult = this.ruleConditionProcessor.evaluateCondition(
-            ruleEvaluation.dataContext,
-            session,
-            ruleEvaluation.rule.condition
-        );
-        const isApplicable = ConditionEvaluationResult.isApplicable(conditionResult);
-        logger.debug(`Rule '${ruleEvaluation.rule.name}' is '${isApplicable ? "applicable" : "not applicable"}'`);
-        if (isApplicable) {
-            extractPayloadDependencies(ruleEvaluation.rule.payload)
-                .forEach(dependency => this.dataContextUpdater.update(
-                    ruleEvaluation.dataContext,
-                    dependency
-                ));
-            return this.rulePayloadProcessor.processRule(ruleEvaluation, session);
-        } else {
-            return {
-                kind: RuleEvaluationResults.Kind.NOT_APPLICABLE,
-                ruleInfo: new RuleInfo(ruleEvaluation.rule),
-                conditionEvaluationResult: conditionResult
-            };
-        }
+    private evaluateDefaultRules(
+        entryPointEvaluation: EntryPointEvaluation,
+        provider: ContextDataProvider,
+        session: ExecutionSession,
+    ): RuleOnInstanceEvaluationResult[] {
+        logger.group('Default rules evaluation')
+        const defaultRules = entryPointEvaluation.rules.filter(r => r.payload.type === PayloadType.DEFAULT)
+        const results = this.doEvaluateDefaultRules(defaultRules, entryPointEvaluation.fieldOrder, provider, session)
+        logger.groupEnd('Default rules evaluation')
+        return results
     }
 
-}
+    private doEvaluateDefaultRules(
+        defaultRules: Rule[],
+        fieldOrder: string[],
+        provider: ContextDataProvider,
+        session: ExecutionSession,
+    ): RuleOnInstanceEvaluationResult[] {
+        const defaultRuleEvaluations = this.buildDefaultRuleEvaluations(defaultRules, provider)
 
-// tslint:disable: triple-equals
-function validate(results: Record<string, FieldEvaluationResult>): void {
-    Object.keys(results)
-        .forEach(key => {
-            const rulesOnOneField = results[key].ruleResults
-                .filter(rr => ConditionEvaluationResult.isApplicable(rr.conditionEvaluationResult)
-                    && !RuleEvaluationResults.isNotApplicable(rr)
-                    && payloadResultTypeChecker.isDefault(rr.payloadResult)
-                    && rr.payloadResult.error === undefined
-                );
-            if (rulesOnOneField.length > 1) {
-                throw new KrakenRuntimeError(
-                    ErrorCode.MULTIPLE_DEFAULT,
-                    "On field '"
-                    + key
-                    + "' evaluated '"
-                    + rulesOnOneField.length
-                    + "' default rules: '"
-                    + rulesOnOneField.map(rr => rr.ruleInfo.ruleName).join(", ")
-                    + "'. One default rule per field can be evaluated."
-                );
-            }
-        });
-}
-
-function concatRuleResults(fer1: FieldEvaluationResult, fer2: FieldEvaluationResult): FieldEvaluationResult {
-    fer1.ruleResults = fer1.ruleResults.concat(fer2.ruleResults);
-    return fer1;
-}
-
-export function resultId(fieldResult: FieldEvaluationResult): string {
-    const info = fieldResult.contextFieldInfo;
-    return `${info.contextName}:${info.contextId}:${info.fieldName}`;
-}
-
-function extractPayloadDependencies(payload: Payloads.Payload): DataContextDependency[] {
-    const dependencies: DataContextDependency[] = [];
-
-    // validation error message template variables extraction
-    if (Payloads.isValidationPayload(payload)
-        && payload.errorMessage
-        && payload.errorMessage.templateExpressions
-        && payload.errorMessage.templateExpressions.length
-    ) {
-        for (const te of payload.errorMessage.templateExpressions) {
-            if (te.expressionType === "COMPLEX" && te.expressionVariables) {
-                for (const variable of te.expressionVariables) {
-                    dependencies.push({ contextName: variable.name });
+        const allResults: RuleOnInstanceEvaluationResult[] = []
+        for (const field of fieldOrder) {
+            if (defaultRuleEvaluations[field]) {
+                for (const evaluations of Object.values(defaultRuleEvaluations[field].evaluations)) {
+                    const priorityOrderedEvaluations = evaluations.sort((a, b) => b.priority - a.priority)
+                    const results = this.evaluateDefaultRulesInPriorityOrder(priorityOrderedEvaluations, session)
+                    allResults.push(...results)
                 }
             }
         }
 
+        return allResults
     }
 
-    if (Payloads.isAssertionPayload(payload)
-        && Expressions.isComplex(payload.assertionExpression)
-        && payload.assertionExpression.expressionVariables
-    ) {
-        payload.assertionExpression.expressionVariables
-            .forEach(v => dependencies.push({ contextName: v.name }));
+    private buildDefaultRuleEvaluations(
+        defaultRules: Rule[],
+        provider: ContextDataProvider,
+    ): Record<string, FieldEvaluation> {
+        logger.group('Context extraction')
+        const defaultRuleEvaluations: Record<string, FieldEvaluation> = {}
+        for (const rule of defaultRules) {
+            for (const dataContext of this.resolveContexts(rule, provider)) {
+                const field = `${dataContext.contextName}.${rule.targetPath}`
+                if (!defaultRuleEvaluations[field]) {
+                    defaultRuleEvaluations[field] = { field, evaluations: {} }
+                }
+                if (!defaultRuleEvaluations[field].evaluations[dataContext.contextId]) {
+                    defaultRuleEvaluations[field].evaluations[dataContext.contextId] = []
+                }
+                defaultRuleEvaluations[field].evaluations[dataContext.contextId].push({
+                    rule,
+                    dataContext,
+                    priority: rule.priority ?? 0,
+                })
+            }
+        }
+        logger.groupEnd('Context extraction')
+        return defaultRuleEvaluations
     }
 
-    if (Payloads.isDefaultValuePayload(payload)
-        && Expressions.isComplex(payload.valueExpression)
-        && payload.valueExpression.expressionVariables
-    ) {
-        payload.valueExpression.expressionVariables
-            .forEach(v => dependencies.push({ contextName: v.name }));
+    private evaluateDefaultRulesInPriorityOrder(
+        priorityOrderedEvaluations: RuleEvaluation[],
+        session: ExecutionSession,
+    ): RuleOnInstanceEvaluationResult[] {
+        const prioritizedEvaluation = priorityOrderedEvaluations.length > 1
+        const results: RuleOnInstanceEvaluationResult[] = []
+        let appliedRuleEvaluation: RuleEvaluation | undefined = undefined
+        for (const evaluation of priorityOrderedEvaluations) {
+            if (appliedRuleEvaluation && appliedRuleEvaluation.priority > evaluation.priority) {
+                const fieldId = this.toFieldId(evaluation.dataContext, evaluation.rule.targetPath)
+                logger.debug(
+                    `Suppressing rule '${evaluation.rule.name}' with priority '${evaluation.priority}' on ${fieldId} because rule '${appliedRuleEvaluation.rule.name}' with higher priority '${appliedRuleEvaluation.priority}' was applied. Evaluation status - UNUSED.`,
+                )
+                continue
+            }
+
+            const result = this.evaluateRulePayload(evaluation, session, prioritizedEvaluation)
+            results.push(result)
+
+            if (this.resolveEvaluationStatus(result) === 'APPLIED') {
+                appliedRuleEvaluation = evaluation
+            }
+        }
+        return results
     }
 
-    return dependencies;
-}
+    private evaluateRules(
+        entryPointEvaluation: EntryPointEvaluation,
+        provider: ContextDataProvider,
+        session: ExecutionSession,
+    ): RuleOnInstanceEvaluationResult[] {
+        logger.group('Other rules evaluation')
 
-function extractConditionDependencies(condition?: Condition): DataContextDependency[] {
-    const dependencies: DataContextDependency[] = [];
+        const results = entryPointEvaluation.rules
+            .filter(r => r.payload.type !== PayloadType.DEFAULT)
+            .map(rule => this.evaluateRule(rule, provider, session))
+            .reduce((p, n) => p.concat(n), [])
 
-    if (condition && Expressions.isComplex(condition.expression) && condition.expression.expressionVariables) {
-        condition.expression.expressionVariables
-            .forEach(v => dependencies.push({ contextName: v.name }));
+        logger.groupEnd('Other rules evaluation')
+
+        return results
     }
 
-    return dependencies;
+    private evaluateRule(
+        rule: Rule,
+        provider: ContextDataProvider,
+        session: ExecutionSession,
+    ): RuleOnInstanceEvaluationResult[] {
+        logger.group(`Rule evaluation: ${rule.name}`)
+
+        const results = this.resolveContexts(rule, provider)
+            .map(dataContext => <RuleEvaluation>{ rule, dataContext })
+            .map(evaluation => this.evaluateRulePayload(evaluation, session, false))
+
+        logger.debug(
+            `Evaluated rule ${rule.name} on a total of ${results.length} instances.` +
+                (results.length === 0 ? ' Evaluation status - UNUSED.' : ''),
+        )
+        logger.groupEnd(`Rule evaluation: ${rule.name}`)
+
+        return results
+    }
+
+    private evaluateRulePayload(
+        evaluation: RuleEvaluation,
+        session: ExecutionSession,
+        prioritizedEvaluation: boolean,
+    ): RuleOnInstanceEvaluationResult {
+        const result: RuleOnInstanceEvaluationResult = {
+            result: this.rulePayloadProcessor.processRule(evaluation, session),
+            dataContext: evaluation.dataContext,
+        }
+
+        const fieldId = this.toFieldId(evaluation.dataContext, evaluation.rule.targetPath)
+        const evaluationStatus = this.resolveEvaluationStatus(result)
+
+        if (evaluation.rule.payload.type === PayloadType.DEFAULT && prioritizedEvaluation) {
+            logger.debug(
+                `Evaluated rule '${evaluation.rule.name}' on ${fieldId} with priority ${evaluation.priority}. Evaluation status - ${evaluationStatus}.`,
+            )
+        } else {
+            logger.debug(
+                `Evaluated rule '${evaluation.rule.name}' on ${fieldId}. Evaluation status - ${evaluationStatus}.`,
+            )
+        }
+
+        return result
+    }
+
+    private resolveEvaluationStatus(result: RuleOnInstanceEvaluationResult): 'SKIPPED' | 'APPLIED' | 'IGNORED' {
+        if (result.result.conditionEvaluationResult.conditionEvaluation === 'ERROR') {
+            return 'IGNORED'
+        }
+        if (isNotApplicable(result.result)) {
+            return 'SKIPPED'
+        }
+        if ((result.result.payloadResult as ErrorAwarePayloadResult).error !== undefined) {
+            return 'IGNORED'
+        }
+        return 'APPLIED'
+    }
+
+    private resolveContexts(rule: Rule, provider: ContextDataProvider): DataContext[] {
+        const contexts = provider.resolveContextData(rule.context)
+
+        logger.debug(`Resolved ${contexts.length} data context(s) for rule '${rule.name}' target '${rule.context}'.`)
+
+        return contexts
+    }
+
+    private addResult(result: RuleOnInstanceEvaluationResult, results: Record<string, FieldEvaluationResult>) {
+        const dataContext = result.dataContext
+        const fieldName = result.result.ruleInfo.targetPath
+        const id = this.toFieldId(dataContext, fieldName)
+        if (!Object.hasOwnProperty.call(results, id)) {
+            results[id] = {
+                ruleResults: [],
+                contextFieldInfo: new DefaultContextFieldInfo(dataContext, fieldName),
+            }
+        }
+        results[id].ruleResults.push(result.result)
+    }
+
+    private toFieldId(context: DataContext, fieldName: string): string {
+        return `${context.contextName}:${context.contextId}:${fieldName}`
+    }
+
+    private validateDefaultsOnOneField(results: Record<string, FieldEvaluationResult>): void {
+        Object.keys(results).forEach(key => {
+            const rulesOnOneField = results[key].ruleResults.filter(
+                rr =>
+                    conditionEvaluationTypeChecker.isApplicable(rr.conditionEvaluationResult) &&
+                    !RuleEvaluationResults.isNotApplicable(rr) &&
+                    payloadResultTypeChecker.isDefault(rr.payloadResult) &&
+                    rr.payloadResult.error === undefined,
+            )
+            if (rulesOnOneField.length > 1) {
+                throw new KrakenRuntimeError(
+                    ErrorCode.MULTIPLE_DEFAULT,
+                    "On field '" +
+                        key +
+                        "' applied '" +
+                        rulesOnOneField.length +
+                        "' default rules: '" +
+                        rulesOnOneField.map(rr => rr.ruleInfo.ruleName).join(', ') +
+                        "'. Only one default rule can be applied on the same field.",
+                )
+            }
+        })
+    }
 }

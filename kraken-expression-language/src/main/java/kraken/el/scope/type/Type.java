@@ -17,6 +17,8 @@ package kraken.el.scope.type;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -36,13 +38,13 @@ import kraken.el.scope.SymbolTable;
  */
 public class Type {
 
-    public static final Type BOOLEAN = new Type("Boolean", true);
-    public static final Type STRING = new Type("String", true);
-    public static final Type NUMBER = new Type("Number", true);
-    public static final Type MONEY = new Type("Money", true);
-    public static final Type DATE = new Type("Date", true);
-    public static final Type DATETIME = new Type("DateTime", true);
-    public static final Type TYPE = new Type("Type", true);
+    public static final Type BOOLEAN = new Type("Boolean");
+    public static final Type STRING = new Type("String");
+    public static final Type NUMBER = new Type("Number");
+    public static final Type MONEY = new Type("Money");
+    public static final Type DATE = new Type("Date");
+    public static final Type DATETIME = new Type("DateTime");
+    public static final Type TYPE = new Type("Type");
 
     /**
      * Represents type that cannot be identified.
@@ -52,7 +54,7 @@ public class Type {
      * <p/>
      * This usually indicates a type usage error in expression and should be validated accordingly.
      */
-    public static final Type UNKNOWN = new Type("Unknown", false, false);
+    public static final Type UNKNOWN = new Type("Unknown");
 
     /**
      * Represents a known dynamic type
@@ -76,44 +78,58 @@ public class Type {
      * @return
      */
     public static Type toType(String typeToken, Map<String, Type> globalTypes) {
+        return toType(typeToken, globalTypes, Map.of());
+    }
+
+    /**
+     * Parses type instance from type string token.
+     * <p/>
+     * Supported type tokens:
+     * <ul>
+     *     <li>native types - Any, Number, Money, Boolean, String, Date, DateTime </li>
+     *     <li>registered type - EntityType</li>
+     *     <li>array - Type[]</li>
+     *     <li>union - Type1 | Type2</li>
+     *     <li>generic - &lt;T&gt;</li>
+     * </ul>
+     *
+     * @param typeToken
+     * @param globalTypes
+     * @param bounds
+     * @return
+     */
+    public static Type toType(String typeToken, Map<String, Type> globalTypes, Map<String, Type> bounds) {
         Common lexer = new CommonLexer(CharStreams.fromString(typeToken));
         Value value = new Value(new CommonTokenStream(lexer));
-        TypeGeneratingVisitor visitor = new TypeGeneratingVisitor(globalTypes);
+        TypeGeneratingVisitor visitor = new TypeGeneratingVisitor(globalTypes, bounds);
         return visitor.visit(value.type());
     }
 
-    public static final Map<String, Type> nativeTypes = Map.of(
-            BOOLEAN.getName(), BOOLEAN,
-            STRING.getName(), STRING,
-            NUMBER.getName(), NUMBER,
-            MONEY.getName(), MONEY,
-            DATE.getName(), DATE,
-            DATETIME.getName(), DATETIME,
-            TYPE.getName(), TYPE,
-            UNKNOWN.getName(), UNKNOWN,
-            ANY.getName(), ANY
+    private static final Map<String, Type> primitiveTypes = Map.of(
+        BOOLEAN.getName(), BOOLEAN,
+        STRING.getName(), STRING,
+        NUMBER.getName(), NUMBER,
+        MONEY.getName(), MONEY,
+        DATE.getName(), DATE,
+        DATETIME.getName(), DATETIME,
+        TYPE.getName(), TYPE
     );
 
+    public static final Map<String, Type> nativeTypes;
+    static {
+        nativeTypes = new HashMap<>(primitiveTypes);
+        nativeTypes.put(UNKNOWN.getName(), UNKNOWN);
+        nativeTypes.put(ANY.getName(), ANY);
+    }
+
     private final String name;
-
-    private final boolean primitive;
-
-    private final boolean known;
 
     private final SymbolTable properties;
 
     private final Collection<Type> extendedTypes;
 
     public Type(String name) {
-        this(name, false);
-    }
-
-    public Type(String name, boolean primitive) {
-        this(name, primitive, true);
-    }
-
-    public Type(String name, boolean primitive, boolean known) {
-        this(name, primitive, known, new SymbolTable(), Collections.emptyList());
+        this(name, new SymbolTable(), Collections.emptyList());
     }
 
     public Type(String name, SymbolTable properties) {
@@ -121,13 +137,7 @@ public class Type {
     }
 
     public Type(String name, SymbolTable properties, Collection<Type> extendedTypes) {
-        this(name, false, true, properties, extendedTypes);
-    }
-
-    public Type(String name, boolean primitive, boolean known, SymbolTable properties, Collection<Type> extendedTypes) {
         this.name = Objects.requireNonNull(name);
-        this.primitive = primitive;
-        this.known = known;
         this.properties = Objects.requireNonNull(properties);
         this.extendedTypes = Objects.requireNonNull(extendedTypes);
     }
@@ -137,7 +147,7 @@ public class Type {
     }
 
     public boolean isPrimitive() {
-        return primitive;
+        return primitiveTypes.containsKey(name);
     }
 
     public SymbolTable getProperties() {
@@ -148,7 +158,58 @@ public class Type {
      * @return true if type exists in subsystem, or it is a dynamic type
      */
     public boolean isKnown() {
-        return known;
+        return !this.equals(UNKNOWN);
+    }
+
+    public boolean isDynamic() {
+        return this.equals(ANY);
+    }
+
+    /**
+     * @return true if this type is generic in some way
+     */
+    public boolean isGeneric() {
+        return false;
+    }
+
+    /**
+     * @param genericTypeRewrites
+     * @return a type with generics rewritten or UNKNOWN iof rewrite not provided
+     */
+    public Type rewriteGenericTypes(Map<GenericType, Type> genericTypeRewrites) {
+        return this;
+    }
+
+    /**
+     *
+     * @param argumentType
+     * @return resolves type rewrites based on actual argument type provided for a generic type parameter.<p>
+     *         If argumentType is String[] and this type is T[], then T rewrite is String.<p>
+     *         If argumentType is String[][] and this type is T[], then T rewrite is String[].<p>
+     *         If argumentType is String[] and this type is T, then T rewrite is String[].
+     *         If argumentType is String[] and this type is not a generic, or it cannot resolve to compatible generic,
+     *         then rewrite type is not resolved
+     */
+    public Map<GenericType, Type> resolveGenericTypeRewrites(Type argumentType) {
+        return Map.of();
+    }
+
+    /**
+     * @return a type with generics rewritten to their bounds or ANY if unbounded
+     */
+    public Type rewriteGenericBounds() {
+        return this;
+    }
+
+    /**
+     * @return true if this type is union of more than one specific type
+     */
+    public boolean isUnion() {
+        return false;
+    }
+
+    public boolean isAssignableToArray() {
+        return isDynamic();
     }
 
     /**
@@ -156,26 +217,36 @@ public class Type {
      * @return true if this type is the same or is a super type of other type
      */
     public boolean isAssignableFrom(Type otherType) {
-        return this.equals(ANY)
-                || otherType.equals(ANY)
-                || this.equals(NUMBER) && otherType.equals(MONEY)
-                || this.equals(MONEY) && otherType.equals(NUMBER)
-                || this.equals(otherType)
-                || otherType.getExtendedTypes().stream().anyMatch(oEx -> isAssignableFrom(oEx));
+        return this.isDynamic()
+            || otherType.isDynamic()
+            || otherType instanceof GenericType && ((GenericType) otherType).getBound() != null && this.isAssignableFrom(((GenericType) otherType).getBound())
+            || this.equals(NUMBER) && otherType.equals(MONEY)
+            || this.equals(otherType)
+            || otherType.getExtendedTypes().stream().anyMatch(oEx -> isAssignableFrom(oEx));
     }
 
     public boolean isComparableWith(Type otherType) {
-        return this.equals(ANY)
-                || otherType.equals(ANY)
-                || areNumber(this, otherType)
-                || areDateTime(this, otherType)
-                || areDate(this, otherType)
-                || otherType.getExtendedTypes().stream().anyMatch(this::isComparableWith);
+        return this.isDynamic()
+            || otherType.isDynamic()
+            || otherType instanceof GenericType && ((GenericType) otherType).getBound() != null && this.isComparableWith(((GenericType) otherType).getBound())
+            || areNumber(this, otherType)
+            || areDateTime(this, otherType)
+            || areDate(this, otherType)
+            || otherType.getExtendedTypes().stream().anyMatch(this::isComparableWith);
     }
 
     public Optional<Type> resolveCommonTypeOf(Type otherType) {
+        if(isDynamic() || otherType.isDynamic()) {
+            return Optional.of(Type.ANY);
+        }
+        if(!isKnown() || !otherType.isKnown()) {
+            return Optional.of(Type.UNKNOWN);
+        }
         if(this.isAssignableFrom(otherType)) {
             return Optional.of(this);
+        }
+        if(otherType.isAssignableFrom(this)) {
+            return Optional.of(otherType);
         }
         return extendedTypes.stream()
                 .filter(extendedType -> extendedType.isAssignableFrom(otherType))
@@ -197,6 +268,40 @@ public class Type {
 
     public Collection<Type> getExtendedTypes() {
         return extendedTypes;
+    }
+
+    /**
+     * @return wraps type to array if it is not array already. For example, if type is String, then array type is String[].
+     * If type is already array then the type itself is returned. If type is dynamic then dynamic is returned.
+     */
+    public Type wrapArrayType() {
+        if(this.isDynamic()) {
+            return Type.ANY;
+        }
+        if(!this.isKnown()) {
+            return Type.UNKNOWN;
+        }
+        return ArrayType.of(this);
+    }
+
+    /**
+     * @return unwraps type of array. For example, if type is String[][], then array type is String[].
+     * If type is already singular then the type itself is returned.
+     */
+    public Type unwrapArrayType() {
+        return this;
+    }
+
+    /**
+     *
+     * @param target type to flat map to
+     * @return mapped typed from this type to target type.
+     * If type is Coverage[] and target is Money, then mapped type is Money[].
+     * If type is Coverage[] and target is Money[], then mapped type is Money[][].
+     * If type is Coverage[] and target is (Money | Money[]), then mapped type is (Money | Money[])[].
+     */
+    public Type mapTo(Type target) {
+        return target;
     }
 
     @Override
@@ -228,5 +333,4 @@ public class Type {
     public static String toGenericsToken(String typeToken) {
         return "<" + typeToken + ">";
     }
-
 }

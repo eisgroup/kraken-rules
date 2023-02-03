@@ -15,11 +15,16 @@
  */
 package kraken.el.scope.type;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+
 import kraken.el.scope.SymbolTable;
 import kraken.el.scope.symbol.FunctionSymbol;
 import kraken.el.scope.symbol.VariableSymbol;
-
-import java.util.*;
 
 /**
  * Models a Union Type of {@link #leftType} and {@link #rightType}
@@ -28,11 +33,11 @@ import java.util.*;
  */
 public class UnionType extends Type {
 
-    private Type leftType;
-    private Type rightType;
+    private final Type leftType;
+    private final Type rightType;
 
     public UnionType(Type leftType, Type rightType) {
-        super("OR", mergeSymbolTables(leftType, rightType), List.of(leftType, rightType));
+        super(leftType + " | " + rightType, mergeSymbolTables(leftType, rightType), List.of(leftType, rightType));
 
         this.leftType = Objects.requireNonNull(leftType);
         this.rightType = Objects.requireNonNull(rightType);
@@ -48,7 +53,7 @@ public class UnionType extends Type {
 
     @Override
     public boolean isPrimitive() {
-        return leftType.isPrimitive() || rightType.isPrimitive();
+        return leftType.isPrimitive() && rightType.isPrimitive();
     }
 
     @Override
@@ -57,7 +62,54 @@ public class UnionType extends Type {
     }
 
     @Override
+    public boolean isDynamic() {
+        return leftType.isDynamic() || rightType.isDynamic();
+    }
+
+    @Override
+    public boolean isGeneric() {
+        return leftType.isGeneric() || rightType.isGeneric();
+    }
+
+    @Override
+    public Type rewriteGenericTypes(Map<GenericType, Type> genericTypeRewrites) {
+        return new UnionType(
+            leftType.rewriteGenericTypes(genericTypeRewrites),
+            rightType.rewriteGenericTypes(genericTypeRewrites)
+        );
+    }
+
+    @Override
+    public Map<GenericType, Type> resolveGenericTypeRewrites(Type argumentType) {
+        Map<GenericType, Type> rewrites = new HashMap<>();
+        rewrites.putAll(leftType.resolveGenericTypeRewrites(argumentType));
+        rewrites.putAll(rightType.resolveGenericTypeRewrites(argumentType));
+        return rewrites;
+    }
+
+    @Override
+    public Type rewriteGenericBounds() {
+        return new UnionType(
+            leftType.rewriteGenericBounds(),
+            rightType.rewriteGenericBounds()
+        );
+    }
+
+    @Override
+    public boolean isUnion() {
+        return true;
+    }
+
+    @Override
+    public boolean isAssignableToArray() {
+        return leftType.isAssignableToArray() || rightType.isAssignableToArray();
+    }
+
+    @Override
     public boolean isAssignableFrom(Type otherType) {
+        if(otherType instanceof GenericType && ((GenericType) otherType).getBound() != null) {
+            otherType = ((GenericType) otherType).getBound();
+        }
         if(otherType instanceof UnionType) {
             return this.isAssignableFrom(((UnionType) otherType).leftType) || this.isAssignableFrom(((UnionType) otherType).rightType);
         }
@@ -66,6 +118,9 @@ public class UnionType extends Type {
 
     @Override
     public boolean isComparableWith(Type otherType) {
+        if(otherType instanceof GenericType && ((GenericType) otherType).getBound() != null) {
+            otherType = ((GenericType) otherType).getBound();
+        }
         if(otherType instanceof UnionType) {
             return this.isComparableWith(((UnionType) otherType).leftType) || this.isComparableWith(((UnionType) otherType).rightType);
         }
@@ -73,8 +128,63 @@ public class UnionType extends Type {
     }
 
     @Override
-    public String toString() {
-        return leftType + " | " + rightType;
+    public Optional<Type> resolveCommonTypeOf(Type otherType) {
+        if(otherType instanceof UnionType) {
+            Optional<Type> leftToLeft = leftType.resolveCommonTypeOf(((UnionType) otherType).leftType);
+            Optional<Type> leftToRight = leftType.resolveCommonTypeOf(((UnionType) otherType).rightType);
+            Optional<Type> rightToLeft = rightType.resolveCommonTypeOf(((UnionType) otherType).leftType);
+            Optional<Type> rightToRight = rightType.resolveCommonTypeOf(((UnionType) otherType).rightType);
+            if(leftToLeft.isEmpty() && leftToRight.isEmpty() || rightToLeft.isEmpty() && rightToRight.isEmpty()) {
+                return Optional.empty();
+            }
+            return Optional.of(simplified(
+                leftToLeft.or(() -> leftToRight).orElse(Type.ANY),
+                rightToRight.or(() -> rightToLeft).orElse(Type.ANY)
+            ));
+        }
+        Optional<Type> left = leftType.resolveCommonTypeOf(otherType);
+        Optional<Type> right = rightType.resolveCommonTypeOf(otherType);
+        if(left.isEmpty() || right.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(simplified(left.get(), right.get()));
+    }
+
+    @Override
+    public Type unwrapArrayType() {
+        Type left = leftType.unwrapArrayType();
+        Type right = rightType.unwrapArrayType();
+        return simplified(left, right);
+    }
+
+    @Override
+    public Type wrapArrayType() {
+        Type left = leftType.wrapArrayType();
+        Type right = rightType.wrapArrayType();
+        return simplified(left, right);
+    }
+
+    @Override
+    public Type mapTo(Type target) {
+        Type left = leftType.mapTo(target);
+        Type right = rightType.mapTo(target);
+        return simplified(left, right);
+    }
+
+    private Type simplified(Type left, Type right) {
+        if(left.equals(right)) {
+            return left;
+        }
+        if(!left.isKnown() || !right.isKnown()) {
+            return Type.UNKNOWN;
+        }
+        if(!left.isDynamic() && left.isAssignableFrom(right)) {
+            return right;
+        }
+        if(!right.isDynamic() && right.isAssignableFrom(left)) {
+            return left;
+        }
+        return new UnionType(left, right);
     }
 
     @Override

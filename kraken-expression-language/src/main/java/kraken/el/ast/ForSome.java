@@ -26,11 +26,11 @@ import kraken.el.scope.type.Type;
  */
 public class ForSome extends Expression {
 
-    private String var;
+    private final String var;
 
-    private Expression collection;
+    private final Expression collection;
 
-    private Expression returnExpression;
+    private final Expression returnExpression;
 
     public ForSome(String var, Expression collection, Expression returnExpression, Scope scope, Token token) {
         super(NodeType.SOME, scope, Type.BOOLEAN, token);
@@ -54,6 +54,6 @@ public class ForSome extends Expression {
 
     @Override
     public String toString() {
-        return "some " + var + " in " + collection + " satisfies " + returnExpression;
+        return "(some " + var + " in " + collection + " satisfies " + returnExpression + ")";
     }
 }

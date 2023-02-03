@@ -14,44 +14,46 @@
  *  limitations under the License.
  */
 
-import { RulePayloadHandler } from "./RulePayloadHandler";
-import { ExpressionEvaluator } from "../runtime/expressions/ExpressionEvaluator";
-import { DataContext } from "../contexts/data/DataContext";
-import { LengthPayloadResult, payloadResultCreator } from "../results/PayloadResult";
-import { Expressions } from "../runtime/expressions/Expressions";
-import { Payloads, Rule } from "kraken-model";
-import LengthPayload = Payloads.Validation.LengthPayload;
-import PayloadType = Payloads.PayloadType;
-import { expressionFactory } from "../runtime/expressions/ExpressionFactory";
-import { ExpressionEvaluationResult } from "../runtime/expressions/ExpressionEvaluationResult";
-import { ExecutionSession } from "../ExecutionSession";
+import { RulePayloadHandler } from './RulePayloadHandler'
+import { ExpressionEvaluator } from '../runtime/expressions/ExpressionEvaluator'
+import { LengthPayloadResult, ExpressionEvaluationResult } from 'kraken-engine-api'
+import { Expressions } from '../runtime/expressions/Expressions'
+import { Payloads, Rule } from 'kraken-model'
+import LengthPayload = Payloads.Validation.LengthPayload
+import PayloadType = Payloads.PayloadType
+import { expressionFactory } from '../runtime/expressions/ExpressionFactory'
+import { ExecutionSession } from '../ExecutionSession'
+import { DataContext } from '../contexts/data/DataContext'
+import { payloadResultCreator } from '../results/PayloadResultCreator'
 
 export class LengthPayloadHandler implements RulePayloadHandler {
-    constructor(private readonly evaluator: ExpressionEvaluator) { }
+    constructor(private readonly evaluator: ExpressionEvaluator) {}
 
     handlesPayloadType(): PayloadType {
-        return PayloadType.LENGTH;
+        return PayloadType.LENGTH
     }
     executePayload(
-        payload: LengthPayload, rule: Rule, dataContext: DataContext, session: ExecutionSession
+        payload: LengthPayload,
+        rule: Rule,
+        dataContext: DataContext,
+        session: ExecutionSession,
     ): LengthPayloadResult {
-        const targetPathExpression =
-            expressionFactory.fromPath(Expressions.createPathResolver(dataContext)(rule.targetPath));
-        const result = this.evaluator.evaluate(targetPathExpression, dataContext);
+        const targetPathExpression = expressionFactory.fromPath(
+            Expressions.createPathResolver(dataContext)(rule.targetPath),
+        )
+        const result = this.evaluator.evaluate(targetPathExpression, dataContext)
         if (ExpressionEvaluationResult.isError(result)) {
-            throw new Error(`Failed to extract attribute '${rule.targetPath}'`);
+            throw new Error(`Failed to extract attribute '${rule.targetPath}'`)
         }
-        const target = result.success;
-        const success = typeof target === "string"
-            ? (target as string).length <= payload.length
-            : true;
+        const target = result.success
+        const success = typeof target === 'string' ? (target as string).length <= payload.length : true
 
         const templateVariables = this.evaluator.evaluateTemplateVariables(
             payload.errorMessage,
             dataContext,
-            session.expressionContext
-        );
+            session.expressionContext,
+        )
 
-        return payloadResultCreator.length(payload, success, templateVariables);
+        return payloadResultCreator.length(payload, success, templateVariables)
     }
 }

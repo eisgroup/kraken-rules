@@ -14,18 +14,18 @@
  *  limitations under the License.
  */
 
-import { DataContext } from "../../contexts/data/DataContext";
+import { DataContext } from '../../contexts/data/DataContext'
 
 function createPathResolver(context: DataContext): (pathString: string) => string {
     return function _createPathResolver(pathString: string): string {
-        const field = context.definitionProjection[pathString];
+        const field = context.definitionProjection[pathString]
         if (field) {
-            return field.fieldPath;
+            return field.fieldPath
         }
-        return pathString;
-    };
+        return pathString
+    }
 }
 
 export const Expressions = {
-    createPathResolver
-};
+    createPathResolver,
+}

@@ -17,15 +17,19 @@ package kraken.el.ast.builder;
 
 import static kraken.el.scope.type.Type.ANY;
 import static kraken.el.scope.type.Type.BOOLEAN;
+import static kraken.el.scope.type.Type.MONEY;
 import static kraken.el.scope.type.Type.NUMBER;
 import static kraken.el.scope.type.Type.STRING;
+import static kraken.el.scope.type.Type.UNKNOWN;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.hamcrest.core.IsCollectionContaining.hasItems;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.hamcrest.core.IsNull.nullValue;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertThrows;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -44,10 +48,12 @@ import kraken.el.ast.And;
 import kraken.el.ast.Ast;
 import kraken.el.ast.AstType;
 import kraken.el.ast.BooleanLiteral;
+import kraken.el.ast.Cast;
 import kraken.el.ast.CollectionFilter;
 import kraken.el.ast.DateLiteral;
 import kraken.el.ast.DateTimeLiteral;
 import kraken.el.ast.Division;
+import kraken.el.ast.Empty;
 import kraken.el.ast.Equals;
 import kraken.el.ast.Exponent;
 import kraken.el.ast.Expression;
@@ -56,6 +62,7 @@ import kraken.el.ast.ForEvery;
 import kraken.el.ast.ForSome;
 import kraken.el.ast.Function;
 import kraken.el.ast.Identifier;
+import kraken.el.ast.If;
 import kraken.el.ast.In;
 import kraken.el.ast.InlineArray;
 import kraken.el.ast.LessThan;
@@ -73,10 +80,13 @@ import kraken.el.ast.Null;
 import kraken.el.ast.NumberLiteral;
 import kraken.el.ast.Or;
 import kraken.el.ast.Path;
+import kraken.el.ast.Reference;
 import kraken.el.ast.ReferenceValue;
 import kraken.el.ast.StringLiteral;
 import kraken.el.ast.Subtraction;
 import kraken.el.ast.Template;
+import kraken.el.ast.This;
+import kraken.el.ast.ValueBlock;
 import kraken.el.ast.token.Token;
 import kraken.el.functionregistry.FunctionHeader;
 import kraken.el.scope.Scope;
@@ -86,7 +96,9 @@ import kraken.el.scope.symbol.FunctionParameter;
 import kraken.el.scope.symbol.FunctionSymbol;
 import kraken.el.scope.symbol.VariableSymbol;
 import kraken.el.scope.type.ArrayType;
+import kraken.el.scope.type.GenericType;
 import kraken.el.scope.type.Type;
+import kraken.el.scope.type.UnionType;
 
 /**
  * @author mulevicius
@@ -94,10 +106,148 @@ import kraken.el.scope.type.Type;
 public class AstBuilderTest {
 
     @Test
+    public void shouldBuildEmptyAstWhenExpressionIsSemanticallyEmpty() {
+        Scope scope = Scope.dynamic();
+
+        assertThat(ast("", scope).isEmpty(), is(true));
+        assertThat(ast(" ", scope).isEmpty(), is(true));
+        assertThat(ast("// comment", scope).isEmpty(), is(true));
+        assertThat(ast("\n", scope).isEmpty(), is(true));
+    }
+
+    @Test
+    public void shouldNotBuildEmptyAstWhenExpressionHasLogic() {
+        Scope scope = Scope.dynamic();
+
+        assertThat(ast("attribute", scope).isEmpty(), is(false));
+        assertThat(ast("10", scope).isEmpty(), is(false));
+    }
+
+    @Test
+    public void shouldReturnAstErrorForMissingBrackets() {
+        Scope scope = Scope.dynamic();
+
+        assertThat(rawAst("attribute[", scope).getGenerationErrors(), hasSize(1));
+        assertThat(rawAst("attribute?[", scope).getGenerationErrors(), hasSize(1));
+        assertThat(rawAst("attribute[this.path.", scope).getGenerationErrors(), hasSize(1));
+        assertThat(rawAst("attribute?[this.path. = true", scope).getGenerationErrors(), hasSize(1));
+        assertThat(rawAst("attribute[]", scope).getGenerationErrors(), hasSize(1));
+        assertThat(rawAst("attribute?[]", scope).getGenerationErrors(), hasSize(1));
+
+        assertThat(rawAst("attribute[index]", scope).getGenerationErrors(), empty());
+        assertThat(rawAst("attribute?[filter = true]", scope).getGenerationErrors(), empty());
+    }
+
+    @Test
+    public void shouldBuildIncompleteThisReference() {
+        Scope scope = Scope.dynamic();
+        ReferenceValue reference = (ReferenceValue) ast("this.", scope);
+
+        assertThat(reference.getThisNode(), instanceOf(This.class));
+        assertThat(reference.getReference(), instanceOf(Path.class));
+        assertThat(reference.getReference().getToken().getText(), is("this."));
+
+        Reference object = ((Path)reference.getReference()).getObject();
+        Reference property = ((Path)reference.getReference()).getProperty();
+        assertThat(object, instanceOf(This.class));
+        assertThat(property, instanceOf(Empty.class));
+        assertThat(property.getToken().getText(), is(""));
+    }
+
+    @Test
+    public void shouldBuildIncompletePath() {
+        Scope scope = Scope.dynamic();
+        ReferenceValue reference = (ReferenceValue) ast("Policy.", scope);
+
+        assertThat(reference.getReference(), instanceOf(Path.class));
+        Path path = (Path) reference.getReference();
+
+        assertThat(path.getProperty(), instanceOf(Empty.class));
+        assertThat(path.getProperty().getToken().getText(), is(""));
+    }
+
+    @Test
+    public void shouldTypeGuardWithinIf() {
+        Scope scope = getCoverageSymbolMock();
+
+        If ifExpression = (If) ast("if(RiskItem instanceof Coverage) then RiskItem.limitAmount", scope);
+        assertThat(ifExpression.getEvaluationType(), is(NUMBER));
+    }
+
+    @Test
+    public void shouldBuildIfEvaluationType() {
+        Scope scope = Scope.dynamic();
+
+        assertThat(ast("if true then 1 else 'a'", scope).getEvaluationType(), is(UNKNOWN));
+        assertThat(ast("if true then 1 else 2", scope).getEvaluationType(), is(NUMBER));
+    }
+
+    @Test
+    public void shouldTypeGuardWithinNestedConjunction() {
+        Scope scope = getCoverageSymbolMock();
+
+        And and = (And) ast(
+            "RiskItem[0] instanceof Coverage and RiskItem[0].limitAmount > 10",
+            scope
+        );
+        Type limitType = ((ReferenceValue)((MoreThan)and.getRight()).getLeft()).getReference().getEvaluationType();
+        assertThat(limitType, is(NUMBER));
+    }
+
+    @Test
+    public void shouldTypeGuardWithinFilter() {
+        Scope scope = getCoverageSymbolMock();
+
+        assertThat(
+            ast("coverages[this instanceof RiskItem].itemCd", scope).getEvaluationType(),
+            is(ArrayType.of(STRING))
+        );
+        assertThat(
+            ast("coverages[this instanceof Base and this instanceof RiskItem].itemCd", scope).getEvaluationType(),
+            is(ArrayType.of(STRING))
+        );
+        assertThat(
+            ast("coverages[this instanceof RiskItem][0].itemCd", scope).getEvaluationType(),
+            is(STRING)
+        );
+        assertThat(
+            ast("coverages[this instanceof Base or this instanceof RiskItem].itemCd", scope).getEvaluationType(),
+            is(ArrayType.of(UNKNOWN))
+        );
+    }
+
+    @Test
+    public void shouldHandleScopeResetInNestedTypeGuardAndFilter() {
+        Scope scope = getCoverageSymbolMock();
+
+        If ifExpression = (If) ast(
+            "if(this instanceof Coverage) then this.limitAmount + coverages[this instanceof RiskItem][0].maxLimitAmount",
+            scope
+        );
+        Expression leftOfAddition = ((Addition)ifExpression.getThenExpression()).getLeft();
+        Expression rightOfAddition = ((Addition)ifExpression.getThenExpression()).getRight();
+
+        assertThat(leftOfAddition.getEvaluationType(), is(NUMBER));
+        assertThat(rightOfAddition.getEvaluationType(), is(MONEY));
+    }
+
+    @Test
     public void shouldBuildInNode() {
         Scope scope = getCoverageSymbolMock();
 
         assertThat(ast("Coverage.coverageCd in {'name'}", scope), instanceOf(In.class));
+    }
+
+    @Test
+    public void shouldBuildCastOutsideOfReference() {
+        Expression expression = ast("(COLLCoverage)coverages[0]", Scope.dynamic());
+
+        assertThat(((ReferenceValue) expression).getReference(), instanceOf(Cast.class));
+    }
+
+    @Test
+    public void shouldThrowIfCannotTokenize() {
+        assertThrows(AstBuildingException.class, () -> rawAst("\"\"\""));
     }
 
     @Test
@@ -127,6 +277,27 @@ public class AstBuilderTest {
         assertThat(((Identifier)path.getProperty()).getIdentifier(), equalTo("limitAmount"));
 
         assertThat(forEach.getEvaluationType(), is(ArrayType.of(NUMBER)));
+    }
+
+    @Test
+    public void shouldThrowErrorWhenKeywordIsUsedAsIdentifierInForExpressions() {
+        Scope scope = getCoverageSymbolMock();
+
+        assertThrows(AstBuildingException.class, () -> ast("for for in coverages satisfies coverage.isPrimary", scope));
+    }
+
+    @Test
+    public void shouldThrowErrorWhenKeywordIsUsedAsIdentifierInTypeComparison() {
+        Scope scope = getCoverageSymbolMock();
+
+        assertThrows(AstBuildingException.class, () -> ast("coverage instanceof return", scope));
+    }
+
+    @Test
+    public void shouldThrowErrorWhenKeywordIsUsedAsIdentifierInReference() {
+        Scope scope = getCoverageSymbolMock();
+
+        assertThrows(AstBuildingException.class, () -> ast("coverage.in", scope));
     }
 
     @Test
@@ -189,9 +360,10 @@ public class AstBuilderTest {
         assertThat(((ArrayType)reference.getEvaluationType()).getElementType().getName(), is("Coverage"));
     }
 
-    @Test(expected = AstBuildingException.class)
+    @Test
     public void shouldFailWhenBuildCollectionFilterNode() {
-        ast("coverages{limitAmount > 99 and limitAmount < 199]", getCoverageSymbolMock());
+        assertThrows(AstBuildingException.class,
+                () -> ast("coverages{limitAmount > 99 and limitAmount < 199]", getCoverageSymbolMock()));
     }
 
     @Test
@@ -358,9 +530,65 @@ public class AstBuilderTest {
         assertThat(reference.getReference(), instanceOf(Function.class));
     }
 
-    @Test(expected = AstBuildingException.class)
-    public void shouldThrowExceptionForUnknownFunction() {
-        ast("unknownFunction('a', 2)", emptyScope());
+    @Test
+    public void shouldBuildGenericFunctionNode() {
+        Scope scope = newScope(new SymbolTable(
+            List.of(new FunctionSymbol(
+                "First",
+                new GenericType("T"),
+                List.of(new FunctionParameter(0, ArrayType.of(new GenericType("T"))))
+            )),
+            Map.of()
+        ));
+
+        ReferenceValue reference = (ReferenceValue) ast("First({'string'})", scope);
+        assertThat(reference.getReference(), instanceOf(Function.class));
+        assertThat(reference.getEvaluationType(), equalTo(STRING));
+    }
+
+    @Test
+    public void shouldBuildBoundedGenericFunctionNode() {
+        Scope scope = newScope(new SymbolTable(
+            List.of(new FunctionSymbol(
+                "First",
+                new GenericType("T", STRING),
+                List.of(new FunctionParameter(0, ArrayType.of(new GenericType("T", STRING))))
+            )),
+            Map.of()
+        ));
+
+        ReferenceValue reference = (ReferenceValue) ast("First({'string'})", scope);
+        assertThat(reference.getReference(), instanceOf(Function.class));
+        assertThat(reference.getEvaluationType(), equalTo(STRING));
+    }
+
+    @Test
+    public void shouldBuildFunctionBodyNodeWithGenericParameters() {
+        Scope scope = newScope(new SymbolTable(
+            List.of(new FunctionSymbol(
+                "First",
+                new GenericType("T"),
+                List.of(
+                    new FunctionParameter(0, ArrayType.of(new GenericType("T"))),
+                    new FunctionParameter(1, new GenericType("T"))
+                )
+            )),
+            Map.of("arr", new VariableSymbol("arr", ArrayType.of(new GenericType("N", NUMBER))))
+        ));
+
+        var evaluationType = ast("set p to arr[0] return First(arr, p)", scope).getEvaluationType();
+        assertThat(evaluationType, equalTo(new GenericType("N")));
+        assertThat(((GenericType) evaluationType).getBound(), equalTo(NUMBER));
+    }
+
+    @Test
+    public void shouldNotThrowExceptionForUnknownFunction() {
+        ReferenceValue reference = (ReferenceValue) ast("UnknownFunction('a', 2)", emptyScope());
+        assertThat(reference.getReference(), instanceOf(Function.class));
+
+        Function function = (Function) reference.getReference();
+
+        assertThat(function.getEvaluationType(), is(UNKNOWN));
     }
 
     @Test
@@ -393,6 +621,36 @@ public class AstBuilderTest {
     }
 
     @Test
+    public void shouldBePathIfIdentifierIsRewrittenToPath() {
+        Identifier identifier = new Identifier("field", "path.to.field", Scope.dynamic(), Type.ANY, new Token(0, 0, ""));
+        Ast ast = new Ast(identifier);
+        assertThat(ast.getAstType(), is(AstType.PATH));
+    }
+
+    @Test
+    public void shouldFlatMapPath() {
+        Scope scope = getCoverageSymbolMock();
+
+        ReferenceValue reference1 = (ReferenceValue) ast("((Coverage | Coverage[]) coverage).limitAmount", scope);
+        assertThat(reference1.getEvaluationType(), is(new UnionType(NUMBER, ArrayType.of(NUMBER))));
+
+        ReferenceValue reference2 = (ReferenceValue) ast("((Any | Coverage) coverage).limitAmount", scope);
+        assertThat(reference2.getEvaluationType(), is(ANY));
+
+        ReferenceValue reference3 = (ReferenceValue) ast("((Any | Coverage | Coverage[]) coverage).limitAmount", scope);
+        assertThat(reference3.getEvaluationType(), is(ANY));
+
+        ReferenceValue reference4 = (ReferenceValue) ast("((Coverage[]) coverage).limitAmount", scope);
+        assertThat(reference4.getEvaluationType(), is(ArrayType.of(NUMBER)));
+
+        ReferenceValue reference5 = (ReferenceValue) ast("((RiskItem | Coverage) coverage).limitAmount", scope);
+        assertThat(reference5.getEvaluationType(), is(UNKNOWN));
+
+        ReferenceValue reference6 = (ReferenceValue) ast("((Coverage[]) coverage).deductibleAmounts", scope);
+        assertThat(reference6.getEvaluationType(), is(ArrayType.of(NUMBER)));
+    }
+
+    @Test
     public void shouldBuildPathNodeWithUnknownVariables() {
         ReferenceValue reference = (ReferenceValue) ast("a.b.c", emptyScope());
         assertThat(reference.getReference(), instanceOf(Path.class));
@@ -418,6 +676,26 @@ public class AstBuilderTest {
     }
 
     @Test
+    public void shouldBuildInlineArrayNodeAndDetermineComplexArrayType() {
+        Scope scope = getCoverageSymbolMock();
+
+        Expression expression = ast("{(Coverage[])Coverage, (Any[])RiskItem}", scope);
+
+        assertThat(expression, instanceOf(InlineArray.class));
+        assertThat(expression.getEvaluationType(), is(ArrayType.of(ArrayType.of(ANY))));
+    }
+
+    @Test
+    public void shouldBuildInlineArrayNodeAndDetermineComplexUnionType() {
+        Scope scope = getCoverageSymbolMock();
+
+        Expression expression = ast("{(Coverage | String[])Coverage, (Coverage | String[])RiskItem}", scope);
+
+        assertThat(expression, instanceOf(InlineArray.class));
+        assertThat(expression.getEvaluationType().getName(), is("(Coverage | String[])[]"));
+    }
+
+    @Test
     public void shouldBuildIdentifierNode() {
         Scope scope = getCoverageSymbolMock();
 
@@ -438,13 +716,13 @@ public class AstBuilderTest {
     public void shouldBuildBooleanLiteralValue() {
         Ast ast = rawAst("true");
         assertThat(ast.getAstType(), is(AstType.LITERAL));
-        assertThat(((BooleanLiteral)ast.getExpression()).getValue(), equalTo(true));
+        assertThat(((BooleanLiteral) ast.getExpression()).getValue(), equalTo(true));
         assertThat(ast.getCompiledLiteralValue(), equalTo(true));
         assertThat(ast.getCompiledLiteralValueType(), equalTo("Boolean"));
 
         ast = rawAst("false");
         assertThat(ast.getAstType(), is(AstType.LITERAL));
-        assertThat(((BooleanLiteral)ast.getExpression()).getValue(), equalTo(false));
+        assertThat(((BooleanLiteral) ast.getExpression()).getValue(), equalTo(false));
         assertThat(ast.getCompiledLiteralValue(), equalTo(false));
     }
 
@@ -456,37 +734,44 @@ public class AstBuilderTest {
         assertThat(ast("6666666666666667"), instanceOf(NumberLiteral.class));
     }
 
-    @Test(expected = AstBuildingException.class)
+    @Test
     public void shouldThrowOnDecimalLossOfPrecisionFloatingOnly() {
-        ast("0.66666666666666667");
+        assertThrows(AstBuildingException.class,
+                () -> ast("0.66666666666666667"));
     }
 
-    @Test(expected = AstBuildingException.class)
+    @Test
     public void shouldThrowOnDecimalLossOfPrecision() {
-        ast("10.6666666666666667");
+        assertThrows(AstBuildingException.class,
+                () -> ast("10.6666666666666667"));
     }
 
-    @Test(expected = AstBuildingException.class)
+    @Test
     public void shouldThrowOnDecimalLossOfPrecisionForLongNumber() {
-        ast("66666666666666667");
+        assertThrows(AstBuildingException.class,
+                () -> ast("66666666666666667"));
     }
 
     @Test
     public void shouldBuildDecimalLiteralValue() {
         Ast ast = rawAst("0.25");
+        Expression expression = ast.getExpression();
+
         assertThat(ast.getAstType(), is(AstType.LITERAL));
-        assertThat(((NumberLiteral)ast.getExpression()).getValue(), equalTo(new BigDecimal("0.25")));
+        assertThat(((NumberLiteral)expression).getValue(), equalTo(new BigDecimal("0.25")));
         assertThat(ast.getCompiledLiteralValue(), equalTo(new BigDecimal("0.25")));
         assertThat(ast.getCompiledLiteralValueType(), equalTo("Number"));
 
         ast = rawAst("-5");
+        expression = ast.getExpression();
         assertThat(ast.getAstType(), is(AstType.LITERAL));
-        assertThat(((NumberLiteral)ast.getExpression()).getValue(), equalTo(new BigDecimal("-5")));
+        assertThat(((NumberLiteral)expression).getValue(), equalTo(new BigDecimal("-5")));
         assertThat(ast.getCompiledLiteralValue(), equalTo(new BigDecimal("-5")));
 
         ast = rawAst("10000000000000000");
+        expression = ast.getExpression();
         assertThat(ast.getAstType(), is(AstType.LITERAL));
-        BigDecimal literalValue = (BigDecimal) ((NumberLiteral)ast.getExpression()).getValue();
+        BigDecimal literalValue = (BigDecimal) ((NumberLiteral)expression).getValue();
         assertThat(literalValue.toPlainString(), equalTo("10000000000000000"));
         BigDecimal compileValue = (BigDecimal) ast.getCompiledLiteralValue();
         assertThat(compileValue.toPlainString(), equalTo("10000000000000000"));
@@ -500,35 +785,27 @@ public class AstBuilderTest {
     @Test
     public void shouldBuildStringLiteralValue() {
         Ast ast = rawAst("'str'");
+        Expression expression = ast.getExpression();
         assertThat(ast.getAstType(), is(AstType.LITERAL));
-        assertThat(((StringLiteral)ast.getExpression()).getValue(), equalTo("str"));
+        assertThat(((StringLiteral)expression).getValue(), equalTo("str"));
         assertThat(ast.getCompiledLiteralValue(), equalTo("str"));
         assertThat(ast.getCompiledLiteralValueType(), equalTo("String"));
 
-        ast = rawAst("\"st\\\'r\"");
+        ast = rawAst("\"st\\'r\"");
+        expression = ast.getExpression();
         assertThat(ast.getAstType(), is(AstType.LITERAL));
-        assertThat(((StringLiteral)ast.getExpression()).getValue(), equalTo("st\\'r"));
-        assertThat(ast.getCompiledLiteralValue(), equalTo("st\\'r"));
-    }
-
-    @Test
-    public void shouldBuildEmptyLiteral() {
-        Ast ast = rawAst("");
-
-        assertThat(ast.getExpression(), instanceOf(Null.class));
-        assertThat(ast.getAstType(), is(AstType.LITERAL));
-        assertThat(((Null)ast.getExpression()).getValue(), nullValue());
-        assertThat(ast.getCompiledLiteralValue(), nullValue());
-        assertThat(ast.getCompiledLiteralValueType(), nullValue());
+        assertThat(((StringLiteral)expression).getValue(), equalTo("st'r"));
+        assertThat(ast.getCompiledLiteralValue(), equalTo("st'r"));
     }
 
     @Test
     public void shouldBuildNullLiteral() {
         Ast ast = rawAst("null");
 
-        assertThat(ast.getExpression(), instanceOf(Null.class));
+        Expression expression = ast.getExpression();
+        assertThat(expression, instanceOf(Null.class));
         assertThat(ast.getAstType(), is(AstType.LITERAL));
-        assertThat(((Null)ast.getExpression()).getValue(), nullValue());
+        assertThat(((Null)expression).getValue(), nullValue());
         assertThat(ast.getCompiledLiteralValue(), nullValue());
         assertThat(ast.getCompiledLiteralValueType(), nullValue());
     }
@@ -553,7 +830,7 @@ public class AstBuilderTest {
         assertThat(ast("t and f or z", Scope.dynamic()).getEvaluationType(), equalTo(BOOLEAN));
         assertThat(ast("coverages[0][1][2][3].limitAmount", Scope.dynamic()).getEvaluationType(), equalTo(ANY));
         assertThat(ast("some n in numbers satisfies n*2 > max", Scope.dynamic()).getEvaluationType(), equalTo(BOOLEAN));
-        assertThat(ast("for n in numbers return n.path", Scope.dynamic()).getEvaluationType(), equalTo(ArrayType.of(ANY)));
+        assertThat(ast("for n in numbers return n.path", Scope.dynamic()).getEvaluationType(), equalTo(ANY));
     }
 
     @Test
@@ -657,12 +934,18 @@ public class AstBuilderTest {
                 var("deductibleAmounts", ArrayType.of(NUMBER)));
 
         VariableSymbol coverages = var("coverages", ArrayType.of(coverage.getType()));
+        VariableSymbol coverageOrCoverages = var("coverageOrCoverages",
+            new UnionType(coverage.getType(), ArrayType.of(coverage.getType())));
 
         VariableSymbol arrayOfCoverages = var("arrayOfArrayOfCoverages", ArrayType.of(coverages.getType()));
 
-        VariableSymbol riskItem = var("RiskItem", base, coverage);
+        VariableSymbol riskItem = var("RiskItem", base,
+            coverage,
+            var("itemCd", STRING),
+            var("maxLimitAmount", MONEY)
+        );
 
-        return newScope(asGlobalSymbolTable(coverage, coverages, arrayOfCoverages, riskItem));
+        return newScope(asGlobalSymbolTable(coverage, coverages, arrayOfCoverages, riskItem, coverageOrCoverages));
     }
 
     private SymbolTable asGlobalSymbolTable(VariableSymbol... symbols) {
@@ -697,7 +980,7 @@ public class AstBuilderTest {
     }
 
     private Expression ast(String expression) {
-        return AstBuilder.from(expression, emptyScope()).getExpression();
+        return ast(expression, emptyScope());
     }
 
     private Expression ast(String expression, Scope scope) {
@@ -710,10 +993,18 @@ public class AstBuilderTest {
     }
 
     private Scope newScope(SymbolTable symbolTable) {
-        return new Scope(new Type("TEST", symbolTable), Map.of());
+        Map<String, Type> allTypes = symbolTable.getReferences().values().stream()
+            .map(VariableSymbol::getType)
+            .filter(type -> !type.isPrimitive())
+            .filter(type -> type.isKnown())
+            .distinct()
+            .collect(Collectors.toMap(Type::getName, t -> t));
+
+        return new Scope(new Type("TEST", symbolTable), allTypes);
     }
 
     private Scope emptyScope() {
         return newScope(new SymbolTable());
     }
+
 }

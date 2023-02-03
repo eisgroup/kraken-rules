@@ -15,16 +15,10 @@
  */
 package kraken.testproduct.domain.extended;
 
-import kraken.testproduct.domain.meta.Identifiable;
+import kraken.testproduct.domain.DriverCoverage;
 
-public class DriverCoverageExtended extends Identifiable {
-    private String typeOfInjuryCovered;
+public class DriverCoverageExtended extends DriverCoverage {
 
-    public String getTypeOfInjuryCovered() {
-        return typeOfInjuryCovered;
-    }
-
-    public void setTypeOfInjuryCovered(String typeOfInjuryCovered) {
-        this.typeOfInjuryCovered = typeOfInjuryCovered;
+    public DriverCoverageExtended() {
     }
 }

@@ -14,21 +14,21 @@
  *  limitations under the License.
  */
 
-import * as React from "react";
+import * as React from 'react'
 
-import { Modal, Tabs } from "antd";
-import "antd/lib/modal/style";
-import "antd/lib/tabs/style";
-import { JsonView } from "../JsonView";
+import { Modal, Tabs } from 'antd'
+import 'antd/lib/modal/style'
+import 'antd/lib/tabs/style'
+import { JsonView } from '../JsonView'
 
-const TabPane = Tabs.TabPane;
+const TabPane = Tabs.TabPane
 
 export interface ResultModalProps {
-    modalVisibility: boolean;
-    onClickShowModal: () => void;
-    backendRawResult: object;
-    backendDefaultResult: object;
-    backendValidationResult: object;
+    modalVisibility: boolean
+    onClickShowModal: () => void
+    backendRawResult: object
+    backendDefaultResult: object
+    backendValidationResult: object
 }
 
 export class BackendResultModal extends React.Component<ResultModalProps> {
@@ -38,23 +38,22 @@ export class BackendResultModal extends React.Component<ResultModalProps> {
                 <Modal
                     visible={this.props.modalVisibility}
                     onCancel={this.props.onClickShowModal}
-                    // tslint:disable-next-line
                     footer={null}
                     width={1000}
                 >
-                    <Tabs defaultActiveKey="1" size={"large"}>
-                        <TabPane tab="All rules result" key="1">
+                    <Tabs defaultActiveKey='1' size={'large'}>
+                        <TabPane tab='All rules result' key='1'>
                             <JsonView data={this.props.backendRawResult} />
                         </TabPane>
-                        <TabPane tab="Default result" key="2">
+                        <TabPane tab='Default result' key='2'>
                             <JsonView data={this.props.backendDefaultResult} />
                         </TabPane>
-                        <TabPane tab="Validation result" key="3">
+                        <TabPane tab='Validation result' key='3'>
                             <JsonView data={this.props.backendValidationResult} />
                         </TabPane>
                     </Tabs>
                 </Modal>
             </div>
-        );
+        )
     }
 }

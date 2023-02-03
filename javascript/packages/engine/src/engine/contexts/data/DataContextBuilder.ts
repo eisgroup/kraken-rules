@@ -14,26 +14,26 @@
  *  limitations under the License.
  */
 
-import { ContextInstanceInfoResolver } from "../info/ContextInstanceInfoResolver";
-import { DataContext } from "./DataContext";
-import { ContextInstanceInfo } from "../info/ContextInstanceInfo";
-import { requireDefinedValue } from "../../../utils/Utils";
-import { DataContextBuilderError } from "../Errors";
-import { ContextModelTree } from "../../../models/ContextModelTree";
-import { ErrorCode, KrakenRuntimeError } from "../../../error/KrakenRuntimeError";
+import { ContextInstanceInfoResolver } from '../info/ContextInstanceInfoResolver'
+import { requireDefinedValue } from '../../../utils/Utils'
+import { DataContextBuilderError } from '../Errors'
+import { ContextModelTree } from '../../../models/ContextModelTree'
+import { DataContext } from './DataContext'
+import { ErrorCode, KrakenRuntimeError } from '../../../error/KrakenRuntimeError'
+import { ContextInstanceInfo } from 'kraken-engine-api'
 
 export class DataContextBuilder {
     constructor(
         private readonly modelTree: ContextModelTree.ContextModelTree,
-        private readonly resolver: ContextInstanceInfoResolver<{}>
-    ) { }
+        private readonly resolver: ContextInstanceInfoResolver<unknown>,
+    ) {}
 
     /**
      * Produce {@link DataContext} instance from passed context object instance
      */
     buildFromRoot(rootContextObject: object): DataContext {
-        const { requireValid, build, resolver } = this;
-        return build(requireValid(rootContextObject), resolver.resolveRootInfo(rootContextObject));
+        const { requireValid, build, resolver } = this
+        return build(requireValid(rootContextObject), resolver.resolveRootInfo(rootContextObject))
     }
 
     /**
@@ -43,53 +43,52 @@ export class DataContextBuilder {
         contextDataObject: object,
         childContextName: string,
         parentContext: DataContext,
-        index?: number
+        index?: number,
     ): DataContext {
-        const { modelTree, requireValid, build, resolver } = this;
+        const { modelTree, requireValid, build, resolver } = this
         const info = resolver.resolveExtractedInfo(
             requireValid(contextDataObject),
             modelTree.contexts[childContextName],
             modelTree.contexts[parentContext.contextName],
             parentContext.info,
-            index);
-        return build(contextDataObject, info, parentContext);
+            index,
+        )
+        return build(contextDataObject, info, parentContext)
     }
 
     private build = (data: object, info: ContextInstanceInfo, parent?: DataContext): DataContext => {
-        requireDefinedValue(info, "Context instance info is null");
-        const contextDefinitionName =
-            requireDefinedValue(info.getContextName(), "Context definition name is null");
-        const contextDefinition = this.modelTree.contexts[contextDefinitionName];
+        requireDefinedValue(info, 'Context instance info is null')
+        const contextDefinitionName = requireDefinedValue(info.getContextName(), 'Context definition name is null')
+        const contextDefinition = this.modelTree.contexts[contextDefinitionName]
 
         if (!contextDefinition) {
             throw new KrakenRuntimeError(
                 ErrorCode.UNKNOWN_CONTEXT_DEFINITION,
-                `Context Definition with name ${contextDefinitionName} does not exist in the Kraken model tree`
-            );
+                `Context Definition with name ${contextDefinitionName} does not exist in the Kraken model tree`,
+            )
         }
 
         return new DataContext(
-            requireDefinedValue(info.getContextInstanceId(), "Context instance id is null"),
+            requireDefinedValue(info.getContextInstanceId(), 'Context instance id is null'),
             info.getContextName(),
-            data,
+            data as Record<string, unknown>,
             info,
             contextDefinition.fields,
             parent,
-            contextDefinition.inheritedContexts
-        );
+            contextDefinition.inheritedContexts,
+        )
     }
 
-    private requireValid: (data: object) => Object = (data: object) => {
-        // tslint:disable-next-line: triple-equals
+    private requireValid: (data: object) => object = (data: object) => {
         if (data == undefined) {
-            throw new DataContextBuilderError("Context data object is null.");
+            throw new DataContextBuilderError('Context data object is null.')
         }
-        const errors = this.resolver.validateContextDataObject(data);
+        const errors = this.resolver.validateContextDataObject(data)
         if (errors.length) {
             throw new DataContextBuilderError(
-                "Context data is not valid:\n\t" + errors.map(error => error.message).join("\n\t")
-            );
+                'Context data is not valid:\n\t' + errors.map(error => error.message).join('\n\t'),
+            )
         }
-        return data;
+        return data
     }
 }

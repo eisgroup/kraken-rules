@@ -19,9 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import kraken.context.path.ContextPath;
-import kraken.context.path.ContextPathExtractor;
 import kraken.cross.context.path.CrossContextPath;
-import kraken.cross.context.path.CrossContextPathsResolver;
 import kraken.model.Rule;
 import kraken.model.project.KrakenProject;
 import kraken.model.project.ccr.CrossContextService;
@@ -39,23 +37,27 @@ import kraken.model.project.validator.ValidationSession;
  *
  * @author psurinin
  */
-public class RuleCrossContextDependencyValidator {
+public class RuleCrossContextDependencyValidator implements RuleValidator {
+
+    private final KrakenProject krakenProject;
 
     private final RuleDependencyExtractor dependencyExtractor;
 
     private final CrossContextService crossContextService;
 
     public RuleCrossContextDependencyValidator(KrakenProject krakenProject) {
+        this.krakenProject = krakenProject;
         this.crossContextService = CrossContextServiceProvider.forProject(krakenProject);
         this.dependencyExtractor = new RuleDependencyExtractor(krakenProject);
     }
 
+    @Override
     public void validate(Rule rule, ValidationSession session) {
         List<ContextPath> paths = crossContextService.getPathsFor(rule.getContext());
-        List<String> ccrDependencies = dependencyExtractor.extractDependencies(rule)
-                .stream()
-                .filter(FieldDependency::isContextDependency)
+        List<String> ccrDependencies = dependencyExtractor.extractDependencies(rule).stream()
+                .filter(FieldDependency::isCcrDependency)
                 .map(FieldDependency::getContextName)
+                .distinct()
                 .collect(Collectors.toList());
 
         for(String ccrDependency : ccrDependencies) {
@@ -69,6 +71,15 @@ public class RuleCrossContextDependencyValidator {
                 }
             }
         }
+    }
+
+    @Override
+    public boolean canValidate(Rule rule) {
+        return rule.getName() != null
+            && rule.getContext() != null
+            && krakenProject.getContextDefinitions().containsKey(rule.getContext())
+            && rule.getTargetPath() != null
+            && krakenProject.getContextProjection(rule.getContext()).getContextFields().containsKey(rule.getTargetPath());
     }
 
     private String formatContextPaths(ContextPath from, List<CrossContextPath> paths) {

@@ -1,5 +1,5 @@
 /*
- *  Copyright 2017 EIS Ltd and/or one of its affiliates.
+ *  Copyright 2022 EIS Ltd and/or one of its affiliates.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,20 +15,29 @@
  */
 package kraken.model.dsl.model;
 
+import java.util.Objects;
+
 /**
- * Represents function parameter which is a part of a function signature specified in Kraken DSL
+ * Represents parameter definition of function implementation specified in Kraken DSL
  *
  * @author mulevicius
  */
 public class DSLFunctionParameter {
 
-    private final String parameterType;
+    private final String name;
 
-    public DSLFunctionParameter(String parameterType) {
-        this.parameterType = parameterType;
+    private final String type;
+
+    public DSLFunctionParameter(String name, String type) {
+        this.name = Objects.requireNonNull(name);
+        this.type = Objects.requireNonNull(type);
     }
 
-    public String getParameterType() {
-        return parameterType;
+    public String getName() {
+        return name;
+    }
+
+    public String getType() {
+        return type;
     }
 }

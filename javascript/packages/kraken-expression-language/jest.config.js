@@ -1,26 +1,20 @@
 module.exports = {
-    moduleFileExtensions: ["ts", "tsx", "js"],
+    moduleFileExtensions: ['ts', 'tsx', 'js'],
     transform: {
-        "^.+\\.ts$": "ts-jest"
+        '^.+\\.ts$': ['@swc/jest'],
     },
-    testMatch: ["**/?(*.)test.ts"],
+    testMatch: ['**/?(*.)test.ts'],
     verbose: true,
-    cacheDirectory: "./target/tmp/",
-    coverageDirectory: "./target/coverage",
+    cacheDirectory: './target/tmp/',
+    coverageDirectory: './target/coverage',
     coverageThreshold: {
         global: {
             branches: 85,
-            functions: 95,
-            lines: 95,
-            statements: 95
-        }
+            functions: 90,
+            lines: 90,
+            statements: 90,
+        },
     },
-    collectCoverageFrom: [
-        "**/*[^d\\.].ts",
-        "!**/node_modules/**",
-        "!**/target/**",
-        "!**/test/**",
-        "!**/index.ts"
-    ],
-    testEnvironment: "node"
+    collectCoverageFrom: ['**/*[^d\\.].ts', '!**/node_modules/**', '!**/target/**', '!**/test/**', '!**/index.ts'],
+    testEnvironment: 'node',
 }

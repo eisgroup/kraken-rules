@@ -31,7 +31,8 @@ kraken.engine.sanity.check.EngineSanityMultipleChildrenTest.shouldFlatAllElement
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -66,7 +67,8 @@ kraken.engine.sanity.check.EngineSanityMultipleChildrenTest.shouldFlatAllElement
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -101,7 +103,8 @@ kraken.engine.sanity.check.EngineSanityMultipleChildrenTest.shouldFlatAllElement
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -136,7 +139,8 @@ kraken.engine.sanity.check.EngineSanityMultipleChildrenTest.shouldFlatAllElement
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -171,7 +175,8 @@ kraken.engine.sanity.check.EngineSanityMultipleChildrenTest.shouldFlatAllElement
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -206,7 +211,8 @@ kraken.engine.sanity.check.EngineSanityMultipleChildrenTest.shouldFlatAllElement
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -241,7 +247,8 @@ kraken.engine.sanity.check.EngineSanityMultipleChildrenTest.shouldFlatAllElement
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     }

@@ -4,6 +4,7 @@ Root Context Policy {
     String accountName : billingInfo.accountName
     String policyNumber
     String* policies
+    Integer* numberOfInsureds
     string policyCurrency
     STRING state
     Integer createdFromPolicyRev
@@ -105,6 +106,7 @@ Context Vehicle {
     Integer odometerReading
     Integer numDaysDrivenPerWeek
     Date purchasedDate
+    Unknown* refsToDriver
     AnubisCoverage* anubisCoverages
     COLLCoverage* collCoverages
     Date* serviceHistory
@@ -128,13 +130,16 @@ Context PartyRole {
     Decimal limit
 }
 
-Context PersonInfo Is Info {
-    String firstName
-    String lastName
+Context PersonInfo Is PersonNameInfo, Info {
     Integer age
     String occupation
     Boolean sameHomeAddress
     Child AddressInfo : addressInfo
+}
+
+Context PersonNameInfo is Info {
+    String firstName
+    String lastName
 }
 
 Context AddressInfo {

@@ -1,0 +1,55 @@
+/*
+ *  Copyright 2022 EIS Ltd and/or one of its affiliates.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+package kraken.tracer.test.utils;
+
+import kraken.tracer.TraceResult;
+import kraken.tracer.observer.TraceObserver;
+
+public class TestingTraceObserver implements TraceObserver {
+
+    private static final ThreadLocal<TestingTraceObserver> LOCAL_OBSERVER
+        = ThreadLocal.withInitial(TestingTraceObserver::new);
+
+    private TestingTraceObserver() {
+    }
+
+    public static TestingTraceObserver getInstance() {
+        return LOCAL_OBSERVER.get();
+    }
+
+    private TraceResult result;
+    private int invocationCount;
+
+    @Override
+    public void observe(TraceResult result) {
+        this.result = result;
+        this.invocationCount++;
+    }
+
+    public TraceResult getResult() {
+        return result;
+    }
+
+    public int getNumberOfInvocations() {
+        return invocationCount;
+    }
+
+    public void clear() {
+        invocationCount = 0;
+        result = null;
+    }
+
+}

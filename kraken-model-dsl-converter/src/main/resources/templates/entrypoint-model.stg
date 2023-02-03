@@ -5,8 +5,8 @@ entryPoint(entryPoint) ::= <<
 <if(entryPoint.serverSideOnly)>
 @ServerSideOnly
 <endif>
-EntryPoint "<entryPoint.name>" {
-    <entryPoint.includedEntryPointNames: {includedEntryPointName | EntryPoint "<includedEntryPointName>"}; separator=",\n"><if(entryPoint.includedEntryPointNames)><if(entryPoint.ruleNames)>,<endif><endif>
-    <entryPoint.ruleNames: {ruleName | "<ruleName>"}; separator=",\n">
+EntryPoint "<entryPoint.name; format="deescapeString">" {
+    <entryPoint.includedEntryPointNames: {includedEntryPointName | EntryPoint "<includedEntryPointName; format="deescapeString">"}; separator=",\n"><if(entryPoint.includedEntryPointNames)><if(entryPoint.ruleNames)>,<endif><endif>
+    <entryPoint.ruleNames: {ruleName | "<ruleName; format="deescapeString">"}; separator=",\n">
 }
 >>

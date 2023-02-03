@@ -16,38 +16,36 @@
 
 /**
  * Iterator are used in Kraken java implementation. For now there is no use cases of using iterator
- * so this code in this folder is not included in any engine process.
+ * so this code in this folder is not included in any engine  process.
  * It is kept in case some use cases of iterator will appear.
  * Also this folder is excluded to collect coverage from in jest config.
  */
-import { ContextInstanceIterator } from "./ContextInstanceIterator";
+import { ContextInstanceIterator } from './ContextInstanceIterator'
 
-export class ContextInstanceListIterator<K = any> implements ContextInstanceIterator<number, K> {
-
-    private list: K[];
-    private idx: number;
-    private lastIndex: number;
+export class ContextInstanceListIterator<K = unknown> implements ContextInstanceIterator<number, K> {
+    private list: K[]
+    private idx: number
+    private lastIndex: number
 
     constructor(list: K[]) {
-        this.list = [...list];
-        this.idx = 0;
-        this.lastIndex = -1;
+        this.list = [...list]
+        this.idx = 0
+        this.lastIndex = -1
     }
 
-    hasNext: () => boolean = () => this.idx < this.list.length;
+    hasNext: () => boolean = () => this.idx < this.list.length
 
     next: () => K = () => {
-        const val = this.list[this.idx];
-        this.lastIndex = this.idx;
-        this.idx = this.idx + 1;
-        return val;
-
+        const val = this.list[this.idx]
+        this.lastIndex = this.idx
+        this.idx = this.idx + 1
+        return val
     }
 
     index: () => number = () => {
         if (this.lastIndex >= 0) {
-            return this.lastIndex;
+            return this.lastIndex
         }
-        throw new Error("Use next() first");
+        throw new Error('Use next() first')
     }
 }

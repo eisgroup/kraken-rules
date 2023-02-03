@@ -22,51 +22,23 @@ import java.util.List;
 
 public class PartyExtended extends Party {
 
-    private List<? extends PartyRole> roles;
-
-    private PersonInfoExtended personInfoExtended;
-
-    private DriverInfoExtended driverInfoExtended;
-
     public PartyExtended(String id) {
-        super.setId(id);
+        this.setId(id);
     }
 
-    public PartyExtended(){}
+    public PartyExtended(){
 
-    public PartyExtended(PersonInfoExtended personInfoExtended) {
-        this.personInfoExtended = personInfoExtended;
     }
 
-    public PartyExtended(List<PartyRoleExtended> roles, String relationToPrimaryInsured, String id, DriverInfoExtended driverInfoExtended) {
-        super.setRelationToPrimaryInsured(relationToPrimaryInsured);
-        this.driverInfoExtended = driverInfoExtended;
-        this.roles = roles;
-        super.setId(id);
+    public PartyExtended(PersonInfoExtended personInfo) {
+        this.setPersonInfo(personInfo);
     }
 
-    public List<? extends PartyRole> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<PartyRole> roles) {
-        this.roles = roles;
-    }
-
-    public PersonInfoExtended getPersonInfoExtended() {
-        return personInfoExtended;
-    }
-
-    public void setPersonInfoExtended(PersonInfoExtended personInfoExtended) {
-        this.personInfoExtended = personInfoExtended;
-    }
-
-    public DriverInfoExtended getDriverInfo() {
-        return driverInfoExtended;
-    }
-
-    public void setDriverInfo(DriverInfoExtended driverInfoExtended) {
-        this.driverInfoExtended = driverInfoExtended;
+    public PartyExtended(List<PartyRoleExtended> roles, String relationToPrimaryInsured, String id, DriverInfoExtended driverInfo) {
+        this.setRelationToPrimaryInsured(relationToPrimaryInsured);
+        this.setId(id);
+        this.setRoles(roles);
+        this.setDriverInfo(driverInfo);
     }
 
 }

@@ -55,7 +55,7 @@ public class DSLReader {
     }
 
     public DSLReader() {
-        this.excludePatterns = List.of();
+        this(List.of());
     }
 
     public List<Resource> read(String directory) {
@@ -81,15 +81,14 @@ public class DSLReader {
             return KrakenDSLModelParser.parseResource(dsl, url.toURI());
         } catch (IOException | DSLParsingException e) {
             throw new DSLReadingException("Invalid DSL at: " + url, e);
-        }
-        catch (LineParseCancellationException exception) {
+        } catch (LineParseCancellationException exception) {
             var template = "Invalid DSL at %s:%s:%s";
             throw new DSLReadingException(
                     String.format(
                             template,
                             url,
                             exception.getLine(),
-                            exception.getColumn()
+                            exception.getColumn() + 1
                     ),
                     exception
             );

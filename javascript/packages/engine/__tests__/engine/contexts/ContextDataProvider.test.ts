@@ -14,25 +14,19 @@
  *  limitations under the License.
  */
 
-import { ContextDataProviderImpl } from "../../../src/engine/contexts/data/extraction/ContextDataProvider";
-import { mock } from "../../mock";
+import { ContextDataProviderImpl } from '../../../src/engine/contexts/data/extraction/ContextDataProvider'
+import { mock } from '../../mock'
 
-describe("ContextDataProviderImpl", () => {
-    const policy = mock.modelTreeJson.contexts.Policy;
-    it("it should create instance", () => {
-        const dataProviderImpl = new ContextDataProviderImpl(
-            mock.data.dataContextEmpty(),
-            mock.contextDataExtractor
-        );
-        expect(dataProviderImpl).not.toBeNull();
-    });
-    it("it should resolve context data", () => {
-        const dataProviderImpl = new ContextDataProviderImpl(
-            mock.data.dataContextEmpty(),
-            mock.contextDataExtractor
-        );
-        const resolvedContextData = dataProviderImpl.resolveContextData(policy.name);
-        expect(resolvedContextData).toHaveLength(1);
-        expect(resolvedContextData.map(c => c.contextId).sort()).toMatchObject(["0"]);
-    });
-});
+describe('ContextDataProviderImpl', () => {
+    const policy = mock.modelTreeJson.contexts.Policy
+    it('it should create instance', () => {
+        const dataProviderImpl = new ContextDataProviderImpl(mock.data.dataContextEmpty(), mock.contextDataExtractor)
+        expect(dataProviderImpl).not.toBeNull()
+    })
+    it('it should resolve context data', () => {
+        const dataProviderImpl = new ContextDataProviderImpl(mock.data.dataContextEmpty(), mock.contextDataExtractor)
+        const resolvedContextData = dataProviderImpl.resolveContextData(policy.name)
+        expect(resolvedContextData).toHaveLength(1)
+        expect(resolvedContextData.map(c => c.contextId).sort()).toMatchObject(['0'])
+    })
+})

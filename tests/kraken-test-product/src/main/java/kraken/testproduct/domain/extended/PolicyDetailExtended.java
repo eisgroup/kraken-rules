@@ -19,4 +19,7 @@ import kraken.testproduct.domain.PolicyDetail;
 import kraken.testproduct.domain.meta.Identifiable;
 
 public class PolicyDetailExtended extends PolicyDetail {
+
+    public PolicyDetailExtended() {
+    }
 }

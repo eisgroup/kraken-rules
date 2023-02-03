@@ -21,7 +21,6 @@ import kraken.el.scope.type.ArrayType;
 import kraken.el.scope.type.Type;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -29,10 +28,10 @@ import java.util.stream.Collectors;
  */
 public class InlineArray extends Expression {
 
-    private List<Expression> items;
+    private final List<Expression> items;
 
     public InlineArray(List<Expression> items, Scope scope, Token token) {
-        super(NodeType.INLINE_ARRAY, scope, ArrayType.of(determineInlineArrayItemType(items)), token);
+        super(NodeType.INLINE_ARRAY, scope, inlineArrayType(items), token);
         this.items = items;
     }
 
@@ -45,6 +44,11 @@ public class InlineArray extends Expression {
         return items.stream()
                 .map(Object::toString)
                 .collect(Collectors.joining(",", "{", "}"));
+    }
+
+    private static Type inlineArrayType(List<Expression> items) {
+        Type type = determineInlineArrayItemType(items);
+        return ArrayType.of(type);
     }
 
     private static Type determineInlineArrayItemType(List<Expression> items) {

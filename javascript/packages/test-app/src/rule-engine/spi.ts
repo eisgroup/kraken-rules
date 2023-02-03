@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /*
  *  Copyright 2019 EIS Ltd and/or one of its affiliates.
  *
@@ -14,29 +15,29 @@
  *  limitations under the License.
  */
 
-import { DataObjectInfoResolver } from "kraken-typescript-engine";
+import { DataObjectInfoResolver } from 'kraken-typescript-engine'
 
-import { TestProduct } from "kraken-test-product";
-import Identifiable = TestProduct.kraken.testproduct.domain.meta.Identifiable;
+import { TestProduct } from 'kraken-test-product'
+import Identifiable = TestProduct.kraken.testproduct.domain.meta.Identifiable
 
 export const infoResolver: DataObjectInfoResolver = {
     /**
      * @override
      */
     validate: (data: Identifiable) => {
-        const validationErrors = [];
+        const validationErrors = []
         if (!Object.keys(data).length) {
-            validationErrors.push({ message: "Validation data object cannot be empty" });
+            validationErrors.push({ message: 'Validation data object cannot be empty' })
         }
-        // tslint:disable-next-line: triple-equals
-        if (data["id"] == undefined) {
-            validationErrors.push({ message: "Validation data object field 'id' is required" });
+
+        if (data['id'] == undefined) {
+            validationErrors.push({ message: "Validation data object field 'id' is required" })
         }
-        // tslint:disable-next-line: triple-equals
-        if (data["cd"] == undefined) {
-            validationErrors.push({ message: "Validation data object field 'cd' is required" });
+
+        if (data['cd'] == undefined) {
+            validationErrors.push({ message: "Validation data object field 'cd' is required" })
         }
-        return validationErrors;
+        return validationErrors
     },
     /**
      * @override
@@ -45,5 +46,5 @@ export const infoResolver: DataObjectInfoResolver = {
     /**
      * @override
      */
-    resolveName: data => (data as Identifiable).cd!
-};
+    resolveName: data => (data as Identifiable).cd!,
+}

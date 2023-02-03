@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /*
  *  Copyright 2019 EIS Ltd and/or one of its affiliates.
  *
@@ -14,89 +15,87 @@
  *  limitations under the License.
  */
 
-// tslint:disable:no-any
-import * as React from "react";
-import { FieldProps, FieldComponent } from "./FieldComponent";
-import { Icon, Tag } from "antd";
-import "antd/lib/icon/style";
-import "antd/lib/tag/style";
-import { isMoment } from "moment";
-import { trans } from "../DateUtils";
-import moment = require("moment");
-import { tagStyle } from "./FieldModelInfo";
+import * as React from 'react'
+import { FieldProps, FieldComponent } from './FieldComponent'
+import { Icon, Tag } from 'antd'
+import 'antd/lib/icon/style'
+import 'antd/lib/tag/style'
+import { isMoment } from 'moment'
+import { trans } from '../DateUtils'
+import moment = require('moment')
+import { tagStyle } from './FieldModelInfo'
 
 interface State {
-    numberOfRecords: number;
-    values: any[];
+    numberOfRecords: number
+    values: any[]
 }
 
 function modelValue(value: any): any {
-    if (typeof value === "boolean" || typeof value === "number" || typeof value === "string") {
-        return value;
+    if (typeof value === 'boolean' || typeof value === 'number' || typeof value === 'string') {
+        return value
     }
-    // tslint:disable-next-line:triple-equals
+
     if (value.target && value.target.value != undefined) {
-        return value.target.value;
+        return value.target.value
     }
     if (isMoment(value)) {
-        return trans.toDate(value);
+        return trans.toDate(value)
     }
 }
 
 function componentValue(value: any): any {
     if (value instanceof Date) {
-        return moment(value);
+        return moment(value)
     }
-    return value;
+    return value
 }
 
 export class MultipleField extends React.Component<FieldProps, State> {
-
     constructor(props: FieldProps) {
-        super(props);
+        super(props)
         this.state = {
             numberOfRecords: Array.isArray(props.value) && props.value.length ? props.value.length : 1,
-            values: Array.isArray(props.value) ? props.value.map(componentValue) : []
-        };
+            values: Array.isArray(props.value) ? props.value.map(componentValue) : [],
+        }
     }
 
     componentWillReceiveProps(props: Readonly<FieldProps>): void {
         this.setState({
             values: Array.isArray(props.value) ? props.value.map(componentValue) : [],
-            numberOfRecords: Array.isArray(props.value) && props.value.length ? props.value.length : 1
-        });
+            numberOfRecords: Array.isArray(props.value) && props.value.length ? props.value.length : 1,
+        })
     }
 
     addValue = (index: number) => (e: any) => {
-        const arr = this.state.values.slice();
-        arr[index] = componentValue(modelValue(e));
-        this.setState({ values: arr });
-        this.props.onChange(arr.map(modelValue));
+        const arr = this.state.values.slice()
+        arr[index] = componentValue(modelValue(e))
+        this.setState({ values: arr })
+        this.props.onChange(arr.map(modelValue))
     }
 
     inputs(): JSX.Element[] {
-        const els = [];
+        const els = []
         for (let index = 0; index < this.state.numberOfRecords; index++) {
-            const element = (<span key={index}>
-                {this.props.renderInput({ value: this.state.values[index], onChange: this.addValue(index) })}
-            </span>);
-            els.push(element);
+            const element = (
+                <span key={index}>
+                    {this.props.renderInput({ value: this.state.values[index], onChange: this.addValue(index) })}
+                </span>
+            )
+            els.push(element)
         }
-        return els;
+        return els
     }
 
-    renderInputs = () => <span>{this.inputs()}</span>;
+    renderInputs = () => <span>{this.inputs()}</span>
 
     addInput = (): void => {
-        this.setState({ numberOfRecords: this.state.numberOfRecords + 1 });
+        this.setState({ numberOfRecords: this.state.numberOfRecords + 1 })
     }
 
     removeInput = (): void => {
-        this.setState(
-            { numberOfRecords: this.state.numberOfRecords - 1 },
-            () => this.props.onChange(this.state.values.slice(0, this.state.values.length - 1).map(modelValue))
-        );
-
+        this.setState({ numberOfRecords: this.state.numberOfRecords - 1 }, () =>
+            this.props.onChange(this.state.values.slice(0, this.state.values.length - 1).map(modelValue)),
+        )
     }
 
     render(): JSX.Element {
@@ -104,15 +103,16 @@ export class MultipleField extends React.Component<FieldProps, State> {
             <span>
                 <FieldComponent {...this.props} renderInput={this.renderInputs} />
                 <span onClick={this.addInput}>
-                    <Tag color="green" style={tagStyle}>
-                        <Icon type="plus-circle" />
+                    <Tag color='green' style={tagStyle}>
+                        <Icon type='plus-circle' />
                     </Tag>
                 </span>
                 <span onClick={this.removeInput}>
-                    <Tag color="red" style={tagStyle}>
-                        <Icon type="minus-circle" />
+                    <Tag color='red' style={tagStyle}>
+                        <Icon type='minus-circle' />
                     </Tag>
                 </span>
-            </span>);
+            </span>
+        )
     }
 }

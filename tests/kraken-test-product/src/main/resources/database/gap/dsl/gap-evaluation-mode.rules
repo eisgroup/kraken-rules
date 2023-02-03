@@ -1,0 +1,49 @@
+Namespace Policy
+
+EntryPoint "EvalModeTestRules" {
+   "EvalMode_Accessibility",
+   "EvalMode_Visibility",
+   "EvalMode_Usage",
+   "EvalMode_Default",
+   "EvalMode_Assert",
+   "EvalMode_Regexp",
+   "EvalMode_Length",
+   "EvalMode_Size",
+   "EvalMode_SizeRange"
+}
+
+Rule "EvalMode_Accessibility" On Policy.policyNumber {
+    Set Disabled
+}
+
+Rule "EvalMode_Visibility" On Policy.policyNumber {
+    Set Hidden
+}
+
+Rule "EvalMode_Usage" On Policy.policyNumber {
+    Set Mandatory
+}
+
+Rule "EvalMode_Default" On Policy.policyNumber {
+    Reset To "P0001"
+}
+
+Rule "EvalMode_Assert" On Policy.policyNumber {
+    Assert policyNumber == "P0001"
+}
+
+Rule "EvalMode_Regexp" On Policy.policyNumber {
+    Assert Matches "[A-Z]+"
+}
+
+Rule "EvalMode_Length" On Policy.policyNumber {
+    Assert Length 2
+}
+
+Rule "EvalMode_Size" On Policy.riskItems {
+    Assert Size Min 0
+}
+
+Rule "EvalMode_SizeRange" On Policy.riskItems {
+    Assert Size Min 0 Max 1
+}

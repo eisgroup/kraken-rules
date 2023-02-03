@@ -8,7 +8,7 @@
     <parent>
         <artifactId>parent-pom</artifactId>
         <groupId>kraken</groupId>
-        <version>1.22.0-SNAPSHOT</version>
+        <version>1.42.4-SNAPSHOT</version>
     </parent>
 
     <artifactId>kraken-expression-language</artifactId>
@@ -61,33 +61,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- Plugin will copy antlr grammar files to the npm package 'kraken-expression-language-visitor' -->
-            <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>3.0.2</version>
-                <executions>
-                    <execution>
-                        <id>copy-resource-one</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>
-                                ${pom.basedir}/../javascript/packages/kraken-expression-language-visitor/src/antlr/generated/
-                            </outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${project.basedir}/src/main/antlr4/kraken/el</directory>
-                                    <excludes>
-                                        <exclude>/gen/</exclude>
-                                    </excludes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
 
@@ -96,6 +69,7 @@
             <groupId>kraken</groupId>
             <artifactId>kraken-expression-language-function-api</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.antlr</groupId>
             <artifactId>antlr4-runtime</artifactId>
@@ -117,12 +91,16 @@
             <artifactId>cache2k-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-        </dependency>
-        <dependency>
             <groupId>javax.money</groupId>
             <artifactId>money-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
         </dependency>
 
         <dependency>
@@ -138,6 +116,11 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.javamoney</groupId>
+            <artifactId>moneta</artifactId>
             <scope>test</scope>
         </dependency>
 

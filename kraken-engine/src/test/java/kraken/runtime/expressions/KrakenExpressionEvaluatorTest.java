@@ -15,19 +15,22 @@
  */
 package kraken.runtime.expressions;
 
-import static kraken.runtime.expressions.KrakenExpressionEvaluator.TEMPLATE_DATE_TIME_FORMAT;
+import static kraken.runtime.utils.TemplateParameterRenderer.TEMPLATE_DATE_TIME_FORMAT;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.hamcrest.core.IsCollectionContaining.hasItems;
+import static org.junit.Assert.assertThrows;
+import static org.mockito.Mockito.mock;
 
 import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
 
-import com.google.common.collect.ImmutableMap;
-
-import kraken.el.functions.DateFunctions;
+import kraken.el.ast.Ast;
+import kraken.el.ast.builder.AstBuilder;
+import kraken.el.functionregistry.functions.DateFunctions;
+import kraken.el.scope.Scope;
 import kraken.runtime.EvaluationConfig;
 import kraken.runtime.EvaluationSession;
 import kraken.runtime.engine.context.data.DataContext;
@@ -42,26 +45,28 @@ public class KrakenExpressionEvaluatorTest {
 
     private KrakenExpressionEvaluator evaluator = new KrakenExpressionEvaluator();
 
-    @Test(expected = KrakenExpressionEvaluationException.class)
+    @Test
     public void shouldWrapMissingPropertyToException() {
         String expression = "Policy.notExistingAttribute.aaa";
 
         Policy policy = new Policy("policyCd");
 
-        Map<String, Object> context = ImmutableMap.of("Policy", policy);
+        Map<String, Object> context = Map.of("Policy", policy);
 
-        evaluator.evaluateGetProperty(expression, context);
+        assertThrows(KrakenExpressionEvaluationException.class,
+                () -> evaluator.evaluateGetProperty(expression, context));
     }
 
-    @Test(expected = KrakenExpressionEvaluationException.class)
+    @Test
     public void shouldPassThroughExceptionThrownFromMethod() {
         String expression = "Policy.thrownException";
 
         Policy policy = new Policy("policyCd");
 
-        Map<String, Object> context = ImmutableMap.of("Policy", policy);
+        Map<String, Object> context = Map.of("Policy", policy);
 
-        evaluator.evaluateGetProperty(expression, context);
+        assertThrows(KrakenExpressionEvaluationException.class,
+                () -> evaluator.evaluateGetProperty(expression, context));
     }
 
     @Test
@@ -74,7 +79,7 @@ public class KrakenExpressionEvaluatorTest {
     @Test
     public void shouldEvaluateAndFormatTemplateVariables() {
         Policy policy = new Policy("policyCd");
-        Map<String, Object> context = ImmutableMap.of("Policy", policy);
+        Map<String, Object> context = Map.of("Policy", policy);
         ErrorMessage errorMessage = new ErrorMessage("code", List.of(), List.of(
             expression("'string'"),
             expression("10.123"),
@@ -102,7 +107,8 @@ public class KrakenExpressionEvaluatorTest {
     }
 
     private CompiledExpression expression(String expression) {
-        return new CompiledExpression(expression, ExpressionType.COMPLEX, null, null, List.of());
+        Ast ast = AstBuilder.from(expression, Scope.dynamic());
+        return new CompiledExpression(expression, ExpressionType.COMPLEX, null, null, List.of(), ast);
     }
 
     private DataContext dataContext(String name, Object root) {
@@ -114,7 +120,13 @@ public class KrakenExpressionEvaluatorTest {
     }
 
     private EvaluationSession session(Map<String, Object> context) {
-        return new EvaluationSession(new EvaluationConfig(), context, null);
+        return new EvaluationSession(
+            new EvaluationConfig(),
+            context,
+            mock(KrakenTypeProvider.class),
+            Map.of(),
+            ""
+        );
     }
 
     public static class Policy {

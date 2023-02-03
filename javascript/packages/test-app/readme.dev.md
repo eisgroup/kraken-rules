@@ -19,22 +19,22 @@ To load new rules by dimensions use button `Fetch new rules`at the top toolbar
 
 To bundle application:
 ```bash
-npm run pack
+yarn run pack
 ```
 
 To start application on server: (by default will start on `localhost:5000`)
 ```bash
-npm run serve
+yarn run serve
 ```
 ```bash
-npm run serve -- -p <PORT>
+yarn run serve -- -p <PORT>
 ```
 
 To start application for development (run index.html file in target/dist folder)
 ```bash
-npm start
+yarn start
 ```
 ```bash
-npm start -- --port <PORT>
+yarn start -- --port <PORT>
 ```
 

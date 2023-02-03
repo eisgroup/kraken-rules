@@ -18,7 +18,7 @@ package kraken.model.project.validator.rule;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.List;
 import java.util.Map;
@@ -108,6 +108,7 @@ public class RuleDefinedOnCycleValidatorTest {
             null,
             Map.of(),
             null,
+            List.of(),
             List.of()
         );
     }

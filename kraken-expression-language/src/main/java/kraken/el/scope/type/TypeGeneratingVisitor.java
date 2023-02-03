@@ -33,8 +33,11 @@ public class TypeGeneratingVisitor extends ValueBaseVisitor<Type> {
 
     private final Map<String, Type> globalTypes;
 
-    public TypeGeneratingVisitor(Map<String, Type> globalTypes) {
+    private final Map<String, Type> bounds;
+
+    public TypeGeneratingVisitor(Map<String, Type> globalTypes, Map<String, Type> bounds) {
         this.globalTypes = globalTypes;
+        this.bounds = bounds;
     }
 
     @Override
@@ -46,7 +49,7 @@ public class TypeGeneratingVisitor extends ValueBaseVisitor<Type> {
         if(globalTypes.containsKey(typeToken)) {
             return globalTypes.get(typeToken);
         }
-        return new Type(typeToken, false, false);
+        return Type.UNKNOWN;
     }
 
     @Override
@@ -56,7 +59,9 @@ public class TypeGeneratingVisitor extends ValueBaseVisitor<Type> {
 
     @Override
     public Type visitGenericType(GenericTypeContext ctx) {
-        return new GenericType(ctx.identifier().getText());
+        String generic = ctx.identifier().getText();
+        Type bound = bounds.get(generic);
+        return new GenericType(generic, bound);
     }
 
     @Override

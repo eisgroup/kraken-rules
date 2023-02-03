@@ -31,6 +31,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static kraken.utils.TestUtils.createMockRules;
 import static kraken.utils.TestUtils.toDSL;
@@ -92,7 +93,7 @@ public class FacadeTest extends AbstractFacadeTest {
     @Test
     public void shouldReturnQA5Bundle() {
         ResponseEntity<Object> response =
-                rest.postForEntity("/bundle/QA5", new BundleRequest(Map.of()), Object.class);
+                rest.postForEntity("/bundle/QA5", new BundleRequest(Map.of(), Set.of()), Object.class);
         assertThat(response, is(notNullValue()));
         assertThat(response.getBody(), is(notNullValue()));
         assertThat(response.getStatusCode().value(), is(200));
@@ -107,7 +108,7 @@ public class FacadeTest extends AbstractFacadeTest {
         );
         ResponseEntity<Map> response = rest.postForEntity(
                 "/bundle/QA1",
-                new BundleRequest(Map.of()),
+                new BundleRequest(Map.of(), Set.of()),
                 Map.class
         );
         assertThat(response.getStatusCode().value(), is(200));

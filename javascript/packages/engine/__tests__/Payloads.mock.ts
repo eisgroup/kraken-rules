@@ -14,37 +14,37 @@
  *  limitations under the License.
  */
 
-import { Payloads } from "kraken-model";
-import PayloadType = Payloads.PayloadType;
-import ValidationPayload = Payloads.Validation.ValidationPayload;
-import AccessibilityPayload = Payloads.UI.AccessibilityPayload;
-import VisibilityPayload = Payloads.UI.VisibilityPayload;
-import DefaultValuePayload = Payloads.Derive.DefaultValuePayload;
-import DefaultingType = Payloads.Derive.DefaultingType;
-import ValidationSeverity = Payloads.Validation.ValidationSeverity;
+import { Payloads } from 'kraken-model'
+import PayloadType = Payloads.PayloadType
+import ValidationPayload = Payloads.Validation.ValidationPayload
+import AccessibilityPayload = Payloads.UI.AccessibilityPayload
+import VisibilityPayload = Payloads.UI.VisibilityPayload
+import DefaultValuePayload = Payloads.Derive.DefaultValuePayload
+import DefaultingType = Payloads.Derive.DefaultingType
+import ValidationSeverity = Payloads.Validation.ValidationSeverity
 
 export const VALIDATION_PAYLOAD: ValidationPayload = {
     type: PayloadType.ASSERTION,
-    errorMessage: { errorCode: "mock-code", templateParts: ["Error"], templateExpressions: [] },
-    severity: ValidationSeverity.critical
-};
+    errorMessage: { errorCode: 'mock-code', templateParts: ['Error'], templateExpressions: [] },
+    severity: ValidationSeverity.critical,
+}
 
 export const ACCESSIBILITY_PAYLOAD: AccessibilityPayload = {
     type: PayloadType.ACCESSIBILITY,
-    accessible: true
-};
+    accessible: true,
+}
 
 export const VISIBILITY_PAYLOAD: VisibilityPayload = {
     type: PayloadType.VISIBILITY,
-    visible: true
-};
+    visible: true,
+}
 
 export const DEFAULT_VALUE_PAYLOAD: DefaultValuePayload = {
     type: PayloadType.DEFAULT,
     defaultingType: DefaultingType.defaultValue,
     valueExpression: {
-        expressionType: "LITERAL",
-        compiledLiteralValue: "value",
-        compiledLiteralValueType: "String"
-    }
-};
+        expressionType: 'LITERAL',
+        compiledLiteralValue: 'value',
+        compiledLiteralValueType: 'String',
+    },
+}

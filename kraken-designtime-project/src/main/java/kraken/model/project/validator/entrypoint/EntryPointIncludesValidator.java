@@ -44,8 +44,8 @@ public class EntryPointIncludesValidator {
             List<EntryPoint> includedEntryPoints = entryPointsByName.get(includedEntryPointName);
             if (includedEntryPoints == null || includedEntryPoints.isEmpty()) {
                 String message = MessageFormat.format(
-                    "EntryPoint ''{0}'' has included EntryPoint ''{1}'' which does not exist.",
-                    entryPoint.getName(), includedEntryPointName
+                    "has included EntryPoint ''{0}'' which does not exist.",
+                    includedEntryPointName
                 );
                 session.add(new ValidationMessage(entryPoint, message, Severity.ERROR));
             }
@@ -67,11 +67,9 @@ public class EntryPointIncludesValidator {
 
             if(!duplicateRuleNames.isEmpty()) {
                 String message = MessageFormat.format(
-                        "EntryPoint ''{0}'' has included EntryPoint ''{1}'' "
-                            + "and it has one or more rule with the same name: ''{2}''.",
-                        entryPoint.getName(),
-                        includedEntryPoint,
-                        String.join(", ", duplicateRuleNames)
+                    "has included EntryPoint ''{0}'' " + "and it has one or more rule with the same name: ''{1}''.",
+                    includedEntryPoint,
+                    String.join(", ", duplicateRuleNames)
                 );
                 session.add(new ValidationMessage(entryPoint, message, Severity.WARNING));
             }
@@ -82,15 +80,15 @@ public class EntryPointIncludesValidator {
                                                       ValidationSession session,
                                                       List<EntryPoint> includedEntryPoints) {
         includedEntryPoints.stream()
-                .filter(includedEntryPoint -> !includedEntryPoint.getIncludedEntryPointNames().isEmpty())
-                .findFirst()
-                .ifPresent(entryPointWithTransitiveIncludes -> {
-                    String message = MessageFormat.format(
-                            "EntryPoint ''{0}'' has included EntryPoint ''{1}'' which has declared includes. "
-                                    + "It is forbidden to have includes in EntryPoints, that are included.",
-                            entryPoint.getName(), entryPointWithTransitiveIncludes.getName()
-                    );
-                    session.add(new ValidationMessage(entryPoint, message, Severity.ERROR));
-                });
+            .filter(includedEntryPoint -> !includedEntryPoint.getIncludedEntryPointNames().isEmpty())
+            .findFirst()
+            .ifPresent(entryPointWithTransitiveIncludes -> {
+                String message = MessageFormat.format(
+                    "has included EntryPoint ''{0}'' which has declared includes. "
+                        + "It is forbidden to have includes in EntryPoints, that are included.",
+                    entryPointWithTransitiveIncludes.getName()
+                );
+                session.add(new ValidationMessage(entryPoint, message, Severity.ERROR));
+            });
     }
 }

@@ -34,12 +34,19 @@ public class EntryPointBundle {
 
     private final Map<String, Object> expressionContext;
 
-    private String engineVersion;
+    /**
+     * Engine version is used to validate Ui and backend versions in the runtime.
+     * By default 'kraken-engine' maven module version is used.
+     * In UI engine it is compared with SyncEngineConfig#engineCompatibilityVersion.
+     *
+     * @since 1.14.0
+     */
+    private final String engineVersion;
 
     public EntryPointBundle(
-            EntryPointEvaluation evaluation,
-            Map<String, Object> expressionContext,
-            String engineVersion
+        EntryPointEvaluation evaluation,
+        Map<String, Object> expressionContext,
+        String engineVersion
     ) {
         this.evaluation = evaluation;
         this.expressionContext = expressionContext;
@@ -52,20 +59,6 @@ public class EntryPointBundle {
 
     public Map<String, Object> getExpressionContext() {
         return expressionContext;
-    }
-
-    /**
-     * Engine version is used to validate Ui and backend versions in the runtime.
-     * By default 'kraken-engine' maven module version is used.
-     * In case you want to use custom version, you can override it here.
-     * Then in UI engine you also must override version in
-     * SyncEngineConfig#engineCompatibilityVersion.
-     *
-     * @param engineVersion version to override default version
-     * @since 1.14.0
-     */
-    public void setEngineVersion(String engineVersion) {
-        this.engineVersion = engineVersion;
     }
 
     public String getEngineVersion() {

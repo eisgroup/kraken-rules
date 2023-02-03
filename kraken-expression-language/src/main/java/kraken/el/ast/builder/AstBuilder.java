@@ -32,9 +32,11 @@ import org.cache2k.integration.CacheLoaderException;
 
 import kraken.el.Common;
 import kraken.el.Kel;
+import kraken.el.Kel.ExpressionContext;
 import kraken.el.ast.Ast;
 import kraken.el.ast.AstType;
 import kraken.el.ast.Expression;
+import kraken.el.ast.builder.KelErrorListener.KelError;
 import kraken.el.scope.Scope;
 
 /**
@@ -51,7 +53,7 @@ public class AstBuilder {
     public static final String AST_CACHE_EXPIRE_AFTER_WRITE_PROP = "kraken.expression.ast.expireAfterWrite";
 
     public static final String AST_CACHE_ENTRY_CAPACITY = System.getProperty(AST_CACHE_ENTRY_CAPACITY_PROP,
-            System.getenv().getOrDefault(AST_CACHE_ENTRY_CAPACITY_PROP, "100000"));
+            System.getenv().getOrDefault(AST_CACHE_ENTRY_CAPACITY_PROP, "1000000"));
 
     public static final String AST_CACHE_EXPIRE_AFTER_WRITE = System.getProperty(AST_CACHE_EXPIRE_AFTER_WRITE_PROP,
             System.getenv().getOrDefault(AST_CACHE_EXPIRE_AFTER_WRITE_PROP, "86400"));
@@ -61,10 +63,16 @@ public class AstBuilder {
             .entryCapacity(Long.valueOf(AST_CACHE_ENTRY_CAPACITY))
             .expireAfterWrite(Long.valueOf(AST_CACHE_EXPIRE_AFTER_WRITE), TimeUnit.SECONDS)
             .loader(key -> {
-                Kel parser = forExpression(key.getExpression());
+                ExpressionContext expressionContext = parse(key.getExpression());
                 AstGeneratingVisitor astGeneratingVisitor = new AstGeneratingVisitor(key.getScope());
-                Expression expressionNode = astGeneratingVisitor.visit(parser.expression());
-                return new Ast(expressionNode, astGeneratingVisitor.getFunctions(), astGeneratingVisitor.getReferences());
+                Expression expressionNode = astGeneratingVisitor.visit(expressionContext);
+
+                return new Ast(
+                    expressionNode,
+                    astGeneratingVisitor.getFunctions(),
+                    astGeneratingVisitor.getReferences(),
+                    astGeneratingVisitor.getGenerationErrors()
+                );
             })
             .build();
 
@@ -87,17 +95,26 @@ public class AstBuilder {
         }
     }
 
-    private static Kel forExpression(String expression) {
+    private static ExpressionContext parse(String expression) {
+        KelErrorListener listener = new KelErrorListener();
         Common lexer = lexerForExpression(expression);
         lexer.removeErrorListeners();
-        lexer.addErrorListener(AstBuilderErrorListener.getInstance());
+        lexer.addErrorListener(listener);
         TokenStream tokenStream = new CommonTokenStream(lexer);
         Kel parser = new Kel(tokenStream);
-        parser.setErrorHandler(AstBuilderErrorStrategy.getInstance());
+        parser.setErrorHandler(new KelErrorStrategy());
         parser.getInterpreter().setPredictionMode(PredictionMode.LL);
         parser.removeErrorListeners();
-        parser.addErrorListener(AstBuilderErrorListener.getInstance());
-        return parser;
+        parser.addErrorListener(listener);
+
+        ExpressionContext expressionContext = parser.expression();
+
+        if(!listener.getErrors().isEmpty()) {
+            KelError error = listener.getErrors().get(0);
+            throw new ParseCancellationException(error.getMessage());
+        }
+
+        return expressionContext;
     }
 
     private static Common lexerForExpression(String expression) {

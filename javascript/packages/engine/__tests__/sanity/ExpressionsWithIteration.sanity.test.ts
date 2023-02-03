@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /*
  *  Copyright 2019 EIS Ltd and/or one of its affiliates.
  *
@@ -14,50 +15,54 @@
  *  limitations under the License.
  */
 
-import { sanityEngine } from "./_SanityEngine";
-import { sanityMocks } from "./_AutoPolicyObject.mocks";
+import { sanityEngine } from './_SanityEngine'
+import { sanityMocks } from './_AutoPolicyObject.mocks'
+import { FieldMetadataReducer } from '../../src'
 
-describe("Engine Expressions Sanity Test", () => {
-    const { empty } = sanityMocks;
-    it("shouldEvaluateDeeplyNestedLoopExpression", () => {
-        const policy = empty();
+describe('Engine Expressions Sanity Test', () => {
+    const { empty } = sanityMocks
+    it('shouldEvaluateDeeplyNestedLoopExpression', () => {
+        const policy = empty()
 
-        const results = sanityEngine.evaluate(policy, "Expressions_nested_for");
+        const results = sanityEngine.evaluate(policy, 'Expressions_nested_for')
+        const fieldResults = new FieldMetadataReducer().reduce(results)
 
-        expect(results).k_toHaveExpressionsFailures(0);
-        expect(policy.transactionDetails!.totalPremium).toBe(123);
-        expect(results).k_toMatchResultsSnapshots();
-    });
-    it("shouldEvaluateDeeplyNestedFilterExpression", () => {
-        const policy = empty();
+        expect(results).k_toHaveExpressionsFailures(0)
+        expect(policy.transactionDetails!.totalPremium).toBe(123)
+        expect({ entryPointResults: results, fieldResults }).k_toMatchResultsSnapshots()
+    })
+    it('shouldEvaluateDeeplyNestedFilterExpression', () => {
+        const policy = empty()
         policy.riskItems = [
             {
-                id: "1",
-                cd: "Vehicle",
-                odometerReading : 100000
-            }
-        ];
+                id: '1',
+                cd: 'Vehicle',
+                odometerReading: 100000,
+            },
+        ]
 
-        const results = sanityEngine.evaluate(policy, "Expressions_nested_filter");
+        const results = sanityEngine.evaluate(policy, 'Expressions_nested_filter')
+        const fieldResults = new FieldMetadataReducer().reduce(results)
 
-        expect(results).k_toHaveExpressionsFailures(0);
-        expect(policy.termDetails!.termNo).toBe(100000);
-        expect(results).k_toMatchResultsSnapshots();
-    });
-    it("shouldEvaluateDeeplyNestedMixedExpression", () => {
-        const policy = empty();
+        expect(results).k_toHaveExpressionsFailures(0)
+        expect(policy.termDetails!.termNo).toBe(100000)
+        expect({ entryPointResults: results, fieldResults }).k_toMatchResultsSnapshots()
+    })
+    it('shouldEvaluateDeeplyNestedMixedExpression', () => {
+        const policy = empty()
         policy.riskItems = [
             {
-                id: "1",
-                cd: "Vehicle",
-                odometerReading : 100000
-            }
-        ];
+                id: '1',
+                cd: 'Vehicle',
+                odometerReading: 100000,
+            },
+        ]
 
-        const results = sanityEngine.evaluate(policy, "Expressions_nested_mixed");
+        const results = sanityEngine.evaluate(policy, 'Expressions_nested_mixed')
+        const fieldResults = new FieldMetadataReducer().reduce(results)
 
-        expect(results).k_toHaveExpressionsFailures(0);
-        expect(policy.transactionDetails!.changePremium).toBe(100000);
-        expect(results).k_toMatchResultsSnapshots();
-    });
-});
+        expect(results).k_toHaveExpressionsFailures(0)
+        expect(policy.transactionDetails!.changePremium).toBe(100000)
+        expect({ entryPointResults: results, fieldResults }).k_toMatchResultsSnapshots()
+    })
+})

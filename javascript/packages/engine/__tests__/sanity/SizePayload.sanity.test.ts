@@ -14,32 +14,39 @@
  *  limitations under the License.
  */
 
-import { sanityEngine } from "./_SanityEngine";
-import { sanityMocks } from "./_AutoPolicyObject.mocks";
+import { sanityEngine } from './_SanityEngine'
+import { sanityMocks } from './_AutoPolicyObject.mocks'
+import { FieldMetadataReducer } from '../../src'
 
-describe("Size payload sanity test", () => {
-    it("should success with array of 2", () => {
-        const policy = sanityMocks.empty();
-        policy.policies = ["1", "2"];
-        const result = sanityEngine.evaluate(policy, "SizePayload");
-        expect(result).k_toMatchResultsStats({ total: 3, critical: 0 });
-        expect(result).k_toHaveExpressionsFailures(0);
-        expect(result).k_toMatchResultsSnapshots();
-    });
-    it("should fail with array of 3", () => {
-        const policy = sanityMocks.empty();
-        policy.policies = ["1", "2", "3"];
-        const result = sanityEngine.evaluate(policy, "SizePayload");
-        expect(result).k_toMatchResultsStats({ total: 3, critical: 2 });
-        expect(result).k_toHaveExpressionsFailures(0);
-        expect(result).k_toMatchResultsSnapshots();
-    });
-    it("should handle undefined collection", () => {
-        const policy = sanityMocks.empty();
-        policy.policies = undefined;
-        const result = sanityEngine.evaluate(policy, "SizePayload");
-        expect(result).k_toMatchResultsStats({ total: 3, critical: 2 });
-        expect(result).k_toHaveExpressionsFailures(0);
-        expect(result).k_toMatchResultsSnapshots();
-    });
-});
+describe('Size payload sanity test', () => {
+    it('should success with array of 2', () => {
+        const policy = sanityMocks.empty()
+        policy.policies = ['1', '2']
+        const result = sanityEngine.evaluate(policy, 'SizePayload')
+        const fieldResults = new FieldMetadataReducer().reduce(result)
+
+        expect(result).k_toMatchResultsStats({ total: 3, critical: 0 })
+        expect(result).k_toHaveExpressionsFailures(0)
+        expect({ entryPointResults: result, fieldResults }).k_toMatchResultsSnapshots()
+    })
+    it('should fail with array of 3', () => {
+        const policy = sanityMocks.empty()
+        policy.policies = ['1', '2', '3']
+        const result = sanityEngine.evaluate(policy, 'SizePayload')
+        const fieldResults = new FieldMetadataReducer().reduce(result)
+
+        expect(result).k_toMatchResultsStats({ total: 3, critical: 2 })
+        expect(result).k_toHaveExpressionsFailures(0)
+        expect({ entryPointResults: result, fieldResults }).k_toMatchResultsSnapshots()
+    })
+    it('should handle undefined collection', () => {
+        const policy = sanityMocks.empty()
+        policy.policies = undefined
+        const result = sanityEngine.evaluate(policy, 'SizePayload')
+        const fieldResults = new FieldMetadataReducer().reduce(result)
+
+        expect(result).k_toMatchResultsStats({ total: 3, critical: 2 })
+        expect(result).k_toHaveExpressionsFailures(0)
+        expect({ entryPointResults: result, fieldResults }).k_toMatchResultsSnapshots()
+    })
+})

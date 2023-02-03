@@ -19,6 +19,7 @@ import java.text.MessageFormat;
 import java.util.Objects;
 
 import kraken.annotations.API;
+import kraken.model.Function;
 import kraken.model.FunctionSignature;
 import kraken.model.KrakenModelItem;
 import kraken.model.Rule;
@@ -105,6 +106,9 @@ public final class ValidationMessage {
         }
         if(item instanceof FunctionSignature) {
             return "Function Signature";
+        }
+        if(item instanceof Function) {
+            return "Function";
         }
         throw new IllegalStateException("Unknown Kraken Model Type encountered: " + item.getClass());
     }

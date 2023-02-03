@@ -1,0 +1,64 @@
+page(libraries) ::= <<
+<libraries:toc()>
+
+___
+
+<libraries:library()>
+>>
+
+toc(libraries) ::= <<
+<libraries : {library | <library.name:link()>
+  <library.functions : {function | <function.functionHeader.name:link()>}; separator={<\n>}>
+}>
+>>
+
+link(name) ::= "- [<name>](#<name; format=\"linkId\">)"
+
+libraries(libraries) ::= <<
+<libraries:library(); separator={<\n>}>
+>>
+
+library(library) ::= <<
+
+# <library.name>
+
+<library.description:line()><\\\>
+<library.since:since():line()><\\\>
+<library.functions:functionBlock()>
+>>
+
+functionBlock(function) ::= <<
+
+## <function.functionHeader.name>
+
+```
+<function:functionDeclaration()>
+```
+
+<function:functionDocumentation()>
+>>
+
+functionDocumentation(function) ::= <<
+<function.description:paragraph()><\\\>
+<function.additionalInfo:paragraph()><\\\>
+<function.parameters:functionParameter():line()><\\\>
+<function.throwsError:throws():line()><\\\>
+<if(function.examples)>**examples**
+```
+<function.examples:example(); separator={<\n>}>
+```
+<endif>
+<function.since:since():line()>
+>>
+
+functionParameter(p) ::= "<if(p.description)>**parameter** <p.name> - <p.description><endif>"
+functionDeclaration(function) ::= "<function:bounds()><function:header()> : <function.returnType>"
+bounds(function) ::= "<if(function.genericTypes)>\<<function.genericTypes:generic(); separator=\", \">> <endif>"
+generic(g) ::= "<g.generic> is <g.bound>"
+header(function) ::= "<function.functionHeader.name>(<function.parameters:parameter(); separator=\", \">)"
+parameter(p) ::= "<p.type> <p.name>"
+example(e) ::= "<e.call> // <if(e.validCall)>✔<else>✘<endif><if(e.result)> <e.result><endif>"
+line(text) ::= "<if(text)><text>  <\n><endif>"
+paragraph(text) ::= "<if(text)><text><\n><\n><endif>"
+throws(text) ::= "<if(text)>**throws error** <text><endif>"
+since(text) ::= "<if(text)>**since** <text; format=\"mappedSinceVersion\"><endif>"

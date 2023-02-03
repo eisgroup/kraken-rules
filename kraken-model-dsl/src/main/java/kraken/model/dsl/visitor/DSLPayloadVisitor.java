@@ -108,14 +108,6 @@ public class DSLPayloadVisitor extends KrakenDSLBaseVisitor<DSLPayload> {
         return new DSLDefaultValuePayload(resetValueExpression, DSLDefaultingType.RESET);
     }
 
-    @Deprecated(since = "1.10.0", forRemoval = true)
-    @Override
-    public DSLPayload visitResetToNull(KrakenDSL.ResetToNullContext ctx) {
-        throw new IllegalStateException("Unsupported Defaulting Rule encountered in DSL: " + ctx.getText()
-                + ". Defaulting Rules without expresion are no longer supported"
-                + ". Rules should be rewritten from 'Reset' to 'Reset To null'");
-    }
-
     @Override
     public DSLPayload visitAccessibilityPayload(KrakenDSL.AccessibilityPayloadContext ctx) {
         return new DSLAccessibilityPayload(ctx.TODISABLED() != null);

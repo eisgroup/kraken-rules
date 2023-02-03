@@ -1,9 +1,16 @@
 lexer grammar Common;
 
+DOCS_COMMENT    : ('/**' .*? '*/');
 LINE_COMMENT    : ('//' ~[\r\n]*) -> channel(HIDDEN);
 BLOCK_COMMENT    : ('/*' .*? '*/') -> channel(HIDDEN);
 
-STRING     : '"' (ESC|.)*? '"' | '\'' (ESC|.)*? '\'';
+STRING     : '"' (~["] | ESC)* '"' | '\'' (~['] | ESC)* '\'';
+
+QDOT : '?.';
+COMMA : ',';
+DOT : '.';
+ETA : '@';
+COLON : ':';
 
 OP_EXP         : '**';
 OP_NEGATION    : NOT | '!';
@@ -37,11 +44,6 @@ R_CURLY_BRACKETS : '}' -> popMode;
 L_SQUARE_BRACKETS : '[';
 R_SQUARE_BRACKETS : ']';
 
-COMMA : ',';
-DOT : '.';
-ETA : '@';
-COLON : ':';
-
 MATCHES : 'matches' | 'Matches' | 'MATCHES';
 NOT : 'not' | 'Not' | 'NOT';
 IN : 'in' | 'In' | 'IN';
@@ -63,6 +65,7 @@ RULES : 'rules' | 'Rules' | 'RULES';
 RULE : 'rule' | 'Rule' | 'RULE';
 ENTRYPOINTS : 'entrypoints' | 'entryPoints' | 'EntryPoints' | 'ENTRYPOINTS';
 ENTRYPOINT : 'entrypoint' | 'entryPoint' | 'EntryPoint' | 'ENTRYPOINT';
+SYSTEM : 'System' | 'system' | 'SYSTEM';
 CONTEXTS : 'contexts' | 'Contexts' | 'CONTEXTS';
 CONTEXT : 'context' | 'Context' | 'CONTEXT';
 EXTERNALCONTEXT : 'externalcontext' | 'ExternalContext' | 'Externalcontext' | 'externalContext' | 'EXTERNALCONTEXT';
@@ -90,6 +93,7 @@ FROM : 'from' | 'From' | 'FROM';
 ERROR : 'error' | 'Error' | 'ERROR';
 WARN  : 'warn' | 'Warn' | 'WARN';
 INFO  : 'info' | 'Info' | 'INFO';
+PRIORITY    : 'priority' | 'Priority' | 'PRIORITY';
 MIN         : 'min' | 'Min' | 'MIN';
 MAX         : 'max' | 'Max' | 'MAX';
 SIZE        : 'size' | 'Size' | 'SIZE';

@@ -28,7 +28,7 @@ import kraken.model.project.KrakenProject;
 @API
 public class StaticKrakenProjectRepository implements KrakenProjectRepository {
 
-    private Map<String, KrakenProject> krakenProjects;
+    private final Map<String, KrakenProject> krakenProjects;
 
     public StaticKrakenProjectRepository(Collection<KrakenProject> krakenProjects) {
         this.krakenProjects = krakenProjects.stream().collect(Collectors.toMap(KrakenProject::getNamespace, p -> p));
@@ -39,8 +39,4 @@ public class StaticKrakenProjectRepository implements KrakenProjectRepository {
         return krakenProjects.get(namespace);
     }
 
-    @Override
-    public boolean hasKrakenProject(String namespace) {
-        return krakenProjects.containsKey(namespace);
-    }
 }

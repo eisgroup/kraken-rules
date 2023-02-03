@@ -13,76 +13,83 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+import { readdirSync } from 'fs'
+import { EntryPointResult } from 'kraken-engine-api'
+import { TestProduct } from 'kraken-test-product'
+import { ExpressionContextManagerImpl } from '../../src'
+import { DimensionSetBundleCache } from '../../src/bundle-cache/dimension-set-cache/DimensionSetBundleCache'
 
-import { mock } from "../mock";
-import { readdirSync } from "fs";
-import { RepoClientCache } from "../../src/repository/RepoClientCache";
-import { SyncEngine, EvaluationConfig } from "../../src/engine/executer/SyncEngine";
-import { EntryPointName } from "./_SanityEntryPointNames";
-import { sanityMocks } from "./_AutoPolicyObject.mocks";
-import { EntryPointBundle } from "../../src/models/EntryPointBundle";
-import { EntryPointResult } from "../../src/dto/EntryPointResult";
-import { TestProduct } from "kraken-test-product";
-import { registry } from "../../src/engine/runtime/expressions/ExpressionEvaluator";
+import { EvaluationConfig, SyncEngine } from '../../src/engine/executer/SyncEngine'
+import { KelFunction, registry } from '../../src/engine/runtime/expressions/ExpressionEvaluator'
+import { ContextModelTree } from '../../src/models/ContextModelTree'
+import { EntryPointBundle } from '../../src/models/EntryPointBundle'
+import { mock } from '../mock'
+import { sanityMocks } from './_AutoPolicyObject.mocks'
+import { SANITY_DIMENSIONS } from './_SanityDimensions'
+import { EntryPointName } from './_SanityEntryPointNames'
 
-import AutoPolicySummary = TestProduct.kraken.testproduct.domain.Policy;
-import { SANITY_DIMENSIONS } from "./_SanityDimensions";
-import { ContextModelTree } from "../../src";
-
+import AutoPolicySummary = TestProduct.kraken.testproduct.domain.Policy
 function isJsonName(fileName: string): boolean {
-    return fileName.indexOf(".json") !== -1;
+    return fileName.indexOf('.json') !== -1
 }
 
-const sanityBundles = readdirSync("__tests__/sanity/__bundles__")
+const sanityBundles = readdirSync('__tests__/sanity/__bundles__')
     .filter(isJsonName)
-    .map(x => require("./__bundles__/" + x)) as EntryPointBundle.EntryPointBundle[];
+    .map(x => require('./__bundles__/' + x)) as EntryPointBundle.EntryPointBundle[]
 
 const cache = (() => {
-    const repoCache = new RepoClientCache(true);
+    const cache = new DimensionSetBundleCache(
+        {
+            logWarning(message) {
+                console.warn(message)
+            },
+        },
+        new ExpressionContextManagerImpl(),
+    )
     sanityBundles
-        .sort((b1, b2) => (b1.evaluation.delta === b2.evaluation.delta) ? 0 : !b1.evaluation.delta ? -1 : 1)
+        .sort((b1, b2) => (b1.evaluation.delta === b2.evaluation.delta ? 0 : !b1.evaluation.delta ? -1 : 1))
         .forEach(entryPointBundle => {
-            return repoCache.addBundleForDimension(entryPointBundle.expressionContext)({
-                entryPointBundle,
-                entryPointName: entryPointBundle.evaluation.entryPointName
-            });
-        });
-    return repoCache;
-})();
+            cache.add(entryPointBundle.evaluation.entryPointName, entryPointBundle.expressionContext, entryPointBundle)
+        })
+    return cache
+})()
 
-function createSanityEngine(namespace: string, modelTree: ContextModelTree.ContextModelTree): SanityEngine {
+function createSanityEngine(
+    namespace: string,
+    modelTree: ContextModelTree.ContextModelTree,
+    functions: KelFunction[],
+): SanityEngine {
     const engine = new SyncEngine({
         contextInstanceInfoResolver: mock.spi.instance,
         cache: cache,
         dataInfoResolver: mock.spi.dataResolver,
-        modelTree
-    });
-    return new SanityEngine(namespace, engine);
+        modelTree,
+        functions,
+    })
+    return new SanityEngine(namespace, engine)
 }
 
 class SanityEngine {
-    constructor(
-        private readonly namespace: string,
-        private readonly engine: SyncEngine
-    ) { }
+    constructor(private readonly namespace: string, private readonly engine: SyncEngine) {}
 
     private createEvaluationConfig(useCaseName: keyof typeof SANITY_DIMENSIONS): EvaluationConfig {
         return {
             context: { dimensions: SANITY_DIMENSIONS[useCaseName] },
-            currencyCd: "EUR"
-        };
+            currencyCd: 'EUR',
+        }
     }
 
     evaluate(
         data: AutoPolicySummary,
         entryPoint: EntryPointName,
-        useCaseName?: keyof typeof SANITY_DIMENSIONS
+        useCaseName?: keyof typeof SANITY_DIMENSIONS,
     ): EntryPointResult {
+        cache.setExpressionContext(useCaseName ? SANITY_DIMENSIONS[useCaseName] : {})
         return this.engine.evaluate(
             data,
             this.resolveEntryPointName(entryPoint),
-            useCaseName ? this.createEvaluationConfig(useCaseName) : sanityMocks.evalConf()
-        );
+            useCaseName ? this.createEvaluationConfig(useCaseName) : sanityMocks.evalConf(),
+        )
     }
 
     evaluateSubTree(
@@ -90,30 +97,31 @@ class SanityEngine {
         node: object,
         entryPoint: EntryPointName,
         useCaseName?: keyof typeof SANITY_DIMENSIONS,
-        options?: { evaluationId: string }
+        options?: { evaluationId: string },
     ): EntryPointResult {
-        const evaluationConfig = useCaseName
-            ? this.createEvaluationConfig(useCaseName)
-            : sanityMocks.evalConf();
-        return this.engine.evaluateSubTree(
-            data,
-            node,
-            this.resolveEntryPointName(entryPoint),
-            { ...evaluationConfig, evaluationId: options?.evaluationId }
-        );
+        cache.setExpressionContext(useCaseName ? SANITY_DIMENSIONS[useCaseName] : {})
+        const evaluationConfig = useCaseName ? this.createEvaluationConfig(useCaseName) : sanityMocks.evalConf()
+        return this.engine.evaluateSubTree(data, node, this.resolveEntryPointName(entryPoint), {
+            ...evaluationConfig,
+            evaluationId: options?.evaluationId,
+        })
     }
 
     private resolveEntryPointName(entryPointName: string): string {
-        return `${this.namespace}:${entryPointName}`;
+        return `${this.namespace}:${entryPointName}`
     }
 }
 
 registry.add({
-    name: "GetCarCoverage",
+    name: 'GetCarCoverage',
     function: function GetCarCoverage(policySummary: AutoPolicySummary): object | undefined {
-        return policySummary.coverage;
-    }
-});
+        return policySummary.coverage
+    },
+})
 
-export const sanityEngine = createSanityEngine("Policy", mock.modelTree);
-export const sanityEngineExtendedPolicy = createSanityEngine("PolicyExtended", mock.extendedModelTree);
+export const sanityEngine = createSanityEngine('Policy', mock.modelTree, mock.policyFunctions)
+export const sanityEngineExtendedPolicy = createSanityEngine(
+    'PolicyExtended',
+    mock.extendedModelTree,
+    mock.policyExtendedFunctions,
+)

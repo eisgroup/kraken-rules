@@ -19,8 +19,8 @@
  */
 export class DataContextBuilderError extends Error {
     constructor(msg: string) {
-        super(msg);
-        this.name = "DataContextBuilderError";
+        super(msg)
+        this.name = 'DataContextBuilderError'
     }
 }
 /**
@@ -28,7 +28,7 @@ export class DataContextBuilderError extends Error {
  */
 export class InvalidContextExtractionError extends Error {
     constructor(msg: string) {
-        super(msg);
-        this.name = "InvalidContextExtractionError";
+        super(msg)
+        this.name = 'InvalidContextExtractionError'
     }
 }

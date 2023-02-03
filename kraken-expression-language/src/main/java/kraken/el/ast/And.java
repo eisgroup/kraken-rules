@@ -15,7 +15,11 @@
  */
 package kraken.el.ast;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import kraken.el.ast.token.Token;
+import kraken.el.ast.typeguard.TypeFact;
 import kraken.el.scope.Scope;
 
 /**
@@ -27,4 +31,11 @@ public class And extends BinaryLogicalOperation {
         super(left, right, NodeType.AND, scope, token);
     }
 
+    @Override
+    public Map<String, TypeFact> getDeducedTypeFacts() {
+        Map<String, TypeFact> unionOfFacts = new HashMap<>();
+        unionOfFacts.putAll(getLeft().getDeducedTypeFacts());
+        unionOfFacts.putAll(getRight().getDeducedTypeFacts());
+        return unionOfFacts;
+    }
 }

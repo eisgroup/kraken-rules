@@ -15,23 +15,25 @@
  */
 package kraken.model.project;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.google.common.base.Suppliers;
-
+import kraken.model.Function;
 import kraken.model.FunctionSignature;
 import kraken.model.Rule;
 import kraken.model.context.ContextDefinition;
@@ -87,6 +89,10 @@ public class ResourceKrakenProject implements KrakenProject, ScopeBuilderSupplie
 
     private final List<FunctionSignature> functionSignatures;
 
+    private final List<Function> functions;
+
+    private final Set<String> accessibleContextsFromRoot = new HashSet<>();
+
     public ResourceKrakenProject(@Nonnull String namespace,
                                  @Nonnull String rootContextName,
                                  @Nonnull Map<String, ContextDefinition> contextDefinitions,
@@ -95,7 +101,8 @@ public class ResourceKrakenProject implements KrakenProject, ScopeBuilderSupplie
                                  ExternalContext externalContext,
                                  @Nonnull Map<String, ExternalContextDefinition> externalContextDefinitions,
                                  NamespaceTree namespaceTree,
-                                 @Nonnull List<FunctionSignature> functionSignatures) {
+                                 @Nonnull List<FunctionSignature> functionSignatures,
+                                 @Nonnull List<Function> functions) {
         this.identifier = UUID.randomUUID();
         this.namespace = Objects.requireNonNull(namespace);
         this.rootContextName = Objects.requireNonNull(rootContextName);
@@ -114,10 +121,15 @@ public class ResourceKrakenProject implements KrakenProject, ScopeBuilderSupplie
                 .filter(ep -> ep.getName() != null)
                 .collect(Collectors.groupingBy(EntryPoint::getName))
         );
-        this.scopeBuilder = Suppliers.memoize(() -> new ScopeBuilder(this));
-        this.crossContextService = Suppliers.memoize(() -> new CrossContextService(this));
+
+        this.scopeBuilder = memoize(() -> new ScopeBuilder(this));
+        this.crossContextService = memoize(() -> new CrossContextService(this));
         this.namespaceTree = namespaceTree;
         this.functionSignatures = Objects.requireNonNull(functionSignatures);
+        this.functions = Objects.requireNonNull(functions);
+
+        ContextDefinition root = this.getContextDefinitions().get(this.getRootContextName());
+        this.collectAccessibleContextDefinitions(root);
     }
 
     @Override
@@ -192,6 +204,11 @@ public class ResourceKrakenProject implements KrakenProject, ScopeBuilderSupplie
         return functionSignatures;
     }
 
+    @Override
+    public List<Function> getFunctions() {
+        return functions;
+    }
+
     /**
      *
      * @param contextName
@@ -210,6 +227,7 @@ public class ResourceKrakenProject implements KrakenProject, ScopeBuilderSupplie
             contextProjection.setName(contextDefinition.getName());
             contextProjection.setPhysicalNamespace(contextDefinition.getPhysicalNamespace());
             contextProjection.setStrict(contextDefinition.isStrict());
+            contextProjection.setSystem(contextDefinition.isSystem());
             contextProjection.setRoot(contextDefinition.isRoot());
             Collection<String> inheritedContextDefinitions = getInheritedContextDefinitions(c);
             contextProjection.setParentDefinitions(inheritedContextDefinitions);
@@ -219,9 +237,30 @@ public class ResourceKrakenProject implements KrakenProject, ScopeBuilderSupplie
         });
     }
 
-    private List<String> getInheritedContextDefinitions(String contextName) {
+    @Override
+    public Collection<String> getConnectedContextDefinitions() {
+        return  accessibleContextsFromRoot;
+    }
+
+    private void collectAccessibleContextDefinitions(ContextDefinition contextDefinition) {
+        if(contextDefinition == null || accessibleContextsFromRoot.contains(contextDefinition.getName())) {
+            return;
+        }
+
+        accessibleContextsFromRoot.add(contextDefinition.getName());
+
+        contextDefinition.getParentDefinitions().stream()
+            .map(inherited -> this.getContextDefinitions().get(inherited))
+            .forEach(this::collectAccessibleContextDefinitions);
+
+        contextDefinition.getChildren().values().stream()
+            .map(child -> this.getContextDefinitions().get(child.getTargetName()))
+            .forEach(contextDefinition1 -> collectAccessibleContextDefinitions(contextDefinition1));
+    }
+
+    private Set<String> getInheritedContextDefinitions(String contextName) {
         ContextDefinition contextDefinition = contextDefinitions.get(contextName);
-        List<String> inheritedContextDefinitions = new ArrayList<>(contextDefinition.getParentDefinitions());
+        Set<String> inheritedContextDefinitions = new LinkedHashSet<>(contextDefinition.getParentDefinitions());
         for(String p : contextDefinition.getParentDefinitions()) {
             if(!contextDefinitions.containsKey(p)) {
                 String format = "ContextDefinition '%s' does not exist in Kraken Project '%s' but it is inherited by '%s'";
@@ -273,6 +312,21 @@ public class ResourceKrakenProject implements KrakenProject, ScopeBuilderSupplie
         return false;
     }
 
+    private <T> Supplier<T> memoize(Supplier<T> delegate) {
+        AtomicReference<T> cache = new AtomicReference<>();
+
+        return () -> {
+            T value = cache.get();
+
+            if (value == null) {
+                value = cache.updateAndGet(current -> Objects.requireNonNullElseGet(current,
+                    () -> Objects.requireNonNull(delegate.get())));
+            }
+
+            return value;
+        };
+    }
+
     /**
      * Builds new instance of KrakenProject by replacing rules and entrypoints with provided.
      * This is more efficient than using {@link KrakenProjectBuilder}, because scope and ccr calculations are reused.
@@ -295,6 +349,7 @@ public class ResourceKrakenProject implements KrakenProject, ScopeBuilderSupplie
             externalContextDefinitions,
             namespaceTree,
             functionSignatures,
+            functions,
             scopeBuilder,
             crossContextService
         );
@@ -313,6 +368,7 @@ public class ResourceKrakenProject implements KrakenProject, ScopeBuilderSupplie
      * @param externalContextDefinitions
      * @param namespaceTree
      * @param functionSignatures
+     * @param functions
      * @param scopeBuilder externally provided scope builder
      * @param crossContextService externally provided ccr path service
      */
@@ -325,6 +381,7 @@ public class ResourceKrakenProject implements KrakenProject, ScopeBuilderSupplie
                           @Nonnull Map<String, ExternalContextDefinition> externalContextDefinitions,
                           NamespaceTree namespaceTree,
                           @Nonnull List<FunctionSignature> functionSignatures,
+                          @Nonnull List<Function> functions,
                           @Nonnull Supplier<ScopeBuilder> scopeBuilder,
                           @Nonnull Supplier<CrossContextService> crossContextService) {
         this.identifier = UUID.randomUUID();
@@ -347,7 +404,11 @@ public class ResourceKrakenProject implements KrakenProject, ScopeBuilderSupplie
         );
         this.namespaceTree = namespaceTree;
         this.functionSignatures = Objects.requireNonNull(functionSignatures);
+        this.functions = Objects.requireNonNull(functions);
         this.scopeBuilder = scopeBuilder;
         this.crossContextService = crossContextService;
+
+        ContextDefinition root = this.getContextDefinitions().get(this.getRootContextName());
+        this.collectAccessibleContextDefinitions(root);
     }
 }

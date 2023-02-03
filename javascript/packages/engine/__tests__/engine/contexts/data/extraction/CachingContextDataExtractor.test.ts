@@ -14,58 +14,51 @@
  *  limitations under the License.
  */
 
-import {
-    CachingContextDataExtractor
-} from "../../../../../src/engine/contexts/data/extraction/CachingContextDataExtractor";
-import {
-    ExtractedChildDataContextBuilder
-} from "../../../../../src/engine/contexts/data/ExtractedChildDataContextBuilder";
-import { ContextDataExtractorImpl } from "../../../../../src/engine/contexts/data/extraction/ContextDataExtractorImpl";
-import { mock } from "../../../../mock";
-import { DataContextBuilder } from "../../../../../src/engine/contexts/data/DataContextBuilder";
-import { ExpressionEvaluator } from "../../../../../src/engine/runtime/expressions/ExpressionEvaluator";
+import { CachingContextDataExtractor } from '../../../../../src/engine/contexts/data/extraction/CachingContextDataExtractor'
+import { ExtractedChildDataContextBuilder } from '../../../../../src/engine/contexts/data/ExtractedChildDataContextBuilder'
+import { ContextDataExtractorImpl } from '../../../../../src/engine/contexts/data/extraction/ContextDataExtractorImpl'
+import { mock } from '../../../../mock'
+import { DataContextBuilder } from '../../../../../src/engine/contexts/data/DataContextBuilder'
+import { ExpressionEvaluator } from '../../../../../src/engine/runtime/expressions/ExpressionEvaluator'
 
-describe("CachingContextDataExtractor", () => {
-    it("should extract once by name", () => {
-        const extractor = new CachingContextDataExtractor(new ContextDataExtractorImpl(
-            mock.modelTree,
-            new ExtractedChildDataContextBuilder(
-                new DataContextBuilder(
-                    mock.modelTree,
-                    mock.spi.instance
+describe('CachingContextDataExtractor', () => {
+    it('should extract once by name', () => {
+        const extractor = new CachingContextDataExtractor(
+            new ContextDataExtractorImpl(
+                mock.modelTree,
+                new ExtractedChildDataContextBuilder(
+                    new DataContextBuilder(mock.modelTree, mock.spi.instance),
+                    ExpressionEvaluator.DEFAULT,
                 ),
-                ExpressionEvaluator.DEFAULT
-            )
-        ));
+            ),
+        )
         const dc1 = extractor.extractByName(
             mock.modelTreeJson.contexts.CreditCardInfo.name,
-            mock.data.dataContextEmpty()
-        );
+            mock.data.dataContextEmpty(),
+        )
         const dc2 = extractor.extractByName(
             mock.modelTreeJson.contexts.CreditCardInfo.name,
-            mock.data.dataContextEmpty()
-        );
-        expect(dc1).toHaveLength(1);
-        expect(dc2).toHaveLength(1);
-        expect(dc2).toBe(dc1);
-        expect(dc2[0]).toBe(dc1[0]);
-    });
-    it("should cache", () => {
-        const extractByName = jest.fn();
-        const extractByPath = jest.fn();
+            mock.data.dataContextEmpty(),
+        )
+        expect(dc1).toHaveLength(1)
+        expect(dc2).toHaveLength(1)
+        expect(dc2).toBe(dc1)
+        expect(dc2[0]).toBe(dc1[0])
+    })
+    it('should cache', () => {
+        const extractByName = jest.fn()
+        const extractByPath = jest.fn()
 
-        const extractor = new CachingContextDataExtractor(
-            { extractByName, extractByPath }
-        );
+        const extractor = new CachingContextDataExtractor({ extractByName, extractByPath })
 
-        extractor.extractByName("A", mock.dataContextEmpty());
-        extractor.extractByName("A", mock.dataContextEmpty());
-        extractor.extractByName("B", mock.dataContextEmpty());
-        expect(extractByName).toHaveBeenCalledTimes(2);
+        extractor.extractByName('A', mock.dataContextEmpty())
+        extractor.extractByName('A', mock.dataContextEmpty())
+        extractor.extractByName('B', mock.dataContextEmpty())
+        expect(extractByName).toHaveBeenCalledTimes(2)
 
-        extractor.extractByPath(mock.dataContextEmpty(), ["A", "B"]);
-        extractor.extractByPath(mock.dataContextEmpty(), ["A", "B"]);
-        extractor.extractByPath(mock.dataContextEmpty(), ["A", "B", "C"]);
-        expect(extractByName).toHaveBeenCalledTimes(2);
-    });
-});
+        extractor.extractByPath(mock.dataContextEmpty(), ['A', 'B'])
+        extractor.extractByPath(mock.dataContextEmpty(), ['A', 'B'])
+        extractor.extractByPath(mock.dataContextEmpty(), ['A', 'B', 'C'])
+        expect(extractByName).toHaveBeenCalledTimes(2)
+    })
+})

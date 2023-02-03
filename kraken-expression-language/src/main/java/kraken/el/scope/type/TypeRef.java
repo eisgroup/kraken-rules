@@ -15,10 +15,11 @@
  */
 package kraken.el.scope.type;
 
-import kraken.el.scope.SymbolTable;
-
 import java.util.Collection;
+import java.util.Map;
 import java.util.Optional;
+
+import kraken.el.scope.SymbolTable;
 
 /**
  * Represents a type which is a soft reference to a concrete {@link Type} that must exist in the system.
@@ -27,7 +28,7 @@ import java.util.Optional;
  */
 public class TypeRef extends Type {
 
-    private TypeRefResolver typeRefResolver;
+    private final TypeRefResolver typeRefResolver;
 
     public TypeRef(String referencedTypeName, TypeRefResolver typeRefResolver) {
         super(referencedTypeName);
@@ -66,17 +67,67 @@ public class TypeRef extends Type {
     }
 
     @Override
+    public boolean isDynamic() {
+        return resolveReferencedType().isDynamic();
+    }
+
+    @Override
+    public boolean isGeneric() {
+        return resolveReferencedType().isGeneric();
+    }
+
+    @Override
+    public Type rewriteGenericTypes(Map<GenericType, Type> genericTypeRewrites) {
+        return resolveReferencedType().rewriteGenericTypes(genericTypeRewrites);
+    }
+
+    @Override
+    public Map<GenericType, Type> resolveGenericTypeRewrites(Type argumentType) {
+        return resolveReferencedType().resolveGenericTypeRewrites(argumentType);
+    }
+
+    @Override
+    public Type rewriteGenericBounds() {
+        return resolveReferencedType().rewriteGenericBounds();
+    }
+
+    @Override
+    public boolean isUnion() {
+        return resolveReferencedType().isUnion();
+    }
+
+    @Override
+    public boolean isAssignableToArray() {
+        return resolveReferencedType().isAssignableToArray();
+    }
+
+    @Override
     public Optional<Type> resolveCommonTypeOf(Type otherType) {
         return resolveReferencedType().resolveCommonTypeOf(otherType);
     }
 
     @Override
     public String toString() {
-        return "Ref<" + getName() + ">";
+        return getName();
     }
 
     private Type resolveReferencedType() {
         return getOrThrowMissingType(typeRefResolver.resolveType(getName()));
+    }
+
+    @Override
+    public Type unwrapArrayType() {
+        return resolveReferencedType().unwrapArrayType();
+    }
+
+    @Override
+    public Type mapTo(Type target) {
+        return resolveReferencedType().mapTo(target);
+    }
+
+    @Override
+    public Type wrapArrayType() {
+        return resolveReferencedType().wrapArrayType();
     }
 
     private Type getOrThrowMissingType(Type type) {

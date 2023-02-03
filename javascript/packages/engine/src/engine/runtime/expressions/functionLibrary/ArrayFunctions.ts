@@ -17,35 +17,35 @@
 export const arrayFunctions = {
     Flat,
     Count,
-    Join
-};
-
-function Flat(array: any): any[] | undefined {
-    if (isUndefined(array)) {
-        return undefined;
-    }
-    if (Array.isArray(array)) {
-        let flattened: any[] = [];
-        for (const element of array) {
-            if (Array.isArray(element)) {
-                flattened = flattened.concat(element);
-            } else {
-                flattened.push(element);
-            }
-        }
-        return flattened;
-    }
-    throw new Error("Flat function accepts only ArrayLike objects");
+    Join,
 }
 
-function Count(array: any): number {
+function Flat(array: unknown): unknown[] | undefined {
+    if (isUndefined(array)) {
+        return undefined
+    }
     if (Array.isArray(array)) {
-        return array.length;
+        let flattened: unknown[] = []
+        for (const element of array) {
+            if (Array.isArray(element)) {
+                flattened = flattened.concat(element)
+            } else {
+                flattened.push(element)
+            }
+        }
+        return flattened
+    }
+    throw new Error('Flat function accepts only ArrayLike objects')
+}
+
+function Count(array: unknown): number {
+    if (Array.isArray(array)) {
+        return array.length
     }
     if (isUndefined(array)) {
-        return 0;
+        return 0
     }
-    return 1;
+    return 1
 }
 
 /**
@@ -54,11 +54,10 @@ function Count(array: any): number {
  * @param b
  * @return joins two arrays into single array by preserving order and duplicates
  */
-function Join(a: any[] | null | undefined, b: any[] | null | undefined): any[] {
-    return [...(a || []), ...(b || [])];
+function Join(a: unknown[] | null | undefined, b: unknown[] | null | undefined): unknown[] {
+    return [...(a || []), ...(b || [])]
 }
 
-function isUndefined(array: any): boolean {
-    // tslint:disable-next-line
-    return array == undefined;
+function isUndefined(array: unknown): boolean {
+    return array == undefined
 }

@@ -1,8 +1,85 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Engine Functions Sanity Test should default with Substring output : Results + reducer results 1`] = `
+exports[`Engine Functions Sanity Test should default with Substring output  1`] = `
 Object {
-  "Field Metadata reduced results": Object {
+  "entryPointResults": Object {
+    "evaluationTimestamp": Any<Date>,
+    "results": Object {
+      "Policy:0:policyNumber": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "policyNumber",
+          "fieldPath": "policyNumber",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "events": Array [
+                ValueChangedEvent {
+                  "attributeTarget": "policyNumber",
+                  "contextId": "0",
+                  "contextName": "Policy",
+                  "newValue": "22463",
+                  "previousValue": undefined,
+                },
+              ],
+              "type": 8,
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "DEFAULT",
+              "ruleName": "f-default-to-policyNumber-with-substring-three-values",
+              "targetPath": "policyNumber",
+            },
+          },
+        ],
+      },
+      "Policy:0:state": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "state",
+          "fieldPath": "state",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "events": Array [
+                ValueChangedEvent {
+                  "attributeTarget": "state",
+                  "contextId": "0",
+                  "contextName": "Policy",
+                  "newValue": " Express",
+                  "previousValue": undefined,
+                },
+              ],
+              "type": 8,
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "DEFAULT",
+              "ruleName": "f-default-to-state-with-substring-two-values",
+              "targetPath": "state",
+            },
+          },
+        ],
+      },
+    },
+  },
+  "fieldResults": Object {
     "Policy:0:policyNumber": Object {
       "fieldType": "STRING",
       "id": "Policy:0:policyNumber",
@@ -28,112 +105,16 @@ Object {
       "ruleResults": Array [],
     },
   },
-  "Raw results": Object {
-    "evaluationTimestamp": Any<Date>,
-    "results": Object {
-      "Policy:0:policyNumber": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "0",
-          "contextName": "Policy",
-          "fieldName": "policyNumber",
-          "fieldPath": "policyNumber",
-          "fieldType": "STRING",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 1,
-            "payloadResult": Object {
-              "events": Array [
-                ValueChangedEvent {
-                  "attributeTarget": "policyNumber",
-                  "contextId": "0",
-                  "contextName": "Policy",
-                  "newValue": "22463",
-                  "previousValue": undefined,
-                },
-              ],
-              "type": 8,
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "DEFAULT",
-              "ruleName": "f-default-to-policyNumber-with-substring-three-values",
-              "targetPath": "policyNumber",
-            },
-          },
-        ],
-      },
-      "Policy:0:state": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "0",
-          "contextName": "Policy",
-          "fieldName": "state",
-          "fieldPath": "state",
-          "fieldType": "STRING",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 1,
-            "payloadResult": Object {
-              "events": Array [
-                ValueChangedEvent {
-                  "attributeTarget": "state",
-                  "contextId": "0",
-                  "contextName": "Policy",
-                  "newValue": " Express",
-                  "previousValue": undefined,
-                },
-              ],
-              "type": 8,
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "DEFAULT",
-              "ruleName": "f-default-to-state-with-substring-two-values",
-              "targetPath": "state",
-            },
-          },
-        ],
-      },
-    },
-  },
-  "Validation results": Object {
-    "critical": Array [],
-    "info": Array [],
-    "warning": Array [],
-  },
 }
 `;
 
-exports[`Engine Functions Sanity Test should default with value from function and change field name to field path: Results + reducer results 1`] = `
+exports[`Engine Functions Sanity Test should default with value from function and change field name to field path 1`] = `
 Object {
-  "Field Metadata reduced results": Object {
-    "Policy:0:policyNumber": Object {
-      "fieldType": "STRING",
-      "id": "Policy:0:policyNumber",
-      "info": Object {
-        "getContextInstanceId": [Function],
-        "getContextName": [Function],
-      },
-      "isDisabled": undefined,
-      "isHidden": undefined,
-      "resolvedTargetPath": "policyNumber",
-      "ruleResults": Array [],
-    },
-  },
-  "Raw results": Object {
+  "entryPointResults": Object {
     "evaluationTimestamp": Any<Date>,
     "results": Object {
       "Policy:0:policyNumber": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "0",
           "contextName": "Policy",
           "fieldName": "policyNumber",
@@ -142,7 +123,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -159,7 +140,7 @@ Object {
               ],
               "type": 8,
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "Policy",
               "payloadtype": "DEFAULT",
               "ruleName": "f-default-to-policyNumber",
@@ -170,17 +151,66 @@ Object {
       },
     },
   },
-  "Validation results": Object {
-    "critical": Array [],
-    "info": Array [],
-    "warning": Array [],
+  "fieldResults": Object {
+    "Policy:0:policyNumber": Object {
+      "fieldType": "STRING",
+      "id": "Policy:0:policyNumber",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "policyNumber",
+      "ruleResults": Array [],
+    },
   },
 }
 `;
 
-exports[`Engine Functions Sanity Test should flat and fail, assert to have 7 items (3 of them serviceHistories): Results + reducer results 1`] = `
+exports[`Engine Functions Sanity Test should flat and fail, assert to have 7 items (3 of them serviceHistories) 1`] = `
 Object {
-  "Field Metadata reduced results": Object {
+  "entryPointResults": Object {
+    "evaluationTimestamp": Any<Date>,
+    "results": Object {
+      "Policy:0:policyNumber": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "policyNumber",
+          "fieldPath": "policyNumber",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": false,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "f-flat-assert",
+              "targetPath": "policyNumber",
+            },
+          },
+        ],
+      },
+    },
+  },
+  "fieldResults": Object {
     "Policy:0:policyNumber": Object {
       "fieldType": "STRING",
       "id": "Policy:0:policyNumber",
@@ -211,11 +241,16 @@ Object {
       ],
     },
   },
-  "Raw results": Object {
+}
+`;
+
+exports[`Engine Functions Sanity Test should flat, assert to have 7 items (3 of them serviceHistories) 1`] = `
+Object {
+  "entryPointResults": Object {
     "evaluationTimestamp": Any<Date>,
     "results": Object {
       "Policy:0:policyNumber": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "0",
           "contextName": "Policy",
           "fieldName": "policyNumber",
@@ -224,7 +259,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -236,11 +271,11 @@ Object {
             },
             "payloadResult": Object {
               "message": undefined,
-              "success": false,
+              "success": true,
               "type": 1,
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "Policy",
               "payloadtype": "ASSERTION",
               "ruleName": "f-flat-assert",
@@ -251,29 +286,7 @@ Object {
       },
     },
   },
-  "Validation results": Object {
-    "critical": Array [
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "Assertion failed",
-        "messageCode": "rule-assertion-error",
-        "ruleName": "f-flat-assert",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-    ],
-    "info": Array [],
-    "warning": Array [],
-  },
-}
-`;
-
-exports[`Engine Functions Sanity Test should flat, assert to have 7 items (3 of them serviceHistories): Results + reducer results 1`] = `
-Object {
-  "Field Metadata reduced results": Object {
+  "fieldResults": Object {
     "Policy:0:policyNumber": Object {
       "fieldType": "STRING",
       "id": "Policy:0:policyNumber",
@@ -304,11 +317,16 @@ Object {
       ],
     },
   },
-  "Raw results": Object {
+}
+`;
+
+exports[`Engine Functions Sanity Test should run functions in assert payload on policy number 1`] = `
+Object {
+  "entryPointResults": Object {
     "evaluationTimestamp": Any<Date>,
     "results": Object {
       "Policy:0:policyNumber": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "0",
           "contextName": "Policy",
           "fieldName": "policyNumber",
@@ -317,7 +335,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -333,10 +351,682 @@ Object {
               "type": 1,
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "Policy",
               "payloadtype": "ASSERTION",
-              "ruleName": "f-flat-assert",
+              "ruleName": "f-symmetricDifference-assert-policyNumber",
+              "targetPath": "policyNumber",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "f-distinct-assert-policyNumber",
+              "targetPath": "policyNumber",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "f-upper-case-assert-policyNumber",
+              "targetPath": "policyNumber",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "f-includes-in-array-assert-policyNumber",
+              "targetPath": "policyNumber",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "f-format-date-assert-policyNumber",
+              "targetPath": "policyNumber",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "f-intersection-assert-policyNumber",
+              "targetPath": "policyNumber",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "f-trim-assert-policyNumber",
+              "targetPath": "policyNumber",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "f-pad-left-assert-policyNumber",
+              "targetPath": "policyNumber",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "f-all-assert-policyNumber",
+              "targetPath": "policyNumber",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "f-union-assert-policyNumber",
+              "targetPath": "policyNumber",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "f-difference-assert-policyNumber",
+              "targetPath": "policyNumber",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "f-concat-assert-policyNumber",
+              "targetPath": "policyNumber",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "f-pad-right-assert-policyNumber",
+              "targetPath": "policyNumber",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "f-money-to-string-assert-policyNumber",
+              "targetPath": "policyNumber",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "f-join-assert-policyNumber",
+              "targetPath": "policyNumber",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "f-includes-in-string-assert-policyNumber",
+              "targetPath": "policyNumber",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "f-starts-with-assert-policyNumber",
+              "targetPath": "policyNumber",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "f-ends-with-between-assert-policyNumber",
+              "targetPath": "policyNumber",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "f-lower-case-assert-policyNumber",
+              "targetPath": "policyNumber",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "f-get-month-date-assert-policyNumber",
+              "targetPath": "policyNumber",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "f-get-day-date-assert-policyNumber",
+              "targetPath": "policyNumber",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "f-isBlank-assert-policyNumber",
+              "targetPath": "policyNumber",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "f-get-year-date-assert-policyNumber",
+              "targetPath": "policyNumber",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "f-date-months-between-assert-policyNumber",
+              "targetPath": "policyNumber",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "f-length-assert-policyNumber",
+              "targetPath": "policyNumber",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "f-number-to-string-assert-policyNumber",
+              "targetPath": "policyNumber",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "f-any-assert-policyNumber",
+              "targetPath": "policyNumber",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "f-isEmpty-assert-policyNumber",
+              "targetPath": "policyNumber",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "f-numberSequence-assert-policyNumber",
               "targetPath": "policyNumber",
             },
           },
@@ -344,17 +1034,7 @@ Object {
       },
     },
   },
-  "Validation results": Object {
-    "critical": Array [],
-    "info": Array [],
-    "warning": Array [],
-  },
-}
-`;
-
-exports[`Engine Functions Sanity Test should run functions in assert payload on policy number: Results + reducer results 1`] = `
-Object {
-  "Field Metadata reduced results": Object {
+  "fieldResults": Object {
     "Policy:0:policyNumber": Object {
       "fieldType": "STRING",
       "id": "Policy:0:policyNumber",
@@ -832,723 +1512,6 @@ Object {
         },
       ],
     },
-  },
-  "Raw results": Object {
-    "evaluationTimestamp": Any<Date>,
-    "results": Object {
-      "Policy:0:policyNumber": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "0",
-          "contextName": "Policy",
-          "fieldName": "policyNumber",
-          "fieldPath": "policyNumber",
-          "fieldType": "STRING",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 1,
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "ASSERTION",
-              "ruleName": "f-symmetricDifference-assert-policyNumber",
-              "targetPath": "policyNumber",
-            },
-          },
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 1,
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "ASSERTION",
-              "ruleName": "f-distinct-assert-policyNumber",
-              "targetPath": "policyNumber",
-            },
-          },
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 1,
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "ASSERTION",
-              "ruleName": "f-upper-case-assert-policyNumber",
-              "targetPath": "policyNumber",
-            },
-          },
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 1,
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "ASSERTION",
-              "ruleName": "f-includes-in-array-assert-policyNumber",
-              "targetPath": "policyNumber",
-            },
-          },
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 1,
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "ASSERTION",
-              "ruleName": "f-format-date-assert-policyNumber",
-              "targetPath": "policyNumber",
-            },
-          },
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 1,
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "ASSERTION",
-              "ruleName": "f-intersection-assert-policyNumber",
-              "targetPath": "policyNumber",
-            },
-          },
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 1,
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "ASSERTION",
-              "ruleName": "f-trim-assert-policyNumber",
-              "targetPath": "policyNumber",
-            },
-          },
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 1,
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "ASSERTION",
-              "ruleName": "f-pad-left-assert-policyNumber",
-              "targetPath": "policyNumber",
-            },
-          },
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 1,
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "ASSERTION",
-              "ruleName": "f-all-assert-policyNumber",
-              "targetPath": "policyNumber",
-            },
-          },
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 1,
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "ASSERTION",
-              "ruleName": "f-union-assert-policyNumber",
-              "targetPath": "policyNumber",
-            },
-          },
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 1,
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "ASSERTION",
-              "ruleName": "f-difference-assert-policyNumber",
-              "targetPath": "policyNumber",
-            },
-          },
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 1,
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "ASSERTION",
-              "ruleName": "f-concat-assert-policyNumber",
-              "targetPath": "policyNumber",
-            },
-          },
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 1,
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "ASSERTION",
-              "ruleName": "f-pad-right-assert-policyNumber",
-              "targetPath": "policyNumber",
-            },
-          },
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 1,
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "ASSERTION",
-              "ruleName": "f-money-to-string-assert-policyNumber",
-              "targetPath": "policyNumber",
-            },
-          },
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 1,
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "ASSERTION",
-              "ruleName": "f-join-assert-policyNumber",
-              "targetPath": "policyNumber",
-            },
-          },
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 1,
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "ASSERTION",
-              "ruleName": "f-includes-in-string-assert-policyNumber",
-              "targetPath": "policyNumber",
-            },
-          },
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 1,
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "ASSERTION",
-              "ruleName": "f-starts-with-assert-policyNumber",
-              "targetPath": "policyNumber",
-            },
-          },
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 1,
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "ASSERTION",
-              "ruleName": "f-ends-with-between-assert-policyNumber",
-              "targetPath": "policyNumber",
-            },
-          },
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 1,
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "ASSERTION",
-              "ruleName": "f-lower-case-assert-policyNumber",
-              "targetPath": "policyNumber",
-            },
-          },
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 1,
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "ASSERTION",
-              "ruleName": "f-get-month-date-assert-policyNumber",
-              "targetPath": "policyNumber",
-            },
-          },
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 1,
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "ASSERTION",
-              "ruleName": "f-get-day-date-assert-policyNumber",
-              "targetPath": "policyNumber",
-            },
-          },
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 1,
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "ASSERTION",
-              "ruleName": "f-isBlank-assert-policyNumber",
-              "targetPath": "policyNumber",
-            },
-          },
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 1,
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "ASSERTION",
-              "ruleName": "f-get-year-date-assert-policyNumber",
-              "targetPath": "policyNumber",
-            },
-          },
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 1,
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "ASSERTION",
-              "ruleName": "f-date-months-between-assert-policyNumber",
-              "targetPath": "policyNumber",
-            },
-          },
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 1,
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "ASSERTION",
-              "ruleName": "f-length-assert-policyNumber",
-              "targetPath": "policyNumber",
-            },
-          },
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 1,
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "ASSERTION",
-              "ruleName": "f-number-to-string-assert-policyNumber",
-              "targetPath": "policyNumber",
-            },
-          },
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 1,
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "ASSERTION",
-              "ruleName": "f-any-assert-policyNumber",
-              "targetPath": "policyNumber",
-            },
-          },
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 1,
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "ASSERTION",
-              "ruleName": "f-isEmpty-assert-policyNumber",
-              "targetPath": "policyNumber",
-            },
-          },
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 1,
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "ASSERTION",
-              "ruleName": "f-numberSequence-assert-policyNumber",
-              "targetPath": "policyNumber",
-            },
-          },
-        ],
-      },
-    },
-  },
-  "Validation results": Object {
-    "critical": Array [],
-    "info": Array [],
-    "warning": Array [],
   },
 }
 `;

@@ -15,16 +15,21 @@
  */
 package kraken.runtime.engine.dto;
 
+import kraken.annotations.API;
+
 /**
+ * Contains information about the rule override configuration
+ *
  * @author mulevicius
  */
+@API
 public class OverrideInfo {
 
-    private boolean isOverridable;
+    private final boolean isOverridable;
 
-    private String overrideGroup;
+    private final String overrideGroup;
 
-    private OverridableRuleContextInfo overridableRuleContextInfo;
+    private final OverridableRuleContextInfo overridableRuleContextInfo;
 
     public OverrideInfo(boolean isOverridable, String overrideGroup, OverridableRuleContextInfo overridableRuleContextInfo) {
         this.isOverridable = isOverridable;
@@ -51,8 +56,8 @@ public class OverrideInfo {
     /**
      *
      * @return  additional info to be used with {@link kraken.runtime.engine.result.reducers.validation.RuleOverrideStatusResolver};
-     *          this is only included when validation rule is overridable and there is an actual validation result that may be overridden.
-     *          otherwise this will ne null.
+     *          this is only included when validation rule is overridable and there is an actual validation result that may be overridden,
+     *          otherwise this is null.
      */
     public OverridableRuleContextInfo getOverridableRuleContextInfo() {
         return overridableRuleContextInfo;

@@ -14,23 +14,23 @@
  *  limitations under the License.
  */
 
-import * as React from "react";
+import * as React from 'react'
 
-import { Modal, Tabs } from "antd";
-import "antd/lib/modal/style";
-import "antd/lib/tabs/style";
-import { FieldEvaluationResult, RuleEvaluationResults } from "kraken-typescript-engine";
-import { JsonView } from "../JsonView";
-import { ValidationStatus } from "../../../rule-engine/ValidationStatusReducer";
+import { Modal, Tabs } from 'antd'
+import 'antd/lib/modal/style'
+import 'antd/lib/tabs/style'
+import { FieldEvaluationResult, RuleEvaluationResults } from 'kraken-engine-api'
+import { JsonView } from '../JsonView'
+import { ValidationStatus } from '../../../rule-engine/ValidationStatusReducer'
 
-const TabPane = Tabs.TabPane;
+const TabPane = Tabs.TabPane
 
 export interface ResultModalProps {
-    modalVisibility: boolean;
-    onClickShowModal: () => void;
-    fieldResults?: { [keyof: string]: FieldEvaluationResult }[];
-    allRuleResults?: RuleEvaluationResults.RuleEvaluationResult[];
-    validationStatus?: ValidationStatus;
+    modalVisibility: boolean
+    onClickShowModal: () => void
+    fieldResults?: { [keyof: string]: FieldEvaluationResult }[]
+    allRuleResults?: RuleEvaluationResults.RuleEvaluationResult[]
+    validationStatus?: ValidationStatus
 }
 
 export class UIResultModal extends React.Component<ResultModalProps> {
@@ -40,23 +40,22 @@ export class UIResultModal extends React.Component<ResultModalProps> {
                 <Modal
                     visible={this.props.modalVisibility}
                     onCancel={this.props.onClickShowModal}
-                    // tslint:disable-next-line
                     footer={null}
                     width={1000}
                 >
-                    <Tabs defaultActiveKey="1" size={"large"}>
-                        <TabPane tab="All rule result" key="1">
+                    <Tabs defaultActiveKey='1' size={'large'}>
+                        <TabPane tab='All rule result' key='1'>
                             <JsonView data={this.props.allRuleResults} />
                         </TabPane>
-                        <TabPane tab="Field result" key="2">
+                        <TabPane tab='Field result' key='2'>
                             <JsonView data={this.props.fieldResults} />
                         </TabPane>
-                        <TabPane tab="Validation reducer result" key="5">
+                        <TabPane tab='Validation reducer result' key='5'>
                             <JsonView data={this.props.validationStatus} />
                         </TabPane>
                     </Tabs>
                 </Modal>
             </div>
-        );
+        )
     }
 }

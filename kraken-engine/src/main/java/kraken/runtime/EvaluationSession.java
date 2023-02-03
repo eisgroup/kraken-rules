@@ -18,6 +18,8 @@ package kraken.runtime;
 import java.time.LocalDateTime;
 import java.util.Map;
 
+import kraken.el.functionregistry.FunctionHeader;
+import kraken.el.functionregistry.KelFunction;
 import kraken.runtime.expressions.KrakenTypeProvider;
 import kraken.runtime.utils.TokenGenerator;
 
@@ -30,24 +32,32 @@ public final class EvaluationSession {
 
     private static final TokenGenerator TOKEN_GENERATOR = new TokenGenerator();
 
-    private EvaluationConfig evaluationConfig;
+    private final EvaluationConfig evaluationConfig;
 
-    private String sessionToken;
+    private final String sessionToken;
 
-    private LocalDateTime timestamp;
+    private final LocalDateTime timestamp;
 
-    private Map<String, Object> expressionContext;
+    private final Map<String, Object> expressionContext;
 
-    private KrakenTypeProvider krakenTypeProvider;
+    private final KrakenTypeProvider krakenTypeProvider;
+
+    private final Map<FunctionHeader, KelFunction> functions;
+
+    private final String namespace;
 
     public EvaluationSession(EvaluationConfig evaluationConfig,
                              Map<String, Object> expressionContext,
-                             KrakenTypeProvider krakenTypeProvider) {
+                             KrakenTypeProvider krakenTypeProvider,
+                             Map<FunctionHeader, KelFunction> functions,
+                             String namespace) {
         this.evaluationConfig = evaluationConfig;
         this.timestamp = LocalDateTime.now();
         this.sessionToken = TOKEN_GENERATOR.generateNewToken(timestamp);
         this.expressionContext = expressionContext;
         this.krakenTypeProvider = krakenTypeProvider;
+        this.functions = functions;
+        this.namespace = namespace;
     }
 
     public EvaluationConfig getEvaluationConfig() {
@@ -70,4 +80,11 @@ public final class EvaluationSession {
         return krakenTypeProvider;
     }
 
+    public Map<FunctionHeader, KelFunction> getFunctions() {
+        return functions;
+    }
+
+    public String getNamespace() {
+        return namespace;
+    }
 }

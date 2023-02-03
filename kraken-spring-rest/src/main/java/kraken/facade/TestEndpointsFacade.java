@@ -16,7 +16,7 @@
 
 package kraken.facade;
 
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import kraken.runtime.EvaluationConfig;
 import kraken.runtime.RuleEngine;
 import kraken.testing.reducer.*;
@@ -49,10 +49,9 @@ public class TestEndpointsFacade {
     @Autowired
     private RuleEngine ruleEngine;
 
-    @ApiOperation(
-            value = "Evaluate rules and reduce to see only Accessibility results",
-            response = Collection.class,
-            notes = "Rule name can be passed as a filter"
+    @Operation(
+        summary = "Evaluate rules and reduce to see only Accessibility results",
+        description = "Rule name can be passed as a filter"
     )
     @PostMapping("/evaluate/accessibility/{entryPointName}")
     public Collection<AccessibilityMetadata> accessibility(
@@ -66,10 +65,9 @@ public class TestEndpointsFacade {
                 .orElseThrow();
     }
 
-    @ApiOperation(
-            value = "Evaluate rules and reduce to see only Visibility results",
-            response = Collection.class,
-            notes = "Rule name can be passed as a filter"
+    @Operation(
+        summary = "Evaluate rules and reduce to see only Visibility results",
+        description = "Rule name can be passed as a filter"
     )
     @PostMapping("/evaluate/visibility/{entryPointName}")
     public Collection<VisibilityMetadata> visibility(
@@ -83,10 +81,9 @@ public class TestEndpointsFacade {
                 .orElseThrow();
     }
 
-    @ApiOperation(
-            value = "Evaluate rules and reduce to see only Validation results",
-            response = Collection.class,
-            notes = "Rule name can be passed as a filter"
+    @Operation(
+        summary = "Evaluate rules and reduce to see only Validation results",
+        description = "Rule name can be passed as a filter"
     )
     @PostMapping("/evaluate/validation/{entryPointName}")
     public Collection<ValidationMetadata> validation(
@@ -100,10 +97,9 @@ public class TestEndpointsFacade {
                 .orElseThrow();
     }
 
-    @ApiOperation(
-            value = "Evaluate rules and reduce to see only Default results",
-            response = Collection.class,
-            notes = "Rule name can be passed as a filter"
+    @Operation(
+        summary = "Evaluate rules and reduce to see only Default results",
+        description = "Rule name can be passed as a filter"
     )
     @PostMapping("/evaluate/default/{entryPointName}")
     public Collection<DefaultValueMetadata> defaultEndpoint(

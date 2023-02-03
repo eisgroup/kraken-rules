@@ -18,6 +18,7 @@ package kraken.model.project.ccr;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import kraken.context.path.ContextPath;
 import kraken.context.path.ContextPathExtractor;
@@ -62,5 +63,9 @@ public class CrossContextService {
 
     public List<CrossContextPath> resolvePaths(ContextPath fromPath, String targetContextName) {
         return crossContextPathsResolver.resolvePaths(fromPath, targetContextName);
+    }
+
+    public boolean hasPathTo(String targetContextName) {
+        return Optional.of(getPathsFor(targetContextName)).map(p -> !p.isEmpty()).orElse(false);
     }
 }

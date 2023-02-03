@@ -15,7 +15,6 @@
  */
 package kraken.model.dsl.converter;
 
-import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -27,20 +26,26 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import org.stringtemplate.v4.ST;
+import org.stringtemplate.v4.STGroup;
+import org.stringtemplate.v4.STGroupFile;
+
 import kraken.annotations.API;
+import kraken.el.ast.builder.Literals;
 import kraken.model.Metadata;
 import kraken.model.context.Cardinality;
 import kraken.model.context.ContextField;
 import kraken.model.context.ContextNavigation;
 import kraken.model.derive.DefaultValuePayload;
-import kraken.model.factory.RulesModelFactory;
 import kraken.model.resource.Resource;
 import kraken.model.state.AccessibilityPayload;
 import kraken.model.state.VisibilityPayload;
-import kraken.model.validation.*;
-import org.stringtemplate.v4.ST;
-import org.stringtemplate.v4.STGroup;
-import org.stringtemplate.v4.STGroupFile;
+import kraken.model.validation.AssertionPayload;
+import kraken.model.validation.LengthPayload;
+import kraken.model.validation.RegExpPayload;
+import kraken.model.validation.SizePayload;
+import kraken.model.validation.SizeRangePayload;
+import kraken.model.validation.UsagePayload;
 
 /**
  * Converts Rules model to Rules DSL model as a <code>string<code/>.
@@ -53,55 +58,63 @@ import org.stringtemplate.v4.STGroupFile;
 @API
 public class DSLModelConverter {
 
-    private static final DefaultErrorListener ERROR_LISTENER;
-    private static final STGroup TEMPLATE_GROUP;
+    private final DefaultErrorListener errorListener;
+    private final STGroup template;
 
-    static {
-        TEMPLATE_GROUP = new STGroupFile(
-                Thread.currentThread().getContextClassLoader().getResource("templates/kraken-dsl-model.stg"),
+    public static final java.net.URL URL =
+        Thread.currentThread().getContextClassLoader().getResource("templates/kraken-dsl-model.stg");
+
+    public DSLModelConverter() {
+        template = new STGroupFile(
+            URL,
                 StandardCharsets.UTF_8.name(),
                 '<', '>'
         );
+        PayloadRenderer payloadRenderer = new PayloadRenderer();
+
         // this adaptor will override "keys" and "values" properties for map in templates
-        TEMPLATE_GROUP.registerModelAdaptor(Map.class, new MapInternalsModelAdaptor());
-        TEMPLATE_GROUP.registerModelAdaptor(Metadata.class, (interp, self, o, property, propertyName) -> {
+        template.registerModelAdaptor(Map.class, new MapInternalsModelAdaptor());
+        template.registerModelAdaptor(Metadata.class, (interp, self, o, property, propertyName) -> {
             Metadata metadata = (Metadata) o;
             var props = new HashMap<String, Object>();
             for (Map.Entry<String, Object> entry : metadata.asMap().entrySet()) {
-                Consumer<Object> put = value -> props.put(entry.getKey(), value);
                 Object value = entry.getValue();
                 if (value == null) {
                     continue;
                 }
                 if (value instanceof String) {
-                    put.accept("\"" + value + "\"");
+
+                    props.put(entry.getKey(), "\"" + Literals.deescape((String)value) + "\"");
                 } else if (value instanceof LocalDate) {
-                    put.accept(((LocalDate) value).format(DateTimeFormatter.ISO_LOCAL_DATE));
+                    props.put(entry.getKey(), ((LocalDate) value).format(DateTimeFormatter.ISO_LOCAL_DATE));
                 } else if (value instanceof LocalDateTime) {
                     String dateTime = ZonedDateTime.of((LocalDateTime) value, ZoneId.systemDefault())
                             .truncatedTo(ChronoUnit.MILLIS)
                             .format(DateTimeFormatter.ISO_INSTANT);
-                    put.accept(dateTime);
-                } else put.accept(value);
+                    props.put(entry.getKey(), dateTime);
+                } else {
+                    props.put(entry.getKey(), value);
+                }
             }
             return  props;
         });
-        TEMPLATE_GROUP.registerRenderer(DefaultValuePayload.class, PayloadRenderer::defaultValuePayloadRenderer);
-        TEMPLATE_GROUP.registerRenderer(UsagePayload.class, PayloadRenderer::usagePayloadRenderer);
-        TEMPLATE_GROUP.registerRenderer(SizePayload.class, PayloadRenderer::sizePayloadRenderer);
-        TEMPLATE_GROUP.registerRenderer(RegExpPayload.class, PayloadRenderer::regExpPayloadRenderer);
-        TEMPLATE_GROUP.registerRenderer(AssertionPayload.class, PayloadRenderer::assertionPayloadRenderer);
-        TEMPLATE_GROUP.registerRenderer(SizeRangePayload.class, PayloadRenderer::sizeRangePayloadRenderer);
-        TEMPLATE_GROUP.registerRenderer(LengthPayload.class, PayloadRenderer::lengthPayloadRenderer);
-        TEMPLATE_GROUP.registerRenderer(VisibilityPayload.class, PayloadRenderer::visibilityPayloadRenderer);
-        TEMPLATE_GROUP.registerRenderer(AccessibilityPayload.class, PayloadRenderer::accessibilityPayloadRenderer);
-        TEMPLATE_GROUP.registerRenderer(Cardinality.class, ContextDefinitionRenderer::cardinalityRenderer);
-        TEMPLATE_GROUP.registerRenderer(String.class, new CustomStringRenderer());
-        TEMPLATE_GROUP.registerModelAdaptor(ContextNavigation.class, new ContextDefinitionRenderer.ContextNavigationAdapter());
-        TEMPLATE_GROUP.registerModelAdaptor(ContextField.class, new ContextDefinitionRenderer.ContextFieldAdapter());
+        template.registerRenderer(DefaultValuePayload.class, payloadRenderer::defaultValuePayloadRenderer);
+        template.registerRenderer(UsagePayload.class, payloadRenderer::usagePayloadRenderer);
+        template.registerRenderer(SizePayload.class, payloadRenderer::sizePayloadRenderer);
+        template.registerRenderer(RegExpPayload.class, payloadRenderer::regExpPayloadRenderer);
+        template.registerRenderer(AssertionPayload.class, payloadRenderer::assertionPayloadRenderer);
+        template.registerRenderer(SizeRangePayload.class, payloadRenderer::sizeRangePayloadRenderer);
+        template.registerRenderer(LengthPayload.class, payloadRenderer::lengthPayloadRenderer);
+        template.registerRenderer(VisibilityPayload.class, payloadRenderer::visibilityPayloadRenderer);
+        template.registerRenderer(AccessibilityPayload.class, payloadRenderer::accessibilityPayloadRenderer);
+        template.registerRenderer(Cardinality.class, ContextDefinitionRenderer::cardinalityRenderer);
+        template.registerRenderer(String.class, new CustomStringRenderer());
+        template.registerRenderer(Number.class, new CustomNumberRenderer());
+        template.registerModelAdaptor(ContextNavigation.class, new ContextDefinitionRenderer.ContextNavigationAdapter());
+        template.registerModelAdaptor(ContextField.class, new ContextDefinitionRenderer.ContextFieldAdapter());
 
-        ERROR_LISTENER = new DefaultErrorListener();
-        TEMPLATE_GROUP.setListener(ERROR_LISTENER);
+        errorListener = new DefaultErrorListener();
+        template.setListener(errorListener);
     }
 
     /**
@@ -114,11 +127,11 @@ public class DSLModelConverter {
      * @since 1.1.0
      */
     public String convert(Resource krakenResource) {
-        ST st = TEMPLATE_GROUP.getInstanceOf("krakenResource");
+        ST st = template.getInstanceOf("krakenResource");
         st.add("krakenResource", krakenResource);
         String dsl = st.render();
-        if(!ERROR_LISTENER.getErrors().isEmpty()) {
-            String msg = "Error while generating DSL: " + String.join(";", ERROR_LISTENER.getErrors());
+        if(!errorListener.getErrors().isEmpty()) {
+            String msg = "Error while generating DSL: " + String.join(";", errorListener.getErrors());
             throw new IllegalStateException(msg);
         }
         return dsl;

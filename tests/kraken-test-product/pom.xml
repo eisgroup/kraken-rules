@@ -8,7 +8,7 @@
     <parent>
         <artifactId>tests</artifactId>
         <groupId>kraken</groupId>
-        <version>1.22.0-SNAPSHOT</version>
+        <version>1.42.4-SNAPSHOT</version>
     </parent>
 
     <artifactId>kraken-test-product</artifactId>
@@ -41,6 +41,9 @@
                         <phase>compile</phase>
                         <configuration>
                             <baseDir>database/gap</baseDir>
+                            <excludes>
+                                <exclude>**/gap-tracer-erroneous.rules</exclude>
+                            </excludes>
                         </configuration>
                     </execution>
                 </executions>
@@ -68,7 +71,7 @@
                                 <mapping>java.time.LocalDate : Date</mapping>
                                 <mapping>java.time.LocalDateTime : Date</mapping>
                             </customTypeMappings>
-                            <outputFile>../../javascript/packages/test-product-types/index.d.ts</outputFile>
+                            <outputFile>${project.basedir}/../../javascript/packages/test-product-types/index.d.ts</outputFile>
                             <outputKind>module</outputKind>
                             <namespace>TestProduct</namespace>
                             <declarePropertiesAsOptional>true</declarePropertiesAsOptional>

@@ -13,9 +13,9 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-import { Numbers } from "./../math/Numbers";
-import { message } from "../functionLibrary/function.utils";
-import { Moneys } from "../math/Moneys";
+import { Numbers } from './../math/Numbers'
+import { message } from '../functionLibrary/function.utils'
+import { Moneys } from '../math/Moneys'
 
 export const mathFunctions = {
     Sum,
@@ -29,8 +29,8 @@ export const mathFunctions = {
     Abs,
     Sign,
     Sqrt,
-    NumberSequence
-};
+    NumberSequence,
+}
 
 /**
  * Rounds to scale using IEEE 754 Round Half Up strategy.
@@ -43,8 +43,8 @@ export const mathFunctions = {
  * @param scale optional parameter, if not provided then will round to Integer
  * @return rounded number
  */
-function Round(n : any, scale? : number) : number {
-    return Numbers.round(toNumber(n), scale);
+function Round(n: unknown, scale?: number): number {
+    return Numbers.round(toNumber(n), scale)
 }
 
 /**
@@ -57,8 +57,8 @@ function Round(n : any, scale? : number) : number {
  * @param scale optional parameter, if not provided then will round to Integer
  * @return rounded number
  */
-function RoundEven(n : any, scale? : number) : number {
-    return Numbers.roundEven(toNumber(n), scale);
+function RoundEven(n: unknown, scale?: number): number {
+    return Numbers.roundEven(toNumber(n), scale)
 }
 
 /**
@@ -66,8 +66,8 @@ function RoundEven(n : any, scale? : number) : number {
  * @return  result of a mathematical floor function which returns
  *          greatest integer that is less than or equal to provided number
  */
-function Floor(n : any) : number {
-    return Numbers.floor(toNumber(n));
+function Floor(n: unknown): number {
+    return Numbers.floor(toNumber(n))
 }
 
 /**
@@ -75,16 +75,16 @@ function Floor(n : any) : number {
  * @return  result of a mathematical ceiling function which returns
  *          the least integer that is greater than or equal to provided number
  */
-function Ceil(n : any) : number {
-    return Numbers.ceil(toNumber(n));
+function Ceil(n: unknown): number {
+    return Numbers.ceil(toNumber(n))
 }
 /**
  *
  * @param n
  * @return absolute number
  */
-function Abs(n : any) : number {
-    return Numbers.abs(toNumber(n));
+function Abs(n: unknown): number {
+    return Numbers.abs(toNumber(n))
 }
 
 /**
@@ -97,8 +97,8 @@ function Abs(n : any) : number {
  *              <li>+1 - if number is greater than zero</li>
  *          </ul>
  */
-function Sign(n : any) : number {
-    return Numbers.sign(toNumber(n));
+function Sign(n: unknown): number {
+    return Numbers.sign(toNumber(n))
 }
 
 /**
@@ -106,119 +106,178 @@ function Sign(n : any) : number {
  * @param n
  * @return square root
  */
-function Sqrt(n : any) : number {
-    return Numbers.sqrt(toNumber(n));
+function Sqrt(n: unknown): number {
+    return Numbers.sqrt(toNumber(n))
 }
 
 /**
  *
  * @param array that contains numbers
  * @return  average over all numbers in collection.
- *          If collection contains any null value then rule will be ignored due to missing data.
+ *          If collection contains `null` value then rule will be ignored due to missing data.
  *          If collection is null then null is returned.
  */
-function Avg(array: any): number | undefined {
+function Avg(array: unknown): number | undefined {
     if (isUndefined(array) || isEmpty(array)) {
-        return undefined;
+        return undefined
     }
     if (Array.isArray(array)) {
-        return Numbers.avgOfArray(array.map(toNumber));
+        return Numbers.avgOfArray(array.map(toNumber))
     }
-    throw new Error("Avg function accepts only ArrayLike objects");
+    throw new Error('Avg function accepts only ArrayLike objects')
 }
 
 /**
  *
  * @param array that contains numbers
  * @return  sum over all numbers in collection.
- *          If collection contains any null value then rule will be ignored due to missing data.
+ *          If collection contains `null` value then rule will be ignored due to missing data.
  *          If collection is null then null is returned.
  */
-function Sum(array: any): number | undefined {
+function Sum(array: unknown): number | undefined {
     if (isUndefined(array) || isEmpty(array)) {
-        return undefined;
+        return undefined
     }
     if (Array.isArray(array)) {
-        return Numbers.sumOfArray(array.map(toNumber));
+        return Numbers.sumOfArray(array.map(toNumber))
     }
-    throw new Error("Sum function accepts only ArrayLike objects");
+    throw new Error('Sum function accepts only ArrayLike objects')
 }
 
 /**
  *
- * Returns smallest number.
- * Returns smallest number from array of numbers when array is passed as a first parameter
+ * Returns smallest number or date.
+ * Returns smallest number or date from array of numbers or dates when array is passed as a first parameter
  * and second parameter is not passed.
- * Returns smallest number out of two numbers when both parameters are passed.
+ * Returns smallest number or date out of two numbers or dates when both parameters are passed.
  *
- * @param first is an array of numbers or a single number
- * @param second number
- * @return  smallest number
+ * @param first is an array of numbers or array of dates or a single number or date
+ * @param second number or date
+ * @return smallest number or date
  */
-function Min(first: any, second?: any): number | undefined {
-    // tslint:disable-next-line
-    if(arguments.length === 1) {
-        return MinArray(first);
+function Min(first: unknown, second?: unknown): number | Date | undefined {
+    if (arguments.length === 1) {
+        return MinArray(first)
     }
-    return Numbers.min(toNumber(first), toNumber(second));
+    if (isNumber(first) && isNumber(second)) {
+        return Numbers.min(toNumber(first), toNumber(second))
+    }
+    if (isDate(first) && isDate(second)) {
+        return first < second ? first : second
+    }
+    throw new Error(
+        `Function 'Min' parameters are invalid: ${first}, ${second}. Parameters must be only numbers or only dates.`,
+    )
 }
 
 /**
  *
- * Returns largest number.
- * Returns largest number from array of numbers when array is passed as a first parameter
+ * Returns largest number or date.
+ * Returns largest number or date from array of numbers or dates when array is passed as a first parameter
  * and second parameter is not passed.
- * Returns largest number out of two numbers when both parameters are passed.
+ * Returns largest number or date out of two numbers or dates when both parameters are passed.
  *
- * @param first is an array of numbers or a single number
- * @param second number
- * @return  largest number
+ * @param first is an array of numbers or array of dates or a single number or date
+ * @param second number or date
+ * @return largest number or date
  */
-function Max(first: any, second?: any): number | undefined {
-    // tslint:disable-next-line
-    if(arguments.length === 1) {
-        return MaxArray(first);
+function Max(first: unknown, second?: unknown): number | Date | undefined {
+    if (arguments.length === 1) {
+        return MaxArray(first)
     }
-    return Numbers.max(toNumber(first), toNumber(second));
+    if (isNumber(first) && isNumber(second)) {
+        return Numbers.max(toNumber(first), toNumber(second))
+    }
+    if (isDate(first) && isDate(second)) {
+        return first > second ? first : second
+    }
+    throw new Error(
+        `Function 'Max' parameters are invalid: ${first}, ${second}. Parameters must be only numbers or only dates.`,
+    )
 }
 
-function MinArray(array: any): number | undefined {
+function MinArray(array: unknown): number | Date | undefined {
     if (isUndefined(array) || isEmpty(array)) {
-        return undefined;
+        return undefined
     }
     if (Array.isArray(array)) {
-        return Numbers.minInArray(array.map(toNumber));
+        if (array.every(isNumber)) {
+            return Numbers.minInArray(array.map(toNumber))
+        }
+        if (array.every(isDate)) {
+            return minDateInArray(array)
+        }
+        throw new Error('Min function array parameter must contain only numbers or only dates')
     }
-    throw new Error("Min function accepts only ArrayLike objects");
+    throw new Error('Min function accepts only ArrayLike objects')
 }
 
-function MaxArray(array: any): number | undefined {
+function MaxArray(array: unknown): number | Date | undefined {
     if (isUndefined(array) || isEmpty(array)) {
-        return undefined;
+        return undefined
     }
     if (Array.isArray(array)) {
-        return Numbers.maxInArray(array.map(toNumber));
+        if (array.every(isNumber)) {
+            return Numbers.maxInArray(array.map(toNumber))
+        }
+        if (array.every(isDate)) {
+            return maxDateInArray(array)
+        }
+        throw new Error('Max function array parameter must contain only numbers or only dates')
     }
-    throw new Error("Max function accepts only ArrayLike objects");
+    throw new Error('Max function accepts only ArrayLike objects')
 }
 
-function isUndefined(array: any): boolean {
-    // tslint:disable-next-line
-    return array == undefined;
+function minDateInArray(array: Date[]): Date {
+    let smallestDate = array[0]
+    for (const date of array) {
+        if (date < smallestDate) {
+            smallestDate = date
+        }
+    }
+    return smallestDate
 }
 
-function isEmpty(array: any): boolean {
-    return (Array.isArray(array) && !array.length);
+function maxDateInArray(array: Date[]): Date {
+    let largestDate = array[0]
+    for (const date of array) {
+        if (date > largestDate) {
+            largestDate = date
+        }
+    }
+    return largestDate
 }
 
-function toNumber(value: any): number {
+function isUndefined(array: unknown): boolean {
+    return array == undefined
+}
+
+function isEmpty(array: unknown): boolean {
+    return Array.isArray(array) && !array.length
+}
+
+function isDate(value: unknown): value is Date {
+    return value instanceof Date
+}
+
+function isNumber(value: unknown): value is number {
+    return Moneys.isMoney(value) || typeof value === 'number'
+}
+
+function toNumber(value: unknown): number {
     if (Moneys.isMoney(value)) {
-        return value.amount as number;
-    } else if (typeof value === "number") {
-        return value as number;
+        return value.amount as number
+    } else if (typeof value === 'number') {
+        return value as number
     }
-    throw new Error("Mathematical functions accepts only " +
-        "'Number' and/or 'Money' type values, but got value ('" + value + " of type " + typeof value + "') ");
+    throw new Error(
+        'Mathematical functions accepts only ' +
+            "'Number' and/or 'Money' type values, but got value ('" +
+            value +
+            ' of type ' +
+            typeof value +
+            "') ",
+    )
 }
 
 /**
@@ -233,32 +292,30 @@ function toNumber(value: any): number {
  * @since 11.2
  */
 function NumberSequence(from: number, to: number, step?: number): number[] {
-    return Numbers.sequence(nonNull(from), nonNull(to), resolveStep(from, to, step));
+    return Numbers.sequence(nonNull(from), nonNull(to), resolveStep(from, to, step))
 }
 
 function resolveStep(from: number, to: number, step?: number): number {
-    // tslint:disable-next-line: triple-equals
     if (step != undefined) {
-        validateDirection(from, to, step);
-        return step;
+        validateDirection(from, to, step)
+        return step
     }
-    return from > to ? -1 : 1;
+    return from > to ? -1 : 1
 }
 
 function validateDirection(from: number, to: number, step: number): void {
-    const direction = to < from ? -1 : 1;
-    const directionOfStep = step > 0 ? 1 : -1;
+    const direction = to < from ? -1 : 1
+    const directionOfStep = step > 0 ? 1 : -1
     if (direction !== directionOfStep) {
         throw new Error(
-            message(NumberSequence.name, "These parameters would generate an infinite sequence of numbers.")
-        );
+            message(NumberSequence.name, 'These parameters would generate an infinite sequence of numbers.'),
+        )
     }
 }
 
 function nonNull(n?: number): number {
-    // tslint:disable-next-line: triple-equals
     if (n == undefined) {
-        throw new Error(message(NumberSequence.name, message.reason.parameterNonNull));
+        throw new Error(message(NumberSequence.name, message.reason.parameterNonNull))
     }
-    return n;
+    return n
 }

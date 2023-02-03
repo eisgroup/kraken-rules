@@ -19,8 +19,14 @@ import kraken.annotations.API;
 import kraken.model.Condition;
 import kraken.model.ErrorMessage;
 import kraken.model.Expression;
+import kraken.model.Function;
+import kraken.model.FunctionDocumentation;
+import kraken.model.FunctionExample;
+import kraken.model.FunctionParameter;
 import kraken.model.FunctionSignature;
+import kraken.model.GenericTypeBound;
 import kraken.model.Metadata;
+import kraken.model.ParameterDocumentation;
 import kraken.model.Payload;
 import kraken.model.Rule;
 import kraken.model.context.ContextDefinition;
@@ -144,4 +150,18 @@ public interface RulesModelFactory {
 
     FunctionSignature createFunctionSignature();
     FunctionSignature cloneFunctionSignature(FunctionSignature functionSignature);
+
+    Function createFunction();
+    Function cloneFunction(Function function);
+    FunctionParameter createFunctionParameter();
+    FunctionParameter cloneFunctionParameter(FunctionParameter functionParameter);
+    GenericTypeBound createGenericTypeBound();
+    GenericTypeBound cloneGenericTypeBound(GenericTypeBound genericTypeBound);
+
+    FunctionDocumentation createFunctionDocumentation();
+    FunctionDocumentation cloneFunctionDocumentation(FunctionDocumentation documentation);
+    ParameterDocumentation createParameterDocumentation();
+    ParameterDocumentation cloneParameterDocumentation(ParameterDocumentation parameterDocumentation);
+    FunctionExample createFunctionExample();
+    FunctionExample cloneFunctionExample(FunctionExample functionExample);
 }

@@ -15,9 +15,11 @@
  */
 package kraken.model.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import kraken.model.FunctionSignature;
+import kraken.model.GenericTypeBound;
 
 /**
  * @author mulevicius
@@ -28,6 +30,7 @@ public class FunctionSignatureImpl implements FunctionSignature {
     private String physicalNamespace;
     private String returnType;
     private List<String> parameterTypes;
+    private List<GenericTypeBound> genericTypeBounds;
 
     @Override
     public String getName() {
@@ -61,6 +64,9 @@ public class FunctionSignatureImpl implements FunctionSignature {
 
     @Override
     public List<String> getParameterTypes() {
+        if(this.parameterTypes == null) {
+            this.parameterTypes = new ArrayList<>();
+        }
         return parameterTypes;
     }
 
@@ -69,4 +75,16 @@ public class FunctionSignatureImpl implements FunctionSignature {
         this.parameterTypes = parameterTypes;
     }
 
+    @Override
+    public List<GenericTypeBound> getGenericTypeBounds() {
+        if(this.genericTypeBounds == null) {
+            this.genericTypeBounds = new ArrayList<>();
+        }
+        return genericTypeBounds;
+    }
+
+    @Override
+    public void setGenericTypeBounds(List<GenericTypeBound> genericTypeBounds) {
+        this.genericTypeBounds = genericTypeBounds;
+    }
 }

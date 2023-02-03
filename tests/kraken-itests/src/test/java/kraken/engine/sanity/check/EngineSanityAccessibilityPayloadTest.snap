@@ -23,7 +23,8 @@ kraken.engine.sanity.check.EngineSanityAccessibilityPayloadTest.shouldExecuteAcc
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -50,7 +51,8 @@ kraken.engine.sanity.check.EngineSanityAccessibilityPayloadTest.shouldExecuteAcc
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -77,7 +79,8 @@ kraken.engine.sanity.check.EngineSanityAccessibilityPayloadTest.shouldExecuteAcc
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -104,7 +107,8 @@ kraken.engine.sanity.check.EngineSanityAccessibilityPayloadTest.shouldExecuteAcc
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     }

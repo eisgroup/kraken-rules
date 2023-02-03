@@ -14,18 +14,15 @@
  *  limitations under the License.
  */
 
-import { Contexts } from "kraken-model";
-import { ContextModelTree } from "../../../models/ContextModelTree";
+import { Contexts } from 'kraken-model'
+import { ContextModelTree } from '../../../models/ContextModelTree'
 
 /**
  * Resolves context definition path cardinality
  * @since 1.1.1
  */
 export class PathCardinalityResolver {
-
-    constructor(
-        private readonly contexts: Record<string, Contexts.ContextDefinition>
-    ) { }
+    constructor(private readonly contexts: Record<string, Contexts.ContextDefinition>) {}
 
     /**
      * Resolves cardinality for context path.
@@ -36,16 +33,16 @@ export class PathCardinalityResolver {
     resolveCardinality(path: ContextModelTree.ContextPath): Contexts.Cardinality {
         for (let index = 0; index < path.path.length; index++) {
             if (index === 0) {
-                continue;
+                continue
             }
-            const origin = this.contexts[path.path[index - 1]];
-            const childName = path.path[index];
+            const origin = this.contexts[path.path[index - 1]]
+            const childName = path.path[index]
             if (origin.children) {
-                if (origin.children[childName].cardinality === "MULTIPLE") {
-                    return "MULTIPLE";
+                if (origin.children[childName].cardinality === 'MULTIPLE') {
+                    return 'MULTIPLE'
                 }
             }
         }
-        return "SINGLE";
+        return 'SINGLE'
     }
 }

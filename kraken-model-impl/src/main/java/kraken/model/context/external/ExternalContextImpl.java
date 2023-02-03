@@ -18,6 +18,7 @@ package kraken.model.context.external;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Default implementation of {@code ExternalContext}.
@@ -80,4 +81,26 @@ public final class ExternalContextImpl implements Serializable, ExternalContext 
         this.refExtContextDefinitions = contextDefinitions;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        ExternalContextImpl that = (ExternalContextImpl) o;
+
+        return Objects.equals(physicalNamespace, that.physicalNamespace)
+            && Objects.equals(name, that.name)
+            && Objects.equals(refExtContextDefinitions, that.refExtContextDefinitions)
+            && Objects.equals(contexts, that.contexts);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, physicalNamespace, refExtContextDefinitions, contexts);
+    }
 }

@@ -9,7 +9,7 @@
         <artifactId>parent-pom</artifactId>
         <relativePath>../../pom.xml</relativePath>
         <groupId>kraken</groupId>
-        <version>1.22.0-SNAPSHOT</version>
+        <version>1.42.4-SNAPSHOT</version>
     </parent>
 
     <artifactId>kraken-code-coverage-report</artifactId>
@@ -62,6 +62,10 @@
         </dependency>
         <dependency>
             <groupId>kraken</groupId>
+            <artifactId>kraken-function-generator-plugin</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>kraken</groupId>
             <artifactId>kraken-context-model-tree</artifactId>
         </dependency>
         <dependency>
@@ -94,19 +98,7 @@
         </dependency>
         <dependency>
             <groupId>kraken</groupId>
-            <artifactId>kraken-expression-language-function-java</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>kraken</groupId>
             <artifactId>kraken-expression-language-js</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>kraken</groupId>
-            <artifactId>kraken-expression-language-mvel</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>kraken</groupId>
-            <artifactId>kraken-expression-language-interpreter</artifactId>
         </dependency>
         <dependency>
             <groupId>kraken</groupId>

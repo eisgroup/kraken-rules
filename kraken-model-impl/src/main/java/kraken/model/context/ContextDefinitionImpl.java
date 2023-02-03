@@ -32,6 +32,8 @@ public class ContextDefinitionImpl implements ContextDefinition, Serializable {
 
     private boolean strict;
 
+    private boolean system;
+
     private Map<String, ContextNavigation> children;
 
     private Map<String, ContextField> contextFields;
@@ -62,6 +64,16 @@ public class ContextDefinitionImpl implements ContextDefinition, Serializable {
     @Override
     public void setStrict(boolean strict) {
         this.strict = strict;
+    }
+
+    @Override
+    public boolean isSystem() {
+        return system;
+    }
+
+    @Override
+    public void setSystem(boolean system) {
+        this.system = system;
     }
 
     @Override

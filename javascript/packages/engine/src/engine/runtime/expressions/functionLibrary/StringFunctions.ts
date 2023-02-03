@@ -1,5 +1,5 @@
-import { message } from "./function.utils";
-import { Numbers } from "./../math/Numbers";
+import { message } from './function.utils'
+import { Numbers } from './../math/Numbers'
 
 /*
  *  Copyright 2019 EIS Ltd and/or one of its affiliates.
@@ -16,8 +16,7 @@ import { Numbers } from "./../math/Numbers";
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-type Nullable<T> = T | null | undefined;
-// tslint:disable: triple-equals
+type Nullable<T> = T | null | undefined
 
 /**
  *
@@ -31,12 +30,12 @@ type Nullable<T> = T | null | undefined;
  */
 function IsBlank(value: Nullable<string>): boolean {
     if (value == undefined) {
-        return true;
+        return true
     }
-    if (typeof value !== "string") {
-        throw new Error(message("IsBlank", "Parameter must be a string"));
+    if (typeof value !== 'string') {
+        throw new Error(message('IsBlank', 'Parameter must be a string'))
     }
-    return value.trim().length === 0;
+    return value.trim().length === 0
 }
 
 /**
@@ -51,42 +50,45 @@ function IsBlank(value: Nullable<string>): boolean {
  */
 function Substring(value: Nullable<string>, beginIndex: Nullable<number>, endIndex: Nullable<number>): string {
     if (value == undefined) {
-        throw new Error(message("Substring", message.reason.firstParam));
+        throw new Error(message('Substring', message.reason.firstParam))
     }
     if (beginIndex == undefined) {
-        throw new Error(message("Substring", message.reason.secondParam));
+        throw new Error(message('Substring', message.reason.secondParam))
     }
     if (endIndex == undefined) {
         if (beginIndex > value.length || beginIndex < 0) {
-            throw new Error(
-                `Cannot perform substring to value: " + ${value} + ", with begin index: " + beginIndex`
-            );
+            throw new Error(`Cannot perform substring to value: " + ${value} + ", with begin index: " + beginIndex`)
         }
-        return value.substring(beginIndex);
+        return value.substring(beginIndex)
     } else {
         if (beginIndex > value.length || beginIndex < 0 || endIndex > value.length || beginIndex > endIndex) {
             throw new Error(
-                "Cannot perform substring to value: " + value + ", " +
-                "with begin index: " + beginIndex + ", and end index: " + endIndex
-            );
+                'Cannot perform substring to value: ' +
+                    value +
+                    ', ' +
+                    'with begin index: ' +
+                    beginIndex +
+                    ', and end index: ' +
+                    endIndex,
+            )
         }
-        return value.substring(beginIndex, endIndex);
+        return value.substring(beginIndex, endIndex)
     }
 }
 
 /**
  * Concatenates objects to one string. It will ignore {@code undefined} and {@code null}
  *
- * @param items to concatenate
+ * @param array to concatenate
  * @return concatenated string
  * @example
  * Concat(["a", undefined, "c"]) // "ac"
  */
-function Concat(array?: Nullable<any[]>): string {
+function Concat(array?: Nullable<unknown[]>): string {
     if (!array) {
-        return "";
+        return ''
     }
-    return array.filter(t => t != undefined).join("");
+    return array.filter(t => t != undefined).join('')
 }
 
 /**
@@ -99,17 +101,17 @@ function Concat(array?: Nullable<any[]>): string {
  */
 function StringLength(text: Nullable<string>): number {
     if (!text) {
-        return 0;
+        return 0
     }
-    return text.length;
+    return text.length
 }
 
 /**
  * Checks for element to be included in collection or string.
- * If {@code null} appears in as a collection or element to search {@code false}
+ * If `null` appears in as a collection or element to search `false`
  * will be returned.
  *
- * @param stringsOrString collection or string of elements to be checked
+ * @param stringOrStrings collection or string of elements to be checked
  * @param searchElement   element to search in string or collection
  * @return does collection or string contains search element.
  * @throws Error if not array or string or {@code null} is passed as a search parameter
@@ -118,27 +120,28 @@ function StringLength(text: Nullable<string>): number {
  * Includes(["a", "b", "c"], "c") //true
  * Includes([1, 3, 5], 5) //true
  */
-function Includes(stringOrStrings: Nullable<any | any[]>, searchElement: Nullable<any>): boolean {
+function Includes(stringOrStrings: Nullable<unknown | unknown[]>, searchElement: Nullable<unknown>): boolean {
     if (searchElement == undefined || stringOrStrings == undefined) {
-        return false;
+        return false
     }
-    if (typeof stringOrStrings === "string") {
-        return stringOrStrings.indexOf(searchElement) != -1;
+    if (typeof stringOrStrings === 'string' && typeof searchElement === 'string') {
+        return stringOrStrings.indexOf(searchElement) != -1
     }
     if (Array.isArray(stringOrStrings)) {
         if (stringOrStrings.length) {
-            return stringOrStrings.indexOf(searchElement.toString()) != -1;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            return stringOrStrings.indexOf((searchElement as any).toString()) != -1
         } else {
-            return false;
+            return false
         }
     }
-    throw new Error("Cannot execute function 'includes' on non array or non string elements.");
+    throw new Error("Cannot execute function 'includes' on non array or non string elements.")
 }
 
 /**
- * Creates a string from number. If {@code null} is passed then empty string will be returned.
+ * Creates a string from number. If `null` is passed then empty string will be returned.
  *
- * @param number to convert to string
+ * @param n to convert to string
  * @return number converted to string
  * @throws Error when not number elements are passed to convert
  * @example
@@ -146,14 +149,14 @@ function Includes(stringOrStrings: Nullable<any | any[]>, searchElement: Nullabl
  * NumberToString(1.1) // "1.1"
  * NumberToString(undefined) // ""
  */
-function NumberToString(n: Nullable<any>): string {
-    if (typeof n === "number") {
-        return Numbers.toString(n);
+function NumberToString(n: Nullable<unknown>): string {
+    if (typeof n === 'number') {
+        return Numbers.toString(n)
     }
     if (n == undefined) {
-        return "";
+        return ''
     }
-    throw new Error("Cannot execute function 'String' on not number elements.");
+    throw new Error("Cannot execute function 'String' on not number elements.")
 }
 
 /**
@@ -166,17 +169,21 @@ function NumberToString(n: Nullable<any>): string {
  * @return padded string.
  * @throws Error if second parameters length is more than one
  */
-function PadLeft(base: string = "", filler: string = " ", length: number = 0): string {
+function PadLeft(base = '', filler = ' ', length = 0): string {
     if (filler.length > 1) {
-        throw new Error("Failed to execute function 'PadLeft': second parameter length must " +
-            +" be '1', got '" + filler.length + "'");
+        throw new Error(
+            "Failed to execute function 'PadLeft': second parameter length must " +
+                +" be '1', got '" +
+                filler.length +
+                "'",
+        )
     }
     if (base.length >= length) {
-        return base;
+        return base
     }
-    const numberOfCharsToFill = length - base.length;
-    const repeated = filler.repeat(numberOfCharsToFill);
-    return repeated + base;
+    const numberOfCharsToFill = length - base.length
+    const repeated = filler.repeat(numberOfCharsToFill)
+    return repeated + base
 }
 
 /**
@@ -189,17 +196,21 @@ function PadLeft(base: string = "", filler: string = " ", length: number = 0): s
  * @return padded string.
  * @throws Error if second parameters length is more than one
  */
-function PadRight(base: string = "", filler: string = " ", length: number = 0): string {
+function PadRight(base = '', filler = ' ', length = 0): string {
     if (filler.length > 1) {
-        throw new Error("Failed to execute function 'PadRight': second parameter length must " +
-            +" be '1', got '" + filler.length + "'");
+        throw new Error(
+            "Failed to execute function 'PadRight': second parameter length must " +
+                +" be '1', got '" +
+                filler.length +
+                "'",
+        )
     }
     if (base.length >= length) {
-        return base;
+        return base
     }
-    const numberOfCharsToFill = length - base.length;
-    const repeated = filler.repeat(numberOfCharsToFill);
-    return base + repeated;
+    const numberOfCharsToFill = length - base.length
+    const repeated = filler.repeat(numberOfCharsToFill)
+    return base + repeated
 }
 
 /**
@@ -212,9 +223,9 @@ function PadRight(base: string = "", filler: string = " ", length: number = 0): 
  */
 function LowerCase(text?: string): Nullable<string> {
     if (text == undefined) {
-        return text;
+        return text
     }
-    return text.toLowerCase();
+    return text.toLowerCase()
 }
 
 /**
@@ -227,9 +238,9 @@ function LowerCase(text?: string): Nullable<string> {
  */
 function UpperCase(text?: string): Nullable<string> {
     if (text == undefined) {
-        return text;
+        return text
     }
-    return text.toUpperCase();
+    return text.toUpperCase()
 }
 
 /**
@@ -243,12 +254,12 @@ function UpperCase(text?: string): Nullable<string> {
  */
 function Trim(text?: string): Nullable<string> {
     if (text == undefined) {
-        return text;
+        return text
     }
-    if (typeof text !== "string") {
-        throw new Error(message("Trim", "Parameter must be a string"));
+    if (typeof text !== 'string') {
+        throw new Error(message('Trim', 'Parameter must be a string'))
     }
-    return text.trim();
+    return text.trim()
 }
 
 /**
@@ -263,18 +274,20 @@ function Trim(text?: string): Nullable<string> {
  */
 function StartsWith(text?: string, start?: string): boolean {
     if (text == undefined) {
-        throw new Error(message("StartsWith", message.reason.firstParam));
+        throw new Error(message('StartsWith', message.reason.firstParam))
     }
     if (start == undefined) {
-        throw new Error(message("StartsWith", message.reason.secondParam));
+        throw new Error(message('StartsWith', message.reason.secondParam))
     }
-    if (typeof text != "string") {
-        throw new Error(message(
-            "StartsWith",
-            `second parameter must be string, instead got value: '${text}', type '${typeof text}'`
-        ));
+    if (typeof text != 'string') {
+        throw new Error(
+            message(
+                'StartsWith',
+                `second parameter must be string, instead got value: '${text}', type '${typeof text}'`,
+            ),
+        )
     }
-    return text.startsWith(start);
+    return text.startsWith(start)
 }
 
 /**
@@ -289,18 +302,17 @@ function StartsWith(text?: string, start?: string): boolean {
  */
 function EndsWith(text?: string, start?: string): boolean {
     if (text == undefined) {
-        throw new Error(message("EndsWith", message.reason.firstParam));
+        throw new Error(message('EndsWith', message.reason.firstParam))
     }
     if (start == undefined) {
-        throw new Error(message("EndsWith", message.reason.secondParam));
+        throw new Error(message('EndsWith', message.reason.secondParam))
     }
-    if (typeof text != "string") {
-        throw new Error(message(
-            "EndsWith",
-            `second parameter must be string, instead got value: '${text}', type '${typeof text}'`
-        ));
+    if (typeof text != 'string') {
+        throw new Error(
+            message('EndsWith', `second parameter must be string, instead got value: '${text}', type '${typeof text}'`),
+        )
     }
-    return text.endsWith(start);
+    return text.endsWith(start)
 }
 
 export const stringFunctions = {
@@ -316,5 +328,5 @@ export const stringFunctions = {
     PadRight,
     LowerCase,
     UpperCase,
-    Trim
-};
+    Trim,
+}

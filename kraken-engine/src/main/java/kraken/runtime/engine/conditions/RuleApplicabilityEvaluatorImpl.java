@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 EIS Ltd and/or one of its affiliates.
+ *  Copyright 2022 EIS Ltd and/or one of its affiliates.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import kraken.runtime.expressions.KrakenExpressionEvaluationException;
 import kraken.runtime.expressions.KrakenExpressionEvaluator;
 import kraken.runtime.model.expression.CompiledExpression;
 import kraken.runtime.model.rule.Condition;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,20 +54,28 @@ public class RuleApplicabilityEvaluatorImpl implements RuleApplicabilityEvaluato
     }
 
     private Function<CompiledExpression, ConditionEvaluationResult> toConditionEvaluationResult(
-            RuleEvaluationInstance evaluation,
-            EvaluationSession session
+        RuleEvaluationInstance evaluation,
+        EvaluationSession session
     ) {
         return expression -> {
+            ConditionEvaluationResult conditionEvaluationResult;
+
             try {
                 Object result = evaluator.evaluate(expression, evaluation.getDataContext(), session);
-                return new ConditionEvaluationResult(Boolean.TRUE.equals(result)
-                        ? ConditionEvaluation.APPLICABLE
-                        : ConditionEvaluation.NOT_APPLICABLE
+                conditionEvaluationResult = new ConditionEvaluationResult(Boolean.TRUE.equals(result)
+                    ? ConditionEvaluation.APPLICABLE
+                    : ConditionEvaluation.NOT_APPLICABLE
                 );
             } catch (KrakenExpressionEvaluationException e) {
-                logger.debug("Condition expression '{}' failed with exception, \n{}", expression.getExpressionString(), e);
-                return new ConditionEvaluationResult(e);
+                logger.debug(
+                    "Condition expression '{}' failed with exception, \n{}",
+                    expression.getExpressionString(),
+                    e);
+
+                conditionEvaluationResult = new ConditionEvaluationResult(e);
             }
+
+            return conditionEvaluationResult;
         };
     }
 

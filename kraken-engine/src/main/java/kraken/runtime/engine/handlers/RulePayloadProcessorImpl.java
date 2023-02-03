@@ -41,6 +41,7 @@ import kraken.runtime.expressions.KrakenExpressionEvaluator;
 import kraken.runtime.model.rule.RuntimeRule;
 import kraken.runtime.model.rule.payload.Payload;
 import kraken.runtime.model.rule.payload.validation.ValidationPayload;
+
 import org.apache.commons.lang3.BooleanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -140,7 +141,8 @@ public class RulePayloadProcessorImpl implements RulePayloadProcessor {
     private RuleInfo toRuleInfo(RuleEvaluationInstance ruleEvaluationInstance) {
         RuntimeRule rule = ruleEvaluationInstance.getRule();
 
-        return new RuleInfo(rule.getName(),
+        return new RuleInfo(
+                rule.getName(),
                 rule.getContext(),
                 rule.getTargetPath(),
                 rule.getPayload().getType()
@@ -160,6 +162,7 @@ public class RulePayloadProcessorImpl implements RulePayloadProcessor {
         );
 
         return new OverridableRuleContextInfo(
+                ruleEvaluationInstance.getNamespace(),
                 ruleEvaluationInstance.getDataContext().getContextId(),
                 getRootId(ruleEvaluationInstance.getDataContext()),
                 ruleEvaluationInstance.getDataContext().getContextName(),
@@ -179,18 +182,19 @@ public class RulePayloadProcessorImpl implements RulePayloadProcessor {
 
     private PayloadResult evaluatePayload(EvaluationSession session, RuleEvaluationInstance ruleEvaluationInstance) {
         logger.debug(
-                "Evaluating Rule '{}' on field '{}', context instance with id:'{}'",
-                ruleEvaluationInstance.getRule().getName(),
-                ruleEvaluationInstance.getRule().getContext() + "." + ruleEvaluationInstance.getRule().getTargetPath(),
-                ruleEvaluationInstance.getDataContext().getContextId()
+            "Evaluating Rule '{}' on field '{}', context instance with id:'{}'",
+            ruleEvaluationInstance.getRule().getName(),
+            ruleEvaluationInstance.getRule().getContext() + "." + ruleEvaluationInstance.getRule().getTargetPath(),
+            ruleEvaluationInstance.getDataContext().getContextId()
         );
         RuntimeRule rule = ruleEvaluationInstance.getRule();
         RulePayloadHandler handler = resolvePayloadHandler(rule.getPayload());
+
         return handler.executePayload(
-                rule.getPayload(),
-                rule,
-                ruleEvaluationInstance.getDataContext(),
-                session
+            rule.getPayload(),
+            rule,
+            ruleEvaluationInstance.getDataContext(),
+            session
         );
     }
 

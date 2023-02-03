@@ -21,6 +21,7 @@ import kraken.runtime.engine.context.info.SimpleDataObjectInfoResolver;
 import kraken.runtime.engine.context.type.ContextTypeAdapter;
 import kraken.runtime.engine.context.type.IterableContextTypeAdapter;
 import kraken.test.TestResources;
+import kraken.testproduct.domain.Policy;
 import kraken.utils.MockAutoPolicyBuilder;
 
 import java.util.ArrayList;
@@ -31,24 +32,8 @@ import java.util.List;
  */
 public abstract class EvaluationEngineBaseTest extends EngineBaseTest {
 
-    @Override
-    protected DataObjectInfoResolver getResolver() {
-        return new SimpleDataObjectInfoResolver();
-    }
-
-    @Override
-    protected Object getDataObject() {
+    protected Policy getDataObject() {
         return new MockAutoPolicyBuilder().addEmptyAutoPolicy().build();
-    }
-
-    @Override
-    protected List<IterableContextTypeAdapter> getIterableTypeAdapters() {
-        return new ArrayList<>();
-    }
-
-    @Override
-    protected List<ContextTypeAdapter> getInstanceTypeAdapters() {
-        return new ArrayList<>();
     }
 
     @Override

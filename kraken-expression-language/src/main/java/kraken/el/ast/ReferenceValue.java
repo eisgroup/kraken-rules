@@ -15,8 +15,11 @@
  */
 package kraken.el.ast;
 
+import javax.annotation.Nullable;
+
 import kraken.el.ast.token.Token;
 import kraken.el.scope.Scope;
+import kraken.el.scope.ScopeType;
 import kraken.el.scope.type.Type;
 
 /**
@@ -24,27 +27,38 @@ import kraken.el.scope.type.Type;
  */
 public class ReferenceValue extends Expression {
 
-    private boolean startsWithThis;
+    private final This thisNode;
 
-    private Reference reference;
+    private final Reference reference;
 
-    public ReferenceValue(boolean startsWithThis, Reference reference, Scope scope, Type evaluationType, Token token) {
-        super(NodeType.REFERENCE, scope, evaluationType, token);
+    public ReferenceValue(Reference reference, Scope scope, Token token) {
+        super(NodeType.REFERENCE, scope, reference.getEvaluationType(), token);
 
-        this.startsWithThis = startsWithThis;
         this.reference = reference;
+        Reference firstReference = reference.getFirstReference();
+        this.thisNode =  firstReference instanceof This ? (This) firstReference : null;
     }
 
-    public boolean isStartsWithThis() {
-        return startsWithThis;
+    @Nullable
+    public This getThisNode() {
+        return thisNode;
     }
 
     public Reference getReference() {
         return reference;
     }
 
+    /**
+     * @return a type of scope that this reference is in
+     */
+    public ScopeType findScopeTypeOfReference() {
+        return thisNode != null
+            ? thisNode.getScope().findClosestReferencableScope().getScopeType()
+            : reference.findScopeTypeOfReference();
+    }
+
     @Override
     public String toString() {
-        return "" + (startsWithThis ? "this." : "") + reference;
+        return reference.toString();
     }
 }

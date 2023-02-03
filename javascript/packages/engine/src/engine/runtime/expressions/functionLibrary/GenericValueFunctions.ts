@@ -14,11 +14,9 @@
  *  limitations under the License.
  */
 
-// tslint:disable: triple-equals
-
 export const genericValueFunctions = {
-    IsEmpty
-};
+    IsEmpty,
+}
 
 /**
  *
@@ -30,6 +28,6 @@ export const genericValueFunctions = {
  * IsEmpty("") // true
  * IsEmpty([null]) // false
  */
-function IsEmpty(value: any): boolean {
-    return value == undefined || Array.isArray(value) && value.length === 0 || value === "";
+function IsEmpty(value: unknown): boolean {
+    return value == undefined || (Array.isArray(value) && value.length === 0) || value === ''
 }

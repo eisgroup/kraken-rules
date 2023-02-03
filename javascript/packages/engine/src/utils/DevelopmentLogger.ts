@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-import { krakenConfig as config } from "../config";
+import { krakenConfig as config, KrakenConfig } from '../config'
 
 /**
  * Kraken logger is configured via environment variable `process.env.NODE_ENV`.
@@ -28,96 +28,93 @@ import { krakenConfig as config } from "../config";
  * @since 1.1.1
  */
 export interface Logger {
-    groupEnd(name: string): void;
-    group(name: string): void;
-    info(...msg: any[]): void;
-    warning(...msg: any[]): void;
-    error(...msg: any[]): void;
-    debug(...msg: any[]): void;
+    groupEnd(name: string): void
+    group(name: string): void
+    info(...msg: unknown[]): void
+    warning(...msg: unknown[]): void
+    error(...msg: unknown[]): void
+    debug(...msg: unknown[]): void
 }
 export class DevelopmentLogger implements Logger {
-
     public static CONSOLE = new DevelopmentLogger({
         groupEnd: console.groupEnd,
-        group: (name: string) => console.groupCollapsed
-            ? console.groupCollapsed(name)
-            : console.group(name),
+        group: (name: string) => (console.groupCollapsed ? console.groupCollapsed(name) : console.group(name)),
         debug: console.debug,
         info: console.log,
         warning: console.warn,
-        error: console.error
-    });
+        error: console.error,
+    })
 
-    private logger: Logger;
-    private isLoggerEnabled: boolean;
+    private logger: Logger
+    private isLoggerEnabled: boolean
 
     constructor(l: Logger) {
-        this.logger = l;
-        this.isLoggerEnabled = process.env.NODE_ENV !== "production";
+        this.logger = l
+        this.isLoggerEnabled = process.env.NODE_ENV !== 'production'
     }
     groupEnd(name: string): void {
         if (this.isLoggerEnabled) {
-            this.addEntry("end  ", name);
-            this.logger.groupEnd(name);
+            this.addEntry('end  ', name)
+            this.logger.groupEnd(name)
         }
     }
     group(name: string): void {
         if (this.isLoggerEnabled) {
-            this.addEntry("start", name);
-            this.logger.group(name);
+            this.addEntry('start', name)
+            this.logger.group(name)
         }
     }
-    debug(...msg: any[]): void {
+    debug(...msg: unknown[]): void {
         if (this.isLoggerEnabled && config.getConfig().logger.debug) {
-            this.addEntry("debug", msg.join(" "));
-            this.logger.debug(...msg);
+            this.addEntry('debug', msg.join(' '))
+            this.logger.debug(...msg)
         }
     }
-    info(...msg: any[]): void {
+    info(...msg: unknown[]): void {
         if (this.isLoggerEnabled && config.getConfig().logger.info) {
-            this.addEntry("info ", msg);
-            this.logger.info(...msg);
+            this.addEntry('info ', msg)
+            this.logger.info(...msg)
         }
     }
-    warning(...msg: any[]): void {
+    warning(...msg: unknown[]): void {
         if (this.isLoggerEnabled && config.getConfig().logger.warning) {
-            this.addEntry("warn ", msg);
-            this.logger.warning(...msg);
+            this.addEntry('warn ', msg)
+            this.logger.warning(...msg)
         }
     }
-    error(...msg: any[]): void {
+    error(...msg: unknown[]): void {
         if (this.isLoggerEnabled && config.getConfig().logger.error) {
-            this.addEntry("error", msg);
-            this.logger.error(...msg);
+            this.addEntry('error', msg)
+            this.logger.error(...msg)
         }
     }
     isEnabled(): boolean {
-        return this.isLoggerEnabled;
+        return this.isLoggerEnabled
     }
 
-    private addEntry(type: string, e: any): void {
+    private addEntry(type: string, e: unknown): void {
         if (global) {
-            let logs;
-            const krakenConfig = (global as any)["Kraken"].logger;
-            if (krakenConfig.logs) {
+            let logs
+            const krakenConfig = (global as unknown as { Kraken: KrakenConfig }).Kraken.logger
+            if (krakenConfig) {
                 if (krakenConfig.logs.length > krakenConfig.entriesCount) {
                     krakenConfig.logs = krakenConfig.logs.slice(
                         krakenConfig.logs.length - krakenConfig.entriesCount,
-                        krakenConfig.logs.length
-                    );
+                        krakenConfig.logs.length,
+                    )
                 }
-                logs = krakenConfig.logs;
+                logs = krakenConfig.logs
             } else {
-                krakenConfig.logs = [];
-                logs = krakenConfig.logs;
+                ;(krakenConfig as KrakenConfig['logger']).logs = []
+                logs = (krakenConfig as KrakenConfig['logger']).logs
             }
-            let entryString = "";
+            let entryString = ''
             if (Array.isArray(e)) {
-                entryString = e.map(x => JSON.stringify(x, null, 2)).join("  \n");
+                entryString = e.map(x => JSON.stringify(x, null, 2)).join('  \n')
             } else {
-                entryString = JSON.stringify(e, null, 2);
+                entryString = JSON.stringify(e, null, 2)
             }
-            logs.push(`${type} : ${entryString}`);
+            logs.push(`${type} : ${entryString}`)
         }
     }
 }
@@ -125,4 +122,4 @@ export class DevelopmentLogger implements Logger {
 /**
  * This logger will log result to the console API
  */
-export const logger = DevelopmentLogger.CONSOLE;
+export const logger = DevelopmentLogger.CONSOLE

@@ -1,29 +1,49 @@
 {
   "name": "root",
-  "version": "1.13.0",
+  "version": "1.42.4-stage.0",
+  "workspaces": [
+    "packages/*"
+  ],
   "private": true,
   "devDependencies": {
-    "@babel/cli": "7.1.5",
-    "@babel/core": "7.1.6",
-    "@babel/polyfill": "7.0.0",
-    "@babel/preset-env": "7.1.6",
-    "babel-plugin-add-header-comment": "1.0.3",
-    "chalk": "^4.1.0",
-    "colors": "^1.4.0",
-    "declarative-js": "3.8.15",
+    "@swc/cli": "^0.1.57",
+    "@swc/core": "^1.3.2",
+    "@swc/jest": "^0.2.22",
+    "@tsconfig/recommended": "1.0.1",
+    "@typescript-eslint/eslint-plugin": "^5.39.0",
+    "@typescript-eslint/parser": "^5.39.0",
+    "chalk": "4.1.1",
+    "colors": "1.4.0",
+    "declarative-js": "3.8.16",
+    "eslint": "8.20.0",
+    "eslint-config-prettier": "8.5.0",
+    "eslint-plugin-implicit-dependencies": "1.1.0",
+    "eslint-plugin-react-hooks": "4.3.0",
     "lerna": "3.16.4",
-    "semver": "^7.3.2",
-    "typedoc": "^0.15.8",
-    "typedoc-plugin-lerna-packages": "^0.2.2",
-    "typedoc-plugin-mermaid": "^1.2.0"
+    "prettier": "2.6.2",
+    "semver": "7.3.2",
+    "typedoc": "0.22.18",
+    "typedoc-plugin-mermaid": "1.8.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "resolutions": {
+    "typescript": "4.2.4",
+    "@types/react": "16.9.23",
+    "@types/react-dom": "16.9.0"
   },
   "scripts": {
-    "licence-headers": "node scripts/addHeader.js ./packages/engine/__tests__ ./packages/engine/src ./packages/model/src ./packages/model-builder/src ./packages/demo-app/src",
+    "licence-headers": "node scripts/addHeader.js ./packages/engine/__tests__ ./packages/engine/src ./packages/kraken-engine-api/src ./packages/model/src ./packages/model-builder/src ./packages/demo-app/src",
     "stage": "node scripts/stage",
+    "bootstrap": "lerna run prepare",
     "stage:l": "lerna version --force-publish --exact && lerna run release",
     "release": "node scripts/publish",
     "validate": "node scripts/validate-dependencies.js",
     "change-version": "node scripts/change-version.js",
-    "docs": "node scripts/generate-docs-modules.js"
+    "format:test": "prettier packages -c",
+    "format": "prettier packages --write",
+    "postinstall": "yarn run format:test",
+    "docs": "yarn lerna run compile && typedoc --out target/docs/$npm_package_version"
   }
 }

@@ -24,7 +24,7 @@ import kraken.el.scope.type.Type;
  */
 public abstract class LiteralExpression<T> extends Expression {
 
-    private T value;
+    private final T value;
 
     public LiteralExpression(T value, NodeType nodeType, Scope scope, Type evaluationType, Token token) {
         super(nodeType, scope, evaluationType, token);

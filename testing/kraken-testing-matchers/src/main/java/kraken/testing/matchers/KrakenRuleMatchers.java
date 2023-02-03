@@ -24,11 +24,18 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
 import javax.money.MonetaryAmount;
+
+import org.hamcrest.Description;
+import org.hamcrest.DiagnosingMatcher;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeDiagnosingMatcher;
 
 import kraken.model.validation.ValidationSeverity;
 import kraken.runtime.engine.EntryPointResult;
 import kraken.runtime.engine.dto.RuleEvaluationResult;
+import kraken.runtime.engine.dto.RuleEvaluationStatus;
 import kraken.runtime.engine.events.RuleEvent;
 import kraken.runtime.engine.events.ValueChangedEvent;
 import kraken.runtime.engine.result.AccessibilityPayloadResult;
@@ -36,9 +43,6 @@ import kraken.runtime.engine.result.DefaultValuePayloadResult;
 import kraken.runtime.engine.result.ExceptionAwarePayloadResult;
 import kraken.runtime.engine.result.ValidationPayloadResult;
 import kraken.runtime.engine.result.VisibilityPayloadResult;
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeDiagnosingMatcher;
 
 /**
  * Utility class containing kraken rule matchers.
@@ -47,6 +51,8 @@ import org.hamcrest.TypeSafeDiagnosingMatcher;
  * @since 1.0.38
  */
 public class KrakenRuleMatchers {
+
+    public static final String RULE_IS_IGNORED = "Rule is ignored (failed to evaluate, because not all data is present).";
 
     private static class Converters {
         public static final Function<Object, Object> DATETIME_TO_DATE = dateTime -> ((LocalDateTime) dateTime).toLocalDate();
@@ -57,8 +63,13 @@ public class KrakenRuleMatchers {
      * Creates a matcher that matches if rule evaluation payload result is an instance of
      * {@code VisibilityPayload} and visibility payload result is true.
      * <p/>
-     * For example:
-     * <pre>assertThat(evaluation, isVisible())</pre>
+     * Usage Example:
+     * <blockquote>
+     * <pre>{@code
+     *     RuleEvaluationResult result = ruleResult(epResult, "Rule name");
+     *     assertThat(result, isVisible())
+     * }</pre>
+     * </blockquote>
      */
     public static Matcher<RuleEvaluationResult> isVisible() {
         return new VisibilityMatcher<>(true);
@@ -68,8 +79,13 @@ public class KrakenRuleMatchers {
      * Creates a matcher that matches if rule evaluation payload result is an instance of
      * {@code VisibilityPayload} and visibility payload result is false.
      * <p/>
-     * For example:
-     * <pre>assertThat(evaluation, isNotVisible())</pre>
+     * Usage Example:
+     * <blockquote>
+     * <pre>{@code
+     *     RuleEvaluationResult result = ruleResult(epResult, "Rule name");
+     *     assertThat(result, isNotVisible())
+     * }</pre>
+     * </blockquote>
      */
     public static Matcher<RuleEvaluationResult> isNotVisible() {
         return new VisibilityMatcher<>(false);
@@ -79,8 +95,13 @@ public class KrakenRuleMatchers {
      * Creates a matcher that matches if rule evaluation payload result is an instance of
      * {@code AccessibilityPayloadResult} and field is accessible (not disabled).
      * <p/>
-     * For example:
-     * <pre>assertThat(evaluation, isAccessible())</pre>
+     * Usage Example:
+     * <blockquote>
+     * <pre>{@code
+     *     RuleEvaluationResult result = ruleResult(epResult, "Rule name");
+     *     assertThat(result, isAccessible())
+     * }</pre>
+     * </blockquote>
      */
     public static Matcher<RuleEvaluationResult> isAccessible() {
         return new AccessibilityMatcher<>(true);
@@ -90,8 +111,13 @@ public class KrakenRuleMatchers {
      * Creates a matcher that matches if rule evaluation payload result is an instance of
      * {@code AccessibilityPayloadResult} and field is not accessible (disabled).
      * <p/>
-     * For example:
-     * <pre>assertThat(evaluation, isNotAccessible())</pre>
+     * Usage Example:
+     * <blockquote>
+     * <pre>{@code
+     *     RuleEvaluationResult result = ruleResult(epResult, "Rule name");
+     *     assertThat(result, isNotAccessible())
+     * }</pre>
+     * </blockquote>
      */
     public static Matcher<RuleEvaluationResult> isNotAccessible() {
         return new AccessibilityMatcher<>(false);
@@ -101,8 +127,13 @@ public class KrakenRuleMatchers {
      * Creates a matcher that matches if rule evaluation payload result is an instance of
      * {@code ValidationPayloadResult} and rule validation was successful.
      * <p/>
-     * For example:
-     * <pre>assertThat(evaluation, hasValidationSucceeded())</pre>
+     * Usage Example:
+     * <blockquote>
+     * <pre>{@code
+     *     RuleEvaluationResult result = ruleResult(epResult, "Rule name");
+     *     assertThat(result, hasValidationSucceeded())
+     * }</pre>
+     * </blockquote>
      */
     public static Matcher<RuleEvaluationResult> hasValidationSucceeded() {
         return new ValidationMatcher<>(true);
@@ -112,8 +143,13 @@ public class KrakenRuleMatchers {
      * Creates a matcher that matches if rule evaluation payload result is an instance of
      * {@code ValidationPayloadResult} and rule validation was failed.
      * <p/>
-     * For example:
-     * <pre>assertThat(evaluation, hasValidationFailed())</pre>
+     * Usage Example:
+     * <blockquote>
+     * <pre>{@code
+     *     RuleEvaluationResult result = ruleResult(epResult, "Rule name");
+     *     assertThat(result, hasValidationFailed())
+     * }</pre>
+     * </blockquote>
      */
     public static Matcher<RuleEvaluationResult> hasValidationFailed() {
         return new ValidationMatcher<>(false);
@@ -123,8 +159,13 @@ public class KrakenRuleMatchers {
      * Creates a matcher that matches if rule evaluation payload result is an instance of
      * {@code ValidationPayloadResult} and payload severity level is info.
      * <p/>
-     * For example:
-     * <pre>assertThat(evaluation, isStatusInfo())</pre>
+     * Usage Example:
+     * <blockquote>
+     * <pre>{@code
+     *     RuleEvaluationResult result = ruleResult(epResult, "Rule name");
+     *     assertThat(result, isStatusInfo())
+     * }</pre>
+     * </blockquote>
      */
     public static Matcher<RuleEvaluationResult> isStatusInfo() {
         return new ValidationStatusMatcher<>(ValidationSeverity.info);
@@ -134,8 +175,13 @@ public class KrakenRuleMatchers {
      * Creates a matcher that matches if rule evaluation payload result is an instance of
      * {@code ValidationPayloadResult} and payload severity level is warning.
      * <p/>
-     * For example:
-     * <pre>assertThat(evaluation, isStatusWarning())</pre>
+     * Usage Example:
+     * <blockquote>
+     * <pre>{@code
+     *     RuleEvaluationResult result = ruleResult(epResult, "Rule name");
+     *     assertThat(result, isStatusWarning())
+     * }</pre>
+     * </blockquote>
      */
     public static Matcher<RuleEvaluationResult> isStatusWarning() {
         return new ValidationStatusMatcher<>(ValidationSeverity.warning);
@@ -145,8 +191,13 @@ public class KrakenRuleMatchers {
      * Creates a matcher that matches if rule evaluation payload result is an instance of
      * {@code ValidationPayloadResult} and payload severity level is critical.
      * <p/>
-     * For example:
-     * <pre>assertThat(evaluation, isStatusCritical())</pre>
+     * Usage Example:
+     * <blockquote>
+     * <pre>{@code
+     *     RuleEvaluationResult result = ruleResult(epResult, "Rule name");
+     *     assertThat(result, isStatusCritical())
+     * }</pre>
+     * </blockquote>
      */
     public static Matcher<RuleEvaluationResult> isStatusCritical() {
         return new ValidationStatusMatcher<>(ValidationSeverity.critical);
@@ -156,8 +207,13 @@ public class KrakenRuleMatchers {
      * Creates a matcher that matches if rule evaluation payload result has a rule
      * with target path equal to given value.
      * <p/>
-     * For example:
-     * <pre>assertThat(evaluation, forAttribute(attr))</pre>
+     * Usage Example:
+     * <blockquote>
+     * <pre>{@code
+     *     RuleEvaluationResult result = ruleResult(epResult, "Rule name");
+     *     assertThat(result, forAttribute(attr))
+     * }</pre>
+     * </blockquote>
      */
     public static Matcher<RuleEvaluationResult> forAttribute(String attributeName) {
         return new AttributeMatcher<>(attributeName);
@@ -168,8 +224,13 @@ public class KrakenRuleMatchers {
      * {@code DefaultValuePayloadResult} and contains value change event with newValue
      * equal to given value.
      * <p/>
-     * For example:
-     * <pre>assertThat(evaluation, hasValueChangeTo(obj))</pre>
+     * Usage Example:
+     * <blockquote>
+     * <pre>{@code
+     *     RuleEvaluationResult result = ruleResult(epResult, "Rule name");
+     *     assertThat(result, hasValueChangeTo(obj))
+     * }</pre>
+     * </blockquote>
      */
     public static Matcher<RuleEvaluationResult> hasValueChangeTo(Object newValue) {
         return new ValueMatcher<>(newValue);
@@ -181,8 +242,13 @@ public class KrakenRuleMatchers {
      * equal to given value. Can be used for LocalDateTime values stored in event as it
      * converts LocalDateTime to LocalDate before comparing.
      * <p/>
-     * For example:
-     * <pre>assertThat(evaluation, hasValueChangeToDateTime(dateObj))</pre>
+     * Usage Example:
+     * <blockquote>
+     * <pre>{@code
+     *     RuleEvaluationResult result = ruleResult(epResult, "Rule name");
+     *     assertThat(result, hasValueChangeToDateTime(dateObj))
+     * }</pre>
+     * </blockquote>
      */
     public static Matcher<RuleEvaluationResult> hasValueChangeToDateTime(LocalDate newValue) {
         return new ValueMatcher<>(newValue, Converters.DATETIME_TO_DATE);
@@ -193,8 +259,13 @@ public class KrakenRuleMatchers {
      * {@code DefaultValuePayloadResult} and contains value change event with newValue
      * equal to given value.
      * <p/>
-     * For example:
-     * <pre>assertThat(evaluation, hasValueChangeToMoneyOf(numberObj))</pre>
+     * Usage Example:
+     * <blockquote>
+     * <pre>{@code
+     *     RuleEvaluationResult result = ruleResult(epResult, "Rule name");
+     *     assertThat(result, hasValueChangeToMoneyOf(numberObj))
+     * }</pre>
+     * </blockquote>
      */
     public static Matcher<RuleEvaluationResult> hasValueChangeToMoneyOf(BigDecimal newValue) {
         return new ValueMatcher<>(newValue, Converters.MONEY_TO_NUMBER);
@@ -204,11 +275,101 @@ public class KrakenRuleMatchers {
      * Creates a matcher that matches if no value change was triggered as a result of
      * rule evaluation.
      * <p/>
-     * For example:
-     * <pre>assertThat(evaluation, hasNoValueChange())</pre>
+     * Usage Example:
+     * <blockquote>
+     * <pre>{@code
+     *     RuleEvaluationResult result = ruleResult(epResult, "Rule name");
+     *     assertThat(result, hasNoValueChange())
+     * }</pre>
+     * </blockquote>
      */
     public static Matcher<RuleEvaluationResult> hasNoValueChange() {
         return new NoValueChangeMatcher<>();
+    }
+
+    /**
+     * Creates a matcher that only matches when examined {@code RuleEvaluationResult} meets
+     * following criteria:
+     * <p>
+     * <ul>
+     *     <li>{@code RuleEvaluationResult} is {@code null}.</li>
+     * </ul>
+     * </p>
+     * Usage Example:
+     * <blockquote>
+     * <pre>{@code
+     *     RuleEvaluationResult result = ruleResult(epResult, "Rule name");
+     *     assertThat(result, isUnused());
+     * }</pre>
+     * </blockquote>
+     */
+    public static Matcher<RuleEvaluationResult> isUnused() {
+        return new RuleEvaluationStatusMatcher<>(RuleEvaluationStatus.UNUSED);
+    }
+
+    /**
+     * Creates a matcher that only matches when examined {@code RuleEvaluationResult} meets
+     * following criteria:
+     * <p>
+     * <ul>
+     *     <li>{@code RuleEvaluationResult} is not {@code null}.</li>
+     *     <li>{@code PayloadResult} OR {@code ConditionEvaluationResult} is erroneous.</li>
+     * </ul>
+     * </p>
+     * Usage Example:
+     * <blockquote>
+     * <pre>{@code
+     *     RuleEvaluationResult result = ruleResult(epResult, "Rule name");
+     *     assertThat(result, isIgnored());
+     * }</pre>
+     * </blockquote>
+     */
+    public static Matcher<RuleEvaluationResult> isIgnored() {
+        return new RuleEvaluationStatusMatcher(RuleEvaluationStatus.IGNORED);
+    }
+
+    /**
+     * Creates a matcher that only matches when examined {@code RuleEvaluationResult} meets
+     * following criteria:
+     * <p>
+     * <ul>
+     *     <li>{@code RuleEvaluationResult} is not {@code null}.</li>
+     *     <li>{@code PayloadResult} has no errors.</li>
+     *     <li>{@code ConditionEvaluationResult} has no errors and evaluates to {@code false}.</li>
+     * </ul>
+     * </p>
+     * Usage Example:
+     * <blockquote>
+     * <pre>{@code
+     *     RuleEvaluationResult result = ruleResult(epResult, "Rule name");
+     *     assertThat(result, isSkipped());
+     * }</pre>
+     * </blockquote>
+     */
+    public static Matcher<RuleEvaluationResult> isSkipped() {
+        return new RuleEvaluationStatusMatcher(RuleEvaluationStatus.SKIPPED);
+    }
+
+    /**
+     * Creates a matcher that only matches when examined {@code RuleEvaluationResult} meets
+     * following criteria:
+     * <p>
+     * <ul>
+     *     <li>{@code RuleEvaluationResult} is not {@code null}.</li>
+     *     <li>{@code PayloadResult} has no errors.</li>
+     *     <li>{@code ConditionEvaluationResult} has no errors and evaluates to {@code true}.</li>
+     * </ul>
+     * </p>
+     * Usage Example:
+     * <blockquote>
+     * <pre>{@code
+     *     RuleEvaluationResult result = ruleResult(epResult, "Rule name");
+     *     assertThat(result, isApplied());
+     * }</pre>
+     * </blockquote>
+     */
+    public static Matcher<RuleEvaluationResult> isApplied() {
+        return new RuleEvaluationStatusMatcher(RuleEvaluationStatus.APPLIED);
     }
 
     public static RuleEvaluationResult ruleResult(EntryPointResult result, String ruleName) {
@@ -237,6 +398,11 @@ public class KrakenRuleMatchers {
 
         @Override
         protected boolean matchesSafely(T result, Description mismatchDescription) {
+            if (result.getPayloadResult() == null) {
+                mismatchDescription.appendText(RULE_IS_IGNORED);
+                return isVisible;
+            }
+
             if (result.getPayloadResult() instanceof VisibilityPayloadResult) {
                 boolean isEvaluatedVisibility = result.getPayloadResult() == null
                         || ((VisibilityPayloadResult) result.getPayloadResult()).getVisible();
@@ -270,6 +436,11 @@ public class KrakenRuleMatchers {
 
         @Override
         protected boolean matchesSafely(T result, Description mismatchDescription) {
+            if (result.getPayloadResult() == null) {
+                mismatchDescription.appendText(RULE_IS_IGNORED);
+                return isAccessible;
+            }
+
             if (result.getPayloadResult() instanceof AccessibilityPayloadResult) {
                 boolean isEvaluatedAccessible = result.getPayloadResult() == null
                         || ((AccessibilityPayloadResult) result.getPayloadResult()).getAccessible();
@@ -304,6 +475,11 @@ public class KrakenRuleMatchers {
 
         @Override
         protected boolean matchesSafely(T result, Description mismatchDescription) {
+            if (result.getPayloadResult() == null) {
+                mismatchDescription.appendText(RULE_IS_IGNORED);
+                return  false;
+            }
+
             if (result.getPayloadResult() instanceof ValidationPayloadResult) {
                 var payloadResult = (ValidationPayloadResult) result.getPayloadResult();
 
@@ -342,6 +518,40 @@ public class KrakenRuleMatchers {
 
     }
 
+    private static class RuleEvaluationStatusMatcher<T extends RuleEvaluationResult> extends DiagnosingMatcher<T> {
+
+        private final RuleEvaluationStatus expectedStatus;
+
+        public RuleEvaluationStatusMatcher(RuleEvaluationStatus expectedStatus) {
+            this.expectedStatus = expectedStatus;
+        }
+
+        @Override
+        protected boolean matches(Object item, Description mismatchDescription) {
+            var actualStatus = resolveEvaluationStatus((T) item);
+            mismatchDescription.appendText(String.format(
+                "Expected '%s', but actual was '%s'.",
+                expectedStatus,
+                actualStatus)
+            );
+
+            return expectedStatus == actualStatus;
+        }
+
+        @Override
+        public void describeTo(Description description) {
+            description.appendText("Rule evaluation status mismatch. ");
+        }
+
+    }
+
+    private static RuleEvaluationStatus resolveEvaluationStatus(RuleEvaluationResult result) {
+        if (result == null) {
+            return RuleEvaluationStatus.UNUSED;
+        }
+        return result.getRuleEvaluationStatus();
+    }
+
     private static class ValidationStatusMatcher<T extends RuleEvaluationResult> extends TypeSafeDiagnosingMatcher<T> {
 
         private final ValidationSeverity validationSeverity;
@@ -352,6 +562,11 @@ public class KrakenRuleMatchers {
 
         @Override
         protected boolean matchesSafely(T result, Description mismatchDescription) {
+            if (result.getPayloadResult() == null) {
+                mismatchDescription.appendText(RULE_IS_IGNORED);
+                return false;
+            }
+
             return Optional.ofNullable(result.getPayloadResult())
                     .filter(ValidationPayloadResult.class::isInstance)
                     .map(ValidationPayloadResult.class::cast)
@@ -412,6 +627,11 @@ public class KrakenRuleMatchers {
 
         @Override
         protected boolean matchesSafely(T item, Description mismatchDescription) {
+            if (item.getPayloadResult() == null) {
+                mismatchDescription.appendText(RULE_IS_IGNORED);
+                return true;
+            }
+
             return Optional.ofNullable(item.getPayloadResult())
                     .filter(payloadResult -> payloadResult instanceof DefaultValuePayloadResult)
                     .map(DefaultValuePayloadResult.class::cast)
@@ -452,30 +672,33 @@ public class KrakenRuleMatchers {
 
         @Override
         protected boolean matchesSafely(T result, Description mismatchDescription) {
-            if (result.getPayloadResult() != null) {
-                if (result.getPayloadResult() instanceof DefaultValuePayloadResult
-                        && ((DefaultValuePayloadResult) result.getPayloadResult()).getException().isEmpty()) {
-                    Object changeValue = getChangeValue(((DefaultValuePayloadResult) result.getPayloadResult()).getEvents());
-                    Object transformedValue = transformationFunction
-                            .map(c -> c.apply(changeValue))
-                            .orElse(changeValue);
+            if (result.getPayloadResult() == null) {
+                mismatchDescription.appendText(RULE_IS_IGNORED);
+                return false;
+            }
 
-                    mismatchDescription.appendText(String.format(
-                            "Rule '%s' triggered value change to '%s', but expected '%s'",
-                            result.getRuleInfo().getRuleName(),
-                            transformedValue,
-                            newValue
-                    ));
-
-                    return Objects.equals(transformedValue, newValue);
-                }
+            if (result.getPayloadResult() instanceof DefaultValuePayloadResult
+                    && ((DefaultValuePayloadResult) result.getPayloadResult()).getException().isEmpty()) {
+                Object changeValue = getChangeValue(((DefaultValuePayloadResult) result.getPayloadResult()).getEvents());
+                Object transformedValue = transformationFunction
+                        .map(c -> c.apply(changeValue))
+                        .orElse(changeValue);
 
                 mismatchDescription.appendText(String.format(
-                        "Rule '%s' triggered no value change. Either rule payload type is incorrect " +
-                                "(expected 'DefaultValue') or payload contains exceptions.",
-                        result.getRuleInfo().getRuleName()
+                        "Rule '%s' triggered value change to '%s', but expected '%s'",
+                        result.getRuleInfo().getRuleName(),
+                        transformedValue,
+                        newValue
                 ));
+
+                return Objects.equals(transformedValue, newValue);
             }
+
+            mismatchDescription.appendText(String.format(
+                    "Rule '%s' triggered no value change. Either rule payload type is incorrect " +
+                            "(expected 'DefaultValue') or payload contains exceptions.",
+                    result.getRuleInfo().getRuleName()
+            ));
 
             return false;
         }

@@ -18,9 +18,9 @@ package kraken.converter;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import kraken.converter.dimensional.DimensionalRuleChecker;
 import kraken.converter.translation.KrakenExpressionTranslator;
-import kraken.el.ast.builder.AstBuilder;
+import kraken.dimensions.DimensionSet;
+import kraken.model.dimensions.DimensionSetService;
 import kraken.model.project.dependencies.RuleDependencyExtractor;
 import kraken.runtime.model.expression.CompiledExpression;
 import kraken.runtime.model.rule.Condition;
@@ -36,6 +36,7 @@ import kraken.runtime.model.rule.payload.validation.RegExpPayload;
 import kraken.runtime.model.rule.payload.validation.SizePayload;
 import kraken.runtime.model.rule.payload.validation.SizeRangePayload;
 import kraken.runtime.model.rule.payload.validation.UsagePayload;
+import kraken.runtime.repository.dynamic.DynamicRuleHolder;
 
 /**
  * @author mulevicius
@@ -48,44 +49,49 @@ public class RuleConverter {
 
     private MetadataConverter metadataConverter = new MetadataConverter();
 
-    private DimensionalRuleChecker dimensionalRuleChecker;
+    private DimensionSetService dimensionSetService;
+
+    private String namespace;
 
     public RuleConverter(RuleDependencyExtractor ruleDependencyExtractor,
                          KrakenExpressionTranslator krakenExpressionTranslator,
-                         DimensionalRuleChecker dimensionalRuleChecker) {
+                         DimensionSetService dimensionSetService,
+                         String namespace) {
         this.ruleDependencyExtractor = ruleDependencyExtractor;
         this.krakenExpressionTranslator = krakenExpressionTranslator;
-        this.dimensionalRuleChecker = dimensionalRuleChecker;
+        this.dimensionSetService = dimensionSetService;
+        this.namespace = namespace;
     }
 
     public List<RuntimeRule> convert(List<kraken.model.Rule> rules) {
         return rules.stream()
-                .map(r -> convert(r))
-                .collect(Collectors.toList());
+            .map(r -> convertRule(r, dimensionSetService.resolveRuleDimensionSet(namespace, r)))
+            .collect(Collectors.toList());
     }
 
-    public RuntimeRule convert(kraken.model.Rule rule) {
-        return convert(rule, dimensionalRuleChecker);
+    public RuntimeRule convertDynamicRule(DynamicRuleHolder dynamicRuleHolder) {
+        return convertRule(dynamicRuleHolder.getRule(), dynamicRuleHolder.getDimensionSet());
     }
 
-    private RuntimeRule convert(kraken.model.Rule rule, DimensionalRuleChecker dimensionalRuleChecker) {
+    private RuntimeRule convertRule(kraken.model.Rule rule, DimensionSet dimensionSet) {
         List<Dependency> dependencies = ruleDependencyExtractor.extractDependencies(rule).stream()
-                .map(d -> new Dependency(d.getContextName(), d.getPath(), d.isContextDependency()))
-                .collect(Collectors.toList());
+            .map(d -> new Dependency(d.getContextName(), d.getFieldName(), d.isCcrDependency(), d.isSelfDependency()))
+            .collect(Collectors.toList());
 
         Condition condition = rule.getCondition() != null
-                ? new Condition(convertRuleExpression(rule, rule.getCondition().getExpression()))
-                : null;
+            ? new Condition(convertRuleExpression(rule, rule.getCondition().getExpression()))
+            : null;
 
         return new RuntimeRule(
-                rule.getName(),
-                rule.getContext(),
-                rule.getTargetPath(),
-                condition,
-                convert(rule, rule.getPayload()),
-                dependencies,
-                dimensionalRuleChecker.isRuleDimensional(rule),
-                metadataConverter.convert(rule.getMetadata())
+            rule.getName(),
+            rule.getContext(),
+            rule.getTargetPath(),
+            condition,
+            convert(rule, rule.getPayload()),
+            dependencies,
+            dimensionSet,
+            metadataConverter.convert(rule.getMetadata()),
+            rule.getPriority()
         );
     }
 

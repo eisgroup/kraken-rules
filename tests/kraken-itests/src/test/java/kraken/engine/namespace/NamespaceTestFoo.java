@@ -30,7 +30,7 @@ import static io.github.jsonSnapshot.SnapshotMatcher.start;
 import static io.github.jsonSnapshot.SnapshotMatcher.validateSnapshots;
 import static kraken.test.KrakenItestMatchers.matchesSnapshot;
 import static kraken.testing.matchers.KrakenMatchers.hasNoIgnoredRules;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * @author psurinin

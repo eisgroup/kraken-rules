@@ -1,26 +1,36 @@
+/*
+ *  Copyright 2019 EIS Ltd and/or one of its affiliates.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 package kraken.runtime.engine.core;
 
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import kraken.dimensions.DimensionSet;
 import kraken.model.payload.PayloadType;
 import kraken.runtime.engine.evaluation.loop.OrderedEvaluationLoop;
 import kraken.runtime.model.rule.RuntimeRule;
-import kraken.runtime.order.GraphFactory;
 import kraken.runtime.repository.RuntimeContextRepository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 /**
- * Creates {@link EntryPointEvaluation}. Default {@link RuntimeRule}s are sorted topologically.
- * Default rules validated not to be applied twice or more on oe field.
- * Default rules appears first in the list. After sorted default rules comes other rules.
- * Order of not default rules is not important. {@link OrderedEvaluationLoop}
- * will process ordered rules.
+ * Creates {@link EntryPointEvaluation}.
+ * Field order is resolved by default {@link RuntimeRule} according to rule dependencies.
+ * {@link OrderedEvaluationLoop} will process default rules according to field order.
  *
- * @see GraphFactory
+ * @see OrderResolver
  * @see OrderedEvaluationLoop
  *
  * @author psurinin@eisgroup.com
@@ -28,56 +38,34 @@ import java.util.stream.Collectors;
  */
 public class EntryPointOrderedEvaluationFactory {
 
-    private final GraphFactory graphFactory;
-    private static final String DEFAULT = "default";
-    private static final String NOT_DEFAULT = "not_default";
-    private static final Function<RuntimeRule, String> PAYLOAD_TYPE_LABEL =
-            rule -> rule.getPayload().getType().equals(PayloadType.DEFAULT)
-                    ? DEFAULT
-                    : NOT_DEFAULT;
+    private final OrderResolver orderResolver;
 
     public EntryPointOrderedEvaluationFactory(RuntimeContextRepository contextRepository) {
-        this.graphFactory = new GraphFactory(contextRepository);
+        this.orderResolver = new OrderResolver(contextRepository);
     }
 
     /**
-     * Creates topologically sorted default rules at the start of rules list in
-     * {@link EntryPointEvaluation} and other rules after default.
+     * Creates {@link EntryPointEvaluation} with rules filtered by excludes and field evaluation order for default rules
      *
-     * @param entryPointData with rules to sort
-     * @param entryPointName to put in {@link EntryPointEvaluation}
-     * @param isDelta flag to decide filter out static rules and send only {@link RuntimeRule#isDimensional()}
-     *                or send all rules. If {@code true} it will filter out static rules.
-     * @return EntryPointEvaluation with sorted rules.
+     * @param entryPointData with rules
+     * @param excludes indicates rules to exclude by dimension set.
+     *                 If rule varies by at least one of the exclusion then such rule is not included in the bundle
+     * @return entry point evaluation with rules and field order
      */
-    public EntryPointEvaluation create(EntryPointData entryPointData, String entryPointName, boolean isDelta) {
-        Map<String, List<RuntimeRule>> rulesByPayloadLabel =
-                entryPointData.getIncludedRules().values().stream().collect(Collectors.groupingBy(PAYLOAD_TYPE_LABEL));
-        List<RuntimeRule> defaultRules = rulesByPayloadLabel.get(DEFAULT);
-        List<RuntimeRule> notDefaultRules = rulesByPayloadLabel.get(NOT_DEFAULT);
-        ArrayList<RuntimeRule> rules = new ArrayList<>();
-        var order = new HashMap<String, Integer>();
+    public EntryPointEvaluation create(EntryPointData entryPointData, Set<DimensionSet> excludes) {
+        List<RuntimeRule> rules = entryPointData.getIncludedRules().values().stream()
+            .filter(rule -> !excludes.contains(rule.getDimensionSet()))
+            .collect(Collectors.toList());
+        List<String> fieldOrder = calculateFieldOrder(entryPointData);
+        return new EntryPointEvaluation(entryPointData.getEntryPoint(), rules, fieldOrder);
+    }
 
-        if (defaultRules != null) {
-            List<RuntimeRule> orderedRules = graphFactory.getOrderedRules(defaultRules);
-            rules.addAll(orderedRules);
-            for (int i = 0; i < orderedRules.size(); i++) {
-                order.put(orderedRules.get(i).getName(), i);
-            }
-        }
-        if (notDefaultRules != null) {
-            rules.addAll(notDefaultRules);
-        }
-
-        var rulesInBundle = new ArrayList<RuntimeRule>();
-
-        for (int i = 0; i < rules.size(); i++) {
-            var rule = rules.get(i);
-            if (isDelta && !rule.isDimensional()) {
-                continue;
-            }
-            rulesInBundle.add(rule);
-        }
-        return new EntryPointEvaluation(entryPointName, rulesInBundle, order, isDelta);
+    private List<String> calculateFieldOrder(EntryPointData entryPointData) {
+        List<RuntimeRule> defaultRules = entryPointData.getIncludedRules().values().stream()
+            .filter(rule -> rule.getPayload().getType().equals(PayloadType.DEFAULT))
+            .collect(Collectors.toList());
+        return orderResolver.resolveOrderedFields(defaultRules).stream()
+            .map(a -> a.getContextName() + "." + a.getContextField())
+            .collect(Collectors.toList());
     }
 }

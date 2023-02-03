@@ -14,26 +14,24 @@
  *  limitations under the License.
  */
 
-// tslint:disable: triple-equals
-
 export const setFunctions = {
     Union,
     Intersection,
     Difference,
     SymmetricDifference,
-    Distinct
-};
+    Distinct,
+}
 
 /**
  * @param a
  * @param b
  * @return a mathematical union of two sets; null parameter is treated as empty set
  */
-function Union(a?: any[] | null, b?: any[] | null): any[] {
-    const setA = new Set(normalizeNulls(a));
-    const setB = new Set(normalizeNulls(b));
-    const union = new Set([...setA, ...setB]);
-    return [...union];
+function Union(a?: unknown[] | null, b?: unknown[] | null): unknown[] {
+    const setA = new Set(normalizeNulls(a))
+    const setB = new Set(normalizeNulls(b))
+    const union = new Set([...setA, ...setB])
+    return [...union]
 }
 
 /**
@@ -41,11 +39,11 @@ function Union(a?: any[] | null, b?: any[] | null): any[] {
  * @param b
  * @return a mathematical intersection of two sets; null parameter is treated as empty set
  */
-function Intersection(a?: any[] | null, b?: any[] | null): any[] {
-    const setA = new Set(normalizeNulls(a));
-    const setB = new Set(normalizeNulls(b));
-    const intersection = new Set([...setA].filter(x => setB.has(x)));
-    return [...intersection];
+function Intersection(a?: unknown[] | null, b?: unknown[] | null): unknown[] {
+    const setA = new Set(normalizeNulls(a))
+    const setB = new Set(normalizeNulls(b))
+    const intersection = new Set([...setA].filter(x => setB.has(x)))
+    return [...intersection]
 }
 
 /**
@@ -53,11 +51,11 @@ function Intersection(a?: any[] | null, b?: any[] | null): any[] {
  * @param b
  * @return a mathematical difference between first set and second set; null parameter is treated as empty set
  */
-function Difference(a?: any[] | null, b?: any[] | null): any[] {
-    const setA = new Set(normalizeNulls(a));
-    const setB = new Set(normalizeNulls(b));
-    const difference = new Set([...setA].filter(x => !setB.has(x)));
-    return [...difference];
+function Difference(a?: unknown[] | null, b?: unknown[] | null): unknown[] {
+    const setA = new Set(normalizeNulls(a))
+    const setB = new Set(normalizeNulls(b))
+    const difference = new Set([...setA].filter(x => !setB.has(x)))
+    return [...difference]
 }
 
 /**
@@ -65,12 +63,12 @@ function Difference(a?: any[] | null, b?: any[] | null): any[] {
  * @param b
  * @return a mathematical symmetric different of two sets; null parameter is treated as empty set
  */
-function SymmetricDifference(a?: any[] | null, b?: any[] | null): any[] {
-    const setA = new Set(normalizeNulls(a));
-    const setB = new Set(normalizeNulls(b));
-    const differenceA = new Set([...setA].filter(x => !setB.has(x)));
-    const differenceB = new Set([...setB].filter(x => !setA.has(x)));
-    return [...differenceA, ...differenceB];
+function SymmetricDifference(a?: unknown[] | null, b?: unknown[] | null): unknown[] {
+    const setA = new Set(normalizeNulls(a))
+    const setB = new Set(normalizeNulls(b))
+    const differenceA = new Set([...setA].filter(x => !setB.has(x)))
+    const differenceB = new Set([...setB].filter(x => !setA.has(x)))
+    return [...differenceA, ...differenceB]
 }
 
 /**
@@ -78,10 +76,10 @@ function SymmetricDifference(a?: any[] | null, b?: any[] | null): any[] {
  * @param b
  * @return a set of values with duplicates removed; null parameter is treated as empty set
  */
-function Distinct(a?: any[] | null): any[] {
-    return [...new Set(normalizeNulls(a))];
+function Distinct(a?: unknown[] | null): unknown[] {
+    return [...new Set(normalizeNulls(a))]
 }
 
-function normalizeNulls(a?: any[] | null): any[] {
-    return a == undefined ? [] : a.map(i => i === null ? undefined : i);
+function normalizeNulls(a?: unknown[] | null): unknown[] {
+    return a == undefined ? [] : a.map(i => (i === null ? undefined : i))
 }

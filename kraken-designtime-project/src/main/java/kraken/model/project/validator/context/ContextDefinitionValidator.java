@@ -59,48 +59,78 @@ public class ContextDefinitionValidator {
         }
         session.addAll(NamespacedValidator.validate(contextDefinition));
 
-        contextDefinition.getContextFields().entrySet().stream()
-                .filter(e -> !e.getKey().equals(e.getValue().getName()))
-                .forEach(e -> session.add(new ValidationMessage(contextDefinition,
-                        "ContextFields map has has key that is different from ContextField.name", ERROR)));
+        if (contextDefinition.isSystem()) {
+            validateSystemContext(contextDefinition, session);
+        } else {
+            validateModeledContext(contextDefinition, session);
+        }
+    }
 
-        for(ContextField contextField : contextDefinition.getContextFields().values()) {
-            if(contextField.getName() == null) {
-                session.add(new ValidationMessage(contextDefinition,
-                        "ContextField.name is missing", ERROR));
-            }
-            if(contextField.getFieldType() == null) {
-                session.add(new ValidationMessage(contextDefinition,
-                        "ContextField.fieldType is missing", ERROR));
-            }
-            if(contextField.getCardinality() == null) {
-                session.add(new ValidationMessage(contextDefinition,
-                        "ContextField.cardinality is missing", ERROR));
-            }
-            if(contextField.getFieldPath() == null) {
-                session.add(new ValidationMessage(contextDefinition,
-                        "ContextField.fieldPath is missing", ERROR));
-            }
+    private void validateModeledContext(ContextDefinition contextDefinition, ValidationSession session) {
+        validateContextFields(contextDefinition, session);
+        validateContextChildren(contextDefinition, session);
+    }
+
+    private void validateSystemContext(ContextDefinition contextDefinition, ValidationSession session) {
+        validateContextFields(contextDefinition, session);
+
+        if (contextDefinition.getParentDefinitions() != null && contextDefinition.getParentDefinitions().size() > 0) {
+            String message = "Parent contexts are not allowed for system context definitions.";
+            session.add(new ValidationMessage(contextDefinition, message, ERROR));
         }
 
+        if (contextDefinition.getChildren() != null && contextDefinition.getChildren().size() > 0) {
+            String message = "Child contexts are not allowed for system context definitions.";
+            session.add(new ValidationMessage(contextDefinition, message, ERROR));
+        }
+    }
+
+    private void validateContextChildren(ContextDefinition contextDefinition, ValidationSession session) {
         contextDefinition.getChildren().entrySet().stream()
-                .filter(e -> !e.getKey().equals(e.getValue().getTargetName()))
-                .forEach(e -> session.add(new ValidationMessage(contextDefinition,
-                        "children map has key that is different from ContextNavigation.targetName", ERROR)));
+            .filter(e -> !e.getKey().equals(e.getValue().getTargetName()))
+            .forEach(e -> session.add(new ValidationMessage(contextDefinition,
+                "children map has key that is different from ContextNavigation.targetName", ERROR)));
 
         for(ContextNavigation contextNavigation : contextDefinition.getChildren().values()) {
             if(contextNavigation.getTargetName() == null) {
                 session.add(new ValidationMessage(contextDefinition,
-                        "ContextNavigation.targetName is missing", ERROR));
+                    "ContextNavigation.targetName is missing", ERROR));
             }
             if(contextNavigation.getCardinality() == null) {
                 session.add(new ValidationMessage(contextDefinition,
-                        "ContextNavigation.cardinality is missing", ERROR));
+                    "ContextNavigation.cardinality is missing", ERROR));
             }
             if(contextNavigation.getNavigationExpression() == null) {
                 session.add(new ValidationMessage(contextDefinition,
-                        "ContextNavigation.navigationExpression is missing", ERROR));
+                    "ContextNavigation.navigationExpression is missing", ERROR));
             }
         }
     }
+
+    private void validateContextFields(ContextDefinition contextDefinition, ValidationSession session) {
+        contextDefinition.getContextFields().entrySet().stream()
+            .filter(e -> !e.getKey().equals(e.getValue().getName()))
+            .forEach(e -> session.add(new ValidationMessage(contextDefinition,
+                "ContextFields map has has key that is different from ContextField.name", ERROR)));
+
+        for (ContextField contextField : contextDefinition.getContextFields().values()) {
+            if (contextField.getName() == null) {
+                session.add(new ValidationMessage(contextDefinition,
+                    "ContextField.name is missing", ERROR));
+            }
+            if (contextField.getFieldType() == null) {
+                session.add(new ValidationMessage(contextDefinition,
+                    "ContextField.fieldType is missing", ERROR));
+            }
+            if (contextField.getCardinality() == null) {
+                session.add(new ValidationMessage(contextDefinition,
+                    "ContextField.cardinality is missing", ERROR));
+            }
+            if (contextField.getFieldPath() == null) {
+                session.add(new ValidationMessage(contextDefinition,
+                    "ContextField.fieldPath is missing", ERROR));
+            }
+        }
+    }
+
 }

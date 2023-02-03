@@ -1,0 +1,9 @@
+Namespace Policy
+
+EntryPoint "EvaluateWithoutDuplicatedResults" {
+    "EvaluateWithoutDuplicatedResults"
+}
+
+Rule "EvaluateWithoutDuplicatedResults" On Info.additionalInfo {
+    Assert additionalInfo = "Some Info"
+}

@@ -19,7 +19,6 @@ import static kraken.runtime.engine.handlers.PayloadHandlerTestConstants.SESSION
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.IsNull.nullValue;
 
 import java.util.List;
 

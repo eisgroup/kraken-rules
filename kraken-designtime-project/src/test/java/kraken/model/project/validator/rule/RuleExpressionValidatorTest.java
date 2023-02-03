@@ -23,7 +23,7 @@ import static kraken.model.project.KrakenProjectMocks.attribute;
 import static kraken.model.project.KrakenProjectMocks.contextDefinition;
 import static kraken.model.project.KrakenProjectMocks.entryPoints;
 import static kraken.model.project.KrakenProjectMocks.field;
-import static kraken.model.project.KrakenProjectMocks.function;
+import static kraken.model.project.KrakenProjectMocks.functionSignature;
 import static kraken.model.project.KrakenProjectMocks.krakenProject;
 import static kraken.model.project.KrakenProjectMocks.rule;
 import static kraken.model.project.KrakenProjectMocks.type;
@@ -32,6 +32,7 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
 
 import java.util.List;
@@ -57,6 +58,7 @@ import kraken.model.derive.DefaultingType;
 import kraken.model.factory.RulesModelFactory;
 import kraken.model.project.KrakenProject;
 import kraken.model.project.KrakenProjectMocks;
+import kraken.model.project.validator.Severity;
 import kraken.model.project.validator.ValidationMessage;
 import kraken.model.project.validator.ValidationSession;
 import kraken.model.validation.AssertionPayload;
@@ -119,8 +121,8 @@ public class RuleExpressionValidatorTest {
 
         assertThat(validationMessages, hasSize(1));
         assertThat(validationMessages,
-                contains("Error found in Condition Expression: syntax error in 'notExistingField' with message: " +
-                        "Symbol 'notExistingField' cannot be resolved in scope: Base:GLOBAL->PartyContext"));
+            contains("Error found in Condition Expression: error in 'notExistingField' with message: "
+                + "Reference 'notExistingField' not found."));
     }
 
     @Test
@@ -144,8 +146,8 @@ public class RuleExpressionValidatorTest {
 
         assertThat(validationMessages, hasSize(2));
         assertThat(validationMessages, contains(
-            "Error found in Error Message Template: syntax error in 'notExistingField' with message: "
-                + "Symbol 'notExistingField' cannot be resolved in scope: Base:GLOBAL->PartyContext",
+            "Error found in Error Message Template: error in 'notExistingField' with message: "
+                + "Reference 'notExistingField' not found.",
             "Return type of expression 'notExistingField' in validation message template must be primitive "
                 + "or array of primitives, but found: Unknown"
         ));
@@ -194,10 +196,13 @@ public class RuleExpressionValidatorTest {
 
         assertThat(validationMessages, hasSize(2));
         assertThat(validationMessages, containsInAnyOrder(
-                "Error found in Assertion Expression: syntax error in 'notExistingField.nested.path >= 21' with message: " +
-                        "Operation MoreThanOrEquals can only be performed on comparable types, but was performed on 'Unknown' and 'Number'",
-                "Error found in Assertion Expression: syntax error in 'notExistingField.nested.path' with message: " +
-                        "Symbol 'notExistingField' cannot be resolved in scope: Base:GLOBAL->PartyContext"
+                "Error found in Assertion Expression: error "
+                    + "in 'notExistingField.nested.path >= 21' with message: "
+                    + "Operation MoreThanOrEquals can only be performed on comparable types, "
+                    + "but was performed on 'Unknown' and 'Number'",
+                "Error found in Assertion Expression: error "
+                    + "in 'notExistingField.nested.path' with message: "
+                    + "Reference 'notExistingField' not found."
                 )
         );
     }
@@ -293,12 +298,13 @@ public class RuleExpressionValidatorTest {
 
         assertThat(validationMessages, hasSize(3));
         assertThat(validationMessages, containsInAnyOrder(
-                "Error found in Default Expression: syntax error in 'notValidExpression > valid' with message: " +
-                        "Operation MoreThan can only be performed on comparable types, but was performed on 'Unknown' and 'Unknown'",
-                "Error found in Default Expression: syntax error in 'notValidExpression' with message: " +
-                        "Symbol 'notValidExpression' cannot be resolved in scope: Base:GLOBAL->PartyContext",
-                "Error found in Default Expression: syntax error in 'valid' with message: " +
-                        "Symbol 'valid' cannot be resolved in scope: Base:GLOBAL->PartyContext"
+                "Error found in Default Expression: error in 'notValidExpression > valid' with message: "
+                    + "Operation MoreThan can only be performed on comparable types, "
+                    + "but was performed on 'Unknown' and 'Unknown'",
+                "Error found in Default Expression: error in 'notValidExpression' with message: "
+                    + "Reference 'notValidExpression' not found.",
+                "Error found in Default Expression: error in 'valid' with message: "
+                    + "Reference 'valid' not found."
                 )
         );
     }
@@ -427,8 +433,10 @@ public class RuleExpressionValidatorTest {
                         .map(validationMessage -> validationMessage.getMessage())
                         .collect(Collectors.toList()),
                 containsInAnyOrder(
-                        "Error found in Default Expression: syntax error in 'context.next.nextField' with message: Symbol 'next' cannot be resolved in scope: ExternalContext_context",
-                        "Return type of default expression must be compatible with field type which is String, but expression return type is Unknown")
+                        "Error found in Default Expression: error in 'context.next.nextField' "
+                            + "with message: Attribute 'next' not found in 'ExternalContext_context'.",
+                        "Return type of default expression must be compatible with field type which is String, "
+                            + "but expression return type is Unknown")
         );
     }
 
@@ -461,7 +469,7 @@ public class RuleExpressionValidatorTest {
                         .map(validationMessage -> validationMessage.getMessage())
                         .collect(Collectors.toList()),
                 containsInAnyOrder(
-                        "Error found in Default Expression: syntax error in 'context.prev.previousStringField + 10' with message: Left side of Addition operation must be of type 'Number' but was 'String'",
+                        "Error found in Default Expression: error in 'context.prev.previousStringField + 10' with message: Left side of Addition operation must be of type 'Number' but was 'String'",
                         "Return type of default expression must be compatible with field type which is String, but expression return type is Number")
         );
     }
@@ -474,7 +482,7 @@ public class RuleExpressionValidatorTest {
         payload.setValueExpression(expressionOf("CustomFunction(1)"));
         rule.setPayload(payload);
 
-        FunctionSignature function = function("CustomFunction", "Any", List.of("String"));
+        FunctionSignature function = functionSignature("CustomFunction", "Any", List.of("String"));
         ContextDefinition contextDefinition = contextDefinition("Policy", List.of(field("expirationDate", DATETIME)));
         KrakenProject krakenProject = krakenProject(
             List.of(contextDefinition),
@@ -487,9 +495,9 @@ public class RuleExpressionValidatorTest {
 
         assertThat(validationMessages.get(0).getMessage(),
             equalTo(
-                "Error found in Default Expression: syntax error in 'CustomFunction(1)' with message: "
+                "Error found in Default Expression: error in 'CustomFunction(1)' with message: "
                     + "Incompatible type 'Number' of function parameter at index 0 when invoking function CustomFunction(1). "
-                    + "Expected type is 'String'"
+                    + "Expected type is 'String'."
             )
         );
     }
@@ -502,7 +510,7 @@ public class RuleExpressionValidatorTest {
         payload.setValueExpression(expressionOf("CustomFunctionString('string')"));
         rule.setPayload(payload);
 
-        FunctionSignature function = function("CustomFunctionString", "Any", List.of("String"));
+        FunctionSignature function = functionSignature("CustomFunctionString", "Any", List.of("String"));
         ContextDefinition contextDefinition = contextDefinition("Policy", List.of(field("expirationDate", DATETIME)));
         KrakenProject krakenProject = krakenProject(
             List.of(contextDefinition),
@@ -514,6 +522,79 @@ public class RuleExpressionValidatorTest {
         List<ValidationMessage> validationMessages = validate(rule, krakenProject);
 
         assertThat(validationMessages, empty());
+    }
+
+    @Test
+    public void shouldNotBeValidIfExpressionIsEmpty() {
+        Rule rule = rule("R1", "PartyContext", "name");
+        rule.setCondition(conditionOf("  "));
+        Payload assertionPayload = factory.createAssertionPayload();
+        ((AssertionPayload) assertionPayload).setAssertionExpression(expressionOf("// todo"));
+        rule.setPayload(assertionPayload);
+
+        ContextDefinition contextDefinition = contextDefinition("PartyContext", List.of(field("surname")));
+
+        KrakenProject krakenProject = krakenProject(List.of(contextDefinition), entryPoints(), List.of(rule));
+
+        List<ValidationMessage> validationMessages = validate(rule, krakenProject);
+
+        assertThat(validationMessages, hasSize(2));
+        assertThat(
+            validationMessages.stream().map(ValidationMessage::getMessage).collect(Collectors.toList()),
+            containsInAnyOrder(
+                "Condition expression is logically empty. "
+                    + "Please check if there are unintentional spaces, new lines or comments remaining.",
+                "Assertion expression is logically empty. "
+                    + "Please check if there are unintentional spaces, new lines or comments remaining."
+            )
+        );
+    }
+
+    @Test
+    public void shouldNotBeValidIfExpressionIsNotParseable() {
+        Rule rule = rule("R1", "PartyContext", "name");
+        Payload assertionPayload = factory.createAssertionPayload();
+        ((AssertionPayload) assertionPayload).setAssertionExpression(expressionOf("name = \"\"\""));
+        rule.setPayload(assertionPayload);
+
+        ContextDefinition contextDefinition = contextDefinition("PartyContext", List.of(field("surname")));
+
+        KrakenProject krakenProject = krakenProject(List.of(contextDefinition), entryPoints(), List.of(rule));
+
+        List<ValidationMessage> validationMessages = validate(rule, krakenProject);
+
+        assertThat(validationMessages, hasSize(1));
+        assertThat(
+            validationMessages.stream().map(ValidationMessage::getMessage).collect(Collectors.toList()),
+            containsInAnyOrder(
+                "Assertion expression cannot be parsed, because there is an error in expression syntax"
+            )
+        );
+    }
+
+    @Test
+    public void shouldCreateInfoMessageForLiteralTrueConditionExpression() {
+        Rule rule = rule("R1", "PartyContext", "surname");
+        rule.setCondition(conditionOf("true"));
+        Payload assertionPayload = factory.createAssertionPayload();
+        ((AssertionPayload) assertionPayload).setAssertionExpression(expressionOf("age >= 21"));
+        rule.setPayload(assertionPayload);
+
+        ContextDefinition contextDefinition = contextDefinition("PartyContext", List.of(
+            field("surname"),
+            field("name"),
+            field("age", PrimitiveFieldDataType.DECIMAL)
+        ));
+
+        KrakenProject krakenProject = krakenProject(List.of(contextDefinition), entryPoints(), List.of(rule));
+
+        List<ValidationMessage> validationMessages = validate(rule, krakenProject);
+
+        assertThat(validationMessages, hasSize(1));
+        assertThat(validationMessages.get(0).getSeverity(), is(Severity.INFO));
+        assertThat(validationMessages.get(0).getMessage(),
+            equalTo("Redundant literal value 'true' in rule condition expression. "
+                + "An empty condition expression is 'true' by default."));
     }
 
     private List<ValidationMessage> validate(Rule rule, KrakenProject krakenProject) {

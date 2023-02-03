@@ -26,14 +26,11 @@ import kraken.model.project.KrakenProject;
  * To validate Rule definitions provided by DynamicRuleRepository at runtime also implement {@link DynamicRuleValidator}
  * <p/>
  * Implementation of {@link KrakenProjectValidator} must be registered in the system by following {@link java.util.ServiceLoader}
+ * <p/>
+ * Note, that this is NOT an API.
  *
  * @author mulevicius
- *
- * @deprecated Custom KrakenProject validation is no longer supported, because such validators cannot be run in
- * tooling environment.
  */
-@SPI
-@Deprecated(since = "1.22.0")
 public interface KrakenProjectValidator {
 
     /**
@@ -42,13 +39,4 @@ public interface KrakenProjectValidator {
      */
     List<ValidationMessage> validate(KrakenProject krakenProject);
 
-    /**
-     *
-     * @return validator tier
-     * @deprecated this is now unused and does not affect validation in any way
-     */
-    @Deprecated(since = "1.21.0", forRemoval = true)
-    default int tier() {
-        return Integer.MAX_VALUE;
-    };
 }

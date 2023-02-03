@@ -1,14 +1,13 @@
 package kraken;
 
 import kraken.el.TargetEnvironment;
-import kraken.namespace.Namespaced;
 import kraken.context.model.tree.ContextModelTree;
 import kraken.context.model.tree.repository.StaticContextModelTreeRepository;
 import kraken.test.TestResources;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class StaticContextModelTreeImplRepositoryTest {
 

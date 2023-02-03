@@ -34,21 +34,14 @@ public class InvocationContextHolder {
 
     public static class InvocationContext {
 
-        private Object context;
+        private final EvaluationContext evaluationContext;
 
-        private Map<String, Object> variables;
-
-        public InvocationContext(Object context, Map<String, Object> variables) {
-            this.context = context;
-            this.variables = variables;
+        public InvocationContext(EvaluationContext evaluationContext) {
+            this.evaluationContext = evaluationContext;
         }
 
-        public Object getContext() {
-            return context;
-        }
-
-        public Map<String, Object> getVariables() {
-            return variables;
+        public EvaluationContext getEvaluationContext() {
+            return evaluationContext;
         }
     }
 }

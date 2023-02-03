@@ -20,11 +20,11 @@ import kraken.model.EntryPointName;
 import kraken.model.Rule;
 import kraken.model.dsl.read.DSLReader;
 import kraken.model.factory.RulesModelFactory;
-import kraken.model.project.KrakenProject;
 import kraken.model.project.ResourceKrakenProject;
 import kraken.model.project.builder.ResourceKrakenProjectBuilder;
 import kraken.model.resource.Resource;
 import kraken.model.state.AccessibilityPayload;
+import kraken.runtime.repository.dynamic.DynamicRuleHolder;
 import kraken.service.ReloadableRepository.Return;
 import kraken.testproduct.TestProduct;
 import org.junit.Before;
@@ -41,7 +41,7 @@ import static kraken.utils.TestUtils.createMockRules;
 import static kraken.utils.TestUtils.toDSL;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.*;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * @author psurinin@eisgroup.com
@@ -127,7 +127,8 @@ public class ReloadableRepositoryTest {
 
         assertThat(aReturn.getFailure().isEmpty(), is(true));
         assertThat(aReturn.getSuccess().isEmpty(), is(false));
-        assertThat(aReturn.getSuccess().get(), is("Rules: [TestRule1] are removed, from an EntryPoint and dynamic repository"));
+        assertThat(aReturn.getSuccess().get(),
+            is("Rules: [TestRule1] are removed, from an EntryPoint and dynamic repository"));
 
         assertThat(repository.getEntryPoint(QA1).getRuleNames(), hasSize(0));
         assertThat(repository.getRules(), hasSize(1));
@@ -137,17 +138,17 @@ public class ReloadableRepositoryTest {
     @Test
     public void shouldResolveRules() {
         repository.addRules(QA1, toDSL(createMockRules("TestRule1")));
-        final List<Rule> rules =
-                repository.resolveRules(TestProduct.NAMESPACE, QA1.name(), Map.of()).collect(Collectors.toList());
+        List<DynamicRuleHolder> rules = repository.resolveDynamicRules(TestProduct.NAMESPACE, QA1.name(), Map.of())
+                .collect(Collectors.toList());
         assertThat(rules, hasSize(1));
-        assertThat(rules.get(0).getName(), is("TestRule1"));
+        assertThat(rules.get(0).getRule().getName(), is("TestRule1"));
     }
 
     @Test
     public void shouldValidateRules() {
         final RulesModelFactory factory = RulesModelFactory.getInstance();
         final Rule rule = factory
-                .createRule();
+            .createRule();
         rule.setName("TestRule");
         rule.setTargetPath("NA");
         rule.setContext("NA");
@@ -158,7 +159,8 @@ public class ReloadableRepositoryTest {
         final Return aReturn = repository.addRules(QA1, toDSL(List.of(rule)));
         assertThat(aReturn.getFailure().isEmpty(), is(false));
         assertThat(aReturn.getSuccess().isEmpty(), is(true));
-        assertThat(aReturn.getFailure().get(), is("[ERROR] Rule - 'TestRule': missing ContextDefinition with name 'NA'"));
+        assertThat(aReturn.getFailure().get(),
+            is("[ERROR] Rule - 'TestRule': missing ContextDefinition with name 'NA'"));
     }
 
 }

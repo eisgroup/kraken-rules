@@ -36,7 +36,7 @@ import org.junit.Test;
 
 import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * @author mulevicius
@@ -54,8 +54,8 @@ public class OverrideDependencyExtractorTest {
     public void shouldExtractMultipleDependencies() {
         Map<String, OverrideDependency> overrideDependencies = overrideDependencyExtractor.extractOverrideDependencies(
                 rule(
-                        dependency("RiskItem", "itemName"),
-                        dependency("Address", "street")
+                        ccrDependency("RiskItem", "itemName"),
+                        selfDependency("Address", "street")
                 ),
                 context(
                         "Policy",
@@ -100,7 +100,7 @@ public class OverrideDependencyExtractorTest {
     public void shouldNotExtractComplexDependency() {
         Map<String, OverrideDependency> overrideDependencies = overrideDependencyExtractor.extractOverrideDependencies(
                 rule(
-                        dependency("RiskItem", "coverage")
+                        ccrDependency("RiskItem", "coverage")
                 ),
                 context(
                         "Policy",
@@ -116,7 +116,7 @@ public class OverrideDependencyExtractorTest {
     public void shouldNotExtractDependencyOfCollectionCrossContext() {
         Map<String, OverrideDependency> overrideDependencies = overrideDependencyExtractor.extractOverrideDependencies(
                 rule(
-                        dependency("RiskItem", "itemName")
+                        ccrDependency("RiskItem", "itemName")
                 ),
                 context(
                         "Policy",
@@ -132,7 +132,7 @@ public class OverrideDependencyExtractorTest {
     public void shouldNotExtractDependencyOfCollectionField() {
         Map<String, OverrideDependency> overrideDependencies = overrideDependencyExtractor.extractOverrideDependencies(
                 rule(
-                        dependency("RiskItem", "itemName")
+                        ccrDependency("RiskItem", "itemName")
                 ),
                 context(
                         "Policy",
@@ -192,11 +192,15 @@ public class OverrideDependencyExtractorTest {
                 .build();
     }
 
-    private Dependency dependency(String context, String attribute) {
-        return new Dependency(context, attribute, true);
+    private Dependency ccrDependency(String context, String attribute) {
+        return new Dependency(context, attribute, true, false);
+    }
+
+    private Dependency selfDependency(String context, String attribute) {
+        return new Dependency(context, attribute, false, true);
     }
 
     private Dependency fieldDependency(String context, String attribute) {
-        return new Dependency(context, attribute, false);
+        return new Dependency(context, attribute, false, false);
     }
 }

@@ -14,30 +14,31 @@
  *  limitations under the License.
  */
 
-import * as React from "react";
+import * as React from 'react'
 
-import { AutoPolicyContext } from "../AutoPolicySummary/Policy.container";
-import { ValidationMetadata, InnerInputsComponentProps } from "./field/SingleField";
+import { AutoPolicyContext } from '../AutoPolicySummary/Policy.container'
+import { ValidationMetadata, InnerInputsComponentProps } from './field/SingleField'
 
-type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 
 export interface AppContextInterface {
-    metadata: { [key: string]: ValidationMetadata };
+    metadata: { [key: string]: ValidationMetadata }
 }
 
-export type ReactComponent<P> = React.ComponentClass<P> | React.StatelessComponent<P>;
+export type ReactComponent<P> = React.ComponentClass<P> | React.StatelessComponent<P>
 
-export function withMetadata<T, P extends InnerInputsComponentProps<T>, R = Omit<P, "metadata">>(
-    Component: ReactComponent<P>): React.FunctionComponent<R> {
-    // tslint:disable-next-line:no-any
+export function withMetadata<T, P extends InnerInputsComponentProps<T>, R = Omit<P, 'metadata'>>(
+    Component: ReactComponent<P>,
+): React.FunctionComponent<R> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return function BoundComponent(props: any): JSX.Element {
-        const idProp = props.contextName ? { id: props.contextName + "." + props.modelFieldName + "." + props.id } : {};
+        const idProp = props.contextName ? { id: props.contextName + '.' + props.modelFieldName + '.' + props.id } : {}
         return (
             <div {...idProp}>
                 <AutoPolicyContext.Consumer>
                     {value => <Component {...props} metadata={value.metadata} />}
                 </AutoPolicyContext.Consumer>
             </div>
-        );
-    };
+        )
+    }
 }

@@ -14,76 +14,87 @@
  *  limitations under the License.
  */
 
-import { Contexts } from "kraken-model";
-import ContextNavigation = Contexts.ContextNavigation;
-import ContextField = Contexts.ContextField;
-import ContextDefinition = Contexts.ContextDefinition;
+import { Contexts } from 'kraken-model'
+import ContextNavigation = Contexts.ContextNavigation
+import ContextField = Contexts.ContextField
+import ContextDefinition = Contexts.ContextDefinition
 
 export class ContextDefinitionBuilder {
-
-    private name: string;
-    private parentDefinitions: string[] = [];
-    private children: Record<string, ContextNavigation>;
-    private contextFields?: Record<string, ContextField>;
+    private name?: string
+    private parentDefinitions: string[] = []
+    private children: Record<string, ContextNavigation> = {}
+    private contextFields?: Record<string, ContextField>
 
     static create(): ContextDefinitionBuilder {
-        return new ContextDefinitionBuilder();
+        return new ContextDefinitionBuilder()
     }
 
     setName(name: string): ContextDefinitionBuilder {
-        this.name = name;
-        return this;
+        this.name = name
+        return this
     }
 
     setParentDefinitions(value: string | string[]): ContextDefinitionBuilder {
-        this.parentDefinitions = typeof value === "string" ? [value] : value;
-        return this;
+        this.parentDefinitions = typeof value === 'string' ? [value] : value
+        return this
     }
 
     addField(field: ContextField): ContextDefinitionBuilder {
         if (!this.contextFields) {
-            this.contextFields = {};
+            this.contextFields = {}
         }
 
         this.contextFields[field.name] = {
-            "name": field.name,
-            "cardinality": field.cardinality,
-            "fieldType": field.fieldType,
-            "fieldPath": field.fieldPath
-        };
+            name: field.name,
+            cardinality: field.cardinality,
+            fieldType: field.fieldType,
+            fieldPath: field.fieldPath,
+        }
 
-        return this;
+        return this
     }
 
     addChild(name: string, nav: string): ContextDefinitionBuilder {
         if (!this.children) {
-            this.children = {};
+            this.children = {}
         }
         this.children[name] = {
             navigationExpression: {
-                expressionType: "PATH",
-                expressionString: nav
+                expressionType: 'PATH',
+                expressionString: nav,
             },
-            cardinality: "SINGLE",
-            targetName: name
-        };
-        return this;
+            cardinality: 'SINGLE',
+            targetName: name,
+        }
+        return this
     }
 
     public build(): ContextDefinition {
+        this.isDefined(this.name, 'Name must be defined')
+
         const context: ContextDefinition = {
             name: this.name,
-            inheritedContexts: []
-        };
+            inheritedContexts: [],
+        }
         if (this.contextFields) {
-            context.fields = this.contextFields;
+            context.fields = this.contextFields
         }
         if (this.children) {
-            context.children = this.children;
+            context.children = this.children
         }
         if (this.parentDefinitions) {
-            context.inheritedContexts = this.parentDefinitions;
+            context.inheritedContexts = this.parentDefinitions
         }
-        return context;
+        return context
+    }
+
+    private isDefined<T>(value: T | undefined, err: string): asserts value is NonNullable<T> {
+        if (value === undefined && value === null) {
+            throw new Error(err)
+        }
+
+        if (typeof value === 'string' && value === '') {
+            throw new Error(err)
+        }
     }
 }

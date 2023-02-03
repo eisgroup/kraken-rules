@@ -54,15 +54,15 @@ public class Policy extends Identifiable {
     private Object refToCustomer;
 
     private SecondaryInsured oneInsured;
-    private List<SecondaryInsured> multipleInsureds;
-    private List<SecondaryInsured> multiInsureds1;
-    private List<SecondaryInsured> multiInsureds2;
+    private List<? extends SecondaryInsured> multipleInsureds;
+    private List<? extends SecondaryInsured> multiInsureds1;
+    private List<? extends SecondaryInsured> multiInsureds2;
 
     public void setMultipleInsureds(
             SecondaryInsured oneInsured,
-            List<SecondaryInsured> multipleInsureds,
-            List<SecondaryInsured> multiInsureds1,
-            List<SecondaryInsured> multiInsureds2
+            List<? extends SecondaryInsured> multipleInsureds,
+            List<? extends SecondaryInsured> multiInsureds1,
+            List<? extends SecondaryInsured> multiInsureds2
     ) {
         this.oneInsured = oneInsured;
         this.multiInsureds1 = multiInsureds1;
@@ -74,15 +74,15 @@ public class Policy extends Identifiable {
         return oneInsured;
     }
 
-    public List<SecondaryInsured> getMultipleInsureds() {
+    public List<? extends SecondaryInsured> getMultipleInsureds() {
         return multipleInsureds;
     }
 
-    public List<SecondaryInsured> getMultiInsureds1() {
+    public List<? extends SecondaryInsured> getMultiInsureds1() {
         return multiInsureds1;
     }
 
-    public List<SecondaryInsured> getMultiInsureds2() {
+    public List<? extends SecondaryInsured> getMultiInsureds2() {
         return multiInsureds2;
     }
 

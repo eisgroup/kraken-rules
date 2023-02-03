@@ -18,6 +18,8 @@ package kraken.converter;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import kraken.dimensions.DimensionSet;
+import kraken.model.dimensions.DimensionSetService;
 import kraken.runtime.model.entrypoint.RuntimeEntryPoint;
 
 /**
@@ -27,18 +29,27 @@ public class EntryPointConverter {
 
     private MetadataConverter metadataConverter = new MetadataConverter();
 
-    public List<RuntimeEntryPoint> convert(List<kraken.model.entrypoint.EntryPoint> entryPoints) {
-        return entryPoints.stream()
-                .map(ep -> convert(ep))
-                .collect(Collectors.toList());
+    private DimensionSetService dimensionSetService;
+
+    private String namespace;
+
+    public EntryPointConverter(DimensionSetService dimensionSetService, String namespace) {
+        this.dimensionSetService = dimensionSetService;
+        this.namespace = namespace;
     }
 
-    private RuntimeEntryPoint convert(kraken.model.entrypoint.EntryPoint entryPoint) {
+    public List<RuntimeEntryPoint> convert(List<kraken.model.entrypoint.EntryPoint> entryPoints) {
+        return entryPoints.stream()
+            .map(ep -> convert(ep, dimensionSetService.resolveEntryPointDimensionSet(namespace, ep)))
+            .collect(Collectors.toList());
+    }
+
+    private RuntimeEntryPoint convert(kraken.model.entrypoint.EntryPoint entryPoint, DimensionSet dimensionSet) {
         return new RuntimeEntryPoint(
-                entryPoint.getName(),
-                entryPoint.getRuleNames().stream().distinct().collect(Collectors.toList()),
-                entryPoint.getIncludedEntryPointNames().stream().distinct().collect(Collectors.toList()),
-                metadataConverter.convert(entryPoint.getMetadata())
-        );
+            entryPoint.getName(),
+            entryPoint.getRuleNames().stream().distinct().collect(Collectors.toList()),
+            entryPoint.getIncludedEntryPointNames().stream().distinct().collect(Collectors.toList()),
+            metadataConverter.convert(entryPoint.getMetadata()),
+            dimensionSet);
     }
 }

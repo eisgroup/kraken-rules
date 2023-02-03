@@ -16,6 +16,10 @@
 
 package kraken.runtime.model.rule;
 
+import java.util.Objects;
+
+import javax.annotation.Nullable;
+
 /**
  * @author psurinin@eisgroup.com
  * @since 1.1.0
@@ -23,24 +27,58 @@ package kraken.runtime.model.rule;
 public class Dependency {
 
     private final String contextName;
-    private final String targetPath;
-    private final boolean isContextDependency;
+    private final String fieldName;
+    private final boolean ccrDependency;
+    private final boolean selfDependency;
 
-    public Dependency(String contextName, String targetPath, boolean isContextDependency) {
+    public Dependency(String contextName, @Nullable String fieldName, boolean ccrDependency, boolean selfDependency) {
         this.contextName = contextName;
-        this.targetPath = targetPath;
-        this.isContextDependency = isContextDependency;
-    }
-
-    public String getTargetPath() {
-        return targetPath;
+        this.fieldName = fieldName;
+        this.ccrDependency = ccrDependency;
+        this.selfDependency = selfDependency;
     }
 
     public String getContextName() {
         return contextName;
     }
 
-    public boolean isContextDependency() {
-        return isContextDependency;
+    @Nullable
+    public String getFieldName() {
+        return fieldName;
+    }
+
+    public boolean isCcrDependency() {
+        return ccrDependency;
+    }
+
+    public boolean isSelfDependency() {
+        return selfDependency;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Dependency that = (Dependency) o;
+        return contextName.equals(that.contextName)
+            && Objects.equals(fieldName, that.fieldName)
+            && ccrDependency == that.ccrDependency
+            && selfDependency == that.selfDependency;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(contextName, fieldName, ccrDependency, selfDependency);
+    }
+
+    @Override
+    public String toString() {
+        return fieldName != null
+            ? contextName + "." + fieldName
+            : contextName;
     }
 }

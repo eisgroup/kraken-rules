@@ -16,7 +16,6 @@
 package kraken.model.dsl;
 
 import java.net.URI;
-import java.util.List;
 
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
@@ -25,7 +24,11 @@ import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.atn.PredictionMode;
 
 import kraken.annotations.API;
-import kraken.model.dsl.error.DSLErrorStrategy;
+import kraken.model.dsl.KrakenDSL.KrakenContext;
+import kraken.model.dsl.error.DslErrorListener;
+import kraken.model.dsl.error.DslErrorListener.DslError;
+import kraken.model.dsl.error.DslErrorStrategy;
+import kraken.model.dsl.error.LineParseCancellationException;
 import kraken.model.dsl.model.DSLModel;
 import kraken.model.dsl.visitor.DSLModelVisitor;
 import kraken.model.resource.Resource;
@@ -46,11 +49,12 @@ public class KrakenDSLModelParser {
      * @param dsl string to parse
      * @return a resource model that represents DSL contents
      * @throws DSLParsingException if DSL cannot be parsed
+     * @throws LineParseCancellationException if DSL cannot be parsed with information about the position
      */
     public static Resource parseResource(String dsl, URI uri) {
-        KrakenDSL parser = forDSL(dsl);
+        KrakenContext krakenContext = forDSL(dsl);
         DSLModelVisitor visitor = new DSLModelVisitor();
-        DSLModel dslModel = visitor.visit(parser.kraken());
+        DSLModel dslModel = visitor.visit(krakenContext);
 
         return KrakenDSLModelConverter.toResource(dslModel, uri);
     }
@@ -64,17 +68,26 @@ public class KrakenDSLModelParser {
         return parseResource(dsl, ResourceUtils.randomResourceUri());
     }
 
-    private static KrakenDSL forDSL(String dsl) {
+    private static KrakenContext forDSL(String dsl) {
+        DslErrorListener listener = new DslErrorListener();
         Common lexer = lexerForExpression(dsl);
         lexer.removeErrorListeners();
-        lexer.addErrorListener(DSLErrorListener.getInstance());
+        lexer.addErrorListener(listener);
         TokenStream tokenStream = new CommonTokenStream(lexer);
         KrakenDSL parser = new KrakenDSL(tokenStream);
-        parser.setErrorHandler(new DSLErrorStrategy(List.of()));
+        parser.setErrorHandler(new DslErrorStrategy());
         parser.getInterpreter().setPredictionMode(PredictionMode.LL);
         parser.removeErrorListeners();
-        parser.addErrorListener(DSLErrorListener.getInstance());
-        return parser;
+        parser.addErrorListener(listener);
+
+        KrakenContext krakenContext = parser.kraken();
+
+        if(!listener.getErrors().isEmpty()) {
+            DslError error = listener.getErrors().get(0);
+            throw new LineParseCancellationException(error.getMessage(), error.getLine(), error.getColumn());
+        }
+
+        return krakenContext;
     }
 
     private static Common lexerForExpression(String expression) {

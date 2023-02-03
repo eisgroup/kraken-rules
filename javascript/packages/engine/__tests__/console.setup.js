@@ -26,4 +26,4 @@ global.console = {
     timeEnd: jest.fn(),
     group: jest.fn(),
     groupEnd: jest.fn(),
-};
+}

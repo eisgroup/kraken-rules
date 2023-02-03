@@ -20,20 +20,11 @@ import java.util.List;
 import kraken.annotations.API;
 import kraken.model.validation.UsageType;
 import kraken.runtime.model.rule.payload.validation.UsagePayload;
-import kraken.runtime.model.rule.payload.validation.ValidationPayload;
 
 @API
 public class UsagePayloadResult extends ValidationPayloadResult {
 
-    private UsageType usageType;
-
-    /**
-     * @deprecated use {@link #UsagePayloadResult(Boolean, UsagePayload, List)} instead.
-     */
-    @Deprecated(since = "1.14.0", forRemoval = true)
-    public UsagePayloadResult(Boolean success, UsagePayload payload) {
-        this(success, payload, List.of());
-    }
+    private final UsageType usageType;
 
     public UsagePayloadResult(Boolean success, UsagePayload payload, List<String> templateVariables) {
         super(success, payload, templateVariables);

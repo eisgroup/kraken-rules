@@ -19,20 +19,10 @@ import kraken.testproduct.domain.PartyRole;
 
 public class PartyRoleExtended extends PartyRole {
 
-    private String role;
-
     public PartyRoleExtended() {
     }
 
     public PartyRoleExtended(String role) {
-        this.role = role;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
+        super(role);
     }
 }

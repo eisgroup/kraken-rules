@@ -23,15 +23,7 @@ import kraken.runtime.model.rule.payload.validation.LengthPayload;
 @API
 public class LengthPayloadResult extends ValidationPayloadResult {
 
-    private int length;
-
-    /**
-     * @deprecated use {@link #LengthPayloadResult(Boolean, LengthPayload, List)} instead.
-     */
-    @Deprecated(since = "1.14.0", forRemoval = true)
-    public LengthPayloadResult(Boolean success, LengthPayload payload) {
-        this(success, payload, List.of());
-    }
+    private final int length;
 
     public LengthPayloadResult(Boolean success, LengthPayload payload, List<String> templateVariables) {
         super(success, payload, templateVariables);

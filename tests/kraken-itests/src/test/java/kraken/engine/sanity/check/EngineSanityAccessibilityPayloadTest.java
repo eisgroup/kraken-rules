@@ -1,3 +1,4 @@
+
 /*
  *  Copyright 2019 EIS Ltd and/or one of its affiliates.
  *
@@ -23,7 +24,7 @@ import org.junit.Test;
 import static io.github.jsonSnapshot.SnapshotMatcher.start;
 import static io.github.jsonSnapshot.SnapshotMatcher.validateSnapshots;
 import static kraken.testing.matchers.KrakenMatchers.*;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static kraken.test.KrakenItestMatchers.matchesSnapshot;
 
 public final class EngineSanityAccessibilityPayloadTest extends SanityEngineBaseTest {
@@ -40,7 +41,7 @@ public final class EngineSanityAccessibilityPayloadTest extends SanityEngineBase
 
     @Test
     public void shouldExecuteAccessibilityAutoPolicyEntryPoint() {
-        final EntryPointResult result = engine.evaluate(dataObject, "AccessibilityAutoPolicy");
+        EntryPointResult result = engine.evaluate(getDataObject(), "AccessibilityAutoPolicy");
 
         assertThat(result, matchesSnapshot());
         assertThat(result, hasRuleResults(4));

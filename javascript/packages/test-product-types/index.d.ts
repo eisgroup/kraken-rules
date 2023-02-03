@@ -170,13 +170,20 @@ export namespace TestProduct {
 
     namespace kraken.testproduct.domain {
 
-        export interface PersonInfo extends kraken.testproduct.domain.Info {
+        export interface PersonInfo extends kraken.testproduct.domain.PersonNameInfo {
             addressInfo?: kraken.testproduct.domain.AddressInfo;
             age?: number;
-            firstName?: string;
-            lastName?: string;
             occupation?: string;
             sameHomeAddress?: boolean;
+        }
+
+    }
+
+    namespace kraken.testproduct.domain {
+
+        export interface PersonNameInfo extends kraken.testproduct.domain.Info {
+            firstName?: string;
+            lastName?: string;
         }
 
     }
@@ -311,6 +318,7 @@ export namespace TestProduct {
             numDaysDrivenPerWeek?: number;
             odometerReading?: number;
             purchasedDate?: Date;
+            refsToDriver?: any[];
             rentalCoverage?: kraken.testproduct.domain.RRCoverage;
             serviceHistory?: Date[];
             vehicleState?: string;

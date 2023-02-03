@@ -40,6 +40,8 @@ public final class EvaluationConfig {
      */
     private final String currencyCd;
 
+    private final EvaluationMode evaluationMode;
+
     public EvaluationConfig() {
         this(Collections.emptyMap(), Currency.getInstance(Locale.getDefault()).getCurrencyCode());
     }
@@ -49,8 +51,13 @@ public final class EvaluationConfig {
     }
 
     public EvaluationConfig(Map<String, Object> context, String currencyCd) {
-        this.context = Objects.requireNonNull(context);
-        this.currencyCd = Objects.requireNonNull(currencyCd);
+        this(context, currencyCd, EvaluationMode.ALL);
+    }
+
+    public EvaluationConfig(Map<String, Object> context, String currencyCd, EvaluationMode evaluationMode) {
+        this.context = context;
+        this.currencyCd = currencyCd;
+        this.evaluationMode = evaluationMode;
     }
 
     public Map<String, Object> getContext() {
@@ -59,6 +66,10 @@ public final class EvaluationConfig {
 
     public String getCurrencyCd() {
         return currencyCd;
+    }
+
+    public EvaluationMode getEvaluationMode() {
+        return evaluationMode;
     }
 
 }

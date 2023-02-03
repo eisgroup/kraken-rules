@@ -29,7 +29,7 @@ import static kraken.el.scope.type.Type.STRING;
 import static kraken.el.scope.type.Type.UNKNOWN;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  *
@@ -49,27 +49,52 @@ public class TypeTest {
         assertThat(DATE.isAssignableFrom(DATETIME), is(false));
         assertThat(DATETIME.isAssignableFrom(DATE), is(false));
 
-        assertThat(MONEY.isAssignableFrom(NUMBER), is(true));
+        assertThat(MONEY.isAssignableFrom(NUMBER), is(false));
         assertThat(NUMBER.isAssignableFrom(MONEY), is(true));
     }
 
     @Test
-    public void allTypesShouldBeAssignableToGenericType() {
-        assertThat(generic().isAssignableFrom(STRING), is(true));
-        assertThat(STRING.isAssignableFrom(generic()), is(false));
+    public void typesShouldBeAssignableFromBoundedGenericType() {
+        assertThat(STRING.isAssignableFrom(generic(STRING)), is(true));
+        assertThat(arr(STRING).isAssignableFrom(generic(arr(STRING))), is(true));
+        assertThat(STRING.isAssignableFrom(generic(arr(STRING))), is(false));
+        assertThat(union(DATE, DATETIME).isAssignableFrom(generic(DATE)), is(true));
 
-        assertThat(generic().isAssignableFrom(UNKNOWN), is(true));
-        assertThat(UNKNOWN.isAssignableFrom(generic()), is(false));
+        assertThat(MONEY.isAssignableFrom(generic(NUMBER)), is(false));
+        assertThat(NUMBER.isAssignableFrom(generic(MONEY)), is(true));
+
+        assertThat(ANY.isAssignableFrom(generic(STRING)), is(true));
+    }
+
+    @Test
+    public void typesShouldBeAssignableToBoundedGenericType() {
+        assertThat(generic(STRING).isAssignableFrom(STRING), is(true));
+        assertThat(generic(arr(STRING)).isAssignableFrom(arr(STRING)), is(true));
+        assertThat(generic(STRING).isAssignableFrom(arr(STRING)), is(false));
+        assertThat(generic(union(DATE, DATETIME)).isAssignableFrom(DATE), is(true));
+
+        assertThat(generic(MONEY).isAssignableFrom(NUMBER), is(false));
+        assertThat(generic(NUMBER).isAssignableFrom(MONEY), is(true));
+
+        assertThat(generic(STRING).isAssignableFrom(ANY), is(true));
+    }
+
+    @Test
+    public void noTypesShouldBeAssignableToUnboundedGenericType() {
+        assertThat(generic().isAssignableFrom(STRING), is(false));
+        assertThat(generic().isAssignableFrom(arr(STRING)), is(false));
+        assertThat(generic().isAssignableFrom(UNKNOWN), is(false));
 
         assertThat(generic().isAssignableFrom(ANY), is(true));
-        assertThat(generic().isAssignableFrom(arr(UNKNOWN)), is(true));
-        assertThat(generic().isAssignableFrom(arr(STRING)), is(true));
-        assertThat(generic().isAssignableFrom(arr(generic())), is(true));
+    }
 
-        assertThat(arr(generic()).isAssignableFrom(ANY), is(true));
-        assertThat(arr(generic()).isAssignableFrom(arr(STRING)), is(true));
-        assertThat(arr(generic()).isAssignableFrom(arr(UNKNOWN)), is(true));
-        assertThat(arr(generic()).isAssignableFrom(arr(ANY)), is(true));
+    @Test
+    public void noTypesShouldBeAssignableFromUnboundedGenericType() {
+        assertThat(STRING.isAssignableFrom(generic()), is(false));
+        assertThat(arr(STRING).isAssignableFrom(arr(generic())), is(false));
+        assertThat(UNKNOWN.isAssignableFrom(generic()), is(false));
+
+        assertThat(ANY.isAssignableFrom(generic()), is(true));
     }
 
     @Test
@@ -124,18 +149,12 @@ public class TypeTest {
     }
 
     @Test
-    public void orTypesShouldBeAssignable() {
+    public void unionTypesShouldBeAssignable() {
         assertThat(NUMBER.isAssignableFrom(union(NUMBER, STRING)), is(true));
         assertThat(NUMBER.isAssignableFrom(union(BOOLEAN, STRING)), is(false));
 
         assertThat(union(BOOLEAN, STRING).isAssignableFrom(union(STRING, BOOLEAN)), is(true));
         assertThat(union(BOOLEAN, union(STRING, NUMBER)).isAssignableFrom(union(MONEY, DATE)), is(true));
-
-        assertThat(generic().isAssignableFrom(union(BOOLEAN, STRING)), is(true));
-        assertThat(union(BOOLEAN, STRING).isAssignableFrom(generic()), is(false));
-
-        assertThat(union(generic(), DATE).isAssignableFrom(union(BOOLEAN, STRING)), is(true));
-        assertThat(union(BOOLEAN, DATE).isAssignableFrom(union(generic(), STRING)), is(false));
 
         assertThat(ANY.isAssignableFrom(union(NUMBER, STRING)), is(true));
         assertThat(union(BOOLEAN, STRING).isAssignableFrom(ANY), is(true));
@@ -194,9 +213,8 @@ public class TypeTest {
     }
 
     @Test
-    public void shouldReturnUnknownTypeIfTokenISUnknown() {
+    public void shouldReturnUnknownTypeIfTokenIsUnknown() {
         Type type = Type.toType("Coverage[]", Map.of());
-        assertThat(type, equalTo(ArrayType.of(new Type("Coverage", false, false))));
         assertThat(type.isKnown(), is(false));
     }
 
@@ -205,6 +223,66 @@ public class TypeTest {
         Type type1 = Type.toType("Coverage | Policy", Map.of());
         Type type2 = Type.toType("Policy|Coverage", Map.of());
         assertThat(type1, equalTo(type2));
+    }
+
+    @Test
+    public void shouldUnwrapArrayType() {
+        assertThat(STRING.unwrapArrayType(), equalTo(STRING));
+        assertThat(ANY.unwrapArrayType(), equalTo(ANY));
+        assertThat(UNKNOWN.unwrapArrayType(), equalTo(UNKNOWN));
+        assertThat(arr(STRING).unwrapArrayType(), equalTo(STRING));
+        assertThat(arr(arr(STRING)).unwrapArrayType(), equalTo(arr(STRING)));
+        assertThat(union(STRING, NUMBER).unwrapArrayType(), equalTo(union(STRING, NUMBER)));
+        assertThat(union(arr(STRING), arr(NUMBER)).unwrapArrayType(), equalTo(union(STRING, NUMBER)));
+        assertThat(union(ANY, STRING).unwrapArrayType(), equalTo(ANY));
+        assertThat(union(arr(STRING), STRING).unwrapArrayType(), equalTo(STRING));
+        assertThat(arr(union(STRING, arr(STRING))).unwrapArrayType(), equalTo(union(STRING, arr(STRING))));
+    }
+
+    @Test
+    public void shouldWrapArrayType() {
+        assertThat(STRING.wrapArrayType(), equalTo(arr(STRING)));
+        assertThat(ANY.wrapArrayType(), equalTo(ANY));
+        assertThat(UNKNOWN.wrapArrayType(), equalTo(UNKNOWN));
+        assertThat(arr(STRING).wrapArrayType(), equalTo(arr(STRING)));
+        assertThat(union(STRING, NUMBER).wrapArrayType(), equalTo(union(arr(STRING), arr(NUMBER))));
+        assertThat(union(STRING, arr(NUMBER)).wrapArrayType(), equalTo(union(arr(STRING), arr(NUMBER))));
+        assertThat(union(arr(STRING), arr(NUMBER)).wrapArrayType(), equalTo(union(arr(STRING), arr(NUMBER))));
+        assertThat(union(ANY, STRING).wrapArrayType(), equalTo(ANY));
+    }
+
+    @Test
+    public void shouldCalculateIfTypeIsAssignableToArray() {
+        assertThat(STRING.isAssignableToArray(), is(false));
+        assertThat(ANY.isAssignableToArray(), is(true));
+        assertThat(UNKNOWN.isAssignableToArray(), is(false));
+        assertThat(arr(STRING).isAssignableToArray(), is(true));
+        assertThat(union(STRING, NUMBER).isAssignableToArray(), is(false));
+        assertThat(union(STRING, arr(NUMBER)).isAssignableToArray(), is(true));
+        assertThat(union(arr(STRING), arr(NUMBER)).isAssignableToArray(), is(true));
+        assertThat(union(ANY, STRING).isAssignableToArray(), is(true));
+        assertThat(arr(union(STRING, arr(STRING))).isAssignableToArray(), is(true));
+    }
+
+    @Test
+    public void shouldMap() {
+        assertThat(ANY.mapTo(STRING), is(STRING));
+        assertThat(UNKNOWN.mapTo(STRING), is(STRING));
+        assertThat(NUMBER.mapTo(STRING), is(STRING));
+        assertThat(NUMBER.mapTo(arr(STRING)), is(arr(STRING)));
+        assertThat(NUMBER.mapTo(arr(arr(STRING))), is(arr(arr(STRING))));
+        assertThat(arr(NUMBER).mapTo(STRING), is(arr(STRING)));
+        assertThat(arr(NUMBER).mapTo(arr(STRING)), is(arr(arr(STRING))));
+        assertThat(arr(arr(NUMBER)).mapTo(STRING), is(arr(arr(STRING))));
+
+        assertThat(arr(NUMBER).mapTo(union(STRING, arr(STRING))), is(arr(union(STRING, arr(STRING)))));
+        assertThat(union(NUMBER, arr(NUMBER)).mapTo(union(STRING, arr(STRING))), is(arr(union(STRING, arr(STRING)))));
+        assertThat(arr(union(NUMBER, BOOLEAN)).mapTo(STRING), is(arr(STRING)));
+        assertThat(arr(union(NUMBER, arr(BOOLEAN))).mapTo(STRING), is(arr(union(STRING, arr(STRING)))));
+        assertThat(union(NUMBER, BOOLEAN).mapTo(STRING), is(STRING));
+        assertThat(union(NUMBER, arr(BOOLEAN)).mapTo(STRING), is(union(STRING, arr(STRING))));
+
+        assertThat(NUMBER.mapTo(ArrayType.of(UNKNOWN)), is(ArrayType.of(UNKNOWN)));
     }
 
     private Type union(Type left, Type right) {
@@ -221,5 +299,9 @@ public class TypeTest {
 
     private Type generic() {
         return new GenericType("T");
+    }
+
+    private Type generic(Type bound) {
+        return new GenericType("T", bound);
     }
 }

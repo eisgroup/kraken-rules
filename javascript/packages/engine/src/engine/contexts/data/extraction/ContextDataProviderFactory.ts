@@ -13,25 +13,23 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-import { DataContextBuilder } from "../DataContextBuilder";
-import { ContextDataProvider, ContextDataProviderImpl } from "./ContextDataProvider";
-import { ContextDataExtractor } from "./ContextDataExtractor.types";
+import { DataContextBuilder } from '../DataContextBuilder'
+import { ContextDataProvider, ContextDataProviderImpl } from './ContextDataProvider'
+import { ContextDataExtractor } from './ContextDataExtractor.types'
 
 export class ContextDataProviderFactory {
     constructor(
         private readonly contextDataExtractor: ContextDataExtractor,
         private readonly dataContextBuilder: DataContextBuilder,
-        private readonly restriction?: {}
-    ) { }
+        private readonly restriction?: object,
+    ) {}
     public createContextProvider(rootData: object): ContextDataProvider {
-        const { dataContextBuilder, restriction, contextDataExtractor } = this;
-        const restrictionDataContext = !!restriction
-            ? this.dataContextBuilder.buildFromRoot(restriction)
-            : undefined;
+        const { dataContextBuilder, restriction, contextDataExtractor } = this
+        const restrictionDataContext = restriction ? this.dataContextBuilder.buildFromRoot(restriction) : undefined
         return new ContextDataProviderImpl(
             dataContextBuilder.buildFromRoot(rootData),
             contextDataExtractor,
-            restrictionDataContext
-        );
+            restrictionDataContext,
+        )
     }
 }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 /*
  *  Copyright 2020 EIS Ltd and/or one of its affiliates.
  *
@@ -14,107 +15,104 @@
  *  limitations under the License.
  */
 
-import { FunctionCache } from "./FunctionCache";
-import { registry } from "./ExpressionEvaluator";
-import { ExpressionEvaluationResult as Result } from "./ExpressionEvaluationResult";
-import { logger } from "../../../utils/DevelopmentLogger";
+import { FunctionCache } from './FunctionCache'
+import { ExpressionEvaluationResult as Result } from 'kraken-engine-api'
+import { logger } from '../../../utils/DevelopmentLogger'
+import { KelFunction, registry } from './ExpressionEvaluator'
 
 export interface ExpressionContext {
-    dataObject: object;
-    references: Record<string, object | object[] | undefined>;
-    context?: Record<string, unknown>;
-    setValue?: any;
+    dataObject: object
+    references: Record<string, object | object[] | undefined>
+    context?: Record<string, unknown>
 }
 
 export interface ComplexEvaluation {
-    expressionContext: ExpressionContext;
-    expression: string;
+    expressionContext: ExpressionContext
+    expression: string
 }
 
 export interface EvaluationFunctions {
-    name: string;
-    fx: Function;
+    name: string
+    fx: Function
 }
 
 export class ComplexEvaluator {
+    private readonly initialFunctions: Record<string, Function>
 
-    private functionNames: string[];
-    private functions: Function[];
-    private readonly functionCache: FunctionCache;
+    private readonly functionInvoker: Record<string, Function>
+    private readonly functionCache: FunctionCache
 
-    constructor(functions: EvaluationFunctions[] = []) {
-        this.functionNames = functions.map(f => f.name);
-        this.functions = functions.map(f => f.fx);
-        this.functionCache = new FunctionCache();
+    private functionRegistrySize = 0
+
+    constructor(jsFunctions: EvaluationFunctions[] = [], kelFunctions: KelFunction[] = []) {
+        this.functionInvoker = {}
+        this.initialFunctions = {}
+        for (const f of jsFunctions) {
+            this.initialFunctions[f.name] = f.fx
+        }
+        for (const f of kelFunctions) {
+            this.initialFunctions[f.name] = Function.apply(this.functionInvoker, [
+                ...f.parameters.map(p => p.name),
+                `return (${f.body})`,
+            ])
+        }
+
+        this.rebuildFunctionInvokerIfNeeded()
+
+        this.functionCache = new FunctionCache()
     }
-    evaluate(evaluation: ComplexEvaluation): Result.Result {
-        const expression = evaluation.expression;
-        const expressionWithReturn = this.withReturn(expression);
 
-        const declarations = [
-            "__dataObject__",
-            "__references__",
-            "__defaultValue__",
-            "context",
-            ...registry.names(),
-            ...this.functionNames,
-            expressionWithReturn
-        ];
+    evaluate(evaluation: ComplexEvaluation): Result.Result {
+        const expression = evaluation.expression
+
+        const declarations = ['__dataObject__', '__references__', 'context', `return (${expression})`]
 
         const variables: unknown[] = [
             evaluation.expressionContext.dataObject,
             evaluation.expressionContext.references,
-            evaluation.expressionContext.setValue,
             evaluation.expressionContext.context,
-            ...registry.functions(),
-            ...this.functions
-        ];
+        ]
         try {
-            const result = this.functionCache
-                .compute(expression, declarations)
-                .apply(undefined, variables);
-            return this.validResult(result, expression);
+            const result = this.functionCache.compute(expression, declarations).apply(this.functionInvoker, variables)
+            return this.validResult(result, expression)
         } catch (error) {
-            if (logger.isEnabled()) {
-                logger.warning(
-                    `Expression evaluation failed:`,
-                    `\n\texpression: ${expression}`,
-                    error
-                );
-            }
+            logger.warning(`Expression evaluation failed:`, `\n\texpression: ${expression}`, error)
             return Result.expressionError({
-                severity: "info",
-                message: `Expression: '${expression}' failed`
-            });
+                severity: 'info',
+                message: `Expression: '${expression}' failed`,
+            })
         }
     }
 
-    private withReturn(expression: string): string {
-        return `return (${expression})`;
+    rebuildFunctionInvokerIfNeeded(): void {
+        const registeredFunctions = registry.registeredFunctions()
+        const currentFunctionRegistrySize = Object.keys(registeredFunctions).length
+        if (this.functionRegistrySize < currentFunctionRegistrySize) {
+            Object.assign(this.functionInvoker, registeredFunctions)
+            Object.assign(this.functionInvoker, this.initialFunctions)
+            this.functionRegistrySize = currentFunctionRegistrySize
+        }
     }
 
     private validResult(result: unknown, expression: string): Result.Result {
-        if (typeof result === "number" && isNaN(result)) {
+        if (typeof result === 'number' && isNaN(result)) {
             return Result.expressionError({
                 message: `Expression '${expression}' result is 'NaN' (not a number)`,
-                severity: "critical"
-            });
+                severity: 'critical',
+            })
         }
         if (result === +Infinity) {
             return Result.expressionError({
-                // tslint:disable-next-line:max-line-length
                 message: `Expression '${expression}' result is 'Infinity'. It might be that some number was divided by zero, or number is more than 1.7976931348623157e+308`,
-                severity: "critical"
-            });
+                severity: 'critical',
+            })
         }
         if (result === -Infinity) {
             return Result.expressionError({
-                // tslint:disable-next-line:max-line-length
                 message: `Expression '${expression}' result is '-Infinity'. It might be that some number was divided by zero, or number is less than -1.7976931348623157e+308`,
-                severity: "critical"
-            });
+                severity: 'critical',
+            })
         }
-        return Result.expressionSuccess(result);
-
+        return Result.expressionSuccess(result)
     }
 }

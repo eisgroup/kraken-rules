@@ -1,6 +1,5 @@
 package kraken.engine.sanity.check;
 
-import com.google.common.collect.ImmutableList;
 import kraken.runtime.engine.EntryPointResult;
 import kraken.testproduct.domain.AnubisCoverage;
 import kraken.testproduct.domain.Policy;
@@ -11,12 +10,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import static kraken.testing.matchers.KrakenMatchers.hasNoIgnoredRules;
 import static kraken.testing.matchers.KrakenMatchers.hasRuleResults;
 import static kraken.testing.matchers.KrakenMatchers.hasValidationFailures;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * @author mulevicius
@@ -31,18 +31,18 @@ public class EngineSanityForIteratorsTest extends SanityEngineBaseTest {
     @Test
     public void shouldEvaluateRulesWithForEachAnubisCoverage() {
         Vehicle vehicle1 = new Vehicle();
-        vehicle1.setAnubisCoverages(ImmutableList.of(
+        vehicle1.setAnubisCoverages(List.of(
                 new AnubisCoverage("code1", new BigDecimal(10)),
                 new AnubisCoverage("code2", new BigDecimal(10))
         ));
 
         Vehicle vehicle2 = new Vehicle();
-        vehicle2.setAnubisCoverages(ImmutableList.of(
+        vehicle2.setAnubisCoverages(List.of(
                 new AnubisCoverage("code3", new BigDecimal(10))
         ));
 
         Policy policy = new MockAutoPolicyBuilder()
-                .addRiskItems(ImmutableList.of(vehicle1, vehicle2))
+                .addRiskItems(List.of(vehicle1, vehicle2))
                 .addTxDetails(new TransactionDetails())
                 .build();
 
@@ -57,18 +57,18 @@ public class EngineSanityForIteratorsTest extends SanityEngineBaseTest {
     @Test
     public void shouldEvaluateRulesWithForEachAnubisCoverageAndFail() {
         Vehicle vehicle1 = new Vehicle();
-        vehicle1.setAnubisCoverages(ImmutableList.of(
+        vehicle1.setAnubisCoverages(List.of(
                 new AnubisCoverage("code1", new BigDecimal(10)),
                 new AnubisCoverage("code2", new BigDecimal(20))
         ));
 
         Vehicle vehicle2 = new Vehicle();
-        vehicle2.setAnubisCoverages(ImmutableList.of(
+        vehicle2.setAnubisCoverages(List.of(
                 new AnubisCoverage("code3", new BigDecimal(10))
         ));
 
         Policy policy = new MockAutoPolicyBuilder()
-                .addRiskItems(ImmutableList.of(vehicle1, vehicle2))
+                .addRiskItems(List.of(vehicle1, vehicle2))
                 .addTxDetails(new TransactionDetails())
                 .build();
 
@@ -82,18 +82,18 @@ public class EngineSanityForIteratorsTest extends SanityEngineBaseTest {
     @Test
     public void shouldEvaluateRulesWithForSomeAndForEveryExpressions() {
         Vehicle vehicle1 = new Vehicle();
-        vehicle1.setAnubisCoverages(ImmutableList.of(
+        vehicle1.setAnubisCoverages(List.of(
                 new AnubisCoverage("code1", new BigDecimal(10), "CULT"),
                 new AnubisCoverage("code2", new BigDecimal(20), "CULT")
         ));
 
         Vehicle vehicle2 = new Vehicle();
-        vehicle2.setAnubisCoverages(ImmutableList.of(
+        vehicle2.setAnubisCoverages(List.of(
                 new AnubisCoverage("code3", new BigDecimal(30), "CULT")
         ));
 
         Policy policy = new MockAutoPolicyBuilder()
-                .addRiskItems(ImmutableList.of(vehicle1, vehicle2))
+                .addRiskItems(List.of(vehicle1, vehicle2))
                 .build();
 
         final EntryPointResult result = engine.evaluate(policy, "ForSome_ForEvery_EntryPoint");
@@ -106,18 +106,18 @@ public class EngineSanityForIteratorsTest extends SanityEngineBaseTest {
     @Test
     public void shouldEvaluateRulesWithForSomeAndForEveryExpressionsAndFail() {
         Vehicle vehicle1 = new Vehicle();
-        vehicle1.setAnubisCoverages(ImmutableList.of(
+        vehicle1.setAnubisCoverages(List.of(
                 new AnubisCoverage("code1", new BigDecimal(20), "CULT"),
                 new AnubisCoverage("code2", new BigDecimal(20), "CULT")
         ));
 
         Vehicle vehicle2 = new Vehicle();
-        vehicle2.setAnubisCoverages(ImmutableList.of(
+        vehicle2.setAnubisCoverages(List.of(
                 new AnubisCoverage("code3", new BigDecimal(20), "CULT")
         ));
 
         Policy policy = new MockAutoPolicyBuilder()
-                .addRiskItems(ImmutableList.of(vehicle1, vehicle2))
+                .addRiskItems(List.of(vehicle1, vehicle2))
                 .build();
 
         final EntryPointResult result = engine.evaluate(policy, "ForSome_ForEvery_EntryPoint");

@@ -31,7 +31,7 @@ import static io.github.jsonSnapshot.SnapshotMatcher.validateSnapshots;
 import static kraken.testing.matchers.KrakenMatchers.*;
 import static kraken.testing.matchers.KrakenRuleMatchers.hasValidationFailed;
 import static kraken.testing.matchers.KrakenRuleMatchers.ruleResult;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static kraken.test.KrakenItestMatchers.matchesSnapshot;
 
 public final class EngineSanityUsagePayloadTest extends SanityEngineBaseTest {

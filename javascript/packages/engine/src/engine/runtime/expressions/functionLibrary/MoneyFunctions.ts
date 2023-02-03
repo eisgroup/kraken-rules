@@ -13,10 +13,16 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-import { Contexts } from "kraken-model";
+import { Moneys } from '../math/Moneys'
 
-function FromMoney(obj?: Contexts.MoneyType): number | undefined {
-    return obj ? obj.amount : undefined;
+function FromMoney(obj?: unknown): number | undefined | null {
+    if (obj && Moneys.isMoney(obj)) {
+        return obj.amount
+    }
+    if (typeof obj === 'number' || obj == null) {
+        return obj as number | null | undefined
+    }
+    throw new Error(`Type '${typeof obj}' of parameter is not supported.`)
 }
 
-export const moneyFunctions = { FromMoney };
+export const moneyFunctions = { FromMoney }

@@ -19,8 +19,8 @@
  */
 export class InvalidExpressionError extends Error {
     constructor(msg: string, error: Error) {
-        super(msg);
-        this.name = "InvalidExpressionError";
-        this.stack = error.stack;
+        super(msg)
+        this.name = 'InvalidExpressionError'
+        this.stack = error.stack
     }
 }

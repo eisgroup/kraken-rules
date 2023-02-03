@@ -14,18 +14,13 @@
  *  limitations under the License.
  */
 
-import * as React from "react";
-import ReactJson from "react-json-view";
+import * as React from 'react'
+import ReactJson from 'react-json-view'
 
 export interface JsonViewProps {
-    data: object;
+    data: object
 }
 
 export const JsonView: React.SFC<JsonViewProps> = (props: JsonViewProps) => {
-    return (<ReactJson
-        shouldCollapse={field => field.name === null ? false : true}
-        // tslint:disable-next-line
-        name={null}
-        src={props.data}
-    />);
-};
+    return <ReactJson shouldCollapse={field => (field.name === null ? false : true)} name={null} src={props.data} />
+}

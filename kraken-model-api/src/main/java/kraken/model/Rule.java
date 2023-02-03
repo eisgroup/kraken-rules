@@ -101,6 +101,7 @@ public interface Rule extends KrakenModelItem, MetadataAware {
      *
      * @return is rule dimensional
      */
+    @Deprecated(since = "1.40.0", forRemoval = true)
     boolean isDimensional();
 
     /**
@@ -112,5 +113,31 @@ public interface Rule extends KrakenModelItem, MetadataAware {
      *
      * @param dimensional
      */
+    @Deprecated(since = "1.40.0", forRemoval = true)
     void setDimensional(boolean dimensional);
+
+    /**
+     * Priority is a number which affects which rule should be applied on entity field
+     * with respect to other rules on the same field. Higher number indicates a higher priority.
+     * <p/>
+     * If there are more than one rule for the same field, then the result of the applicable rule with the highest
+     * priority is applied while rules with lower priority are not evaluated (unused).
+     * <p/>
+     * Priority can be a negative number. Priority can be null.
+     * If priority is null then it is handled as if the priority is 0 by default.
+     * In other words, null priority is equal to 0 priority.
+     * Also, null priority is a higher priority than a negative priority.
+     * <p/>
+     * Currently only supported for defaulting rules.
+     * If priority is set for other kind of rule then the rule model validation will return error.
+     *
+     * @return priority of this rule variation.
+     */
+    Integer getPriority();
+
+    /**
+     * @see #getPriority()
+     * @param priority of this rule variation.
+     */
+    void setPriority(Integer priority);
 }

@@ -17,8 +17,10 @@ package kraken.el.ast.visitor;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.Optional;
 
 import kraken.el.ast.Expression;
+import kraken.el.ast.Path;
 import kraken.el.ast.ReferenceValue;
 
 /**
@@ -57,5 +59,16 @@ public abstract class QueuedAstVisitor<T> extends BaseAstVisitor<T> {
         astNodeQueue.pop();
 
         return t;
+    }
+
+    /**
+     * @return first Path within closes ReferenceValue is such exists, or empty otherwise
+     */
+    protected Optional<Path> findFirstPathFromClosestReference() {
+        return astNodeQueue.stream()
+            .filter(expression -> expression instanceof Path || expression instanceof ReferenceValue)
+            .findFirst()
+            .filter(expression -> expression instanceof Path)
+            .map(expression -> (Path) expression);
     }
 }

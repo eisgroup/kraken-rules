@@ -15,18 +15,22 @@
  */
 package kraken.runtime.engine.dto;
 
+import kraken.annotations.API;
 import kraken.model.Rule;
 import kraken.model.payload.PayloadType;
 
 /**
+ * Information about a particular rule
+ *
  * @author mulevicius
  */
+@API
 public class RuleInfo {
 
-    private String ruleName;
-    private String context;
-    private String targetPath;
-    private PayloadType payloadType;
+    private final String ruleName;
+    private final String context;
+    private final String targetPath;
+    private final PayloadType payloadType;
 
     public RuleInfo(String ruleName, String context, String targetPath, PayloadType payloadType) {
         this.ruleName = ruleName;

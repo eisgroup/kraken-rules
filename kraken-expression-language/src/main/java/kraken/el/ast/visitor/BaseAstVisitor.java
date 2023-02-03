@@ -87,6 +87,8 @@ public abstract class BaseAstVisitor<T> implements AstVisitor<T> {
                 return visit((DateTimeLiteral) expression);
             case NULL:
                 return visit((Null) expression);
+            case EMPTY:
+                return visit((Empty) expression);
             case INLINE_ARRAY:
                 return visit((InlineArray) expression);
             case INLINE_MAP:
@@ -109,6 +111,10 @@ public abstract class BaseAstVisitor<T> implements AstVisitor<T> {
                 return visit((This) expression);
             case TEMPLATE:
                 return visit((Template) expression);
+            case VARIABLE:
+                return visit((Variable) expression);
+            case VALUE_BLOCK:
+                return visit((ValueBlock) expression);
             default: throw new IllegalStateException("Cannot identify AST node: " + expression.getNodeType());
         }
 

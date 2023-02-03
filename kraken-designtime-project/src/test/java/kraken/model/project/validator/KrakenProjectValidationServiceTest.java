@@ -34,9 +34,11 @@ import static kraken.model.context.PrimitiveFieldDataType.STRING;
 import static kraken.model.context.SystemDataTypes.UNKNOWN;
 import static kraken.model.project.KrakenProjectMocks.*;
 import static kraken.model.project.KrakenProjectMocks.rootContextDefinition;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * @author mulevicius
@@ -145,7 +147,7 @@ public class KrakenProjectValidationServiceTest {
 
         ValidationResult result = krakenProjectValidationService.validate(krakenProject);
 
-        assertThat(result.getErrors(), hasSize(2));
+        assertThat(result.getErrors(), hasSize(3));
     }
 
     @Test
@@ -163,7 +165,7 @@ public class KrakenProjectValidationServiceTest {
     }
 
     @Test
-    public void shouldReturnErrorIfRulePayloadIsNotCompatibleWithAppliedOnField() {
+    public void shouldReturnErrorIfRulePayloadIsNotCompatibleWithAppliedOnField_AndDefaultExpressionError() {
         EntryPoint entryPoint = entryPoint("Validate", List.of("R01"));
         Rule rule = rule("R01", "Policy", "policyCd");
         DefaultValuePayload payload = factory.createDefaultValuePayload();
@@ -179,7 +181,7 @@ public class KrakenProjectValidationServiceTest {
 
         ValidationResult result = krakenProjectValidationService.validate(krakenProject);
 
-        assertThat(result.getErrors(), hasSize(1));
+        assertThat(result.getErrors(), hasSize(2));
     }
 
     @Test
@@ -332,7 +334,7 @@ public class KrakenProjectValidationServiceTest {
     }
 
     @Test
-    public void shouldReturnErrorIfContextIsNotRelatedToRootButExpressionIsInvalid() {
+    public void shouldReturnErrorsIfContextIsNotRelatedToRootAndThatExpressionIsInvalidAndReturnTypeIncompatible() {
         EntryPoint entryPoint = entryPoint("Validate", List.of("R01"));
         Rule rule = rule("R01", "RiskItem", "itemName");
         DefaultValuePayload payload = factory.createDefaultValuePayload();
@@ -354,6 +356,41 @@ public class KrakenProjectValidationServiceTest {
 
         ValidationResult result = krakenProjectValidationService.validate(krakenProject);
 
-        assertThat(result.getErrors(), hasSize(1));
+        assertThat(result.getErrors(), hasSize(3));
     }
+
+    @Test
+    public void shouldReturnErrorIfContextHasDuplicateParentDefinition() {
+        ContextDefinition policy = rootContextDefinition("Policy", List.of(), List.of("BasePolicy", "BasePolicy"));
+        ContextDefinition basePolicy = contextDefinition("BasePolicy", List.of());
+        KrakenProject krakenProject = krakenProject(List.of(policy, basePolicy), List.of(), List.of());
+
+        ValidationResult result = krakenProjectValidationService.validate(krakenProject);
+
+        assertThat(result.getErrors(), hasSize(1));
+        assertThat(
+            result.getErrors().get(0).getMessage(),
+            is("parent 'BasePolicy' is specified twice - please remove duplicated context")
+        );
+    }
+    
+    @Test
+    public void shouldReturnErrorIfSystemContextHasParentContextDefined() {
+        ContextDefinition systemContext = toSystemContextDefinition("SystemContext");
+        systemContext.setParentDefinitions(List.of("ParentContext"));
+
+        KrakenProject krakenProject = krakenProject(List.of(systemContext), List.of(), rules());
+
+        ValidationResult result = krakenProjectValidationService.validate(krakenProject);
+
+        assertThat(result.getErrors(), hasSize(1));
+
+        ValidationMessage message = result.getValidationMessages().get(0);
+
+        assertThat(message.getItem().getName(), is("SystemContext"));
+        assertThat(message.getSeverity(), is(Severity.ERROR));
+        assertThat(message.getMessage(), containsString(
+            "Parent contexts are not allowed for system context definitions."));
+    }
+
 }

@@ -3,11 +3,11 @@
 ## Tests
 
 To run tests enter command in console:
-`npm test`
+`yarn test`
 This command will run all tests without coverage
 
 To run tests with coverage enter command in console:
-`npm run test:coverage`
+`yarn run test:coverage`
 
 Kraken engine have its own matchers in jest, that can be used `expect(value).<matcher>`
 
@@ -36,12 +36,12 @@ expect(results: EntryPointResult).k_toMatchResultsStats(stats: {
 
 ## Lint
 To lint project enter command in console:
-`npm run lint`
+`yarn lint`
 
 TSLint can fix some errors. To do this enter command in console:
-`npm run lint -- --fix`
+`yarn lint -- --fix`
 
 ## Committing
 Before commiting run this command:
-`npm run precommit` this will fix some linter issues if they are present, run linter, 
+`yarn prepare` this will fix some linter issues if they are present, run linter, 
 tests with coverage and compile typescript to javascript

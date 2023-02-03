@@ -19,13 +19,10 @@ import kraken.testproduct.domain.BillingInfo;
 
 public class BillingInfoExtended extends BillingInfo {
 
-    private CreditCardInfoExtended creditCardInfo;
-
-    public CreditCardInfoExtended getCreditCardInfo() {
-        return creditCardInfo;
+    public BillingInfoExtended(String accountName, CreditCardInfoExtended creditCardInfo) {
+        super(accountName, creditCardInfo);
     }
 
-    public void setCreditCardInfo(CreditCardInfoExtended creditCardInf) {
-        this.creditCardInfo = creditCardInf;
+    public BillingInfoExtended() {
     }
 }

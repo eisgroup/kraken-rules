@@ -15,15 +15,19 @@
  */
 package kraken.el.ast;
 
+import java.util.Map;
+import java.util.Set;
+
 import kraken.el.ast.token.Token;
+import kraken.el.ast.typeguard.TypeFact;
 import kraken.el.scope.Scope;
 import kraken.el.scope.type.Type;
 
 public class TypeComparisonOperation extends Expression {
 
-    private Expression left;
+    private final Expression left;
 
-    private TypeLiteral typeLiteral;
+    private final TypeLiteral typeLiteral;
 
     public TypeComparisonOperation(Expression left, TypeLiteral typeLiteral, NodeType nodeType, Scope scope, Token token) {
         super(nodeType, scope, Type.BOOLEAN, token);
@@ -38,6 +42,16 @@ public class TypeComparisonOperation extends Expression {
 
     public TypeLiteral getTypeLiteral() {
         return typeLiteral;
+    }
+
+    @Override
+    public Map<String, TypeFact> getDeducedTypeFacts() {
+        String token = left.getToken().getText();
+        Type castedType = scope.resolveTypeOf(typeLiteral.getValue());
+        if(castedType.isKnown()) {
+            return Map.of(token, new TypeFact(left, scope.resolveTypeOf(typeLiteral.getValue())));
+        }
+        return Map.of();
     }
 
     @Override

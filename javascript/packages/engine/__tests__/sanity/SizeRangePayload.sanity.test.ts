@@ -14,32 +14,39 @@
  *  limitations under the License.
  */
 
-import { sanityEngine } from "./_SanityEngine";
-import { sanityMocks } from "./_AutoPolicyObject.mocks";
+import { sanityEngine } from './_SanityEngine'
+import { sanityMocks } from './_AutoPolicyObject.mocks'
+import { FieldMetadataReducer } from '../../src'
 
-describe("SizeRange payload sanity test", () => {
-    it("should fail when size is less than min", () => {
-        const policy = sanityMocks.empty();
-        policy.policies = ["1"];
-        const result = sanityEngine.evaluate(policy, "SizeRangePayload");
-        expect(result).k_toMatchResultsStats({ total: 1, critical: 1 });
-        expect(result).k_toHaveExpressionsFailures(0);
-        expect(result).k_toMatchResultsSnapshots();
-    });
-    it("should fail when size is more than max", () => {
-        const policy = sanityMocks.empty();
-        policy.policies = ["1", "2", "3", "4"];
-        const result = sanityEngine.evaluate(policy, "SizeRangePayload");
-        expect(result).k_toMatchResultsStats({ total: 1, critical: 1 });
-        expect(result).k_toHaveExpressionsFailures(0);
-        expect(result).k_toMatchResultsSnapshots();
-    });
-    it("should succeed when size is in range", () => {
-        const policy = sanityMocks.empty();
-        policy.policies = ["1", "2"];
-        const result = sanityEngine.evaluate(policy, "SizeRangePayload");
-        expect(result).k_toMatchResultsStats({ total: 1, critical: 0 });
-        expect(result).k_toHaveExpressionsFailures(0);
-        expect(result).k_toMatchResultsSnapshots();
-    });
-});
+describe('SizeRange payload sanity test', () => {
+    it('should fail when size is less than min', () => {
+        const policy = sanityMocks.empty()
+        policy.policies = ['1']
+        const result = sanityEngine.evaluate(policy, 'SizeRangePayload')
+        const fieldResults = new FieldMetadataReducer().reduce(result)
+
+        expect(result).k_toMatchResultsStats({ total: 1, critical: 1 })
+        expect(result).k_toHaveExpressionsFailures(0)
+        expect({ entryPointResults: result, fieldResults }).k_toMatchResultsSnapshots()
+    })
+    it('should fail when size is more than max', () => {
+        const policy = sanityMocks.empty()
+        policy.policies = ['1', '2', '3', '4']
+        const result = sanityEngine.evaluate(policy, 'SizeRangePayload')
+        const fieldResults = new FieldMetadataReducer().reduce(result)
+
+        expect(result).k_toMatchResultsStats({ total: 1, critical: 1 })
+        expect(result).k_toHaveExpressionsFailures(0)
+        expect({ entryPointResults: result, fieldResults }).k_toMatchResultsSnapshots()
+    })
+    it('should succeed when size is in range', () => {
+        const policy = sanityMocks.empty()
+        policy.policies = ['1', '2']
+        const result = sanityEngine.evaluate(policy, 'SizeRangePayload')
+        const fieldResults = new FieldMetadataReducer().reduce(result)
+
+        expect(result).k_toMatchResultsStats({ total: 1, critical: 0 })
+        expect(result).k_toHaveExpressionsFailures(0)
+        expect({ entryPointResults: result, fieldResults }).k_toMatchResultsSnapshots()
+    })
+})

@@ -14,59 +14,90 @@
  *  limitations under the License.
  */
 
-import { RulePayloadProcessor } from "../../src/engine/RulePayloadProcessor";
-import { Payloads, Rule } from "kraken-model";
+import { RulePayloadProcessor } from '../../src/engine/RulePayloadProcessor'
+import { Payloads, Rule } from 'kraken-model'
 import {
-    DefaultValuePayloadResult,
     AccessibilityPayloadResult,
-    VisibilityPayloadResult
-} from "../../src/engine/results/PayloadResult";
-import { mock } from "../mock";
-import { PayloadBuilder, RulesBuilder } from "kraken-model-builder";
-import { ExecutionSession } from "../../src/engine/ExecutionSession";
-import { RuleEvaluationResults } from "../../src/dto/RuleEvaluationResults";
-import ApplicableRuleEvaluationResult = RuleEvaluationResults.ApplicableRuleEvaluationResult;
+    ConditionEvaluation,
+    DefaultValuePayloadResult,
+    RuleEvaluationResults,
+    VisibilityPayloadResult,
+} from 'kraken-engine-api'
+import { mock } from '../mock'
+import { PayloadBuilder, RulesBuilder } from 'kraken-model-builder'
+import { ExecutionSession } from '../../src/engine/ExecutionSession'
+import { RuleOverrideContextExtractorImpl } from '../../src/engine/results/RuleOverrideContextExtractor'
+import ApplicableRuleEvaluationResult = RuleEvaluationResults.ApplicableRuleEvaluationResult
+import RuleEvaluationResult = RuleEvaluationResults.RuleEvaluationResult
 
-import { RuleOverrideContextExtractorImpl } from "../../src/engine/results/RuleOverrideContextExtractor";
+const payloadProcessor = new RulePayloadProcessor(mock.evaluator, new RuleOverrideContextExtractorImpl(), {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    update: () => {},
+})
 
-const payloadProcessor = new RulePayloadProcessor(mock.evaluator, new RuleOverrideContextExtractorImpl());
-
-function execute(rule: Rule): ApplicableRuleEvaluationResult {
+function execute(rule: Rule): RuleEvaluationResult {
     function config(): ExecutionSession {
-        return { currencyCd: "USD", expressionContext: {}, timestamp: new Date() };
+        return { currencyCd: 'USD', expressionContext: {}, timestamp: new Date() }
     }
-    return payloadProcessor.processRule({
-        rule,
-        dataContext: mock.data.dataContextEmpty()
-    }, config()) as ApplicableRuleEvaluationResult;
+    return payloadProcessor.processRule(
+        {
+            rule,
+            dataContext: mock.data.dataContextEmpty(),
+            priority: 0,
+        },
+        config(),
+    )
 }
-const createRule = (payload: Payloads.Payload) => new RulesBuilder()
-    .setContext(mock.modelTreeJson.contexts.Policy.name)
-    .setName("mock")
-    .setTargetPath(mock.modelTreeJson.contexts.Policy.fields.state.name)
-    .setPayload(payload)
-    .build();
+const createRule = (payload: Payloads.Payload) =>
+    new RulesBuilder()
+        .setContext(mock.modelTreeJson.contexts.Policy.name)
+        .setName('mock')
+        .setTargetPath(mock.modelTreeJson.contexts.Policy.fields.state.name)
+        .setPayload(payload)
+        .build()
 
-describe("RulePayloadProcessor", () => {
-    it("should process rule evaluation instance with AssertionPayload", () => {
-        const rule = createRule(PayloadBuilder.asserts().that("true"));
-        expect(execute(rule)).k_toBeValidRuleResult();
-    });
-    it("should process rule evaluation instance with LengthPayload", () => {
-        const rule = createRule(PayloadBuilder.lengthLimit().limit(111));
-        expect(execute(rule)).k_toBeValidRuleResult();
-    });
-    it("should process rule evaluation instance with DefaultValuePayload", () => {
-        const rule = createRule(PayloadBuilder.default().to("'AZ'"));
-        expect((execute(rule).payloadResult as DefaultValuePayloadResult).events).toHaveLength(1);
-    });
-    it("should process rule evaluation instance with VisibilityPayload", () => {
-        const rule = createRule(PayloadBuilder.visibility().notVisible());
-        expect((execute(rule).payloadResult as VisibilityPayloadResult).visible).toBeFalsy();
-    });
-
-    it("should process rule evaluation instance with AccessibilityPayload", () => {
-        const rule = createRule(PayloadBuilder.accessibility().notAccessible());
-        expect((execute(rule).payloadResult as AccessibilityPayloadResult).accessible).toBeFalsy();
-    });
-});
+describe('RulePayloadProcessor', () => {
+    it('should process rule evaluation instance with AssertionPayload', () => {
+        const rule = createRule(PayloadBuilder.asserts().that('true'))
+        expect(execute(rule)).k_toBeValidRuleResult()
+    })
+    it('should process rule evaluation instance with LengthPayload', () => {
+        const rule = createRule(PayloadBuilder.lengthLimit().limit(111))
+        expect(execute(rule)).k_toBeValidRuleResult()
+    })
+    it('should process rule evaluation instance with DefaultValuePayload', () => {
+        const rule = createRule(PayloadBuilder.default().to("'AZ'"))
+        const payloadResult = (execute(rule) as ApplicableRuleEvaluationResult).payloadResult
+        expect((payloadResult as DefaultValuePayloadResult).events).toHaveLength(1)
+    })
+    it('should process rule evaluation instance with VisibilityPayload', () => {
+        const rule = createRule(PayloadBuilder.visibility().notVisible())
+        const payloadResult = (execute(rule) as ApplicableRuleEvaluationResult).payloadResult
+        expect((payloadResult as VisibilityPayloadResult).visible).toBeFalsy()
+    })
+    it('should process rule evaluation instance with AccessibilityPayload', () => {
+        const rule = createRule(PayloadBuilder.accessibility().notAccessible())
+        const payloadResult = (execute(rule) as ApplicableRuleEvaluationResult).payloadResult
+        expect((payloadResult as AccessibilityPayloadResult).accessible).toBeFalsy()
+    })
+    it('should process not applicable conditional rule evaluation instance', () => {
+        const rule = createRule(PayloadBuilder.accessibility().notAccessible())
+        rule.condition = {
+            expression: {
+                expressionString: 'false',
+                expressionType: 'COMPLEX',
+            },
+        }
+        expect(execute(rule).conditionEvaluationResult.conditionEvaluation).toBe(ConditionEvaluation.NOT_APPLICABLE)
+    })
+    it('should process applicable conditional rule evaluation instance', () => {
+        const rule = createRule(PayloadBuilder.accessibility().notAccessible())
+        rule.condition = {
+            expression: {
+                expressionString: 'true',
+                expressionType: 'COMPLEX',
+            },
+        }
+        expect(execute(rule).conditionEvaluationResult.conditionEvaluation).toBe(ConditionEvaluation.APPLICABLE)
+    })
+})

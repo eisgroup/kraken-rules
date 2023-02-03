@@ -35,6 +35,7 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.mock;
 
 
@@ -68,19 +69,22 @@ public class DataContextBuilderTest {
         assertThat(dataContext.getContextId(), is(instanceOf(String.class)));
     }
 
-    @Test(expected = DataContextBuildingException.class)
+    @Test
     public void nullDataObjectThrowsException() {
-        testObject.buildFromRoot(null);
+        assertThrows(DataContextBuildingException.class,
+                () -> testObject.buildFromRoot(null));
     }
 
-    @Test(expected = DataContextBuildingException.class)
+    @Test
     public void failsOnCollectionContext() {
-        testObject.buildFromRoot(new ArrayList<>());
+        assertThrows(DataContextBuildingException.class,
+                () -> testObject.buildFromRoot(new ArrayList<>()));
     }
 
-    @Test(expected = DataContextBuildingException.class)
+    @Test
     public void failsOnMapContext() {
-        testObject.buildFromRoot(new HashMap<>());
+        assertThrows(DataContextBuildingException.class,
+                () -> testObject.buildFromRoot(new HashMap<>()));
     }
 
 }

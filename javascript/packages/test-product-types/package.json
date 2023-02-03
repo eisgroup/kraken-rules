@@ -1,6 +1,6 @@
 {
-    "name": "@types/kraken-test-product",
-    "version": "1.20.1-autocomplete.3",
+    "name": "kraken-test-product",
+    "version": "1.42.4-stage.0",
     "description": "Test product typings",
     "main": "index.d.ts",
     "author": "psurinin <psurinin@eisgroup.com> (http://eisgroup.com)",

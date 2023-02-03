@@ -24,9 +24,9 @@ public final class FunctionHeader {
 
     private final String name;
 
-    private final long parameterCount;
+    private final int parameterCount;
 
-    public FunctionHeader(String name, long parameterCount) {
+    public FunctionHeader(String name, int parameterCount) {
         this.name = Objects.requireNonNull(name);
         this.parameterCount = parameterCount;
     }
@@ -35,7 +35,7 @@ public final class FunctionHeader {
         return name;
     }
 
-    public long getParameterCount() {
+    public int getParameterCount() {
         return parameterCount;
     }
 

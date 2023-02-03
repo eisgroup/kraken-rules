@@ -16,23 +16,21 @@
 
 export const quantifierFunctions = {
     Any,
-    All
-};
-
-/**
- *
- * @param any
- * @return true if collection is not empty and at least one item is true
- */
-function Any(array ?: any[] | null): boolean {
-    return (array || []).some(Boolean);
+    All,
 }
 
 /**
- *
- * @param all
+ * @param array
+ * @return true if collection is not empty and at least one item is true
+ */
+function Any(array?: unknown[] | null): boolean {
+    return (array || []).some(Boolean)
+}
+
+/**
+ * @param array
  * @return true if collection is empty or every item is true
  */
-function All(array ?: any[] | null): boolean {
-    return (array || []).every(Boolean);
+function All(array?: unknown[] | null): boolean {
+    return (array || []).every(Boolean)
 }

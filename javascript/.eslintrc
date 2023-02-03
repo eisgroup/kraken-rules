@@ -1,0 +1,37 @@
+{
+    "parser": "@typescript-eslint/parser",
+    "plugins": ["implicit-dependencies", "@typescript-eslint"],
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:react-hooks/recommended",
+        "prettier"
+    ],
+    "ignorePatterns": "*.js",
+    "overrides": [
+        {
+            "files": ["*.ts", "*.tsx"]
+        }
+    ],
+    "rules": {
+        "@typescript-eslint/no-unused-vars": [
+            "error",
+            {
+                "argsIgnorePattern": "^_",
+                "varsIgnorePattern": "^_",
+                "caughtErrorsIgnorePattern": "^_"
+            }
+        ],
+        "@typescript-eslint/no-namespace": 0,
+        "@typescript-eslint/no-explicit-any": 2,
+        "implicit-dependencies/no-implicit": [
+            "error",
+            {
+                "peer": true,
+                "dev": true,
+                "optional": true
+            }
+        ]
+    }
+}

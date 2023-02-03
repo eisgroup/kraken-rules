@@ -16,7 +16,7 @@
 
 /**
  * Iterator are used in Kraken java implementation. For now there is no use cases of using iterator
- * so this code in this folder is not included in any engine process.
+ * so this code in this folder is not included in any engine  process.
  * It is kept in case some use cases of iterator will appear.
  * Also this folder is excluded to collect coverage from in jest config.
  *
@@ -26,8 +26,8 @@
  * T - type of index in iterator
  * V - type of object iterator is holding, default is Object
  */
-export interface ContextInstanceIterator<T, V = Object> {
-    hasNext: () => boolean;
-    next: () => V;
-    index: () => T;
+export interface ContextInstanceIterator<T, V = object> {
+    hasNext: () => boolean
+    next: () => V
+    index: () => T
 }

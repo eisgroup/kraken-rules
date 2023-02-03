@@ -14,18 +14,21 @@
  *  limitations under the License.
  */
 
-import { sanityMocks } from "./_AutoPolicyObject.mocks";
-import { sanityEngine } from "./_SanityEngine";
+import { sanityMocks } from './_AutoPolicyObject.mocks'
+import { sanityEngine } from './_SanityEngine'
+import { FieldMetadataReducer } from '../../src'
 
-describe("Engine Sanity Self reference Test", () => {
-    const { empty } = sanityMocks;
-    it("should execute SelfReference entry point", () => {
-        const policy = empty();
-        policy.policyNumber = "P1";
+describe('Engine Sanity Self reference Test', () => {
+    const { empty } = sanityMocks
+    it('should execute SelfReference entry point', () => {
+        const policy = empty()
+        policy.policyNumber = 'P1'
 
-        const results = sanityEngine.evaluate(policy, "SelfReference");
-        expect(results).k_toMatchResultsStats({ total: 3, critical: 0 });
-        expect(results).k_toHaveExpressionsFailures(0);
-        expect(results).k_toMatchResultsSnapshots();
-    });
-});
+        const results = sanityEngine.evaluate(policy, 'SelfReference')
+        const fieldResults = new FieldMetadataReducer().reduce(results)
+
+        expect(results).k_toMatchResultsStats({ total: 3, critical: 0 })
+        expect(results).k_toHaveExpressionsFailures(0)
+        expect({ entryPointResults: results, fieldResults }).k_toMatchResultsSnapshots()
+    })
+})

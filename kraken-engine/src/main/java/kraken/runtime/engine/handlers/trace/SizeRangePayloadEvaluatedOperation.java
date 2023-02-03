@@ -1,0 +1,54 @@
+/*
+ * Copyright © 2022 EIS Group and/or one of its affiliates. All rights reserved. Unpublished work under U.S.
+ * copyright laws.
+ * CONFIDENTIAL AND TRADE SECRET INFORMATION. No portion of this work may be copied, distributed, modified,
+ *  or incorporated into any other media without EIS Group prior written consent.
+ */
+package kraken.runtime.engine.handlers.trace;
+
+import java.util.Collection;
+
+import kraken.runtime.model.rule.payload.validation.SizeRangePayload;
+import kraken.tracer.VoidOperation;
+
+/**
+ * Operation to be added to trace after size range payload evaluation is completed.
+ * Describes payload evaluation details, field and state.
+ *
+ * @author Tomas Dapkunas
+ * @since 1.33.0
+ */
+public final class SizeRangePayloadEvaluatedOperation implements VoidOperation {
+
+    private final SizeRangePayload sizeRangePayload;
+    private final Object fieldValue;
+    private final boolean evaluationState;
+
+    public SizeRangePayloadEvaluatedOperation(SizeRangePayload sizeRangePayload,
+                                              Object fieldValue,
+                                              boolean evaluationState) {
+        this.sizeRangePayload = sizeRangePayload;
+        this.fieldValue = fieldValue;
+        this.evaluationState = evaluationState;
+    }
+
+    @Override
+    public String describe() {
+        var template = "Evaluated '%s' to %s. %s";
+        var successTemplate = "Collection field size is within expected range.";
+        var failureTemplate = "Expected size withing %s and %s. Actual size is %s.";
+
+        return String.format(template,
+            sizeRangePayload.getType().getTypeName(),
+            evaluationState,
+            evaluationState
+                ? successTemplate
+                : String.format(failureTemplate, sizeRangePayload.getMin(), sizeRangePayload.getMax(), actualSize()));
+    }
+
+    private String actualSize() {
+        return fieldValue instanceof Collection
+            ? String.valueOf(((Collection<?>) fieldValue).size()) : "";
+    }
+
+}

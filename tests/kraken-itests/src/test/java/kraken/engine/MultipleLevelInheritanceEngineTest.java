@@ -32,7 +32,7 @@ import java.util.List;
 import static kraken.testing.matchers.KrakenMatchers.hasNoIgnoredRules;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * @author psurinin
@@ -43,24 +43,8 @@ public class MultipleLevelInheritanceEngineTest extends EngineBaseTest {
         return TestResources.create(TestResources.Info.NOT_ROOT_INH);
     }
 
-    @Override
-    protected DataObjectInfoResolver getResolver() {
-        return new SimpleDataObjectInfoResolver();
-    }
-
-    @Override
-    protected Policy getDataObject() {
+    private Policy getDataObject() {
         return new CanadaPersonalAutoPolicy();
-    }
-
-    @Override
-    protected List<IterableContextTypeAdapter> getIterableTypeAdapters() {
-        return Collections.emptyList();
-    }
-
-    @Override
-    protected List<ContextTypeAdapter> getInstanceTypeAdapters() {
-        return Collections.emptyList();
     }
 
     @Test

@@ -15,15 +15,16 @@
  */
 package kraken.model.dsl.visitor;
 
-import kraken.model.dsl.KrakenDSLBaseVisitor;
+import static kraken.el.ast.builder.Literals.escape;
+import static kraken.el.ast.builder.Literals.stripQuotes;
+
+import kraken.el.ast.builder.Literals;
 import kraken.model.dsl.KrakenDSL;
+import kraken.model.dsl.KrakenDSLBaseVisitor;
 import kraken.model.dsl.model.DSLAnnotation;
 import kraken.model.dsl.model.DSLExpression;
 import kraken.model.dsl.model.DSLPayload;
 import kraken.model.dsl.model.DSLRule;
-
-import static kraken.el.ast.builder.Literals.escape;
-import static kraken.el.ast.builder.Literals.stripQuotes;
 
 /**
  * @author mulevicius
@@ -35,26 +36,46 @@ public class DSLRuleVisitor extends KrakenDSLBaseVisitor<DSLRule> {
 
     @Override
     public DSLRule visitARule(KrakenDSL.ARuleContext ctx) {
-        DSLAnnotation annotation = ctx.annotations() != null ?
-                annotationVisitor.visit(ctx.annotations()) : DSLAnnotation.EMPTY;
+        DSLAnnotation annotation = ctx.annotations() != null
+            ? annotationVisitor.visit(ctx.annotations())
+            : DSLAnnotation.EMPTY;
 
         String name = escape(stripQuotes(ctx.ruleName().getText()));
-        String description = getRuleDescription(ctx);
+        String description = parseRuleDescription(ctx);
         String contextName = ctx.contextName().getText();
         String fieldName = ctx.pathExpression().getText();
 
         DSLExpression condition = ctx.ruleCondition() != null
-                ? ExpressionReader.read(ctx.ruleCondition().inlineExpression())
-                : null;
+            ? ExpressionReader.read(ctx.ruleCondition().inlineExpression())
+            : null;
         DSLPayload payload = payloadVisitor.visit(ctx.payload());
 
-        return new DSLRule(annotation.getMetadata(), name, description, contextName, fieldName, condition, payload);
+        Integer priority = parsePriority(ctx);
+
+        return new DSLRule(annotation.getMetadata(), name, description, contextName, fieldName, condition, payload,
+            priority);
     }
 
-    private String getRuleDescription(KrakenDSL.ARuleContext ctx) {
-        KrakenDSL.RuleDescriptionContext desCtx = ctx.ruleDescription();
+    private Integer parsePriority(KrakenDSL.ARuleContext ctx) {
+        if(ctx.rulePriority() == null) {
+            return null;
+        }
+        if(ctx.rulePriority().MAX() != null) {
+            return Integer.MAX_VALUE;
+        }
+        if(ctx.rulePriority().MIN() != null) {
+            return Integer.MIN_VALUE;
+        }
+        if(ctx.rulePriority().integerLiteral() != null) {
+            return Literals.getInteger(ctx.rulePriority().integerLiteral().getText());
+        }
+        throw new IllegalStateException("Cannot parse rule priority from: " + ctx.rulePriority().getText());
+    }
 
-        return desCtx == null ? null : escape(stripQuotes(desCtx.getText()));
+    private String parseRuleDescription(KrakenDSL.ARuleContext ctx) {
+        return ctx.ruleDescription() != null
+            ? escape(stripQuotes(ctx.ruleDescription().description.getText()))
+            : null;
     }
 
 }

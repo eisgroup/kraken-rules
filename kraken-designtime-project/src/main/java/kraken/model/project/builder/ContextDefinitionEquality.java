@@ -48,12 +48,14 @@ public class ContextDefinitionEquality {
      * @param contextDefinition2 the second {@link ContextDefinition} used for comparison
      * @return true if {@link ContextDefinition}s are equal, false otherwise
      */
-    private static boolean contextDefinitionsAreEqual(ContextDefinition contextDefinition1, ContextDefinition contextDefinition2){
+    private static boolean contextDefinitionsAreEqual(ContextDefinition contextDefinition1,
+                                                      ContextDefinition contextDefinition2) {
         return Objects.equals(contextDefinition1.getName(), contextDefinition2.getName())
-                && Objects.equals(contextDefinition1.getPhysicalNamespace(), contextDefinition2.getPhysicalNamespace())
-                && Objects.equals(contextDefinition1.getParentDefinitions(), contextDefinition2.getParentDefinitions())
-                && Objects.equals(contextDefinition1.isRoot(), contextDefinition2.isRoot())
-                && Objects.equals(contextDefinition1.isStrict(), contextDefinition2.isStrict());
+            && Objects.equals(contextDefinition1.isSystem(), contextDefinition2.isSystem())
+            && Objects.equals(contextDefinition1.getPhysicalNamespace(), contextDefinition2.getPhysicalNamespace())
+            && Objects.equals(contextDefinition1.getParentDefinitions(), contextDefinition2.getParentDefinitions())
+            && Objects.equals(contextDefinition1.isRoot(), contextDefinition2.isRoot())
+            && Objects.equals(contextDefinition1.isStrict(), contextDefinition2.isStrict());
     }
 
     /**

@@ -24,7 +24,7 @@ import kraken.el.scope.type.Type;
  */
 public abstract class UnaryExpression extends Expression {
 
-    private Expression expression;
+    private final Expression expression;
 
     public UnaryExpression(Expression expression, NodeType nodeType, Scope scope, Type evaluationType, Token token) {
         super(nodeType, scope, evaluationType, token);

@@ -14,21 +14,21 @@
  *  limitations under the License.
  */
 
-import { RulePayloadHandler } from "./RulePayloadHandler";
-import { VisibilityPayloadResult, PayloadResultType } from "../results/PayloadResult";
-import { Payloads } from "kraken-model";
-import PayloadType = Payloads.PayloadType;
+import { RulePayloadHandler } from './RulePayloadHandler'
+import { VisibilityPayloadResult, PayloadResultType } from 'kraken-engine-api'
+import { Payloads } from 'kraken-model'
+import PayloadType = Payloads.PayloadType
 
 class VisibilityPayloadHandler implements RulePayloadHandler {
     handlesPayloadType(): Payloads.PayloadType {
-        return PayloadType.VISIBILITY;
+        return PayloadType.VISIBILITY
     }
     executePayload(payload: Payloads.UI.VisibilityPayload): VisibilityPayloadResult {
         return {
             type: PayloadResultType.VISIBILITY,
-            visible: payload.visible
-        };
+            visible: payload.visible,
+        }
     }
 }
 
-export const visibilityPayloadHandler = new VisibilityPayloadHandler();
+export const visibilityPayloadHandler = new VisibilityPayloadHandler()

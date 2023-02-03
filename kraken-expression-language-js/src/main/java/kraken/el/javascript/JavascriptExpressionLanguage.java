@@ -15,8 +15,8 @@
  */
 package kraken.el.javascript;
 
-import java.util.Map;
-
+import kraken.el.EvaluationContext;
+import kraken.el.Expression;
 import kraken.el.ExpressionEvaluationException;
 import kraken.el.ExpressionLanguage;
 import kraken.el.ExpressionLanguageConfiguration;
@@ -35,12 +35,12 @@ public class JavascriptExpressionLanguage implements ExpressionLanguage {
     }
 
     @Override
-    public String translate(Ast ast) {
-        return translator.translate(ast);
+    public Expression translate(Ast ast) {
+        return new Expression(translator.translate(ast), ast);
     }
 
     @Override
-    public Object evaluate(String expression, Object dataObject, Map<String, Object> vars) throws ExpressionEvaluationException {
+    public Object evaluate(Expression expression, EvaluationContext evaluationContext) throws ExpressionEvaluationException {
         throw new UnsupportedOperationException("Javascript evaluation in Java is not supported");
     }
 

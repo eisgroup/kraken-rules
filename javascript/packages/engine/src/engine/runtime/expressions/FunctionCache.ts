@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 /*
  *  Copyright 2019 EIS Ltd and/or one of its affiliates.
  *
@@ -19,12 +20,13 @@
  * Compiles function and stores to cache.
  */
 export class FunctionCache {
-    private readonly cache: Record<string, Function> = {};
+    private readonly cache: Record<string, Function> = {}
 
     compute(key: string, functionArgs: string[]): Function {
         if (this.cache[key] === undefined) {
-            this.cache[key] = Function.apply(undefined, functionArgs);
+            // eslint-disable-next-line prefer-spread
+            this.cache[key] = Function.apply(undefined, functionArgs)
         }
-        return this.cache[key];
+        return this.cache[key]
     }
 }

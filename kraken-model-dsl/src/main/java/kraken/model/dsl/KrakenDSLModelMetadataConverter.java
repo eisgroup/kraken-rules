@@ -15,6 +15,8 @@
  */
 package kraken.model.dsl;
 
+import java.net.URI;
+
 import kraken.model.Metadata;
 import kraken.model.MetadataAware;
 import kraken.model.dsl.model.DSLMetadata;
@@ -30,23 +32,23 @@ class KrakenDSLModelMetadataConverter {
     private KrakenDSLModelMetadataConverter() {
     }
 
-    static Metadata convertMetadata(DSLMetadata dslMetadata) {
-        if (dslMetadata == null || dslMetadata.getMetadata().isEmpty()) {
-            return null;
-        }
+    static Metadata convertMetadata(DSLMetadata dslMetadata, URI resourceUri) {
         Metadata metadata = factory.createMetadata();
-        dslMetadata.getMetadata().entrySet()
-                .stream()
-                .forEach(e -> metadata.setProperty(e.getKey(), e.getValue()));
+        metadata.setUri(resourceUri);
+
+        if (dslMetadata.getMetadata() != null && !dslMetadata.getMetadata().isEmpty()) {
+            dslMetadata.getMetadata().forEach(metadata::setProperty);
+        }
+
         return metadata;
     }
 
     /**
      * Applies metadata over MetadataAware model by preserving duplicate metadata properties in model
      *
+     * @param <T>
      * @param model
      * @param parentMetadata
-     * @param <T>
      * @return
      */
     static <T extends MetadataAware> T withParentMetadata(T model, Metadata parentMetadata) {
@@ -64,27 +66,28 @@ class KrakenDSLModelMetadataConverter {
     }
 
     /**
-     * Merges two metadata objects so that duplicate metadata properties in child metadata takes precedence
+     * Merges two metadata objects so that duplicate metadata properties and resource URI of child metadata
+     * takes precedence.
      *
-     * @param parentMetadata
-     * @param childMetadata
-     * @return
+     * @param parentMetadata Parent metadata object.
+     * @param childMetadata Child metadata object.
+     * @return Merged metadata or {@code null} if all arguments are {@code null}.
      */
     public static Metadata merge(Metadata parentMetadata, Metadata childMetadata) {
-        if(parentMetadata == null && childMetadata == null) {
+        if (parentMetadata == null && childMetadata == null) {
             return null;
         }
 
         Metadata metadata = factory.createMetadata();
 
-        if(parentMetadata != null) {
-            parentMetadata.asMap().entrySet().stream()
-                    .forEach(e -> metadata.setProperty(e.getKey(), e.getValue()));
+        if (parentMetadata != null) {
+            parentMetadata.asMap().forEach(metadata::setProperty);
+            metadata.setUri(parentMetadata.getUri());
         }
 
-        if(childMetadata != null) {
-            childMetadata.asMap().entrySet().stream()
-                    .forEach(e -> metadata.setProperty(e.getKey(), e.getValue()));
+        if (childMetadata != null) {
+            childMetadata.asMap().forEach(metadata::setProperty);
+            metadata.setUri(childMetadata.getUri());
         }
 
         return metadata;

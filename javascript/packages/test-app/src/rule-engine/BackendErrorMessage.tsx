@@ -14,13 +14,11 @@
  *  limitations under the License.
  */
 
-import * as React from "react";
-import { upperFirst } from "lodash";
+import * as React from 'react'
+import { upperFirst } from 'lodash'
 
 export interface BackendError {
-    error: {
-
-    };
+    error: Record<string, unknown>
     response: {
         data: {
             status: number
@@ -29,29 +27,27 @@ export interface BackendError {
             message: string
             path: string
         }
-    };
+    }
 }
 
 const style = {
-    listItem: { borderBottom: "1px solid grey", textAlign: "left" } as React.CSSProperties,
-    info: { fontSize: "11px" } as React.CSSProperties
-};
+    listItem: { borderBottom: '1px solid grey', textAlign: 'left' } as React.CSSProperties,
+    info: { fontSize: '11px' } as React.CSSProperties,
+}
 
 /**
  * React Component used to display error message from backend
  */
-export let BackendErrorMessage = ({ error }: { error: BackendError }) => {
+export const BackendErrorMessage = ({ error }: { error: BackendError }) => {
     return (
         <div style={{ width: 500 }}>
-            {Object.keys(error.response.data)
-                .map(key => (
-                    <p key={key} style={style.listItem}>
-                        <b>{upperFirst(key)}:</b> {error.response.data[key]}
-                    </p>)
-                )
-            }
+            {Object.keys(error.response.data).map(key => (
+                <p key={key} style={style.listItem}>
+                    <b>{upperFirst(key)}:</b> {error.response.data[key]}
+                </p>
+            ))}
         </div>
-    );
-};
+    )
+}
 
-export let messageFrom = (error: BackendError) => <BackendErrorMessage error={error} />;
+export const messageFrom = (error: BackendError) => <BackendErrorMessage error={error} />

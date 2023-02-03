@@ -24,4 +24,10 @@ import java.time.LocalDateTime;
 
 public class TransactionDetailsExtended extends TransactionDetails {
 
+    public TransactionDetailsExtended() {
+    }
+
+    public TransactionDetailsExtended(String txType, String txReason, LocalDateTime txEffectiveDate) {
+        super(txType, txReason, txEffectiveDate);
+    }
 }

@@ -2,9 +2,12 @@ rule(rule) ::= <<
 <if(rule.metadata)>
 <rule.metadata.properties.__keys__:{k | @Dimension("<k>", <rule.metadata.properties.(k)>)}; separator="\n">
 <endif>
-Rule "<rule.name>" On <rule.context>.<rule.targetPath> {
+Rule "<rule.name; format="deescapeString">" On <rule.context>.<rule.targetPath> {
     <if(rule.description)>
-    Description "<rule.description>"
+    Description "<rule.description; format="deescapeString">"
+    <endif>
+    <if(rule.priority)>
+    Priority <rule.priority; format="minMaxOrInteger">
     <endif>
     <if(rule.condition)>
     When <rule.condition.expression.expressionString>

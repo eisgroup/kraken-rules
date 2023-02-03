@@ -24,7 +24,7 @@ import static io.github.jsonSnapshot.SnapshotMatcher.start;
 import static io.github.jsonSnapshot.SnapshotMatcher.validateSnapshots;
 import static kraken.testing.matchers.KrakenMatchers.*;
 import static kraken.test.KrakenItestMatchers.matchesSnapshot;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public final class EngineSanityVisibilityPayloadTest extends SanityEngineBaseTest {
 
@@ -40,7 +40,7 @@ public final class EngineSanityVisibilityPayloadTest extends SanityEngineBaseTes
 
     @Test
     public void shouldExecuteVisibilityAutoPolicyEntryPoint() {
-        final EntryPointResult result = engine.evaluate(dataObject, "VisibilityAutoPolicy");
+        EntryPointResult result = engine.evaluate(getDataObject(), "VisibilityAutoPolicy");
 
         assertThat(result, matchesSnapshot());
         assertThat(result, hasHiddenFields(7));

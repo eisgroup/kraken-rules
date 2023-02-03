@@ -36,7 +36,7 @@ public enum ScopeType {
     /**
      * Indicates a {@link Scope} which is global throughout expression and every symbol available in global scope
      * can be accessed from anywhere in expression unless that symbol is shadowed by child scope
-     * of {@link ScopeType#FILTER}, {@link ScopeType#FOR_RETURN_EXPRESSION}, {@link ScopeType#LOCAL}
+     * of {@link ScopeType#FILTER}, {@link ScopeType#VARIABLES_MAP}, {@link ScopeType#LOCAL}
      * or scope has no parent, like {@link ScopeType#PATH}.
      * <p/>
      * Global scope is never created by {@link AstBuilder}.
@@ -88,16 +88,20 @@ public enum ScopeType {
     FILTER,
 
     /**
-     * Indicates a {@link Scope} that has looping variable accessible by name as defined in looping expression,
-     * like 'for c in coverages return c.limitAmount'.
+     * Indicates a {@link Scope} that contains variables defined in expression, including for iteration variables.
      * <p/>
-     * {@link ScopeType#FOR_RETURN_EXPRESSION} is created by {@link AstBuilder} when loop expression is encountered.
-     * For example, for 'for c in coverages return c.limitAmount' expression a {@link Scope} of
-     * {@link ScopeType#FOR_RETURN_EXPRESSION} will be created for expression in 'return' section and the {@link Scope} will
+     * {@link ScopeType#VARIABLES_MAP} is created by {@link AstBuilder} when variable declaration is encountered.
+     * For example, 'var firstCoverage = Policy.riskItems.coverages[0] return firstCoverage.limitAmount'
+     * expression a {@link Scope} of {@link ScopeType#VARIABLES_MAP} will be created for expression in 'return'
+     * section and the {@link Scope} will have a variable with name 'firstCoverage' which will have
+     * all the properties of item from 'Policy.riskItems.coverages[0]'.
+     * <p/>
+     * Another example, for 'for c in coverages return c.limitAmount' expression a {@link Scope} of
+     * {@link ScopeType#VARIABLES_MAP} will be created for expression in 'return' section and the {@link Scope} will
      * have a variable with name 'c' which will have all the properties of item in collection referred to by 'coverages'.
      * <p/>
      * {@link Scope} will also have parent scope (which can be any scope of any type except {@link ScopeType#PATH})
-     * available that may be referred to if current type of loop scope does not have referred property.
+     * available that may be referred to if scope does not have referred variable.
      */
-    FOR_RETURN_EXPRESSION
+    VARIABLES_MAP
 }

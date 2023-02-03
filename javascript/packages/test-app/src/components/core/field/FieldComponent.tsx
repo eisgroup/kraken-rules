@@ -14,41 +14,38 @@
  *  limitations under the License.
  */
 
-import * as React from "react";
+import * as React from 'react'
 
-import { InputValue } from "./SingleField";
-import { Tooltip, Icon } from "antd";
+import { InputValue } from './SingleField'
+import { Tooltip, Icon } from 'antd'
 
 interface CurriedInputProps {
-    value: InputValue | InputValue[];
-    onChange: (e: InputValue | InputValue[] | {}) => void;
+    value: InputValue | InputValue[]
+    onChange: (e: InputValue | InputValue[] | object) => void
 }
 
 export interface FieldComponentProps {
-    label: string;
-    info?: string;
-    renderInput: (props: CurriedInputProps) => JSX.Element;
-    fieldInfo?: Function;
-    error?: Function;
-    selections?: string[];
+    label: string
+    info?: string
+    renderInput: (props: CurriedInputProps) => JSX.Element
+    fieldInfo?: () => void
+    error?: () => void
+    selections?: string[]
 }
 
-export type FieldProps = CurriedInputProps & FieldComponentProps;
+export type FieldProps = CurriedInputProps & FieldComponentProps
 
 function label(props: FieldComponentProps): JSX.Element {
     return (
         <h4>
             {props.label}
-            {props.info && <Tooltip
-                placement="right"
-                title={props.info}>
-                <Icon
-                    type="question-circle-o"
-                    style={{ color: "#2f7dc5", marginLeft: "5px" }}
-                />
-            </Tooltip>}
+            {props.info && (
+                <Tooltip placement='right' title={props.info}>
+                    <Icon type='question-circle-o' style={{ color: '#2f7dc5', marginLeft: '5px' }} />
+                </Tooltip>
+            )}
         </h4>
-    );
+    )
 }
 
 export const FieldComponent = (props: FieldProps) => (
@@ -58,17 +55,17 @@ export const FieldComponent = (props: FieldProps) => (
         {props.fieldInfo()}
         {props.error && props.error()}
     </div>
-);
+)
 
 export interface InnerInputsComponentProps<T> {
-    metadata: { [key: string]: ValidationMetadata };
-    id: string;
-    value: T;
-    onChange: (det: T) => void;
+    metadata: { [key: string]: ValidationMetadata }
+    id: string
+    value: T
+    onChange: (det: T) => void
 }
 
 export interface ValidationMetadata {
-    isApplicable: boolean;
-    isVisible: boolean;
-    errMessage?: string;
+    isApplicable: boolean
+    isVisible: boolean
+    errMessage?: string
 }

@@ -17,8 +17,16 @@ package kraken.testproduct.domain.extended;
 
 import kraken.testproduct.domain.FullCoverage;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class FullCoverageExtended extends FullCoverage implements CoverageExtended {
 
+    public FullCoverageExtended() {
+    }
+
+    public FullCoverageExtended(String code, BigDecimal limitAmount, BigDecimal deductibleAmount,
+                                LocalDate effectiveDate, LocalDate expirationDate, String typeOfInjuryCovered) {
+        super(code, limitAmount, deductibleAmount, effectiveDate, expirationDate, typeOfInjuryCovered);
+    }
 }

@@ -17,20 +17,32 @@ package kraken.runtime.engine.result.reducers.validation;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import javax.annotation.Nonnull;
+
+import org.apache.commons.lang3.BooleanUtils;
 
 import kraken.annotations.API;
 import kraken.model.validation.ValidationSeverity;
 import kraken.runtime.engine.EntryPointResult;
 import kraken.runtime.engine.dto.FieldEvaluationResult;
 import kraken.runtime.engine.dto.RuleEvaluationResult;
+import kraken.runtime.engine.dto.RuleEvaluationStatus;
 import kraken.runtime.engine.dto.RuleInfo;
-import kraken.runtime.engine.result.ExceptionAwarePayloadResult;
+import kraken.runtime.engine.result.AssertionPayloadResult;
+import kraken.runtime.engine.result.LengthPayloadResult;
+import kraken.runtime.engine.result.RegExpPayloadResult;
+import kraken.runtime.engine.result.SizePayloadResult;
+import kraken.runtime.engine.result.SizeRangePayloadResult;
+import kraken.runtime.engine.result.UsagePayloadResult;
 import kraken.runtime.engine.result.ValidationPayloadResult;
 import kraken.runtime.engine.result.reducers.EntryPointResultReducer;
-import org.apache.commons.lang3.BooleanUtils;
-
+import kraken.runtime.engine.result.reducers.validation.ValidationMessageProvider.ValidationMessage;
+import kraken.runtime.engine.result.reducers.validation.trace.EntryPointResultReducingOperation;
+import kraken.runtime.engine.result.reducers.validation.trace.RuleResultOverriddenOperation;
+import kraken.runtime.utils.TemplateParameterRenderer;
+import kraken.tracer.Tracer;
 
 /**
  * Processes rule evaluation information from {@link EntryPointResult}, reducing it to
@@ -43,26 +55,47 @@ import org.apache.commons.lang3.BooleanUtils;
 @API
 public class ValidationStatusReducer implements EntryPointResultReducer<ValidationStatus> {
 
-    private RuleOverrideStatusResolver overrideStatusResolver;
-
-    private PayloadMessageProvider messageProvider;
-
+    private final RuleOverrideStatusResolver overrideStatusResolver;
+    private final PayloadMessageProvider messageProvider;
+    private final ValidationMessageProvider validationMessageProvider;
 
     public ValidationStatusReducer() {
-        this(null, new DefaultPayloadMessageProvider());
+        this((RuleOverrideStatusResolver) null);
     }
 
     public ValidationStatusReducer(RuleOverrideStatusResolver overrideStatusResolver) {
-        this(overrideStatusResolver, new DefaultPayloadMessageProvider());
+        this(overrideStatusResolver, new DefaultValidationMessageProvider());
+    }
+
+    public ValidationStatusReducer(ValidationMessageProvider validationMessageProvider) {
+        this(null, validationMessageProvider);
+    }
+
+    /**
+     * ValidationStatusReducer that care about overridden rules and those rules should be filtered out as valid.
+     * Provided {@link RuleOverrideStatusResolver} should know what rules on current context are overridden.
+     *
+     * @deprecated deprecated because uses {@link PayloadMessageProvider} which does not support localization of
+     * default validation messages.
+     * Use {@link #ValidationStatusReducer(RuleOverrideStatusResolver, ValidationMessageProvider)} instead.
+     */
+    @Deprecated(since = "1.24.0", forRemoval = true)
+    public ValidationStatusReducer(RuleOverrideStatusResolver overrideStatusResolver,
+                                   PayloadMessageProvider messageProvider) {
+        this.overrideStatusResolver = overrideStatusResolver;
+        this.messageProvider = Objects.requireNonNull(messageProvider);
+        this.validationMessageProvider = null;
     }
 
     /**
      * ValidationStatusReducer that care about overridden rules and those rules should be filtered out as valid.
      * Provided {@link RuleOverrideStatusResolver} should know what rules on current context are overridden.
      */
-    public ValidationStatusReducer(RuleOverrideStatusResolver overrideStatusResolver, PayloadMessageProvider messageProvider) {
+    public ValidationStatusReducer(RuleOverrideStatusResolver overrideStatusResolver,
+                                   ValidationMessageProvider validationMessageProvider) {
         this.overrideStatusResolver = overrideStatusResolver;
-        this.messageProvider = Objects.requireNonNull(messageProvider);
+        this.messageProvider = null;
+        this.validationMessageProvider = Objects.requireNonNull(validationMessageProvider);
     }
 
     /**
@@ -74,24 +107,29 @@ public class ValidationStatusReducer implements EntryPointResultReducer<Validati
      */
     @Override
     public ValidationStatus reduce(EntryPointResult entryPointResult) {
-        List<ValidationResult> validationResults = entryPointResult.getFieldResults().values().stream()
+        return Tracer.doOperation(new EntryPointResultReducingOperation(entryPointResult), () -> {
+            List<ValidationResult> validationResults = entryPointResult.getFieldResults().values().stream()
                 .flatMap(result -> buildValidationResults(result).stream())
                 .collect(Collectors.toList());
-        return buildValidationStatus(validationResults);
+
+            return buildValidationStatus(validationResults);
+        });
     }
 
-    private List<ValidationResult> buildValidationResults(FieldEvaluationResult fieldResult){
+    private List<ValidationResult> buildValidationResults(FieldEvaluationResult fieldResult) {
         return getEvalsValidationResults(fieldResult).stream()
-                .map(result -> buildValidationResult(result, fieldResult))
-                .collect(Collectors.toList());
+            .map(result -> buildValidationResult(result, fieldResult))
+            .collect(Collectors.toList());
     }
 
     private ValidationStatus buildValidationStatus(List<ValidationResult> validationResults){
-        return new ValidationStatus(
+        var validationStatus = new ValidationStatus(
                 getResultsBySeverity(validationResults, ValidationSeverity.critical),
                 getResultsBySeverity(validationResults, ValidationSeverity.warning),
                 getResultsBySeverity(validationResults, ValidationSeverity.info)
         );
+
+        return validationStatus;
     }
 
     private List<ValidationResult> getResultsBySeverity(List<ValidationResult> messages, ValidationSeverity severity){
@@ -102,12 +140,11 @@ public class ValidationStatusReducer implements EntryPointResultReducer<Validati
 
     private List<RuleEvaluationResult> getEvalsValidationResults(FieldEvaluationResult result) {
         return result.getRuleResults().stream()
-                .filter(rr -> rr.getPayloadResult() instanceof ValidationPayloadResult)
-                .filter(isNotEvaluatedWithError())
-                .filter(rr -> rr.getConditionEvaluationResult().isApplicable())
-                .filter(rr -> BooleanUtils.isFalse(((ValidationPayloadResult) rr.getPayloadResult()).getSuccess()))
-                .filter(rr -> !isRuleOverridden(rr))
-                .collect(Collectors.toList());
+            .filter(rr -> rr.getRuleEvaluationStatus() == RuleEvaluationStatus.APPLIED)
+            .filter(rr -> rr.getPayloadResult() instanceof ValidationPayloadResult)
+            .filter(rr -> BooleanUtils.isFalse(((ValidationPayloadResult) rr.getPayloadResult()).getSuccess()))
+            .filter(rr -> !isRuleOverridden(rr))
+            .collect(Collectors.toList());
     }
 
     private boolean isRuleOverridden(RuleEvaluationResult ruleEvaluationResult) {
@@ -115,42 +152,118 @@ public class ValidationStatusReducer implements EntryPointResultReducer<Validati
         if (ruleEvaluationResult.getOverrideInfo() == null || !ruleEvaluationResult.getOverrideInfo().isOverridable()) {
             return false;
         }
-        return overrideStatusResolver != null
-                && ruleEvaluationResult.getOverrideInfo().getOverridableRuleContextInfo() != null
-                && overrideStatusResolver.isRuleOverridden(ruleInfo, ruleEvaluationResult.getOverrideInfo().getOverridableRuleContextInfo());
-    }
 
-    private Predicate<RuleEvaluationResult> isNotEvaluatedWithError() {
-        return ruleEvaluationResult -> {
-            if (ruleEvaluationResult.getPayloadResult() instanceof ExceptionAwarePayloadResult) {
-                return !((ExceptionAwarePayloadResult) ruleEvaluationResult.getPayloadResult()).getException().isPresent();
-            }
-            return true;
-        };
+        var isOverridden = overrideStatusResolver != null
+            && ruleEvaluationResult.getOverrideInfo().getOverridableRuleContextInfo() != null
+            && overrideStatusResolver.isRuleOverridden(ruleInfo,
+            ruleEvaluationResult.getOverrideInfo().getOverridableRuleContextInfo());
+
+        if (isOverridden) {
+            Tracer.doOperation(new RuleResultOverriddenOperation(ruleEvaluationResult));
+        }
+
+        return isOverridden;
     }
 
     private ValidationResult buildValidationResult(RuleEvaluationResult ruleResult, FieldEvaluationResult fieldEvaluationResult) {
-        ValidationResult validationResult = new ValidationResult(
-                ruleResult.getRuleInfo().getRuleName(),
-                getMessage((ValidationPayloadResult) ruleResult.getPayloadResult()),
-                getMessageCode((ValidationPayloadResult) ruleResult.getPayloadResult()),
-                ((ValidationPayloadResult) ruleResult.getPayloadResult()).getTemplateVariables(),
-                ((ValidationPayloadResult)ruleResult.getPayloadResult()).getValidationSeverity(),
-                fieldEvaluationResult.getContextFieldInfo()
+        RenderedValidationMessage message = resolveMessage((ValidationPayloadResult) ruleResult.getPayloadResult());
+        return new ValidationResult(
+            ruleResult.getRuleInfo().getRuleName(),
+            message.getMessage(),
+            message.getCode(),
+            message.getParameters(),
+            message.getMessageTemplate(),
+            ((ValidationPayloadResult)ruleResult.getPayloadResult()).getValidationSeverity(),
+            fieldEvaluationResult.getContextFieldInfo()
         );
-        return validationResult;
     }
 
-    private String getMessageCode(ValidationPayloadResult validationPayloadResult) {
-        return validationPayloadResult.getMessageCode() != null
-                ? validationPayloadResult.getMessageCode()
-                : messageProvider.resolveByPayloadResult(validationPayloadResult).getCode();
+    private RenderedValidationMessage resolveMessage(ValidationPayloadResult payloadResult) {
+        ValidationMessage defaultMessage = resolveDefaultMessage(payloadResult);
+        return new RenderedValidationMessage(
+            payloadResult.getMessageCode() != null
+                ? payloadResult.getMessageCode()
+                : defaultMessage.getCode(),
+            payloadResult.getMessage() != null
+                ? payloadResult.getMessage()
+                : defaultMessage.getMessage(),
+            payloadResult.getMessage() != null
+                ? payloadResult.getTemplateVariables()
+                : renderParameters(defaultMessage.getParameters()),
+            payloadResult.getMessageTemplate() != null
+                ? payloadResult.getMessageTemplate()
+                : defaultMessage.getMessage()
+        );
     }
 
-    private String getMessage(ValidationPayloadResult validationPayloadResult) {
-        return validationPayloadResult.getMessage() != null
-                ? validationPayloadResult.getMessage()
-                : messageProvider.resolveByPayloadResult(validationPayloadResult).getMessage();
+    private List<String> renderParameters(List<Object> parameters) {
+        return parameters.stream()
+            .map(TemplateParameterRenderer::render)
+            .collect(Collectors.toList());
     }
 
+    private ValidationMessage resolveDefaultMessage(ValidationPayloadResult payloadResult) {
+        if(messageProvider != null) {
+            DefaultMessage message = messageProvider.resolveByPayloadResult(payloadResult);
+            return new ValidationMessage(message.getCode(), message.getMessage());
+        }
+
+        if(validationMessageProvider != null) {
+            if (payloadResult instanceof AssertionPayloadResult) {
+                return validationMessageProvider.assertionErrorMessage((AssertionPayloadResult) payloadResult);
+            }
+            if (payloadResult instanceof SizePayloadResult) {
+                return validationMessageProvider.sizeErrorMessage((SizePayloadResult) payloadResult);
+            }
+            if (payloadResult instanceof SizeRangePayloadResult) {
+                return validationMessageProvider.sizeRangeErrorMessage((SizeRangePayloadResult) payloadResult);
+            }
+            if (payloadResult instanceof LengthPayloadResult) {
+                return validationMessageProvider.lengthErrorMessage((LengthPayloadResult) payloadResult);
+            }
+            if (payloadResult instanceof RegExpPayloadResult) {
+                return validationMessageProvider.regExpErrorMessage((RegExpPayloadResult) payloadResult);
+            }
+            if (payloadResult instanceof UsagePayloadResult) {
+                return validationMessageProvider.usageErrorMessage((UsagePayloadResult) payloadResult);
+            }
+            throw new IllegalStateException("Unknown payload result type encountered: " + payloadResult.getClass());
+        }
+        throw new IllegalStateException(
+            "ValidationStatusReducer is incorrectly initialized. Message provider is not set.");
+    }
+
+    static class RenderedValidationMessage {
+        private final String code;
+        private final String message;
+        private final List<String> parameters;
+        private final String messageTemplate;
+
+        public RenderedValidationMessage(@Nonnull String code, @Nonnull String message, @Nonnull List<String> parameters, @Nonnull String messageTemplate) {
+            this.code = code;
+            this.message = message;
+            this.parameters = parameters;
+            this.messageTemplate = messageTemplate;
+        }
+
+        @Nonnull
+        public String getCode() {
+            return code;
+        }
+
+        @Nonnull
+        public String getMessage() {
+            return message;
+        }
+
+        @Nonnull
+        public List<String> getParameters() {
+            return parameters;
+        }
+
+        @Nonnull
+        public String getMessageTemplate() {
+            return messageTemplate;
+        }
+    }
 }

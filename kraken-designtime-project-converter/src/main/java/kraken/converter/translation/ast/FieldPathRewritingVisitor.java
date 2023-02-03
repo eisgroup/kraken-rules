@@ -20,7 +20,6 @@ import java.util.Optional;
 import kraken.el.ast.Expression;
 import kraken.el.ast.Identifier;
 import kraken.el.ast.visitor.AstRewritingVisitor;
-import kraken.el.scope.type.ArrayType;
 import kraken.model.context.ContextField;
 import kraken.model.project.KrakenProject;
 
@@ -39,14 +38,19 @@ public class FieldPathRewritingVisitor extends AstRewritingVisitor {
 
     @Override
     public Expression visit(Identifier identifier) {
-        String contextDefinitionName = identifier.getScope().getType() instanceof ArrayType
-                ? ((ArrayType) identifier.getScope().getType()).getElementType().getName()
-                : identifier.getScope().getType().getName();
+        String contextDefinitionName = identifier.getScope().getType().unwrapArrayType().getName();
         return Optional.ofNullable(krakenProject.getContextProjection(contextDefinitionName))
-                .filter(c -> c.getContextFields().containsKey(identifier.getIdentifier()))
-                .map(c -> c.getContextFields().get(identifier.getIdentifier()))
+                .filter(c -> c.getContextFields().containsKey(identifier.getIdentifierToken()))
+                .map(c -> c.getContextFields().get(identifier.getIdentifierToken()))
                 .filter(p -> !identifier.getIdentifier().equals(p.getFieldPath()))
-                .<Expression>map(p -> new Identifier(identifier.getIdentifier(), p.getFieldPath(), identifier.getScope(), identifier.getToken()))
+                .<Expression>map(p ->
+                    new Identifier(
+                        identifier.getIdentifierToken(),
+                        p.getFieldPath(),
+                        identifier.getScope(),
+                        identifier.getEvaluationType(),
+                        identifier.getToken()
+                    ))
                 .orElseGet(() -> super.visit(identifier));
     }
 

@@ -55,10 +55,9 @@ public class EntryPointServerSideOnlyValidator {
             session.add(new ValidationMessage(
                 entryPoint,
                 String.format(
-                    "EntryPoint '%s' variation is misconfigured, because it is not marked as @ServerSideOnly, "
+                    "variation is misconfigured, because it is not marked as @ServerSideOnly, "
                         + "but there are another EntryPoint variation that is marked as @ServerSideOnly."
-                        + "All variations of the same EntryPoint must be consistently marked as @ServerSideOnly.",
-                    entryPoint.getName()
+                        + "All variations of the same EntryPoint must be consistently marked as @ServerSideOnly."
                 ),
                 ERROR
             ));
@@ -78,8 +77,7 @@ public class EntryPointServerSideOnlyValidator {
                 session.add(new ValidationMessage(
                     entryPoint,
                     String.format(
-                        "Entry Point '%s' not annotated as @ServerSideOnly includes entry point(s): '%s' marked as @ServerSideOnly",
-                        entryPoint.getName(),
+                        "not annotated as @ServerSideOnly includes entry point(s): '%s' marked as @ServerSideOnly",
                         includedServerSideEntryPoints.stream()
                             .map(EntryPoint::getName)
                             .collect(Collectors.joining(","))

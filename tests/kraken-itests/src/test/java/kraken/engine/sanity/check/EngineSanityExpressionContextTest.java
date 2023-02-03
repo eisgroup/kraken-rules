@@ -15,20 +15,24 @@
  */
 package kraken.engine.sanity.check;
 
-import com.google.common.collect.ImmutableMap;
 import kraken.runtime.EvaluationConfig;
 import kraken.runtime.engine.EntryPointResult;
+import kraken.testproduct.domain.COLLCoverage;
 import kraken.testproduct.domain.Policy;
 import kraken.testproduct.domain.Insured;
 import kraken.testproduct.domain.TransactionDetails;
+import kraken.testproduct.domain.Vehicle;
+
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static kraken.testing.matchers.KrakenMatchers.*;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * EntryPoint "ExpressionContextCheck-Condition" {
@@ -66,8 +70,8 @@ public class EngineSanityExpressionContextTest extends SanityEngineBaseTest {
 
     @Test
     public void shouldCheckExpressionContextCondition() {
-        final Policy policy = policy();
-        final EntryPointResult result = engine.evaluate(policy, EntryPoint.CONDITION, config());
+        Policy policy = policy();
+        EntryPointResult result = engine.evaluate(policy, EntryPoint.CONDITION, config());
         assertThat(result, hasNoIgnoredRules());
         assertThat(policy.getPolicyNumber(), is(PLAN));
         assertThat(policy.getTransactionDetails().getTxReason(), is(PACKAGE));
@@ -76,8 +80,8 @@ public class EngineSanityExpressionContextTest extends SanityEngineBaseTest {
 
     @Test
     public void shouldCheckExpressionContextDefault() {
-        final Policy policy = policy();
-        final EntryPointResult result = engine.evaluate(policy, EntryPoint.DEFAULT, config());
+        Policy policy = policy();
+        EntryPointResult result = engine.evaluate(policy, EntryPoint.DEFAULT, config());
         assertThat(result, hasNoIgnoredRules());
         assertThat(policy.getPolicyNumber(), is(PLAN));
         assertThat(policy.getTransactionDetails().getTxReason(), is(PACKAGE));
@@ -85,29 +89,100 @@ public class EngineSanityExpressionContextTest extends SanityEngineBaseTest {
 
     @Test
     public void shouldCheckExpressionContextAssert() {
-        final Policy policy = policy();
+        Policy policy = policy();
         policy.setPolicyNumber(PLAN);
         policy.getTransactionDetails().setTxReason(PACKAGE);
 
-        final EntryPointResult result = engine.evaluate(policy, EntryPoint.ASSERTION, config());
+        EntryPointResult result = engine.evaluate(policy, EntryPoint.ASSERTION, config());
         assertThat(result, hasNoIgnoredRules());
         assertThat(result, hasValidationFailures(0));
     }
 
     @Test
     public void shouldCheckExpressionContextAssertCCR() {
-        final Policy policy = policy();
+        Policy policy = policy();
         policy.setPolicyNumber(PLAN);
         policy.getTransactionDetails().setTxReason(PACKAGE);
         policy.getInsured().setName(PACKAGE);
 
-        final EntryPointResult result = engine.evaluate(policy, EntryPoint.ASSERTION_CCR, config());
+        EntryPointResult result = engine.evaluate(policy, EntryPoint.ASSERTION_CCR, config());
         assertThat(result, hasNoIgnoredRules());
         assertThat(result, hasValidationFailures(0));
     }
 
+    @Test
+    public void shouldEvaluateNestedDynamicContextScope() {
+        Policy policy = policyWithPolicyNumber("target-context");
+
+        HashMap<String, Object> context = new HashMap<>();
+        context.put("additional", Map.of("policies", List.of(policyWithPolicyNumber("external-context"))));
+        EvaluationConfig config = new EvaluationConfig(context, "USD");
+
+        EntryPointResult result = engine.evaluate(policy, "ExpressionContextCheck-NestedScope", config);
+
+        assertThat(result, hasNoIgnoredRules());
+        assertThat(result, hasValidationFailures(0));
+    }
+
+    @Test
+    public void shouldEvaluateNestedFilterContextScope() {
+        Policy policy = policyWithPolicyNumber("policy-make");
+        policy.setRiskItems(List.of(vehicleWithModel("vehicle-make")));
+
+        HashMap<String, Object> context = new HashMap<>();
+        context.put("additional", Map.of(
+            "vehicles", List.of(vehicleWithModel("policy-make"))
+        ));
+        EvaluationConfig config = new EvaluationConfig(context, "USD");
+
+        EntryPointResult result = engine.evaluate(policy, "ExpressionContextCheck-NestedFilter", config);
+
+        assertThat(result, hasNoIgnoredRules());
+        assertThat(result, hasValidationFailures(0));
+    }
+
+    @Test
+    public void shouldEvaluateByFlatMappingDynamicContext() {
+        Policy policy = policyWithPolicyNumber("last");
+
+        HashMap<String, Object> context = new HashMap<>();
+        context.put("additional", Map.of(
+            "vehicles", List.of(vehicleWithCoverageCodes("first", "second"), vehicleWithCoverageCodes("third"))
+        ));
+        EvaluationConfig config = new EvaluationConfig(context, "USD");
+
+        EntryPointResult result = engine.evaluate(policy, "ExpressionContextCheck-FlatMapDynamicContext", config);
+
+        assertThat(result, hasNoIgnoredRules());
+        assertThat(result, hasValidationFailures(0));
+    }
+
+    private Vehicle vehicleWithCoverageCodes(String... codes) {
+        Vehicle vehicle = new Vehicle();
+        List<COLLCoverage> collCoverages = new ArrayList<>();
+        for(String code : codes) {
+            COLLCoverage coverage = new COLLCoverage();
+            coverage.setCode(code);
+            collCoverages.add(coverage);
+        }
+        vehicle.setCollCoverages(collCoverages);
+        return vehicle;
+    }
+
+    private Vehicle vehicleWithModel(String model) {
+        Vehicle vehicle = new Vehicle();
+        vehicle.setModel(model);
+        return vehicle;
+    }
+
+    private Policy policyWithPolicyNumber(String policyNumber) {
+        Policy policy = new Policy();
+        policy.setPolicyNumber(policyNumber);
+        return policy;
+    }
+
     private Policy policy() {
-        final Policy policy = new Policy();
+        Policy policy = new Policy();
         policy.setTransactionDetails(new TransactionDetails());
         policy.setInsured(new Insured());
         return policy;
@@ -118,9 +193,9 @@ public class EngineSanityExpressionContextTest extends SanityEngineBaseTest {
     }
 
     private Map<String, Object> context() {
-        final HashMap<String, Object> context = new HashMap<>();
-        context.put("dimensions", ImmutableMap.of("plan", PLAN));
-        context.put("additional", ImmutableMap.of("package", PACKAGE));
+        HashMap<String, Object> context = new HashMap<>();
+        context.put("dimensions", Map.of("plan", PLAN));
+        context.put("additional", Map.of("package", PACKAGE));
         return context;
     }
 }

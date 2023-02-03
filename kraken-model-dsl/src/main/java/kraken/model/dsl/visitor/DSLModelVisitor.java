@@ -33,6 +33,7 @@ import kraken.model.dsl.model.DSLEntryPoints;
 import kraken.model.dsl.model.DSLExternalContext;
 import kraken.model.dsl.model.DSLExternalContextDefinition;
 import kraken.model.dsl.model.DSLFunction;
+import kraken.model.dsl.model.DSLFunctionSignature;
 import kraken.model.dsl.model.DSLImportReference;
 import kraken.model.dsl.model.DSLModel;
 import kraken.model.dsl.model.DSLRule;
@@ -44,25 +45,27 @@ import kraken.namespace.Namespaced;
  */
 public class DSLModelVisitor extends KrakenDSLBaseVisitor<DSLModel> {
 
-    private DSLContextVisitor contextVisitor = new DSLContextVisitor();
+    private final DSLContextVisitor contextVisitor = new DSLContextVisitor();
 
-    private DSLExternalContextVisitor externalContextVisitor = new DSLExternalContextVisitor();
+    private final DSLExternalContextVisitor externalContextVisitor = new DSLExternalContextVisitor();
 
-    private DSLExternalContextDefinitionVisitor externalContextDefinitionVisitor = new DSLExternalContextDefinitionVisitor();
+    private final DSLExternalContextDefinitionVisitor externalContextDefinitionVisitor = new DSLExternalContextDefinitionVisitor();
 
-    private DSLEntryPointVisitor entryPointVisitor = new DSLEntryPointVisitor();
+    private final DSLEntryPointVisitor entryPointVisitor = new DSLEntryPointVisitor();
 
-    private DSLRuleVisitor ruleVisitor = new DSLRuleVisitor();
+    private final DSLRuleVisitor ruleVisitor = new DSLRuleVisitor();
 
-    private DSLContextsVisitor contextsVisitor = new DSLContextsVisitor();
+    private final DSLContextsVisitor contextsVisitor = new DSLContextsVisitor();
 
-    private DSLEntryPointsVisitor entryPointsVisitor = new DSLEntryPointsVisitor();
+    private final DSLEntryPointsVisitor entryPointsVisitor = new DSLEntryPointsVisitor();
 
-    private DSLRulesVisitor rulesVisitor = new DSLRulesVisitor();
+    private final DSLRulesVisitor rulesVisitor = new DSLRulesVisitor();
 
-    private DSLImportReferenceVisitor importReferenceVisitor = new DSLImportReferenceVisitor();
+    private final DSLImportReferenceVisitor importReferenceVisitor = new DSLImportReferenceVisitor();
 
-    private DSLFunctionVisitor functionVisitor = new DSLFunctionVisitor();
+    private final DSLFunctionSignatureVisitor functionSignatureVisitor = new DSLFunctionSignatureVisitor();
+
+    private final DSLFunctionVisitor functionVisitor = new DSLFunctionVisitor();
 
     @Override
     public DSLModel visitKraken(KrakenDSL.KrakenContext ctx) {
@@ -79,19 +82,20 @@ public class DSLModelVisitor extends KrakenDSLBaseVisitor<DSLModel> {
                 List.of(),
                 null,
                 List.of(),
+                List.of(),
                 List.of()
             );
         }
 
         List<NamespaceImportContext> namespaceImports = ctx.anImport().stream()
             .filter(i -> i.namespaceImport() != null)
-            .map(i -> i.namespaceImport()).collect(
-            Collectors.toList());
+            .map(i -> i.namespaceImport())
+            .collect(Collectors.toList());
 
         List<RuleImportContext> ruleImports = ctx.anImport().stream()
             .filter(i -> i.ruleImport() != null)
-            .map(i -> i.ruleImport()).collect(
-                Collectors.toList());
+            .map(i -> i.ruleImport())
+            .collect(Collectors.toList());
 
         NamespaceContext namespaceContext = ctx.namespace();
         if(namespaceContext == null && !namespaceImports.isEmpty()) {
@@ -115,54 +119,60 @@ public class DSLModelVisitor extends KrakenDSLBaseVisitor<DSLModel> {
         }
 
         DSLExternalContext dslExternalContext = externalContext.size() == 1
-                ? externalContextVisitor.visitExternalContext(externalContext.get(0)) : null;
+                ? externalContextVisitor.visit(externalContext.get(0)) : null;
 
         List<DSLExternalContextDefinition> dslExternalContextDefinitions = ctx.model().stream()
                 .map(ModelContext::externalContextDefinition)
                 .filter(Objects::nonNull)
-                .map(context -> externalContextDefinitionVisitor.visitExternalContextDefinition(context))
+                .map(externalContextDefinitionVisitor::visit)
                 .collect(Collectors.toList());
 
         List<DSLContext> contexts = ctx.model().stream()
                 .map(ModelContext::context)
                 .filter(Objects::nonNull)
-                .map(context -> contextVisitor.visitContext(context))
+                .map(contextVisitor::visit)
                 .collect(Collectors.toList());
 
         List<DSLEntryPoint> entryPoints = ctx.model().stream()
                 .map(ModelContext::entryPoint)
                 .filter(Objects::nonNull)
-                .map(entryPoint -> entryPointVisitor.visitEntryPoint(entryPoint))
+                .map(entryPointVisitor::visit)
                 .collect(Collectors.toList());
 
         List<DSLRule> rules = ctx.model().stream()
                 .map(ModelContext::aRule)
                 .filter(Objects::nonNull)
-                .map(rule -> ruleVisitor.visitARule(rule))
+                .map(ruleVisitor::visit)
                 .collect(Collectors.toList());
 
         List<DSLContexts> contextDefinitionBlocks = ctx.model().stream()
                 .map(ModelContext::contexts)
                 .filter(Objects::nonNull)
-                .map(contextBlock -> contextsVisitor.visit(contextBlock))
+                .map(contextsVisitor::visit)
                 .collect(Collectors.toList());
 
         List<DSLEntryPoints> entryPointBlocks = ctx.model().stream()
                 .map(ModelContext::entryPoints)
                 .filter(Objects::nonNull)
-                .map(entryPointBlock -> entryPointsVisitor.visit(entryPointBlock))
+                .map(entryPointsVisitor::visit)
                 .collect(Collectors.toList());
 
         List<DSLRules> ruleBlocks = ctx.model().stream()
                 .map(ModelContext::rules)
                 .filter(Objects::nonNull)
-                .map(ruleBlock -> rulesVisitor.visit(ruleBlock))
+                .map(rulesVisitor::visit)
                 .collect(Collectors.toList());
 
-        List<DSLFunction> functions = ctx.model().stream()
+        List<DSLFunctionSignature> functionSignatures = ctx.model().stream()
             .map(ModelContext::functionSignature)
             .filter(Objects::nonNull)
-            .map(function -> functionVisitor.visit(function))
+            .map(functionSignatureVisitor::visit)
+            .collect(Collectors.toList());
+
+        List<DSLFunction> functions = ctx.model().stream()
+            .map(ModelContext::functionImplementation)
+            .filter(Objects::nonNull)
+            .map(functionVisitor::visit)
             .collect(Collectors.toList());
 
         return new DSLModel(
@@ -177,6 +187,7 @@ public class DSLModelVisitor extends KrakenDSLBaseVisitor<DSLModel> {
             parseRuleImports(ruleImports),
             dslExternalContext,
             dslExternalContextDefinitions,
+            functionSignatures,
             functions
         );
     }

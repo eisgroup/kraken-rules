@@ -14,18 +14,18 @@
  *  limitations under the License.
  */
 
-import * as React from "react";
+import * as React from 'react'
 
-import { Modal, Input } from "antd";
-import "antd/lib/modal/style";
-import "antd/lib/tabs/style";
+import { Modal, Input } from 'antd'
+import 'antd/lib/modal/style'
+import 'antd/lib/tabs/style'
 
 export interface ImportModalProps {
-    modalVisibility: boolean;
-    onClickShowModal: () => void;
-    onImportableModelChange: (e: React.FormEvent<HTMLTextAreaElement>) => void;
-    onImportableModelSubmit: () => void;
-    importableModelState: string;
+    modalVisibility: boolean
+    onClickShowModal: () => void
+    onImportableModelChange: (e: React.FormEvent<HTMLTextAreaElement>) => void
+    onImportableModelSubmit: () => void
+    importableModelState: string
 }
 
 export class ImportModal extends React.Component<ImportModalProps> {
@@ -36,7 +36,7 @@ export class ImportModal extends React.Component<ImportModalProps> {
                     visible={this.props.modalVisibility}
                     onCancel={this.props.onClickShowModal}
                     onOk={this.props.onImportableModelSubmit}
-                    okText={"Submit"}
+                    okText={'Submit'}
                     closable={false}
                     width={1000}
                 >
@@ -47,6 +47,6 @@ export class ImportModal extends React.Component<ImportModalProps> {
                     />
                 </Modal>
             </div>
-        );
+        )
     }
 }

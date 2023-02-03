@@ -14,22 +14,20 @@
  *  limitations under the License.
  */
 
-import {
-    genericValueFunctions
-} from "../../../../../src/engine/runtime/expressions/functionLibrary/GenericValueFunctions";
+import { genericValueFunctions } from '../../../../../src/engine/runtime/expressions/functionLibrary/GenericValueFunctions'
 
-describe("Generic Value Functions Test", () => {
-    describe("Empty function", () => {
-        it("should check if value is empty", () => {
-            expect(genericValueFunctions.IsEmpty(undefined)).toBeTruthy();
-            expect(genericValueFunctions.IsEmpty(null)).toBeTruthy();
-            expect(genericValueFunctions.IsEmpty([])).toBeTruthy();
-            expect(genericValueFunctions.IsEmpty([1])).toBeFalsy();
-            expect(genericValueFunctions.IsEmpty([null])).toBeFalsy();
-            expect(genericValueFunctions.IsEmpty([undefined])).toBeFalsy();
-            expect(genericValueFunctions.IsEmpty(0)).toBeFalsy();
-            expect(genericValueFunctions.IsEmpty("")).toBeTruthy();
-            expect(genericValueFunctions.IsEmpty("string")).toBeFalsy();
-        });
-    });
-});
+describe('Generic Value Functions Test', () => {
+    describe('Empty function', () => {
+        it('should check if value is empty', () => {
+            expect(genericValueFunctions.IsEmpty(undefined)).toBeTruthy()
+            expect(genericValueFunctions.IsEmpty(null)).toBeTruthy()
+            expect(genericValueFunctions.IsEmpty([])).toBeTruthy()
+            expect(genericValueFunctions.IsEmpty([1])).toBeFalsy()
+            expect(genericValueFunctions.IsEmpty([null])).toBeFalsy()
+            expect(genericValueFunctions.IsEmpty([undefined])).toBeFalsy()
+            expect(genericValueFunctions.IsEmpty(0)).toBeFalsy()
+            expect(genericValueFunctions.IsEmpty('')).toBeTruthy()
+            expect(genericValueFunctions.IsEmpty('string')).toBeFalsy()
+        })
+    })
+})

@@ -14,53 +14,52 @@
  *  limitations under the License.
  */
 
-import { DataContext } from "../DataContext";
-import { ReferenceExtractionInfo } from "../extraction/ReferenceExtractionInfo";
-import { DataContextUpdater, DataContextDependency } from "./DataContextUpdater";
-import { ReferencePathResolver } from "../../ccr/ReferencePathResolver";
-import { ErrorCode, KrakenRuntimeError } from "../../../../error/KrakenRuntimeError";
+import { ReferenceExtractionInfo } from '../extraction/ReferenceExtractionInfo'
+import { DataContextUpdater, DataContextDependency } from './DataContextUpdater'
+import { ReferencePathResolver } from '../../ccr/ReferencePathResolver'
+import { DataContext } from '../DataContext'
+import { ErrorCode, KrakenRuntimeError } from '../../../../error/KrakenRuntimeError'
 
 export class DataContextUpdaterImpl implements DataContextUpdater {
     constructor(
         private readonly referencePathResolver: ReferencePathResolver,
-        private readonly resolveReferences: (root: DataContext, path: string[]) => DataContext[]
-    ) {
-    }
+        private readonly resolveReferences: (root: DataContext, path: string[]) => DataContext[],
+    ) {}
     update(dataContext: DataContext, dependency: DataContextDependency): void {
-        const extractionInfo = this.getExtractionInfo(dataContext, dependency.contextName);
-        const refs = this.resolveReferences(extractionInfo.extractionRoot, extractionInfo.extractionPath);
+        const extractionInfo = this.getExtractionInfo(dataContext, dependency.contextName)
+        const refs = this.resolveReferences(extractionInfo.extractionRoot, extractionInfo.extractionPath)
         if (refs.length) {
-            if (extractionInfo.cardinality === "SINGLE") {
-                dataContext.externalReferenceObjects.addSingle(dependency.contextName, refs[0]);
+            if (extractionInfo.cardinality === 'SINGLE') {
+                dataContext.externalReferenceObjects.addSingle(dependency.contextName, refs[0])
             } else {
-                dataContext.externalReferenceObjects.addMultiple(dependency.contextName, refs);
+                dataContext.externalReferenceObjects.addMultiple(dependency.contextName, refs)
             }
         }
     }
 
     private getExtractionInfo(dataContext: DataContext, dependencyName: string): ReferenceExtractionInfo {
-        const path = dataContext.getPath();
-        const reference = this.referencePathResolver.resolveReferencePath(
-            path, dependencyName
-        );
+        const path = dataContext.getPath()
+        const reference = this.referencePathResolver.resolveReferencePath(path, dependencyName)
         return {
             cardinality: reference.cardinality,
             extractionPath: reference.path,
             extractionRoot: this.startContext(dataContext, reference.path),
-            dependencyName: dependencyName
-        };
+            dependencyName: dependencyName,
+        }
     }
     private startContext(dataContext: DataContext, path: string[]): DataContext {
-        const parents = dataContext.getParents();
-        const extractionRoot = path[0];
-        const parent = parents.find(x => x.contextName === extractionRoot);
+        const parents = dataContext.getParents()
+        const extractionRoot = path[0]
+        const parent = parents.find(x => x.contextName === extractionRoot)
         if (!parent) {
             throw new KrakenRuntimeError(
                 ErrorCode.INCORRECT_MODEL_TREE,
-                // tslint:disable-next-line: max-line-length
-                `Failed to find extraction root from ${parents.map(x => x.contextName).join(", ")} in path ${path.join(".")}`
-            );
+
+                `Failed to find extraction root from ${parents.map(x => x.contextName).join(', ')} in path ${path.join(
+                    '.',
+                )}`,
+            )
         }
-        return parent;
+        return parent
     }
 }

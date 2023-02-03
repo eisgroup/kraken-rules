@@ -31,8 +31,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import kraken.model.EvaluationResponse;
 import kraken.model.RawEvaluationResponse;
 import kraken.model.ValidationEvaluationResponse;
@@ -54,19 +54,18 @@ public class EvaluationFacade {
     @Autowired
     private RuleEngine ruleEngine;
 
-    @ApiOperation(
-            value = "Get RAW result after engine evaluation",
-            response = RawEvaluationResponse.class,
-            notes = "Endpoint for entry point evaluation on model instance. Evaluation will return " +
-                    "RawEvaluationResponse witch contains model instance before evaluation, " +
-                    "model instance after evaluation and raw evaluation result. " +
-                    "Raw evaluation result contains all rule result, field result and failed rule result."
+    @Operation(
+        summary = "Get RAW result after engine evaluation",
+        description = "Endpoint for entry point evaluation on model instance. Evaluation will return " +
+            "RawEvaluationResponse witch contains model instance before evaluation, " +
+            "model instance after evaluation and raw evaluation result. " +
+            "Raw evaluation result contains all rule result, field result and failed rule result."
     )
     @PostMapping("/evaluation/{entryPointName}/raw")
     public EvaluationResponse evaluateEngineRawResult(
-            @ApiParam(required = true, value = "Valid model instance")
+            @Parameter(required = true, description = "Valid model instance")
             @RequestBody Policy policy,
-            @ApiParam(required = true, value = "Valid entry point name")
+            @Parameter(required = true, description = "Valid entry point name")
             @PathVariable String entryPointName
     ) {
         Policy modelAfterEvaluation = deepCopy(policy);
@@ -79,18 +78,17 @@ public class EvaluationFacade {
         return new RawEvaluationResponse(policy, modelAfterEvaluation, allRuleResults, fieldResults);
     }
 
-    @ApiOperation(
-            value = "Get Validation status result after engine evaluation",
-            response = ValidationEvaluationResponse.class,
-            notes = "Endpoint for entry point evaluation on model instance. Evaluation will return " +
-                    "ValidationEvaluationResponse witch contains model instance before evaluation, " +
-                    "model instance after evaluation and validations status results."
+    @Operation(
+        summary = "Get Validation status result after engine evaluation",
+        description = "Endpoint for entry point evaluation on model instance. Evaluation will return " +
+            "ValidationEvaluationResponse witch contains model instance before evaluation, " +
+            "model instance after evaluation and validations status results."
     )
     @PostMapping("/evaluation/{entryPointName}/validation")
     public EvaluationResponse evaluateEngineValidationResult(
-            @ApiParam(required = true, value = "model instance")
+            @Parameter(required = true, description = "model instance")
             @RequestBody Policy policy,
-            @ApiParam(required = true, value = "entrypoint name")
+            @Parameter(required = true, description = "entrypoint name")
             @PathVariable String entryPointName
     ) {
         Policy modelAfterEvaluation = deepCopy(policy);

@@ -35,8 +35,7 @@ public abstract class NamespaceBaseTest extends EngineBaseTest {
         return new SPI();
     }
 
-    @Override
-    protected Object getDataObject() {
+    protected TestPolicy getDataObject() {
         final TestAddressInfo addressInfo = new TestAddressInfo(
                 "work",
                 "Vilnius",
@@ -70,16 +69,6 @@ public abstract class NamespaceBaseTest extends EngineBaseTest {
                         )
                 )
         );
-    }
-
-    @Override
-    protected List<IterableContextTypeAdapter> getIterableTypeAdapters() {
-        return Collections.emptyList();
-    }
-
-    @Override
-    protected List<ContextTypeAdapter> getInstanceTypeAdapters() {
-        return Collections.emptyList();
     }
 
     private static class SPI extends SimpleDataObjectInfoResolver {

@@ -14,17 +14,17 @@
  *  limitations under the License.
  */
 
-import * as React from "react";
+import * as React from 'react'
 
-import { Modal } from "antd";
-import "antd/lib/modal/style";
-import "antd/lib/tabs/style";
-import { ExpressionTree } from "../../../expression/tree/ExpressionTree";
-import { KRAKEN_MODEL_TREE_POLICY } from "kraken-test-product-model-tree";
+import { Modal } from 'antd'
+import 'antd/lib/modal/style'
+import 'antd/lib/tabs/style'
+import { ExpressionTree } from '../../../expression/tree/ExpressionTree'
+import { KRAKEN_MODEL_TREE_POLICY } from 'kraken-test-product-model-tree'
 
 export interface ImportModalProps {
-    modalVisibility: boolean;
-    onClickShowModal: () => void;
+    modalVisibility: boolean
+    onClickShowModal: () => void
 }
 
 export class ExpressionTreeModal extends React.Component<ImportModalProps> {
@@ -32,14 +32,14 @@ export class ExpressionTreeModal extends React.Component<ImportModalProps> {
         return (
             <div>
                 <Modal
-                    title={"Expression Analysis"}
+                    title={'Expression Analysis'}
                     visible={this.props.modalVisibility}
                     onCancel={this.props.onClickShowModal}
-                    width={"95%"}
+                    width={'95%'}
                 >
                     <ExpressionTree scopes={Object.keys(KRAKEN_MODEL_TREE_POLICY.contexts)} />
                 </Modal>
-            </div >
-        );
+            </div>
+        )
     }
 }

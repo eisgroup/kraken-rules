@@ -18,23 +18,18 @@ package kraken.model.dsl;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import kraken.model.dsl.error.LineParseCancellationException;
 import kraken.model.resource.Resource;
-import kraken.model.resource.RuleImport;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
 import static kraken.model.dsl.KrakenDSLModelParser.parseResource;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
-import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertThrows;
 
 /**
  * Base test for {@link KrakenDSLModelParser} that verifies if context, rule and entryPoint blocks are parsed correctly
@@ -68,9 +63,10 @@ public class KrakenModelDSLParserBaseTest {
         assertThat(model.getRules(), hasSize(1));
     }
 
-    @Test(expected = LineParseCancellationException.class)
+    @Test
     public void shouldFailToParseComplexExpression() {
-        parseResource("Rules { Rule 'rule1' On RiskItem.itemName {Rese To Date('2018-01-01')}}");
+        assertThrows(LineParseCancellationException.class,
+                () -> parseResource("Rules { Rule 'rule1' On RiskItem.itemName {Rese To Date('2018-01-01')}}"));
     }
 
     @Test

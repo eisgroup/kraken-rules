@@ -17,13 +17,17 @@ package kraken.model.impl;
 
 import kraken.model.Metadata;
 
+import java.net.URI;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public class MetadataImpl implements Metadata {
+
     private String type = Metadata.class.getSimpleName();
     private Map<String, Object> properties = new HashMap<>();
+
+    private URI uri;
 
     @Override
     public String getType() {
@@ -54,4 +58,15 @@ public class MetadataImpl implements Metadata {
     public Map<String, Object> getProperties() {
         return properties;
     }
+
+    @Override
+    public void setUri(URI uri) {
+        this.uri = uri;
+    }
+
+    @Override
+    public URI getUri() {
+        return uri;
+    }
+
 }

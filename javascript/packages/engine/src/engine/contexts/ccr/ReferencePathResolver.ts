@@ -14,8 +14,8 @@
  *  limitations under the License.
  */
 
-import { ContextReference } from "./ContextReference";
-import { PathToNode } from "./PathToNode";
+import { ContextReference } from './ContextReference'
+import { PathToNode } from './PathToNode'
 /**
  * Resolves path to reference from data context to the data context
  * @since 1.1.1
@@ -32,5 +32,5 @@ export interface ReferencePathResolver {
      * @throws if resolved more than 1 path
      * @throws if no paths are to select from are provided
      */
-    resolveReferencePath(origin: PathToNode, targetContextName: string): ContextReference;
+    resolveReferencePath(origin: PathToNode, targetContextName: string): ContextReference
 }

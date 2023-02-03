@@ -23,4 +23,5 @@ public class InstanceOf extends TypeComparisonOperation {
     public InstanceOf(Expression left, TypeLiteral type, Scope scope, Token token) {
         super(left, type, NodeType.INSTANCEOF, scope, token);
     }
+
 }

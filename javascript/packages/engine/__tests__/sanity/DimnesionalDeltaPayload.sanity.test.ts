@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /*
  *  Copyright 2019 EIS Ltd and/or one of its affiliates.
  *
@@ -14,41 +15,41 @@
  *  limitations under the License.
  */
 
-import { sanityMocks } from "./_AutoPolicyObject.mocks";
-import { sanityEngine } from "./_SanityEngine";
+import { sanityMocks } from './_AutoPolicyObject.mocks'
+import { sanityEngine } from './_SanityEngine'
 
-describe("Engine Sanity Dimensional Delta Caching test", () => {
-    const { empty } = sanityMocks;
+describe('Engine Sanity Dimensional Delta Caching test', () => {
+    const { empty } = sanityMocks
     it("should execute 'Dimensional' entrypoint with state AZ", () => {
-        const data = empty();
+        const data = empty()
         data.parties![0].personInfo!.addressInfo = {
-            cd: "AddressInfo",
-            id: "4-addressInfo",
+            cd: 'AddressInfo',
+            id: '4-addressInfo',
             addressLine1: {
-                cd: "AddressLine1",
-                id: "4-addressInfo-addressLine1"
-            }
-        };
-        const results = sanityEngine.evaluate(data, "Dimensional", "Dimensional-state-AZ");
-        expect(data.parties![0].personInfo?.addressInfo?.postalCode).toBeDefined();
-        expect(data.parties![0].personInfo?.addressInfo?.countryCd).toBeDefined();
-        expect(data.parties![0].personInfo?.addressInfo?.addressLine1?.addressLine).toBeDefined();
-        expect(results).k_toMatchResultsStats({ total: 9, critical: 4 });
-    });
+                cd: 'AddressLine1',
+                id: '4-addressInfo-addressLine1',
+            },
+        }
+        const results = sanityEngine.evaluate(data, 'Dimensional', 'Dimensional-state-AZ')
+        expect(data.parties![0].personInfo?.addressInfo?.postalCode).toBeDefined()
+        expect(data.parties![0].personInfo?.addressInfo?.countryCd).toBeDefined()
+        expect(data.parties![0].personInfo?.addressInfo?.addressLine1?.addressLine).toBeDefined()
+        expect(results).k_toMatchResultsStats({ total: 9, critical: 4 })
+    })
     it("should execute 'Dimensional' entrypoint with no dimensions", () => {
-        const data = empty();
+        const data = empty()
         data.parties![0].personInfo!.addressInfo = {
-            cd: "AddressInfo",
-            id: "4-addressInfo",
+            cd: 'AddressInfo',
+            id: '4-addressInfo',
             addressLine1: {
-                cd: "AddressLine1",
-                id: "4-addressInfo-addressLine1"
-            }
-        };
-        const results = sanityEngine.evaluate(data, "Dimensional");
-        expect(data.parties![0].personInfo?.addressInfo?.postalCode).not.toBeDefined();
-        expect(data.parties![0].personInfo?.addressInfo?.countryCd).toBeDefined();
-        expect(data.parties![0].personInfo?.addressInfo?.addressLine1?.addressLine).not.toBeDefined();
-        expect(results).k_toMatchResultsStats({ total: 7, critical: 4 });
-    });
-});
+                cd: 'AddressLine1',
+                id: '4-addressInfo-addressLine1',
+            },
+        }
+        const results = sanityEngine.evaluate(data, 'Dimensional')
+        expect(data.parties![0].personInfo?.addressInfo?.postalCode).not.toBeDefined()
+        expect(data.parties![0].personInfo?.addressInfo?.countryCd).toBeDefined()
+        expect(data.parties![0].personInfo?.addressInfo?.addressLine1?.addressLine).not.toBeDefined()
+        expect(results).k_toMatchResultsStats({ total: 7, critical: 4 })
+    })
+})

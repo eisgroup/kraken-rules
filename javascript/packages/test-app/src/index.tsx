@@ -14,10 +14,10 @@
  *  limitations under the License.
  */
 
-import * as React from "react";
-import * as ReactDOM from "react-dom";
-import "antd/lib/layout/style";
+import * as React from 'react'
+import * as ReactDOM from 'react-dom'
+import 'antd/lib/layout/style'
 
-import { App } from "./App";
+import { App } from './App'
 
-ReactDOM.render(<App />, document.getElementById("app"));
+ReactDOM.render(<App />, document.getElementById('app'))

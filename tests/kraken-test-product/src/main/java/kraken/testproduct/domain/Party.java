@@ -21,7 +21,7 @@ import java.util.List;
 
 public class Party extends Identifiable {
 
-    private List<PartyRole> roles;
+    private List<? extends PartyRole> roles;
 
     private String relationToPrimaryInsured;
 
@@ -39,7 +39,7 @@ public class Party extends Identifiable {
         this.personInfo = personInfo;
     }
 
-    public Party(List<PartyRole> roles, String relationToPrimaryInsured, String id) {
+    public Party(List<? extends PartyRole> roles, String relationToPrimaryInsured, String id) {
         this.roles = roles;
         this.relationToPrimaryInsured = relationToPrimaryInsured;
         super.setId(id);
@@ -49,7 +49,7 @@ public class Party extends Identifiable {
         return roles;
     }
 
-    public void setRoles(List<PartyRole> roles) {
+    public void setRoles(List<? extends PartyRole> roles) {
         this.roles = roles;
     }
 

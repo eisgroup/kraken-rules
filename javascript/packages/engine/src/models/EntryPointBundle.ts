@@ -14,10 +14,9 @@
  *  limitations under the License.
  */
 
-import { Rule } from "kraken-model";
+import { Rule } from 'kraken-model'
 
 export namespace EntryPointBundle {
-
     /**
      * Represents rule data for specific entry point and preprocessed statically
      * to be used for evaluation on specific data context. Evaluation contains rules in exact
@@ -25,28 +24,25 @@ export namespace EntryPointBundle {
      * next all other rules.
      */
     export interface EntryPointEvaluation {
-        rules: Rule[];
-        entryPointName: string;
+        rules: Rule[]
+        entryPointName: string
+
         /**
-         * Order of the rules to be evaluated.
-         * Key is rule name, value is its order.
-         * The less number, the earlier it needs to be evaluated.
-         *
-         * @see {@link Rule}
-         * @since 1.0.41
+         * A list of ordered fields in form contextName.fieldName
+         * @since 1.40.0
          */
-        rulesOrder: Record<string, number>;
+        fieldOrder: string[]
+
         /**
          * If delta is *true*, then only dimensional rules are
          * present in the bundle. If *false*, all rules are in the bundle
          */
-        delta: boolean;
+        delta: boolean
     }
 
-    // tslint:disable-next-line: no-shadowed-variable
     export interface EntryPointBundle {
-        engineVersion?: string;
-        evaluation: EntryPointEvaluation;
-        expressionContext: Record<string, unknown>;
+        engineVersion?: string
+        evaluation: EntryPointEvaluation
+        expressionContext: Record<string, unknown>
     }
 }

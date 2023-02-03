@@ -65,7 +65,7 @@ class DataContextReferenceUpdater {
     private Stream<ReferenceExtractionInfo> referenceExtractions(DataContext dataContext) {
         final Function<String, ReferenceExtractionInfo> toExtractionInfo = toExtractionInfo(dataContext);
         return dependencies.stream()
-                .filter(Dependency::isContextDependency)
+                .filter(Dependency::isCcrDependency)
                 .map(Dependency::getContextName)
                 .distinct()
                 .map(toExtractionInfo);

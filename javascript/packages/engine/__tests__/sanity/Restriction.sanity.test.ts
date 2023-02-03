@@ -14,74 +14,68 @@
  *  limitations under the License.
  */
 
-import { sanityMocks } from "./_AutoPolicyObject.mocks";
-import { sanityEngine as engine } from "./_SanityEngine";
-import { mock } from "../mock";
-import { ConditionEvaluation } from "../../src/dto/ConditionEvaluationResult";
+import { sanityMocks } from './_AutoPolicyObject.mocks'
+import { sanityEngine as engine } from './_SanityEngine'
+import { mock } from '../mock'
+import { ConditionEvaluation } from 'kraken-engine-api'
 
-const RRCoverage = mock.modelTreeJson.contexts.RRCoverage;
-const Vehicle = mock.modelTreeJson.contexts.Vehicle;
+const RRCoverage = mock.modelTreeJson.contexts.RRCoverage
+const Vehicle = mock.modelTreeJson.contexts.Vehicle
 
-describe("Engine Sanity rule order test", () => {
-    const { empty } = sanityMocks;
-    it("should execute rules in order", () => {
-        const policy = empty();
-        policy.riskItems = [{
-            cd: Vehicle.name,
-            id: `${Vehicle.name}-1`,
-            rentalCoverage: {
-                cd: RRCoverage.name,
-                id: `${RRCoverage.name}-1`
+describe('Engine Sanity rule order test', () => {
+    const { empty } = sanityMocks
+    it('should execute rules in order', () => {
+        const policy = empty()
+        policy.riskItems = [
+            {
+                cd: Vehicle.name,
+                id: `${Vehicle.name}-1`,
+                rentalCoverage: {
+                    cd: RRCoverage.name,
+                    id: `${RRCoverage.name}-1`,
+                },
+                modelYear: 2020,
             },
-            modelYear: 2020
-        },
-        {
-            cd: Vehicle.name,
-            id: `${Vehicle.name}-2`,
-            rentalCoverage: {
-                cd: RRCoverage.name,
-                id: `${RRCoverage.name}-2`
+            {
+                cd: Vehicle.name,
+                id: `${Vehicle.name}-2`,
+                rentalCoverage: {
+                    cd: RRCoverage.name,
+                    id: `${RRCoverage.name}-2`,
+                },
+                modelYear: 2021,
             },
-            modelYear: 2021
-        }];
-        const data = mock.data.dataContextCustom(policy);
-        const r1 = engine.evaluateSubTree(
-            data.dataObject,
-            policy,
-            "ForRestrictionCache",
-            undefined,
-            { evaluationId: "1" }
-        );
-        const r2 = engine.evaluateSubTree(
-            data.dataObject,
-            policy.riskItems[0],
-            "ForRestrictionCache",
-            undefined,
-            { evaluationId: "1" }
-        );
-        const r3 = engine.evaluateSubTree(
-            data.dataObject,
-            policy.riskItems[1],
-            "ForRestrictionCache",
-            undefined,
-            { evaluationId: "1" }
-        );
-        expect(r1.getAllRuleResults()).toHaveLength(2);
-        expect(r1.getAllRuleResults()[0].conditionEvaluationResult.error).toBeUndefined();
-        expect(r1.getAllRuleResults()[1].conditionEvaluationResult.error).toBeUndefined();
-        expect(r1.getAllRuleResults()[0].conditionEvaluationResult.conditionEvaluation)
-            .toBe(ConditionEvaluation.APPLICABLE);
-        expect(r1.getAllRuleResults()[1].conditionEvaluationResult.conditionEvaluation)
-            .toBe(ConditionEvaluation.NOT_APPLICABLE);
+        ]
+        const data = mock.data.dataContextCustom(policy)
+        const r1 = engine.evaluateSubTree(data.dataObject, policy, 'ForRestrictionCache', undefined, {
+            evaluationId: '1',
+        })
+        const r2 = engine.evaluateSubTree(data.dataObject, policy.riskItems[0], 'ForRestrictionCache', undefined, {
+            evaluationId: '1',
+        })
+        const r3 = engine.evaluateSubTree(data.dataObject, policy.riskItems[1], 'ForRestrictionCache', undefined, {
+            evaluationId: '1',
+        })
+        expect(r1.getAllRuleResults()).toHaveLength(2)
+        expect(r1.getAllRuleResults()[0].conditionEvaluationResult.error).toBeUndefined()
+        expect(r1.getAllRuleResults()[1].conditionEvaluationResult.error).toBeUndefined()
+        expect(r1.getAllRuleResults()[0].conditionEvaluationResult.conditionEvaluation).toBe(
+            ConditionEvaluation.APPLICABLE,
+        )
+        expect(r1.getAllRuleResults()[1].conditionEvaluationResult.conditionEvaluation).toBe(
+            ConditionEvaluation.NOT_APPLICABLE,
+        )
 
-        expect(r2.getAllRuleResults()).toHaveLength(1);
-        expect(r2.getAllRuleResults()[0].conditionEvaluationResult.error).toBeUndefined();
-        expect(r2.getAllRuleResults()[0].conditionEvaluationResult.conditionEvaluation)
-            .toBe(ConditionEvaluation.APPLICABLE);
+        expect(r2.getAllRuleResults()).toHaveLength(1)
+        expect(r2.getAllRuleResults()[0].conditionEvaluationResult.error).toBeUndefined()
+        expect(r2.getAllRuleResults()[0].conditionEvaluationResult.conditionEvaluation).toBe(
+            ConditionEvaluation.APPLICABLE,
+        )
 
-        expect(r3.getAllRuleResults()).toHaveLength(1);
-        expect(r3.getAllRuleResults()[0].conditionEvaluationResult.error).toBeUndefined();
-        expect(r3.getAllRuleResults()[0].conditionEvaluationResult.conditionEvaluation)
-            .toBe(ConditionEvaluation.NOT_APPLICABLE);
-    });
-});
+        expect(r3.getAllRuleResults()).toHaveLength(1)
+        expect(r3.getAllRuleResults()[0].conditionEvaluationResult.error).toBeUndefined()
+        expect(r3.getAllRuleResults()[0].conditionEvaluationResult.conditionEvaluation).toBe(
+            ConditionEvaluation.NOT_APPLICABLE,
+        )
+    })
+})

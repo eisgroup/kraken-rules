@@ -14,28 +14,40 @@
  *  limitations under the License.
  */
 
-import { Dependency } from "./Dependency";
-import { Metadata } from "./Metadata";
-import { Payloads } from "./Payloads";
-import { Condition } from "./Condition";
+import { Dependency } from './Dependency'
+import { Metadata } from './Metadata'
+import { Payloads } from './Payloads'
+import { Condition } from './Condition'
 
 export interface Rule {
-    name: string;
-    context: string;
-    targetPath: string;
-    condition?: Condition;
-    payload: Payloads.Payload;
-    description?: string;
-    dependencies?: Dependency[];
-    metadata?: Metadata;
+    name: string
+    context: string
+    targetPath: string
+    condition?: Condition
+    payload: Payloads.Payload
+    description?: string
+    dependencies?: Dependency[]
+    metadata?: Metadata
+    dimensionSet: DimensionSet
+    priority?: number
+}
+
+export type DimensionSet = UnknownDimensionSet | KnownDimensionSet
+
+export interface UnknownDimensionSet {
+    variability: 'UNKNOWN'
+}
+
+export interface KnownDimensionSet {
     /**
-     * Rule is considered dimensional if it is marked as dimensional in {@link Metadata#asMap()}
-     * Or rule has two or more versions.
-     * Default is *false*.
-     *
-     * @return is rule dimensional
-     * @see {@link Metadata}
-     * @since 1.0.41
+     * A set of a dimension names by which rule is varied.
+     * If this property is `undefined`, then rule is varied
+     * by all dimensions.
      */
-    dimensional: boolean;
+    dimensions: string[]
+    variability: 'STATIC' | 'KNOWN'
+}
+
+export function isKnownDimensionSet(dimensionSet: DimensionSet): dimensionSet is KnownDimensionSet {
+    return dimensionSet.variability !== 'UNKNOWN'
 }

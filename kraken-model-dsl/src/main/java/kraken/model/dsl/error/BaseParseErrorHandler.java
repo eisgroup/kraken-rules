@@ -30,10 +30,10 @@ import java.text.MessageFormat;
  */
 public abstract class BaseParseErrorHandler implements ParseErrorHandler {
 
-    protected abstract String getMessageDetails(Parser recognizer, Token offendingToke);
+    protected abstract String getMessageDetails(Parser recognizer, Token offendingToken);
 
     @Override
-    public abstract boolean isApplicable(Parser recognizer, Token offendingToke);
+    public abstract boolean isApplicable(Parser recognizer, Token offendingToken);
 
     @Override
     public String getErrorMessage(Parser recognizer, Token token) {

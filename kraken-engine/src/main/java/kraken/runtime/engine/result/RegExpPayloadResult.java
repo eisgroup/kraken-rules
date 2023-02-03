@@ -23,15 +23,7 @@ import kraken.runtime.model.rule.payload.validation.RegExpPayload;
 @API
 public class RegExpPayloadResult extends ValidationPayloadResult {
 
-    private String regExp;
-
-    /**
-     * @deprecated use {@link #RegExpPayloadResult(Boolean, RegExpPayload, List)} instead.
-     */
-    @Deprecated(since = "1.14.0", forRemoval = true)
-    public RegExpPayloadResult(Boolean success, RegExpPayload payload) {
-        this(success, payload, List.of());
-    }
+    private final String regExp;
 
     public RegExpPayloadResult(Boolean success, RegExpPayload payload, List<String> templateVariables) {
         super(success, payload, templateVariables);

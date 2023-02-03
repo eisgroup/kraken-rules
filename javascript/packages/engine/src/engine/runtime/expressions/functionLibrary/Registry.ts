@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 /*
  *  Copyright 2018 EIS Ltd and/or one of its affiliates.
  *
@@ -13,20 +14,19 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-// tslint:disable: triple-equals
 
-import { dateFunctions } from "./DateFunctions";
-import { arrayFunctions } from "./ArrayFunctions";
-import { setFunctions } from "./SetFunctions";
-import { moneyFunctions } from "./MoneyFunctions";
-import { stringFunctions } from "./StringFunctions";
-import { genericValueFunctions } from "./GenericValueFunctions";
-import { quantifierFunctions } from "./QuantifierFunctions";
-import { nativeFunctions } from "./NativeFunctions";
-import { mathFunctions } from "./MathFunctions";
-import { DataObjectInfoResolver } from "../../../contexts/info/DataObjectInfoResolver";
-import BigNumber from "bignumber.js";
-import { Numbers } from "../math/Numbers";
+import { dateFunctions } from './DateFunctions'
+import { arrayFunctions } from './ArrayFunctions'
+import { setFunctions } from './SetFunctions'
+import { moneyFunctions } from './MoneyFunctions'
+import { stringFunctions } from './StringFunctions'
+import { genericValueFunctions } from './GenericValueFunctions'
+import { quantifierFunctions } from './QuantifierFunctions'
+import { nativeFunctions } from './NativeFunctions'
+import { mathFunctions } from './MathFunctions'
+import { DataObjectInfoResolver } from '../../../contexts/info/DataObjectInfoResolver'
+import BigNumber from 'bignumber.js'
+import { Numbers } from '../math/Numbers'
 
 /**
  * Declares custom function implementation to be invocable in Kraken Expression Language.
@@ -48,23 +48,22 @@ export interface FunctionDeclaration {
     /**
      * Unique name of Function. Function will be invokable by this name in Kraken Expression Language.
      */
-    name: string;
+    name: string
 
-    function: (this: FunctionScope, ...p: any[]) => any | void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    function: (this: FunctionScope, ...p: any[]) => any | void
 }
 
 export interface FunctionScope {
-
     /**
      * @param n value to normalize
      * @return number converted to BigNumber in IEE 754 64bit Decimal representation
      */
-    normalize : (n : number) => BigNumber;
+    normalize: (n: number) => BigNumber
 }
 
 export class FunctionRegistry {
-
-    static INSTANCE = new FunctionRegistry();
+    static INSTANCE = new FunctionRegistry()
 
     /**
      * Creates functions to be used with {@link ContextDefinition} instances.
@@ -75,9 +74,9 @@ export class FunctionRegistry {
      * @see {@link ExpressionEvaluator}
      * @since 11.2
      */
-    static createInstanceFunctions = _createInstanceFunctions;
+    static createInstanceFunctions = _createInstanceFunctions
 
-    functionsRegistry: Record<string, Function> = {
+    functionRegistry: Record<string, Function> = {
         ...nativeFunctions,
         ...dateFunctions,
         ...arrayFunctions,
@@ -86,69 +85,61 @@ export class FunctionRegistry {
         ...setFunctions,
         ...genericValueFunctions,
         ...quantifierFunctions,
-        ...mathFunctions
-    };
-
-    #functionNames: string[] = [];
-    #functionBodies: Function[] = [];
-    #isUpdated = false;
+        ...mathFunctions,
+    }
 
     add(fx: FunctionDeclaration): void {
         if (fx.name == undefined) {
-            throw new Error(errorMessage("name is required"));
+            throw new Error(errorMessage('name is required'))
         }
-        if (fx.name === "") {
-            throw new Error(errorMessage("name is empty"));
+        if (fx.name === '') {
+            throw new Error(errorMessage('name is empty'))
         }
         if (!fx.function) {
-            throw new Error(errorMessage("function is required"));
+            throw new Error(errorMessage('function is required'))
         }
-        if (typeof fx.function !== "function") {
-            throw new Error(errorMessage("function is type of " + typeof fx.function));
+        if (typeof fx.function !== 'function') {
+            throw new Error(errorMessage('function is type of ' + typeof fx.function))
         }
-        if (fx.name.indexOf(".") > 0) {
-            throw new Error(errorMessage("function name cannot contain symbol '.'"));
+        if (fx.name.indexOf('.') > 0) {
+            throw new Error(errorMessage("function name cannot contain symbol '.'"))
         }
-        if (this.names().some(name => name === fx.name)) {
-            throw new Error(errorMessage(`function with name '${fx.name}' already registered`));
+        if (this.functionRegistry[fx.name]) {
+            throw new Error(errorMessage(`function with name '${fx.name}' already registered`))
         }
 
-        this.functionsRegistry[fx.name] = fx.function.bind(
-            {
-                normalize : Numbers.normalized
-            }
-        );
-        this.#isUpdated = false;
+        this.functionRegistry[fx.name] = fx.function.bind({
+            normalize: Numbers.normalized,
+        })
     }
+
+    /**
+     * @deprecated since 1.33.0. Use {@link registeredFunctions} instead.
+     */
     names(): string[] {
-        if (!this.#isUpdated) {
-            this.updateState();
-        }
-        return this.#functionNames;
-    }
-    functions(): Function[] {
-        if (!this.#isUpdated) {
-            this.updateState();
-        }
-        return this.#functionBodies;
+        return Object.keys(this.functionRegistry)
     }
 
-    private updateState(): void {
-        this.#functionNames = Object.keys(this.functionsRegistry);
-        this.#functionBodies = Object.keys(this.functionsRegistry).map(k => this.functionsRegistry[k]);
-        this.#isUpdated = true;
+    /**
+     * @deprecated since 1.33.0. Use {@link registeredFunctions} instead.
+     */
+    functions(): Function[] {
+        return Object.values(this.functionRegistry)
+    }
+
+    registeredFunctions(): Record<string, Function> {
+        return this.functionRegistry
     }
 }
 
 function errorMessage(message: string): string {
-    return `Failed to add function to registry: ${message}`;
+    return `Failed to add function to registry: ${message}`
 }
 
 function _createInstanceFunctions(
     dataInfoResolver: DataObjectInfoResolver,
-    getInheritance: (contextDefinitionName: string) => string[]
+    getInheritance: (contextDefinitionName: string) => string[],
 ): FunctionDeclaration[] {
-
     /**
      * Using {@link DataObjectInfoResolver} to determine object type.
      *
@@ -156,14 +147,14 @@ function _createInstanceFunctions(
      * @param {string} typeName context definition name
      * @returns {boolean} is type of object same as in parameters
      */
-    function typeOf(object: {}, typeName: string): boolean {
+    function typeOf(object: object, typeName: string): boolean {
         if (object == null) {
-            return false;
+            return false
         }
         if (dataInfoResolver.validate(object).length) {
-            return false;
+            return false
         }
-        return dataInfoResolver.resolveName(object) === typeName;
+        return dataInfoResolver.resolveName(object) === typeName
     }
 
     /**
@@ -175,19 +166,19 @@ function _createInstanceFunctions(
      * @param {string} typeName context definition name
      * @returns {boolean} is type from parameters is in inheritance names or object type
      */
-    function instanceOf(object: {}, typeName: string): boolean {
+    function instanceOf(object: object, typeName: string): boolean {
         if (object == null) {
-            return false;
+            return false
         }
         if (dataInfoResolver.validate(object).length) {
-            return false;
+            return false
         }
-        const objectType = GetType(object);
+        const objectType = GetType(object)
         if (!objectType) {
-            return false;
+            return false
         }
-        const typeInheritance = getInheritance(objectType).concat(objectType);
-        return typeInheritance.includes(typeName);
+        const typeInheritance = getInheritance(objectType).concat(objectType)
+        return typeInheritance.includes(typeName)
     }
 
     /**
@@ -198,27 +189,27 @@ function _createInstanceFunctions(
      */
     function GetType(object?: object): string | undefined {
         if (object == null) {
-            return undefined;
+            return undefined
         }
         if (dataInfoResolver.validate(object).length) {
-            return undefined;
+            return undefined
         }
-        return dataInfoResolver.resolveName(object);
+        return dataInfoResolver.resolveName(object)
     }
     return [
         {
-            name: "_t",
-            function: typeOf
+            name: '_t',
+            function: typeOf,
         },
         {
-            name: "_i",
-            function: instanceOf
+            name: '_i',
+            function: instanceOf,
         },
         {
             name: GetType.name,
-            function: GetType
-        }
-    ];
+            function: GetType,
+        },
+    ]
 }
 
-export const functionsRegistry = new FunctionRegistry();
+export const functionsRegistry = new FunctionRegistry()

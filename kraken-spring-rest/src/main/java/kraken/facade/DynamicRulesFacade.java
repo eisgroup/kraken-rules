@@ -15,11 +15,10 @@
  */
 package kraken.facade;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import kraken.model.EntryPointName;
 import kraken.model.Rule;
-import kraken.namespace.Namespaced;
 import kraken.service.ReloadableRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -37,19 +36,18 @@ public class DynamicRulesFacade {
     @Autowired
     private ReloadableRepository reloadableRepository;
 
-    @ApiOperation(
-            value = "Add new rules in DSL format to entry point by name",
-            response = ResponseEntity.class,
-            notes = "Endpoint for creating rules and adding them to entry point by name. " +
+    @Operation(
+            summary = "Add new rules in DSL format to entry point by name",
+            description = "Endpoint for creating rules and adding them to entry point by name. " +
                     "Request body will accept DSL with rules. " +
                     "Entry point name path param will accept only predefined entry point names: " +
                     "QA1, QA2, QA3, QA4, QA5."
     )
     @PostMapping("/dynamic/rule/dsl/{entryPointName}")
     public ResponseEntity<String> addDSLRule(
-            @ApiParam(required = true, value = "DSL with rules")
+            @Parameter(required = true, description = "DSL with rules")
             @RequestBody String dslRuleList,
-            @ApiParam(required = true, value = "Predefined entry point name")
+            @Parameter(required = true, description = "Predefined entry point name")
             @PathVariable String entryPointName
     ){
         return reloadableRepository
@@ -57,16 +55,15 @@ public class DynamicRulesFacade {
                 .createResponseEntity();
     }
 
-    @ApiOperation(
-            value = "Get all rules from entry point by name",
-            response = List.class,
-            notes = "Endpoint for getting all rule that belongs to entry point by name. " +
+    @Operation(
+            summary = "Get all rules from entry point by name",
+            description = "Endpoint for getting all rule that belongs to entry point by name. " +
                     "Entry point name path param will accept only predefined entry point names: " +
                     "QA1, QA2, QA3, QA4, QA5."
     )
     @GetMapping("/dynamic/rule/{entryPointName}")
     public List<Rule> getEntryPointRules(
-            @ApiParam(required = true, value = "Predefined entry point name")
+            @Parameter(required = true, description = "Predefined entry point name")
             @PathVariable String entryPointName
     ){
         final Map<String, Rule> rules = reloadableRepository
@@ -81,19 +78,18 @@ public class DynamicRulesFacade {
                 .collect(Collectors.toList());
     }
 
-    @ApiOperation(
-            value = "Remove rule from entry point by name",
-            response = ResponseEntity.class,
-            notes = "Endpoint should be used to remove rule name from entry point by name. " +
+    @Operation(
+            summary = "Remove rule from entry point by name",
+            description = "Endpoint should be used to remove rule name from entry point by name. " +
                     "Rule name path param will expect exiting rule name on entry point. " +
                     "Entry point name path param will accept only predefined entry point names: " +
                     "QA1, QA2, QA3, QA4, QA5."
     )
     @DeleteMapping("/dynamic/rule/{ruleName}/entrypoint/{entryPointName}")
     public ResponseEntity<String> removeRule(
-            @ApiParam(required = true, value = "Existing rule name on entry point")
+            @Parameter(required = true, description = "Existing rule name on entry point")
             @PathVariable String ruleName,
-            @ApiParam(required = true, value = "Predefined entry point name")
+            @Parameter(required = true, description = "Predefined entry point name")
             @PathVariable String entryPointName
     ){
         return reloadableRepository
@@ -101,10 +97,9 @@ public class DynamicRulesFacade {
                 .createResponseEntity();
     }
 
-    @ApiOperation(
-            value = "Get all existing rules",
-            response = Collection.class,
-            notes = "Endpoint for getting all existing rule. " +
+    @Operation(
+            summary = "Get all existing rules",
+            description = "Endpoint for getting all existing rule. " +
                     "Return Collection of rules."
     )
     @GetMapping("/dynamic/rules/all")
@@ -112,24 +107,22 @@ public class DynamicRulesFacade {
         return reloadableRepository.getRules();
     }
 
-    @ApiOperation(
-            value = "Remove all rules from entry point by name",
-            response = ResponseEntity.class,
-            notes = "Endpoint should be used to remove all rules from entry point by given entry point name. " +
+    @Operation(
+            summary = "Remove all rules from entry point by name",
+            description = "Endpoint should be used to remove all rules from entry point by given entry point name. " +
                     "Entry point name path param will accept only predefined entry point names: " +
                     "QA1, QA2, QA3, QA4, QA5."
     )
     @PostMapping("/dynamic/entrypoint/{entryPointName}/reset")
     public void resetEntryPoint(
-            @ApiParam(required = true, value = "Predefined entry point name")
+            @Parameter(required = true, description = "Predefined entry point name")
             @PathVariable String entryPointName
     ){
         reloadableRepository.clear(EntryPointName.valueOf(entryPointName));
     }
 
-    @ApiOperation(
-            value = "Remove all rules from runtime repository and cleans dynamic EntryPoints content",
-            response = ResponseEntity.class
+    @Operation(
+            summary = "Remove all rules from runtime repository and cleans dynamic EntryPoints content"
     )
     @DeleteMapping("/dynamic/rules/clear")
     public void cleanApp() {

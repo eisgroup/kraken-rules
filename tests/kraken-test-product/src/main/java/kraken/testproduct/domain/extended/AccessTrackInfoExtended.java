@@ -21,4 +21,11 @@ import kraken.testproduct.domain.meta.Identifiable;
 import java.time.LocalDate;
 
 public class AccessTrackInfoExtended extends AccessTrackInfo {
+
+    public AccessTrackInfoExtended() {
+    }
+
+    public AccessTrackInfoExtended(LocalDate createdOn, String createdBy, LocalDate updatedOn, String updatedBy) {
+        super(createdOn, createdBy, updatedOn, updatedBy);
+    }
 }

@@ -22,12 +22,14 @@ import kraken.model.payload.PayloadType;
 import kraken.runtime.EvaluationSession;
 import kraken.runtime.engine.RulePayloadHandler;
 import kraken.runtime.engine.context.data.DataContext;
+import kraken.runtime.engine.handlers.trace.RegExpPayloadEvaluatedOperation;
 import kraken.runtime.engine.result.PayloadResult;
 import kraken.runtime.engine.result.RegExpPayloadResult;
 import kraken.runtime.expressions.KrakenExpressionEvaluator;
 import kraken.runtime.model.rule.RuntimeRule;
 import kraken.runtime.model.rule.payload.Payload;
 import kraken.runtime.model.rule.payload.validation.RegExpPayload;
+import kraken.tracer.Tracer;
 
 import static kraken.runtime.engine.handlers.PayloadHandlerUtils.convertToString;
 import static kraken.runtime.engine.handlers.PayloadHandlerUtils.isEmptyValue;
@@ -41,7 +43,7 @@ import static kraken.runtime.utils.TargetPathUtils.resolveTargetPath;
  */
 public class RegExpPayloadHandler implements RulePayloadHandler {
 
-    private KrakenExpressionEvaluator evaluator;
+    private final KrakenExpressionEvaluator evaluator;
 
     public RegExpPayloadHandler(KrakenExpressionEvaluator evaluator) {
         this.evaluator = evaluator;
@@ -56,6 +58,8 @@ public class RegExpPayloadHandler implements RulePayloadHandler {
 
         boolean valid = isEmptyValue(value) || Pattern.matches(regExpPayload.getRegExp(), convertToString(value));
         List<String> templateVariables = evaluator.evaluateTemplateVariables(regExpPayload.getErrorMessage(), dataContext, session);
+
+        Tracer.doOperation(new RegExpPayloadEvaluatedOperation(regExpPayload, value, valid));
         return new RegExpPayloadResult(valid, regExpPayload, templateVariables);
     }
 

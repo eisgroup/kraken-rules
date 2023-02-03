@@ -22,8 +22,11 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import kraken.el.functionregistry.FunctionHeader;
+import kraken.el.functionregistry.KelFunction;
 import kraken.runtime.model.context.RuntimeContextDefinition;
 import kraken.runtime.model.entrypoint.RuntimeEntryPoint;
+import kraken.runtime.model.function.CompiledFunction;
 import kraken.runtime.model.rule.RuntimeRule;
 
 /**
@@ -31,34 +34,38 @@ import kraken.runtime.model.rule.RuntimeRule;
  */
 public class RuntimeKrakenProject {
 
-    private UUID checksum;
+    private final UUID checksum;
 
-    private String namespace;
+    private final String namespace;
 
-    private String rootContextName;
+    private final String rootContextName;
 
-    private Map<String, RuntimeContextDefinition> contextDefinitions;
+    private final Map<String, RuntimeContextDefinition> contextDefinitions;
 
-    private List<RuntimeEntryPoint> entryPoints;
+    private final List<RuntimeEntryPoint> entryPoints;
 
-    private List<RuntimeRule> rules;
+    private final List<RuntimeRule> rules;
 
-    private Map<String, List<RuntimeEntryPoint>> entryPointVersions;
+    private final Map<String, List<RuntimeEntryPoint>> entryPointVersions;
 
-    private Map<String, List<RuntimeRule>> ruleVersions;
+    private final Map<String, List<RuntimeRule>> ruleVersions;
+
+    private final Map<String, CompiledFunction> functions;
 
     public RuntimeKrakenProject(UUID checksum,
                                 String namespace,
                                 String rootContextName,
                                 Map<String, RuntimeContextDefinition> contextDefinitions,
                                 List<RuntimeEntryPoint> entryPoints,
-                                List<RuntimeRule> rules) {
+                                List<RuntimeRule> rules,
+                                List<CompiledFunction> functions) {
         this.checksum = checksum;
         this.namespace = Objects.requireNonNull(namespace);
         this.rootContextName = rootContextName;
         this.contextDefinitions = Collections.unmodifiableMap(contextDefinitions);
         this.entryPoints = Collections.unmodifiableList(entryPoints);
         this.rules = Collections.unmodifiableList(rules);
+        this.functions = functions.stream().collect(Collectors.toMap(CompiledFunction::getName, f-> f));
 
         this.entryPointVersions = entryPoints.stream().collect(Collectors.groupingBy(RuntimeEntryPoint::getName));
         this.ruleVersions = rules.stream().collect(Collectors.groupingBy(RuntimeRule::getName));
@@ -94,5 +101,9 @@ public class RuntimeKrakenProject {
 
     public Map<String, List<RuntimeRule>> getRuleVersions() {
         return ruleVersions;
+    }
+
+    public Map<String, CompiledFunction> getFunctions() {
+        return functions;
     }
 }

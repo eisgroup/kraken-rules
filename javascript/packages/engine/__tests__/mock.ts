@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /*
  *  Copyright 2019 EIS Ltd and/or one of its affiliates.
  *
@@ -14,216 +15,239 @@
  *  limitations under the License.
  */
 
-import { ExecutionSession } from "../src/engine/ExecutionSession";
-import { ContextModelTree } from "../src/models/ContextModelTree";
-import { KRAKEN_MODEL_TREE_POLICY as modelTreeJson } from "kraken-test-product-model-tree";
-import { KRAKEN_MODEL_TREE_POLICYEXTENDED as extendedModelTreeJson } from "kraken-test-product-model-tree";
-import { ContextInstanceInfo } from "../src/engine/contexts/info/ContextInstanceInfo";
-import { DataObjectInfoResolver } from "../src/engine/contexts/info/DataObjectInfoResolver";
-import { ContextInstanceInfoResolver } from "../src/engine/contexts/info/ContextInstanceInfoResolver";
-import Identifiable = TestProduct.kraken.testproduct.domain.meta.Identifiable;
-import { ContextDataExtractorImpl } from "../src/engine/contexts/data/extraction/ContextDataExtractorImpl";
-import { DataContextBuilder } from "../src/engine/contexts/data/DataContextBuilder";
-import { DataContext } from "../src/engine/contexts/data/DataContext";
-import { TestProduct } from "kraken-test-product";
-import { ExtractedChildDataContextBuilder } from "../src/engine/contexts/data/ExtractedChildDataContextBuilder";
-import { ExpressionEvaluator } from "../src/engine/runtime/expressions/ExpressionEvaluator";
+import { ExecutionSession } from '../src/engine/ExecutionSession'
+import { ContextModelTree } from '../src/models/ContextModelTree'
+import { KRAKEN_MODEL_TREE_POLICY as modelTreeJson } from 'kraken-test-product-model-tree'
+import { KRAKEN_MODEL_TREE_POLICYEXTENDED as extendedModelTreeJson } from 'kraken-test-product-model-tree'
+import { KRAKEN_FUNCTIONS_POLICY as policyFunctionsJson } from 'kraken-test-product-model-tree'
+import { KRAKEN_FUNCTIONS_POLICYEXTENDED as policyExtendedFunctionsJson } from 'kraken-test-product-model-tree'
+import { DataObjectInfoResolver } from '../src/engine/contexts/info/DataObjectInfoResolver'
+import { ContextInstanceInfoResolver } from '../src/engine/contexts/info/ContextInstanceInfoResolver'
+import Identifiable = TestProduct.kraken.testproduct.domain.meta.Identifiable
+import { ContextDataExtractorImpl } from '../src/engine/contexts/data/extraction/ContextDataExtractorImpl'
+import { DataContextBuilder } from '../src/engine/contexts/data/DataContextBuilder'
+import { TestProduct } from 'kraken-test-product'
+import { ExtractedChildDataContextBuilder } from '../src/engine/contexts/data/ExtractedChildDataContextBuilder'
+import { ExpressionEvaluator, KelFunction } from '../src/engine/runtime/expressions/ExpressionEvaluator'
+import { FunctionRegistry } from '../src/engine/runtime/expressions/functionLibrary/Registry'
+import { DataContext } from '../src/engine/contexts/data/DataContext'
+import { ContextInstanceInfo } from 'kraken-engine-api'
 
-const modelTree = Object.freeze(modelTreeJson as unknown as ContextModelTree.ContextModelTree);
-const extendedModelTree = Object.freeze(extendedModelTreeJson as unknown as ContextModelTree.ContextModelTree);
-const evaluationConfig = Object.freeze({ context: {}, currencyCd: "USD" });
-const session = Object.freeze(new ExecutionSession(evaluationConfig, {}));
-const toMoney = (amount: number) => ({ amount: amount, currency: "USD" });
+const modelTree = Object.freeze(modelTreeJson as unknown as ContextModelTree.ContextModelTree)
+const extendedModelTree = Object.freeze(extendedModelTreeJson as unknown as ContextModelTree.ContextModelTree)
+const policyFunctions = policyFunctionsJson as unknown as KelFunction[]
+const policyExtendedFunctions = policyExtendedFunctionsJson as unknown as KelFunction[]
+const evaluationConfig = Object.freeze({ context: {}, currencyCd: 'USD' })
+const session = Object.freeze(new ExecutionSession(evaluationConfig, {}))
+const toMoney = (amount: number) => ({ amount: amount, currency: 'USD' })
 const contextInstanceInfo: ContextInstanceInfo = Object.freeze({
-    getContextInstanceId: () => "1",
-    getContextName: () => "mock"
-});
+    getContextInstanceId: () => '1',
+    getContextName: () => 'mock',
+})
 const empty = (): TestProduct.kraken.testproduct.domain.Policy => ({
-    id: "0",
-    cd: "Policy",
+    id: '0',
+    cd: 'Policy',
     insured: {
-        cd: "Insured",
-        id: "insured-1-id",
+        cd: 'Insured',
+        id: 'insured-1-id',
         addressInfo: {
-            id: "iai1",
-            cd: "AddressInfo"
-        }
+            id: 'iai1',
+            cd: 'AddressInfo',
+        },
     },
     billingInfo: {
-        id: "1",
-        cd: "BillingInfo",
+        id: '1',
+        cd: 'BillingInfo',
         creditCardInfo: {
-            id: "2",
-            cd: "CreditCardInfo"
-        }
+            id: '2',
+            cd: 'CreditCardInfo',
+        },
     },
     parties: [
         {
-            id: "3",
-            cd: "Party",
+            id: '3',
+            cd: 'Party',
             personInfo: {
-                id: "4",
-                cd: "PersonInfo"
+                id: '4',
+                cd: 'PersonInfo',
             },
             roles: [
                 {
-                    id: "5",
-                    cd: "PartyRole"
-                }
-            ]
-        }
+                    id: '5',
+                    cd: 'PartyRole',
+                },
+            ],
+        },
     ],
     riskItems: [
         {
-            id: "6",
-            cd: "Vehicle",
+            id: '6',
+            cd: 'Vehicle',
             addressInfo: {
-                id: "7",
-                cd: "AddressInfo"
-            }
-        }
+                id: '7',
+                cd: 'AddressInfo',
+            },
+        },
     ],
     transactionDetails: {
-        id: "8",
-        cd: "TransactionDetails"
+        id: '8',
+        cd: 'TransactionDetails',
     },
     accessTrackInfo: {
-        id: "9",
-        cd: "AccessTrackInfo"
-    },
-    termDetails: {
-    },
-    policyDetail: {
-        id: "11",
-        cd: "PolicyDetail"
-    }
-});
-const emptyExtended: () => TestProduct.kraken.testproduct.domain.Policy = () => ({
-    id: "0",
-    cd: "PolicyExtended",
-    billingInfo: {
-        id: "1",
-        cd: "BillingInfoExtended",
-        creditCardInfo: {
-            id: "2",
-            cd: "CreditCardInfoExtended",
-            billingAddress: {
-                id: "99",
-                cd: "BillingAddressExtended"
-            }
-        }
-    },
-    parties: [
-        {
-            id: "3",
-            cd: "PartyExtended",
-            driverInfo: {
-                cd: "DriverInfoExtended",
-                id: "88"
-            },
-            personInfo: {
-                id: "4",
-                cd: "PersonInfoExtended"
-            },
-            roles: [
-                {
-                    id: "5",
-                    cd: "PartyRoleExtended"
-                }
-            ]
-        }
-    ],
-    riskItems: [
-        {
-            id: "6",
-            cd: "VehicleExtended",
-            addressInfo: {
-                id: "7",
-                cd: "AddressInfoExtended"
-            },
-            info: {
-                id: "61",
-                cd: "VehicleInfoExtended"
-            }
-        }
-    ],
-    transactionDetails: {
-        id: "8",
-        cd: "TransactionDetailsExtended"
-    },
-    accessTrackInfo: {
-        id: "9",
-        cd: "AccessTrackInfoExtended"
+        id: '9',
+        cd: 'AccessTrackInfo',
     },
     termDetails: {},
     policyDetail: {
-        id: "11",
-        cd: "PolicyDetailExtended"
-    }
-});
+        id: '11',
+        cd: 'PolicyDetail',
+    },
+})
+const emptyExtended: () => TestProduct.kraken.testproduct.domain.Policy = () => ({
+    id: '0',
+    cd: 'PolicyExtended',
+    billingInfo: {
+        id: '1',
+        cd: 'BillingInfoExtended',
+        creditCardInfo: {
+            id: '2',
+            cd: 'CreditCardInfoExtended',
+            billingAddress: {
+                id: '99',
+                cd: 'BillingAddressExtended',
+            },
+        },
+    },
+    parties: [
+        {
+            id: '3',
+            cd: 'PartyExtended',
+            driverInfo: {
+                cd: 'DriverInfoExtended',
+                id: '88',
+            },
+            personInfo: {
+                id: '4',
+                cd: 'PersonInfoExtended',
+            },
+            roles: [
+                {
+                    id: '5',
+                    cd: 'PartyRoleExtended',
+                },
+            ],
+        },
+    ],
+    riskItems: [
+        {
+            id: '6',
+            cd: 'VehicleExtended',
+            addressInfo: {
+                id: '7',
+                cd: 'AddressInfoExtended',
+            },
+            info: {
+                id: '61',
+                cd: 'VehicleInfoExtended',
+            },
+        },
+    ],
+    transactionDetails: {
+        id: '8',
+        cd: 'TransactionDetailsExtended',
+    },
+    accessTrackInfo: {
+        id: '9',
+        cd: 'AccessTrackInfoExtended',
+    },
+    termDetails: {},
+    policyDetail: {
+        id: '11',
+        cd: 'PolicyDetailExtended',
+    },
+})
 const dataContextEmpty: () => DataContext = () => {
-    const emptyPolicy = empty();
-    const { Policy } = modelTreeJson.contexts;
+    const emptyPolicy = empty()
+    const { Policy } = modelTreeJson.contexts
     const info: ContextInstanceInfo = {
         getContextInstanceId: () => emptyPolicy.id!,
-        getContextName: () => emptyPolicy.cd!
-    };
+        getContextName: () => emptyPolicy.cd!,
+    }
     return new DataContext(
-        emptyPolicy.id!, Policy.name, emptyPolicy, info, modelTree.contexts[Policy.name].fields
-    );
-};
+        emptyPolicy.id!,
+        Policy.name,
+        emptyPolicy as Record<string, unknown>,
+        info,
+        modelTree.contexts[Policy.name].fields,
+    )
+}
 const dataContextEmptyExtended: () => DataContext = () => {
-    const emptyPolicy = emptyExtended();
-    const { PolicyExtended } = extendedModelTree.contexts;
+    const emptyPolicy = emptyExtended()
+    const { PolicyExtended } = extendedModelTree.contexts
     const info: ContextInstanceInfo = {
         getContextInstanceId: () => emptyPolicy.id!,
-        getContextName: () => emptyPolicy.cd!
-    };
+        getContextName: () => emptyPolicy.cd!,
+    }
     return new DataContext(
         emptyPolicy.id!,
         PolicyExtended.name,
-        emptyPolicy,
+        emptyPolicy as Record<string, unknown>,
         info,
         extendedModelTree.contexts[PolicyExtended.name].fields,
-        undefined
-    );
-};
+        undefined,
+    )
+}
 
 const dataContextCustom = (policy: Partial<TestProduct.kraken.testproduct.domain.Policy>) => {
-    const dataContext = dataContextEmpty();
-    (dataContext as { dataObject: {} }).dataObject = {
+    const dataContext = dataContextEmpty()
+    ;(dataContext as { dataObject: Record<string, unknown> }).dataObject = {
         ...dataContext.dataObject,
-        ...policy
-    };
-    return dataContext;
-};
+        ...policy,
+    }
+    return dataContext
+}
+
+const dataContextExplicit = (policy: Partial<TestProduct.kraken.testproduct.domain.Policy>) => {
+    const { Policy } = modelTreeJson.contexts
+    return new DataContext(
+        policy.id!,
+        Policy.name,
+        policy as Record<string, unknown>,
+        {
+            getContextInstanceId: () => policy.id!,
+            getContextName: () => policy.cd!,
+        },
+        modelTree.contexts[Policy.name].fields,
+    )
+}
 
 const data = {
     empty,
     emptyExtended,
     dataContextEmpty,
     dataContextEmptyExtended,
-    dataContextCustom
-};
-const dataResolver = ({
+    dataContextCustom,
+    dataContextExplicit,
+}
+const dataResolver = {
     validate: (identifiable: Identifiable) => {
-        const errors = [];
+        const errors = []
         if (identifiable.cd === undefined) {
-            errors.push({ message: "'cd' field is not present in data object" });
+            errors.push({ message: "'cd' field is not present in data object" })
         }
         if (identifiable.id === undefined) {
-            errors.push({ message: "'id' field is not present in data object" });
+            errors.push({ message: "'id' field is not present in data object" })
         }
-        return errors;
+        return errors
     },
-    resolveId: (identifiable: Identifiable) => identifiable["id"],
-    resolveName: (identifiable: Identifiable) => identifiable["cd"]
-} as DataObjectInfoResolver);
+    resolveId: (identifiable: Identifiable) => identifiable['id'],
+    resolveName: (identifiable: Identifiable) => identifiable['cd'],
+} as DataObjectInfoResolver
 function resolveInfo(root: Identifiable): ContextInstanceInfo {
-    return ({
-        getContextInstanceId: () => root["id"]!,
-        getContextName: () => root["cd"]!
-    });
+    return {
+        getContextInstanceId: () => root['id']!,
+        getContextName: () => root['cd']!,
+    }
 }
 const spi = {
     dataResolver,
@@ -232,18 +256,19 @@ const spi = {
         processContextInstanceInfo: info => info,
         resolveRootInfo: resolveInfo,
         resolveAncestorInfo: resolveInfo,
-        resolveExtractedInfo: resolveInfo
-    } as ContextInstanceInfoResolver<Identifiable>
-};
-const contextBuilder = new DataContextBuilder(modelTree, spi.instance);
-const evaluator = ExpressionEvaluator.DEFAULT;
+        resolveExtractedInfo: resolveInfo,
+    } as ContextInstanceInfoResolver<Identifiable>,
+}
+const contextBuilder = new DataContextBuilder(modelTree, spi.instance)
+const evaluator = ExpressionEvaluator.DEFAULT
 const contextDataExtractor = new ContextDataExtractorImpl(
     modelTree,
-    new ExtractedChildDataContextBuilder(
-        contextBuilder,
-        evaluator
-    )
-);
+    new ExtractedChildDataContextBuilder(contextBuilder, evaluator),
+)
+const policyEvaluator = new ExpressionEvaluator(
+    FunctionRegistry.createInstanceFunctions(dataResolver, name => modelTree.contexts[name].inheritedContexts),
+    policyFunctions,
+)
 export const mock = {
     dataContextEmpty,
     evaluator,
@@ -258,5 +283,8 @@ export const mock = {
     data,
     spi,
     contextDataExtractor,
-    contextBuilder
-};
+    contextBuilder,
+    policyFunctions,
+    policyExtendedFunctions,
+    policyEvaluator,
+}

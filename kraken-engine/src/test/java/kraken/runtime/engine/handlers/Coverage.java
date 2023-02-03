@@ -15,12 +15,24 @@
  */
 package kraken.runtime.engine.handlers;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
+
+import javax.money.MonetaryAmount;
 
 public class Coverage {
     private String code;
     private int level;
+    private BigDecimal decimalLimit;
+    private MonetaryAmount moneyLimit;
+    private LocalDate localDate;
+    private LocalDateTime localDateTime;
+    private List<String> labels;
     private Collection<Object> conditions;
+    private Object address;
 
     public Coverage(Collection<Object> conditions) {
         this.conditions = conditions;
@@ -43,6 +55,54 @@ public class Coverage {
 
     public void setLevel(int level) {
         this.level = level;
+    }
+
+    public BigDecimal getDecimalLimit() {
+        return decimalLimit;
+    }
+
+    public void setDecimalLimit(BigDecimal decimalLimit) {
+        this.decimalLimit = decimalLimit;
+    }
+
+    public MonetaryAmount getMoneyLimit() {
+        return moneyLimit;
+    }
+
+    public void setMoneyLimit(MonetaryAmount moneyLimit) {
+        this.moneyLimit = moneyLimit;
+    }
+
+    public LocalDate getLocalDate() {
+        return localDate;
+    }
+
+    public void setLocalDate(LocalDate localDate) {
+        this.localDate = localDate;
+    }
+
+    public LocalDateTime getLocalDateTime() {
+        return localDateTime;
+    }
+
+    public void setLocalDateTime(LocalDateTime localDateTime) {
+        this.localDateTime = localDateTime;
+    }
+
+    public List<String> getLabels() {
+        return labels;
+    }
+
+    public void setLabels(List<String> labels) {
+        this.labels = labels;
+    }
+
+    public Object getAddress() {
+        return address;
+    }
+
+    public void setAddress(Object address) {
+        this.address = address;
     }
 
     public Collection<Object> getConditions() {

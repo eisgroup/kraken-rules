@@ -15,13 +15,14 @@
  */
 package kraken.model.dsl;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import com.google.common.collect.ImmutableList;
 import kraken.model.Metadata;
 import kraken.model.dsl.model.DSLEntryPoint;
 import kraken.model.dsl.model.DSLEntryPoints;
@@ -42,45 +43,65 @@ class KrakenDSLModelEntryPointConverter {
     private KrakenDSLModelEntryPointConverter() {
     }
 
-    static List<EntryPoint> convertEntryPoints(DSLModel dsl) {
-        List<EntryPoint> entryPoints = convertEntryPointBlocks(dsl.getNamespace(), dsl.getEntryPointBlocks(), null, false);
-        List<EntryPoint> otherEntryPoints = convertEntryPoints(dsl.getNamespace(), dsl.getEntryPoints(), null, false);
+    static List<EntryPoint> convertEntryPoints(DSLModel dsl, URI resourceUri) {
+        List<EntryPoint> entryPoints = convertEntryPointBlocks(
+            dsl.getNamespace(),
+            dsl.getEntryPointBlocks(),
+            resourceUri,
+            null,
+            false
+        );
+        entryPoints.addAll(
+            convertEntryPoints(dsl.getNamespace(), dsl.getEntryPoints(), resourceUri, null, false)
+        );
 
-        return ImmutableList.<EntryPoint>builder()
-                .addAll(entryPoints)
-                .addAll(otherEntryPoints)
-                .build();
+        return Collections.unmodifiableList(entryPoints);
     }
 
     private static List<EntryPoint> convertEntryPointBlocks(String namespace,
                                                             Collection<DSLEntryPoints> entryPointBlocks,
+                                                            URI resourceUri,
                                                             Metadata parentMetadata,
                                                             boolean serverSideOnly) {
         return entryPointBlocks.stream()
                 .flatMap(entryPointBlock ->
-                        convertEntryPointBlock(namespace, entryPointBlock, parentMetadata, serverSideOnly).stream())
+                        convertEntryPointBlock(namespace, entryPointBlock, resourceUri, parentMetadata, serverSideOnly)
+                            .stream())
                 .collect(Collectors.toList());
     }
 
     private static List<EntryPoint> convertEntryPointBlock(String namespace,
-                                                           DSLEntryPoints entryPoints,
+                                                           DSLEntryPoints dsl,
+                                                           URI resourceUri,
                                                            Metadata parentMetadata,
                                                            boolean serverSideOnly) {
-        parentMetadata = KrakenDSLModelMetadataConverter.merge(parentMetadata, convertMetadata(entryPoints.getMetadata()));
-        serverSideOnly = serverSideOnly || entryPoints.isServerSideOnly();
+        parentMetadata = KrakenDSLModelMetadataConverter.merge(
+            parentMetadata,
+            convertMetadata(dsl.getMetadata(), resourceUri)
+        );
+        serverSideOnly = serverSideOnly || dsl.isServerSideOnly();
 
-        return ImmutableList.<EntryPoint>builder()
-                .addAll(convertEntryPointBlocks(namespace, entryPoints.getEntryPointBlocks(), parentMetadata, serverSideOnly))
-                .addAll(convertEntryPoints(namespace, entryPoints.getEntryPoints(), parentMetadata, serverSideOnly))
-                .build();
+        List<EntryPoint> entryPoints = convertEntryPointBlocks(
+            namespace,
+            dsl.getEntryPointBlocks(),
+            resourceUri,
+            parentMetadata,
+            serverSideOnly
+        );
+        entryPoints.addAll(
+            convertEntryPoints(namespace, dsl.getEntryPoints(), resourceUri, parentMetadata, serverSideOnly)
+        );
+
+        return Collections.unmodifiableList(entryPoints);
     }
 
     private static List<EntryPoint> convertEntryPoints(String namespace,
                                                        Collection<DSLEntryPoint> entryPoints,
+                                                       URI resourceUri,
                                                        Metadata parentMetadata,
                                                        boolean serverSideOnly) {
         return entryPoints.stream()
-                .map(entryPoint -> convert(namespace, entryPoint))
+                .map(entryPoint -> convert(namespace, entryPoint, resourceUri))
                 .map(entryPoint -> {
                     entryPoint.setServerSideOnly(entryPoint.isServerSideOnly() || serverSideOnly);
                     return withParentMetadata(entryPoint, parentMetadata);
@@ -88,7 +109,7 @@ class KrakenDSLModelEntryPointConverter {
                 .collect(Collectors.toList());
     }
 
-    private static EntryPoint convert(String namespace, DSLEntryPoint dslEntryPoint) {
+    private static EntryPoint convert(String namespace, DSLEntryPoint dslEntryPoint, URI resourceURi) {
         EntryPoint entryPoint = factory.createEntryPoint();
         entryPoint.setPhysicalNamespace(namespace);
         entryPoint.setEntryPointVariationId(UUID.randomUUID().toString());
@@ -96,7 +117,7 @@ class KrakenDSLModelEntryPointConverter {
         entryPoint.setRuleNames(new ArrayList<>(dslEntryPoint.getRuleNames()));
         entryPoint.setIncludedEntryPointNames(new ArrayList<>(dslEntryPoint.getIncludedEntryPointNames()));
         entryPoint.setServerSideOnly(dslEntryPoint.isServerSideOnly());
-        entryPoint.setMetadata(convertMetadata(dslEntryPoint.getMetadata()));
+        entryPoint.setMetadata(convertMetadata(dslEntryPoint.getMetadata(), resourceURi));
         return entryPoint;
     }
 }

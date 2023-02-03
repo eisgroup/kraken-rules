@@ -27,13 +27,11 @@ import kraken.model.project.KrakenProject;
  * <p/>
  * Note, that instance of this must also implement {@link KrakenProjectValidator}
  * and be registered as a {@link KrakenProjectValidator}.
+ * <p/>
+ * Note, that this is NOT an API.
  *
  * @author mulevicius
- * @deprecated Custom dynamic Rule validation is no longer supported, because such validators cannot be run in
- * tooling environment.
  */
-@SPI
-@Deprecated(since = "1.22.0")
 public interface DynamicRuleValidator {
 
     /**

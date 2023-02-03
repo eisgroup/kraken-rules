@@ -41,9 +41,9 @@ public class JavascriptAstTranslator {
     }
 
     private String resolvePathExpression(Expression expression) {
-        if(expression instanceof ReferenceValue) {
-            return resolvePathExpression(((ReferenceValue) expression).getReference());
-        }
-        return expression.toString();
+        String pathExpression = expression.toString();
+        return pathExpression.startsWith("this.")
+            ? pathExpression.substring(5)
+            : pathExpression;
     }
 }

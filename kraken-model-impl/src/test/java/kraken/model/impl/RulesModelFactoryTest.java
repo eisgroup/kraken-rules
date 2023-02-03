@@ -16,7 +16,7 @@
 package kraken.model.impl;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,8 +24,14 @@ import java.util.List;
 import kraken.model.Condition;
 import kraken.model.ErrorMessage;
 import kraken.model.Expression;
+import kraken.model.Function;
+import kraken.model.FunctionDocumentation;
+import kraken.model.FunctionExample;
+import kraken.model.FunctionParameter;
 import kraken.model.FunctionSignature;
+import kraken.model.GenericTypeBound;
 import kraken.model.Metadata;
+import kraken.model.ParameterDocumentation;
 import kraken.model.Rule;
 import kraken.model.context.ContextDefinition;
 import kraken.model.context.ContextField;
@@ -54,32 +60,38 @@ public class RulesModelFactoryTest {
     /**
      * List of supported model interfaces, any new elements added must be registered here
      */
-    List<Class> MODELS_INTERFACE_NAMES = Arrays
-            .asList(ContextNavigation.class,
-                    LengthPayload.class,
-                    DefaultValuePayload.class,
-                    DefaultValuePayload.class,
-                    EntryPoint.class,
-                    AccessibilityPayload.class,
-                    VisibilityPayload.class,
-                    AssertionPayload.class,
-                    RegExpPayload.class,
-                    UsagePayload.class,
-                    Condition.class,
-                    ErrorMessage.class,
-                    Expression.class,
-                    Rule.class,
-                    Metadata.class,
-                    SizePayload.class,
-                    SizeRangePayload.class,
-                    ContextField.class,
-                    ExternalContext.class,
-                    ExternalContextDefinition.class,
-                    ExternalContextDefinitionAttribute.class,
-                    ExternalContextDefinitionAttributeType.class,
-                    ExternalContextDefinitionReference.class,
-                    FunctionSignature.class
-            );
+    List<Class> MODELS_INTERFACE_NAMES = Arrays.asList(
+        ContextNavigation.class,
+        LengthPayload.class,
+        DefaultValuePayload.class,
+        DefaultValuePayload.class,
+        EntryPoint.class,
+        AccessibilityPayload.class,
+        VisibilityPayload.class,
+        AssertionPayload.class,
+        RegExpPayload.class,
+        UsagePayload.class,
+        Condition.class,
+        ErrorMessage.class,
+        Expression.class,
+        Rule.class,
+        Metadata.class,
+        SizePayload.class,
+        SizeRangePayload.class,
+        ContextField.class,
+        ExternalContext.class,
+        ExternalContextDefinition.class,
+        ExternalContextDefinitionAttribute.class,
+        ExternalContextDefinitionAttributeType.class,
+        ExternalContextDefinitionReference.class,
+        FunctionSignature.class,
+        Function.class,
+        FunctionParameter.class,
+        GenericTypeBound.class,
+        FunctionDocumentation.class,
+        FunctionExample.class,
+        ParameterDocumentation.class
+    );
 
     @Test
     public void shouldCreateExternalContext() {

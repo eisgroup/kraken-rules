@@ -1,0 +1,9 @@
+kraken.el.functionregistry.functions.DateFunctions
+kraken.el.functionregistry.functions.MoneyFunctions
+kraken.el.functionregistry.functions.CollectionFunctions
+kraken.el.functionregistry.functions.StringFunctions
+kraken.el.functionregistry.functions.SetFunctions
+kraken.el.functionregistry.functions.GenericValueFunctions
+kraken.el.functionregistry.functions.QuantifierFunctions
+kraken.el.functionregistry.functions.TypeFunctions
+kraken.el.functionregistry.functions.MathFunctions

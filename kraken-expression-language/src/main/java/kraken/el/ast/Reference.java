@@ -30,36 +30,41 @@ public abstract class Reference extends Expression {
     }
 
     /**
-     * @return first token in reference
-     * For example, in {@code Coverage[1][*].limitAmount[1]} first token is 'Coverage'
-     */
-    abstract String getFirstToken();
-
-    /**
      * @return true if this reference exists in current immediate scope;
      *              a reference is in current immediate scope if the scope is static and has reference by name
      *              or a scope is dynamic and no static parent scope has this reference
      */
-    public boolean isReferenceInCurrentScope() {
-        return scope.isReferenceInCurrentScope(getFirstToken());
-    }
+    public abstract boolean isReferenceInCurrentScope();
 
     /**
      * @return true if this reference exists only in global scope but not in any descendant scope
      */
-    public boolean isReferenceInGlobalScope() {
-        return scope.isReferenceInGlobalScope(getFirstToken());
-    }
+    public abstract boolean isReferenceInGlobalScope();
 
     /**
-     * @return a type of scope that has this reference is in
+     * @return a type of scope that this reference is in
      */
-    public ScopeType findScopeTypeOfReference() {
-        return scope.findScopeTypeOfReference(getFirstToken());
-    }
+    public abstract ScopeType findScopeTypeOfReference();
 
-    public boolean isSimpleBeanPath() {
-        return false;
-    }
+    /**
+     *
+     * @return first identifier of this reference.
+     *         If expression is Coverage[limit > 10].limit[0] then first reference is 'Coverage'
+     */
+    public abstract Reference getFirstReference();
+
+    /**
+     *
+     * @return true if reference is a simple bean path
+     */
+    public abstract boolean isSimpleBeanPath();
+
+    /**
+     * Returns {@code true} if this reference is a simple path. A simple path is a path where all
+     * elements are assignable to {@code Identifier}.
+     *
+     * @return {@code true} if simple path, {@code false} otherwise.
+     */
+    public abstract boolean isSimplePath();
 
 }

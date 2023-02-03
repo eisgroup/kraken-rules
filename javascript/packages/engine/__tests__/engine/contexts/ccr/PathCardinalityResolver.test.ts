@@ -14,33 +14,33 @@
  *  limitations under the License.
  */
 
-import { mock } from "../../../mock";
-import { PathCardinalityResolver } from "../../../../src/engine/contexts/ccr/PathCardinalityResolver";
+import { mock } from '../../../mock'
+import { PathCardinalityResolver } from '../../../../src/engine/contexts/ccr/PathCardinalityResolver'
 
-const { Policy, Insured, Vehicle, FullCoverage } = mock.modelTreeJson.contexts;
+const { Policy, Insured, Vehicle, FullCoverage } = mock.modelTreeJson.contexts
 
-describe("Reference Path Resolver", () => {
-    let resolver: PathCardinalityResolver;
+describe('Reference Path Resolver', () => {
+    let resolver: PathCardinalityResolver
     beforeEach(() => {
-        resolver = new PathCardinalityResolver(mock.modelTree.contexts);
-    });
-    it("should resolve to single with one element", () => {
-        const cardinality = resolver.resolveCardinality({ path: [Policy.name] });
-        expect(cardinality).toBe("SINGLE");
-    });
-    it("should resolve to single in multiple elements", () => {
-        const cardinality = resolver.resolveCardinality({ path: [Policy.name, Insured.name] });
-        expect(cardinality).toBe(Policy.children.Insured.cardinality);
-        expect(cardinality).toBe("SINGLE");
-    });
-    it("should resolve to multiple in multiple elements", () => {
-        const cardinality = resolver.resolveCardinality({ path: [Policy.name, Vehicle.name] });
-        expect(cardinality).toBe(Policy.children.Vehicle.cardinality);
-        expect(cardinality).toBe("MULTIPLE");
-    });
-    it("should throw on multiple in middle of path", () => {
-        const cardinality = resolver.resolveCardinality({ path: [Policy.name, Vehicle.name, FullCoverage.name] });
-        expect(cardinality).toBe(Policy.children.Vehicle.cardinality);
-        expect(cardinality).toBe("MULTIPLE");
-    });
-});
+        resolver = new PathCardinalityResolver(mock.modelTree.contexts)
+    })
+    it('should resolve to single with one element', () => {
+        const cardinality = resolver.resolveCardinality({ path: [Policy.name] })
+        expect(cardinality).toBe('SINGLE')
+    })
+    it('should resolve to single in multiple elements', () => {
+        const cardinality = resolver.resolveCardinality({ path: [Policy.name, Insured.name] })
+        expect(cardinality).toBe(Policy.children.Insured.cardinality)
+        expect(cardinality).toBe('SINGLE')
+    })
+    it('should resolve to multiple in multiple elements', () => {
+        const cardinality = resolver.resolveCardinality({ path: [Policy.name, Vehicle.name] })
+        expect(cardinality).toBe(Policy.children.Vehicle.cardinality)
+        expect(cardinality).toBe('MULTIPLE')
+    })
+    it('should throw on multiple in middle of path', () => {
+        const cardinality = resolver.resolveCardinality({ path: [Policy.name, Vehicle.name, FullCoverage.name] })
+        expect(cardinality).toBe(Policy.children.Vehicle.cardinality)
+        expect(cardinality).toBe('MULTIPLE')
+    })
+})

@@ -15,6 +15,7 @@
  */
 package kraken.testproduct.domain.extended;
 
+import kraken.testproduct.domain.BillingAddress;
 import kraken.testproduct.domain.CreditCardInfo;
 
 import javax.money.MonetaryAmount;
@@ -22,84 +23,12 @@ import java.time.LocalDate;
 
 public class CreditCardInfoExtended extends CreditCardInfo {
 
-    private String cardType;
-
-    private MonetaryAmount cardCreditLimitAmount;
-
-    private String cardNumber;
-
-    private Integer cvv;
-
-    private LocalDate expirationDate;
-
-    private String cardHolderName;
-
-    private BillingAddressExtended billingAddress;
-
     public CreditCardInfoExtended() {
     }
 
-    public CreditCardInfoExtended(String cardType, String cardNumber, Integer cvv, BillingAddressExtended billingAddress, MonetaryAmount cardCreditLimitAmount) {
-        this.cardType = cardType;
-        this.cardCreditLimitAmount = cardCreditLimitAmount;
-        this.cardNumber = cardNumber;
-        this.cvv = cvv;
-        this.billingAddress = billingAddress;
-    }
-
-    public MonetaryAmount getCardCreditLimitAmount() {
-        return cardCreditLimitAmount;
-    }
-
-    public void setCardCreditLimitAmount(MonetaryAmount cardCreditLimitAmount) {
-        this.cardCreditLimitAmount = cardCreditLimitAmount;
-    }
-
-    public String getCardType() {
-        return cardType;
-    }
-
-    public void setCardType(String cardType) {
-        this.cardType = cardType;
-    }
-
-    public String getCardNumber() {
-        return cardNumber;
-    }
-
-    public void setCardNumber(String cardNumber) {
-        this.cardNumber = cardNumber;
-    }
-
-    public Integer getCvv() {
-        return cvv;
-    }
-
-    public void setCvv(Integer cvv) {
-        this.cvv = cvv;
-    }
-
-    public LocalDate getExpirationDate() {
-        return expirationDate;
-    }
-
-    public void setExpirationDate(LocalDate expirationDate) {
-        this.expirationDate = expirationDate;
-    }
-
-    public String getCardHolderName() {
-        return cardHolderName;
-    }
-
-    public void setCardHolderName(String cardHolderName) {
-        this.cardHolderName = cardHolderName;
-    }
-
-    public BillingAddressExtended getBillingAddress() {
-        return billingAddress;
-    }
-
-    public void setBillingAddress(BillingAddressExtended billingAddress) {
-        this.billingAddress = billingAddress;
+    public CreditCardInfoExtended(String cardType, String cardNumber, Integer cvv,
+                                  BillingAddressExtended billingAddress,
+                                  MonetaryAmount cardCreditLimitAmount) {
+        super(cardType, cardNumber, cvv, billingAddress, cardCreditLimitAmount);
     }
 }

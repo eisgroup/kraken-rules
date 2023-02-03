@@ -15,12 +15,12 @@
  */
 package kraken.engine.sanity.check;
 
-import static kraken.runtime.expressions.KrakenExpressionEvaluator.TEMPLATE_DATE_TIME_FORMAT;
+import static kraken.runtime.utils.TemplateParameterRenderer.TEMPLATE_DATE_TIME_FORMAT;
 import static kraken.testing.matchers.KrakenMatchers.hasNoIgnoredRules;
 import static kraken.testing.matchers.KrakenMatchers.hasRuleResults;
 import static kraken.testing.matchers.KrakenMatchers.hasValidationFailures;
 import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -28,7 +28,7 @@ import java.util.Map;
 import org.junit.Test;
 
 import kraken.el.ast.builder.Literals;
-import kraken.el.functions.DateFunctions;
+import kraken.el.functionregistry.functions.DateFunctions;
 import kraken.runtime.EvaluationConfig;
 import kraken.runtime.engine.EntryPointResult;
 import kraken.runtime.engine.result.AssertionPayloadResult;

@@ -8,9 +8,11 @@ import static kraken.model.project.KrakenProjectMocks.entryPoints;
 import static kraken.model.project.KrakenProjectMocks.externalContext;
 import static kraken.model.project.KrakenProjectMocks.externalContextDefinitions;
 import static kraken.model.project.KrakenProjectMocks.function;
+import static kraken.model.project.KrakenProjectMocks.functionSignature;
 import static kraken.model.project.KrakenProjectMocks.imports;
 import static kraken.model.project.KrakenProjectMocks.includes;
 import static kraken.model.project.KrakenProjectMocks.resource;
+import static kraken.model.project.KrakenProjectMocks.resourceWithFunctions;
 import static kraken.model.project.KrakenProjectMocks.ri;
 import static kraken.model.project.KrakenProjectMocks.rules;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -18,14 +20,14 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertThrows;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import kraken.model.Rule;
 import kraken.model.context.ContextDefinition;
@@ -39,20 +41,12 @@ import kraken.model.project.exception.IllegalKrakenProjectStateException;
  */
 public class ResourceKrakenProjectBuilderTest {
 
-    @org.junit.Rule
-    public ExpectedException expectedException = ExpectedException.none();
-
-
-    @Test(expected = IllegalKrakenProjectStateException.class)
+    @Test
     public void shouldThrowWhenBuildingKrakenProjectForNamespaceThatDoesNotExist() {
         ResourceKrakenProjectBuilder krakenProjectBuilder = new ResourceKrakenProjectBuilder(of());
 
-        KrakenProject krakenProject = krakenProjectBuilder.buildKrakenProject("PersonalAutoPolicy");
-
-        assertThat(krakenProject.getNamespace(), is("PersonalAutoPolicy"));
-        assertThat(krakenProject.getContextDefinitions().values(), empty());
-        assertThat(krakenProject.getEntryPoints(), empty());
-        assertThat(krakenProject.getRules(), empty());
+        assertThrows(IllegalKrakenProjectStateException.class,
+                () -> krakenProjectBuilder.buildKrakenProject("PersonalAutoPolicy"));
     }
 
     @Test
@@ -445,9 +439,9 @@ public class ResourceKrakenProjectBuilderTest {
         assertThat(krakenProject.getRules().get(0).getPhysicalNamespace(), is("Car"));
     }
 
-    @Test(expected = IllegalKrakenProjectStateException.class)
+    @Test
     public void shouldThrowWhenRuleIsImportedFromNamespaceThatDoesNotExist() {
-        ResourceKrakenProjectBuilder krakenProjectBuilder = new ResourceKrakenProjectBuilder(of(
+        assertThrows(IllegalKrakenProjectStateException.class, () -> new ResourceKrakenProjectBuilder(of(
                 resource("PersonalAutoPolicy",
                         contextDefinitionsWithRoot("Policy"),
                         entryPoints(),
@@ -455,14 +449,12 @@ public class ResourceKrakenProjectBuilderTest {
                         includes(),
                         imports(ri("Base", "R01"))
                 )
-        ));
-
-        krakenProjectBuilder.buildKrakenProject("PersonalAutoPolicy");
+        )));
     }
 
-    @Test(expected = IllegalKrakenProjectStateException.class)
+    @Test
     public void shouldThrowWhenImportedRuleDoesNotExistInThatNamespace() {
-        ResourceKrakenProjectBuilder krakenProjectBuilder = new ResourceKrakenProjectBuilder(of(
+        assertThrows(IllegalKrakenProjectStateException.class, () -> new ResourceKrakenProjectBuilder(of(
                 resource("PersonalAutoPolicy",
                         contextDefinitionsWithRoot("Policy"),
                         entryPoints(),
@@ -475,14 +467,12 @@ public class ResourceKrakenProjectBuilderTest {
                         entryPoints(),
                         rules()
                 )
-        ));
-
-        krakenProjectBuilder.buildKrakenProject("PersonalAutoPolicy");
+        )));
     }
 
-    @Test(expected = IllegalKrakenProjectStateException.class)
+    @Test
     public void shouldThrowWhenImportedRuleIsAlreadyDefined() {
-        ResourceKrakenProjectBuilder krakenProjectBuilder = new ResourceKrakenProjectBuilder(of(
+        assertThrows(IllegalKrakenProjectStateException.class, () -> new ResourceKrakenProjectBuilder(of(
                 resource("PersonalAutoPolicy",
                         contextDefinitionsWithRoot("Policy"),
                         entryPoints(),
@@ -495,14 +485,12 @@ public class ResourceKrakenProjectBuilderTest {
                         entryPoints(),
                         rules("R01")
                 )
-        ));
-
-        krakenProjectBuilder.buildKrakenProject("PersonalAutoPolicy");
+        )));
     }
 
-    @Test(expected = IllegalKrakenProjectStateException.class)
+    @Test
     public void shouldThrowWhenSameRuleIsImportedFromMultipleNamespaces() {
-        ResourceKrakenProjectBuilder krakenProjectBuilder = new ResourceKrakenProjectBuilder(of(
+        assertThrows(IllegalKrakenProjectStateException.class, () -> new ResourceKrakenProjectBuilder(of(
                 resource("PersonalAutoPolicy",
                         contextDefinitionsWithRoot("Policy"),
                         entryPoints(),
@@ -527,35 +515,32 @@ public class ResourceKrakenProjectBuilderTest {
                         entryPoints(),
                         rules("R01")
                 )
-        ));
-
-        krakenProjectBuilder.buildKrakenProject("PersonalAutoPolicy");
+        )));
     }
 
-    @Test(expected = IllegalKrakenProjectStateException.class)
+    @Test
     public void shouldThrowWhenIncludedNamespaceDoesNotExist() {
-        ResourceKrakenProjectBuilder krakenProjectBuilder = new ResourceKrakenProjectBuilder(of(
+        assertThrows(IllegalKrakenProjectStateException.class, () -> new ResourceKrakenProjectBuilder(of(
                 resource("PersonalAutoPolicy",
                         contextDefinitionsWithRoot("Policy"),
                         entryPoints(),
                         rules(),
                         includes("Base")
                 )
-        ));
-
-        krakenProjectBuilder.buildKrakenProject("PersonalAutoPolicy");
+        )));
     }
 
-    @Test(expected = IllegalKrakenProjectStateException.class)
+    @Test
     public void shouldThrowWhenNamespaceIncludesItself() {
         ResourceKrakenProjectBuilder krakenProjectBuilder = new ResourceKrakenProjectBuilder(of(
                 resource("Base", contextDefinitionsWithRoot("Policy"), entryPoints(), rules(), includes("Base"))
         ));
 
-        krakenProjectBuilder.buildKrakenProject("Base");
+        assertThrows(IllegalKrakenProjectStateException.class,
+                () -> krakenProjectBuilder.buildKrakenProject("Base"));
     }
 
-    @Test(expected = IllegalKrakenProjectStateException.class)
+    @Test
     public void shouldThrowWhenNamespaceIncludesAreCyclical() {
         ResourceKrakenProjectBuilder krakenProjectBuilder = new ResourceKrakenProjectBuilder(of(
                 resource("A", contextDefinitionsWithRoot("Root"), entryPoints(), rules(), includes("B")),
@@ -563,7 +548,8 @@ public class ResourceKrakenProjectBuilderTest {
                 resource("C", contextDefinitions(), entryPoints(), rules(), includes("A"))
         ));
 
-        krakenProjectBuilder.buildKrakenProject("A");
+        assertThrows(IllegalKrakenProjectStateException.class,
+                () -> krakenProjectBuilder.buildKrakenProject("A"));
     }
 
     @Test
@@ -595,7 +581,7 @@ public class ResourceKrakenProjectBuilderTest {
         assertThat(krakenProject.getRules(), hasSize(1));
     }
 
-    @Test(expected = IllegalKrakenProjectStateException.class)
+    @Test
     public void shouldThrowWhenIncludeHasRuleAmbiguities() {
         ResourceKrakenProjectBuilder krakenProjectBuilder = new ResourceKrakenProjectBuilder(of(
                 resource("PersonalAutoPolicy", contextDefinitionsWithRoot("Policy"), entryPoints(), rules(), includes("Policy", "Car")),
@@ -603,10 +589,11 @@ public class ResourceKrakenProjectBuilderTest {
                 resource("Car", contextDefinitions(), entryPoints(), rules("R01"))
         ));
 
-        krakenProjectBuilder.buildKrakenProject("PersonalAutoPolicy");
+        assertThrows(IllegalKrakenProjectStateException.class,
+                () -> krakenProjectBuilder.buildKrakenProject("PersonalAutoPolicy"));
     }
 
-    @Test(expected = IllegalKrakenProjectStateException.class)
+    @Test
     public void shouldThrowWhenIncludeHasEntryPointAmbiguities() {
         ResourceKrakenProjectBuilder krakenProjectBuilder = new ResourceKrakenProjectBuilder(of(
                 resource("PersonalAutoPolicy", contextDefinitionsWithRoot("Policy"), entryPoints(), rules(), includes("Policy", "Car")),
@@ -614,10 +601,11 @@ public class ResourceKrakenProjectBuilderTest {
                 resource("Car", contextDefinitions(), entryPoints("Validate"), rules())
         ));
 
-        krakenProjectBuilder.buildKrakenProject("PersonalAutoPolicy");
+        assertThrows(IllegalKrakenProjectStateException.class,
+                () -> krakenProjectBuilder.buildKrakenProject("PersonalAutoPolicy"));
     }
 
-    @Test(expected = IllegalKrakenProjectStateException.class)
+    @Test
     public void shouldThrowWhenIncludeHasContextDefinitionAmbiguities() {
         ResourceKrakenProjectBuilder krakenProjectBuilder = new ResourceKrakenProjectBuilder(of(
                 resource("PersonalAutoPolicy", contextDefinitions(), entryPoints(), rules(), includes("Policy", "Car")),
@@ -625,17 +613,16 @@ public class ResourceKrakenProjectBuilderTest {
                 resource("Car", contextDefinitionsWithRoot("Policy"), entryPoints(), rules())
         ));
 
-        krakenProjectBuilder.buildKrakenProject("PersonalAutoPolicy");
+        assertThrows(IllegalKrakenProjectStateException.class,
+                () -> krakenProjectBuilder.buildKrakenProject("PersonalAutoPolicy"));
     }
 
-    @Test(expected = IllegalKrakenProjectStateException.class)
+    @Test
     public void shouldThrowWhenDuplicateContextDefinitionsWithDifferentContentsAreDefinedInSameNamespace() {
-        ResourceKrakenProjectBuilder krakenProjectBuilder = new ResourceKrakenProjectBuilder(of(
+        assertThrows(IllegalKrakenProjectStateException.class, () -> new ResourceKrakenProjectBuilder(of(
                 resource("PersonalAutoPolicy", contextDefinitionsWithRoot("Policy", "RiskItem"), entryPoints(), rules()),
                 resource("PersonalAutoPolicy", contextDefinitions("Policy"), entryPoints(), rules())
-        ));
-
-        krakenProjectBuilder.buildKrakenProject("PersonalAutoPolicy");
+        )));
     }
 
     @Test
@@ -649,7 +636,7 @@ public class ResourceKrakenProjectBuilderTest {
         assertThat(krakenProject.getContextDefinitions().values(), hasSize(2));
     }
 
-    @Test(expected = IllegalKrakenProjectStateException.class)
+    @Test
     public void shouldThrowWhenAmbiguitiesAreTransitive() {
         ResourceKrakenProjectBuilder krakenProjectBuilder = new ResourceKrakenProjectBuilder(of(
                 resource("PersonalAutoPolicy", contextDefinitions(), entryPoints(), rules(), includes("Policy", "Car")),
@@ -659,7 +646,8 @@ public class ResourceKrakenProjectBuilderTest {
                 resource("SpecialCar", contextDefinitions(), entryPoints(), rules("R01"))
         ));
 
-        krakenProjectBuilder.buildKrakenProject("PersonalAutoPolicy");
+        assertThrows(IllegalKrakenProjectStateException.class,
+                () -> krakenProjectBuilder.buildKrakenProject("PersonalAutoPolicy"));
     }
 
     @Test
@@ -682,7 +670,7 @@ public class ResourceKrakenProjectBuilderTest {
         KrakenProject krakenProject = krakenProjectBuilder.buildKrakenProject("PersonalAutoPolicy");
 
         assertThat(krakenProject.getNamespace(), is("PersonalAutoPolicy"));
-        assertThat(krakenProject.getRules(), hasSize(3));
+        assertThat(krakenProject.getRules(), hasSize(1));
     }
 
     @Test
@@ -697,11 +685,11 @@ public class ResourceKrakenProjectBuilderTest {
                         List.of(), List.of(), rules())
         ));
 
-        expectedException.expect(IllegalKrakenProjectStateException.class);
-        expectedException.expectMessage("Kraken Project 'PersonalAutoPolicy' has namespace include errors:" +
-                " Item 'ExternalContext_root' is ambiguous, because it is included from multiple namespaces: Policy, Base.");
+        var message = "Kraken Project 'PersonalAutoPolicy' has namespace include errors:" +
+                " Item 'ExternalContext_root' is ambiguous, because it is included from multiple namespaces: Policy, Base.";
 
-        krakenProjectBuilder.buildKrakenProject("PersonalAutoPolicy");
+        assertThrows(message, IllegalKrakenProjectStateException.class,
+                () -> krakenProjectBuilder.buildKrakenProject("PersonalAutoPolicy"));
     }
 
     @Test
@@ -712,11 +700,11 @@ public class ResourceKrakenProjectBuilderTest {
                         List.of(), entryPoints(), rules(), List.of())
         ));
 
-        expectedException.expect(IllegalKrakenProjectStateException.class);
-        expectedException.expectMessage("KrakenProject for namespace PersonalAutoPolicy does not have any" +
-                " context definition defined. At least one context definition is expected.");
+        var message = "KrakenProject for namespace PersonalAutoPolicy does not have any" +
+                " context definition defined. At least one context definition is expected.";
 
-        krakenProjectBuilder.buildKrakenProject("PersonalAutoPolicy");
+        assertThrows(message, IllegalKrakenProjectStateException.class,
+                () -> krakenProjectBuilder.buildKrakenProject("PersonalAutoPolicy"));
     }
 
     @Test
@@ -725,15 +713,15 @@ public class ResourceKrakenProjectBuilderTest {
             resource(
                 "PersonalAutoPolicy",
                 List.of(
-                    function("GetAutoPolicy", "AutoPolicy", List.of()),
-                    function("GetPolicy", "Policy", List.of())
+                    functionSignature("GetAutoPolicy", "AutoPolicy", List.of()),
+                    functionSignature("GetPolicy", "Policy", List.of())
                 ),
                 List.of("Base")
             ),
             resource(
                 "Base",
                 List.of(
-                    function("GetPolicy", "Policy", List.of())
+                    functionSignature("GetPolicy", "Policy", List.of())
                 ),
                 List.of()
             )
@@ -744,30 +732,35 @@ public class ResourceKrakenProjectBuilderTest {
         assertThat(krakenProject.getFunctionSignatures(), hasSize(2));
     }
 
-    @Test(expected = IllegalKrakenProjectStateException.class)
+    @Test
     public void shouldThrowIfNamespaceHasClashingFunctionSignatures() {
-        ResourceKrakenProjectBuilder krakenProjectBuilder = new ResourceKrakenProjectBuilder(of(
+        assertThrows(IllegalKrakenProjectStateException.class, () -> new ResourceKrakenProjectBuilder(of(
             resource(
                 "PersonalAutoPolicy",
                 List.of(
-                    function("GetAutoPolicy", "AutoPolicy", List.of()),
-                    function("GetAutoPolicy", "Policy", List.of())
+                    functionSignature("GetAutoPolicy", "AutoPolicy", List.of()),
+                    functionSignature("GetAutoPolicy", "Policy", List.of())
                 ),
                 List.of("Base")
             )
-        ));
-
-        krakenProjectBuilder.buildKrakenProject("PersonalAutoPolicy");
+        )));
     }
 
     @Test
-    public void shouldNotThrowIfNamespaceHasDuplicateFunctionSignatures() {
+    public void shouldAddFunctionsToKrakenProject() {
         ResourceKrakenProjectBuilder krakenProjectBuilder = new ResourceKrakenProjectBuilder(of(
-            resource(
+            resourceWithFunctions(
                 "PersonalAutoPolicy",
                 List.of(
-                    function("GetAutoPolicy", "AutoPolicy", List.of()),
-                    function("GetAutoPolicy", "AutoPolicy", List.of())
+                    function("USD", "'USD'"),
+                    function("EUR", "'EUR'")
+                ),
+                List.of("Base")
+            ),
+            resourceWithFunctions(
+                "Base",
+                List.of(
+                    function("EUR", "'EUR'")
                 ),
                 List.of()
             )
@@ -775,6 +768,20 @@ public class ResourceKrakenProjectBuilderTest {
 
         KrakenProject krakenProject = krakenProjectBuilder.buildKrakenProject("PersonalAutoPolicy");
 
-        assertThat(krakenProject.getFunctionSignatures(), hasSize(1));
+        assertThat(krakenProject.getFunctions(), hasSize(2));
+    }
+
+    @Test
+    public void shouldThrowIfNamespaceHasDuplicateFunctions() {
+        assertThrows(IllegalKrakenProjectStateException.class, () -> new ResourceKrakenProjectBuilder(of(
+            resourceWithFunctions(
+                "PersonalAutoPolicy",
+                List.of(
+                    function("USD", "'USD'"),
+                    function("USD", "'USD'")
+                ),
+                List.of("Base")
+            )
+        )));
     }
 }

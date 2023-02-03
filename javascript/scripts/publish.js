@@ -1,57 +1,34 @@
 const { execSync } = require("child_process");
-const semver = require("semver");
 const Logger = require("./__internal__/log")
 const logger = new Logger("publish.js")
-
-const v = prepareVersion();
-
-function prepareVersion() {
-    const version = process.argv.indexOf('-v') !== -1
-        ? process.argv[process.argv.indexOf('-v') + 1]
-        : undefined
-    if (!version) {
-        const cv = require('../lerna.json').version
-        const coerced = semver.coerce(cv)
-        const stagingVersion = semver.inc(coerced, 'prerelease', 'stage')
-        return stagingVersion;
-    }
-    return version
-}
+const { VERSION } = require('./version');
 
 function cli(cmd) {
     logger.command(cmd)
     execSync(cmd, { stdio: 'inherit' })
 }
 
-function validate(version) {
-    if (!version) {
-        throw new Error(logger.error('Version must be defined'))
-    }
-    if (!semver.valid(version)) {
-        throw new Error(logger.error(`Version '${version}' is not a valid sematic versioning version`))
-    }
-}
-
-function publish(version) {
+function publish(v) {
     const publishArgs = [
         '--yes',
         '--exact',
-        '--no-git-tag-version'
+        '--no-git-tag-version',
+        '--no-verify-access',
+        // do not try to reset git working changes to previous version
+        '--no-git-reset',
+        '--graph-type all'
     ]
     logger.log('Publishing')
-    cli(`npm run change-version -- -v ${version}`)
-    cli(`lerna publish ${version} ${publishArgs.join(' ')}`)
+    cli(`yarn run change-version -- -v ${v}`)
+    cli(`lerna publish ${v} ${publishArgs.join(' ')}`)
 }
 
 function logEnv() {
-    cli('npm config list')
+    cli('yarn config list')
 }
 
-logger.log(`Publishing Kraken UI with version '${v}'`)
+logger.log(`Publishing Kraken UI with version '${VERSION}'`)
 logger.log('Logging environment configuration')
 logEnv()
-logger.log(`Validating provided version '${v}'`)
-validate(v)
-logger.log(`Version '${v}' is valid `)
-publish(v)
-logger.log(`Kraken UI is published, version '${v}'`)
+publish(VERSION)
+logger.log(`Kraken UI is published, version '${VERSION}'`)

@@ -25,12 +25,16 @@ import java.text.MessageFormat;
  * @since 1.8.0
  */
 public class DefaultParseErrorHandler extends BaseParseErrorHandler {
+
+    public DefaultParseErrorHandler() {
+    }
+
     @Override
-    protected String getMessageDetails(Parser recognizer, Token offendingToke) {
+    protected String getMessageDetails(Parser recognizer, Token offendingToken) {
         return MessageFormat.format(
                 "Expected: {0}, but token found: ''{1}''",
                 recognizer.getExpectedTokens().toString(recognizer.getVocabulary()),
-                offendingToke.getText()
+                offendingToken.getText()
         );
     }
 

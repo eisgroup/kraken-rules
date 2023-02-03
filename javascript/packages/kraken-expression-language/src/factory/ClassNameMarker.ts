@@ -1,5 +1,5 @@
-import { ClassName } from "./ClassName";
-import { Objects } from "./Objects";
+import { ClassName } from './ClassName'
+import { Objects } from './Objects'
 
 /**
  * Instances of implementing classes are deserialized from a JSON.
@@ -9,9 +9,9 @@ import { Objects } from "./Objects";
  * @interface ClassNameMarker
  */
 export interface ClassNameMarker {
-    __type: ClassName;
+    __type: ClassName
 }
 
-export function isClassNameMarker(o: unknown): o is ClassNameMarker {
-    return Objects.propertyExists(o, "__type");
+export function hasClassNameMarker(o: unknown): o is ClassNameMarker {
+    return Objects.propertyExists(o, '__type')
 }

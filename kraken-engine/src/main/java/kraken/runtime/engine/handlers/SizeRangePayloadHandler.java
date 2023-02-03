@@ -18,18 +18,19 @@ package kraken.runtime.engine.handlers;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Function;
 
 import kraken.model.payload.PayloadType;
 import kraken.runtime.EvaluationSession;
 import kraken.runtime.engine.RulePayloadHandler;
 import kraken.runtime.engine.context.data.DataContext;
+import kraken.runtime.engine.handlers.trace.SizeRangePayloadEvaluatedOperation;
 import kraken.runtime.engine.result.PayloadResult;
 import kraken.runtime.engine.result.SizeRangePayloadResult;
 import kraken.runtime.expressions.KrakenExpressionEvaluator;
 import kraken.runtime.model.rule.RuntimeRule;
 import kraken.runtime.model.rule.payload.Payload;
 import kraken.runtime.model.rule.payload.validation.SizeRangePayload;
+import kraken.tracer.Tracer;
 
 import static kraken.runtime.utils.TargetPathUtils.resolveTargetPath;
 
@@ -50,19 +51,26 @@ public class SizeRangePayloadHandler implements RulePayloadHandler {
     }
 
     @Override
-    public PayloadResult executePayload(Payload payload, RuntimeRule rule, DataContext dataContext, EvaluationSession session) {
+    public PayloadResult executePayload(Payload payload, RuntimeRule rule, DataContext dataContext,
+                                        EvaluationSession session) {
         final SizeRangePayload rangePayload = (SizeRangePayload) payload;
         Object value = evaluator.evaluateGetProperty(resolveTargetPath(rule, dataContext), dataContext.getDataObject());
-        List<String> templateVariables = evaluator.evaluateTemplateVariables(rangePayload.getErrorMessage(), dataContext, session);
-        Function<Boolean, SizeRangePayloadResult> result = success -> new SizeRangePayloadResult(success, rangePayload, templateVariables);
+        List<String> templateVariables = evaluator.evaluateTemplateVariables(rangePayload.getErrorMessage(),
+            dataContext, session);
+
+        boolean success = true;
+
         if (value == null) {
             value = Collections.emptyList();
         }
+
         if (value instanceof Collection) {
-            final int size = ((Collection) value).size();
-            return result.apply(size >= rangePayload.getMin() && size <= rangePayload.getMax() );
+            final int size = ((Collection<?>) value).size();
+            success = size >= rangePayload.getMin() && size <= rangePayload.getMax();
         }
-        return result.apply(true);
+
+        Tracer.doOperation(new SizeRangePayloadEvaluatedOperation(rangePayload, value, success));
+        return new SizeRangePayloadResult(success, rangePayload, templateVariables);
     }
 
 }

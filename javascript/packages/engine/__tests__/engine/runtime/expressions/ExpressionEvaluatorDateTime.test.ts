@@ -14,57 +14,55 @@
  *  limitations under the License.
  */
 
-import { mock } from "../../../mock";
-import { DataContext } from "../../../../src/engine/contexts/data/DataContext";
-import { ComplexExpression } from "../../../../src/engine/runtime/expressions/RuntimeExpression";
-import { ExpressionEvaluationResult } from "../../../../src/engine/runtime/expressions/ExpressionEvaluationResult";
+import { ExpressionEvaluationResult } from 'kraken-engine-api'
+import { mock } from '../../../mock'
+import { ComplexExpression } from '../../../../src/engine/runtime/expressions/RuntimeExpression'
+import { DataContext } from '../../../../src/engine/contexts/data/DataContext'
 
-const { evaluator } = mock;
+const { evaluator } = mock
 
 export interface TestDataObject {
-    creationTime: string;
+    creationTime: string
 }
-const path = "__dataObject__.creationTime";
 
-function unwrap(expressionResult: ExpressionEvaluationResult.Result): any {
+function unwrap(expressionResult: ExpressionEvaluationResult.Result): Date {
     if (ExpressionEvaluationResult.isError(expressionResult)) {
-        console.error({ expressionResult });
-        throw new Error("Expression failed");
+        console.error({ expressionResult })
+        throw new Error('Expression failed')
     }
-    return expressionResult.success;
+    return new Date(expressionResult.success as string)
 }
 
 function complex(expression: string): ComplexExpression {
     return {
-        type: "ComplexExpression",
-        expression
-    };
+        type: 'ComplexExpression',
+        expression,
+    }
 }
 
-let dataObject;
-let dataContext: DataContext;
+let dataContext: DataContext
 beforeEach(() => {
-    dataObject = { creationTime: new Date() };
-    dataContext = new DataContext("1", "dummyCtx", dataObject, mock.contextInstanceInfo, {}, undefined);
-});
+    const dataObject = { creationTime: new Date() }
+    dataContext = new DataContext('1', 'dummyCtx', dataObject, mock.contextInstanceInfo, {}, undefined)
+})
 
-describe("DateTime in ExpressionEvaluator", () => {
-    it("should create date time passed in params", () => {
-        const date = evaluator.evaluate(complex("DateTime('2011-11-11T10:10:10')"), dataContext);
-        // tslint:disable-next-line
-        unwrap(evaluator.evaluateSet(
-            complex(path),
-            dataContext.dataObject,
-            unwrap(date)
-        )) as TestDataObject;
-        const creationTime = (dataContext.dataObject as TestDataObject).creationTime;
-        expect(creationTime).k_toBeDateTime(unwrap(date));
-    });
-    it("should compare two dates in kraken format from command expression", () => {
-        const is = evaluator.evaluate(complex(`Today() > DateTime('2011-11-11T10:10:10')`), dataContext);
-        expect(unwrap(is)).toBeTruthy();
-    });
-    it("should create current dateTime", () => {
-        expect(unwrap(evaluator.evaluate(complex("Now()"), dataContext))).k_toBeDateTime(new Date());
-    });
-});
+describe('DateTime in ExpressionEvaluator', () => {
+    it('should create date time passed in params', () => {
+        const date = evaluator.evaluate(complex("this.DateTime('2011-11-11T10:10:10')"), dataContext)
+        evaluator.evaluateSet('creationTime', dataContext.dataObject, unwrap(date))
+        const creationTime = (dataContext.dataObject as unknown as TestDataObject).creationTime
+        expect(new Date(creationTime)).k_toBeDateEqualTo(unwrap(date))
+    })
+    it('should compare two dates in kraken format from command expression', () => {
+        const is = evaluator.evaluate(complex(`this.Today() > this.DateTime('2011-11-11T10:10:10')`), dataContext)
+        expect(unwrap(is)).toBeTruthy()
+    })
+    it('should create current dateTime', () => {
+        const beforeNow = new Date()
+        const now = unwrap(evaluator.evaluate(complex('this.Now()'), dataContext))
+        const afterNow = new Date()
+        // impossible to accurately test Now(), since immediately create Date will have different timestamp
+        expect(now.getTime()).toBeGreaterThanOrEqual(beforeNow.getTime())
+        expect(now.getTime()).toBeLessThanOrEqual(afterNow.getTime())
+    })
+})

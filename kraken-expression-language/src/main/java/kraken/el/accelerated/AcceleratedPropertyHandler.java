@@ -18,7 +18,6 @@ package kraken.el.accelerated;
 /**
  * Simple property handler. Will be invoked for properties
  * This handler will be use for both simple expression handling and also registered for complex expressions
- * to handle property resolution natively by MVEL
  *
  * @author mulevicius
  */

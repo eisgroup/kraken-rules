@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import kraken.el.functionregistry.FunctionHeader;
+import kraken.model.Function;
 import kraken.model.FunctionSignature;
 import kraken.model.Rule;
 import kraken.model.context.ContextDefinition;
@@ -43,6 +43,7 @@ import kraken.model.project.KrakenProjectBuilder;
 import kraken.model.project.ResourceKrakenProject;
 import kraken.model.project.builder.NamespaceNode.NamespaceProjection;
 import kraken.model.project.exception.IllegalKrakenProjectStateException;
+import kraken.model.project.validator.Duplicates;
 import kraken.model.resource.Resource;
 import kraken.model.resource.RuleImport;
 
@@ -65,6 +66,7 @@ public class ResourceKrakenProjectBuilder implements KrakenProjectBuilder {
 
                             ensureUniqueContextDefinitionNames(namespaceName, resources);
                             ensureUniqueCustomFunctionSignatures(namespaceName, resources);
+                            ensureUniqueCustomFunctions(namespaceName, resources);
 
                             NamespacedResource namespacedResource = new NamespacedResource(namespaceName);
                             for(Resource resource : resources) {
@@ -74,7 +76,8 @@ public class ResourceKrakenProjectBuilder implements KrakenProjectBuilder {
                                 resource.getEntryPoints().forEach(namespacedResource::addEntryPoint);
                                 resource.getRuleImports().forEach(namespacedResource::addRuleImport);
                                 resource.getIncludes().forEach(namespacedResource::addInclude);
-                                resource.getFunctionSignatures().forEach(namespacedResource::addFunction);
+                                resource.getFunctionSignatures().forEach(namespacedResource::addFunctionSignature);
+                                resource.getFunctions().forEach(namespacedResource::addFunction);
                                 setExternalContext(namespacedResource, resource.getExternalContext());
                             }
                             return namespacedResource;
@@ -133,9 +136,24 @@ public class ResourceKrakenProjectBuilder implements KrakenProjectBuilder {
 
         List<EntryPoint> entryPoints = new ArrayList<>(namespaceProjection.getEntryPoints());
 
-        List<Rule> rules = new ArrayList<>(namespaceProjection.getRules());
+        Set<String> includedRules = entryPoints.stream().flatMap(e -> e.getRuleNames().stream()).collect(Collectors.toSet());
 
-        List<FunctionSignature> functions = new ArrayList<>(namespaceProjection.getFunctions().values());
+        List<Rule> rules = namespaceProjection.getRules().stream()
+            .filter(r -> {
+                boolean ruleIsIncludedInEntryPoint = includedRules.contains(r.getName());
+                if(!ruleIsIncludedInEntryPoint) {
+                    String template = "Rule ''{0}'' is not included into any EntryPoint and is unused in KrakenProject for namespace {1}. " +
+                        "This Rule will be removed from KrakenProject and excluded from any further calculations. " +
+                        "Such KrakenProject configurations may not be supported in the future.";
+                    String message = MessageFormat.format(template, r.getName(), namespace);
+                    logger.warn(message);
+                }
+                return ruleIsIncludedInEntryPoint;
+            })
+            .collect(Collectors.toList());
+
+        List<FunctionSignature> functionSignatures = new ArrayList<>(namespaceProjection.getFunctionSignatures().values());
+        List<Function> functions = new ArrayList<>(namespaceProjection.getFunctions().values());
 
         return new ResourceKrakenProject(
             namespace,
@@ -146,6 +164,7 @@ public class ResourceKrakenProjectBuilder implements KrakenProjectBuilder {
             externalContext,
             externalContextDefinitions,
             convertTree(namespaceTree),
+            functionSignatures,
             functions
         );
     }
@@ -162,39 +181,58 @@ public class ResourceKrakenProjectBuilder implements KrakenProjectBuilder {
                         .collect(Collectors.toList()));
     }
 
-    private static void ensureUniqueCustomFunctionSignatures(String namespaceName, List<Resource> namespaceResources) {
-        String resourceUris = namespaceResources.stream()
-            .map(Resource::getUri)
-            .map(URI::toString)
-            .collect(Collectors.joining(System.lineSeparator()));
+    private static void ensureUniqueCustomFunctions(String namespaceName, List<Resource> namespaceResources) {
+        Duplicates.findAndDo(
+            namespaceResources.stream().flatMap(r -> r.getFunctions().stream()),
+            duplicates -> {
+                String resourceUris = namespaceResources.stream()
+                    .map(Resource::getUri)
+                    .map(URI::toString)
+                    .collect(Collectors.joining(System.lineSeparator()));
 
-        namespaceResources.stream()
-            .flatMap(r -> r.getFunctionSignatures().stream())
-            .collect(Collectors.groupingBy(f -> new FunctionHeader(f.getName(), f.getParameterTypes().size()),
-                Collectors.collectingAndThen(Collectors.toList(), functionSignatures -> {
-                    List<String> signatures = functionSignatures.stream()
-                        .map(FunctionSignature::format)
-                        .distinct()
-                        .collect(Collectors.toList());
-                    if(signatures.size() > 1) {
-                        String msg = String.format(
-                            "Function signatures defined in DSL must be unique by function name and parameter "
-                                + "count, but duplicate function signatures are defined in namespace '%s':"
-                                + System.lineSeparator()
-                                + "%s"
-                                + System.lineSeparator()
-                                + "Please review affected DSL resources and remove duplicated function signatures:"
-                                + System.lineSeparator()
-                                + "%s",
-                            namespaceName,
-                            String.join(System.lineSeparator(), signatures),
-                            resourceUris
-                        );
-                        throw new IllegalKrakenProjectStateException(msg);
-                    }
-                    return functionSignatures;
-                }))
-            );
+                String msg = String.format(
+                    "Functions defined in DSL must be unique by function name, "
+                        + "but duplicate functions are defined in namespace '%s':"
+                        + System.lineSeparator()
+                        + "%s"
+                        + System.lineSeparator()
+                        + "Please review affected DSL resources and remove duplicated functions:"
+                        + System.lineSeparator()
+                        + "%s",
+                    namespaceName,
+                    duplicates.stream().map(Function::getName).collect(Collectors.joining(System.lineSeparator())),
+                    resourceUris
+                );
+                throw new IllegalKrakenProjectStateException(msg);
+            });
+    }
+
+    private static void ensureUniqueCustomFunctionSignatures(String namespaceName, List<Resource> namespaceResources) {
+        Duplicates.findAndDo(
+            namespaceResources.stream().flatMap(r -> r.getFunctionSignatures().stream()),
+            FunctionSignature::toHeader,
+            duplicates -> {
+                String resourceUris = namespaceResources.stream()
+                    .map(Resource::getUri)
+                    .map(URI::toString)
+                    .collect(Collectors.joining(System.lineSeparator()));
+                String msg = String.format(
+                    "Function signatures defined in DSL must be unique by function name and parameter "
+                        + "count, but duplicate function signatures are defined in namespace '%s':"
+                        + System.lineSeparator()
+                        + "%s"
+                        + System.lineSeparator()
+                        + "Please review affected DSL resources and remove duplicated function signatures:"
+                        + System.lineSeparator()
+                        + "%s",
+                    namespaceName,
+                    duplicates.stream().map(FunctionSignature::format)
+                        .collect(Collectors.joining(System.lineSeparator())),
+                    resourceUris
+                );
+                throw new IllegalKrakenProjectStateException(msg);
+            }
+        );
     }
 
     private static void ensureUniqueContextDefinitionNames(String namespaceName, List<Resource> namespaceResources) {
@@ -344,9 +382,12 @@ public class ResourceKrakenProjectBuilder implements KrakenProjectBuilder {
 
     private void setExternalContext(NamespacedResource namespacedResource, ExternalContext externalContext) {
         if (externalContext != null) {
-            if (namespacedResource.getExternalContext() != null) {
-                throw new IllegalKrakenProjectStateException("Multiple conflicting External Contexts defined in namespace "
-                        + namespacedResource.getNamespace() + ". Only one External Context can be configured per namespace.");
+            if (namespacedResource.getExternalContext() != null
+                && !externalContext.equals(namespacedResource.getExternalContext())) {
+                String template = "Multiple conflicting External Contexts defined in namespace %s. "
+                    + "Only one External Context can be configured per namespace.";
+                throw new IllegalKrakenProjectStateException(
+                    String.format(template, namespacedResource.getNamespace()));
             }
 
             namespacedResource.setExternalContext(externalContext);

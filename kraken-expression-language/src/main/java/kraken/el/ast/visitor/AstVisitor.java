@@ -105,7 +105,13 @@ public interface AstVisitor<T> {
 
     T visit(Null aNull);
 
+    T visit(Empty empty);
+
     T visit(This aThis);
+
+    T visit(ValueBlock valueBlock);
+
+    T visit(Variable variable);
 
     default T visit(Template template) {
         throw new IllegalStateException("Expression node is not supported: " + template.getNodeType());

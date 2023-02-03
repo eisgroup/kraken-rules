@@ -19,16 +19,14 @@ import static kraken.model.FunctionSignature.format;
 
 import java.util.Map;
 
-import kraken.converter.dimensional.DimensionalRuleChecker;
 import kraken.converter.translation.KrakenExpressionTranslator;
 import kraken.el.KrakenKel;
 import kraken.el.TargetEnvironment;
-import kraken.el.functionregistry.FunctionDefinition;
 import kraken.el.functionregistry.FunctionHeader;
 import kraken.el.functionregistry.FunctionRegistry;
-import kraken.el.scope.Scope;
-import kraken.el.scope.type.Type;
+import kraken.el.functionregistry.JavaFunction;
 import kraken.model.FunctionSignature;
+import kraken.model.dimensions.DimensionSetService;
 import kraken.model.project.KrakenProject;
 import kraken.model.project.dependencies.RuleDependencyExtractor;
 import kraken.model.project.scope.ScopeBuilder;
@@ -50,51 +48,60 @@ public class KrakenProjectConverter {
 
     private final ContextDefinitionConverter contextDefinitionConverter;
 
+    private final FunctionConverter functionConverter;
+
     private final ScopeBuilder scopeBuilder;
 
     public KrakenProjectConverter(KrakenProject krakenProject, TargetEnvironment targetEnvironment) {
         this.krakenProject = krakenProject;
 
         RuleDependencyExtractor ruleDependencyExtractor = new RuleDependencyExtractor(krakenProject);
-        KrakenExpressionTranslator krakenExpressionTranslator = new KrakenExpressionTranslator(krakenProject, targetEnvironment, ruleDependencyExtractor);
+        KrakenExpressionTranslator krakenExpressionTranslator = new KrakenExpressionTranslator(krakenProject,
+            targetEnvironment, ruleDependencyExtractor);
+        DimensionSetService dimensionSetService = new DimensionSetService(krakenProject);
 
-        DimensionalRuleChecker dimensionalRuleChecker = new DimensionalRuleChecker(krakenProject);
-        this.ruleConverter = new RuleConverter(ruleDependencyExtractor, krakenExpressionTranslator, dimensionalRuleChecker);
-        this.entryPointConverter = new EntryPointConverter();
+        this.ruleConverter = new RuleConverter(
+            ruleDependencyExtractor,
+            krakenExpressionTranslator,
+            dimensionSetService,
+            krakenProject.getNamespace()
+        );
+        this.entryPointConverter = new EntryPointConverter(dimensionSetService, krakenProject.getNamespace());
         this.contextDefinitionConverter = new ContextDefinitionConverter(krakenProject, krakenExpressionTranslator);
+
+        this.functionConverter = new FunctionConverter(krakenExpressionTranslator);
+
         this.scopeBuilder = ScopeBuilderProvider.forProject(krakenProject);
     }
 
     public RuntimeKrakenProject convert() {
-        ensureThatFunctionImplementationExistsForEachFunctionSignature();
+        ensureThatFunctionExistsForEachFunctionSignature();
 
         return new RuntimeKrakenProject(
-                krakenProject.getIdentifier(),
-                krakenProject.getNamespace(),
-                krakenProject.getRootContextName(),
-                contextDefinitionConverter.convert(krakenProject.getContextDefinitions()),
-                entryPointConverter.convert(krakenProject.getEntryPoints()),
-                ruleConverter.convert(krakenProject.getRules())
+            krakenProject.getIdentifier(),
+            krakenProject.getNamespace(),
+            krakenProject.getRootContextName(),
+            contextDefinitionConverter.convert(krakenProject.getContextDefinitions()),
+            entryPointConverter.convert(krakenProject.getEntryPoints()),
+            ruleConverter.convert(krakenProject.getRules()),
+            functionConverter.convert(krakenProject.getFunctions())
         );
     }
 
-    private void ensureThatFunctionImplementationExistsForEachFunctionSignature() {
-        Map<FunctionHeader, FunctionDefinition> functions = FunctionRegistry.getFunctions(KrakenKel.EXPRESSION_TARGET);
+    private void ensureThatFunctionExistsForEachFunctionSignature() {
+        Map<FunctionHeader, JavaFunction> functions = FunctionRegistry.getFunctions(KrakenKel.EXPRESSION_TARGET);
 
-        for(FunctionSignature functionSignature : krakenProject.getFunctionSignatures()) {
-            FunctionHeader header = new FunctionHeader(
-                functionSignature.getName(),
-                functionSignature.getParameterTypes().size()
-            );
-            if(!functions.containsKey(header)) {
+        for (FunctionSignature functionSignature : krakenProject.getFunctionSignatures()) {
+            FunctionHeader header = FunctionSignature.toHeader(functionSignature);
+            if (!functions.containsKey(header)) {
                 String template = "Critical error encountered while converting Kraken Project '%s' "
                     + "from design-time to runtime model: function signature '%s' is defined "
                     + "but implementation for this function does not exist in system";
                 String message = String.format(template, krakenProject.getNamespace(), format(functionSignature));
                 throw new KrakenProjectConvertionException(message);
             }
-            FunctionDefinition functionDefinition = functions.get(header);
-            if(!isFunctionImplementationEqual(functionDefinition, functionSignature)) {
+            JavaFunction javaFunction = functions.get(header);
+            if (!isFunctionMatchesSignature(javaFunction, functionSignature)) {
                 String template = "Critical error encountered while converting Kraken Project '%s' "
                     + "from design-time to runtime model: function signature '%s' is defined "
                     + "but implementation of this function is not compatible with defined signature";
@@ -104,35 +111,10 @@ public class KrakenProjectConverter {
         }
     }
 
-    private boolean isFunctionImplementationEqual(FunctionDefinition functionDefinition,
-                                                  FunctionSignature functionSignature) {
-
-        return isReturnTypeEqual(functionDefinition, functionSignature)
-            && isEveryFunctionParameterEqual(functionDefinition, functionSignature);
-    }
-
-    private boolean isReturnTypeEqual(FunctionDefinition functionDefinition,
-                                      FunctionSignature functionSignature) {
-
-        return areTypeTokensEqual(functionSignature.getReturnType(), functionDefinition.getReturnType());
-    }
-
-    private boolean isEveryFunctionParameterEqual(FunctionDefinition functionDefinition,
-                                                  FunctionSignature functionSignature) {
-        for(int i = 0; i < functionDefinition.getParameterTypes().size(); i++) {
-            String typeToken1 = functionSignature.getParameterTypes().get(i);
-            String typeToken2 = functionDefinition.getParameterTypes().get(i);
-            if(!areTypeTokensEqual(typeToken1, typeToken2)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private boolean areTypeTokensEqual(String typeToken1, String typeToken2) {
-        Type type1 = scopeBuilder.resolveTypeOf(typeToken1);
-        Type type2 = scopeBuilder.resolveTypeOf(typeToken2);
-        return type1.equals(type2);
+    private boolean isFunctionMatchesSignature(JavaFunction function, FunctionSignature signature) {
+        var functionSymbol = scopeBuilder.buildFunctionSymbol(function);
+        var signatureSymbol = scopeBuilder.buildFunctionSymbol(signature);
+        return functionSymbol.equals(signatureSymbol);
     }
 
 }

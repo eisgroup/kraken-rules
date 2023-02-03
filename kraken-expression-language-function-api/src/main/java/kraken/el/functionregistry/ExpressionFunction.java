@@ -15,12 +15,12 @@
  */
 package kraken.el.functionregistry;
 
-import kraken.annotations.API;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
+import kraken.annotations.API;
 
 /**
  * Annotated Java Method will be available as Expression Function in expressions evaluated by Kraken Expression Language.
@@ -47,7 +47,7 @@ import java.lang.annotation.Target;
  *             <li>{@link Boolean} - is resolved to Boolean</li>
  *             <li>{@link java.time.LocalDate} - is resolved to Date</li>
  *             <li>{@link java.time.LocalDateTime} - is resolved to DateTime</li>
- *             <li>{@link java.util.Collection} - is resolved to Any[]</li>
+ *             <li>{@link java.util.Collection} - is resolved to Any</li>
  *             <li>{@link java.util.Map} - is resolved to Any</li>
  *             <li>{@link Object} - is resolved to Any</li>
  *             <li>for any other Class it is resolved to {@link Class#getSimpleName()}</li>
@@ -66,6 +66,10 @@ import java.lang.annotation.Target;
  *     </li>
  * </ul>
  * <p/>
+ * To indicate a business error you can throw {@link kraken.el.ExpressionEvaluationException}
+ * and engine will handle this appropriately. For example, Kraken engine would ignore the rule.
+ * Any other type of exception is propagated outside of the engine and would terminate the engine.
+ * <p/>
  * Every defined Expression Function must be unique in the system
  * where uniqueness is determined by name of Expression Function and by parameter count.
  *
@@ -78,7 +82,6 @@ public @interface ExpressionFunction {
 
     /**
      * @return name of Expression Function; if not provided then {@link java.lang.reflect.Method#getName()} will be used.
-     *
      */
     String value() default "";
 
@@ -88,4 +91,10 @@ public @interface ExpressionFunction {
      * Setting this to true will greatly limit environments where this Expression Function can be used.
      */
     boolean modifiesState() default false;
+
+    /**
+     *
+     * @return a list of information about generic types used in parameter type and return type of this function.
+     */
+    GenericType[] genericTypes() default {};
 }

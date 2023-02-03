@@ -1,3 +1,79 @@
+kraken.engine.sanity.check.EngineSanityRuleOrderTest.shouldValidateEvaluateDefaultRulesInOrder=[
+  {
+    "CarCoverage:-1:limitAmount": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "CarCoverage",
+        "fieldName": "limitAmount",
+        "fieldPath": "limitAmount"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "Default Car Coverage Limit Amount To 1000",
+            "context": "CarCoverage",
+            "targetPath": "limitAmount",
+            "payloadType": "DEFAULT"
+          },
+          "payloadResult": {
+            "events": [
+              {
+                "attributeTarget": "limitAmount",
+                "contextName": "CarCoverage",
+                "contextId": "-1",
+                "newValue": 1000
+              }
+            ]
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          },
+          "ruleEvaluationStatus": "APPLIED"
+        }
+      ]
+    },
+    "Policy:-1:totalLimit": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "totalLimit",
+        "fieldPath": "transactionDetails.totalLimit"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "Default Total Limit To Car Coverage Limit Amount",
+            "context": "Policy",
+            "targetPath": "totalLimit",
+            "payloadType": "DEFAULT"
+          },
+          "payloadResult": {
+            "events": [
+              {
+                "attributeTarget": "transactionDetails.totalLimit",
+                "contextName": "Policy",
+                "contextId": "-1",
+                "newValue": 1000
+              }
+            ]
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          },
+          "ruleEvaluationStatus": "APPLIED"
+        }
+      ]
+    }
+  }
+]
+
+
 kraken.engine.sanity.check.EngineSanityRuleOrderTest.shouldValidateEvaluateRulesInOrder=[
   {
     "BillingAddress:-1:countryCd": {
@@ -30,27 +106,8 @@ kraken.engine.sanity.check.EngineSanityRuleOrderTest.shouldValidateEvaluateRules
           },
           "overrideInfo": {
             "isOverridable": false
-          }
-        },
-        {
-          "ruleInfo": {
-            "ruleName": "RULEORDER-BILLINGADDRESS-mandatory",
-            "context": "AddressInfo",
-            "targetPath": "countryCd",
-            "payloadType": "USAGE"
           },
-          "payloadResult": {
-            "usageType": "mandatory",
-            "success": true,
-            "templateVariables": [],
-            "validationSeverity": "critical"
-          },
-          "conditionEvaluationResult": {
-            "conditionEvaluation": "APPLICABLE"
-          },
-          "overrideInfo": {
-            "isOverridable": false
-          }
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -84,27 +141,8 @@ kraken.engine.sanity.check.EngineSanityRuleOrderTest.shouldValidateEvaluateRules
           },
           "overrideInfo": {
             "isOverridable": false
-          }
-        },
-        {
-          "ruleInfo": {
-            "ruleName": "RULEORDER-COLL-mandatory",
-            "context": "COLLCoverage",
-            "targetPath": "code",
-            "payloadType": "USAGE"
           },
-          "payloadResult": {
-            "usageType": "mandatory",
-            "success": true,
-            "templateVariables": [],
-            "validationSeverity": "critical"
-          },
-          "conditionEvaluationResult": {
-            "conditionEvaluation": "APPLICABLE"
-          },
-          "overrideInfo": {
-            "isOverridable": false
-          }
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -138,27 +176,8 @@ kraken.engine.sanity.check.EngineSanityRuleOrderTest.shouldValidateEvaluateRules
           },
           "overrideInfo": {
             "isOverridable": false
-          }
-        },
-        {
-          "ruleInfo": {
-            "ruleName": "RULEORDER-CREDITCARD-mandatory",
-            "context": "CreditCardInfo",
-            "targetPath": "cardType",
-            "payloadType": "USAGE"
           },
-          "payloadResult": {
-            "usageType": "mandatory",
-            "success": true,
-            "templateVariables": [],
-            "validationSeverity": "critical"
-          },
-          "conditionEvaluationResult": {
-            "conditionEvaluation": "APPLICABLE"
-          },
-          "overrideInfo": {
-            "isOverridable": false
-          }
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -192,27 +211,8 @@ kraken.engine.sanity.check.EngineSanityRuleOrderTest.shouldValidateEvaluateRules
           },
           "overrideInfo": {
             "isOverridable": false
-          }
-        },
-        {
-          "ruleInfo": {
-            "ruleName": "RULEORDER-INSURED-mandatory",
-            "context": "Insured",
-            "targetPath": "name",
-            "payloadType": "USAGE"
           },
-          "payloadResult": {
-            "usageType": "mandatory",
-            "success": true,
-            "templateVariables": [],
-            "validationSeverity": "critical"
-          },
-          "conditionEvaluationResult": {
-            "conditionEvaluation": "APPLICABLE"
-          },
-          "overrideInfo": {
-            "isOverridable": false
-          }
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -246,27 +246,8 @@ kraken.engine.sanity.check.EngineSanityRuleOrderTest.shouldValidateEvaluateRules
           },
           "overrideInfo": {
             "isOverridable": false
-          }
-        },
-        {
-          "ruleInfo": {
-            "ruleName": "RULEORDER-PARTY-mandatory",
-            "context": "Party",
-            "targetPath": "relationToPrimaryInsured",
-            "payloadType": "USAGE"
           },
-          "payloadResult": {
-            "usageType": "mandatory",
-            "success": true,
-            "templateVariables": [],
-            "validationSeverity": "critical"
-          },
-          "conditionEvaluationResult": {
-            "conditionEvaluation": "APPLICABLE"
-          },
-          "overrideInfo": {
-            "isOverridable": false
-          }
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -300,56 +281,8 @@ kraken.engine.sanity.check.EngineSanityRuleOrderTest.shouldValidateEvaluateRules
           },
           "overrideInfo": {
             "isOverridable": false
-          }
-        },
-        {
-          "ruleInfo": {
-            "ruleName": "RULEORDER-POLICY-mandatory",
-            "context": "Policy",
-            "targetPath": "policyNumber",
-            "payloadType": "USAGE"
           },
-          "payloadResult": {
-            "usageType": "mandatory",
-            "success": true,
-            "templateVariables": [],
-            "validationSeverity": "critical"
-          },
-          "conditionEvaluationResult": {
-            "conditionEvaluation": "APPLICABLE"
-          },
-          "overrideInfo": {
-            "isOverridable": false
-          }
-        }
-      ]
-    },
-    "Policy:-1:state": {
-      "contextFieldInfo": {
-        "contextId": "-1",
-        "contextName": "Policy",
-        "fieldName": "state",
-        "fieldPath": "state"
-      },
-      "ruleResults": [
-        {
-          "ruleInfo": {
-            "ruleName": "RULEORDER-Policy-state",
-            "context": "Policy",
-            "targetPath": "state",
-            "payloadType": "ASSERTION"
-          },
-          "payloadResult": {
-            "success": true,
-            "templateVariables": [],
-            "validationSeverity": "critical"
-          },
-          "conditionEvaluationResult": {
-            "conditionEvaluation": "APPLICABLE"
-          },
-          "overrideInfo": {
-            "isOverridable": false
-          }
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -383,27 +316,8 @@ kraken.engine.sanity.check.EngineSanityRuleOrderTest.shouldValidateEvaluateRules
           },
           "overrideInfo": {
             "isOverridable": false
-          }
-        },
-        {
-          "ruleInfo": {
-            "ruleName": "RULEORDER-VEHICLE-mandatory",
-            "context": "Vehicle",
-            "targetPath": "model",
-            "payloadType": "USAGE"
           },
-          "payloadResult": {
-            "usageType": "mandatory",
-            "success": true,
-            "templateVariables": [],
-            "validationSeverity": "critical"
-          },
-          "conditionEvaluationResult": {
-            "conditionEvaluation": "APPLICABLE"
-          },
-          "overrideInfo": {
-            "isOverridable": false
-          }
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     }
@@ -443,7 +357,8 @@ kraken.engine.sanity.check.EngineSanityRuleOrderTest.shouldValidateRulesWithComp
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -477,7 +392,8 @@ kraken.engine.sanity.check.EngineSanityRuleOrderTest.shouldValidateRulesWithComp
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -511,7 +427,8 @@ kraken.engine.sanity.check.EngineSanityRuleOrderTest.shouldValidateRulesWithComp
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -545,7 +462,8 @@ kraken.engine.sanity.check.EngineSanityRuleOrderTest.shouldValidateRulesWithComp
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -579,7 +497,8 @@ kraken.engine.sanity.check.EngineSanityRuleOrderTest.shouldValidateRulesWithComp
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -613,7 +532,8 @@ kraken.engine.sanity.check.EngineSanityRuleOrderTest.shouldValidateRulesWithComp
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     }

@@ -14,46 +14,41 @@
  *  limitations under the License.
  */
 
-import { ValidationMetadata } from "../components/core/field/SingleField";
-import { FieldMetadata } from "kraken-typescript-engine";
+import { ValidationMetadata } from '../components/core/field/SingleField'
+import { FieldMetadata } from 'kraken-typescript-engine'
 
-export const mapValidationResults = (metadata: { [key: string]: ValidationMetadata }) => (
-    res: Record<string, FieldMetadata>
-) => {
-    const updatedMetadata = Object.keys(metadata).reduce(
-        (metamap, key) => {
+export const mapValidationResults =
+    (metadata: { [key: string]: ValidationMetadata }) => (res: Record<string, FieldMetadata>) => {
+        const updatedMetadata = Object.keys(metadata).reduce((metamap, key) => {
             metamap[key] = {
-                isVisible: res[key]
-                    ? !res[key].isHidden
-                    : metadata[key].isVisible,
-                isApplicable: res[key]
-                    ? !res[key].isDisabled
-                    : metadata[key].isVisible,
-                errMessage: res[key] && res[key].ruleResults && res[key].ruleResults.length
-                    ? res[key].ruleResults.filter(m => m.isFailed)
-                        .map(m => m.errorMessage || m.errorCode)
-                        .join("\n")
-                    : undefined
-            };
-            return metamap;
-        },
-        {} as { [key: string]: ValidationMetadata }
-    );
-    const newMetadata = Object.keys(res)
-        .filter(key => !Object.keys(metadata).some(mk => mk === key))
-        .reduce(
-            (pv, cv) => {
+                isVisible: res[key] ? !res[key].isHidden : metadata[key].isVisible,
+                isApplicable: res[key] ? !res[key].isDisabled : metadata[key].isVisible,
+                errMessage:
+                    res[key] && res[key].ruleResults && res[key].ruleResults.length
+                        ? res[key].ruleResults
+                              .filter(m => m.isFailed)
+                              .map(m => m.errorMessage || m.errorCode)
+                              .join('\n')
+                        : undefined,
+            }
+            return metamap
+        }, {} as { [key: string]: ValidationMetadata })
+        const newMetadata = Object.keys(res)
+            .filter(key => !Object.keys(metadata).some(mk => mk === key))
+            .reduce((pv, cv) => {
                 pv[cv] = {
                     isApplicable: !res[cv].isDisabled,
                     isVisible: !res[cv].isHidden,
-                    errMessage: res[cv] && res[cv].ruleResults && res[cv].ruleResults.length
-                        && res[cv].ruleResults.filter(m => m.isFailed)
+                    errMessage:
+                        res[cv] &&
+                        res[cv].ruleResults &&
+                        res[cv].ruleResults.length &&
+                        res[cv].ruleResults
+                            .filter(m => m.isFailed)
                             .map(m => m.errorMessage || m.errorCode)
-                            .join("\n")
-                };
-                return pv;
-            },
-            {} as { [key: string]: ValidationMetadata }
-        );
-    return { ...updatedMetadata, ...newMetadata };
-};
+                            .join('\n'),
+                }
+                return pv
+            }, {} as { [key: string]: ValidationMetadata })
+        return { ...updatedMetadata, ...newMetadata }
+    }

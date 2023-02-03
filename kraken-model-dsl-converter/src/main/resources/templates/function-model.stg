@@ -1,3 +1,16 @@
-functionSignature(f) ::= <<
-Function <f.name>(<f.parameterTypes: {parameterType | <parameterType>}; separator=", ">) : <f.returnType>
+function(f) ::= <<
+<if(f.documentation)>/**
+  <f.documentation.description>
+  <if(f.documentation.since)>@since <f.documentation.since><endif>
+  <f.documentation.examples: {e | <if(e.valid)>@example<else>@invalidExample<endif> <e.example><if(e.valid)><\n>  @result <e.result><endif>}; separator="\n" >
+  <f.documentation.parameterDocumentations: {p | @parameter <p.parameterName> - <p.description>}; separator="\n" >
+ */
+<endif>
+Function <genericTypeBounds(f)><f.name>(<f.parameters: {p | <p.type> <p.name>}; separator=", ">) : <f.returnType> {
+  <f.body>
+}
+>>
+
+genericTypeBounds(f) ::= <<
+<if(f.genericTypeBounds)>\<<f.genericTypeBounds: {b | <b.generic> is <b.bound>}; separator=", ">\> <endif>
 >>

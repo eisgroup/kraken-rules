@@ -14,12 +14,11 @@
  *  limitations under the License.
  */
 
-import { Expressions } from "./Expressions";
+import { Expressions } from './Expressions'
 
 export namespace Payloads {
-
     export interface Payload {
-        type: PayloadType;
+        type: PayloadType
     }
 
     /**
@@ -27,24 +26,21 @@ export namespace Payloads {
      * {@link Payloads.resolveEvaluationType} function
      */
     export enum PayloadType {
-        ASSERTION = "ASSERTION",
-        DEFAULT = "DEFAULT",
-        USAGE = "USAGE",
-        REGEX = "REGEX",
-        ACCESSIBILITY = "ACCESSIBILITY",
-        VISIBILITY = "VISIBILITY",
-        LENGTH = "LENGTH",
-        SIZE = "SIZE",
-        SIZE_RANGE = "SIZE_RANGE"
+        ASSERTION = 'ASSERTION',
+        DEFAULT = 'DEFAULT',
+        USAGE = 'USAGE',
+        REGEX = 'REGEX',
+        ACCESSIBILITY = 'ACCESSIBILITY',
+        VISIBILITY = 'VISIBILITY',
+        LENGTH = 'LENGTH',
+        SIZE = 'SIZE',
+        SIZE_RANGE = 'SIZE_RANGE',
     }
     /**
      * To resolve {@link EvaluationType} by the PayloadType use
      * {@link Payloads.resolveEvaluationType} function
      */
-    export type EvaluationType = "VALIDATION"
-        | "DEFAULT"
-        | "VISIBILITY"
-        | "ACCESSIBILITY";
+    export type EvaluationType = 'VALIDATION' | 'DEFAULT' | 'VISIBILITY' | 'ACCESSIBILITY'
 
     export function resolveEvaluationType(pt: PayloadType): EvaluationType {
         switch (pt) {
@@ -54,32 +50,32 @@ export namespace Payloads {
             case PayloadType.SIZE:
             case PayloadType.SIZE_RANGE:
             case PayloadType.USAGE:
-                return "VALIDATION";
+                return 'VALIDATION'
             case PayloadType.DEFAULT:
-                return "DEFAULT";
+                return 'DEFAULT'
             case PayloadType.ACCESSIBILITY:
-                return "ACCESSIBILITY";
+                return 'ACCESSIBILITY'
             case PayloadType.VISIBILITY:
-                return "VISIBILITY";
+                return 'VISIBILITY'
         }
     }
 
     export namespace UI {
         export interface AccessibilityPayload extends Payload {
-            accessible: boolean;
+            accessible: boolean
         }
 
         export interface VisibilityPayload extends Payload {
-            visible: boolean;
+            visible: boolean
         }
     }
 
     export namespace Validation {
         export interface ValidationPayload extends Payload {
-            isOverridable?: boolean;
-            overrideGroup?: string;
-            severity: ValidationSeverity;
-            errorMessage?: ErrorMessage;
+            isOverridable?: boolean
+            overrideGroup?: string
+            severity: ValidationSeverity
+            errorMessage?: ErrorMessage
         }
 
         /**
@@ -87,12 +83,12 @@ export namespace Payloads {
          * If field value does not comply with {@Link UsageType} validation will fail.
          */
         export interface UsagePayload extends ValidationPayload {
-            usageType: UsageType;
+            usageType: UsageType
         }
 
         export enum UsageType {
-            mandatory = "mandatory",
-            mustBeEmpty = "mustBeEmpty"
+            mandatory = 'mandatory',
+            mustBeEmpty = 'mustBeEmpty',
         }
 
         /**
@@ -101,55 +97,55 @@ export namespace Payloads {
          * invalid. Otherwise, field is considered to be valid.
          */
         export interface AssertionPayload extends ValidationPayload {
-            assertionExpression: Expressions.Expression;
+            assertionExpression: Expressions.Expression
         }
 
         /**
          * Validates filed value against specified regular expression
          */
         export interface RegExpPayload extends ValidationPayload {
-            regExp: string;
+            regExp: string
         }
 
         /**
          * Validates string length
          */
         export interface LengthPayload extends ValidationPayload {
-            length: number;
+            length: number
         }
 
         /**
          * Validates array length
          */
         export interface SizePayload extends ValidationPayload {
-            orientation: SizeOrientation;
-            size: number;
+            orientation: SizeOrientation
+            size: number
         }
 
         /**
          * Validates array length ranges
          */
         export interface SizeRangePayload extends ValidationPayload {
-            min: number;
-            max: number;
+            min: number
+            max: number
         }
 
         export interface ErrorMessage {
-            templateParts: string[];
-            templateExpressions: Expressions.Expression[];
-            errorCode: string;
+            templateParts: string[]
+            templateExpressions: Expressions.Expression[]
+            errorCode: string
         }
 
         export enum SizeOrientation {
-            MIN = "MIN",
-            MAX = "MAX",
-            EQUALS = "EQUALS"
+            MIN = 'MIN',
+            MAX = 'MAX',
+            EQUALS = 'EQUALS',
         }
 
         export enum ValidationSeverity {
-            critical = "critical",
-            warning = "warning",
-            info = "info"
+            critical = 'critical',
+            warning = 'warning',
+            info = 'info',
         }
     }
 
@@ -158,8 +154,8 @@ export namespace Payloads {
          * Used to default field to value generated using provided value expression
          */
         export interface DefaultValuePayload extends Payload {
-            valueExpression: Expressions.Expression;
-            defaultingType: DefaultingType;
+            valueExpression: Expressions.Expression
+            defaultingType: DefaultingType
         }
 
         export enum DefaultingType {
@@ -167,47 +163,49 @@ export namespace Payloads {
              * This type of payload indicates that rule wil set a value,
              * only if the value is not null, or empty string
              */
-            defaultValue = "defaultValue",
+            defaultValue = 'defaultValue',
             /**
              * This type of payload indicates that rule wil reset a value
              */
-            resetValue = "resetValue"
+            resetValue = 'resetValue',
         }
     }
 
     export function isAccessibilityPayload(p: Payload): p is UI.AccessibilityPayload {
-        return p.type === PayloadType.ACCESSIBILITY;
+        return p.type === PayloadType.ACCESSIBILITY
     }
     export function isVisibilityPayload(p: Payload): p is UI.VisibilityPayload {
-        return p.type === PayloadType.VISIBILITY;
+        return p.type === PayloadType.VISIBILITY
     }
     export function isDefaultValuePayload(p: Payload): p is Derive.DefaultValuePayload {
-        return p.type === PayloadType.DEFAULT;
+        return p.type === PayloadType.DEFAULT
     }
     export function isAssertionPayload(p: Payload): p is Validation.AssertionPayload {
-        return p.type === PayloadType.ASSERTION;
+        return p.type === PayloadType.ASSERTION
     }
     export function isLengthPayload(p: Payload): p is Validation.LengthPayload {
-        return p.type === PayloadType.LENGTH;
+        return p.type === PayloadType.LENGTH
     }
     export function isRegExpPayload(p: Payload): p is Validation.RegExpPayload {
-        return p.type === PayloadType.REGEX;
+        return p.type === PayloadType.REGEX
     }
     export function isSizePayload(p: Payload): p is Validation.SizePayload {
-        return p.type === PayloadType.SIZE;
+        return p.type === PayloadType.SIZE
     }
     export function isSizeRangePayload(p: Payload): p is Validation.SizeRangePayload {
-        return p.type === PayloadType.SIZE_RANGE;
+        return p.type === PayloadType.SIZE_RANGE
     }
     export function isUsagePayload(p: Payload): p is Validation.UsagePayload {
-        return p.type === PayloadType.USAGE;
+        return p.type === PayloadType.USAGE
     }
     export function isValidationPayload(p: Payload): p is Validation.ValidationPayload {
-        return isAssertionPayload(p)
-            || isUsagePayload(p)
-            || isLengthPayload(p)
-            || isRegExpPayload(p)
-            || isSizePayload(p)
-            || isSizeRangePayload(p);
+        return (
+            isAssertionPayload(p) ||
+            isUsagePayload(p) ||
+            isLengthPayload(p) ||
+            isRegExpPayload(p) ||
+            isSizePayload(p) ||
+            isSizeRangePayload(p)
+        )
     }
 }

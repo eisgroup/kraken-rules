@@ -14,8 +14,8 @@
  *  limitations under the License.
  */
 
-import { EntryPointResult } from "../../dto/EntryPointResult";
+import { EntryPointResult } from 'kraken-engine-api'
 
 export interface EntryPointReducer<T> {
-  reduce(results: EntryPointResult): T;
+    reduce(results: EntryPointResult): T
 }

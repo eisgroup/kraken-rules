@@ -24,9 +24,9 @@ import kraken.el.scope.Scope;
  */
 public class MatchesRegExp extends Expression {
 
-    private Expression left;
+    private final Expression left;
 
-    private String regex;
+    private final String regex;
 
     public MatchesRegExp(Expression left, String regex, Scope scope, Token token) {
         super(NodeType.MATCHES_REG_EXP, scope, Type.BOOLEAN, token);

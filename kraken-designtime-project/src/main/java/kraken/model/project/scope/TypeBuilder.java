@@ -75,13 +75,10 @@ final class TypeBuilder {
      * Builds a {@code Type} for given {@code ExternalContextDefinition}.
      *
      * @param externalContextDefinition External context definition to build type for.
-     * @param krakenProject             Kraken project.
      * @param typeRefResolver           Type reference function.
      * @return {@code Type} for external context definition.
      */
-    static Type buildType(ExternalContextDefinition externalContextDefinition,
-                          KrakenProject krakenProject,
-                          TypeRefResolver typeRefResolver) {
+    static Type buildType(ExternalContextDefinition externalContextDefinition, TypeRefResolver typeRefResolver) {
 
         Map<String, VariableSymbol> properties = new HashMap<>();
 

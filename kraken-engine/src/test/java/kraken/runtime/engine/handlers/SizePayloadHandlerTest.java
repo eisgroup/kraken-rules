@@ -14,12 +14,12 @@ import kraken.runtime.expressions.KrakenExpressionEvaluator;
 import kraken.runtime.model.rule.RuntimeRule;
 import kraken.runtime.model.rule.payload.Payload;
 import kraken.runtime.model.rule.payload.validation.SizePayload;
-import org.junit.Assert;
 import org.junit.Test;
 
 import static kraken.runtime.engine.handlers.PayloadHandlerTestConstants.SESSION;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * @author psurinin
@@ -99,8 +99,8 @@ public class SizePayloadHandlerTest {
         assertSuccess(payloadResult, false);
     }
     private void assertSuccess(PayloadResult result, boolean toMatch){
-        Assert.assertThat(result, instanceOf(SizePayloadResult.class));
-        Assert.assertThat(((SizePayloadResult) result).getSuccess(), is(toMatch));
+        assertThat(result, instanceOf(SizePayloadResult.class));
+        assertThat(((SizePayloadResult) result).getSuccess(), is(toMatch));
     }
 
     private SizePayloadHandler handler() {

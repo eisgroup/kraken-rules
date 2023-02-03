@@ -14,11 +14,11 @@
  *  limitations under the License.
  */
 
-import { DataContext } from "../DataContext";
+import { DataContext } from '../DataContext'
 
 export type DataContextDependency = {
     contextName: string
-};
+}
 
 /**
  * Updates {@link DataContext#externalReferences}. It uses paths from
@@ -28,5 +28,5 @@ export type DataContextDependency = {
  * External references in that case are being merged.
  */
 export interface DataContextUpdater {
-    update(dataContext: DataContext, dependency: DataContextDependency): void;
+    update(dataContext: DataContext, dependency: DataContextDependency): void
 }

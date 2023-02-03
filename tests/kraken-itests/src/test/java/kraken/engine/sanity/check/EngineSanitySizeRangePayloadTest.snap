@@ -27,7 +27,8 @@ kraken.engine.sanity.check.EngineSanitySizeRangePayloadTest.shouldFailOnLess=[
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     }
@@ -64,7 +65,8 @@ kraken.engine.sanity.check.EngineSanitySizeRangePayloadTest.shouldFailOnMore=[
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     }
@@ -101,7 +103,8 @@ kraken.engine.sanity.check.EngineSanitySizeRangePayloadTest.shouldSuccessOnInRan
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     }

@@ -14,13 +14,13 @@
  *  limitations under the License.
  */
 
-import { moneyFunctions } from "../../../../../src/engine/runtime/expressions/functionLibrary/MoneyFunctions";
+import { moneyFunctions } from '../../../../../src/engine/runtime/expressions/functionLibrary/MoneyFunctions'
 
-describe("MoneyFunction for ExpressionEvaluator", () => {
-    it("should extract amount", () => {
-        expect(moneyFunctions.FromMoney({currency : "USD", amount : 100})).toBe(100);
-    });
-    it("should return undefined if Money is undefined", () => {
-        expect(moneyFunctions.FromMoney(undefined)).toBe(undefined);
-    });
-});
+describe('MoneyFunction for ExpressionEvaluator', () => {
+    it('should extract amount', () => {
+        expect(moneyFunctions.FromMoney({ currency: 'USD', amount: 100 })).toBe(100)
+    })
+    it('should return undefined if Money is undefined', () => {
+        expect(moneyFunctions.FromMoney(undefined)).toBe(undefined)
+    })
+})

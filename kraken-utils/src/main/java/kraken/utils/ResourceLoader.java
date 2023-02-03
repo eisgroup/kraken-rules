@@ -88,7 +88,8 @@ public final class ResourceLoader {
             manager.addProvider("jar", new JarFileProvider());
             manager.addProvider("file", new DefaultLocalFileProvider());
             manager.addExtensionMap("jar", "jar");
-
+            manager.addMimeTypeMap("application/java-archive", "jar");
+            
             manager.setDefaultProvider(new UrlFileProvider());
 
             File tempDir = Files.createTempDirectory("kraken-vfs-cache").toFile();

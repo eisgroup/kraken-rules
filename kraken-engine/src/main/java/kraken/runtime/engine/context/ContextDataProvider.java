@@ -29,6 +29,6 @@ import kraken.runtime.model.rule.Dependency;
  */
 public interface ContextDataProvider {
 
-    List<DataContext> resolveContextData(String contextName, Collection<Dependency> fieldDependencies);
+    List<DataContext> resolveContextData(String contextName, Collection<Dependency> dependencies);
 
 }

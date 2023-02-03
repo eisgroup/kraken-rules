@@ -27,7 +27,10 @@ import kraken.model.dsl.model.DSLExpression;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
+
+import org.antlr.v4.runtime.RuleContext;
 
 /**
  * @author mulevicius
@@ -36,39 +39,62 @@ public class DSLContextVisitor extends KrakenDSLBaseVisitor<DSLContext> {
 
     @Override
     public DSLContext visitContext(KrakenDSL.ContextContext ctx) {
-        String name = ctx.contextName().getText();
-        boolean strict = ctx.NOTSTRICT() == null;
-        Collection<String> inheritedContexts = ctx.inheritedContexts() != null
-                ? ctx.inheritedContexts().contextName().stream()
-                    .map(contextNameContext -> contextNameContext.getText())
-                    .collect(Collectors.toList())
-                : Collections.emptyList();
-
-        Collection<DSLContextChild> children = ctx.child() != null
-                ? ctx.child().stream()
-                    .map(childContext -> toContextChild(childContext))
-                    .collect(Collectors.toList())
-                : Collections.emptyList();
-
-        Collection<DSLContextField> fields = ctx.field() != null
-                ? ctx.field().stream()
-                    .map(fieldContext -> toContextField(fieldContext))
-                    .collect(Collectors.toList())
-                : Collections.emptyList();
-
-        final boolean isRoot = ctx.ROOT() != null;
-        return new DSLContext(name, strict, isRoot, inheritedContexts, fields, children);
+        return ctx.systemContext() != null
+            ? toSystemContext(ctx.systemContext())
+            : toContext(ctx.modeledContext());
     }
 
-    private DSLContextField toContextField(KrakenDSL.FieldContext ctx) {
+    private DSLContext toSystemContext(KrakenDSL.SystemContextContext ctx) {
+        String name = ctx.contextName().getText();
+        Collection<DSLContextField> fields = ctx.field() != null
+            ? ctx.field().stream()
+                .map(DSLContextVisitor::toContextField)
+                .collect(Collectors.toList())
+            : Collections.emptyList();
+
+        return new DSLContext(name, true, false, true, List.of(), fields, List.of());
+    }
+
+    private DSLContext toContext(KrakenDSL.ModeledContextContext ctx) {
+        String name = ctx.contextName().getText();
+
+        boolean strict = ctx.NOTSTRICT() == null;
+        boolean isRoot = ctx.ROOT() != null;
+
+        Collection<String> inheritedContexts = ctx.inheritedContexts() != null
+            ? ctx.inheritedContexts().contextName().stream()
+                .map(RuleContext::getText)
+                .collect(Collectors.toList())
+            : Collections.emptyList();
+
+        Collection<DSLContextChild> children = ctx.child() != null
+            ? ctx.child().stream()
+                .map(this::toContextChild)
+                .collect(Collectors.toList())
+            : Collections.emptyList();
+
+        Collection<DSLContextField> fields = ctx.field() != null
+            ? ctx.field().stream()
+                .map(DSLContextVisitor::toContextField)
+                .collect(Collectors.toList())
+            : Collections.emptyList();
+
+        return new DSLContext(name, strict, isRoot, false, inheritedContexts, fields, children);
+    }
+
+    public static DSLContextField toContextField(KrakenDSL.FieldContext ctx) {
         String name = ctx.fieldName.getText();
         String type = ctx.fieldType().getText();
-        if(PrimitiveFieldDataType.isPrimitiveType(type.toUpperCase()) || SystemDataTypes.isSystemDataType(type.toUpperCase())) {
+
+        if (PrimitiveFieldDataType.isPrimitiveType(type.toUpperCase()) || SystemDataTypes.isSystemDataType(
+            type.toUpperCase())) {
             type = type.toUpperCase();
         }
+
         DSLCardinality cardinality = ctx.OP_MULT() != null ? DSLCardinality.MULTIPLE : DSLCardinality.SINGLE;
         String path = ctx.pathExpression() != null ? ctx.pathExpression().getText() : null;
         boolean external = ctx.EXTERNAL() != null;
+
         return new DSLContextField(name, type, cardinality, path, external);
     }
 

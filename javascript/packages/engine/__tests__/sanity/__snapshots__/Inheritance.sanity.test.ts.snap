@@ -1,8 +1,204 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Sanity Coverages Inheritance tests Inheritance field test on AccessibilityCarCoverage should execute 'AccessibilityCarCoverage' entry point: Results + reducer results 1`] = `
+exports[`Sanity Coverages Inheritance tests Inheritance field test on AccessibilityCarCoverage should execute 'AccessibilityCarCoverage' entry point 1`] = `
 Object {
-  "Field Metadata reduced results": Object {
+  "entryPointResults": Object {
+    "evaluationTimestamp": Any<Date>,
+    "results": Object {
+      "COLLCoverage:2:deductibleAmount": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "2",
+          "contextName": "COLLCoverage",
+          "fieldName": "deductibleAmount",
+          "fieldPath": "deductibleAmount",
+          "fieldType": "DECIMAL",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "accessible": false,
+              "type": 128,
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "CarCoverage",
+              "payloadtype": "ACCESSIBILITY",
+              "ruleName": "R0119",
+              "targetPath": "deductibleAmount",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "accessible": false,
+              "type": 128,
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "CarCoverage",
+              "payloadtype": "ACCESSIBILITY",
+              "ruleName": "R0139",
+              "targetPath": "deductibleAmount",
+            },
+          },
+        ],
+      },
+      "COLLCoverage:2:effectiveDate": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "2",
+          "contextName": "COLLCoverage",
+          "fieldName": "effectiveDate",
+          "fieldPath": "effectiveDate",
+          "fieldType": "DATE",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "accessible": false,
+              "type": 128,
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "COLLCoverage",
+              "payloadtype": "ACCESSIBILITY",
+              "ruleName": "R0104A",
+              "targetPath": "effectiveDate",
+            },
+          },
+        ],
+      },
+      "FullCoverage:5:deductibleAmount": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "5",
+          "contextName": "FullCoverage",
+          "fieldName": "deductibleAmount",
+          "fieldPath": "deductibleAmount",
+          "fieldType": "DECIMAL",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "accessible": false,
+              "type": 128,
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "CarCoverage",
+              "payloadtype": "ACCESSIBILITY",
+              "ruleName": "R0119",
+              "targetPath": "deductibleAmount",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "accessible": false,
+              "type": 128,
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "CarCoverage",
+              "payloadtype": "ACCESSIBILITY",
+              "ruleName": "R0139",
+              "targetPath": "deductibleAmount",
+            },
+          },
+        ],
+      },
+      "FullCoverage:5:effectiveDate": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "5",
+          "contextName": "FullCoverage",
+          "fieldName": "effectiveDate",
+          "fieldPath": "effectiveDate",
+          "fieldType": "DATE",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "accessible": false,
+              "type": 128,
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "COLLCoverage",
+              "payloadtype": "ACCESSIBILITY",
+              "ruleName": "R0104A",
+              "targetPath": "effectiveDate",
+            },
+          },
+        ],
+      },
+      "RRCoverage:R7:deductibleAmount": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "R7",
+          "contextName": "RRCoverage",
+          "fieldName": "deductibleAmount",
+          "fieldPath": "deductibleAmount",
+          "fieldType": "DECIMAL",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "accessible": false,
+              "type": 128,
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "CarCoverage",
+              "payloadtype": "ACCESSIBILITY",
+              "ruleName": "R0119",
+              "targetPath": "deductibleAmount",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "accessible": false,
+              "type": 128,
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "CarCoverage",
+              "payloadtype": "ACCESSIBILITY",
+              "ruleName": "R0139",
+              "targetPath": "deductibleAmount",
+            },
+          },
+        ],
+      },
+    },
+  },
+  "fieldResults": Object {
     "COLLCoverage:2:deductibleAmount": Object {
       "fieldType": "DECIMAL",
       "id": "COLLCoverage:2:deductibleAmount",
@@ -64,213 +260,212 @@ Object {
       "ruleResults": Array [],
     },
   },
-  "Raw results": Object {
+}
+`;
+
+exports[`Sanity Coverages Inheritance tests Inheritance field test on AssertionCarCoverage should execute 'AssertionCarCoverage' entry point on empty data 1`] = `
+Object {
+  "entryPointResults": Object {
     "evaluationTimestamp": Any<Date>,
     "results": Object {
-      "COLLCoverage:2:deductibleAmount": Object {
-        "contextFieldInfo": ContextFieldInfo {
+      "COLLCoverage:2:expirationDate": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "2",
           "contextName": "COLLCoverage",
-          "fieldName": "deductibleAmount",
-          "fieldPath": "deductibleAmount",
-          "fieldType": "DECIMAL",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 1,
-            "payloadResult": Object {
-              "accessible": false,
-              "type": 128,
-            },
-            "ruleInfo": RuleInfo {
-              "context": "CarCoverage",
-              "payloadtype": "ACCESSIBILITY",
-              "ruleName": "R0119",
-              "targetPath": "deductibleAmount",
-            },
-          },
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 1,
-            "payloadResult": Object {
-              "accessible": false,
-              "type": 128,
-            },
-            "ruleInfo": RuleInfo {
-              "context": "CarCoverage",
-              "payloadtype": "ACCESSIBILITY",
-              "ruleName": "R0139",
-              "targetPath": "deductibleAmount",
-            },
-          },
-        ],
-      },
-      "COLLCoverage:2:effectiveDate": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "2",
-          "contextName": "COLLCoverage",
-          "fieldName": "effectiveDate",
-          "fieldPath": "effectiveDate",
+          "fieldName": "expirationDate",
+          "fieldPath": "expirationDate",
           "fieldType": "DATE",
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
-            "kind": 1,
-            "payloadResult": Object {
-              "accessible": false,
-              "type": 128,
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
             },
-            "ruleInfo": RuleInfo {
+            "payloadResult": Object {
+              "error": Object {
+                "error": Object {
+                  "message": "Expression: '(this._nd(__dataObject__.expirationDate) > this._nd(__dataObject__.effectiveDate))' failed",
+                  "severity": "info",
+                },
+                "kind": 2,
+              },
+              "type": 1,
+            },
+            "ruleInfo": DefaultRuleInfo {
               "context": "COLLCoverage",
-              "payloadtype": "ACCESSIBILITY",
-              "ruleName": "R0104A",
-              "targetPath": "effectiveDate",
+              "payloadtype": "ASSERTION",
+              "ruleName": "R0108",
+              "targetPath": "expirationDate",
             },
           },
         ],
       },
-      "FullCoverage:5:deductibleAmount": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "5",
-          "contextName": "FullCoverage",
-          "fieldName": "deductibleAmount",
-          "fieldPath": "deductibleAmount",
+      "COLLCoverage:2:limitAmount": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "2",
+          "contextName": "COLLCoverage",
+          "fieldName": "limitAmount",
+          "fieldPath": "limitAmount",
           "fieldType": "DECIMAL",
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
-            "kind": 1,
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
             "payloadResult": Object {
-              "accessible": false,
-              "type": 128,
+              "error": Object {
+                "error": Object {
+                  "message": "Expression: '((this._nd(__dataObject__.limitAmount) > 1000) && (this._nd(__dataObject__.limitAmount) < 1000000))' failed",
+                  "severity": "info",
+                },
+                "kind": 2,
+              },
+              "type": 1,
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "CarCoverage",
-              "payloadtype": "ACCESSIBILITY",
-              "ruleName": "R0119",
-              "targetPath": "deductibleAmount",
-            },
-          },
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 1,
-            "payloadResult": Object {
-              "accessible": false,
-              "type": 128,
-            },
-            "ruleInfo": RuleInfo {
-              "context": "CarCoverage",
-              "payloadtype": "ACCESSIBILITY",
-              "ruleName": "R0139",
-              "targetPath": "deductibleAmount",
+              "payloadtype": "ASSERTION",
+              "ruleName": "R0117",
+              "targetPath": "limitAmount",
             },
           },
         ],
       },
-      "FullCoverage:5:effectiveDate": Object {
-        "contextFieldInfo": ContextFieldInfo {
+      "FullCoverage:5:expirationDate": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "5",
           "contextName": "FullCoverage",
-          "fieldName": "effectiveDate",
-          "fieldPath": "effectiveDate",
+          "fieldName": "expirationDate",
+          "fieldPath": "expirationDate",
           "fieldType": "DATE",
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
-            "kind": 1,
-            "payloadResult": Object {
-              "accessible": false,
-              "type": 128,
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
             },
-            "ruleInfo": RuleInfo {
+            "payloadResult": Object {
+              "error": Object {
+                "error": Object {
+                  "message": "Expression: '(this._nd(__dataObject__.expirationDate) > this._nd(__dataObject__.effectiveDate))' failed",
+                  "severity": "info",
+                },
+                "kind": 2,
+              },
+              "type": 1,
+            },
+            "ruleInfo": DefaultRuleInfo {
               "context": "COLLCoverage",
-              "payloadtype": "ACCESSIBILITY",
-              "ruleName": "R0104A",
-              "targetPath": "effectiveDate",
+              "payloadtype": "ASSERTION",
+              "ruleName": "R0108",
+              "targetPath": "expirationDate",
             },
           },
         ],
       },
-      "RRCoverage:R7:deductibleAmount": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "R7",
+      "FullCoverage:5:limitAmount": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "5",
+          "contextName": "FullCoverage",
+          "fieldName": "limitAmount",
+          "fieldPath": "limitAmount",
+          "fieldType": "DECIMAL",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "error": Object {
+                "error": Object {
+                  "message": "Expression: '((this._nd(__dataObject__.limitAmount) > 1000) && (this._nd(__dataObject__.limitAmount) < 1000000))' failed",
+                  "severity": "info",
+                },
+                "kind": 2,
+              },
+              "type": 1,
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "CarCoverage",
+              "payloadtype": "ASSERTION",
+              "ruleName": "R0117",
+              "targetPath": "limitAmount",
+            },
+          },
+        ],
+      },
+      "RRCoverage:7:limitAmount": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "7",
           "contextName": "RRCoverage",
-          "fieldName": "deductibleAmount",
-          "fieldPath": "deductibleAmount",
+          "fieldName": "limitAmount",
+          "fieldPath": "limitAmount",
           "fieldType": "DECIMAL",
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
-            "kind": 1,
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
             "payloadResult": Object {
-              "accessible": false,
-              "type": 128,
+              "error": Object {
+                "error": Object {
+                  "message": "Expression: '((this._nd(__dataObject__.limitAmount) > 1000) && (this._nd(__dataObject__.limitAmount) < 1000000))' failed",
+                  "severity": "info",
+                },
+                "kind": 2,
+              },
+              "type": 1,
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "CarCoverage",
-              "payloadtype": "ACCESSIBILITY",
-              "ruleName": "R0119",
-              "targetPath": "deductibleAmount",
-            },
-          },
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 1,
-            "payloadResult": Object {
-              "accessible": false,
-              "type": 128,
-            },
-            "ruleInfo": RuleInfo {
-              "context": "CarCoverage",
-              "payloadtype": "ACCESSIBILITY",
-              "ruleName": "R0139",
-              "targetPath": "deductibleAmount",
+              "payloadtype": "ASSERTION",
+              "ruleName": "R0117",
+              "targetPath": "limitAmount",
             },
           },
         ],
       },
     },
   },
-  "Validation results": Object {
-    "critical": Array [],
-    "info": Array [],
-    "warning": Array [],
-  },
-}
-`;
-
-exports[`Sanity Coverages Inheritance tests Inheritance field test on AssertionCarCoverage should execute 'AssertionCarCoverage' entry point on empty data: Results + reducer results 1`] = `
-Object {
-  "Field Metadata reduced results": Object {
+  "fieldResults": Object {
     "COLLCoverage:2:expirationDate": Object {
       "fieldType": "DATE",
       "id": "COLLCoverage:2:expirationDate",
@@ -291,7 +486,7 @@ Object {
           "payloadResult": Object {
             "error": Object {
               "error": Object {
-                "message": "Expression: '(_nd(__dataObject__.expirationDate) > _nd(__dataObject__.effectiveDate))' failed",
+                "message": "Expression: '(this._nd(__dataObject__.expirationDate) > this._nd(__dataObject__.effectiveDate))' failed",
                 "severity": "info",
               },
               "kind": 2,
@@ -324,7 +519,7 @@ Object {
           "payloadResult": Object {
             "error": Object {
               "error": Object {
-                "message": "Expression: '((_nd(__dataObject__.limitAmount) > 1000) && (_nd(__dataObject__.limitAmount) < 1000000))' failed",
+                "message": "Expression: '((this._nd(__dataObject__.limitAmount) > 1000) && (this._nd(__dataObject__.limitAmount) < 1000000))' failed",
                 "severity": "info",
               },
               "kind": 2,
@@ -357,7 +552,7 @@ Object {
           "payloadResult": Object {
             "error": Object {
               "error": Object {
-                "message": "Expression: '(_nd(__dataObject__.expirationDate) > _nd(__dataObject__.effectiveDate))' failed",
+                "message": "Expression: '(this._nd(__dataObject__.expirationDate) > this._nd(__dataObject__.effectiveDate))' failed",
                 "severity": "info",
               },
               "kind": 2,
@@ -390,7 +585,7 @@ Object {
           "payloadResult": Object {
             "error": Object {
               "error": Object {
-                "message": "Expression: '((_nd(__dataObject__.limitAmount) > 1000) && (_nd(__dataObject__.limitAmount) < 1000000))' failed",
+                "message": "Expression: '((this._nd(__dataObject__.limitAmount) > 1000) && (this._nd(__dataObject__.limitAmount) < 1000000))' failed",
                 "severity": "info",
               },
               "kind": 2,
@@ -423,7 +618,7 @@ Object {
           "payloadResult": Object {
             "error": Object {
               "error": Object {
-                "message": "Expression: '((_nd(__dataObject__.limitAmount) > 1000) && (_nd(__dataObject__.limitAmount) < 1000000))' failed",
+                "message": "Expression: '((this._nd(__dataObject__.limitAmount) > 1000) && (this._nd(__dataObject__.limitAmount) < 1000000))' failed",
                 "severity": "info",
               },
               "kind": 2,
@@ -437,11 +632,16 @@ Object {
       ],
     },
   },
-  "Raw results": Object {
+}
+`;
+
+exports[`Sanity Coverages Inheritance tests Inheritance field test on AssertionCarCoverage should execute 'AssertionCarCoverage' entry point on valid data 1`] = `
+Object {
+  "entryPointResults": Object {
     "evaluationTimestamp": Any<Date>,
     "results": Object {
       "COLLCoverage:2:expirationDate": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "2",
           "contextName": "COLLCoverage",
           "fieldName": "expirationDate",
@@ -450,7 +650,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -461,16 +661,16 @@ Object {
               "overrideGroup": undefined,
             },
             "payloadResult": Object {
-              "error": Object {
-                "error": Object {
-                  "message": "Expression: '(_nd(__dataObject__.expirationDate) > _nd(__dataObject__.effectiveDate))' failed",
-                  "severity": "info",
-                },
-                "kind": 2,
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "Value didn't match assertion expirationDate > effectiveDate",
+                "templateVariables": Array [],
               },
+              "success": true,
               "type": 1,
+              "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "COLLCoverage",
               "payloadtype": "ASSERTION",
               "ruleName": "R0108",
@@ -480,7 +680,7 @@ Object {
         ],
       },
       "COLLCoverage:2:limitAmount": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "2",
           "contextName": "COLLCoverage",
           "fieldName": "limitAmount",
@@ -489,7 +689,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -500,16 +700,16 @@ Object {
               "overrideGroup": undefined,
             },
             "payloadResult": Object {
-              "error": Object {
-                "error": Object {
-                  "message": "Expression: '((_nd(__dataObject__.limitAmount) > 1000) && (_nd(__dataObject__.limitAmount) < 1000000))' failed",
-                  "severity": "info",
-                },
-                "kind": 2,
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "Value didn't match assertion limitAmount > 1000 and limitAmount < 1000000",
+                "templateVariables": Array [],
               },
+              "success": true,
               "type": 1,
+              "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "CarCoverage",
               "payloadtype": "ASSERTION",
               "ruleName": "R0117",
@@ -519,7 +719,7 @@ Object {
         ],
       },
       "FullCoverage:5:expirationDate": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "5",
           "contextName": "FullCoverage",
           "fieldName": "expirationDate",
@@ -528,7 +728,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -539,16 +739,16 @@ Object {
               "overrideGroup": undefined,
             },
             "payloadResult": Object {
-              "error": Object {
-                "error": Object {
-                  "message": "Expression: '(_nd(__dataObject__.expirationDate) > _nd(__dataObject__.effectiveDate))' failed",
-                  "severity": "info",
-                },
-                "kind": 2,
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "Value didn't match assertion expirationDate > effectiveDate",
+                "templateVariables": Array [],
               },
+              "success": true,
               "type": 1,
+              "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "COLLCoverage",
               "payloadtype": "ASSERTION",
               "ruleName": "R0108",
@@ -558,7 +758,7 @@ Object {
         ],
       },
       "FullCoverage:5:limitAmount": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "5",
           "contextName": "FullCoverage",
           "fieldName": "limitAmount",
@@ -567,7 +767,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -578,16 +778,16 @@ Object {
               "overrideGroup": undefined,
             },
             "payloadResult": Object {
-              "error": Object {
-                "error": Object {
-                  "message": "Expression: '((_nd(__dataObject__.limitAmount) > 1000) && (_nd(__dataObject__.limitAmount) < 1000000))' failed",
-                  "severity": "info",
-                },
-                "kind": 2,
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "Value didn't match assertion limitAmount > 1000 and limitAmount < 1000000",
+                "templateVariables": Array [],
               },
+              "success": true,
               "type": 1,
+              "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "CarCoverage",
               "payloadtype": "ASSERTION",
               "ruleName": "R0117",
@@ -596,9 +796,9 @@ Object {
           },
         ],
       },
-      "RRCoverage:7:limitAmount": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "7",
+      "RRCoverage:R7:limitAmount": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "R7",
           "contextName": "RRCoverage",
           "fieldName": "limitAmount",
           "fieldPath": "limitAmount",
@@ -606,7 +806,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -617,16 +817,16 @@ Object {
               "overrideGroup": undefined,
             },
             "payloadResult": Object {
-              "error": Object {
-                "error": Object {
-                  "message": "Expression: '((_nd(__dataObject__.limitAmount) > 1000) && (_nd(__dataObject__.limitAmount) < 1000000))' failed",
-                  "severity": "info",
-                },
-                "kind": 2,
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "Value didn't match assertion limitAmount > 1000 and limitAmount < 1000000",
+                "templateVariables": Array [],
               },
+              "success": true,
               "type": 1,
+              "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "CarCoverage",
               "payloadtype": "ASSERTION",
               "ruleName": "R0117",
@@ -637,17 +837,7 @@ Object {
       },
     },
   },
-  "Validation results": Object {
-    "critical": Array [],
-    "info": Array [],
-    "warning": Array [],
-  },
-}
-`;
-
-exports[`Sanity Coverages Inheritance tests Inheritance field test on AssertionCarCoverage should execute 'AssertionCarCoverage' entry point on valid data: Results + reducer results 1`] = `
-Object {
-  "Field Metadata reduced results": Object {
+  "fieldResults": Object {
     "COLLCoverage:2:expirationDate": Object {
       "fieldType": "DATE",
       "id": "COLLCoverage:2:expirationDate",
@@ -814,11 +1004,68 @@ Object {
       ],
     },
   },
-  "Raw results": Object {
+}
+`;
+
+exports[`Sanity Coverages Inheritance tests Inheritance field test on InitCarCoverage should execute 'InitCarCoverage' entry point rules to resetValue on valid data 1`] = `
+Object {
+  "entryPointResults": Object {
     "evaluationTimestamp": Any<Date>,
     "results": Object {
+      "COLLCoverage:2:deductibleAmount": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "2",
+          "contextName": "COLLCoverage",
+          "fieldName": "deductibleAmount",
+          "fieldPath": "deductibleAmount",
+          "fieldType": "DECIMAL",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "NOT_APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 4,
+            "ruleInfo": DefaultRuleInfo {
+              "context": "COLLCoverage",
+              "payloadtype": "DEFAULT",
+              "ruleName": "R0123",
+              "targetPath": "deductibleAmount",
+            },
+          },
+        ],
+      },
+      "COLLCoverage:2:effectiveDate": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "2",
+          "contextName": "COLLCoverage",
+          "fieldName": "effectiveDate",
+          "fieldPath": "effectiveDate",
+          "fieldType": "DATE",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "events": Array [],
+              "type": 8,
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "COLLCoverage",
+              "payloadtype": "DEFAULT",
+              "ruleName": "R0101",
+              "targetPath": "effectiveDate",
+            },
+          },
+        ],
+      },
       "COLLCoverage:2:expirationDate": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "2",
           "contextName": "COLLCoverage",
           "fieldName": "expirationDate",
@@ -827,37 +1074,26 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
+            "kind": 1,
             "payloadResult": Object {
-              "message": Object {
-                "errorCode": "code",
-                "errorMessage": "Value didn't match assertion expirationDate > effectiveDate",
-                "templateVariables": Array [],
-              },
-              "success": true,
-              "type": 1,
-              "validationSeverity": "critical",
+              "events": Array [],
+              "type": 8,
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "COLLCoverage",
-              "payloadtype": "ASSERTION",
-              "ruleName": "R0108",
+              "payloadtype": "DEFAULT",
+              "ruleName": "R0107",
               "targetPath": "expirationDate",
             },
           },
         ],
       },
       "COLLCoverage:2:limitAmount": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "2",
           "contextName": "COLLCoverage",
           "fieldName": "limitAmount",
@@ -866,37 +1102,90 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
+            "kind": 1,
             "payloadResult": Object {
-              "message": Object {
-                "errorCode": "code",
-                "errorMessage": "Value didn't match assertion limitAmount > 1000 and limitAmount < 1000000",
-                "templateVariables": Array [],
-              },
-              "success": true,
-              "type": 1,
-              "validationSeverity": "critical",
+              "events": Array [],
+              "type": 8,
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "CarCoverage",
-              "payloadtype": "ASSERTION",
-              "ruleName": "R0117",
+              "payloadtype": "DEFAULT",
+              "ruleName": "R0114",
               "targetPath": "limitAmount",
             },
           },
         ],
       },
+      "FullCoverage:5:deductibleAmount": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "5",
+          "contextName": "FullCoverage",
+          "fieldName": "deductibleAmount",
+          "fieldPath": "deductibleAmount",
+          "fieldType": "DECIMAL",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "events": Array [
+                ValueChangedEvent {
+                  "attributeTarget": "deductibleAmount",
+                  "contextId": "5",
+                  "contextName": "FullCoverage",
+                  "newValue": 20000,
+                  "previousValue": 0,
+                },
+              ],
+              "type": 8,
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "COLLCoverage",
+              "payloadtype": "DEFAULT",
+              "ruleName": "R0123",
+              "targetPath": "deductibleAmount",
+            },
+          },
+        ],
+      },
+      "FullCoverage:5:effectiveDate": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "5",
+          "contextName": "FullCoverage",
+          "fieldName": "effectiveDate",
+          "fieldPath": "effectiveDate",
+          "fieldType": "DATE",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "events": Array [],
+              "type": 8,
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "COLLCoverage",
+              "payloadtype": "DEFAULT",
+              "ruleName": "R0101",
+              "targetPath": "effectiveDate",
+            },
+          },
+        ],
+      },
       "FullCoverage:5:expirationDate": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "5",
           "contextName": "FullCoverage",
           "fieldName": "expirationDate",
@@ -905,37 +1194,26 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
+            "kind": 1,
             "payloadResult": Object {
-              "message": Object {
-                "errorCode": "code",
-                "errorMessage": "Value didn't match assertion expirationDate > effectiveDate",
-                "templateVariables": Array [],
-              },
-              "success": true,
-              "type": 1,
-              "validationSeverity": "critical",
+              "events": Array [],
+              "type": 8,
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "COLLCoverage",
-              "payloadtype": "ASSERTION",
-              "ruleName": "R0108",
+              "payloadtype": "DEFAULT",
+              "ruleName": "R0107",
               "targetPath": "expirationDate",
             },
           },
         ],
       },
       "FullCoverage:5:limitAmount": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "5",
           "contextName": "FullCoverage",
           "fieldName": "limitAmount",
@@ -944,37 +1222,26 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
+            "kind": 1,
             "payloadResult": Object {
-              "message": Object {
-                "errorCode": "code",
-                "errorMessage": "Value didn't match assertion limitAmount > 1000 and limitAmount < 1000000",
-                "templateVariables": Array [],
-              },
-              "success": true,
-              "type": 1,
-              "validationSeverity": "critical",
+              "events": Array [],
+              "type": 8,
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "CarCoverage",
-              "payloadtype": "ASSERTION",
-              "ruleName": "R0117",
+              "payloadtype": "DEFAULT",
+              "ruleName": "R0114",
               "targetPath": "limitAmount",
             },
           },
         ],
       },
       "RRCoverage:R7:limitAmount": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "R7",
           "contextName": "RRCoverage",
           "fieldName": "limitAmount",
@@ -983,30 +1250,19 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
+            "kind": 1,
             "payloadResult": Object {
-              "message": Object {
-                "errorCode": "code",
-                "errorMessage": "Value didn't match assertion limitAmount > 1000 and limitAmount < 1000000",
-                "templateVariables": Array [],
-              },
-              "success": true,
-              "type": 1,
-              "validationSeverity": "critical",
+              "events": Array [],
+              "type": 8,
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "CarCoverage",
-              "payloadtype": "ASSERTION",
-              "ruleName": "R0117",
+              "payloadtype": "DEFAULT",
+              "ruleName": "R0114",
               "targetPath": "limitAmount",
             },
           },
@@ -1014,17 +1270,7 @@ Object {
       },
     },
   },
-  "Validation results": Object {
-    "critical": Array [],
-    "info": Array [],
-    "warning": Array [],
-  },
-}
-`;
-
-exports[`Sanity Coverages Inheritance tests Inheritance field test on InitCarCoverage should execute 'InitCarCoverage' entry point rules to resetValue on valid data: Results + reducer results 1`] = `
-Object {
-  "Field Metadata reduced results": Object {
+  "fieldResults": Object {
     "COLLCoverage:2:deductibleAmount": Object {
       "fieldType": "DECIMAL",
       "id": "COLLCoverage:2:deductibleAmount",
@@ -1134,11 +1380,52 @@ Object {
       "ruleResults": Array [],
     },
   },
-  "Raw results": Object {
+}
+`;
+
+exports[`Sanity Coverages Inheritance tests Inheritance field test on UsageCarCoverage should execute 'UsageCarCoverage' entry point on empty data 1`] = `
+Object {
+  "entryPointResults": Object {
     "evaluationTimestamp": Any<Date>,
     "results": Object {
+      "COLLCoverage:2:code": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "2",
+          "contextName": "COLLCoverage",
+          "fieldName": "code",
+          "fieldPath": "code",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": false,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "CarCoverage",
+              "payloadtype": "USAGE",
+              "ruleName": "R0111",
+              "targetPath": "code",
+            },
+          },
+        ],
+      },
       "COLLCoverage:2:deductibleAmount": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "2",
           "contextName": "COLLCoverage",
           "fieldName": "deductibleAmount",
@@ -1147,22 +1434,34 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "NOT_APPLICABLE",
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
-            "kind": 4,
-            "ruleInfo": RuleInfo {
-              "context": "COLLCoverage",
-              "payloadtype": "DEFAULT",
-              "ruleName": "R0123",
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": false,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "CarCoverage",
+              "payloadtype": "USAGE",
+              "ruleName": "R0118",
               "targetPath": "deductibleAmount",
             },
           },
         ],
       },
       "COLLCoverage:2:effectiveDate": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "2",
           "contextName": "COLLCoverage",
           "fieldName": "effectiveDate",
@@ -1171,26 +1470,38 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
-            "kind": 1,
-            "payloadResult": Object {
-              "events": Array [],
-              "type": 8,
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
             },
-            "ruleInfo": RuleInfo {
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "The field is mandatory",
+                "errorMessage": undefined,
+                "templateVariables": Array [],
+              },
+              "success": false,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
               "context": "COLLCoverage",
-              "payloadtype": "DEFAULT",
-              "ruleName": "R0101",
+              "payloadtype": "USAGE",
+              "ruleName": "R0099",
               "targetPath": "effectiveDate",
             },
           },
         ],
       },
       "COLLCoverage:2:expirationDate": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "2",
           "contextName": "COLLCoverage",
           "fieldName": "expirationDate",
@@ -1199,26 +1510,38 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
-            "kind": 1,
-            "payloadResult": Object {
-              "events": Array [],
-              "type": 8,
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
             },
-            "ruleInfo": RuleInfo {
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "The field is mandatory",
+                "errorMessage": undefined,
+                "templateVariables": Array [],
+              },
+              "success": false,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
               "context": "COLLCoverage",
-              "payloadtype": "DEFAULT",
-              "ruleName": "R0107",
+              "payloadtype": "USAGE",
+              "ruleName": "R0105",
               "targetPath": "expirationDate",
             },
           },
         ],
       },
       "COLLCoverage:2:limitAmount": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "2",
           "contextName": "COLLCoverage",
           "fieldName": "limitAmount",
@@ -1227,26 +1550,70 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
-            "kind": 1,
-            "payloadResult": Object {
-              "events": Array [],
-              "type": 8,
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
             },
-            "ruleInfo": RuleInfo {
+            "payloadResult": Object {
+              "message": undefined,
+              "success": false,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
               "context": "CarCoverage",
-              "payloadtype": "DEFAULT",
-              "ruleName": "R0114",
+              "payloadtype": "USAGE",
+              "ruleName": "R0115",
               "targetPath": "limitAmount",
             },
           },
         ],
       },
+      "FullCoverage:5:code": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "5",
+          "contextName": "FullCoverage",
+          "fieldName": "code",
+          "fieldPath": "code",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": false,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "CarCoverage",
+              "payloadtype": "USAGE",
+              "ruleName": "R0111",
+              "targetPath": "code",
+            },
+          },
+        ],
+      },
       "FullCoverage:5:deductibleAmount": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "5",
           "contextName": "FullCoverage",
           "fieldName": "deductibleAmount",
@@ -1255,34 +1622,34 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
-            "kind": 1,
-            "payloadResult": Object {
-              "events": Array [
-                ValueChangedEvent {
-                  "attributeTarget": "deductibleAmount",
-                  "contextId": "5",
-                  "contextName": "FullCoverage",
-                  "newValue": 20000,
-                  "previousValue": 0,
-                },
-              ],
-              "type": 8,
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
             },
-            "ruleInfo": RuleInfo {
-              "context": "COLLCoverage",
-              "payloadtype": "DEFAULT",
-              "ruleName": "R0123",
+            "payloadResult": Object {
+              "message": undefined,
+              "success": false,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "CarCoverage",
+              "payloadtype": "USAGE",
+              "ruleName": "R0118",
               "targetPath": "deductibleAmount",
             },
           },
         ],
       },
       "FullCoverage:5:effectiveDate": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "5",
           "contextName": "FullCoverage",
           "fieldName": "effectiveDate",
@@ -1291,26 +1658,38 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
-            "kind": 1,
-            "payloadResult": Object {
-              "events": Array [],
-              "type": 8,
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
             },
-            "ruleInfo": RuleInfo {
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "The field is mandatory",
+                "errorMessage": undefined,
+                "templateVariables": Array [],
+              },
+              "success": false,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
               "context": "COLLCoverage",
-              "payloadtype": "DEFAULT",
-              "ruleName": "R0101",
+              "payloadtype": "USAGE",
+              "ruleName": "R0099",
               "targetPath": "effectiveDate",
             },
           },
         ],
       },
       "FullCoverage:5:expirationDate": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "5",
           "contextName": "FullCoverage",
           "fieldName": "expirationDate",
@@ -1319,26 +1698,38 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
-            "kind": 1,
-            "payloadResult": Object {
-              "events": Array [],
-              "type": 8,
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
             },
-            "ruleInfo": RuleInfo {
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "The field is mandatory",
+                "errorMessage": undefined,
+                "templateVariables": Array [],
+              },
+              "success": false,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
               "context": "COLLCoverage",
-              "payloadtype": "DEFAULT",
-              "ruleName": "R0107",
+              "payloadtype": "USAGE",
+              "ruleName": "R0105",
               "targetPath": "expirationDate",
             },
           },
         ],
       },
       "FullCoverage:5:limitAmount": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "5",
           "contextName": "FullCoverage",
           "fieldName": "limitAmount",
@@ -1347,27 +1738,107 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
-            "kind": 1,
-            "payloadResult": Object {
-              "events": Array [],
-              "type": 8,
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
             },
-            "ruleInfo": RuleInfo {
+            "payloadResult": Object {
+              "message": undefined,
+              "success": false,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
               "context": "CarCoverage",
-              "payloadtype": "DEFAULT",
-              "ruleName": "R0114",
+              "payloadtype": "USAGE",
+              "ruleName": "R0115",
               "targetPath": "limitAmount",
             },
           },
         ],
       },
-      "RRCoverage:R7:limitAmount": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "R7",
+      "RRCoverage:7:code": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "7",
+          "contextName": "RRCoverage",
+          "fieldName": "code",
+          "fieldPath": "code",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": false,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "CarCoverage",
+              "payloadtype": "USAGE",
+              "ruleName": "R0111",
+              "targetPath": "code",
+            },
+          },
+        ],
+      },
+      "RRCoverage:7:deductibleAmount": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "7",
+          "contextName": "RRCoverage",
+          "fieldName": "deductibleAmount",
+          "fieldPath": "deductibleAmount",
+          "fieldType": "DECIMAL",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": false,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "CarCoverage",
+              "payloadtype": "USAGE",
+              "ruleName": "R0118",
+              "targetPath": "deductibleAmount",
+            },
+          },
+        ],
+      },
+      "RRCoverage:7:limitAmount": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "7",
           "contextName": "RRCoverage",
           "fieldName": "limitAmount",
           "fieldPath": "limitAmount",
@@ -1375,19 +1846,27 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
-            "kind": 1,
-            "payloadResult": Object {
-              "events": Array [],
-              "type": 8,
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
             },
-            "ruleInfo": RuleInfo {
+            "payloadResult": Object {
+              "message": undefined,
+              "success": false,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
               "context": "CarCoverage",
-              "payloadtype": "DEFAULT",
-              "ruleName": "R0114",
+              "payloadtype": "USAGE",
+              "ruleName": "R0115",
               "targetPath": "limitAmount",
             },
           },
@@ -1395,17 +1874,7 @@ Object {
       },
     },
   },
-  "Validation results": Object {
-    "critical": Array [],
-    "info": Array [],
-    "warning": Array [],
-  },
-}
-`;
-
-exports[`Sanity Coverages Inheritance tests Inheritance field test on UsageCarCoverage should execute 'UsageCarCoverage' entry point on empty data: Results + reducer results 1`] = `
-Object {
-  "Field Metadata reduced results": Object {
+  "fieldResults": Object {
     "COLLCoverage:2:code": Object {
       "fieldType": "STRING",
       "id": "COLLCoverage:2:code",
@@ -1813,11 +2282,16 @@ Object {
       ],
     },
   },
-  "Raw results": Object {
+}
+`;
+
+exports[`Sanity Coverages Inheritance tests Inheritance field test on UsageCarCoverage should execute 'UsageCarCoverage' entry point on valid data 1`] = `
+Object {
+  "entryPointResults": Object {
     "evaluationTimestamp": Any<Date>,
     "results": Object {
       "COLLCoverage:2:code": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "2",
           "contextName": "COLLCoverage",
           "fieldName": "code",
@@ -1826,7 +2300,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -1838,12 +2312,12 @@ Object {
             },
             "payloadResult": Object {
               "message": undefined,
-              "success": false,
+              "success": true,
               "type": 64,
               "usageType": "mandatory",
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "CarCoverage",
               "payloadtype": "USAGE",
               "ruleName": "R0111",
@@ -1853,7 +2327,7 @@ Object {
         ],
       },
       "COLLCoverage:2:deductibleAmount": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "2",
           "contextName": "COLLCoverage",
           "fieldName": "deductibleAmount",
@@ -1862,7 +2336,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -1874,12 +2348,12 @@ Object {
             },
             "payloadResult": Object {
               "message": undefined,
-              "success": false,
+              "success": true,
               "type": 64,
               "usageType": "mandatory",
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "CarCoverage",
               "payloadtype": "USAGE",
               "ruleName": "R0118",
@@ -1889,7 +2363,7 @@ Object {
         ],
       },
       "COLLCoverage:2:effectiveDate": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "2",
           "contextName": "COLLCoverage",
           "fieldName": "effectiveDate",
@@ -1898,7 +2372,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -1914,12 +2388,12 @@ Object {
                 "errorMessage": undefined,
                 "templateVariables": Array [],
               },
-              "success": false,
+              "success": true,
               "type": 64,
               "usageType": "mandatory",
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "COLLCoverage",
               "payloadtype": "USAGE",
               "ruleName": "R0099",
@@ -1929,7 +2403,7 @@ Object {
         ],
       },
       "COLLCoverage:2:expirationDate": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "2",
           "contextName": "COLLCoverage",
           "fieldName": "expirationDate",
@@ -1938,7 +2412,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -1954,12 +2428,12 @@ Object {
                 "errorMessage": undefined,
                 "templateVariables": Array [],
               },
-              "success": false,
+              "success": true,
               "type": 64,
               "usageType": "mandatory",
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "COLLCoverage",
               "payloadtype": "USAGE",
               "ruleName": "R0105",
@@ -1969,7 +2443,7 @@ Object {
         ],
       },
       "COLLCoverage:2:limitAmount": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "2",
           "contextName": "COLLCoverage",
           "fieldName": "limitAmount",
@@ -1978,7 +2452,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -1990,12 +2464,12 @@ Object {
             },
             "payloadResult": Object {
               "message": undefined,
-              "success": false,
+              "success": true,
               "type": 64,
               "usageType": "mandatory",
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "CarCoverage",
               "payloadtype": "USAGE",
               "ruleName": "R0115",
@@ -2005,7 +2479,7 @@ Object {
         ],
       },
       "FullCoverage:5:code": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "5",
           "contextName": "FullCoverage",
           "fieldName": "code",
@@ -2014,7 +2488,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -2026,12 +2500,12 @@ Object {
             },
             "payloadResult": Object {
               "message": undefined,
-              "success": false,
+              "success": true,
               "type": 64,
               "usageType": "mandatory",
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "CarCoverage",
               "payloadtype": "USAGE",
               "ruleName": "R0111",
@@ -2041,7 +2515,7 @@ Object {
         ],
       },
       "FullCoverage:5:deductibleAmount": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "5",
           "contextName": "FullCoverage",
           "fieldName": "deductibleAmount",
@@ -2050,7 +2524,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -2062,12 +2536,12 @@ Object {
             },
             "payloadResult": Object {
               "message": undefined,
-              "success": false,
+              "success": true,
               "type": 64,
               "usageType": "mandatory",
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "CarCoverage",
               "payloadtype": "USAGE",
               "ruleName": "R0118",
@@ -2077,7 +2551,7 @@ Object {
         ],
       },
       "FullCoverage:5:effectiveDate": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "5",
           "contextName": "FullCoverage",
           "fieldName": "effectiveDate",
@@ -2086,7 +2560,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -2102,12 +2576,12 @@ Object {
                 "errorMessage": undefined,
                 "templateVariables": Array [],
               },
-              "success": false,
+              "success": true,
               "type": 64,
               "usageType": "mandatory",
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "COLLCoverage",
               "payloadtype": "USAGE",
               "ruleName": "R0099",
@@ -2117,7 +2591,7 @@ Object {
         ],
       },
       "FullCoverage:5:expirationDate": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "5",
           "contextName": "FullCoverage",
           "fieldName": "expirationDate",
@@ -2126,7 +2600,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -2142,12 +2616,12 @@ Object {
                 "errorMessage": undefined,
                 "templateVariables": Array [],
               },
-              "success": false,
+              "success": true,
               "type": 64,
               "usageType": "mandatory",
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "COLLCoverage",
               "payloadtype": "USAGE",
               "ruleName": "R0105",
@@ -2157,7 +2631,7 @@ Object {
         ],
       },
       "FullCoverage:5:limitAmount": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "5",
           "contextName": "FullCoverage",
           "fieldName": "limitAmount",
@@ -2166,7 +2640,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -2178,12 +2652,12 @@ Object {
             },
             "payloadResult": Object {
               "message": undefined,
-              "success": false,
+              "success": true,
               "type": 64,
               "usageType": "mandatory",
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "CarCoverage",
               "payloadtype": "USAGE",
               "ruleName": "R0115",
@@ -2192,9 +2666,9 @@ Object {
           },
         ],
       },
-      "RRCoverage:7:code": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "7",
+      "RRCoverage:R7:code": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "R7",
           "contextName": "RRCoverage",
           "fieldName": "code",
           "fieldPath": "code",
@@ -2202,7 +2676,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -2214,12 +2688,12 @@ Object {
             },
             "payloadResult": Object {
               "message": undefined,
-              "success": false,
+              "success": true,
               "type": 64,
               "usageType": "mandatory",
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "CarCoverage",
               "payloadtype": "USAGE",
               "ruleName": "R0111",
@@ -2228,9 +2702,9 @@ Object {
           },
         ],
       },
-      "RRCoverage:7:deductibleAmount": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "7",
+      "RRCoverage:R7:deductibleAmount": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "R7",
           "contextName": "RRCoverage",
           "fieldName": "deductibleAmount",
           "fieldPath": "deductibleAmount",
@@ -2238,7 +2712,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -2250,12 +2724,12 @@ Object {
             },
             "payloadResult": Object {
               "message": undefined,
-              "success": false,
+              "success": true,
               "type": 64,
               "usageType": "mandatory",
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "CarCoverage",
               "payloadtype": "USAGE",
               "ruleName": "R0118",
@@ -2264,9 +2738,9 @@ Object {
           },
         ],
       },
-      "RRCoverage:7:limitAmount": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "7",
+      "RRCoverage:R7:limitAmount": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "R7",
           "contextName": "RRCoverage",
           "fieldName": "limitAmount",
           "fieldPath": "limitAmount",
@@ -2274,7 +2748,7 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -2286,12 +2760,12 @@ Object {
             },
             "payloadResult": Object {
               "message": undefined,
-              "success": false,
+              "success": true,
               "type": 64,
               "usageType": "mandatory",
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "CarCoverage",
               "payloadtype": "USAGE",
               "ruleName": "R0115",
@@ -2302,161 +2776,7 @@ Object {
       },
     },
   },
-  "Validation results": Object {
-    "critical": Array [
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "Field is mandatory",
-        "messageCode": "rule-mandatory-error",
-        "ruleName": "R0118",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "Field is mandatory",
-        "messageCode": "rule-mandatory-error",
-        "ruleName": "R0118",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "Field is mandatory",
-        "messageCode": "rule-mandatory-error",
-        "ruleName": "R0118",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "Field is mandatory",
-        "messageCode": "The field is mandatory",
-        "ruleName": "R0105",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "Field is mandatory",
-        "messageCode": "The field is mandatory",
-        "ruleName": "R0105",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "Field is mandatory",
-        "messageCode": "The field is mandatory",
-        "ruleName": "R0099",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "Field is mandatory",
-        "messageCode": "The field is mandatory",
-        "ruleName": "R0099",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "Field is mandatory",
-        "messageCode": "rule-mandatory-error",
-        "ruleName": "R0111",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "Field is mandatory",
-        "messageCode": "rule-mandatory-error",
-        "ruleName": "R0111",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "Field is mandatory",
-        "messageCode": "rule-mandatory-error",
-        "ruleName": "R0111",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "Field is mandatory",
-        "messageCode": "rule-mandatory-error",
-        "ruleName": "R0115",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "Field is mandatory",
-        "messageCode": "rule-mandatory-error",
-        "ruleName": "R0115",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "Field is mandatory",
-        "messageCode": "rule-mandatory-error",
-        "ruleName": "R0115",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-    ],
-    "info": Array [],
-    "warning": Array [],
-  },
-}
-`;
-
-exports[`Sanity Coverages Inheritance tests Inheritance field test on UsageCarCoverage should execute 'UsageCarCoverage' entry point on valid data: Results + reducer results 1`] = `
-Object {
-  "Field Metadata reduced results": Object {
+  "fieldResults": Object {
     "COLLCoverage:2:code": Object {
       "fieldType": "STRING",
       "id": "COLLCoverage:2:code",
@@ -2864,11 +3184,16 @@ Object {
       ],
     },
   },
-  "Raw results": Object {
+}
+`;
+
+exports[`Sanity Coverages Inheritance tests Inheritance field test on VisibilityCarCoverage should execute 'VisibilityCarCoverage' entry point 1`] = `
+Object {
+  "entryPointResults": Object {
     "evaluationTimestamp": Any<Date>,
     "results": Object {
       "COLLCoverage:2:code": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "2",
           "contextName": "COLLCoverage",
           "fieldName": "code",
@@ -2877,70 +3202,26 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
+            "kind": 1,
             "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
+              "type": 256,
+              "visible": false,
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "CarCoverage",
-              "payloadtype": "USAGE",
-              "ruleName": "R0111",
+              "payloadtype": "VISIBILITY",
+              "ruleName": "R0113",
               "targetPath": "code",
             },
           },
         ],
       },
-      "COLLCoverage:2:deductibleAmount": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "2",
-          "contextName": "COLLCoverage",
-          "fieldName": "deductibleAmount",
-          "fieldPath": "deductibleAmount",
-          "fieldType": "DECIMAL",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "CarCoverage",
-              "payloadtype": "USAGE",
-              "ruleName": "R0118",
-              "targetPath": "deductibleAmount",
-            },
-          },
-        ],
-      },
       "COLLCoverage:2:effectiveDate": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "2",
           "contextName": "COLLCoverage",
           "fieldName": "effectiveDate",
@@ -2949,38 +3230,26 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
+            "kind": 1,
             "payloadResult": Object {
-              "message": Object {
-                "errorCode": "The field is mandatory",
-                "errorMessage": undefined,
-                "templateVariables": Array [],
-              },
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
+              "type": 256,
+              "visible": false,
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "COLLCoverage",
-              "payloadtype": "USAGE",
-              "ruleName": "R0099",
+              "payloadtype": "VISIBILITY",
+              "ruleName": "R0104",
               "targetPath": "effectiveDate",
             },
           },
         ],
       },
       "COLLCoverage:2:expirationDate": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "2",
           "contextName": "COLLCoverage",
           "fieldName": "expirationDate",
@@ -2989,74 +3258,26 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
+            "kind": 1,
             "payloadResult": Object {
-              "message": Object {
-                "errorCode": "The field is mandatory",
-                "errorMessage": undefined,
-                "templateVariables": Array [],
-              },
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
+              "type": 256,
+              "visible": false,
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "COLLCoverage",
-              "payloadtype": "USAGE",
-              "ruleName": "R0105",
+              "payloadtype": "VISIBILITY",
+              "ruleName": "R0110",
               "targetPath": "expirationDate",
             },
           },
         ],
       },
-      "COLLCoverage:2:limitAmount": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "2",
-          "contextName": "COLLCoverage",
-          "fieldName": "limitAmount",
-          "fieldPath": "limitAmount",
-          "fieldType": "DECIMAL",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "CarCoverage",
-              "payloadtype": "USAGE",
-              "ruleName": "R0115",
-              "targetPath": "limitAmount",
-            },
-          },
-        ],
-      },
       "FullCoverage:5:code": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "5",
           "contextName": "FullCoverage",
           "fieldName": "code",
@@ -3065,70 +3286,26 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
+            "kind": 1,
             "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
+              "type": 256,
+              "visible": false,
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "CarCoverage",
-              "payloadtype": "USAGE",
-              "ruleName": "R0111",
+              "payloadtype": "VISIBILITY",
+              "ruleName": "R0113",
               "targetPath": "code",
             },
           },
         ],
       },
-      "FullCoverage:5:deductibleAmount": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "5",
-          "contextName": "FullCoverage",
-          "fieldName": "deductibleAmount",
-          "fieldPath": "deductibleAmount",
-          "fieldType": "DECIMAL",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "CarCoverage",
-              "payloadtype": "USAGE",
-              "ruleName": "R0118",
-              "targetPath": "deductibleAmount",
-            },
-          },
-        ],
-      },
       "FullCoverage:5:effectiveDate": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "5",
           "contextName": "FullCoverage",
           "fieldName": "effectiveDate",
@@ -3137,38 +3314,26 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
+            "kind": 1,
             "payloadResult": Object {
-              "message": Object {
-                "errorCode": "The field is mandatory",
-                "errorMessage": undefined,
-                "templateVariables": Array [],
-              },
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
+              "type": 256,
+              "visible": false,
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "COLLCoverage",
-              "payloadtype": "USAGE",
-              "ruleName": "R0099",
+              "payloadtype": "VISIBILITY",
+              "ruleName": "R0104",
               "targetPath": "effectiveDate",
             },
           },
         ],
       },
       "FullCoverage:5:expirationDate": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "5",
           "contextName": "FullCoverage",
           "fieldName": "expirationDate",
@@ -3177,74 +3342,26 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
+            "kind": 1,
             "payloadResult": Object {
-              "message": Object {
-                "errorCode": "The field is mandatory",
-                "errorMessage": undefined,
-                "templateVariables": Array [],
-              },
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
+              "type": 256,
+              "visible": false,
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "COLLCoverage",
-              "payloadtype": "USAGE",
-              "ruleName": "R0105",
+              "payloadtype": "VISIBILITY",
+              "ruleName": "R0110",
               "targetPath": "expirationDate",
             },
           },
         ],
       },
-      "FullCoverage:5:limitAmount": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "5",
-          "contextName": "FullCoverage",
-          "fieldName": "limitAmount",
-          "fieldPath": "limitAmount",
-          "fieldType": "DECIMAL",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "CarCoverage",
-              "payloadtype": "USAGE",
-              "ruleName": "R0115",
-              "targetPath": "limitAmount",
-            },
-          },
-        ],
-      },
       "RRCoverage:R7:code": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "R7",
           "contextName": "RRCoverage",
           "fieldName": "code",
@@ -3253,117 +3370,27 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
+            "kind": 1,
             "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
+              "type": 256,
+              "visible": false,
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "CarCoverage",
-              "payloadtype": "USAGE",
-              "ruleName": "R0111",
+              "payloadtype": "VISIBILITY",
+              "ruleName": "R0113",
               "targetPath": "code",
-            },
-          },
-        ],
-      },
-      "RRCoverage:R7:deductibleAmount": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "R7",
-          "contextName": "RRCoverage",
-          "fieldName": "deductibleAmount",
-          "fieldPath": "deductibleAmount",
-          "fieldType": "DECIMAL",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "CarCoverage",
-              "payloadtype": "USAGE",
-              "ruleName": "R0118",
-              "targetPath": "deductibleAmount",
-            },
-          },
-        ],
-      },
-      "RRCoverage:R7:limitAmount": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "R7",
-          "contextName": "RRCoverage",
-          "fieldName": "limitAmount",
-          "fieldPath": "limitAmount",
-          "fieldType": "DECIMAL",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "CarCoverage",
-              "payloadtype": "USAGE",
-              "ruleName": "R0115",
-              "targetPath": "limitAmount",
             },
           },
         ],
       },
     },
   },
-  "Validation results": Object {
-    "critical": Array [],
-    "info": Array [],
-    "warning": Array [],
-  },
-}
-`;
-
-exports[`Sanity Coverages Inheritance tests Inheritance field test on VisibilityCarCoverage should execute 'VisibilityCarCoverage' entry point: Results + reducer results 1`] = `
-Object {
-  "Field Metadata reduced results": Object {
+  "fieldResults": Object {
     "COLLCoverage:2:code": Object {
       "fieldType": "STRING",
       "id": "COLLCoverage:2:code",
@@ -3449,218 +3476,89 @@ Object {
       "ruleResults": Array [],
     },
   },
-  "Raw results": Object {
+}
+`;
+
+exports[`Sanity Coverages Inheritance tests Inherited Field Sanity tests should set inherited default fields 1`] = `
+Object {
+  "entryPointResults": Object {
     "evaluationTimestamp": Any<Date>,
     "results": Object {
-      "COLLCoverage:2:code": Object {
-        "contextFieldInfo": ContextFieldInfo {
+      "FullCoverage:2:deductibleAmount": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "2",
-          "contextName": "COLLCoverage",
-          "fieldName": "code",
-          "fieldPath": "code",
-          "fieldType": "STRING",
+          "contextName": "FullCoverage",
+          "fieldName": "deductibleAmount",
+          "fieldPath": "deductibleAmount",
+          "fieldType": "DECIMAL",
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
             "kind": 1,
             "payloadResult": Object {
-              "type": 256,
-              "visible": false,
+              "events": Array [
+                ValueChangedEvent {
+                  "attributeTarget": "deductibleAmount",
+                  "contextId": "2",
+                  "contextName": "FullCoverage",
+                  "newValue": 1000,
+                  "previousValue": undefined,
+                },
+              ],
+              "type": 8,
             },
-            "ruleInfo": RuleInfo {
-              "context": "CarCoverage",
-              "payloadtype": "VISIBILITY",
-              "ruleName": "R0113",
-              "targetPath": "code",
+            "ruleInfo": DefaultRuleInfo {
+              "context": "COLLCoverage",
+              "payloadtype": "DEFAULT",
+              "ruleName": "R0171",
+              "targetPath": "deductibleAmount",
             },
           },
         ],
       },
-      "COLLCoverage:2:effectiveDate": Object {
-        "contextFieldInfo": ContextFieldInfo {
+      "FullCoverage:2:limitAmount": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "2",
-          "contextName": "COLLCoverage",
-          "fieldName": "effectiveDate",
-          "fieldPath": "effectiveDate",
-          "fieldType": "DATE",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 1,
-            "payloadResult": Object {
-              "type": 256,
-              "visible": false,
-            },
-            "ruleInfo": RuleInfo {
-              "context": "COLLCoverage",
-              "payloadtype": "VISIBILITY",
-              "ruleName": "R0104",
-              "targetPath": "effectiveDate",
-            },
-          },
-        ],
-      },
-      "COLLCoverage:2:expirationDate": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "2",
-          "contextName": "COLLCoverage",
-          "fieldName": "expirationDate",
-          "fieldPath": "expirationDate",
-          "fieldType": "DATE",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 1,
-            "payloadResult": Object {
-              "type": 256,
-              "visible": false,
-            },
-            "ruleInfo": RuleInfo {
-              "context": "COLLCoverage",
-              "payloadtype": "VISIBILITY",
-              "ruleName": "R0110",
-              "targetPath": "expirationDate",
-            },
-          },
-        ],
-      },
-      "FullCoverage:5:code": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "5",
           "contextName": "FullCoverage",
-          "fieldName": "code",
-          "fieldPath": "code",
-          "fieldType": "STRING",
+          "fieldName": "limitAmount",
+          "fieldPath": "limitAmount",
+          "fieldType": "DECIMAL",
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
             "kind": 1,
             "payloadResult": Object {
-              "type": 256,
-              "visible": false,
+              "events": Array [
+                ValueChangedEvent {
+                  "attributeTarget": "limitAmount",
+                  "contextId": "2",
+                  "contextName": "FullCoverage",
+                  "newValue": 1000,
+                  "previousValue": undefined,
+                },
+              ],
+              "type": 8,
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "CarCoverage",
-              "payloadtype": "VISIBILITY",
-              "ruleName": "R0113",
-              "targetPath": "code",
-            },
-          },
-        ],
-      },
-      "FullCoverage:5:effectiveDate": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "5",
-          "contextName": "FullCoverage",
-          "fieldName": "effectiveDate",
-          "fieldPath": "effectiveDate",
-          "fieldType": "DATE",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 1,
-            "payloadResult": Object {
-              "type": 256,
-              "visible": false,
-            },
-            "ruleInfo": RuleInfo {
-              "context": "COLLCoverage",
-              "payloadtype": "VISIBILITY",
-              "ruleName": "R0104",
-              "targetPath": "effectiveDate",
-            },
-          },
-        ],
-      },
-      "FullCoverage:5:expirationDate": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "5",
-          "contextName": "FullCoverage",
-          "fieldName": "expirationDate",
-          "fieldPath": "expirationDate",
-          "fieldType": "DATE",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 1,
-            "payloadResult": Object {
-              "type": 256,
-              "visible": false,
-            },
-            "ruleInfo": RuleInfo {
-              "context": "COLLCoverage",
-              "payloadtype": "VISIBILITY",
-              "ruleName": "R0110",
-              "targetPath": "expirationDate",
-            },
-          },
-        ],
-      },
-      "RRCoverage:R7:code": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "R7",
-          "contextName": "RRCoverage",
-          "fieldName": "code",
-          "fieldPath": "code",
-          "fieldType": "STRING",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 1,
-            "payloadResult": Object {
-              "type": 256,
-              "visible": false,
-            },
-            "ruleInfo": RuleInfo {
-              "context": "CarCoverage",
-              "payloadtype": "VISIBILITY",
-              "ruleName": "R0113",
-              "targetPath": "code",
+              "payloadtype": "DEFAULT",
+              "ruleName": "R0114",
+              "targetPath": "limitAmount",
             },
           },
         ],
       },
     },
   },
-  "Validation results": Object {
-    "critical": Array [],
-    "info": Array [],
-    "warning": Array [],
-  },
-}
-`;
-
-exports[`Sanity Coverages Inheritance tests Inherited Field Sanity tests should set inherited default fields: Results + reducer results 1`] = `
-Object {
-  "Field Metadata reduced results": Object {
+  "fieldResults": Object {
     "FullCoverage:2:deductibleAmount": Object {
       "fieldType": "DECIMAL",
       "id": "FullCoverage:2:deductibleAmount",
@@ -3686,11 +3584,52 @@ Object {
       "ruleResults": Array [],
     },
   },
-  "Raw results": Object {
+}
+`;
+
+exports[`Sanity Coverages Inheritance tests Inherited Field Sanity tests should validate inherited mandatory fields 1`] = `
+Object {
+  "entryPointResults": Object {
     "evaluationTimestamp": Any<Date>,
     "results": Object {
+      "FullCoverage:2:code": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "2",
+          "contextName": "FullCoverage",
+          "fieldName": "code",
+          "fieldPath": "code",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": false,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "CarCoverage",
+              "payloadtype": "USAGE",
+              "ruleName": "R0111",
+              "targetPath": "code",
+            },
+          },
+        ],
+      },
       "FullCoverage:2:deductibleAmount": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "2",
           "contextName": "FullCoverage",
           "fieldName": "deductibleAmount",
@@ -3699,34 +3638,114 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
-            "kind": 1,
-            "payloadResult": Object {
-              "events": Array [
-                ValueChangedEvent {
-                  "attributeTarget": "deductibleAmount",
-                  "contextId": "2",
-                  "contextName": "FullCoverage",
-                  "newValue": 1000,
-                  "previousValue": undefined,
-                },
-              ],
-              "type": 8,
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
             },
-            "ruleInfo": RuleInfo {
-              "context": "COLLCoverage",
-              "payloadtype": "DEFAULT",
-              "ruleName": "R0171",
+            "payloadResult": Object {
+              "message": undefined,
+              "success": false,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "CarCoverage",
+              "payloadtype": "USAGE",
+              "ruleName": "R0118",
               "targetPath": "deductibleAmount",
             },
           },
         ],
       },
+      "FullCoverage:2:effectiveDate": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "2",
+          "contextName": "FullCoverage",
+          "fieldName": "effectiveDate",
+          "fieldPath": "effectiveDate",
+          "fieldType": "DATE",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "The field is mandatory",
+                "errorMessage": undefined,
+                "templateVariables": Array [],
+              },
+              "success": false,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "COLLCoverage",
+              "payloadtype": "USAGE",
+              "ruleName": "R0099",
+              "targetPath": "effectiveDate",
+            },
+          },
+        ],
+      },
+      "FullCoverage:2:expirationDate": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "2",
+          "contextName": "FullCoverage",
+          "fieldName": "expirationDate",
+          "fieldPath": "expirationDate",
+          "fieldType": "DATE",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "The field is mandatory",
+                "errorMessage": undefined,
+                "templateVariables": Array [],
+              },
+              "success": false,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "COLLCoverage",
+              "payloadtype": "USAGE",
+              "ruleName": "R0105",
+              "targetPath": "expirationDate",
+            },
+          },
+        ],
+      },
       "FullCoverage:2:limitAmount": Object {
-        "contextFieldInfo": ContextFieldInfo {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "2",
           "contextName": "FullCoverage",
           "fieldName": "limitAmount",
@@ -3735,27 +3754,27 @@ Object {
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
-            "kind": 1,
-            "payloadResult": Object {
-              "events": Array [
-                ValueChangedEvent {
-                  "attributeTarget": "limitAmount",
-                  "contextId": "2",
-                  "contextName": "FullCoverage",
-                  "newValue": 1000,
-                  "previousValue": undefined,
-                },
-              ],
-              "type": 8,
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
             },
-            "ruleInfo": RuleInfo {
+            "payloadResult": Object {
+              "message": undefined,
+              "success": false,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
               "context": "CarCoverage",
-              "payloadtype": "DEFAULT",
-              "ruleName": "R0114",
+              "payloadtype": "USAGE",
+              "ruleName": "R0115",
               "targetPath": "limitAmount",
             },
           },
@@ -3763,17 +3782,7 @@ Object {
       },
     },
   },
-  "Validation results": Object {
-    "critical": Array [],
-    "info": Array [],
-    "warning": Array [],
-  },
-}
-`;
-
-exports[`Sanity Coverages Inheritance tests Inherited Field Sanity tests should validate inherited mandatory fields: Results + reducer results 1`] = `
-Object {
-  "Field Metadata reduced results": Object {
+  "fieldResults": Object {
     "FullCoverage:2:code": Object {
       "fieldType": "STRING",
       "id": "FullCoverage:2:code",
@@ -3933,266 +3942,73 @@ Object {
       ],
     },
   },
-  "Raw results": Object {
+}
+`;
+
+exports[`Sanity Coverages Inheritance tests Inherited Field Sanity tests should validate inherited presentation fields 1`] = `
+Object {
+  "entryPointResults": Object {
     "evaluationTimestamp": Any<Date>,
     "results": Object {
-      "FullCoverage:2:code": Object {
-        "contextFieldInfo": ContextFieldInfo {
+      "COLLCoverage:2:code": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "2",
-          "contextName": "FullCoverage",
+          "contextName": "COLLCoverage",
           "fieldName": "code",
           "fieldPath": "code",
           "fieldType": "STRING",
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
+            "kind": 1,
             "payloadResult": Object {
-              "message": undefined,
-              "success": false,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
+              "type": 256,
+              "visible": false,
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "CarCoverage",
-              "payloadtype": "USAGE",
-              "ruleName": "R0111",
+              "payloadtype": "VISIBILITY",
+              "ruleName": "R0113",
               "targetPath": "code",
             },
           },
         ],
       },
-      "FullCoverage:2:deductibleAmount": Object {
-        "contextFieldInfo": ContextFieldInfo {
+      "COLLCoverage:2:deductibleAmount": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "2",
-          "contextName": "FullCoverage",
+          "contextName": "COLLCoverage",
           "fieldName": "deductibleAmount",
           "fieldPath": "deductibleAmount",
           "fieldType": "DECIMAL",
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
+            "kind": 1,
             "payloadResult": Object {
-              "message": undefined,
-              "success": false,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
+              "accessible": false,
+              "type": 128,
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "CarCoverage",
-              "payloadtype": "USAGE",
-              "ruleName": "R0118",
+              "payloadtype": "ACCESSIBILITY",
+              "ruleName": "R0119",
               "targetPath": "deductibleAmount",
-            },
-          },
-        ],
-      },
-      "FullCoverage:2:effectiveDate": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "2",
-          "contextName": "FullCoverage",
-          "fieldName": "effectiveDate",
-          "fieldPath": "effectiveDate",
-          "fieldType": "DATE",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": Object {
-                "errorCode": "The field is mandatory",
-                "errorMessage": undefined,
-                "templateVariables": Array [],
-              },
-              "success": false,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "COLLCoverage",
-              "payloadtype": "USAGE",
-              "ruleName": "R0099",
-              "targetPath": "effectiveDate",
-            },
-          },
-        ],
-      },
-      "FullCoverage:2:expirationDate": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "2",
-          "contextName": "FullCoverage",
-          "fieldName": "expirationDate",
-          "fieldPath": "expirationDate",
-          "fieldType": "DATE",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": Object {
-                "errorCode": "The field is mandatory",
-                "errorMessage": undefined,
-                "templateVariables": Array [],
-              },
-              "success": false,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "COLLCoverage",
-              "payloadtype": "USAGE",
-              "ruleName": "R0105",
-              "targetPath": "expirationDate",
-            },
-          },
-        ],
-      },
-      "FullCoverage:2:limitAmount": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "2",
-          "contextName": "FullCoverage",
-          "fieldName": "limitAmount",
-          "fieldPath": "limitAmount",
-          "fieldType": "DECIMAL",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": false,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "CarCoverage",
-              "payloadtype": "USAGE",
-              "ruleName": "R0115",
-              "targetPath": "limitAmount",
             },
           },
         ],
       },
     },
   },
-  "Validation results": Object {
-    "critical": Array [
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "Field is mandatory",
-        "messageCode": "rule-mandatory-error",
-        "ruleName": "R0118",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "Field is mandatory",
-        "messageCode": "The field is mandatory",
-        "ruleName": "R0105",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "Field is mandatory",
-        "messageCode": "The field is mandatory",
-        "ruleName": "R0099",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "Field is mandatory",
-        "messageCode": "rule-mandatory-error",
-        "ruleName": "R0111",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-      ResultErrorMessage {
-        "info": Object {
-          "getContextInstanceId": [Function],
-          "getContextName": [Function],
-        },
-        "message": "Field is mandatory",
-        "messageCode": "rule-mandatory-error",
-        "ruleName": "R0115",
-        "severity": "critical",
-        "templateVariables": Array [],
-      },
-    ],
-    "info": Array [],
-    "warning": Array [],
-  },
-}
-`;
-
-exports[`Sanity Coverages Inheritance tests Inherited Field Sanity tests should validate inherited presentation fields: Results + reducer results 1`] = `
-Object {
-  "Field Metadata reduced results": Object {
+  "fieldResults": Object {
     "COLLCoverage:2:code": Object {
       "fieldType": "STRING",
       "id": "COLLCoverage:2:code",
@@ -4218,20 +4034,185 @@ Object {
       "ruleResults": Array [],
     },
   },
-  "Raw results": Object {
+}
+`;
+
+exports[`Sanity Coverages Inheritance tests Inherited Field Sanity tests should validate local and inherited fields 1`] = `
+Object {
+  "entryPointResults": Object {
     "evaluationTimestamp": Any<Date>,
     "results": Object {
-      "COLLCoverage:2:code": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "2",
-          "contextName": "COLLCoverage",
-          "fieldName": "code",
-          "fieldPath": "code",
+      "AddressInfo:17:countryCd": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "17",
+          "contextName": "AddressInfo",
+          "fieldName": "countryCd",
+          "fieldPath": "countryCd",
           "fieldType": "STRING",
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "The field is mandatory",
+                "templateVariables": Array [],
+              },
+              "success": true,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "AddressInfo",
+              "payloadtype": "USAGE",
+              "ruleName": "R0156",
+              "targetPath": "countryCd",
+            },
+          },
+        ],
+      },
+      "AddressInfo:17:postalCode": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "17",
+          "contextName": "AddressInfo",
+          "fieldName": "postalCode",
+          "fieldPath": "postalCode",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "String doesn't match Regular Expression: ^\\\\d{5}$",
+                "templateVariables": Array [],
+              },
+              "regExp": "^\\\\d{5}$",
+              "success": true,
+              "type": 32,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "AddressInfo",
+              "payloadtype": "REGEX",
+              "ruleName": "R0157A",
+              "targetPath": "postalCode",
+            },
+          },
+        ],
+      },
+      "AddressInfo:21:countryCd": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "21",
+          "contextName": "AddressInfo",
+          "fieldName": "countryCd",
+          "fieldPath": "countryCd",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "The field is mandatory",
+                "templateVariables": Array [],
+              },
+              "success": true,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "AddressInfo",
+              "payloadtype": "USAGE",
+              "ruleName": "R0156",
+              "targetPath": "countryCd",
+            },
+          },
+        ],
+      },
+      "AddressInfo:21:postalCode": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "21",
+          "contextName": "AddressInfo",
+          "fieldName": "postalCode",
+          "fieldPath": "postalCode",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "String doesn't match Regular Expression: ^\\\\d{5}$",
+                "templateVariables": Array [],
+              },
+              "regExp": "^\\\\d{5}$",
+              "success": true,
+              "type": 32,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "AddressInfo",
+              "payloadtype": "REGEX",
+              "ruleName": "R0157A",
+              "targetPath": "postalCode",
+            },
+          },
+        ],
+      },
+      "BillingAddress:14:countryCd": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "14",
+          "contextName": "BillingAddress",
+          "fieldName": "countryCd",
+          "fieldPath": "countryCd",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -4240,56 +4221,87 @@ Object {
               "type": 256,
               "visible": false,
             },
-            "ruleInfo": RuleInfo {
-              "context": "CarCoverage",
+            "ruleInfo": DefaultRuleInfo {
+              "context": "BillingAddress",
               "payloadtype": "VISIBILITY",
-              "ruleName": "R0113",
-              "targetPath": "code",
+              "ruleName": "R0156A",
+              "targetPath": "countryCd",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "The field is mandatory",
+                "templateVariables": Array [],
+              },
+              "success": true,
+              "type": 64,
+              "usageType": "mandatory",
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "AddressInfo",
+              "payloadtype": "USAGE",
+              "ruleName": "R0156",
+              "targetPath": "countryCd",
             },
           },
         ],
       },
-      "COLLCoverage:2:deductibleAmount": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "2",
-          "contextName": "COLLCoverage",
-          "fieldName": "deductibleAmount",
-          "fieldPath": "deductibleAmount",
-          "fieldType": "DECIMAL",
+      "BillingAddress:14:postalCode": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "14",
+          "contextName": "BillingAddress",
+          "fieldName": "postalCode",
+          "fieldPath": "postalCode",
+          "fieldType": "STRING",
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
-            "kind": 1,
-            "payloadResult": Object {
-              "accessible": false,
-              "type": 128,
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
             },
-            "ruleInfo": RuleInfo {
-              "context": "CarCoverage",
-              "payloadtype": "ACCESSIBILITY",
-              "ruleName": "R0119",
-              "targetPath": "deductibleAmount",
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "String doesn't match Regular Expression: ^\\\\d{5}$",
+                "templateVariables": Array [],
+              },
+              "regExp": "^\\\\d{5}$",
+              "success": true,
+              "type": 32,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "AddressInfo",
+              "payloadtype": "REGEX",
+              "ruleName": "R0157A",
+              "targetPath": "postalCode",
             },
           },
         ],
       },
     },
   },
-  "Validation results": Object {
-    "critical": Array [],
-    "info": Array [],
-    "warning": Array [],
-  },
-}
-`;
-
-exports[`Sanity Coverages Inheritance tests Inherited Field Sanity tests should validate local and inherited fields: Results + reducer results 1`] = `
-Object {
-  "Field Metadata reduced results": Object {
+  "fieldResults": Object {
     "AddressInfo:17:countryCd": Object {
       "fieldType": "STRING",
       "id": "AddressInfo:17:countryCd",
@@ -4494,273 +4506,6 @@ Object {
         },
       ],
     },
-  },
-  "Raw results": Object {
-    "evaluationTimestamp": Any<Date>,
-    "results": Object {
-      "AddressInfo:17:countryCd": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "17",
-          "contextName": "AddressInfo",
-          "fieldName": "countryCd",
-          "fieldPath": "countryCd",
-          "fieldType": "STRING",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": Object {
-                "errorCode": "code",
-                "errorMessage": "The field is mandatory",
-                "templateVariables": Array [],
-              },
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "AddressInfo",
-              "payloadtype": "USAGE",
-              "ruleName": "R0156",
-              "targetPath": "countryCd",
-            },
-          },
-        ],
-      },
-      "AddressInfo:17:postalCode": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "17",
-          "contextName": "AddressInfo",
-          "fieldName": "postalCode",
-          "fieldPath": "postalCode",
-          "fieldType": "STRING",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": Object {
-                "errorCode": "code",
-                "errorMessage": "String doesn't match Regular Expression: ^\\\\d{5}$",
-                "templateVariables": Array [],
-              },
-              "regExp": "^\\\\d{5}$",
-              "success": true,
-              "type": 32,
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "AddressInfo",
-              "payloadtype": "REGEX",
-              "ruleName": "R0157A",
-              "targetPath": "postalCode",
-            },
-          },
-        ],
-      },
-      "AddressInfo:21:countryCd": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "21",
-          "contextName": "AddressInfo",
-          "fieldName": "countryCd",
-          "fieldPath": "countryCd",
-          "fieldType": "STRING",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": Object {
-                "errorCode": "code",
-                "errorMessage": "The field is mandatory",
-                "templateVariables": Array [],
-              },
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "AddressInfo",
-              "payloadtype": "USAGE",
-              "ruleName": "R0156",
-              "targetPath": "countryCd",
-            },
-          },
-        ],
-      },
-      "AddressInfo:21:postalCode": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "21",
-          "contextName": "AddressInfo",
-          "fieldName": "postalCode",
-          "fieldPath": "postalCode",
-          "fieldType": "STRING",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": Object {
-                "errorCode": "code",
-                "errorMessage": "String doesn't match Regular Expression: ^\\\\d{5}$",
-                "templateVariables": Array [],
-              },
-              "regExp": "^\\\\d{5}$",
-              "success": true,
-              "type": 32,
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "AddressInfo",
-              "payloadtype": "REGEX",
-              "ruleName": "R0157A",
-              "targetPath": "postalCode",
-            },
-          },
-        ],
-      },
-      "BillingAddress:14:countryCd": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "14",
-          "contextName": "BillingAddress",
-          "fieldName": "countryCd",
-          "fieldPath": "countryCd",
-          "fieldType": "STRING",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 1,
-            "payloadResult": Object {
-              "type": 256,
-              "visible": false,
-            },
-            "ruleInfo": RuleInfo {
-              "context": "BillingAddress",
-              "payloadtype": "VISIBILITY",
-              "ruleName": "R0156A",
-              "targetPath": "countryCd",
-            },
-          },
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": Object {
-                "errorCode": "code",
-                "errorMessage": "The field is mandatory",
-                "templateVariables": Array [],
-              },
-              "success": true,
-              "type": 64,
-              "usageType": "mandatory",
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "AddressInfo",
-              "payloadtype": "USAGE",
-              "ruleName": "R0156",
-              "targetPath": "countryCd",
-            },
-          },
-        ],
-      },
-      "BillingAddress:14:postalCode": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "14",
-          "contextName": "BillingAddress",
-          "fieldName": "postalCode",
-          "fieldPath": "postalCode",
-          "fieldType": "STRING",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": Object {
-                "errorCode": "code",
-                "errorMessage": "String doesn't match Regular Expression: ^\\\\d{5}$",
-                "templateVariables": Array [],
-              },
-              "regExp": "^\\\\d{5}$",
-              "success": true,
-              "type": 32,
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "AddressInfo",
-              "payloadtype": "REGEX",
-              "ruleName": "R0157A",
-              "targetPath": "postalCode",
-            },
-          },
-        ],
-      },
-    },
-  },
-  "Validation results": Object {
-    "critical": Array [],
-    "info": Array [],
-    "warning": Array [],
   },
 }
 `;

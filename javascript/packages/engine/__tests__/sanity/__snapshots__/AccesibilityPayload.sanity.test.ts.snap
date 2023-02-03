@@ -1,8 +1,125 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Engine Sanity Accessibility Payload Test should execute 'AccessibilityAutoPolicy' entrypoint: Results + reducer results 1`] = `
+exports[`Engine Sanity Accessibility Payload Test should execute 'AccessibilityAutoPolicy' entrypoint 1`] = `
 Object {
-  "Field Metadata reduced results": Object {
+  "entryPointResults": Object {
+    "evaluationTimestamp": Any<Date>,
+    "results": Object {
+      "Policy:0:policyNumber": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "policyNumber",
+          "fieldPath": "policyNumber",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "accessible": false,
+              "type": 128,
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "ACCESSIBILITY",
+              "ruleName": "R0001B",
+              "targetPath": "policyNumber",
+            },
+          },
+        ],
+      },
+      "Policy:0:termCd": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "termCd",
+          "fieldPath": "termDetails.termCd",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "accessible": false,
+              "type": 128,
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "ACCESSIBILITY",
+              "ruleName": "R0058",
+              "targetPath": "termCd",
+            },
+          },
+        ],
+      },
+      "Policy:0:txCreateDate": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "txCreateDate",
+          "fieldPath": "transactionDetails.txCreateDate",
+          "fieldType": "DATE",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "accessible": false,
+              "type": 128,
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "ACCESSIBILITY",
+              "ruleName": "R0023",
+              "targetPath": "txCreateDate",
+            },
+          },
+        ],
+      },
+      "Policy:0:txReason": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "txReason",
+          "fieldPath": "transactionDetails.txReason",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "accessible": false,
+              "type": 128,
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "ACCESSIBILITY",
+              "ruleName": "R0015",
+              "targetPath": "txReason",
+            },
+          },
+        ],
+      },
+    },
+  },
+  "fieldResults": Object {
     "Policy:0:policyNumber": Object {
       "fieldType": "STRING",
       "id": "Policy:0:policyNumber",
@@ -51,128 +168,6 @@ Object {
       "resolvedTargetPath": "transactionDetails.txReason",
       "ruleResults": Array [],
     },
-  },
-  "Raw results": Object {
-    "evaluationTimestamp": Any<Date>,
-    "results": Object {
-      "Policy:0:policyNumber": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "0",
-          "contextName": "Policy",
-          "fieldName": "policyNumber",
-          "fieldPath": "policyNumber",
-          "fieldType": "STRING",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 1,
-            "payloadResult": Object {
-              "accessible": false,
-              "type": 128,
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "ACCESSIBILITY",
-              "ruleName": "R0001B",
-              "targetPath": "policyNumber",
-            },
-          },
-        ],
-      },
-      "Policy:0:termCd": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "0",
-          "contextName": "Policy",
-          "fieldName": "termCd",
-          "fieldPath": "termDetails.termCd",
-          "fieldType": "STRING",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 1,
-            "payloadResult": Object {
-              "accessible": false,
-              "type": 128,
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "ACCESSIBILITY",
-              "ruleName": "R0058",
-              "targetPath": "termCd",
-            },
-          },
-        ],
-      },
-      "Policy:0:txCreateDate": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "0",
-          "contextName": "Policy",
-          "fieldName": "txCreateDate",
-          "fieldPath": "transactionDetails.txCreateDate",
-          "fieldType": "DATE",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 1,
-            "payloadResult": Object {
-              "accessible": false,
-              "type": 128,
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "ACCESSIBILITY",
-              "ruleName": "R0023",
-              "targetPath": "txCreateDate",
-            },
-          },
-        ],
-      },
-      "Policy:0:txReason": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "0",
-          "contextName": "Policy",
-          "fieldName": "txReason",
-          "fieldPath": "transactionDetails.txReason",
-          "fieldType": "STRING",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 1,
-            "payloadResult": Object {
-              "accessible": false,
-              "type": 128,
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "ACCESSIBILITY",
-              "ruleName": "R0015",
-              "targetPath": "txReason",
-            },
-          },
-        ],
-      },
-    },
-  },
-  "Validation results": Object {
-    "critical": Array [],
-    "info": Array [],
-    "warning": Array [],
   },
 }
 `;

@@ -14,34 +14,38 @@
  *  limitations under the License.
  */
 
-import * as React from "react";
+import * as React from 'react'
 
 interface State {
-    hasError: boolean;
-    errorMessage: string;
+    hasError: boolean
+    errorMessage: string
 }
 
-export class ErrorBoundary extends React.Component<{}, State> {
-    constructor(props: {}) {
-        super(props);
+export class ErrorBoundary extends React.Component<unknown, State> {
+    constructor(props: unknown) {
+        super(props)
         this.state = {
             hasError: false,
-            errorMessage: ""
-        };
+            errorMessage: '',
+        }
     }
 
     static getDerivedStateFromError(error: Error): State {
-        return { hasError: true, errorMessage: error.message };
+        return { hasError: true, errorMessage: error.message }
     }
 
     componentDidCatch(error: Error, info: unknown): void {
-        console.error(error, info);
+        console.error(error, info)
     }
 
     render(): React.ReactNode {
         if (this.state.hasError) {
-            return <h1>Error occured: <b>{this.state.errorMessage}</b></h1>;
+            return (
+                <h1>
+                    Error occured: <b>{this.state.errorMessage}</b>
+                </h1>
+            )
         }
-        return this.props.children;
+        return this.props.children
     }
 }

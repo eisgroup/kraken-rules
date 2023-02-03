@@ -14,32 +14,29 @@
  *  limitations under the License.
  */
 
-import { ContextDataProviderFactory } from "../../../src/engine/contexts/data/extraction/ContextDataProviderFactory";
-import { mock } from "../../mock";
+import { ContextDataProviderFactory } from '../../../src/engine/contexts/data/extraction/ContextDataProviderFactory'
+import { mock } from '../../mock'
 
-const { Policy, Party, PartyRole } = mock.modelTreeJson.contexts;
-describe("ContextDataProviderFactory", () => {
-    const contextDataProviderFactory = new ContextDataProviderFactory(
-        mock.contextDataExtractor,
-        mock.contextBuilder
-    );
-    const data = Object.freeze(mock.data.empty());
-    it("should extract 1 policy", () => {
-        const contextDataProvider = contextDataProviderFactory.createContextProvider(data);
-        const resolveContextData = contextDataProvider.resolveContextData(Policy.name);
-        expect(resolveContextData).toHaveLength(1);
-        expect(resolveContextData.map(v => v.contextId)).toMatchObject([data.id]);
-    });
-    it("should extract 1 party from array", () => {
-        const contextDataProvider = contextDataProviderFactory.createContextProvider(data);
-        const resolveContextData = contextDataProvider.resolveContextData(Party.name);
-        expect(resolveContextData).toHaveLength(1);
-        expect(resolveContextData.map(v => v.contextId)).toMatchObject([data.parties![0]!.id]);
-    });
-    it("should extract 1 party role from array of arrays", () => {
-        const contextDataProvider = contextDataProviderFactory.createContextProvider(data);
-        const resolveContextData = contextDataProvider.resolveContextData(PartyRole.name);
-        expect(resolveContextData).toHaveLength(1);
-        expect(resolveContextData.map(v => v.contextId)).toMatchObject([data.parties![0]!.roles![0].id]);
-    });
-});
+const { Policy, Party, PartyRole } = mock.modelTreeJson.contexts
+describe('ContextDataProviderFactory', () => {
+    const contextDataProviderFactory = new ContextDataProviderFactory(mock.contextDataExtractor, mock.contextBuilder)
+    const data = Object.freeze(mock.data.empty())
+    it('should extract 1 policy', () => {
+        const contextDataProvider = contextDataProviderFactory.createContextProvider(data)
+        const resolveContextData = contextDataProvider.resolveContextData(Policy.name)
+        expect(resolveContextData).toHaveLength(1)
+        expect(resolveContextData.map(v => v.contextId)).toMatchObject([data.id])
+    })
+    it('should extract 1 party from array', () => {
+        const contextDataProvider = contextDataProviderFactory.createContextProvider(data)
+        const resolveContextData = contextDataProvider.resolveContextData(Party.name)
+        expect(resolveContextData).toHaveLength(1)
+        expect(resolveContextData.map(v => v.contextId)).toMatchObject([data.parties?.[0].id])
+    })
+    it('should extract 1 party role from array of arrays', () => {
+        const contextDataProvider = contextDataProviderFactory.createContextProvider(data)
+        const resolveContextData = contextDataProvider.resolveContextData(PartyRole.name)
+        expect(resolveContextData).toHaveLength(1)
+        expect(resolveContextData.map(v => v.contextId)).toMatchObject([data.parties?.[0].roles?.[0].id])
+    })
+})

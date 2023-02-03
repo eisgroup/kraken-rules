@@ -27,7 +27,7 @@ import java.util.Map;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * @author mulevicius
@@ -121,4 +121,13 @@ public class ScopeTest {
 
         assertThat(globalScope.resolveTypeOf("CoverageType"), is(coverageType));
     }
+
+    @Test
+    public void shouldResolveTypeFromDynamicScope() {
+        Type policyType = new Type("PolicyType", new SymbolTable(List.of(), Map.of()));
+        Scope globalScope = new Scope(Type.ANY, Map.of(policyType.getName(), policyType));
+
+        assertThat(globalScope.resolveTypeOf("PolicyType").getName(), is("PolicyType"));
+    }
+
 }

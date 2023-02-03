@@ -15,76 +15,14 @@
  */
 package kraken.testproduct.domain.extended;
 
-import kraken.testproduct.domain.meta.Identifiable;
+import kraken.testproduct.domain.PersonInfo;
 
-public class PersonInfoExtended extends Identifiable {
-
-    private String firstName;
-
-    private String lastName;
+public class PersonInfoExtended extends PersonInfo {
 
     public PersonInfoExtended() {
     }
 
-    public PersonInfoExtended(String firstName, String lastName, AddressInfoExtended addressInfoExtended) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.addressInfoExtended = addressInfoExtended;
-    }
-
-    private Integer age;
-
-    private String occupation;
-
-    private Boolean sameHomeAddress;
-
-    private AddressInfoExtended addressInfoExtended;
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public String getOccupation() {
-        return occupation;
-    }
-
-    public void setOccupation(String occupation) {
-        this.occupation = occupation;
-    }
-
-    public Boolean getSameHomeAddress() {
-        return sameHomeAddress;
-    }
-
-    public void setSameHomeAddress(Boolean sameHomeAddress) {
-        this.sameHomeAddress = sameHomeAddress;
-    }
-
-    public AddressInfoExtended getAddressInfoExtended() {
-        return addressInfoExtended;
-    }
-
-    public void setAddressInfoExtended(AddressInfoExtended addressInfoExtended) {
-        this.addressInfoExtended = addressInfoExtended;
+    public PersonInfoExtended(String firstName, String lastName, AddressInfoExtended addressInfo) {
+        super(firstName, lastName, addressInfo);
     }
 }

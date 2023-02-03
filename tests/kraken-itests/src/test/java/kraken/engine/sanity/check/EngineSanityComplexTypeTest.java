@@ -15,10 +15,8 @@
  */
 package kraken.engine.sanity.check;
 
-import com.google.common.collect.ImmutableList;
 import kraken.runtime.engine.EntryPointResult;
 import kraken.testproduct.domain.AddressInfo;
-import kraken.testproduct.domain.AddressLine;
 import kraken.testproduct.domain.AddressLine1;
 import kraken.testproduct.domain.AddressLine2;
 import kraken.testproduct.domain.Policy;
@@ -33,8 +31,10 @@ import org.junit.Test;
 import static io.github.jsonSnapshot.SnapshotMatcher.start;
 import static io.github.jsonSnapshot.SnapshotMatcher.validateSnapshots;
 import static kraken.testing.matchers.KrakenMatchers.*;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static kraken.test.KrakenItestMatchers.matchesSnapshot;
+
+import java.util.List;
 
 /**
  * @author mulevicius
@@ -59,11 +59,11 @@ public class EngineSanityComplexTypeTest extends SanityEngineBaseTest {
 
         Vehicle vehicle = new Vehicle();
         vehicle.setAddressInfo(addressInfo);
-        vehicle.setAnubisCoverages(ImmutableList.of(new AnubisCoverage(), new AnubisCoverage()));
+        vehicle.setAnubisCoverages(List.of(new AnubisCoverage(), new AnubisCoverage()));
 
         Policy policy = new MockAutoPolicyBuilder()
                 .addCreditCardInfo(new CreditCardInfo())
-                .addRiskItems(ImmutableList.of(vehicle))
+                .addRiskItems(List.of(vehicle))
                 .build();
 
         final EntryPointResult result = engine.evaluate(policy, "complex-field-type-test");

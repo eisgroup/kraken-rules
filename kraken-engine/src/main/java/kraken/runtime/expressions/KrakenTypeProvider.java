@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-import kraken.el.functions.TypeProvider;
+import kraken.el.TypeProvider;
 import kraken.runtime.engine.context.info.ContextInstanceInfoResolver;
 import kraken.runtime.repository.RuntimeContextRepository;
 

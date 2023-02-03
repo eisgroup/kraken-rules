@@ -13,111 +13,210 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+import { DefaultValuePayloadResult, ExpressionEvaluationResult } from 'kraken-engine-api'
+import { Contexts, Payloads, Rule } from 'kraken-model'
 
-import { ExpressionEvaluator } from "../runtime/expressions/ExpressionEvaluator";
-import { RulePayloadHandler } from "./RulePayloadHandler";
-import { DefaultValuePayloadResult, payloadResultCreator } from "../results/PayloadResult";
-import { DataContext } from "../contexts/data/DataContext";
-import { ValueChangedEvent } from "../results/Events";
-import { ExecutionSession } from "../ExecutionSession";
+import { DataContext } from '../contexts/data/DataContext'
+import { ExecutionSession } from '../ExecutionSession'
+import { payloadResultCreator } from '../results/PayloadResultCreator'
+import { ValueChangedEvent } from '../results/ValueChangedEvent'
+import { ExpressionEvaluator } from '../runtime/expressions/ExpressionEvaluator'
+import { expressionFactory } from '../runtime/expressions/ExpressionFactory'
+import { Expressions } from '../runtime/expressions/Expressions'
+import { Moneys } from '../runtime/expressions/math/Moneys'
+import { RulePayloadHandler } from './RulePayloadHandler'
+import { logger } from '../../utils/DevelopmentLogger'
 
-import { Expressions } from "../runtime/expressions/Expressions";
-import { ExpressionEvaluationResult } from "../runtime/expressions/ExpressionEvaluationResult";
-import { expressionFactory } from "../runtime/expressions/ExpressionFactory";
-
-import { Payloads, Rule, Contexts } from "kraken-model";
-import DefaultingType = Payloads.Derive.DefaultingType;
-import DefaultValuePayload = Payloads.Derive.DefaultValuePayload;
-import PayloadType = Payloads.PayloadType;
+import DefaultingType = Payloads.Derive.DefaultingType
+import DefaultValuePayload = Payloads.Derive.DefaultValuePayload
+import PayloadType = Payloads.PayloadType
+import ContextField = Contexts.ContextField
 
 function isDefaultType(payload: DefaultValuePayload): boolean {
-    return payload.defaultingType === DefaultingType.defaultValue;
+    return payload.defaultingType === DefaultingType.defaultValue
 }
 
 function isResetType(payload: DefaultValuePayload): boolean {
-    return payload.defaultingType === DefaultingType.resetValue;
+    return payload.defaultingType === DefaultingType.resetValue
 }
 
 function toMoney(currency: string, amount: number): Contexts.MoneyType | undefined {
-    // tslint:disable-next-line: triple-equals
     if (amount == undefined) {
-        return undefined;
+        return undefined
     }
     return {
         amount: amount,
-        currency: currency
-    };
+        currency: currency,
+    }
 }
 
 /**
  * Payload handler implementation to process {@link DefaultValuePayload}s
  */
 export class DefaultValuePayloadHandler implements RulePayloadHandler {
-    constructor(private readonly evaluator: ExpressionEvaluator) { }
+    constructor(private readonly evaluator: ExpressionEvaluator) {}
 
     handlesPayloadType(): Payloads.PayloadType {
-        return PayloadType.DEFAULT;
+        return PayloadType.DEFAULT
     }
     executePayload(
-        payload: Payloads.Derive.DefaultValuePayload, rule: Rule, dataCtx: DataContext, session: ExecutionSession
+        payload: Payloads.Derive.DefaultValuePayload,
+        rule: Rule,
+        dataCtx: DataContext,
+        session: ExecutionSession,
     ): DefaultValuePayloadResult {
-        // resolve current value
-        const resolvePath = Expressions.createPathResolver(dataCtx);
-        const targetExpression = expressionFactory.fromPath(resolvePath(rule.targetPath));
-        const result = this.evaluator.evaluate(targetExpression, dataCtx);
-        if (ExpressionEvaluationResult.isError(result)) {
-            throw new Error(`Failed to extract attribute ${rule.targetPath}`);
-        }
-        const value = result.success;
+        const targetPath = Expressions.createPathResolver(dataCtx)(rule.targetPath)
 
-        // resolve update value
-        let updatedValue = value;
-        const expression = expressionFactory.fromExpression(payload.valueExpression);
-        const defaultValueResult = this.evaluator.evaluate(expression, dataCtx, session.expressionContext);
-        if (ExpressionEvaluationResult.isError(defaultValueResult)) {
-            return payloadResultCreator.defaultFail(defaultValueResult);
+        const value = this.resolveCurrentFieldValue(targetPath, dataCtx)
+
+        const expression = expressionFactory.fromExpression(payload.valueExpression)
+        const expressionResult = this.evaluator.evaluate(expression, dataCtx, session.expressionContext)
+        if (ExpressionEvaluationResult.isError(expressionResult)) {
+            return payloadResultCreator.defaultFail(expressionResult)
+        }
+        const coercionResult = this.coerce(expressionResult.success, rule, dataCtx, session)
+        if (ExpressionEvaluationResult.isError(coercionResult)) {
+            return payloadResultCreator.defaultFail(coercionResult)
         }
 
-        const defaultValue = defaultValueResult.success;
-        let isMoney = false;
-        if (dataCtx.definitionProjection) {
-            const field = dataCtx.definitionProjection[rule.targetPath];
-            if (field) {
-                isMoney = Contexts.fieldTypeChecker.isMoney(field.fieldType);
-            }
-        }
+        const defaultValue = coercionResult.success
 
-        const newDefaultValue = isMoney
-            ? toMoney(session.currencyCd, defaultValue)
-            : defaultValue;
+        // apply default value on field
 
-        // tslint:disable: triple-equals
-        const isDefault = isDefaultType(payload) && (value == undefined || value === "");
-        const isReset = isResetType(payload);
-
+        let updatedValue = value
+        const isDefault = isDefaultType(payload) && (value == undefined || value === '')
+        const isReset = isResetType(payload)
         if (isDefault || isReset) {
-            const updateValueResult = this.evaluator.evaluateSet(
-                targetExpression,
-                dataCtx.dataObject,
-                (isDefault || isReset)
-                    ? newDefaultValue
-                    : undefined,
-                session.expressionContext
-            );
+            const updateValueResult = this.evaluator.evaluateSet(targetPath, dataCtx.dataObject, defaultValue)
             if (ExpressionEvaluationResult.isError(updateValueResult)) {
-                return payloadResultCreator.defaultFail(updateValueResult);
+                return payloadResultCreator.defaultFail(updateValueResult)
             }
-            updatedValue = updateValueResult.success;
+            updatedValue = updateValueResult.success
         }
 
-        if (updatedValue === value) {
-            return payloadResultCreator.defaultNoEvents();
+        if (this.areValuesEqual(updatedValue, value)) {
+            return payloadResultCreator.defaultNoEvents()
         }
-        const path = dataCtx.definitionProjection[rule.targetPath]
-            ? dataCtx.definitionProjection[rule.targetPath].fieldPath
-            : rule.targetPath;
+
         return payloadResultCreator.default([
-            new ValueChangedEvent(path, dataCtx.contextName, dataCtx.contextId, updatedValue, value)
-        ]);
+            new ValueChangedEvent(targetPath, dataCtx.contextName, dataCtx.contextId, updatedValue, value),
+        ])
+    }
+
+    private resolveCurrentFieldValue(targetPath: string, dataCtx: DataContext): unknown {
+        const targetExpression = expressionFactory.fromPath(targetPath)
+        const result = this.evaluator.evaluate(targetExpression, dataCtx)
+        if (ExpressionEvaluationResult.isError(result)) {
+            throw new Error(`Failed to extract attribute ${targetPath}`)
+        }
+        return result.success
+    }
+
+    private coerce(
+        defaultValue: unknown,
+        rule: Rule,
+        dataCtx: DataContext,
+        session: ExecutionSession,
+    ): ExpressionEvaluationResult.Result {
+        const field = dataCtx.definitionProjection?.[rule.targetPath]
+        if (!field) {
+            return ExpressionEvaluationResult.expressionSuccess(defaultValue)
+        }
+        if (!Contexts.fieldTypeChecker.isPrimitive(field.fieldType) || field.cardinality !== 'SINGLE') {
+            throw Error(
+                `Unsupported operation. Default value rule '${rule.name}' is being applied on attribute '${
+                    dataCtx.contextName
+                }.${field.name}' which is not a primitive attribute, but a '${this.toTypeSymbol(field)}'.`,
+            )
+        }
+
+        if (defaultValue == undefined) {
+            return ExpressionEvaluationResult.expressionSuccess(defaultValue)
+        }
+
+        switch (field.fieldType) {
+            case 'MONEY':
+                if (Moneys.isMoney(defaultValue)) {
+                    return ExpressionEvaluationResult.expressionSuccess(defaultValue)
+                }
+                if (typeof defaultValue === 'number') {
+                    return ExpressionEvaluationResult.expressionSuccess(toMoney(session.currencyCd, defaultValue))
+                }
+                return this.logWarningAndReturnErrorResult(defaultValue, dataCtx, field)
+            case 'INTEGER':
+            case 'DECIMAL':
+                if (typeof defaultValue === 'number') {
+                    return ExpressionEvaluationResult.expressionSuccess(defaultValue)
+                }
+                if (Moneys.isMoney(defaultValue)) {
+                    return ExpressionEvaluationResult.expressionSuccess(defaultValue.amount)
+                }
+                return this.logWarningAndReturnErrorResult(defaultValue, dataCtx, field)
+            case 'DATE':
+            case 'DATETIME':
+                if (defaultValue instanceof Date) {
+                    return ExpressionEvaluationResult.expressionSuccess(defaultValue)
+                }
+                return this.logWarningAndReturnErrorResult(defaultValue, dataCtx, field)
+            case 'BOOLEAN':
+                if (typeof defaultValue === 'boolean') {
+                    return ExpressionEvaluationResult.expressionSuccess(defaultValue)
+                }
+                return this.logWarningAndReturnErrorResult(defaultValue, dataCtx, field)
+            case 'STRING':
+                if (typeof defaultValue === 'string') {
+                    return ExpressionEvaluationResult.expressionSuccess(defaultValue)
+                }
+                return this.logWarningAndReturnErrorResult(defaultValue, dataCtx, field)
+            case 'UUID':
+                return ExpressionEvaluationResult.expressionSuccess(defaultValue)
+        }
+        return ExpressionEvaluationResult.expressionError({
+            message: `Unknown primitive field type: ${field.fieldType}`,
+            severity: 'critical',
+        })
+    }
+
+    private logWarningAndReturnErrorResult(
+        value: unknown,
+        dataContext: DataContext,
+        field: ContextField,
+    ): ExpressionEvaluationResult.Result {
+        const message = `Cannot apply value '${value} (typeof ${typeof value})' on '${dataContext.contextName}.${
+            field.name
+        }' because value type is not assignable to field type '${this.toTypeSymbol(
+            field,
+        )}'. Rule will be silently ignored.`
+        logger.warning(message)
+        return ExpressionEvaluationResult.expressionError({ message, severity: 'critical' })
+    }
+
+    private toTypeSymbol(field: ContextField): string {
+        return field.cardinality === 'SINGLE' ? field.fieldType : field.fieldType + '[]'
+    }
+
+    private areValuesEqual(previousValue: unknown, updatedValue: unknown): boolean {
+        return (
+            (previousValue == undefined && updatedValue == undefined) ||
+            updatedValue === previousValue ||
+            this.areValuesEqualAsMoney(previousValue, updatedValue) ||
+            this.areValuesEqualAsDate(previousValue, updatedValue)
+        )
+    }
+
+    private areValuesEqualAsMoney(previousValue: unknown, updatedValue: unknown): boolean {
+        return (
+            Moneys.isMoney(updatedValue) &&
+            Moneys.isMoney(previousValue) &&
+            updatedValue.amount === previousValue.amount
+        )
+    }
+
+    private areValuesEqualAsDate(previousValue: unknown, updatedValue: unknown): boolean {
+        return (
+            updatedValue instanceof Date &&
+            previousValue instanceof Date &&
+            updatedValue.getTime() === previousValue.getTime()
+        )
     }
 }

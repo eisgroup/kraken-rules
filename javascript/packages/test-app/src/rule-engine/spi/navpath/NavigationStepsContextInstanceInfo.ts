@@ -14,8 +14,8 @@
  *  limitations under the License.
  */
 
-import { NavigationStep, NavigationStepType } from "./NavigationStep";
-import { ContextInstanceInfo } from "kraken-typescript-engine";
+import { NavigationStep, NavigationStepType } from './NavigationStep'
+import { ContextInstanceInfo } from 'kraken-typescript-engine'
 
 /**
  * Implementation of {{@link ContextInstanceInfo}} interface for navigation path
@@ -25,27 +25,23 @@ import { ContextInstanceInfo } from "kraken-typescript-engine";
  * extraction path from the root.
  */
 export class NavigationStepsContextInstanceInfo implements ContextInstanceInfo {
-
-    // @ts-ignore
-    readonly contextName: string;
-    // @ts-ignore
-    readonly navigationSteps: NavigationStep[];
-    // @ts-ignore
-    readonly contextInstanceId: string;
+    readonly contextName: string
+    readonly navigationSteps: NavigationStep[]
+    readonly contextInstanceId: string
 
     constructor(name: string, id: string, steps?: NavigationStep[]) {
-        Object.defineProperty(this, "contextName", {
+        Object.defineProperty(this, 'contextName', {
             enumerable: false,
-            value: name
-        });
-        Object.defineProperty(this, "contextInstanceId", {
+            value: name,
+        })
+        Object.defineProperty(this, 'contextInstanceId', {
             enumerable: true,
-            value: id
-        });
-        Object.defineProperty(this, "navigationSteps", {
+            value: id,
+        })
+        Object.defineProperty(this, 'navigationSteps', {
             enumerable: false,
-            value: steps || []
-        });
+            value: steps || [],
+        })
     }
 
     addExtractionStep(name: string, id: string, expression: string): NavigationStepsContextInstanceInfo {
@@ -53,41 +49,35 @@ export class NavigationStepsContextInstanceInfo implements ContextInstanceInfo {
             NavigationStepType.EXTRACTION,
             this.contextName,
             this.contextInstanceId,
-            expression);
-        return this.appendStep(name, id, step);
+            expression,
+        )
+        return this.appendStep(name, id, step)
     }
 
     addListExtractionStep(index: number): NavigationStepsContextInstanceInfo {
-        const step = new NavigationStep(
-            NavigationStepType.LIST_INDEX,
-            this.contextName,
-            this.contextInstanceId,
-            index);
-        return this.appendStep(this.contextName, this.contextInstanceId, step);
+        const step = new NavigationStep(NavigationStepType.LIST_INDEX, this.contextName, this.contextInstanceId, index)
+        return this.appendStep(this.contextName, this.contextInstanceId, step)
     }
 
     addInheritanceStep(parentName: string): NavigationStepsContextInstanceInfo {
-        const step = new NavigationStep(
-            NavigationStepType.PARENT_ACCESS,
-            this.contextName,
-            this.contextInstanceId);
-        return this.appendStep(parentName, this.contextInstanceId, step);
+        const step = new NavigationStep(NavigationStepType.PARENT_ACCESS, this.contextName, this.contextInstanceId)
+        return this.appendStep(parentName, this.contextInstanceId, step)
     }
 
     /**
      * @override
      */
     getContextInstanceId(): string {
-        return this.contextInstanceId;
+        return this.contextInstanceId
     }
     /**
      * @override
      */
     getContextName(): string {
-        return this.contextName;
+        return this.contextName
     }
 
     private appendStep(name: string, id: string, step: NavigationStep): NavigationStepsContextInstanceInfo {
-        return new NavigationStepsContextInstanceInfo(name, id, [...this.navigationSteps, step]);
+        return new NavigationStepsContextInstanceInfo(name, id, [...this.navigationSteps, step])
     }
 }

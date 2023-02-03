@@ -42,6 +42,8 @@ public class RuleImpl implements Rule {
 
     private boolean dimensional = false;
 
+    private Integer priority;
+
     @Override
     public String getRuleVariationId() {
         return ruleVariationId;
@@ -144,5 +146,15 @@ public class RuleImpl implements Rule {
     @Override
     public void setDimensional(boolean dimensional) {
         this.dimensional = dimensional;
+    }
+
+    @Override
+    public Integer getPriority() {
+        return priority;
+    }
+
+    @Override
+    public void setPriority(Integer priority) {
+        this.priority = priority;
     }
 }

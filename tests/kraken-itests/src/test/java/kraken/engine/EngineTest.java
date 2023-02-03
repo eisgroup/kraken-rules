@@ -15,24 +15,11 @@
  */
 package kraken.engine;
 
-import kraken.runtime.engine.EntryPointResult;
-import kraken.runtime.engine.context.info.DataObjectInfoResolver;
-import kraken.runtime.engine.context.info.SimpleDataObjectInfoResolver;
-import kraken.runtime.engine.context.type.ContextTypeAdapter;
-import kraken.runtime.engine.context.type.IterableContextTypeAdapter;
-import kraken.runtime.engine.result.reducers.validation.ValidationResult;
-import kraken.test.TestResources;
-import kraken.testproduct.domain.*;
-import kraken.utils.MockAutoPolicyBuilder;
-import org.junit.Assert;
-import org.junit.Test;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.*;
-
-import static kraken.testing.matchers.KrakenMatchers.*;
+import static kraken.testing.matchers.KrakenMatchers.hasNoIgnoredRules;
+import static kraken.testing.matchers.KrakenMatchers.hasNoValidationFailures;
+import static kraken.testing.matchers.KrakenMatchers.hasRuleResults;
+import static kraken.testing.matchers.KrakenMatchers.hasValidationFailures;
+import static kraken.testing.matchers.KrakenMatchers.hasValueChangeEvents;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -41,34 +28,53 @@ import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 
-public final class EngineTest extends EngineBaseTest {
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-    @Override
-    protected DataObjectInfoResolver getResolver() { return new SimpleDataObjectInfoResolver(); }
+import org.junit.Test;
+
+import kraken.model.payload.PayloadType;
+import kraken.runtime.EvaluationConfig;
+import kraken.runtime.EvaluationMode;
+import kraken.runtime.KrakenRuntimeException;
+import kraken.runtime.engine.EntryPointResult;
+import kraken.runtime.engine.context.info.DataObjectInfoResolver;
+import kraken.runtime.engine.context.info.SimpleDataObjectInfoResolver;
+import kraken.runtime.engine.context.type.ContextTypeAdapter;
+import kraken.runtime.engine.context.type.IterableContextTypeAdapter;
+import kraken.runtime.engine.result.reducers.validation.ValidationResult;
+import kraken.test.TestResources;
+import kraken.testproduct.domain.BillingInfo;
+import kraken.testproduct.domain.COLLCoverage;
+import kraken.testproduct.domain.CreditCardInfo;
+import kraken.testproduct.domain.Insured;
+import kraken.testproduct.domain.Party;
+import kraken.testproduct.domain.Policy;
+import kraken.testproduct.domain.RRCoverage;
+import kraken.testproduct.domain.TransactionDetails;
+import kraken.testproduct.domain.Vehicle;
+import kraken.utils.MockAutoPolicyBuilder;
+
+public final class EngineTest extends EngineBaseTest {
 
     @Override
     protected TestResources getResources() {
         return TestResources.create(TestResources.Info.TEST_PRODUCT);
     }
 
-    @Override
-    protected Object getDataObject() {
+    private Policy getDataObject() {
         return new MockAutoPolicyBuilder().addEmptyAutoPolicy().build();
-    }
-
-    @Override
-    protected List<IterableContextTypeAdapter> getIterableTypeAdapters() {
-        return new ArrayList<>();
-    }
-
-    @Override
-    protected List<ContextTypeAdapter> getInstanceTypeAdapters() {
-        return new ArrayList<>();
     }
 
     @Test
     public void shouldExecuteCoverageAssertionEntryPoint() {
-        final Policy policy = (Policy) getDataObject();
+        final Policy policy = getDataObject();
         final COLLCoverage collCoverage = new COLLCoverage();
         collCoverage.setLimitAmount(new BigDecimal("100"));
         policy.setCoverage(collCoverage);
@@ -83,9 +89,54 @@ public final class EngineTest extends EngineBaseTest {
     }
 
     @Test
+    public void shouldEvaluateOnlyRulesApplicableForInquiryEvaluationMode() {
+        Vehicle vehicle = new Vehicle();
+        Policy policy = getDataObject();
+        policy.setRiskItems(List.of(vehicle));
+
+        EntryPointResult result = engine.evaluate(policy, "EvalModeTestRules",
+            new EvaluationConfig(Map.of(), "USD", EvaluationMode.INQUIRY));
+
+        assertThat(result.getAllRuleResults(), hasSize(2));
+        assertThat(result.getAllRuleResults().stream()
+            .map(ruleEvaluationResult -> ruleEvaluationResult.getRuleInfo().getPayloadType())
+            .collect(Collectors.toList()), containsInAnyOrder(
+                is(PayloadType.ACCESSIBILITY), is(PayloadType.VISIBILITY)));
+    }
+
+    @Test
+    public void shouldEvaluateOnlyRulesApplicableForPresentationalEvaluationMode() {
+        Vehicle vehicle = new Vehicle();
+        Policy policy = getDataObject();
+        policy.setRiskItems(List.of(vehicle));
+
+        EntryPointResult result = engine.evaluate(policy, "EvalModeTestRules",
+            new EvaluationConfig(Map.of(), "USD", EvaluationMode.PRESENTATIONAL));
+
+        assertThat(result.getAllRuleResults(), hasSize(4));
+        assertThat(result.getAllRuleResults().stream()
+            .map(ruleEvaluationResult -> ruleEvaluationResult.getRuleInfo().getPayloadType())
+            .collect(Collectors.toList()), containsInAnyOrder(
+                is(PayloadType.ACCESSIBILITY), is(PayloadType.VISIBILITY),
+                is(PayloadType.DEFAULT), is(PayloadType.USAGE)));
+    }
+
+    @Test
+    public void shouldEvaluateAllRulesByDefault() {
+        Vehicle vehicle = new Vehicle();
+        Policy policy = getDataObject();
+        policy.setRiskItems(List.of(vehicle));
+
+        EntryPointResult result = engine.evaluate(policy, "EvalModeTestRules",
+            new EvaluationConfig());
+
+        assertThat(result.getAllRuleResults(), hasSize(9));
+    }
+
+    @Test
     public void shouldExecuteCreditCardInfoRegExpEntryPoint() {
         final String RuleName = "R0066";
-        final Policy policy = (Policy) getDataObject();
+        final Policy policy = getDataObject();
         final CreditCardInfo creditCardInfo = new CreditCardInfo();
         final BillingInfo billingInfo = new BillingInfo();
         creditCardInfo.setCardType("MasterCard");
@@ -102,12 +153,13 @@ public final class EngineTest extends EngineBaseTest {
         assertThat(errorResults.get(0).getRuleName(), is(RuleName));
         assertThat(errorResults.get(0).getContextFieldInfo().getContextName(), is("CreditCardInfo"));
         assertThat(errorResults.get(0).getMessage(), is("String doesn't match Regular Expression: ^[0-9]{3}$"));
+        assertThat(errorResults.get(0).getMessageTemplate(), is("String doesn''t match Regular Expression: ^[0-9]'{'3'}'$"));
         assertThat(result, hasNoIgnoredRules());
     }
 
     @Test
     public void shouldExecuteCarCoverageUsageEntryPoint() {
-        final Policy policy = (Policy) getDataObject();
+        final Policy policy = getDataObject();
         policy.setCoverage(new COLLCoverage());
 
         final EntryPointResult result = engine.evaluate(policy, "CarCoverageUsage");
@@ -126,7 +178,7 @@ public final class EngineTest extends EngineBaseTest {
 
     @Test
     public void shouldExecuteAutoPolicyDefaultEntryPoint () {
-        final Policy policy = (Policy) getDataObject();
+        final Policy policy = getDataObject();
         final EntryPointResult result = engine.evaluate(policy, "AutoPolicyDefault");
 
         assertThat(result, hasValueChangeEvents(5));
@@ -140,7 +192,7 @@ public final class EngineTest extends EngineBaseTest {
 
     @Test
     public void shouldExecuteAutoPolicyDefaultAndAssertRulesInOrder() {
-        final Policy policy = (Policy) getDataObject();
+        final Policy policy = getDataObject();
         final EntryPointResult result = engine.evaluate(policy, "AutoPolicyDefaultAndAssert");
         final List<ValidationResult> errorResults = validationStatusReducer.reduce(result).getErrorResults();
 
@@ -154,7 +206,7 @@ public final class EngineTest extends EngineBaseTest {
 
     @Test
     public void shouldExecuteUsagePayloadAutoPolicyEntryPoint() {
-        final Policy policy = (Policy) getDataObject();
+        final Policy policy = getDataObject();
         final EntryPointResult resultFromEvaluationWithEntryPointName = engine.evaluate(policy, "UsagePayloadAutoPolicy");
         final List<ValidationResult> errorResultsWithEntryPointName = validationStatusReducer.reduce(resultFromEvaluationWithEntryPointName).getErrorResults();
 
@@ -168,7 +220,7 @@ public final class EngineTest extends EngineBaseTest {
 
     @Test
     public void shouldExecutePartyLengthEntryPoint() {
-        final Policy policy = (Policy) getDataObject();
+        final Policy policy = getDataObject();
         final Party party = new Party("1");
         final String relationToPrimaryInsured = "String contains more charactes than 20";
         party.setRelationToPrimaryInsured(relationToPrimaryInsured);
@@ -205,7 +257,7 @@ public final class EngineTest extends EngineBaseTest {
         policy.setInsured(insured);
         final EntryPointResult result = engine.evaluateSubtree(policy, insured, "ResetRules");
 
-        Assert.assertThat(result, hasRuleResults(0));
+        assertThat(result, hasRuleResults(0));
     }
 
     @Test
@@ -217,6 +269,20 @@ public final class EngineTest extends EngineBaseTest {
 
         assertThat(result, hasNoIgnoredRules());
         assertThat(result, hasNoValidationFailures());
+    }
+
+    @Test(expected = KrakenRuntimeException.class)
+    public void shouldEvaluateRuleOrderWithCycleInFunctionAndThrowRuntimeError() {
+        Vehicle vehicle = new Vehicle();
+        RRCoverage rrCoverage = new RRCoverage();
+        vehicle.setRentalCoverage(rrCoverage);
+        COLLCoverage collCoverage1 = new COLLCoverage(new BigDecimal("50"));
+        COLLCoverage collCoverage2 = new COLLCoverage(new BigDecimal("75"));
+        vehicle.setCollCoverages(List.of(collCoverage1, collCoverage2));
+        Policy policy = new Policy();
+        policy.setRiskItems(List.of(vehicle));
+
+        engine.evaluate(policy, "RuleOrderWithCycleInFunction");
     }
 
 }

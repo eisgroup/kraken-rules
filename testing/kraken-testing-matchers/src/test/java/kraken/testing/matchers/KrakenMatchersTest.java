@@ -65,7 +65,7 @@ public class KrakenMatchersTest {
         RuleEvaluationResult evaluationResult = setupRuleEvaluationResult(rule, payloadResult);
 
         EntryPointResult entryPointResult = mock(EntryPointResult.class);
-        when(entryPointResult.getApplicableRuleResults()).thenReturn(List.of(evaluationResult));
+        when(entryPointResult.getAllRuleResults()).thenReturn(List.of(evaluationResult));
 
         MatcherAssert.assertThat(entryPointResult, KrakenMatchers.hasValueChangeEvents(2));
     }
@@ -80,7 +80,7 @@ public class KrakenMatchersTest {
         RuleEvaluationResult evaluationResult = setupRuleEvaluationResult(rule, payloadResult);
 
         EntryPointResult entryPointResult = mock(EntryPointResult.class);
-        when(entryPointResult.getApplicableRuleResults()).thenReturn(List.of(evaluationResult));
+        when(entryPointResult.getAllRuleResults()).thenReturn(List.of(evaluationResult));
 
         MatcherAssert.assertThat(entryPointResult, KrakenMatchers.hasDisabledFields(1));
     }
@@ -143,7 +143,7 @@ public class KrakenMatchersTest {
         RuleEvaluationResult evaluationResult = setupRuleEvaluationResult(rule, payloadResult);
 
         EntryPointResult entryPointResult = mock(EntryPointResult.class);
-        when(entryPointResult.getApplicableRuleResults()).thenReturn(List.of(evaluationResult));
+        when(entryPointResult.getAllRuleResults()).thenReturn(List.of(evaluationResult));
 
         MatcherAssert.assertThat(entryPointResult, KrakenMatchers.hasValidationFailures(1));
     }
@@ -158,7 +158,7 @@ public class KrakenMatchersTest {
         RuleEvaluationResult evaluationResult = setupRuleEvaluationResult(rule, payloadResult);
 
         EntryPointResult entryPointResult = mock(EntryPointResult.class);
-        when(entryPointResult.getApplicableRuleResults()).thenReturn(List.of(evaluationResult));
+        when(entryPointResult.getAllRuleResults()).thenReturn(List.of(evaluationResult));
 
         MatcherAssert.assertThat(entryPointResult, KrakenMatchers.hasNoValidationFailures());
     }
@@ -174,7 +174,7 @@ public class KrakenMatchersTest {
         RuleEvaluationResult evaluationResult = setupRuleEvaluationResult(rule, payloadResult);
 
         EntryPointResult entryPointResult = mock(EntryPointResult.class);
-        when(entryPointResult.getApplicableRuleResults()).thenReturn(List.of(evaluationResult));
+        when(entryPointResult.getAllRuleResults()).thenReturn(List.of(evaluationResult));
 
         MatcherAssert.assertThat(entryPointResult, KrakenMatchers.hasNoValidationFailures());
     }
@@ -182,7 +182,7 @@ public class KrakenMatchersTest {
     @Test
     public void shouldEvaluateValidationMatcherNoFailuresNoResults() {
         EntryPointResult entryPointResult = mock(EntryPointResult.class);
-        when(entryPointResult.getApplicableRuleResults()).thenReturn(List.of());
+        when(entryPointResult.getAllRuleResults()).thenReturn(List.of());
 
         MatcherAssert.assertThat(entryPointResult, KrakenMatchers.hasNoValidationFailures());
     }
@@ -197,7 +197,7 @@ public class KrakenMatchersTest {
         RuleEvaluationResult evaluationResult = setupRuleEvaluationResult(rule, payloadResult);
 
         EntryPointResult entryPointResult = mock(EntryPointResult.class);
-        when(entryPointResult.getApplicableRuleResults()).thenReturn(List.of(evaluationResult));
+        when(entryPointResult.getAllRuleResults()).thenReturn(List.of(evaluationResult));
 
         MatcherAssert.assertThat(entryPointResult, KrakenMatchers.hasNoIgnoredRules());
     }
@@ -205,7 +205,7 @@ public class KrakenMatchersTest {
     @Test
     public void shouldEvaluateErrorsMatcherNoResults() {
         EntryPointResult entryPointResult = mock(EntryPointResult.class);
-        when(entryPointResult.getApplicableRuleResults()).thenReturn(List.of());
+        when(entryPointResult.getAllRuleResults()).thenReturn(List.of());
 
         MatcherAssert.assertThat(entryPointResult, KrakenMatchers.hasNoIgnoredRules());
     }

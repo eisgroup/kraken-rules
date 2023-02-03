@@ -15,26 +15,33 @@
  */
 package kraken.engine.adapter;
 
+import static kraken.testing.matchers.KrakenMatchers.hasNoIgnoredRules;
+import static kraken.testing.matchers.KrakenMatchers.hasValidationFailures;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Optional;
+import java.util.Set;
+
+import org.junit.Test;
+
 import kraken.engine.EngineBaseTest;
-import kraken.engine.adapter.test.domain.*;
+import kraken.engine.adapter.test.domain.CoverageA;
+import kraken.engine.adapter.test.domain.CoverageB;
+import kraken.engine.adapter.test.domain.Insured;
+import kraken.engine.adapter.test.domain.Policy;
+import kraken.engine.adapter.test.domain.RiskItem;
 import kraken.engine.adapter.test.domain.wrappers.ExtendedWrapper;
 import kraken.engine.adapter.test.domain.wrappers.InfoAdapterHolder;
 import kraken.engine.adapter.test.domain.wrappers.Wrapper;
 import kraken.runtime.engine.EntryPointResult;
-import kraken.runtime.engine.context.info.DataObjectInfoResolver;
-import kraken.runtime.engine.context.info.SimpleDataObjectInfoResolver;
 import kraken.runtime.engine.context.info.iterators.ContextInstanceIterator;
 import kraken.runtime.engine.context.type.ContextTypeAdapter;
 import kraken.runtime.engine.context.type.IterableContextTypeAdapter;
 import kraken.test.TestResources;
-import org.junit.Test;
-
-import java.util.*;
-
-import static kraken.testing.matchers.KrakenMatchers.hasNoIgnoredRules;
-import static kraken.testing.matchers.KrakenMatchers.hasValidationFailures;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * @author psurinin
@@ -43,18 +50,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public final class TypeAdaptersEngineTest extends EngineBaseTest {
 
     @Override
-    protected DataObjectInfoResolver getResolver() {
-        return new SimpleDataObjectInfoResolver();
-    }
-
-    @Override
     protected TestResources getResources() {
         return TestResources.create(TestResources.Info.TYPE_ADAPTER);
-    }
-
-    @Override
-    protected Object getDataObject() {
-        return createMockPolicyWithWrappers();
     }
 
     @Override
@@ -74,7 +71,7 @@ public final class TypeAdaptersEngineTest extends EngineBaseTest {
 
     @Test
     public void shouldGetAllFailedResultsOnWrappedInstances() {
-        final EntryPointResult result = engine.evaluate(dataObject, "Adapter");
+        final EntryPointResult result = engine.evaluate(createMockPolicyWithWrappers(), "Adapter");
         // assert
         assertThat(result, hasValidationFailures(4));
         assertThat(result, hasNoIgnoredRules());

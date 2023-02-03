@@ -21,14 +21,13 @@ import static kraken.model.project.KrakenProjectMocks.entryPoint;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import kraken.model.Expression;
@@ -60,7 +59,6 @@ public class RuleCrossContextCardinalityValidatorTest {
     }
 
     @Test
-    @Ignore("GENESIS-131003")
     public void shouldValidateCcrWithoutInheritance() {
         final String ruleContext = "Coverage";
         final String reference = "RiskItem";
@@ -79,7 +77,6 @@ public class RuleCrossContextCardinalityValidatorTest {
     }
 
     @Test
-    @Ignore("GENESIS-131003")
     public void shouldValidateCcrWithInheritance_AUTO_namespace_Vehicle() {
         final String ruleContext = "Coverage";
         final String reference = "Vehicle";
@@ -99,7 +96,6 @@ public class RuleCrossContextCardinalityValidatorTest {
     }
 
     @Test
-    @Ignore("GENESIS-131003")
     public void shouldValidateCcrWithInheritance_AUTO_namespace_RiskItem() {
         final String ruleContext = "Coverage";
         final String reference = "RiskItem";
@@ -119,17 +115,26 @@ public class RuleCrossContextCardinalityValidatorTest {
     }
 
     private KrakenProject toKrakenProject(String namespace, List<Rule> rules) {
-        List<String> ruleNames = rules.stream().map(Rule::getName).collect(Collectors.toList());
+        var ruleNames = rules.stream()
+                .map(Rule::getName)
+                .collect(Collectors.toList());
+        var rootContextDefinition = contextDefinitions.stream()
+                .filter(contextDefinition -> contextDefinition.isRoot() && contextDefinition.getPhysicalNamespace().equals(namespace))
+                .findFirst()
+                .map(contextDefinition -> contextDefinition.getName())
+                .orElse(null);
+
         return new ResourceKrakenProject(
-            namespace,
-            contextDefinitions.isEmpty() ? null : contextDefinitions.get(0).getName(),
-            contextDefinitions.stream().collect(Collectors.toMap(ContextDefinition::getName, c -> c)),
-            List.of(entryPoint("Validate", ruleNames)),
-            rules,
-            null,
-            Map.of(),
-            null,
-            List.of()
+                namespace,
+                rootContextDefinition,
+                contextDefinitions.stream().collect(Collectors.toMap(ContextDefinition::getName, c -> c)),
+                List.of(entryPoint("Validate", ruleNames)),
+                rules,
+                null,
+                Map.of(),
+                null,
+                List.of(),
+                List.of()
         );
     }
 

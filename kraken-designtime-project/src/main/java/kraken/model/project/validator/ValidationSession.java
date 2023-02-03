@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import kraken.model.Function;
 import kraken.model.FunctionSignature;
 import kraken.model.Rule;
 import kraken.model.context.ContextDefinition;
@@ -39,6 +40,7 @@ public class ValidationSession {
     private final List<ValidationMessage> contextValidationMessages = new ArrayList<>();
     private final List<ValidationMessage> externalContextValidationMessages = new ArrayList<>();
     private final List<ValidationMessage> functionSignatureValidationMessages = new ArrayList<>();
+    private final List<ValidationMessage> functionValidationMessages = new ArrayList<>();
 
     private final List<ValidationMessage> ruleValidationMessages = new ArrayList<>();
     private final List<ValidationMessage> entryPointValidationMessages = new ArrayList<>();
@@ -63,6 +65,8 @@ public class ValidationSession {
             externalContextValidationMessages.add(message);
         } else if(message.getItem() instanceof FunctionSignature) {
             functionSignatureValidationMessages.add(message);
+        } else if(message.getItem() instanceof Function) {
+            functionValidationMessages.add(message);
         } else {
             throw new IllegalStateException("Unknown Kraken Model Type encountered: " + message.getItem().getClass());
         }
@@ -78,6 +82,10 @@ public class ValidationSession {
 
     public boolean hasFunctionSignatureError() {
         return functionSignatureValidationMessages.stream().anyMatch(m -> m.getSeverity() == Severity.ERROR);
+    }
+
+    public boolean hasFunctionError() {
+        return functionValidationMessages.stream().anyMatch(m -> m.getSeverity() == Severity.ERROR);
     }
 
     public boolean hasEntryPointError() {

@@ -4,4 +4,5 @@ import Value;
 
 options {tokenVocab=Common;}
 
-expression : value? EOF;
+expression : (valueBlock? | template) EOF;
+

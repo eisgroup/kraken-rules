@@ -24,6 +24,7 @@ import kraken.runtime.RuleEngine;
 import kraken.runtime.RuleEngineBuilder;
 import kraken.runtime.engine.EntryPointResult;
 import kraken.runtime.engine.context.info.DataObjectInfoResolver;
+import kraken.runtime.engine.context.info.SimpleDataObjectInfoResolver;
 import kraken.runtime.engine.context.info.navpath.DataNavigationContextInstanceInfoResolver;
 import kraken.runtime.engine.context.type.ContextTypeAdapter;
 import kraken.runtime.engine.context.type.IterableContextTypeAdapter;
@@ -31,8 +32,6 @@ import kraken.runtime.engine.result.reducers.validation.ValidationStatusReducer;
 import kraken.test.TestResources;
 import kraken.utils.Namespaces;
 import org.junit.Before;
-import org.junit.Rule;
-import org.junit.contrib.java.lang.system.SystemOutRule;
 
 /**
  * @author psurinin
@@ -42,11 +41,8 @@ import org.junit.contrib.java.lang.system.SystemOutRule;
 public abstract class EngineBaseTest {
 
     protected RuleEngine engine;
-    protected Object dataObject;
-    protected ValidationStatusReducer validationStatusReducer;
 
-    @Rule
-    public final SystemOutRule systemOutRule = new SystemOutRule().enableLog();
+    protected ValidationStatusReducer validationStatusReducer;
 
     @Before
     public void setUp() {
@@ -62,20 +58,23 @@ public abstract class EngineBaseTest {
         Stream.of(getInstanceTypeAdapters().toArray())
                 .map(a -> ((ContextTypeAdapter) a))
                 .forEach(builder::addCustomTypeAdapter);
-        engine = new TestEngine(builder.buildEngine(), resources.getKrakenProject().getNamespace());
-        dataObject = getDataObject();
-        validationStatusReducer = new ValidationStatusReducer();
+        this.engine = new TestEngine(builder.buildEngine(), resources.getKrakenProject().getNamespace());
+        this.validationStatusReducer = new ValidationStatusReducer();
     }
 
     protected abstract TestResources getResources();
 
-    protected abstract DataObjectInfoResolver getResolver();
+    protected DataObjectInfoResolver getResolver() {
+        return new SimpleDataObjectInfoResolver();
+    };
 
-    protected abstract Object getDataObject();
+    protected List<IterableContextTypeAdapter> getIterableTypeAdapters() {
+        return List.of();
+    }
 
-    protected abstract List<IterableContextTypeAdapter> getIterableTypeAdapters();
-
-    protected abstract List<ContextTypeAdapter> getInstanceTypeAdapters();
+    protected List<ContextTypeAdapter> getInstanceTypeAdapters() {
+        return List.of();
+    };
 
     protected static class TestEngine implements RuleEngine {
 

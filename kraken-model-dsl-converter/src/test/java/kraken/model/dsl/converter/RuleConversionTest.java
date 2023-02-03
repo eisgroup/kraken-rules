@@ -51,11 +51,18 @@ public class RuleConversionTest {
     }
 
     @Test
-    public void shouldConvertRuleWithDescription(){
-        String convertedRule = convert(createSimpleRuleWithDescription());
+    public void shouldConvertRuleWithDescription() {
+        Rule rule = factory.createRule();
+        rule.setDescription("A rule which asserts a state of limit amount");
+        rule.setPayload(createAssertionPayload("limitAmount.state = \"CA\""));
+        rule.setContext("Driver");
+        rule.setTargetPath("limitAmount");
+        rule.setName("Driver_limitAmount_rule");
+        rule.setPhysicalNamespace("whatever");
 
+        String convertedRule = convert(rule);
         assertEquals(
-                        "Rule \"Driver_limitAmount_rule\" On Driver.limitAmount {" +
+                "Rule \"Driver_limitAmount_rule\" On Driver.limitAmount {" +
                         System.lineSeparator() +
                         "    Description \"A rule which asserts a state of limit amount\"" +
                         System.lineSeparator() +
@@ -95,7 +102,7 @@ public class RuleConversionTest {
         metadata.setProperty("boolean", false);
         simpleAssertionRule.setMetadata(metadata);
         String convertedRule = convert(simpleAssertionRule);
-        assertEquals("" +
+        assertEquals(
                         "@Dimension(\"boolean\", false)" + n +
                         "Rule \"Driver_limitAmount_rule\" On Driver.limitAmount {" + n +
                         "    Assert limitAmount.state = \"CA\"" + n +
@@ -111,7 +118,7 @@ public class RuleConversionTest {
         metadata.setProperty("decimal", BigDecimal.valueOf(1.1D));
         simpleAssertionRule.setMetadata(metadata);
         String convertedRule = convert(simpleAssertionRule);
-        assertEquals("" +
+        assertEquals(
                         "@Dimension(\"decimal\", 1.1)" + n +
                         "Rule \"Driver_limitAmount_rule\" On Driver.limitAmount {" + n +
                         "    Assert limitAmount.state = \"CA\"" + n +
@@ -127,7 +134,7 @@ public class RuleConversionTest {
         metadata.setProperty("number", BigDecimal.valueOf(1));
         simpleAssertionRule.setMetadata(metadata);
         String convertedRule = convert(simpleAssertionRule);
-        assertEquals("" +
+        assertEquals(
                         "@Dimension(\"number\", 1)" + n +
                         "Rule \"Driver_limitAmount_rule\" On Driver.limitAmount {" + n +
                         "    Assert limitAmount.state = \"CA\"" + n +
@@ -143,7 +150,7 @@ public class RuleConversionTest {
         metadata.setProperty("date", LocalDate.of(2020,2,2));
         simpleAssertionRule.setMetadata(metadata);
         String convertedRule = convert(simpleAssertionRule);
-        assertEquals("" +
+        assertEquals(
                         "@Dimension(\"date\", 2020-02-02)" + n +
                         "Rule \"Driver_limitAmount_rule\" On Driver.limitAmount {" + n +
                         "    Assert limitAmount.state = \"CA\"" + n +
@@ -159,8 +166,24 @@ public class RuleConversionTest {
         metadata.setProperty("datetime", Literals.getDateTime("2020-02-02T01:01:01Z"));
         simpleAssertionRule.setMetadata(metadata);
         String convertedRule = convert(simpleAssertionRule);
-        assertEquals("" +
+        assertEquals(
                         "@Dimension(\"datetime\", 2020-02-02T01:01:01Z)" + n +
+                        "Rule \"Driver_limitAmount_rule\" On Driver.limitAmount {" + n +
+                        "    Assert limitAmount.state = \"CA\"" + n +
+                        "}" + n + n,
+                convertedRule
+        );
+    }
+
+    @Test
+    public void shouldConvertDimension_money() {
+        final Rule simpleAssertionRule = createSimpleAssertionRule();
+        final Metadata metadata = RulesModelFactory.getInstance().createMetadata();
+        metadata.setProperty("money", 200);
+        simpleAssertionRule.setMetadata(metadata);
+        String convertedRule = convert(simpleAssertionRule);
+        assertEquals(
+                        "@Dimension(\"money\", 200)" + n +
                         "Rule \"Driver_limitAmount_rule\" On Driver.limitAmount {" + n +
                         "    Assert limitAmount.state = \"CA\"" + n +
                         "}" + n + n,
@@ -175,7 +198,7 @@ public class RuleConversionTest {
         metadata.setProperty("null", null);
         simpleAssertionRule.setMetadata(metadata);
         String convertedRule = convert(simpleAssertionRule);
-        assertEquals("" +
+        assertEquals(
                         "Rule \"Driver_limitAmount_rule\" On Driver.limitAmount {" + n +
                         "    Assert limitAmount.state = \"CA\"" + n +
                         "}" + n + n,
@@ -255,7 +278,7 @@ public class RuleConversionTest {
                         System.lineSeparator() +
                         "    Assert limitAmount.state = \"CA\"" +
                         System.lineSeparator() +
-                        "    Error \"'1313'\" : \"Error in 'AssertionRule'\"" +
+                        "    Error \"\\\"1313\\\"\" : \"Error in \\\"AssertionRule\\\"\"" +
                         System.lineSeparator() +
                         "}" + System.lineSeparator() +
                         System.lineSeparator(),
@@ -278,16 +301,53 @@ public class RuleConversionTest {
     }
 
     @Test
-    public void shouldConvertRegExpRuleWithConditionAndSeverity(){
-        String convertedRule = convert(createRegExpRule("^[a-zA-Z]*", "Condition == null"));
+    public void shouldConvertRegExpRuleWithConditionAndSeverity() {
+        Rule rule = factory.createRule();
+        rule.setCondition(createCondition("Condition == null"));
+        RegExpPayload payload = createRegExpPayload("^[a-zA-Z]*");
+        payload.setErrorMessage(createErrorMessage("code", "message"));
+        rule.setPayload(payload);
+        rule.setContext("Driver");
+        rule.setTargetPath("riskItem");
+        rule.setName("Driver_riskItem_rule");
+
+        String convertedRule = convert(rule);
         assertEquals(
-                        "Rule \"Driver_riskItem_rule\" On Driver.riskItem {" +
+                "Rule \"Driver_riskItem_rule\" On Driver.riskItem {" +
                         System.lineSeparator() +
                         "    When Condition == null" +
                         System.lineSeparator() +
                         "    Assert Matches \"^[a-zA-Z]*\"" +
                         System.lineSeparator() +
                         "    Error \"code\" : \"message\"" +
+                        System.lineSeparator() +
+                        "}" + System.lineSeparator() +
+                        System.lineSeparator(),
+                convertedRule
+        );
+    }
+
+    @Test
+    public void shouldConvertRegExpRuleWithDescriptionAndOverridable() {
+        Rule rule = factory.createRule();
+        rule.setDescription("A RegExp rule. Can be overridden");
+        RegExpPayload payload = factory.createRegExpPayload();
+        payload.setRegExp("^[a-zA-Z]*");
+        payload.setOverridable(true);
+        rule.setPayload(payload);
+        rule.setContext("Driver");
+        rule.setTargetPath("riskItem");
+        rule.setName("Driver_riskItem_rule");
+
+        String convertedRule = convert(rule);
+        assertEquals(
+                "Rule \"Driver_riskItem_rule\" On Driver.riskItem {" +
+                        System.lineSeparator() +
+                        "    Description \"A RegExp rule. Can be overridden\"" +
+                        System.lineSeparator() +
+                        "    Assert Matches \"^[a-zA-Z]*\"" +
+                        System.lineSeparator() +
+                        "    Overridable" +
                         System.lineSeparator() +
                         "}" + System.lineSeparator() +
                         System.lineSeparator(),
@@ -304,6 +364,34 @@ public class RuleConversionTest {
                         "    Assert Length 15" +
                         System.lineSeparator() +
                         "    Overridable" +
+                        System.lineSeparator() +
+                        "}" + System.lineSeparator() +
+                        System.lineSeparator(),
+                convertedRule
+        );
+    }
+
+    @Test
+    public void shouldConvertLengthRuleWithDescriptionAndValidationMessage() {
+        Rule rule = factory.createRule();
+        LengthPayload lengthPayload = createLengthPayload(15);
+        lengthPayload.setOverridable(false);
+        lengthPayload.setErrorMessage(createErrorMessage("code", "Not able to create length rule"));
+        rule.setPayload(lengthPayload);
+        rule.setDescription("Rule for length");
+        rule.setContext("Driver");
+        rule.setTargetPath("riskItem");
+        rule.setName("Driver_riskItem_rule");
+
+        String convertedRule = convert(rule);
+        assertEquals(
+                "Rule \"Driver_riskItem_rule\" On Driver.riskItem {" +
+                        System.lineSeparator() +
+                        "    Description \"Rule for length\"" +
+                        System.lineSeparator() +
+                        "    Assert Length 15" +
+                        System.lineSeparator() +
+                        "    Error \"code\" : \"Not able to create length rule\"" +
                         System.lineSeparator() +
                         "}" + System.lineSeparator() +
                         System.lineSeparator(),
@@ -359,6 +447,76 @@ public class RuleConversionTest {
     }
 
     @Test
+    public void shouldConvertUsageRuleMandatoryWithDescriptionConditionAndOverridable() {
+        UsagePayload payload = factory.createUsagePayload();
+        payload.setSeverity(ValidationSeverity.warning);
+        payload.setUsageType(UsageType.mandatory);
+        payload.setOverridable(true);
+        payload.setErrorMessage(createErrorMessage("code", "message"));
+
+        Rule rule = factory.createRule();
+        rule.setPayload(payload);
+        rule.setContext("Driver");
+        rule.setTargetPath("riskItem");
+        rule.setName("Driver_riskItem_rule");
+        rule.setDescription("Mandatory rule");
+        rule.setCondition(createCondition("Driver.riskItem > 10"));
+        String convertedRule = convert(rule);
+        assertEquals(
+                "Rule \"Driver_riskItem_rule\" On Driver.riskItem {" +
+                        System.lineSeparator() +
+                        "    Description \"Mandatory rule\"" +
+                        System.lineSeparator() +
+                        "    When Driver.riskItem > 10" +
+                        System.lineSeparator() +
+                        "    Set Mandatory" +
+                        System.lineSeparator() +
+                        "    Warn \"code\" : \"message\"" +
+                        System.lineSeparator() +
+                        "    Overridable" +
+                        System.lineSeparator() +
+                        "}" + System.lineSeparator() +
+                        System.lineSeparator(),
+                convertedRule
+        );
+    }
+
+    @Test
+    public void shouldConvertUsageRuleEmptyWithDescriptionConditionAndOverridable() {
+        UsagePayload payload = factory.createUsagePayload();
+        payload.setSeverity(ValidationSeverity.info);
+        payload.setUsageType(UsageType.mustBeEmpty);
+        payload.setOverridable(true);
+        payload.setErrorMessage(createErrorMessage("code", "message"));
+
+        Rule rule = factory.createRule();
+        rule.setPayload(payload);
+        rule.setContext("Driver");
+        rule.setTargetPath("riskItem");
+        rule.setName("Driver_riskItem_rule");
+        rule.setDescription("Mandatory rule");
+        rule.setCondition(createCondition("Driver.riskItem == null || Driver.riskItem == 0"));
+        String convertedRule = convert(rule);
+        assertEquals(
+                "Rule \"Driver_riskItem_rule\" On Driver.riskItem {" +
+                        System.lineSeparator() +
+                        "    Description \"Mandatory rule\"" +
+                        System.lineSeparator() +
+                        "    When Driver.riskItem == null || Driver.riskItem == 0" +
+                        System.lineSeparator() +
+                        "    Assert Empty" +
+                        System.lineSeparator() +
+                        "    Info \"code\" : \"message\"" +
+                        System.lineSeparator() +
+                        "    Overridable" +
+                        System.lineSeparator() +
+                        "}" + System.lineSeparator() +
+                        System.lineSeparator(),
+                convertedRule
+        );
+    }
+
+    @Test
     public void shouldConvertVisibilityRule(){
         String convertedRule = convert(createVisibilityRule());
         assertEquals(
@@ -373,10 +531,62 @@ public class RuleConversionTest {
     }
 
     @Test
+    public void shouldConvertVisibilityRuleWithDescriptionAndCondition() {
+        Rule rule = factory.createRule();
+        rule.setPayload(createVisibilityPayload());
+        rule.setDescription("Visibility rule");
+        rule.setCondition(createCondition("applicable = true"));
+        rule.setContext("Driver");
+        rule.setTargetPath("riskItem");
+        rule.setName("Driver_riskItem_rule");
+
+        String convertedRule = convert(rule);
+        assertEquals(
+                "Rule \"Driver_riskItem_rule\" On Driver.riskItem {" +
+                        System.lineSeparator() +
+                        "    Description \"Visibility rule\"" +
+                        System.lineSeparator() +
+                        "    When applicable = true" +
+                        System.lineSeparator() +
+                        "    Set Hidden" +
+                        System.lineSeparator() +
+                        "}" + System.lineSeparator() +
+                        System.lineSeparator(),
+                convertedRule
+        );
+    }
+
+    @Test
     public void shouldConvertAccessibilityRule(){
         String convertedRule = convert(createAccessibilityRule());
         assertEquals(
                         "Rule \"Driver_riskItem_rule\" On Driver.riskItem {" +
+                        System.lineSeparator() +
+                        "    Set Disabled" +
+                        System.lineSeparator() +
+                        "}" + System.lineSeparator() +
+                        System.lineSeparator(),
+                convertedRule
+        );
+    }
+
+    @Test
+    public void shouldConvertAccessibilityRuleWithDescriptionAndCondition() {
+        Rule rule = factory.createRule();
+        rule.setPayload(createAccessibilityPayload());
+        rule.setDescription("Accessibility rule");
+        rule.setCondition(createCondition("applicable = true"));
+        rule.setContext("Driver");
+        rule.setTargetPath("riskItem");
+        rule.setName("Driver_riskItem_rule");
+
+        String convertedRule = convert(rule);
+        assertEquals(
+                "Rule \"Driver_riskItem_rule\" On Driver.riskItem {" +
+                        System.lineSeparator() +
+                        "    Description \"Accessibility rule\"" +
+                        System.lineSeparator() +
+                        "    When applicable = true" +
                         System.lineSeparator() +
                         "    Set Disabled" +
                         System.lineSeparator() +
@@ -434,6 +644,198 @@ public class RuleConversionTest {
     }
 
     @Test
+    public void shouldConvertDefaultRuleWithPriority(){
+        var rule = createDefaultRule(DefaultingType.defaultValue, "10");
+        rule.setPriority(10);
+        String rules = convert(List.of(rule));
+        assertEquals(
+            "Rule \"Driver_riskItem_rule\" On Driver.riskItem {" +
+                System.lineSeparator() +
+                "    Priority 10" +
+                System.lineSeparator() +
+                "    Default To 10" +
+                System.lineSeparator() +
+                "}" +
+                System.lineSeparator() +
+                System.lineSeparator(),
+            rules
+        );
+    }
+
+    @Test
+    public void shouldConvertDefaultRuleWithDescriptionAndCondition() {
+        Rule rule = factory.createRule();
+        rule.setPayload(createDefaultPayload(DefaultingType.defaultValue, "200"));
+        rule.setDescription("Default to rule");
+        rule.setCondition(createCondition("riskItems > 5"));
+        rule.setContext("Driver");
+        rule.setTargetPath("riskItem");
+        rule.setName("Driver_riskItem_rule");
+
+        String rules = convert(rule);
+        assertEquals(
+                "Rule \"Driver_riskItem_rule\" On Driver.riskItem {" +
+                        System.lineSeparator() +
+                        "    Description \"Default to rule\"" +
+                        System.lineSeparator() +
+                        "    When riskItems > 5" +
+                        System.lineSeparator() +
+                        "    Default To 200" +
+                        System.lineSeparator() +
+                        "}" + System.lineSeparator() +
+                        System.lineSeparator(),
+                rules
+        );
+    }
+
+    @Test
+    public void shouldConvertDefaultResetRuleWithDescriptionAndCondition() {
+        Rule rule = factory.createRule();
+        rule.setPayload(createDefaultPayload(DefaultingType.resetValue, "200"));
+        rule.setDescription("Reset To rule");
+        rule.setCondition(createCondition("riskItems > 5"));
+        rule.setContext("Driver");
+        rule.setTargetPath("riskItem");
+        rule.setName("Driver_riskItem_rule");
+
+        String rules = convert(rule);
+        assertEquals(
+                "Rule \"Driver_riskItem_rule\" On Driver.riskItem {" +
+                        System.lineSeparator() +
+                        "    Description \"Reset To rule\"" +
+                        System.lineSeparator() +
+                        "    When riskItems > 5" +
+                        System.lineSeparator() +
+                        "    Reset To 200" +
+                        System.lineSeparator() +
+                        "}" + System.lineSeparator() +
+                        System.lineSeparator(),
+                rules
+        );
+    }
+
+    @Test
+    public void shouldConvertSizeMinRuleWithDescriptionAndCondition() {
+
+        Rule rule = factory.createRule();
+        rule.setPayload(createSizePayload(SizeOrientation.MIN, 20, ValidationSeverity.info));
+        rule.setDescription("Size rule");
+        rule.setCondition(createCondition("riskItems > 5"));
+        rule.setContext("Driver");
+        rule.setTargetPath("riskItems");
+        rule.setName("Driver_riskItems_rule");
+
+        String convertedRule = convert(rule);
+        assertEquals(
+                "Rule \"Driver_riskItems_rule\" On Driver.riskItems {" +
+                        System.lineSeparator() +
+                        "    Description \"Size rule\"" +
+                        System.lineSeparator() +
+                        "    When riskItems > 5" +
+                        System.lineSeparator() +
+                        "    Assert Size Min 20" +
+                        System.lineSeparator() +
+                        "    Info \"SizeCode\" : \"SizeMessage\"" +
+                        System.lineSeparator() +
+                        "    Overridable \"OverrideGroup\"" +
+                        System.lineSeparator() +
+                        "}" + System.lineSeparator() +
+                        System.lineSeparator(),
+                convertedRule
+        );
+    }
+
+    @Test
+    public void shouldConvertSizeMaxRuleWithDescriptionAndCondition() {
+        Rule rule = factory.createRule();
+        rule.setPayload(createSizePayload(SizeOrientation.MAX, 20, ValidationSeverity.critical));
+        rule.setDescription("Size rule");
+        rule.setCondition(createCondition("Driver.age > 21"));
+        rule.setContext("Driver");
+        rule.setTargetPath("riskItems");
+        rule.setName("Driver_riskItems_rule");
+
+        String convertedRule = convert(rule);
+        assertEquals(
+                "Rule \"Driver_riskItems_rule\" On Driver.riskItems {" +
+                        System.lineSeparator() +
+                        "    Description \"Size rule\"" +
+                        System.lineSeparator() +
+                        "    When Driver.age > 21" +
+                        System.lineSeparator() +
+                        "    Assert Size Max 20" +
+                        System.lineSeparator() +
+                        "    Error \"SizeCode\" : \"SizeMessage\"" +
+                        System.lineSeparator() +
+                        "    Overridable \"OverrideGroup\"" +
+                        System.lineSeparator() +
+                        "}" + System.lineSeparator() +
+                        System.lineSeparator(),
+                convertedRule
+        );
+    }
+
+    @Test
+    public void shouldConvertSizeRuleWithDescriptionAndCondition() {
+        Rule rule = factory.createRule();
+        rule.setPayload(createSizePayload(SizeOrientation.EQUALS, 20, ValidationSeverity.warning));
+        rule.setDescription("Size rule");
+        rule.setCondition(createCondition("Driver.age = 21"));
+        rule.setContext("Driver");
+        rule.setTargetPath("riskItems");
+        rule.setName("Driver_riskItems_rule");
+
+        String convertedRule = convert(rule);
+        assertEquals(
+                "Rule \"Driver_riskItems_rule\" On Driver.riskItems {" +
+                        System.lineSeparator() +
+                        "    Description \"Size rule\"" +
+                        System.lineSeparator() +
+                        "    When Driver.age = 21" +
+                        System.lineSeparator() +
+                        "    Assert Size 20" +
+                        System.lineSeparator() +
+                        "    Warn \"SizeCode\" : \"SizeMessage\"" +
+                        System.lineSeparator() +
+                        "    Overridable \"OverrideGroup\"" +
+                        System.lineSeparator() +
+                        "}" + System.lineSeparator() +
+                        System.lineSeparator(),
+                convertedRule
+        );
+    }
+
+    @Test
+    public void shouldConvertSizeRangeRuleWithDescriptionAndCondition() {
+        Rule rule = factory.createRule();
+        rule.setPayload(createSizeRangePayload(20, 55, ValidationSeverity.critical));
+        rule.setDescription("Size rule");
+        rule.setCondition(createCondition("Driver.age > 60"));
+        rule.setContext("Driver");
+        rule.setTargetPath("riskItems");
+        rule.setName("Driver_riskItems_rule");
+
+        String convertedRule = convert(rule);
+        assertEquals(
+                "Rule \"Driver_riskItems_rule\" On Driver.riskItems {" +
+                        System.lineSeparator() +
+                        "    Description \"Size rule\"" +
+                        System.lineSeparator() +
+                        "    When Driver.age > 60" +
+                        System.lineSeparator() +
+                        "    Assert Size Min 20 Max 55" +
+                        System.lineSeparator() +
+                        "    Error \"SizeCode\" : \"SizeMessage\"" +
+                        System.lineSeparator() +
+                        "    Overridable \"OverrideGroup\"" +
+                        System.lineSeparator() +
+                        "}" + System.lineSeparator() +
+                        System.lineSeparator(),
+                convertedRule
+        );
+    }
+
+    @Test
     public void shouldConvertSizeRules(){
         String rules = convert(Arrays.asList(
                 createSizeRule(SizeOrientation.MAX, 20, ValidationSeverity.info),
@@ -486,21 +888,52 @@ public class RuleConversionTest {
         );
     }
 
+    @Test
+    public void shouldConvertRuleWithDoubleQuotes(){
+        Rule rule = factory.createRule();
+        rule.setName("double\"quote");
+        rule.setContext("Context");
+        rule.setTargetPath("attribute");
+        rule.setDescription("double\"quote");
+
+        AssertionPayload payload = factory.createAssertionPayload();
+        Expression expression = factory.createExpression();
+        expression.setExpressionString("code = \"double\\\"quote\"");
+        payload.setAssertionExpression(expression);
+        payload.setOverridable(true);
+        payload.setOverrideGroup("double\"quote");
+        ErrorMessage errorMessage = factory.createErrorMessage();
+        errorMessage.setErrorCode("double\"quote");
+        errorMessage.setErrorMessage("double\"quote");
+        payload.setErrorMessage(errorMessage);
+        payload.setSeverity(ValidationSeverity.critical);
+        rule.setPayload(payload);
+        Metadata metadata = factory.createMetadata();
+        metadata.setProperty("Package", "double\"quote");
+        rule.setMetadata(metadata);
+
+        String convertedRule = convert(rule);
+        assertEquals(
+            "@Dimension(\"Package\", \"double\\\"quote\")" + System.lineSeparator() +
+            "Rule \"double\\\"quote\" On Context.attribute {" +
+                System.lineSeparator() +
+                "    Description \"double\\\"quote\"" +
+                System.lineSeparator() +
+                "    Assert code = \"double\\\"quote\"" +
+                System.lineSeparator() +
+                "    Error \"double\\\"quote\" : \"double\\\"quote\"" +
+                System.lineSeparator() +
+                "    Overridable \"double\\\"quote\"" +
+                System.lineSeparator() +
+                "}" + System.lineSeparator() +
+                System.lineSeparator(),
+            convertedRule
+        );
+    }
+
     private Rule createRegExpRule(String regExp) {
         Rule rule = factory.createRule();
         rule.setPayload(createRegExpPayload(regExp));
-        rule.setContext("Driver");
-        rule.setTargetPath("riskItem");
-        rule.setName("Driver_riskItem_rule");
-        return rule;
-    }
-
-    private Rule createRegExpRule(String regExp, String condition) {
-        Rule rule = factory.createRule();
-        rule.setCondition(createCondition(condition));
-        RegExpPayload payload = createRegExpPayload(regExp);
-        payload.setErrorMessage(createErrorMessage("code", "message"));
-        rule.setPayload(payload);
         rule.setContext("Driver");
         rule.setTargetPath("riskItem");
         rule.setName("Driver_riskItem_rule");
@@ -555,6 +988,7 @@ public class RuleConversionTest {
         UsagePayload payload = factory.createUsagePayload();
         payload.setSeverity(severity);
         payload.setUsageType(usageType);
+        payload.setOverridable(false);
         payload.setErrorMessage(createErrorMessage("code", "message"));
         return payload;
     }
@@ -656,22 +1090,11 @@ public class RuleConversionTest {
         return rule;
     }
 
-    private Rule createSimpleRuleWithDescription(){
-        Rule rule = factory.createRule();
-        rule.setDescription("A rule which asserts a state of limit amount");
-        rule.setPayload(createAssertionPayload("limitAmount.state = \"CA\""));
-        rule.setContext("Driver");
-        rule.setTargetPath("limitAmount");
-        rule.setName("Driver_limitAmount_rule");
-        rule.setPhysicalNamespace("whatever");
-        return rule;
-    }
-
     private Rule createAssertionRule(){
         Rule rule = factory.createRule();
         rule.setCondition(createCondition("Count(riskItem[*].location) > 5 && zip = \"DGD\""));
         AssertionPayload assertionPayload = createAssertionPayload("limitAmount.state = \"CA\"");
-        assertionPayload.setErrorMessage(createErrorMessage("\"1313\'", "Error in \"AssertionRule\""));
+        assertionPayload.setErrorMessage(createErrorMessage("\"1313\"", "Error in \"AssertionRule\""));
         rule.setPayload(assertionPayload);
         rule.setContext("Driver");
         rule.setTargetPath("limitAmount");

@@ -16,8 +16,10 @@
 package kraken.model;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import kraken.annotations.API;
+import kraken.el.functionregistry.FunctionHeader;
 
 /**
  * Models a signature of a custom function that can be used in Rule expressions.
@@ -46,12 +48,26 @@ public interface FunctionSignature extends KrakenModelItem {
 
     void setParameterTypes(List<String> parameterTypes);
 
+    List<GenericTypeBound> getGenericTypeBounds();
+
+    void setGenericTypeBounds(List<GenericTypeBound> genericTypeBounds);
+
     /**
      * @param f
      * @return function signature formatted into human-readable representation equivalent to DSL syntax to be used for
      *         messages
      */
     static String format(FunctionSignature f) {
-        return f.getName() + "(" + String.join(", ", f.getParameterTypes()) + ") : " + f.getReturnType();
+        String genericBounds = "";
+        if(!f.getParameterTypes().isEmpty()) {
+            genericBounds = f.getGenericTypeBounds().stream().map(t -> t.getGeneric() + " is " + t.getBound()).collect(
+                Collectors.joining(", ", "<", "> "));
+        }
+
+        return genericBounds + f.getName() + "(" + String.join(", ", f.getParameterTypes()) + ") : " + f.getReturnType();
+    }
+
+    static FunctionHeader toHeader(FunctionSignature f) {
+        return new FunctionHeader(f.getName(), f.getParameterTypes().size());
     }
 }

@@ -15,14 +15,17 @@
  */
 package kraken.el.scope.symbol;
 
-import kraken.el.scope.type.ArrayType;
-import kraken.el.scope.type.GenericType;
-import kraken.el.scope.type.Type;
-
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
+import kraken.el.ast.Expression;
+import kraken.el.functionregistry.FunctionHeader;
+import kraken.el.scope.type.GenericType;
+import kraken.el.scope.type.Type;
 
 /**
  * @author mulevicius
@@ -41,18 +44,20 @@ public class FunctionSymbol extends Symbol {
         return parameters;
     }
 
-    public FunctionParameter findGenericParameter(GenericType genericType) {
-        return parameters.stream()
-                .filter(functionParameter -> unwrapScalarType(functionParameter.getType()).getName().equals(genericType.getName()))
-                .findFirst()
-                .orElseThrow();
+    public FunctionHeader header() {
+        return new FunctionHeader(this.getName(), parameters.size());
     }
 
-    private Type unwrapScalarType(Type type) {
-        if(type instanceof ArrayType) {
-            return unwrapScalarType(((ArrayType) type).getElementType());
-        }
-        return type;
+    public Map<GenericType, Type> resolveGenericRewrites(List<Expression> arguments) {
+        return this.getParameters().stream()
+            .flatMap(p ->
+                p.getType().resolveGenericTypeRewrites(arguments.get(p.getParameterIndex()).getEvaluationType())
+                    .entrySet().stream())
+            .collect(Collectors.toMap(
+                Entry::getKey,
+                Entry::getValue,
+                (v1, v2) -> v1.resolveCommonTypeOf(v2).orElse(Type.UNKNOWN)
+            ));
     }
 
     @Override
@@ -67,7 +72,7 @@ public class FunctionSymbol extends Symbol {
             return false;
         }
         FunctionSymbol that = (FunctionSymbol) o;
-        return Objects.equals(parameters, that.parameters);
+        return super.equals(o) && Objects.equals(parameters, that.parameters);
     }
 
     @Override

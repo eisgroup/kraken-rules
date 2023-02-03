@@ -15,18 +15,21 @@
  */
 package kraken.testproduct.domain.extended;
 
+import java.math.BigDecimal;
+
 import kraken.testproduct.domain.RRCoverage;
 
 public class RRCoverageExtended extends RRCoverage {
 
-    private String combinedLimit;
-    
-    public String getCombinedLimit() {
-        return combinedLimit;
+    public RRCoverageExtended(BigDecimal limitAmount) {
+        super(limitAmount);
     }
 
-    public void setCombinedLimit(String combinedLimit) {
-        this.combinedLimit = combinedLimit;
+    public RRCoverageExtended(String code, BigDecimal limitAmount, BigDecimal deductibleAmount,
+                              String combinedLimit) {
+        super(code, limitAmount, deductibleAmount, combinedLimit);
     }
-    
+
+    public RRCoverageExtended() {
+    }
 }

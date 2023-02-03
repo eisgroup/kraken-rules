@@ -17,10 +17,9 @@ package kraken.runtime.engine.context.data;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import com.google.common.collect.Lists;
 import kraken.context.path.ContextPath;
 import kraken.model.context.ContextDefinition;
 
@@ -41,7 +40,9 @@ public class DataContexts {
             elements.add(currentDataContext);
             currentDataContext = currentDataContext.getParentDataContext();
         }
-        return Lists.reverse(elements);
+
+        Collections.reverse(elements);
+        return elements;
     }
 
     /**
@@ -55,7 +56,10 @@ public class DataContexts {
             elements.add(currentDataContext.getContextName());
             currentDataContext = currentDataContext.getParentDataContext();
         }
-        return Lists.reverse(elements).stream().collect(Collectors.joining("."));
+
+        Collections.reverse(elements);
+
+        return String.join(".", elements);
     }
 
     /**

@@ -22,5 +22,6 @@ EntryPoint "Default" {
 }
 
 Rule "DefaultRule" On Policy.policyCd {
+  Priority 666
   Default To "cd"
 }

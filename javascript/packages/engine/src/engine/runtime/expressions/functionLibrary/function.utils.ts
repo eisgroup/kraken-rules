@@ -15,12 +15,12 @@
  */
 
 export function message(fxName: string, reason: string): string {
-    return `Failed to execute function '${fxName}'. ${reason}`;
+    return `Failed to execute function '${fxName}'. ${reason}`
 }
 
 message.reason = {
-    parameterNonNull: "parameter cannot be null",
-    firstParam: "First parameter is mandatory",
-    secondParam: "Second parameter is mandatory",
-    thirdParam: "Third parameter is mandatory"
-};
+    parameterNonNull: 'parameter cannot be null',
+    firstParam: 'First parameter is mandatory',
+    secondParam: 'Second parameter is mandatory',
+    thirdParam: 'Third parameter is mandatory',
+}

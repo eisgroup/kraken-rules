@@ -44,17 +44,19 @@ public class Vehicle extends Identifiable {
 
     private List<LocalDate> serviceHistory = new ArrayList<>();
 
-    private List<AnubisCoverage> anubisCoverages;
+    private List<? extends AnubisCoverage> anubisCoverages;
 
-    private List<COLLCoverage> collCoverages;
+    private List<? extends COLLCoverage> collCoverages;
 
-    private List<FullCoverage> fullCoverages;
+    private List<? extends FullCoverage> fullCoverages;
     
     private RRCoverage rentalCoverage;
 
     private AddressInfo addressInfo;
 
     private String vehicleState;
+
+    private List<Object> refsToDriver;
 
     public Vehicle() {
     }
@@ -150,15 +152,15 @@ public class Vehicle extends Identifiable {
         this.addressInfo = addressInfo;
     }
 
-    public List<COLLCoverage> getCollCoverages() {
+    public List<? extends COLLCoverage> getCollCoverages() {
         return collCoverages;
     }
 
-    public void setCollCoverages(List<COLLCoverage> collCoverages) {
+    public void setCollCoverages(List<? extends COLLCoverage> collCoverages) {
         this.collCoverages = collCoverages;
     }
 
-    public List<FullCoverage> getFullCoverages() {
+    public List<? extends FullCoverage> getFullCoverages() {
         return fullCoverages;
     }
 
@@ -170,15 +172,15 @@ public class Vehicle extends Identifiable {
         return rentalCoverage;
     }
 
-    public void setFullCoverages(List<FullCoverage> fullCoverages) {
+    public void setFullCoverages(List<? extends FullCoverage> fullCoverages) {
         this.fullCoverages = fullCoverages;
     }
 
-    public List<AnubisCoverage> getAnubisCoverages() {
+    public List<? extends AnubisCoverage> getAnubisCoverages() {
         return anubisCoverages;
     }
 
-    public void setAnubisCoverages(List<AnubisCoverage> anubisCoverages) {
+    public void setAnubisCoverages(List<? extends AnubisCoverage> anubisCoverages) {
         this.anubisCoverages = anubisCoverages;
     }
 
@@ -198,4 +200,11 @@ public class Vehicle extends Identifiable {
         this.vehicleState = vehicleState;
     }
 
+    public List<Object> getRefsToDriver() {
+        return refsToDriver;
+    }
+
+    public void setRefsToDriver(List<Object> refsToDriver) {
+        this.refsToDriver = refsToDriver;
+    }
 }

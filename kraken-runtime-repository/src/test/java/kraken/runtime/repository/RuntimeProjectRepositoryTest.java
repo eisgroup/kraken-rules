@@ -23,7 +23,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import kraken.model.Rule;
 import kraken.model.dsl.read.DSLReader;
 import kraken.model.factory.RulesModelFactory;
 import kraken.model.project.KrakenProject;
@@ -36,9 +35,11 @@ import kraken.model.validation.ValidationSeverity;
 import kraken.runtime.model.MetadataContainer;
 import kraken.runtime.model.rule.RuntimeRule;
 import kraken.runtime.model.rule.payload.validation.AssertionPayload;
+import kraken.runtime.repository.dynamic.DynamicRuleHolder;
 import kraken.runtime.repository.dynamic.DynamicRuleRepository;
 import kraken.runtime.repository.factory.RuntimeProjectRepositoryFactory;
 import kraken.runtime.repository.filter.DimensionFilter;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -49,18 +50,15 @@ import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.hamcrest.collection.IsMapContaining.hasEntry;
 import static org.hamcrest.collection.IsMapContaining.hasKey;
 import static org.hamcrest.core.IsNull.notNullValue;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * @author mulevicius
  */
 public class RuntimeProjectRepositoryTest {
 
-    private RuntimeContextRepository policyContextRepository;
-    private RuntimeRuleRepository policyRuleRepository;
-
-    private RuntimeContextRepository crmContextRepository;
-    private RuntimeRuleRepository crmRuleRepository;
+    private RuntimeProjectRepository policyRepository;
+    private RuntimeProjectRepository crmRepository;
 
     @Before
     public void setUp() throws Exception {
@@ -79,35 +77,32 @@ public class RuntimeProjectRepositoryTest {
         );
         RuntimeProjectRepositoryFactory factory = new RuntimeProjectRepositoryFactory(krakenProjectRepository, config, JAVA);
 
-        this.policyContextRepository = factory.resolveContextRepository("Policy");
-        this.policyRuleRepository = factory.resolveRuleRepository("Policy");
-
-        this.crmContextRepository = factory.resolveContextRepository("Crm");
-        this.crmRuleRepository = factory.resolveRuleRepository("Crm");
+        this.policyRepository = factory.resolveRepository("Policy");
+        this.crmRepository = factory.resolveRepository("Crm");
     }
 
     @Test
     public void shouldLoadContextDefinitions() {
-        assertThat(policyContextRepository.getContextDefinition("Policy"), notNullValue());
-        assertThat(policyContextRepository.getContextDefinition("RiskItem"), notNullValue());
-        assertThat(policyContextRepository.getContextDefinition("Coverage"), notNullValue());
+        assertThat(policyRepository.getContextDefinition("Policy"), notNullValue());
+        assertThat(policyRepository.getContextDefinition("RiskItem"), notNullValue());
+        assertThat(policyRepository.getContextDefinition("Coverage"), notNullValue());
 
-        assertThat(crmContextRepository.getContextDefinition("Customer"), notNullValue());
+        assertThat(crmRepository.getContextDefinition("Customer"), notNullValue());
     }
 
     @Test
     public void shouldLoadRulesByNamespace() {
-        Map<String, RuntimeRule> policyRules = policyRuleRepository.resolveRules("Validation", Map.of());
+        Map<String, RuntimeRule> policyRules = policyRepository.resolveRules("Validation", Map.of());
         assertThat(policyRules, hasKey("R01-Policy"));
 
-        Map<String, RuntimeRule> crmRules = crmRuleRepository.resolveRules("Validation", Map.of());
+        Map<String, RuntimeRule> crmRules = crmRepository.resolveRules("Validation", Map.of());
         assertThat(crmRules, hasKey("R01-CRM"));
     }
 
     @Test
     public void shouldFilterEntryPointsByDimensions() {
         Map<String, Object> context = Map.of("Package", "Empty");
-        Map<String, RuntimeRule> policyRules = policyRuleRepository.resolveRules("Validation", context);
+        Map<String, RuntimeRule> policyRules = policyRepository.resolveRules("Validation", context);
 
         assertThat(policyRules.values(), empty());
     }
@@ -115,7 +110,7 @@ public class RuntimeProjectRepositoryTest {
     @Test
     public void shouldFilterRulesByDimension() {
         Map<String, Object> context = Map.of("Package", "Simple");
-        Map<String, RuntimeRule> policyRules = policyRuleRepository.resolveRules("Validation", context);
+        Map<String, RuntimeRule> policyRules = policyRepository.resolveRules("Validation", context);
 
         assertThat(policyRules, hasKey("R02-Policy-PackageSpecific"));
         assertThat(policyRules, hasKey("R03-Policy-Simple"));
@@ -131,7 +126,7 @@ public class RuntimeProjectRepositoryTest {
                 "Dynamic", true
         );
 
-        Map<String, RuntimeRule> policyRules = policyRuleRepository.resolveRules("Validation", context);
+        Map<String, RuntimeRule> policyRules = policyRepository.resolveRules("Validation", context);
 
         assertThat(policyRules, hasKey("DynamicRule"));
 
@@ -168,7 +163,9 @@ public class RuntimeProjectRepositoryTest {
         private final RulesModelFactory factory = RulesModelFactory.getInstance();
 
         @Override
-        public Stream<Rule> resolveRules(String namespace, String entryPoint, Map<String, Object> context) {
+        public Stream<DynamicRuleHolder> resolveDynamicRules(String namespace,
+                                                             String entryPoint,
+                                                             Map<String, Object> context) {
             if(entryPoint.equals("PackageValidation") && context.containsKey("Dynamic")) {
                 kraken.model.Rule rule = factory.createRule();
                 rule.setRuleVariationId(UUID.randomUUID().toString());
@@ -188,7 +185,7 @@ public class RuntimeProjectRepositoryTest {
 
                 rule.setPayload(payload);
 
-                return Stream.of(rule);
+                return Stream.of(DynamicRuleHolder.createNonDimensional(rule));
             }
             return Stream.empty();
         }

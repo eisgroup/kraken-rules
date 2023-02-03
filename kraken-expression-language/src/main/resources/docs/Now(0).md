@@ -1,0 +1,1 @@
+> This function is NOT idempotent and will not produce the same result if called multiple times. For example, if this function is used in a default value rule to reset the value to the current date it will change to a new date if a rule is executed multiple times on different dates and as a side, the result will result in changes to a data image.

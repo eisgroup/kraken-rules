@@ -14,13 +14,12 @@
  *  limitations under the License.
  */
 
-import { DataContext } from "../../../src/engine/contexts/data/DataContext";
-import { mock } from "../../mock";
+import { mock } from '../../mock'
+import { DataContext } from '../../../src/engine/contexts/data/DataContext'
 
-describe("DataContext", () => {
-    it("should return construct id from attributes", () => {
-        const dataCtx: DataContext = new DataContext("P001", "Person", {}, mock.contextInstanceInfo, {}, undefined);
-        expect(dataCtx.getId()).toBe("Person:P001");
-    });
-}
-);
+describe('DataContext', () => {
+    it('should return construct id from attributes', () => {
+        const dataCtx: DataContext = new DataContext('P001', 'Person', {}, mock.contextInstanceInfo, {}, undefined)
+        expect(dataCtx.getId()).toBe('Person:P001')
+    })
+})

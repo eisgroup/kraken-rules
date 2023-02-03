@@ -23,7 +23,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckAccessibilityC
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         },
         {
           "ruleInfo": {
@@ -40,7 +41,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckAccessibilityC
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -67,7 +69,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckAccessibilityC
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -94,7 +97,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckAccessibilityC
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         },
         {
           "ruleInfo": {
@@ -111,7 +115,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckAccessibilityC
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -138,7 +143,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckAccessibilityC
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -165,7 +171,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckAccessibilityC
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         },
         {
           "ruleInfo": {
@@ -182,7 +189,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckAccessibilityC
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     }
@@ -212,6 +220,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckAssertionCarCo
             "messageCode": "code",
             "message": "Value didn\u0027t match assertion expirationDate \u003e effectiveDate",
             "templateVariables": [],
+            "messageTemplate": "Value didn\u0027\u0027t match assertion expirationDate \u003e effectiveDate",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -219,7 +228,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckAssertionCarCo
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -243,6 +253,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckAssertionCarCo
             "messageCode": "code",
             "message": "Value didn\u0027t match assertion limitAmount \u003e 1000 and limitAmount \u003c 1000000",
             "templateVariables": [],
+            "messageTemplate": "Value didn\u0027\u0027t match assertion limitAmount \u003e 1000 and limitAmount \u003c 1000000",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -250,7 +261,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckAssertionCarCo
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -274,6 +286,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckAssertionCarCo
             "messageCode": "code",
             "message": "Value didn\u0027t match assertion expirationDate \u003e effectiveDate",
             "templateVariables": [],
+            "messageTemplate": "Value didn\u0027\u0027t match assertion expirationDate \u003e effectiveDate",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -281,7 +294,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckAssertionCarCo
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -305,6 +319,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckAssertionCarCo
             "messageCode": "code",
             "message": "Value didn\u0027t match assertion limitAmount \u003e 1000 and limitAmount \u003c 1000000",
             "templateVariables": [],
+            "messageTemplate": "Value didn\u0027\u0027t match assertion limitAmount \u003e 1000 and limitAmount \u003c 1000000",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -312,7 +327,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckAssertionCarCo
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -336,6 +352,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckAssertionCarCo
             "messageCode": "code",
             "message": "Value didn\u0027t match assertion limitAmount \u003e 1000 and limitAmount \u003c 1000000",
             "templateVariables": [],
+            "messageTemplate": "Value didn\u0027\u0027t match assertion limitAmount \u003e 1000 and limitAmount \u003c 1000000",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -343,7 +360,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckAssertionCarCo
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     }
@@ -373,7 +391,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckInitCarCoverag
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "SKIPPED"
         }
       ]
     },
@@ -400,7 +419,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckInitCarCoverag
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -427,7 +447,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckInitCarCoverag
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -454,7 +475,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckInitCarCoverag
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -489,7 +511,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckInitCarCoverag
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -516,7 +539,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckInitCarCoverag
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -543,7 +567,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckInitCarCoverag
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -570,7 +595,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckInitCarCoverag
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -597,7 +623,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckInitCarCoverag
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     }
@@ -633,7 +660,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -663,7 +691,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -687,6 +716,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
             "success": false,
             "messageCode": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -694,7 +724,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -718,6 +749,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
             "success": false,
             "messageCode": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -725,7 +757,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -755,7 +788,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -785,7 +819,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -815,7 +850,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -839,6 +875,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
             "success": false,
             "messageCode": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -846,7 +883,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -870,6 +908,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
             "success": false,
             "messageCode": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -877,7 +916,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -907,7 +947,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -937,7 +978,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -967,7 +1009,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -997,7 +1040,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     }
@@ -1033,7 +1077,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1063,7 +1108,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1087,6 +1133,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
             "success": true,
             "messageCode": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1094,7 +1141,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1118,6 +1166,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
             "success": true,
             "messageCode": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1125,7 +1174,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1155,7 +1205,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1185,7 +1236,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1215,7 +1267,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1239,6 +1292,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
             "success": true,
             "messageCode": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1246,7 +1300,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1270,6 +1325,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
             "success": true,
             "messageCode": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1277,7 +1333,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1307,7 +1364,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1337,7 +1395,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1367,7 +1426,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1397,7 +1457,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     }
@@ -1430,7 +1491,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckVisibilityCarC
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1457,7 +1519,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckVisibilityCarC
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1484,7 +1547,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckVisibilityCarC
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1511,7 +1575,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckVisibilityCarC
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1538,7 +1603,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckVisibilityCarC
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1565,7 +1631,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckVisibilityCarC
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1592,7 +1659,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckVisibilityCarC
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     }
@@ -1623,6 +1691,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldEvaluateRulesOnLoca
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1630,7 +1699,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldEvaluateRulesOnLoca
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         },
         {
           "ruleInfo": {
@@ -1645,6 +1715,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldEvaluateRulesOnLoca
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1652,7 +1723,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldEvaluateRulesOnLoca
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1677,6 +1749,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldEvaluateRulesOnLoca
             "messageCode": "code",
             "message": "String doesn\u0027t match Regular Expression: ^\\d{5}$",
             "templateVariables": [],
+            "messageTemplate": "String doesn\u0027\u0027t match Regular Expression: ^\\d\u0027{\u00275\u0027}\u0027$",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1684,7 +1757,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldEvaluateRulesOnLoca
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         },
         {
           "ruleInfo": {
@@ -1699,6 +1773,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldEvaluateRulesOnLoca
             "messageCode": "code",
             "message": "String doesn\u0027t match Regular Expression: ^\\d{5}$",
             "templateVariables": [],
+            "messageTemplate": "String doesn\u0027\u0027t match Regular Expression: ^\\d\u0027{\u00275\u0027}\u0027$",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1706,7 +1781,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldEvaluateRulesOnLoca
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1733,7 +1809,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldEvaluateRulesOnLoca
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         },
         {
           "ruleInfo": {
@@ -1748,6 +1825,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldEvaluateRulesOnLoca
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1755,7 +1833,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldEvaluateRulesOnLoca
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1780,6 +1859,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldEvaluateRulesOnLoca
             "messageCode": "code",
             "message": "String doesn\u0027t match Regular Expression: ^\\d{5}$",
             "templateVariables": [],
+            "messageTemplate": "String doesn\u0027\u0027t match Regular Expression: ^\\d\u0027{\u00275\u0027}\u0027$",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1787,7 +1867,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldEvaluateRulesOnLoca
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     }
@@ -1827,7 +1908,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldSetDefaultValueOnIn
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1861,7 +1943,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldSetDefaultValueOnIn
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     }
@@ -1897,7 +1980,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldValidateInheritedMa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1927,7 +2011,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldValidateInheritedMa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1951,6 +2036,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldValidateInheritedMa
             "success": false,
             "messageCode": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1958,7 +2044,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldValidateInheritedMa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -1982,6 +2069,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldValidateInheritedMa
             "success": false,
             "messageCode": "The field is mandatory",
             "templateVariables": [],
+            "messageTemplate": "",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1989,7 +2077,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldValidateInheritedMa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -2019,7 +2108,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldValidateInheritedMa
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     }
@@ -2052,7 +2142,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldValidateInheritedPr
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -2079,7 +2170,8 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldValidateInheritedPr
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     }

@@ -20,12 +20,14 @@ import kraken.model.validation.UsageType;
 import kraken.runtime.EvaluationSession;
 import kraken.runtime.engine.RulePayloadHandler;
 import kraken.runtime.engine.context.data.DataContext;
+import kraken.runtime.engine.handlers.trace.UsagePayloadEvaluatedOperation;
 import kraken.runtime.engine.result.PayloadResult;
 import kraken.runtime.engine.result.UsagePayloadResult;
 import kraken.runtime.expressions.KrakenExpressionEvaluator;
 import kraken.runtime.model.rule.RuntimeRule;
 import kraken.runtime.model.rule.payload.Payload;
 import kraken.runtime.model.rule.payload.validation.UsagePayload;
+import kraken.tracer.Tracer;
 
 import static kraken.runtime.utils.TargetPathUtils.resolveTargetPath;
 
@@ -54,6 +56,8 @@ public class UsagePayloadHandler implements RulePayloadHandler {
         Object value = evaluator.evaluateGetProperty(path, dataContext.getDataObject());
         boolean valid = isMandatoryAndNotNull(value, usagePayload) || isEmptyAndNull(value, usagePayload);
         List<String> templateVariables = evaluator.evaluateTemplateVariables(usagePayload.getErrorMessage(), dataContext, session);
+
+        Tracer.doOperation(new UsagePayloadEvaluatedOperation(usagePayload, value, valid));
         return new UsagePayloadResult(valid, usagePayload, templateVariables);
     }
 

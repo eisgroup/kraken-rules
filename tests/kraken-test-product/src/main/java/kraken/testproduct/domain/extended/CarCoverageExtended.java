@@ -15,7 +15,16 @@
  */
 package kraken.testproduct.domain.extended;
 
+import java.math.BigDecimal;
+
 import kraken.testproduct.domain.CarCoverage;
 
 public class CarCoverageExtended extends CarCoverage implements CoverageExtended {
+
+    public CarCoverageExtended(String code, BigDecimal limitAmount, BigDecimal deductibleAmount) {
+        super(code, limitAmount, deductibleAmount);
+    }
+
+    public CarCoverageExtended() {
+    }
 }

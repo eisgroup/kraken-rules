@@ -14,31 +14,31 @@
  *  limitations under the License.
  */
 
-import * as React from "react";
-import { Row } from "antd";
+import * as React from 'react'
+import { Row } from 'antd'
 
-import { InnerInputsComponentProps, SingleField } from "../../core/field/SingleField";
-import { renderers } from "../../core/RenderInputFunctions";
+import { InnerInputsComponentProps, SingleField } from '../../core/field/SingleField'
+import { renderers } from '../../core/RenderInputFunctions'
 
-import { TestProduct } from "kraken-test-product";
-import domain = TestProduct.kraken.testproduct.domain;
-import { withMetadata } from "../../core/ContextHOC";
+import { TestProduct } from 'kraken-test-product'
+import domain = TestProduct.kraken.testproduct.domain
+import { withMetadata } from '../../core/ContextHOC'
 
 class Component extends React.Component<InnerInputsComponentProps<domain.RRCoverage>> {
     onCodeChange = (event: React.FormEvent<HTMLInputElement>) => {
-        this.props.onChange(Object.assign({}, this.props.value, { code: event.currentTarget.value }));
+        this.props.onChange(Object.assign({}, this.props.value, { code: event.currentTarget.value }))
     }
 
     onLimitAmountChange = (limitAmount: React.ReactText) => {
-        this.props.onChange(Object.assign({}, this.props.value, { limitAmount }));
+        this.props.onChange(Object.assign({}, this.props.value, { limitAmount }))
     }
 
     onDeductibleAmountChange = (deductibleAmount: React.ReactText) => {
-        this.props.onChange(Object.assign({}, this.props.value, { deductibleAmount }));
+        this.props.onChange(Object.assign({}, this.props.value, { deductibleAmount }))
     }
 
     onCombinedLimitChnage = (event: React.FormEvent<HTMLInputElement>) => {
-        this.props.onChange(Object.assign({}, this.props.value, { combinedLimit: event.currentTarget.value }));
+        this.props.onChange(Object.assign({}, this.props.value, { combinedLimit: event.currentTarget.value }))
     }
 
     render(): JSX.Element {
@@ -47,39 +47,38 @@ class Component extends React.Component<InnerInputsComponentProps<domain.RRCover
                 <SingleField
                     id={this.props.id}
                     value={this.props.value.code}
-                    contextName="RRCoverage"
-                    modelFieldName="code"
+                    contextName='RRCoverage'
+                    modelFieldName='code'
                     onChange={this.onCodeChange}
                     renderInput={renderers.input}
                 />
                 <SingleField
                     id={this.props.id}
                     value={this.props.value.limitAmount}
-                    contextName="RRCoverage"
-                    modelFieldName="limitAmount"
+                    contextName='RRCoverage'
+                    modelFieldName='limitAmount'
                     onChange={this.onLimitAmountChange}
-
                     renderInput={renderers.inputNumber}
                 />
                 <SingleField
                     id={this.props.id}
                     value={this.props.value.deductibleAmount}
-                    contextName="RRCoverage"
-                    modelFieldName="deductibleAmount"
+                    contextName='RRCoverage'
+                    modelFieldName='deductibleAmount'
                     onChange={this.onDeductibleAmountChange}
                     renderInput={renderers.inputNumber}
                 />
-                 <SingleField
+                <SingleField
                     id={this.props.id}
                     value={this.props.value.combinedLimit}
-                    contextName="RRCoverage"
-                    modelFieldName="combinedLimit"
+                    contextName='RRCoverage'
+                    modelFieldName='combinedLimit'
                     onChange={this.onCombinedLimitChnage}
                     renderInput={renderers.input}
                 />
             </Row>
-        );
+        )
     }
 }
 
-export const RRCoverage = withMetadata(Component);
+export const RRCoverage = withMetadata(Component)

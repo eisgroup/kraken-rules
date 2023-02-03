@@ -38,6 +38,24 @@ public interface DimensionFilter {
      * @return filtered collection that contains only items that match the filter;
      *         if there is nothing to filter then collection instance can be the same as provided in parameter,
      *         otherwise it should be a new collection instance
+     * @deprecated use {@link #filter(String, Collection, Map)} instead
      */
-    <T extends MetadataContainer> Collection<T> filter(Collection<T> items, Map<String, Object> context);
+    @Deprecated(since = "1.38.0", forRemoval = true)
+    default <T extends MetadataContainer> Collection<T> filter(Collection<T> items, Map<String, Object> context) {
+        throw new UnsupportedOperationException("DimensionFilter#filter(Collection, Map) is not supported");
+    };
+
+    /**
+     * @param items to filter; collection of items is immutable and cannot be modified
+     * @param context that shall contain dimensions and other additional context data as a key value pairs
+     * @param namespace namespace of the kraken project of this evaluation
+     * @return filtered collection that contains only items that match the filter;
+     *         if there is nothing to filter then collection instance can be the same as provided in parameter,
+     *         otherwise it should be a new collection instance
+     */
+    default <T extends MetadataContainer> Collection<T> filter(String namespace,
+                                                               Collection<T> items,
+                                                               Map<String, Object> context) {
+        return filter(items, context);
+    };
 }

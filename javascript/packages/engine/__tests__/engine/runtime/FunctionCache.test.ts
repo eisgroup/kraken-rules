@@ -14,11 +14,11 @@
  *  limitations under the License.
  */
 
-import { FunctionCache } from "../../../src/engine/runtime/expressions/FunctionCache";
+import { FunctionCache } from '../../../src/engine/runtime/expressions/FunctionCache'
 
-describe("FunctionCache", () => {
-    it("should compile function in cache and return it", () => {
-        const fx = new FunctionCache().compute("return Math.round(a)", ["a", "return Math.round(a)"]);
-        expect(fx(1.001)).toBe(1);
-    });
-});
+describe('FunctionCache', () => {
+    it('should compile function in cache and return it', () => {
+        const fx = new FunctionCache().compute('return Math.round(a)', ['a', 'return Math.round(a)'])
+        expect(fx(1.001)).toBe(1)
+    })
+})

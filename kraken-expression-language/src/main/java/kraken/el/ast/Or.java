@@ -26,5 +26,4 @@ public class Or extends BinaryLogicalOperation {
     public Or(Expression left, Expression right, Scope scope, Token token) {
         super(left, right, NodeType.OR, scope, token);
     }
-
 }

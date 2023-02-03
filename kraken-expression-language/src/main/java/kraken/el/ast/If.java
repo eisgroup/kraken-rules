@@ -17,6 +17,7 @@ package kraken.el.ast;
 
 import kraken.el.ast.token.Token;
 import kraken.el.scope.Scope;
+import kraken.el.scope.type.Type;
 
 import java.util.Optional;
 
@@ -25,17 +26,17 @@ import java.util.Optional;
  */
 public class If extends Expression {
 
-    private Expression condition;
+    private final Expression condition;
 
-    private Expression thenExpression;
+    private final Expression thenExpression;
 
-    private Optional<Expression> elseExpression;
+    private final Expression elseExpression;
 
     public If(Expression condition, Expression thenExpression, Expression elseExpression, Scope scope, Token token) {
-        super(NodeType.IF, scope, thenExpression.getEvaluationType(), token);
+        super(NodeType.IF, scope, determineEvaluationType(thenExpression, elseExpression), token);
         this.condition = condition;
         this.thenExpression = thenExpression;
-        this.elseExpression = Optional.ofNullable(elseExpression);
+        this.elseExpression = elseExpression;
     }
 
     public Expression getCondition() {
@@ -47,13 +48,22 @@ public class If extends Expression {
     }
 
     public Optional<Expression> getElseExpression() {
-        return elseExpression;
+        return Optional.ofNullable(elseExpression);
+    }
+
+    private static Type determineEvaluationType(Expression then, Expression elze) {
+        if(elze == null) {
+            return then.getEvaluationType();
+        }
+        return then.getEvaluationType()
+            .resolveCommonTypeOf(elze.getEvaluationType())
+            .orElse(Type.UNKNOWN);
     }
 
     @Override
     public String toString() {
-        return "if " + condition +
+        return "(if " + condition +
                 " then " + thenExpression +
-                elseExpression.map(e -> " else " + e).orElse("");
+                Optional.ofNullable(elseExpression).map(e -> " else " + e).orElse("") + ")";
     }
 }

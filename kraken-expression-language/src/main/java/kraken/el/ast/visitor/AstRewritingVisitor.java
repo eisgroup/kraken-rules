@@ -15,10 +15,55 @@
  */
 package kraken.el.ast.visitor;
 
-import kraken.el.ast.*;
-
 import java.util.List;
 import java.util.stream.Collectors;
+
+import kraken.el.ast.AccessByIndex;
+import kraken.el.ast.Addition;
+import kraken.el.ast.And;
+import kraken.el.ast.BooleanLiteral;
+import kraken.el.ast.Cast;
+import kraken.el.ast.CollectionFilter;
+import kraken.el.ast.DateLiteral;
+import kraken.el.ast.DateTimeLiteral;
+import kraken.el.ast.Division;
+import kraken.el.ast.Empty;
+import kraken.el.ast.Equals;
+import kraken.el.ast.Exponent;
+import kraken.el.ast.Expression;
+import kraken.el.ast.ForEach;
+import kraken.el.ast.ForEvery;
+import kraken.el.ast.ForSome;
+import kraken.el.ast.Function;
+import kraken.el.ast.Identifier;
+import kraken.el.ast.If;
+import kraken.el.ast.In;
+import kraken.el.ast.InlineArray;
+import kraken.el.ast.InlineMap;
+import kraken.el.ast.InstanceOf;
+import kraken.el.ast.LessThan;
+import kraken.el.ast.LessThanOrEquals;
+import kraken.el.ast.MatchesRegExp;
+import kraken.el.ast.Modulus;
+import kraken.el.ast.MoreThan;
+import kraken.el.ast.MoreThanOrEquals;
+import kraken.el.ast.Multiplication;
+import kraken.el.ast.Negation;
+import kraken.el.ast.Negative;
+import kraken.el.ast.NotEquals;
+import kraken.el.ast.Null;
+import kraken.el.ast.NumberLiteral;
+import kraken.el.ast.Or;
+import kraken.el.ast.Path;
+import kraken.el.ast.Reference;
+import kraken.el.ast.ReferenceValue;
+import kraken.el.ast.StringLiteral;
+import kraken.el.ast.Subtraction;
+import kraken.el.ast.Template;
+import kraken.el.ast.This;
+import kraken.el.ast.TypeOf;
+import kraken.el.ast.ValueBlock;
+import kraken.el.ast.Variable;
 
 /**
  * Visitor that rewrites AST in immutable way from one structure to another.
@@ -57,7 +102,13 @@ public abstract class AstRewritingVisitor extends QueuedAstVisitor<Expression> {
         if(filter.getPredicate() != null) {
             predicate = visit(filter.getPredicate());
         }
-        return new CollectionFilter(collection, predicate, filter.getScope(), filter.getToken());
+        return new CollectionFilter(
+            collection,
+            predicate,
+            filter.getScope(),
+            filter.getEvaluationType(),
+            filter.getToken()
+        );
     }
 
     @Override
@@ -271,8 +322,11 @@ public abstract class AstRewritingVisitor extends QueuedAstVisitor<Expression> {
         return new Path(
                 (Reference) visit(path.getObject()),
                 (Reference) visit(path.getProperty()),
+                path.isNullSafe(),
                 path.getScope(),
-                path.getToken());
+                path.getEvaluationType(),
+                path.getToken()
+        );
     }
 
     @Override
@@ -281,22 +335,29 @@ public abstract class AstRewritingVisitor extends QueuedAstVisitor<Expression> {
                 (Reference) visit(accessByIndex.getCollection()),
                 visit(accessByIndex.getIndexExpression()),
                 accessByIndex.getScope(),
-                accessByIndex.getToken());
+                accessByIndex.getEvaluationType(),
+                accessByIndex.getToken()
+        );
     }
 
     @Override
     public Expression visit(ReferenceValue reference) {
         return new ReferenceValue(
-                reference.isStartsWithThis(),
                 (Reference) visit(reference.getReference()),
                 reference.getScope(),
-                reference.getEvaluationType(),
-                reference.getToken());
+                reference.getToken()
+        );
     }
 
     @Override
     public Expression visit(Identifier identifier) {
-        return new Identifier(identifier.getIdentifierToken(), identifier.getIdentifier(), identifier.getScope(), identifier.getToken());
+        return new Identifier(
+            identifier.getIdentifierToken(),
+            identifier.getIdentifier(),
+            identifier.getScope(),
+            identifier.getEvaluationType(),
+            identifier.getToken()
+        );
     }
 
     @Override
@@ -305,8 +366,13 @@ public abstract class AstRewritingVisitor extends QueuedAstVisitor<Expression> {
     }
 
     @Override
+    public Expression visit(Empty empty) {
+        return new Empty(empty.getScope());
+    }
+
+    @Override
     public Expression visit(This aThis) {
-        return new This(aThis.getScope(), aThis.getToken());
+        return new This(aThis.getScope(), aThis.getEvaluationType(), aThis.getToken());
     }
 
     @Override
@@ -316,5 +382,31 @@ public abstract class AstRewritingVisitor extends QueuedAstVisitor<Expression> {
             .collect(Collectors.toList());
 
         return new Template(template.getTemplateParts(), templateExpressions, template.getScope(), template.getToken());
+    }
+
+    @Override
+    public Expression visit(ValueBlock valueBlock) {
+        List<Variable> variables = valueBlock.getVariables().stream()
+            .map(v -> (Variable) this.visit(v))
+            .collect(Collectors.toList());
+
+        Expression value = visit(valueBlock.getValue());
+
+        return new ValueBlock(
+            value,
+            variables,
+            valueBlock.getScope(),
+            valueBlock.getToken()
+        );
+    }
+
+    @Override
+    public Expression visit(Variable variable) {
+       return new Variable(
+           variable.getVariableName(),
+           visit(variable.getValue()),
+           variable.getScope(),
+           variable.getToken()
+       );
     }
 }

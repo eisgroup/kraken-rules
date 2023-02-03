@@ -1,0 +1,3 @@
+functionSignature(f) ::= <<
+Function <f.name>(<f.parameterTypes: {parameterType | <parameterType>}; separator=", ">) : <f.returnType>
+>>

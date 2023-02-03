@@ -39,6 +39,6 @@ public class VisitingRewriter implements AstRewriter {
         for(AstRewritingVisitor visitor : astRewritingVisitors) {
             expression = visitor.visit(expression);
         }
-        return new Ast(expression, ast.getFunctions(), ast.getReferences());
+        return new Ast(expression, ast.getFunctions(), ast.getReferences(), ast.getGenerationErrors());
     }
 }

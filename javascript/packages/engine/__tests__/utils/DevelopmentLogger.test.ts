@@ -14,64 +14,64 @@
  *  limitations under the License.
  */
 
-import { KrakenConfig } from "../../src/config";
-import { DevelopmentLogger } from "../../src/utils/DevelopmentLogger";
+import { KrakenConfig } from '../../src/config'
+import { DevelopmentLogger } from '../../src/utils/DevelopmentLogger'
 
-type ThisWithKraken = typeof global & { Kraken: KrakenConfig };
+type ThisWithKraken = typeof global & { Kraken: KrakenConfig }
 
-describe("DevelopmentLogger", () => {
-    it("should call provided methods", () => {
-        (global as ThisWithKraken).Kraken.logger.debug = true;
-        const before = process.env.NODE_ENV;
-        process.env.NODE_ENV = "development";
+describe('DevelopmentLogger', () => {
+    it('should call provided methods', () => {
+        ;(global as ThisWithKraken).Kraken.logger.debug = true
+        const before = process.env.NODE_ENV
+        process.env.NODE_ENV = 'development'
         const mock = {
             groupEnd: jest.fn(),
             group: jest.fn(),
             info: jest.fn(),
             warning: jest.fn(),
             error: jest.fn(),
-            debug: jest.fn()
-        };
-        const l = new DevelopmentLogger(mock);
-        l.debug("d");
-        expect(mock.debug).toHaveBeenCalledWith("d");
-        l.error("e");
-        expect(mock.error).toHaveBeenCalledWith("e");
-        l.group("g");
-        expect(mock.group).toHaveBeenCalledWith("g");
-        l.groupEnd("ge");
-        expect(mock.groupEnd).toHaveBeenCalledWith("ge");
-        l.info("i");
-        expect(mock.info).toHaveBeenCalledWith("i");
-        l.warning("w");
-        expect(mock.warning).toHaveBeenCalledWith("w");
-        process.env.NODE_ENV = before;
-    });
+            debug: jest.fn(),
+        }
+        const l = new DevelopmentLogger(mock)
+        l.debug('d')
+        expect(mock.debug).toHaveBeenCalledWith('d')
+        l.error('e')
+        expect(mock.error).toHaveBeenCalledWith('e')
+        l.group('g')
+        expect(mock.group).toHaveBeenCalledWith('g')
+        l.groupEnd('ge')
+        expect(mock.groupEnd).toHaveBeenCalledWith('ge')
+        l.info('i')
+        expect(mock.info).toHaveBeenCalledWith('i')
+        l.warning('w')
+        expect(mock.warning).toHaveBeenCalledWith('w')
+        process.env.NODE_ENV = before
+    })
 
-    it("should not call provided methods", () => {
-        const before = process.env.NODE_ENV;
-        process.env.NODE_ENV = "production";
+    it('should not call provided methods', () => {
+        const before = process.env.NODE_ENV
+        process.env.NODE_ENV = 'production'
         const mock = {
             groupEnd: jest.fn(),
             group: jest.fn(),
             info: jest.fn(),
             warning: jest.fn(),
             error: jest.fn(),
-            debug: jest.fn()
-        };
-        const l = new DevelopmentLogger(mock);
-        l.debug("d");
-        l.error("e");
-        l.group("g");
-        l.groupEnd("ge");
-        l.info("i");
-        l.warning("w");
-        expect(mock.debug).not.toHaveBeenCalled();
-        expect(mock.error).not.toHaveBeenCalled();
-        expect(mock.group).not.toHaveBeenCalled();
-        expect(mock.groupEnd).not.toHaveBeenCalled();
-        expect(mock.info).not.toHaveBeenCalled();
-        expect(mock.warning).not.toHaveBeenCalled();
-        process.env.NODE_ENV = before;
-    });
-});
+            debug: jest.fn(),
+        }
+        const l = new DevelopmentLogger(mock)
+        l.debug('d')
+        l.error('e')
+        l.group('g')
+        l.groupEnd('ge')
+        l.info('i')
+        l.warning('w')
+        expect(mock.debug).not.toHaveBeenCalled()
+        expect(mock.error).not.toHaveBeenCalled()
+        expect(mock.group).not.toHaveBeenCalled()
+        expect(mock.groupEnd).not.toHaveBeenCalled()
+        expect(mock.info).not.toHaveBeenCalled()
+        expect(mock.warning).not.toHaveBeenCalled()
+        process.env.NODE_ENV = before
+    })
+})

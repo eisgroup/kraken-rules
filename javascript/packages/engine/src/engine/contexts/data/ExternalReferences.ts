@@ -14,26 +14,23 @@
  *  limitations under the License.
  */
 
-import { DataContextTypes } from "./DataContext.types";
-import { DataContext } from "./DataContext";
+import { DataContext } from './DataContext'
+import { DataContextTypes } from './DataContext.types'
 
 export class ExternalReferences {
-
-    readonly references: DataContextTypes.ExternalObjectReferences = {};
-    readonly singleDataContexts: Record<string, DataContext> = {};
+    readonly references: DataContextTypes.ExternalObjectReferences = {}
+    readonly singleDataContexts: Record<string, DataContext> = {}
 
     addSingle(contextName: string, dc: DataContext | undefined): void {
-        // tslint:disable-next-line: triple-equals
         if (dc && this.references[contextName] == null) {
-            this.references[contextName] = dc.dataObject;
-            this.singleDataContexts[contextName] = dc;
+            this.references[contextName] = dc.dataObject
+            this.singleDataContexts[contextName] = dc
         }
     }
 
     addMultiple(contextName: string, dcs: DataContext[] | undefined): void {
-        // tslint:disable-next-line: triple-equals
         if (dcs && dcs.length && this.references[contextName] == null) {
-            this.references[contextName] = dcs.map(d => d.dataObject);
+            this.references[contextName] = dcs.map(d => d.dataObject)
         }
     }
 }

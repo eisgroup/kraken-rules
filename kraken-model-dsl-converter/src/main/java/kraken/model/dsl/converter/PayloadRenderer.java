@@ -15,41 +15,42 @@
  */
 package kraken.model.dsl.converter;
 
-import kraken.model.derive.DefaultValuePayload;
-import kraken.model.validation.SizePayload;
-import kraken.model.validation.UsagePayload;
-import kraken.model.validation.ValidationSeverity;
+import java.nio.charset.StandardCharsets;
+import java.util.Locale;
+
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupFile;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Locale;
+import kraken.model.derive.DefaultValuePayload;
+import kraken.model.validation.SizePayload;
+import kraken.model.validation.UsagePayload;
+import kraken.model.validation.ValidationSeverity;
 
 /**
  * Used by {@link DSLModelConverter} to render {@link kraken.model.Payload}
- * when converting {@link kraken.model.dsl.KrakenDSLModel} to Dsl <code>string</code>
+ * when converting {@link kraken.model.resource.Resource} to Dsl <code>string</code>
  *
  * @author avasiliauskas
  */
 class PayloadRenderer {
 
-    private static final STGroup TEMPLATE_GROUP;
-    private static final DefaultErrorListener ERROR_LISTENER;
 
-    static {
-        TEMPLATE_GROUP = new STGroupFile(
-                Thread.currentThread().getContextClassLoader().getResource("templates/rule-payload-model.stg"),
-                StandardCharsets.UTF_8.name(),
-                '<', '>'
-        );
-        TEMPLATE_GROUP.registerRenderer(ValidationSeverity.class, PayloadRenderer::validationSeverityRenderer);
-        TEMPLATE_GROUP.registerRenderer(String.class, new CustomStringRenderer());
-        ERROR_LISTENER = new DefaultErrorListener();
-        TEMPLATE_GROUP.setListener(ERROR_LISTENER);
+    private static final java.net.URL URL = 
+        Thread.currentThread().getContextClassLoader().getResource("templates/rule-payload-model.stg");
+    private final STGroup template;
+    private final DefaultErrorListener errorListener;
+        
+    public PayloadRenderer() {
+        template =
+            new STGroupFile(URL, StandardCharsets.UTF_8.name(), '<', '>');
+        template.registerRenderer(ValidationSeverity.class, this::validationSeverityRenderer);
+        template.registerRenderer(String.class, new CustomStringRenderer());
+        errorListener = new DefaultErrorListener();
+        template.setListener(errorListener);
     }
 
-    static String validationSeverityRenderer(Object object, String s, Locale locale) {
+    public String validationSeverityRenderer(Object object, String s, Locale locale) {
         ValidationSeverity validationSeverity = (ValidationSeverity)object;
         switch (validationSeverity) {
             case info: return "Info";
@@ -62,7 +63,7 @@ class PayloadRenderer {
         }
     }
 
-    static String usagePayloadRenderer(Object payload, String formatString, Locale locale) {
+    String usagePayloadRenderer(Object payload, String formatString, Locale locale) {
         UsagePayload usagePayload = (UsagePayload) payload;
         switch (usagePayload.getUsageType()) {
             case mandatory: return renderPayload(payload, "usageMandatoryPayload");
@@ -74,31 +75,31 @@ class PayloadRenderer {
         }
     }
 
-    static String regExpPayloadRenderer(Object payload, String formatString, Locale locale){
-        return PayloadRenderer.renderPayload(payload, "regExpPayload");
+    String regExpPayloadRenderer(Object payload, String formatString, Locale locale){
+        return renderPayload(payload, "regExpPayload");
     }
 
-    static String assertionPayloadRenderer(Object payload, String formatString, Locale locale){
-        return PayloadRenderer.renderPayload(payload, "assertionPayload");
+    String assertionPayloadRenderer(Object payload, String formatString, Locale locale){
+        return renderPayload(payload, "assertionPayload");
     }
 
-    static String sizeRangePayloadRenderer(Object payload, String s, Locale locale) {
-        return PayloadRenderer.renderPayload(payload, "sizeRangePayload");
+    String sizeRangePayloadRenderer(Object payload, String s, Locale locale) {
+        return renderPayload(payload, "sizeRangePayload");
     }
 
-    static String lengthPayloadRenderer(Object payload, String s, Locale locale) {
-        return PayloadRenderer.renderPayload(payload, "lengthPayload");
+    String lengthPayloadRenderer(Object payload, String s, Locale locale) {
+        return renderPayload(payload, "lengthPayload");
     }
 
-    static String visibilityPayloadRenderer(Object payload, String s, Locale locale) {
-        return  PayloadRenderer.render("visibilityPayload");
+    String visibilityPayloadRenderer(Object payload, String s, Locale locale) {
+        return  render("visibilityPayload");
     }
 
-    static String accessibilityPayloadRenderer(Object payload, String s, Locale locale) {
-        return PayloadRenderer.render("accessibilityPayload");
+    String accessibilityPayloadRenderer(Object payload, String s, Locale locale) {
+        return render("accessibilityPayload");
     }
 
-    static String sizePayloadRenderer(Object payload, String formatString, Locale locale) {
+    String sizePayloadRenderer(Object payload, String formatString, Locale locale) {
         SizePayload sizePayload = (SizePayload) payload;
         switch (sizePayload.getOrientation()) {
             case MAX: return renderPayload(payload, "sizeMaxPayload");
@@ -111,7 +112,7 @@ class PayloadRenderer {
         }
     }
 
-    static String defaultValuePayloadRenderer(Object payload, String formatString, Locale locale) {
+    String defaultValuePayloadRenderer(Object payload, String formatString, Locale locale) {
         DefaultValuePayload defaultValuePayload = (DefaultValuePayload) payload;
         switch (defaultValuePayload.getDefaultingType()) {
             case defaultValue: return renderPayload(payload, "defaultValuePayload");
@@ -124,21 +125,21 @@ class PayloadRenderer {
         }
     }
 
-    private static String renderPayload(Object payload, String instanceName){
-        ST st = TEMPLATE_GROUP.getInstanceOf(instanceName);
+    private String renderPayload(Object payload, String instanceName){
+        ST st = template.getInstanceOf(instanceName);
         st.add("payload", payload);
         return renderST(st);
     }
 
-    private static String render(String instanceName){
-        ST st = TEMPLATE_GROUP.getInstanceOf(instanceName);
+    private String render(String instanceName){
+        ST st = template.getInstanceOf(instanceName);
         return renderST(st);
     }
 
-    private static String renderST(ST st){
+    private String renderST(ST st){
         String dsl = st.render();
-        if(!ERROR_LISTENER.getErrors().isEmpty()) {
-            String msg = "Error while generating DSL: " + String.join(";", ERROR_LISTENER.getErrors());
+        if(!errorListener.getErrors().isEmpty()) {
+            String msg = "Error while generating DSL: " + String.join(";", errorListener.getErrors());
             throw new IllegalStateException(msg);
         }
         return dsl;

@@ -14,8 +14,8 @@ import static io.github.jsonSnapshot.SnapshotMatcher.start;
 import static io.github.jsonSnapshot.SnapshotMatcher.validateSnapshots;
 import static kraken.testing.matchers.KrakenMatchers.hasNoIgnoredRules;
 import static kraken.test.KrakenItestMatchers.matchesSnapshot;
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class EngineSanityMultipleChildrenTest extends SanityEngineBaseTest {
 

@@ -2,6 +2,11 @@ parser grammar Value;
 
 options {tokenVocab=Common;}
 
+valueBlock : valueWithVariables | value;
+// validation of missing 'RETURN', 'value' and 'TO' cases are handled semantically to not depend on ANTLR auto recovery
+valueWithVariables : variable+ RETURN? value? | RETURN value?;
+variable : SET identifier TO? value?;
+
 value : L_ROUND_BRACKETS value R_ROUND_BRACKETS        #Precedence
       | <assoc=right> value op=OP_EXP value            #Exponent
       | op=OP_MINUS value                              #Negative
@@ -18,21 +23,19 @@ value : L_ROUND_BRACKETS value R_ROUND_BRACKETS        #Precedence
       | L_CURLY_BRACKETS valueList? R_CURLY_BRACKETS   #InlineArray
       | L_CURLY_BRACKETS keyValuePairs R_CURLY_BRACKETS #InlineMap
       | IF condition=value
-        THEN thenExpression=value
-        (ELSE elseExpression=value)?                   #IfValue
-      | THIS                                           #This
-      | (THIS DOT)? reference                          #ReferenceValue
-      | FOR var=identifier
-        OP_IN collection=value
-        RETURN returnExpression=value                  #ForEach
-      | EVERY var=identifier
-        OP_IN collection=value
-        SATISFIES returnExpression=value               #ForEvery
-      | SOME var=identifier
-        OP_IN collection=value
-        SATISFIES returnExpression=value               #ForSome
+        THEN thenExpression=valueBlock
+        (ELSE elseExpression=valueBlock)?              #IfValue
+      | reference                                      #ReferenceValue
+      | opStart=FOR var=identifier
+        opIn=OP_IN collection=value
+        opReturn=RETURN returnExpression=valueBlock    #ForEach
+      | opStart=EVERY var=identifier
+        opIn=OP_IN collection=value
+        opReturn=SATISFIES returnExpression=valueBlock #ForEvery
+      | opStart=SOME var=identifier
+        opIn=OP_IN collection=value
+        opReturn=SATISFIES returnExpression=valueBlock #ForSome
       | literal                                        #LiteralValue
-      | template                                       #TemplateValue
       ;
 
 type : identifier                                 #PlainType
@@ -48,8 +51,7 @@ templateExpression : TEMPLATE_EXPRESSION_START value? R_CURLY_BRACKETS;
 
 indexValue :
       L_ROUND_BRACKETS indexValue R_ROUND_BRACKETS    #PrecedenceValue
-     | THIS                                           #ThisValue
-     | (THIS DOT)? reference                          #ReferenceValueValue
+     | reference                                      #ReferenceValueValue
      | literal                                        #LiteralValueValue
      | value op=(OP_MINUS|OP_ADD) value               #SubtractionOrAdditionValue
      | value op=(OP_MULT|OP_DIV|OP_MOD) value         #MultiplicationOrDivisionValue
@@ -59,12 +61,12 @@ indexValue :
 
 valuePredicate :
        L_ROUND_BRACKETS valuePredicate R_ROUND_BRACKETS        #PrecedencePredicate
-     | EVERY var=identifier
-       OP_IN collection=value
-       SATISFIES returnExpression=value                        #ForEveryPredicate
-     | SOME var=identifier
-       OP_IN collection=value
-       SATISFIES returnExpression=value                        #ForSomePredicate
+     | opStart=EVERY var=identifier
+       opIn=OP_IN collection=value
+       opReturn=SATISFIES returnExpression=valueBlock          #ForEveryPredicate
+     | opStart=SOME var=identifier
+       opIn=OP_IN collection=value
+       opReturn=SATISFIES returnExpression=valueBlock          #ForSomePredicate
      | value op=OP_OR value                                    #DisjunctionPredicate
      | value op=OP_AND value                                   #ConjunctionPredicate
      | value op=(OP_EQUALS|OP_NOT_EQUALS) value                #EqualityComparisonPredicate
@@ -76,19 +78,27 @@ valuePredicate :
      ;
 
 reference : L_ROUND_BRACKETS reference R_ROUND_BRACKETS        #ReferencePrecedence
-         | L_ROUND_BRACKETS type R_ROUND_BRACKETS reference    #Cast
          | identifier                                          #IdentifierReference
          | functionCall                                        #Function
          | collection=reference indices                        #AccessByIndex
-         | object=reference DOT property=reference             #Path
+         | object=reference pathSeparator property=reference   #Path
+         // optional path property to allow incomplete path to parse
+         | object=reference pathSeparator                      #IncompletePath
          | filterCollection=reference (predicate | asterix)    #Filter
+         | L_ROUND_BRACKETS type R_ROUND_BRACKETS reference    #Cast
+         | thisValue                                           #This
          ;
 
-predicate : L_SQUARE_BRACKETS valuePredicate R_SQUARE_BRACKETS
-          | OP_QUESTION L_SQUARE_BRACKETS value R_SQUARE_BRACKETS
+pathSeparator : DOT | QDOT;
+
+// optional brackets and predicate to allow incomplete filters to parse
+predicate : L_SQUARE_BRACKETS valuePredicate? R_SQUARE_BRACKETS?
+          | OP_QUESTION L_SQUARE_BRACKETS value? R_SQUARE_BRACKETS?
           ;
 
-indices : L_SQUARE_BRACKETS indexValue R_SQUARE_BRACKETS;
+// optional brackets and predicate to allow incomplete access by index to parse
+indices : L_SQUARE_BRACKETS indexValue? R_SQUARE_BRACKETS?;
+
 asterix : L_SQUARE_BRACKETS OP_MULT R_SQUARE_BRACKETS;
 
 functionCall : (functionName=identifier) L_ROUND_BRACKETS (arguments=valueList)? R_ROUND_BRACKETS ;
@@ -97,23 +107,77 @@ valueList : value (COMMA value)*;
 keyValuePairs : keyValuePair (COMMA keyValuePair)*;
 keyValuePair : key=STRING COLON value;
 
+thisValue : THIS;
+
 literal : DATE_TOKEN                                  #Date
         | TIME_TOKEN                                  #DateTime
         | BOOL                                        #Boolean
-        | decimalLiteral                              #Decimal
+        | positiveDecimalLiteral                      #Decimal
         | STRING                                      #String
         | NULL                                        #Null
         ;
 
-decimalLiteral : REAL | integerLiteral;
-integerLiteral : positiveIntegerLiteral;
+positiveDecimalLiteral : REAL | positiveIntegerLiteral;
 positiveIntegerLiteral : NATURAL;
 
-identifier : IDENTIFIER | reservedWord;
-reservedWord : reservedWordNoChild | CHILD;
-reservedWordNoChild : DESCRIPTION | RULES | RULE | ENTRYPOINT | ENTRYPOINTS | CONTEXT | CONTEXTS | EXTERNAL | THIS
-             | WHEN | ASSERT | MATCHES | LENGTH | SET | IS | ON | TO | NOT | IN | AND | OR
-             | ERROR | WARN | INFO | MANDATORY | EMPTY | TODISABLED
-             | TOHIDDEN | DEFAULT | RESET | DIMENSION | SERVERSIDEONLY | OVERRIDABLE | MIN | MAX | SIZE
-             | IF | THEN | ELSE | NOTSTRICT | NAMESPACE | INCLUDE | IMPORT | FROM
-             | FOR | EVERY | SOME | RETURN | SATISFIES | OP_INSTANCEOF | OP_TYPEOF | FUNCTION;
+identifier : IDENTIFIER | krakenModelReservedWord;
+
+krakenModelReservedWord : krakenModelReservedWordNoChild | CHILD;
+krakenModelReservedWordNoChild : DESCRIPTION
+                               | ENTRYPOINT
+                               | ENTRYPOINTS
+                               | SYSTEM
+                               | CONTEXT
+                               | CONTEXTS
+                               | EXTERNAL
+                               | SERVERSIDEONLY
+                               | NOTSTRICT
+                               | ROOT
+                               | NAMESPACE
+                               | FUNCTION
+                               | RULES
+                               | RULE
+                               | DIMENSION
+                               | ERROR
+                               | WARN
+                               | INFO
+                               | MANDATORY
+                               | EMPTY
+                               | TODISABLED
+                               | TOHIDDEN
+                               | DEFAULT
+                               | RESET
+                               | OVERRIDABLE
+                               | MIN
+                               | MAX
+                               | SIZE
+                               | WHEN
+                               | ASSERT
+                               | LENGTH
+                               | ON
+                               | TO
+                               | INCLUDE
+                               | IMPORT
+                               | FROM
+                               | SET
+                               ;
+
+kelReservedWord : THIS
+                | IF
+                | THEN
+                | ELSE
+                | FOR
+                | EVERY
+                | SOME
+                | RETURN
+                | SATISFIES
+                | OP_INSTANCEOF
+                | OP_TYPEOF
+                | IN
+                | NOT
+                | AND
+                | OR
+                | MATCHES
+                | SET
+                | TO
+                ;

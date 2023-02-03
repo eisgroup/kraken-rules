@@ -1,8 +1,52 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Cross context references sanity tests should access reference with multiple cardinality: Results + reducer results 1`] = `
+exports[`Cross context references sanity tests should access reference with multiple cardinality 1`] = `
 Object {
-  "Field Metadata reduced results": Object {
+  "entryPointResults": Object {
+    "evaluationTimestamp": Any<Date>,
+    "results": Object {
+      "Policy:0:policyNumber": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "policyNumber",
+          "fieldPath": "policyNumber",
+          "fieldType": "STRING",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": Object {
+                "errorCode": "code",
+                "errorMessage": "Value didn't match assertion",
+                "templateVariables": Array [],
+              },
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "ASSERTION",
+              "ruleName": "R-CCR-Policy-PartyRole",
+              "targetPath": "policyNumber",
+            },
+          },
+        ],
+      },
+    },
+  },
+  "fieldResults": Object {
     "Policy:0:policyNumber": Object {
       "fieldType": "STRING",
       "id": "Policy:0:policyNumber",
@@ -37,20 +81,25 @@ Object {
       ],
     },
   },
-  "Raw results": Object {
+}
+`;
+
+exports[`Cross context references sanity tests should check is self reference with inherited context will be skipped 1`] = `
+Object {
+  "entryPointResults": Object {
     "evaluationTimestamp": Any<Date>,
     "results": Object {
-      "Policy:0:policyNumber": Object {
-        "contextFieldInfo": ContextFieldInfo {
+      "Policy:0:policyCurrency": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "0",
           "contextName": "Policy",
-          "fieldName": "policyNumber",
-          "fieldPath": "policyNumber",
+          "fieldName": "policyCurrency",
+          "fieldPath": "policyCurrency",
           "fieldType": "STRING",
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -70,28 +119,18 @@ Object {
               "type": 1,
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
               "context": "Policy",
               "payloadtype": "ASSERTION",
-              "ruleName": "R-CCR-Policy-PartyRole",
-              "targetPath": "policyNumber",
+              "ruleName": "R-CCR-Policy-ExPolicy",
+              "targetPath": "policyCurrency",
             },
           },
         ],
       },
     },
   },
-  "Validation results": Object {
-    "critical": Array [],
-    "info": Array [],
-    "warning": Array [],
-  },
-}
-`;
-
-exports[`Cross context references sanity tests should check is self reference with inherited context will be skipped: Results + reducer results 1`] = `
-Object {
-  "Field Metadata reduced results": Object {
+  "fieldResults": Object {
     "Policy:0:policyCurrency": Object {
       "fieldType": "STRING",
       "id": "Policy:0:policyCurrency",
@@ -126,20 +165,25 @@ Object {
       ],
     },
   },
-  "Raw results": Object {
+}
+`;
+
+exports[`Cross context references sanity tests should not fail on executing rules on same instance with inheritance rules 1`] = `
+Object {
+  "entryPointResults": Object {
     "evaluationTimestamp": Any<Date>,
     "results": Object {
-      "Policy:0:policyCurrency": Object {
-        "contextFieldInfo": ContextFieldInfo {
+      "PolicyExtended:0:policyCurrency": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
           "contextId": "0",
-          "contextName": "Policy",
+          "contextName": "PolicyExtended",
           "fieldName": "policyCurrency",
           "fieldPath": "policyCurrency",
           "fieldType": "STRING",
         },
         "ruleResults": Array [
           Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
               "conditionEvaluation": "APPLICABLE",
               "error": undefined,
             },
@@ -150,19 +194,39 @@ Object {
               "overrideGroup": undefined,
             },
             "payloadResult": Object {
-              "message": Object {
-                "errorCode": "code",
-                "errorMessage": "Value didn't match assertion",
-                "templateVariables": Array [],
-              },
+              "message": undefined,
               "success": true,
               "type": 1,
               "validationSeverity": "critical",
             },
-            "ruleInfo": RuleInfo {
+            "ruleInfo": DefaultRuleInfo {
+              "context": "PolicyExtended",
+              "payloadtype": "ASSERTION",
+              "ruleName": "Inheritance-CCR-02",
+              "targetPath": "policyCurrency",
+            },
+          },
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
               "context": "Policy",
               "payloadtype": "ASSERTION",
-              "ruleName": "R-CCR-Policy-ExPolicy",
+              "ruleName": "Inheritance-CCR-01",
               "targetPath": "policyCurrency",
             },
           },
@@ -170,17 +234,7 @@ Object {
       },
     },
   },
-  "Validation results": Object {
-    "critical": Array [],
-    "info": Array [],
-    "warning": Array [],
-  },
-}
-`;
-
-exports[`Cross context references sanity tests should not fail on executing rules on same instance with inheritance rules: Results + reducer results 1`] = `
-Object {
-  "Field Metadata reduced results": Object {
+  "fieldResults": Object {
     "PolicyExtended:0:policyCurrency": Object {
       "fieldType": "STRING",
       "id": "PolicyExtended:0:policyCurrency",
@@ -226,75 +280,6 @@ Object {
         },
       ],
     },
-  },
-  "Raw results": Object {
-    "evaluationTimestamp": Any<Date>,
-    "results": Object {
-      "PolicyExtended:0:policyCurrency": Object {
-        "contextFieldInfo": ContextFieldInfo {
-          "contextId": "0",
-          "contextName": "PolicyExtended",
-          "fieldName": "policyCurrency",
-          "fieldPath": "policyCurrency",
-          "fieldType": "STRING",
-        },
-        "ruleResults": Array [
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 1,
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "PolicyExtended",
-              "payloadtype": "ASSERTION",
-              "ruleName": "Inheritance-CCR-02",
-              "targetPath": "policyCurrency",
-            },
-          },
-          Object {
-            "conditionEvaluationResult": ConditionEvaluationResult {
-              "conditionEvaluation": "APPLICABLE",
-              "error": undefined,
-            },
-            "kind": 2,
-            "overrideInfo": Object {
-              "overridable": false,
-              "overrideApplicable": false,
-              "overrideGroup": undefined,
-            },
-            "payloadResult": Object {
-              "message": undefined,
-              "success": true,
-              "type": 1,
-              "validationSeverity": "critical",
-            },
-            "ruleInfo": RuleInfo {
-              "context": "Policy",
-              "payloadtype": "ASSERTION",
-              "ruleName": "Inheritance-CCR-01",
-              "targetPath": "policyCurrency",
-            },
-          },
-        ],
-      },
-    },
-  },
-  "Validation results": Object {
-    "critical": Array [],
-    "info": Array [],
-    "warning": Array [],
   },
 }
 `;

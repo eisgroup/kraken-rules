@@ -30,10 +30,21 @@ public enum Cardinality {
     /**
      * Field type is singular
      */
-    SINGLE,
+    SINGLE("single"),
 
     /**
      * Field type is a collection
      */
-    MULTIPLE
+    MULTIPLE("multiple");
+
+    private final String name;
+
+    Cardinality(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
 }

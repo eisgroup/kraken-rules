@@ -18,13 +18,17 @@ package kraken.converter.translation;
 import static kraken.el.ast.Template.asTemplateExpression;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import kraken.converter.KrakenProjectConvertionException;
-import kraken.converter.translation.ast.*;
-import kraken.el.*;
+import kraken.converter.translation.ast.AstRewriter;
+import kraken.converter.translation.ast.JavaRewriter;
+import kraken.converter.translation.ast.JavaScriptRewriter;
+import kraken.converter.translation.ast.SimplePathRewriter;
+import kraken.el.ExpressionLanguage;
+import kraken.el.KrakenKel;
+import kraken.el.TargetEnvironment;
 import kraken.el.ast.Ast;
 import kraken.el.ast.AstType;
 import kraken.el.ast.Template;
@@ -32,7 +36,9 @@ import kraken.el.ast.builder.AstBuilder;
 import kraken.el.ast.builder.AstBuildingException;
 import kraken.el.scope.Scope;
 import kraken.model.Expression;
+import kraken.model.Function;
 import kraken.model.Rule;
+import kraken.model.context.ContextDefinition;
 import kraken.model.context.ContextNavigation;
 import kraken.model.factory.RulesModelFactory;
 import kraken.model.project.KrakenProject;
@@ -40,7 +46,10 @@ import kraken.model.project.dependencies.FieldDependency;
 import kraken.model.project.dependencies.RuleDependencyExtractor;
 import kraken.model.project.scope.ScopeBuilder;
 import kraken.model.project.scope.ScopeBuilderProvider;
-import kraken.runtime.model.expression.*;
+import kraken.runtime.model.expression.CompiledExpression;
+import kraken.runtime.model.expression.ExpressionType;
+import kraken.runtime.model.expression.ExpressionVariable;
+import kraken.runtime.model.expression.ExpressionVariableType;
 import kraken.runtime.model.rule.payload.validation.ErrorMessage;
 
 /**
@@ -79,27 +88,50 @@ public class KrakenExpressionTranslator {
         this.scopeBuilder = ScopeBuilderProvider.forProject(krakenProject);
     }
 
+    public CompiledExpression translateFunctionExpression(Function function) {
+        try {
+            Scope scope = scopeBuilder.buildFunctionScope(function);
+
+            Ast ast = AstBuilder.from(function.getBody().getExpressionString(), scope);
+            Ast rewrittenAst = rewrite(ast);
+            kraken.el.Expression e = translateExpression(rewrittenAst);
+            return new CompiledExpression(
+                e.getExpression(),
+                convert(rewrittenAst.getAstType()),
+                rewrittenAst.getAstType() == AstType.LITERAL ? (Serializable) rewrittenAst.getCompiledLiteralValue() : null,
+                rewrittenAst.getAstType() == AstType.LITERAL ? rewrittenAst.getCompiledLiteralValueType() : null,
+                List.of(),
+                e.getAst()
+            );
+        } catch (AstBuildingException e) {
+            throw new KrakenProjectConvertionException("Error while translating expression: " + function.getBody().getExpressionString(), e);
+        }
+    }
+
     public CompiledExpression translateExpression(Rule rule, Expression expression) {
         try {
-            kraken.model.context.ContextDefinition contextDefinition = krakenProject.getContextDefinitions().get(rule.getContext());
+            ContextDefinition contextDefinition = krakenProject.getContextDefinitions().get(rule.getContext());
             Scope scope = scopeBuilder.buildScope(contextDefinition);
 
-            Collection<FieldDependency> dependencies = ruleDependencyExtractor.extractDependencies(expression, scope);
+            var dependencies = ruleDependencyExtractor.extractDependencies(expression, rule, scope);
 
             List<ExpressionVariable> expressionVariables = dependencies.stream()
-                    .filter(d -> d.isContextDependency())
-                    .filter(d -> !d.getContextName().equals(rule.getContext()))
-                    .map(d -> new ExpressionVariable(d.getContextName(), ExpressionVariableType.CROSS_CONTEXT))
+                    .filter(FieldDependency::isCcrDependency)
+                    .map(FieldDependency::getContextName)
+                    .distinct()
+                    .map(contextName -> new ExpressionVariable(contextName, ExpressionVariableType.CROSS_CONTEXT))
                     .collect(Collectors.toList());
 
-            Ast rewrittenAst = rewrite(AstBuilder.from(expression.getExpressionString(), scope));
-
+            Ast ast = AstBuilder.from(expression.getExpressionString(), scope);
+            Ast rewrittenAst = rewrite(ast);
+            kraken.el.Expression e = translateExpression(rewrittenAst);
             return new CompiledExpression(
-                    translateExpression(rewrittenAst),
+                    e.getExpression(),
                     convert(rewrittenAst.getAstType()),
                     rewrittenAst.getAstType() == AstType.LITERAL ? (Serializable) rewrittenAst.getCompiledLiteralValue() : null,
                     rewrittenAst.getAstType() == AstType.LITERAL ? rewrittenAst.getCompiledLiteralValueType() : null,
-                    expressionVariables
+                    expressionVariables,
+                    e.getAst()
             );
         } catch (AstBuildingException e) {
             throw new KrakenProjectConvertionException("Error while translating expression: " + expression.getExpressionString(), e);
@@ -113,10 +145,10 @@ public class KrakenExpressionTranslator {
         if(errorMessage.getErrorMessage() == null) {
             return new ErrorMessage(errorMessage.getErrorCode(), List.of(), List.of());
         }
-        kraken.model.context.ContextDefinition contextDefinition = krakenProject.getContextDefinitions().get(rule.getContext());
+        ContextDefinition contextDefinition = krakenProject.getContextDefinitions().get(rule.getContext());
         Scope scope = scopeBuilder.buildScope(contextDefinition);
 
-        Template template = (Template) AstBuilder.from(asTemplateExpression(errorMessage.getErrorMessage()), scope).getExpression();
+        Template template = AstBuilder.from(asTemplateExpression(errorMessage.getErrorMessage()), scope).asTemplate();
 
         List<CompiledExpression> templateExpressions = template.getTemplateExpressions().stream()
             .map(e -> {
@@ -132,13 +164,16 @@ public class KrakenExpressionTranslator {
 
     public CompiledExpression translateContextNavigationExpression(ContextNavigation contextNavigation) {
         try {
-            Ast rewrittenAst = rewrite(AstBuilder.from(contextNavigation.getNavigationExpression(), Scope.dynamic()));
+            Ast ast = AstBuilder.from(contextNavigation.getNavigationExpression(), Scope.dynamic());
+            Ast rewrittenAst = rewrite(ast);
+            kraken.el.Expression e = translateExpression(rewrittenAst);
             return new CompiledExpression(
-                    translateExpression(rewrittenAst),
+                    e.getExpression(),
                     convert(rewrittenAst.getAstType()),
                     rewrittenAst.getAstType() == AstType.LITERAL ? (Serializable) rewrittenAst.getCompiledLiteralValue() : null,
                     rewrittenAst.getAstType() == AstType.LITERAL ? rewrittenAst.getCompiledLiteralValueType() : null,
-                    List.of()
+                    List.of(),
+                    e.getAst()
             );
         } catch (AstBuildingException e) {
             throw new KrakenProjectConvertionException("Error while translating navigation expression: "
@@ -155,7 +190,7 @@ public class KrakenExpressionTranslator {
         return complexExpressionRewriter.rewrite(ast);
     }
 
-    private String translateExpression(Ast ast) {
+    private kraken.el.Expression translateExpression(Ast ast) {
         return expressionLanguage.translate(ast);
     }
 

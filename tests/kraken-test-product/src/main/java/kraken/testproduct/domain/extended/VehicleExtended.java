@@ -22,24 +22,26 @@ import java.util.List;
 
 public class VehicleExtended extends Vehicle {
 
-    private AddressInfoExtended addressInfo;
-
     public VehicleExtended() {
     }
 
+    public VehicleExtended(String model) {
+        super(model);
+    }
+
+    public VehicleExtended(Boolean included, String model, LocalDate purchasedDate, AddressInfoExtended addressInfo) {
+        super(included, model, purchasedDate, addressInfo);
+    }
+
     public VehicleExtended(AddressInfoExtended addressInfo) {
-        this.addressInfo = addressInfo;
+        super();
+
+        this.setAddressInfo(addressInfo);
     }
 
-    public VehicleExtended(List<LocalDate> serviceHistories) {
-        this.setServiceHistory(serviceHistories);
-    }
+    public VehicleExtended(List<LocalDate> serviceHistory) {
+        super();
 
-    public AddressInfoExtended getAddressInfoExtended() {
-        return addressInfo;
-    }
-
-    public void setAddressInfoExtended(AddressInfoExtended addressInfoExtended) {
-        this.addressInfo = addressInfoExtended;
+        this.setServiceHistory(serviceHistory);
     }
 }

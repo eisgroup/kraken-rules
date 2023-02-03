@@ -14,36 +14,36 @@
  *  limitations under the License.
  */
 
-import * as React from "react";
-import { Row } from "antd";
+import * as React from 'react'
+import { Row } from 'antd'
 
-import { renderers } from "../core/RenderInputFunctions";
+import { renderers } from '../core/RenderInputFunctions'
 
-import { InnerInputsComponentProps, SingleField } from "../core/field/SingleField";
-import { PartyRole } from "./PartyRole";
-import { PersonInfo } from "./PersonInfo";
-import { AddressInfo } from "./AddressInfo";
-import { DriverInfo } from "./DriverInfo";
+import { InnerInputsComponentProps, SingleField } from '../core/field/SingleField'
+import { PartyRole } from './PartyRole'
+import { PersonInfo } from './PersonInfo'
+import { AddressInfo } from './AddressInfo'
+import { DriverInfo } from './DriverInfo'
 
-import { TestProduct } from "kraken-test-product";
-import domain = TestProduct.kraken.testproduct.domain;
-import { withMetadata } from "../core/ContextHOC";
-import { ContextDefinitionInfo } from "../core/field/ContextDefinitionInfo";
-import { EntityBox } from "../core/EntityBox";
+import { TestProduct } from 'kraken-test-product'
+import domain = TestProduct.kraken.testproduct.domain
+import { withMetadata } from '../core/ContextHOC'
+import { ContextDefinitionInfo } from '../core/field/ContextDefinitionInfo'
+import { EntityBox } from '../core/EntityBox'
 
 class Component extends React.Component<InnerInputsComponentProps<domain.Party>> {
     onRelationToPrimaryInsuredChange = (event: React.FormEvent<HTMLInputElement>) => {
         this.props.onChange(
-            Object.assign({}, this.props.value, { relationToPrimaryInsured: event.currentTarget.value })
-        );
+            Object.assign({}, this.props.value, { relationToPrimaryInsured: event.currentTarget.value }),
+        )
     }
 
     onPartyRoleChange = (partyRole: domain.PartyRole) => {
-        this.props.onChange(Object.assign({}, this.props.value, { roles: [{ ...partyRole }] }));
+        this.props.onChange(Object.assign({}, this.props.value, { roles: [{ ...partyRole }] }))
     }
 
     onPersonInfoChange = (personInfo: domain.PersonInfo) => {
-        this.props.onChange(Object.assign({}, this.props.value, { personInfo }));
+        this.props.onChange(Object.assign({}, this.props.value, { personInfo }))
     }
 
     onAddressInfoChange = (addressInfo: domain.AddressInfo) => {
@@ -51,55 +51,54 @@ class Component extends React.Component<InnerInputsComponentProps<domain.Party>>
             Object.assign({}, this.props.value, {
                 personInfo: {
                     ...this.props.value.personInfo,
-                    addressInfo: { ...addressInfo }
-                }
-            })
-        );
+                    addressInfo: { ...addressInfo },
+                },
+            }),
+        )
     }
 
     onDriverInfoChange = (driverInfo: domain.DriverInfo) => {
-        this.props.onChange(Object.assign({}, this.props.value, { driverInfo }));
+        this.props.onChange(Object.assign({}, this.props.value, { driverInfo }))
     }
 
     render(): JSX.Element {
         return (
             <div>
-                <ContextDefinitionInfo contextName="Party" />
+                <ContextDefinitionInfo contextName='Party' />
                 <Row>
                     <SingleField
                         id={this.props.id}
                         value={this.props.value.relationToPrimaryInsured}
-                        contextName="Party"
-                        modelFieldName="relationToPrimaryInsured"
+                        contextName='Party'
+                        modelFieldName='relationToPrimaryInsured'
                         onChange={this.onRelationToPrimaryInsuredChange}
-
                         renderInput={renderers.input}
                     />
                 </Row>
 
-                <ContextDefinitionInfo contextName="PartyRole" />
+                <ContextDefinitionInfo contextName='PartyRole' />
                 <PartyRole
                     id={this.props.value.roles[0].id}
                     value={this.props.value.roles[0]}
                     onChange={this.onPartyRoleChange}
                 />
 
-                <ContextDefinitionInfo contextName="DriverInfo" />
+                <ContextDefinitionInfo contextName='DriverInfo' />
                 <DriverInfo
                     id={this.props.value.driverInfo.id}
                     value={this.props.value.driverInfo}
                     onChange={this.onDriverInfoChange}
                 />
 
-                <EntityBox title="PersonInfo">
-                    <ContextDefinitionInfo contextName="PersonInfo" />
+                <EntityBox title='PersonInfo'>
+                    <ContextDefinitionInfo contextName='PersonInfo' />
                     <PersonInfo
                         id={this.props.value.personInfo.id}
                         value={this.props.value.personInfo}
                         onChange={this.onPersonInfoChange}
                     />
 
-                    <ContextDefinitionInfo contextName="AddressInfo" />
+                    <ContextDefinitionInfo contextName='AddressInfo' />
                     <AddressInfo
                         id={this.props.value.personInfo.addressInfo.id}
                         value={this.props.value.personInfo.addressInfo}
@@ -107,8 +106,8 @@ class Component extends React.Component<InnerInputsComponentProps<domain.Party>>
                     />
                 </EntityBox>
             </div>
-        );
+        )
     }
 }
 
-export const Party = withMetadata(Component);
+export const Party = withMetadata(Component)

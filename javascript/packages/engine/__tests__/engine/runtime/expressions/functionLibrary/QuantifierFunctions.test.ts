@@ -14,31 +14,31 @@
  *  limitations under the License.
  */
 
-import { quantifierFunctions } from "../../../../../src/engine/runtime/expressions/functionLibrary/QuantifierFunctions";
+import { quantifierFunctions } from '../../../../../src/engine/runtime/expressions/functionLibrary/QuantifierFunctions'
 
-describe("Quantifier Functions Test", () => {
-    it("should check if Any is true in array", () => {
-        expect(quantifierFunctions.Any(null)).toBeFalsy();
-        expect(quantifierFunctions.Any(undefined)).toBeFalsy();
-        expect(quantifierFunctions.Any([])).toBeFalsy();
-        expect(quantifierFunctions.Any([false, false])).toBeFalsy();
-        expect(quantifierFunctions.Any([true, false])).toBeTruthy();
-        expect(quantifierFunctions.Any([true, true])).toBeTruthy();
+describe('Quantifier Functions Test', () => {
+    it('should check if Any is true in array', () => {
+        expect(quantifierFunctions.Any(null)).toBeFalsy()
+        expect(quantifierFunctions.Any(undefined)).toBeFalsy()
+        expect(quantifierFunctions.Any([])).toBeFalsy()
+        expect(quantifierFunctions.Any([false, false])).toBeFalsy()
+        expect(quantifierFunctions.Any([true, false])).toBeTruthy()
+        expect(quantifierFunctions.Any([true, true])).toBeTruthy()
 
-        expect(quantifierFunctions.Any([null])).toBeFalsy();
-        expect(quantifierFunctions.Any([undefined])).toBeFalsy();
-        expect(quantifierFunctions.Any([null, undefined, true])).toBeTruthy();
-    });
-    it("should check if All is true in array", () => {
-        expect(quantifierFunctions.All(null)).toBeTruthy();
-        expect(quantifierFunctions.All(undefined)).toBeTruthy();
-        expect(quantifierFunctions.All([])).toBeTruthy();
-        expect(quantifierFunctions.All([false, false])).toBeFalsy();
-        expect(quantifierFunctions.All([true, false])).toBeFalsy();
-        expect(quantifierFunctions.All([true, true])).toBeTruthy();
+        expect(quantifierFunctions.Any([null])).toBeFalsy()
+        expect(quantifierFunctions.Any([undefined])).toBeFalsy()
+        expect(quantifierFunctions.Any([null, undefined, true])).toBeTruthy()
+    })
+    it('should check if All is true in array', () => {
+        expect(quantifierFunctions.All(null)).toBeTruthy()
+        expect(quantifierFunctions.All(undefined)).toBeTruthy()
+        expect(quantifierFunctions.All([])).toBeTruthy()
+        expect(quantifierFunctions.All([false, false])).toBeFalsy()
+        expect(quantifierFunctions.All([true, false])).toBeFalsy()
+        expect(quantifierFunctions.All([true, true])).toBeTruthy()
 
-        expect(quantifierFunctions.All([null])).toBeFalsy();
-        expect(quantifierFunctions.All([undefined])).toBeFalsy();
-        expect(quantifierFunctions.All([null, true, true])).toBeFalsy();
-    });
-});
+        expect(quantifierFunctions.All([null])).toBeFalsy()
+        expect(quantifierFunctions.All([undefined])).toBeFalsy()
+        expect(quantifierFunctions.All([null, true, true])).toBeFalsy()
+    })
+})

@@ -17,6 +17,7 @@ package kraken.runtime.engine.dto;
 
 import kraken.annotations.API;
 import kraken.runtime.engine.conditions.ConditionEvaluationResult;
+import kraken.runtime.engine.result.ExceptionAwarePayloadResult;
 import kraken.runtime.engine.result.PayloadResult;
 import kraken.runtime.model.rule.RuntimeRule;
 
@@ -37,6 +38,8 @@ public class RuleEvaluationResult<T extends PayloadResult> {
 
     private OverrideInfo overrideInfo;
 
+    private RuleEvaluationStatus ruleEvaluationStatus;
+
     public RuleEvaluationResult(RuleInfo ruleInfo,
                                 T payloadResult,
                                 ConditionEvaluationResult conditionEvaluationResult,
@@ -45,6 +48,15 @@ public class RuleEvaluationResult<T extends PayloadResult> {
         this.payloadResult = payloadResult;
         this.conditionEvaluationResult = conditionEvaluationResult;
         this.overrideInfo = overrideInfo;
+
+        if (conditionEvaluationResult.getError() != null || payloadResult instanceof ExceptionAwarePayloadResult
+            && ((ExceptionAwarePayloadResult) payloadResult).getException().isPresent()) {
+            this.ruleEvaluationStatus = RuleEvaluationStatus.IGNORED;
+        } else if (!conditionEvaluationResult.isApplicable()) {
+            this.ruleEvaluationStatus = RuleEvaluationStatus.SKIPPED;
+        } else {
+            this.ruleEvaluationStatus = RuleEvaluationStatus.APPLIED;
+        }
     }
 
     public ConditionEvaluationResult getConditionEvaluationResult() {
@@ -73,6 +85,10 @@ public class RuleEvaluationResult<T extends PayloadResult> {
      */
     public OverrideInfo getOverrideInfo() {
         return overrideInfo;
+    }
+
+    public RuleEvaluationStatus getRuleEvaluationStatus() {
+        return ruleEvaluationStatus;
     }
 
 }

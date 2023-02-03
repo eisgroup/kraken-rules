@@ -14,78 +14,91 @@
  *  limitations under the License.
  */
 
-import { RuleEvaluationResults } from "../../../dto/RuleEvaluationResults";
-import ValidationRuleEvaluationResult = RuleEvaluationResults.ValidationRuleEvaluationResult;
+import {
+    RuleEvaluationResults,
+    EntryPointResult,
+    RuleOverride,
+    ContextFieldInfo,
+    ErrorMessage,
+} from 'kraken-engine-api'
 
-import { ErrorMessage, payloadResultTypeChecker } from "../PayloadResult";
-import { EntryPointReducer } from "../Reducer";
-import { EntryPointResult } from "../../../dto/EntryPointResult";
-import { Localization } from "../Localization";
-import { FieldMetadata, FieldMetadataResult } from "./FieldMetadata";
-import { RuleOverride } from "../RuleOverride";
-import { ContextFieldInfo } from "../../../dto/ContextFieldInfo";
+import { EntryPointReducer } from '../Reducer'
+import { Localization } from '../Localization'
+import { FieldMetadata, FieldMetadataResult } from 'kraken-engine-api'
+
+import ValidationRuleEvaluationResult = RuleEvaluationResults.ValidationRuleEvaluationResult
+import { payloadResultTypeChecker } from '../PayloadResultTypeChecker'
 
 /**
  * Processes rule evaluation information from {@link EntryPointResult}, reducing it to list of
  * metadata entries for each distinct field
  */
 export class FieldMetadataReducer implements EntryPointReducer<Record<string, FieldMetadata>> {
+    readonly #isRuleOverridden: RuleOverride.IsRuleOverridden
+    readonly #errorMessageFrom: (rer: ValidationRuleEvaluationResult, contextInfo: ContextFieldInfo) => ErrorMessage
 
-    readonly #isRuleOverridden:
-        RuleOverride.IsRuleOverridden;
-    readonly #errorMessageFrom:
-        (rer: ValidationRuleEvaluationResult, contextInfo: ContextFieldInfo) => ErrorMessage;
+    constructor(
+        isRuleOverridden?: RuleOverride.IsRuleOverridden,
+        errorMessages?: Localization.MessageProvider,
+        validationMessageProvider?: Localization.ValidationMessageProvider,
+    ) {
+        this.#isRuleOverridden = isRuleOverridden ? isRuleOverridden : () => false
 
-    constructor(isRuleOverridden?: RuleOverride.IsRuleOverridden, errorMessages?: Localization.MessageProvider) {
-        this.#isRuleOverridden = isRuleOverridden ? isRuleOverridden : () => false;
-        this.#errorMessageFrom = errorMessages
-            ? Localization.errorMessage(errorMessages)
-            : Localization.errorMessage(Localization.defaultMessages);
+        if (validationMessageProvider) {
+            this.#errorMessageFrom = rer => Localization.resolveMessage(rer.payloadResult, validationMessageProvider)
+        } else if (errorMessages) {
+            this.#errorMessageFrom = Localization.errorMessage(errorMessages)
+        } else {
+            this.#errorMessageFrom = rer =>
+                Localization.resolveMessage(rer.payloadResult, Localization.defaultValidationMessages)
+        }
     }
 
     /**
      * @override
      */
     reduce(results: EntryPointResult): Record<string, FieldMetadata> {
-        const fieldMetadataResults: Record<string, FieldMetadata> = {};
-        const fieldResults = results.getFieldResults();
+        const fieldMetadataResults: Record<string, FieldMetadata> = {}
+        const fieldResults = results.getFieldResults()
         for (const id in fieldResults) {
-            if (fieldResults.hasOwnProperty(id)) {
-                const fieldResult = fieldResults[id];
-                let isDisabled;
-                let isHidden;
-                const validationResults: FieldMetadataResult[] = [];
+            if (Object.prototype.hasOwnProperty.call(fieldResults, id)) {
+                const fieldResult = fieldResults[id]
+                let isDisabled
+                let isHidden
+                const validationResults: FieldMetadataResult[] = []
                 for (const ruleResult of fieldResult.ruleResults) {
                     if (!RuleEvaluationResults.isNotApplicable(ruleResult)) {
-                        const payloadResult = ruleResult.payloadResult;
+                        const payloadResult = ruleResult.payloadResult
                         // resolve accessibility
                         if (!isDisabled && payloadResultTypeChecker.isAccessibility(payloadResult)) {
-                            isDisabled = !payloadResult.accessible;
+                            isDisabled = !payloadResult.accessible
                         }
                         // resolve visibility
                         if (!isHidden && payloadResultTypeChecker.isVisibility(payloadResult)) {
-                            isHidden = !payloadResult.visible;
+                            isHidden = !payloadResult.visible
                         }
                         // resolve validation
                         if (RuleEvaluationResults.isValidation(ruleResult)) {
-                            const error = this.#errorMessageFrom(ruleResult, fieldResult.contextFieldInfo);
-                            const isOverridden = RuleEvaluationResults
-                                .overrideInfoTypeChecker
-                                .isOverrideApplicable(ruleResult.overrideInfo)
-                                && this.#isRuleOverridden(ruleResult.overrideInfo.overrideContext);
+                            const error = this.#errorMessageFrom(ruleResult, fieldResult.contextFieldInfo)
+                            const isOverridden =
+                                RuleEvaluationResults.overrideInfoTypeChecker.isOverrideApplicable(
+                                    ruleResult.overrideInfo,
+                                ) && this.#isRuleOverridden(ruleResult.overrideInfo.overrideContext)
                             validationResults.push({
                                 ruleName: ruleResult.ruleInfo.ruleName,
                                 errorCode: error.errorCode,
+                                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                                 errorMessage: error.errorMessage!,
                                 templateVariables: error.templateVariables,
                                 payloadResult,
                                 severity: ruleResult.payloadResult.validationSeverity,
-                                isFailed: ruleResult.payloadResult.success !== undefined
-                                    ? !ruleResult.payloadResult.success
-                                    : undefined,
+                                isFailed:
+                                    ruleResult.payloadResult.success !== undefined
+                                        ? !ruleResult.payloadResult.success
+                                        : undefined,
                                 isOverridable: ruleResult.overrideInfo.overridable,
-                                isOverridden
-                            });
+                                isOverridden,
+                            })
                         }
                     }
                 }
@@ -95,17 +108,16 @@ export class FieldMetadataReducer implements EntryPointReducer<Record<string, Fi
                     id,
                     info: {
                         getContextInstanceId: () => fieldResult.contextFieldInfo.contextId,
-                        getContextName: () => fieldResult.contextFieldInfo.contextName
+                        getContextName: () => fieldResult.contextFieldInfo.contextName,
                     },
                     resolvedTargetPath: fieldResult.contextFieldInfo.fieldPath,
                     isDisabled,
                     isHidden,
                     ruleResults: validationResults,
-                    fieldType: fieldResult.contextFieldInfo.fieldType
-                };
-
+                    fieldType: fieldResult.contextFieldInfo.fieldType,
+                }
             }
         }
-        return fieldMetadataResults;
+        return fieldMetadataResults
     }
 }

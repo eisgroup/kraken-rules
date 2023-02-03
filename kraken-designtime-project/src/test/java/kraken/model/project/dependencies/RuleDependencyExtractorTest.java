@@ -15,38 +15,55 @@
  */
 package kraken.model.project.dependencies;
 
+import static kraken.model.context.PrimitiveFieldDataType.BOOLEAN;
 import static kraken.model.context.PrimitiveFieldDataType.DECIMAL;
 import static kraken.model.context.PrimitiveFieldDataType.INTEGER;
 import static kraken.model.context.PrimitiveFieldDataType.STRING;
 import static kraken.model.project.KrakenProjectMocks.arrayChild;
 import static kraken.model.project.KrakenProjectMocks.arrayField;
+import static kraken.model.project.KrakenProjectMocks.attribute;
 import static kraken.model.project.KrakenProjectMocks.child;
 import static kraken.model.project.KrakenProjectMocks.contextDefinition;
+import static kraken.model.project.KrakenProjectMocks.createExternalContextDefinitionReference;
 import static kraken.model.project.KrakenProjectMocks.entryPoints;
+import static kraken.model.project.KrakenProjectMocks.externalContext;
+import static kraken.model.project.KrakenProjectMocks.externalContextDefinition;
 import static kraken.model.project.KrakenProjectMocks.field;
 import static kraken.model.project.KrakenProjectMocks.function;
+import static kraken.model.project.KrakenProjectMocks.functionSignature;
+import static kraken.model.project.KrakenProjectMocks.parameter;
 import static kraken.model.project.KrakenProjectMocks.rule;
-import static org.hamcrest.CoreMatchers.allOf;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
+import static kraken.model.project.KrakenProjectMocks.type;
+import static kraken.model.project.dependencies.RuleDependencyExtractorTest.DependencyMatcher.contextRef;
+import static kraken.model.project.dependencies.RuleDependencyExtractorTest.DependencyMatcher.fieldRef;
+import static kraken.model.project.dependencies.RuleDependencyExtractorTest.DependencyMatcher.selfRef;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
+import java.util.Map;
 
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
 import org.junit.Before;
 import org.junit.Test;
 
+import kraken.el.scope.type.Type;
 import kraken.model.Condition;
 import kraken.model.ErrorMessage;
 import kraken.model.Expression;
+import kraken.model.Function;
 import kraken.model.FunctionSignature;
 import kraken.model.Rule;
+import kraken.model.context.Cardinality;
 import kraken.model.context.ContextDefinition;
+import kraken.model.context.external.ExternalContext;
+import kraken.model.context.external.ExternalContextDefinition;
 import kraken.model.derive.DefaultValuePayload;
 import kraken.model.factory.RulesModelFactory;
 import kraken.model.project.KrakenProject;
@@ -189,6 +206,34 @@ public class RuleDependencyExtractorTest {
     }
 
     @Test
+    public void shouldNotExtractDependencyFromExternalContextReference() {
+        var rule = rule("TESTRULE", "SomeContext", "target");
+        var expressionString = "every e in { context.external } satisfies e.previousPolicy.state != null";
+        addCondition(expressionString, rule);
+
+        var previousPolicyExternal = externalContextDefinition(
+            "PreviousPolicy_external",
+            List.of(attribute("state", type(STRING.name(), Cardinality.SINGLE, true)))
+        );
+
+        var externalContext = externalContext("root_external", Map.of("context",
+            externalContext("context_map", Map.of("external",
+                externalContext("external_map", Map.of(), Map.of("previousPolicy",
+                    createExternalContextDefinitionReference(previousPolicyExternal.getName()))
+                )),
+                Map.of()
+            )),
+            Map.of()
+        );
+
+        var krakenProject = krakenProjectWithExternalData(rule, externalContext, List.of(previousPolicyExternal));
+        var dependencyExtractor = new RuleDependencyExtractor(krakenProject);
+        var dependencies = dependencyExtractor.extractDependencies(rule);
+
+        assertThat(dependencies, empty());
+    }
+
+    @Test
     public void extractDependencyFromNestedForExpressions() {
         Rule rule = rule("TESTRULE", "SomeContext", "target");
         String expressionString = "for vehicleCoverage in Vehicle.coverages return "
@@ -202,26 +247,10 @@ public class RuleDependencyExtractorTest {
 
         assertThat(dependencies, hasSize(4));
         assertThat(dependencies, containsInAnyOrder(
-                allOf(
-                        hasProperty("path", is("coverages")),
-                        hasProperty("contextName", is("Vehicle")),
-                        hasProperty("contextDependency", is(true))
-                ),
-                allOf(
-                        hasProperty("path", is("limitAmount")),
-                        hasProperty("contextName", is("Coverage")),
-                        hasProperty("contextDependency", is(false))
-                ),
-                allOf(
-                        hasProperty("path", is("happyNumber")),
-                        hasProperty("contextName", is("Info")),
-                        hasProperty("contextDependency", is(false))
-                ),
-                allOf(
-                        hasProperty("path", is("source")),
-                        hasProperty("contextName", is("SomeContext")),
-                        hasProperty("contextDependency", is(false))
-                )
+            contextRef("Vehicle"),
+            fieldRef("Coverage", "limitAmount"),
+            fieldRef("Info", "happyNumber"),
+            selfRef("SomeContext", "source")
         ));
     }
 
@@ -235,28 +264,11 @@ public class RuleDependencyExtractorTest {
         RuleDependencyExtractor ruleDependencyExtractor = new RuleDependencyExtractor(krakenProject);
         Collection<FieldDependency> dependencies = ruleDependencyExtractor.extractDependencies(rule);
 
-        assertThat(dependencies, hasSize(4));
+        assertThat(dependencies, hasSize(3));
         assertThat(dependencies, containsInAnyOrder(
-                allOf(
-                        hasProperty("path", is("coverages")),
-                        hasProperty("contextName", is("Vehicle")),
-                        hasProperty("contextDependency", is(true))
-                ),
-                allOf(
-                        hasProperty("path", is("amount")),
-                        hasProperty("contextName", is("Info")),
-                        hasProperty("contextDependency", is(false))
-                ),
-                allOf(
-                        hasProperty("path", is("vehicleInfo")),
-                        hasProperty("contextName", is("Vehicle")),
-                        hasProperty("contextDependency", is(true))
-                ),
-                allOf(
-                        hasProperty("path", is("happyNumber")),
-                        hasProperty("contextName", is("Info")),
-                        hasProperty("contextDependency", is(false))
-                )
+            fieldRef("Info", "amount"),
+            fieldRef("Info", "happyNumber"),
+            contextRef("Vehicle")
         ));
     }
 
@@ -270,19 +282,8 @@ public class RuleDependencyExtractorTest {
         RuleDependencyExtractor ruleDependencyExtractor = new RuleDependencyExtractor(krakenProject);
         Collection<FieldDependency> dependencies = ruleDependencyExtractor.extractDependencies(rule);
 
-        assertThat(dependencies, hasSize(2));
-        assertThat(dependencies, containsInAnyOrder(
-                allOf(
-                        hasProperty("path", is("streetNumber")),
-                        hasProperty("contextName", is("Address")),
-                        hasProperty("contextDependency", is(false))
-                ),
-                allOf(
-                        hasProperty("path", is(nullValue())),
-                        hasProperty("contextName", is("SomeContext")),
-                        hasProperty("contextDependency", is(true))
-                )
-        ));
+        assertThat(dependencies, hasSize(1));
+        assertThat(dependencies, contains(fieldRef("Address", "streetNumber")));
     }
 
     @Test
@@ -295,18 +296,9 @@ public class RuleDependencyExtractorTest {
         RuleDependencyExtractor ruleDependencyExtractor = new RuleDependencyExtractor(krakenProject);
         Collection<FieldDependency> dependencies = ruleDependencyExtractor.extractDependencies(rule);
 
-        assertThat(dependencies, hasSize(2));
-        assertThat(dependencies, containsInAnyOrder(
-                allOf(
-                        hasProperty("path", is("streetNumber")),
-                        hasProperty("contextName", is("Address")),
-                        hasProperty("contextDependency", is(false))
-                ),
-                allOf(
-                        hasProperty("path", is("addressField")),
-                        hasProperty("contextName", is("SomeContext")),
-                        hasProperty("contextDependency", is(true))
-                )
+        assertThat(dependencies, hasSize(1));
+        assertThat(dependencies, contains(
+            fieldRef("Address", "streetNumber")
         ));
     }
 
@@ -320,19 +312,8 @@ public class RuleDependencyExtractorTest {
         RuleDependencyExtractor ruleDependencyExtractor = new RuleDependencyExtractor(krakenProject);
         Collection<FieldDependency> dependencies = ruleDependencyExtractor.extractDependencies(rule);
 
-        assertThat(dependencies, hasSize(2));
-        assertThat(dependencies, containsInAnyOrder(
-                allOf(
-                        hasProperty("path", is("streetNumber")),
-                        hasProperty("contextName", is("Address")),
-                        hasProperty("contextDependency", is(false))
-                ),
-                allOf(
-                        hasProperty("path", is(nullValue())),
-                        hasProperty("contextName", is("SomeContext")),
-                        hasProperty("contextDependency", is(true))
-                )
-        ));
+        assertThat(dependencies, hasSize(1));
+        assertThat(dependencies, contains(fieldRef("Address", "streetNumber")));
     }
 
     @Test
@@ -347,53 +328,15 @@ public class RuleDependencyExtractorTest {
         RuleDependencyExtractor ruleDependencyExtractor = new RuleDependencyExtractor(krakenProject);
         Collection<FieldDependency> dependencies = ruleDependencyExtractor.extractDependencies(rule);
 
-        assertThat(dependencies, hasSize(9));
+        assertThat(dependencies, hasSize(7));
         assertThat(dependencies, containsInAnyOrder(
-                allOf(
-                        hasProperty("path", is("vehicle")),
-                        hasProperty("contextName", is("OtherContext")),
-                        hasProperty("contextDependency", is(true))
-                ),
-                allOf(
-                        hasProperty("path", is("limitAmount")),
-                        hasProperty("contextName", is("Coverage")),
-                        hasProperty("contextDependency", is(false))
-                ),
-                allOf(
-                        hasProperty("path", is("vehicleInfo")),
-                        hasProperty("contextName", is("Vehicle")),
-                        hasProperty("contextDependency", is(true))
-                ),
-                allOf(
-                        hasProperty("path", is("salary")),
-                        hasProperty("contextName", is("Info")),
-                        hasProperty("contextDependency", is(false))
-                ),
-                allOf(
-                        hasProperty("path", is("coverages")),
-                        hasProperty("contextName", is("Vehicle")),
-                        hasProperty("contextDependency", is(true))
-                ),
-                allOf(
-                        hasProperty("path", is("amount")),
-                        hasProperty("contextName", is("Info")),
-                        hasProperty("contextDependency", is(false))
-                ),
-                allOf(
-                        hasProperty("path", is("price")),
-                        hasProperty("contextName", is("OtherContext")),
-                        hasProperty("contextDependency", is(true))
-                ),
-                allOf(
-                        hasProperty("path", is("price")),
-                        hasProperty("contextName", is("OtherContext")),
-                        hasProperty("contextDependency", is(false))
-                ),
-                allOf(
-                        hasProperty("path", is("happyNumber")),
-                        hasProperty("contextName", is("Info")),
-                        hasProperty("contextDependency", is(false))
-                )
+            contextRef("OtherContext"),
+            contextRef("OtherContext", "price"),
+            contextRef("Vehicle"),
+            fieldRef("Coverage", "limitAmount"),
+            fieldRef("Info", "happyNumber"),
+            fieldRef("Info", "salary"),
+            fieldRef("Info", "amount")
         ));
     }
 
@@ -407,18 +350,11 @@ public class RuleDependencyExtractorTest {
         RuleDependencyExtractor ruleDependencyExtractor = new RuleDependencyExtractor(krakenProject);
         Collection<FieldDependency> dependencies = ruleDependencyExtractor.extractDependencies(rule);
 
-        assertThat(dependencies, hasSize(2));
+        assertThat(dependencies, hasSize(3));
         assertThat(dependencies, containsInAnyOrder(
-                allOf(
-                        hasProperty("path", is("vehicle")),
-                        hasProperty("contextName", is("OtherContext")),
-                        hasProperty("contextDependency", is(true))
-                ),
-                allOf(
-                        hasProperty("path", is("limitAmount")),
-                        hasProperty("contextName", is("Coverage")),
-                        hasProperty("contextDependency", is(false))
-                )
+            contextRef("OtherContext"),
+            fieldRef("Coverage", "limitAmount"),
+            fieldRef("Address", "streetNumber")
         ));
     }
 
@@ -433,22 +369,10 @@ public class RuleDependencyExtractorTest {
         Collection<FieldDependency> dependencies = ruleDependencyExtractor.extractDependencies(rule);
 
         assertThat(dependencies, hasSize(3));
-        assertThat(dependencies, contains(
-                allOf(
-                        hasProperty("path", is("coverages")),
-                        hasProperty("contextName", is("Vehicle")),
-                        hasProperty("contextDependency", is(true))
-                ),
-                allOf(
-                        hasProperty("path", is("limitAmount")),
-                        hasProperty("contextName", is("Coverage")),
-                        hasProperty("contextDependency", is(false))
-                ),
-                allOf(
-                        hasProperty("path", is("source")),
-                        hasProperty("contextName", is("SomeContext")),
-                        hasProperty("contextDependency", is(false))
-                )
+        assertThat(dependencies, containsInAnyOrder(
+            contextRef("Vehicle"),
+            fieldRef("Coverage", "limitAmount"),
+            selfRef("SomeContext", "source")
         ));
     }
 
@@ -464,16 +388,8 @@ public class RuleDependencyExtractorTest {
 
         assertThat(dependencies, hasSize(2));
         assertThat(dependencies, containsInAnyOrder(
-                allOf(
-                        hasProperty("path", is("vehicle")),
-                        hasProperty("contextName", is("OtherContext")),
-                        hasProperty("contextDependency", is(true))
-                ),
-                allOf(
-                        hasProperty("path", is("limitAmount")),
-                        hasProperty("contextName", is("Coverage")),
-                        hasProperty("contextDependency", is(false))
-                )
+            contextRef("OtherContext"),
+            fieldRef("Coverage", "limitAmount")
         ));
     }
 
@@ -487,28 +403,11 @@ public class RuleDependencyExtractorTest {
         RuleDependencyExtractor ruleDependencyExtractor = new RuleDependencyExtractor(krakenProject);
         Collection<FieldDependency> dependencies = ruleDependencyExtractor.extractDependencies(rule);
 
-        assertThat(dependencies, hasSize(4));
+        assertThat(dependencies, hasSize(3));
         assertThat(dependencies, containsInAnyOrder(
-                allOf(
-                        hasProperty("path", is(nullValue())),
-                        hasProperty("contextName", is("SomeContext")),
-                        hasProperty("contextDependency", is(true))
-                ),
-                allOf(
-                        hasProperty("path", is("limit")),
-                        hasProperty("contextName", is("OtherContext")),
-                        hasProperty("contextDependency", is(true))
-                ),
-                allOf(
-                        hasProperty("path", is("limit")),
-                        hasProperty("contextName", is("OtherContext")),
-                        hasProperty("contextDependency", is(false))
-                ),
-                allOf(
-                        hasProperty("path", is("source")),
-                        hasProperty("contextName", is("SomeContext")),
-                        hasProperty("contextDependency", is(false))
-                )
+            contextRef("OtherContext"),
+            contextRef("OtherContext", "limit"),
+            fieldRef("SomeContext", "source")
         ));
     }
 
@@ -522,54 +421,26 @@ public class RuleDependencyExtractorTest {
         RuleDependencyExtractor ruleDependencyExtractor = new RuleDependencyExtractor(krakenProject);
         Collection<FieldDependency> dependencies = ruleDependencyExtractor.extractDependencies(rule);
 
-        assertThat(dependencies, hasSize(4));
+        assertThat(dependencies, hasSize(3));
         assertThat(dependencies, containsInAnyOrder(
-                allOf(
-                        hasProperty("path", is("source")),
-                        hasProperty("contextName", is("SomeContext")),
-                        hasProperty("contextDependency", is(true))
-                ),
-                allOf(
-                        hasProperty("path", is("source")),
-                        hasProperty("contextName", is("SomeContext")),
-                        hasProperty("contextDependency", is(false))
-                ),
-                allOf(
-                        hasProperty("path", is("limit")),
-                        hasProperty("contextName", is("OtherContext")),
-                        hasProperty("contextDependency", is(true))
-                ),
-                allOf(
-                        hasProperty("path", is("limit")),
-                        hasProperty("contextName", is("OtherContext")),
-                        hasProperty("contextDependency", is(false))
-                )
+            selfRef("SomeContext", "source"),
+            contextRef("OtherContext"),
+            contextRef("OtherContext", "limit")
         ));
     }
 
     @Test
     public void extractFromConditionMultipleOccurs() {
         Rule rule = rule("TESTRULE", "SomeContext", "target");
-        String expressionString = "SomeContext.source = SomeContext.source*10 / SomeContext.target";
+        String expressionString = "source = SomeContext.source*10 / SomeContext.target";
         addCondition(expressionString, rule);
 
         KrakenProject krakenProject = krakenProject(rule);
         RuleDependencyExtractor ruleDependencyExtractor = new RuleDependencyExtractor(krakenProject);
         Collection<FieldDependency> dependencies = ruleDependencyExtractor.extractDependencies(rule);
 
-        assertThat(dependencies, hasSize(2));
-        assertThat(dependencies, containsInAnyOrder(
-                allOf(
-                        hasProperty("path", is("source")),
-                        hasProperty("contextName", is("SomeContext")),
-                        hasProperty("contextDependency", is(true))
-                ),
-                allOf(
-                        hasProperty("path", is("source")),
-                        hasProperty("contextName", is("SomeContext")),
-                        hasProperty("contextDependency", is(false))
-                )
-        ));
+        assertThat(dependencies, hasSize(1));
+        assertThat(dependencies, contains(selfRef("SomeContext", "source")));
     }
 
     @Test
@@ -589,16 +460,8 @@ public class RuleDependencyExtractorTest {
 
         assertThat(dependencies, hasSize(2));
         assertThat(dependencies, containsInAnyOrder(
-                allOf(
-                        hasProperty("path", is("price")),
-                        hasProperty("contextName", is("OtherContext")),
-                        hasProperty("contextDependency", is(true))
-                ),
-                allOf(
-                        hasProperty("path", is("price")),
-                        hasProperty("contextName", is("OtherContext")),
-                        hasProperty("contextDependency", is(false))
-                )
+            contextRef("OtherContext"),
+            contextRef("OtherContext", "price")
         ));
     }
 
@@ -619,26 +482,10 @@ public class RuleDependencyExtractorTest {
 
         assertThat(dependencies, hasSize(4));
         assertThat(dependencies, containsInAnyOrder(
-                allOf(
-                        hasProperty("path", is("limit")),
-                        hasProperty("contextName", is("ThirdContext")),
-                        hasProperty("contextDependency", is(false))
-                ),
-                allOf(
-                        hasProperty("path", is("limit")),
-                        hasProperty("contextName", is("ThirdContext")),
-                        hasProperty("contextDependency", is(true))
-                ),
-                allOf(
-                        hasProperty("path", is("limit")),
-                        hasProperty("contextName", is("OtherContext")),
-                        hasProperty("contextDependency", is(false))
-                ),
-                allOf(
-                        hasProperty("path", is("limit")),
-                        hasProperty("contextName", is("OtherContext")),
-                        hasProperty("contextDependency", is(true))
-                )
+            contextRef("ThirdContext"),
+            contextRef("ThirdContext", "limit"),
+            contextRef("OtherContext"),
+            contextRef("OtherContext", "limit")
         ));
     }
 
@@ -662,16 +509,131 @@ public class RuleDependencyExtractorTest {
 
         assertThat(dependencies, hasSize(2));
         assertThat(dependencies, containsInAnyOrder(
-            allOf(
-                hasProperty("path", is("price")),
-                hasProperty("contextName", is("OtherContext")),
-                hasProperty("contextDependency", is(true))
-            ),
-            allOf(
-                hasProperty("path", is("price")),
-                hasProperty("contextName", is("OtherContext")),
-                hasProperty("contextDependency", is(false))
+            contextRef("OtherContext", "price"),
+            contextRef("OtherContext")
+        ));
+    }
+
+    @Test
+    public void shouldExtractNoDependenciesFromUnparseableExpression() {
+        String expressionString = "SomeContext.target = \"\"\"";
+        Expression expression = factory.createExpression();
+        expression.setExpressionString(expressionString);
+
+        Rule rule = rule("TESTRULE", "SomeContext", "target");
+        AssertionPayload payload = factory.createAssertionPayload();
+        payload.setAssertionExpression(expression);
+        rule.setPayload(payload);
+
+        KrakenProject krakenProject = krakenProject(rule);
+        RuleDependencyExtractor ruleDependencyExtractor = new RuleDependencyExtractor(krakenProject);
+        Collection<FieldDependency> dependencies = ruleDependencyExtractor.extractDependencies(rule);
+
+        assertThat(dependencies, empty());
+    }
+
+    @Test
+    public void extractFromUsedFunction() {
+        String expressionString = "CalculateTotalPrice(OtherContext)";
+        Expression expression = factory.createExpression();
+        expression.setExpressionString(expressionString);
+
+        Rule rule = rule("TESTRULE", "SomeContext", "target");
+        AssertionPayload payload = factory.createAssertionPayload();
+        payload.setAssertionExpression(expression);
+        rule.setPayload(payload);
+
+        List<Function> functions = List.of(
+            function(
+                "CalculateTotalPrice",
+                List.of(parameter("ctx", "OtherContext")),
+                "ctx.price + ctx.limit"
             )
+        );
+
+        KrakenProject krakenProject = krakenProjectWithFunctions(rule, functions);
+        RuleDependencyExtractor ruleDependencyExtractor = new RuleDependencyExtractor(krakenProject);
+        Collection<FieldDependency> dependencies = ruleDependencyExtractor.extractDependencies(rule);
+
+        assertThat(dependencies, hasSize(3));
+        assertThat(dependencies, containsInAnyOrder(
+            contextRef("OtherContext"),
+            fieldRef("OtherContext", "price"),
+            fieldRef("OtherContext", "limit")
+        ));
+    }
+
+    @Test
+    public void extractFromUsedFunctionWithRecursion() {
+        String expressionString = "CalculateRecursive(OtherContext, 3)";
+        Expression expression = factory.createExpression();
+        expression.setExpressionString(expressionString);
+
+        Rule rule = rule("TESTRULE", "SomeContext", "target");
+        AssertionPayload payload = factory.createAssertionPayload();
+        payload.setAssertionExpression(expression);
+        rule.setPayload(payload);
+
+        List<Function> functions = List.of(
+            function(
+                "CalculateTotalPrice",
+                List.of(parameter("ctx", "OtherContext")),
+                "ctx.price + ctx.limit"
+            ),
+            function(
+                "CalculateRecursive",
+                List.of(
+                    parameter("ctx", "OtherContext"),
+                    parameter("depth", Type.NUMBER.getName())
+                ),
+                "CalculateRecursive(ctx, depth-1) + CalculateTotalPrice(ctx)"
+            )
+        );
+
+        KrakenProject krakenProject = krakenProjectWithFunctions(rule, functions);
+        RuleDependencyExtractor ruleDependencyExtractor = new RuleDependencyExtractor(krakenProject);
+        Collection<FieldDependency> dependencies = ruleDependencyExtractor.extractDependencies(rule);
+
+        assertThat(dependencies, hasSize(3));
+        assertThat(dependencies, containsInAnyOrder(
+            contextRef("OtherContext"),
+            fieldRef("OtherContext", "price"),
+            fieldRef("OtherContext", "limit")
+        ));
+    }
+
+    @Test
+    public void extractFromUsedFunctionByActualArgumentTypes() {
+        String expressionString = "CalculateTotalPriceDynamic(OtherContext) "
+            + "+ CalculateTotalPriceDynamic(ThirdContext) "
+            + "+ CalculateTotalPriceDynamic(SomeContext)";
+        Expression expression = factory.createExpression();
+        expression.setExpressionString(expressionString);
+
+        Rule rule = rule("TESTRULE", "SomeContext", "target");
+        AssertionPayload payload = factory.createAssertionPayload();
+        payload.setAssertionExpression(expression);
+        rule.setPayload(payload);
+
+        List<Function> functions = List.of(
+            function(
+                "CalculateTotalPriceDynamic",
+                List.of(parameter("ctx", Type.ANY.getName())),
+                "ctx.price + ctx.limit + ctx.unknown"
+            )
+        );
+
+        KrakenProject krakenProject = krakenProjectWithFunctions(rule, functions);
+        RuleDependencyExtractor ruleDependencyExtractor = new RuleDependencyExtractor(krakenProject);
+        Collection<FieldDependency> dependencies = ruleDependencyExtractor.extractDependencies(rule);
+
+        assertThat(dependencies, hasSize(5));
+        assertThat(dependencies, containsInAnyOrder(
+            contextRef("OtherContext"),
+            contextRef("ThirdContext"),
+            fieldRef("OtherContext", "price"),
+            fieldRef("OtherContext", "limit"),
+            fieldRef("ThirdContext", "limit")
         ));
     }
 
@@ -683,14 +645,96 @@ public class RuleDependencyExtractorTest {
         rule.setCondition(condition);
     }
 
+    private KrakenProject krakenProjectWithExternalData(
+        Rule rule,
+        ExternalContext externalContext,
+        List<ExternalContextDefinition> externalContextDefinitions
+    ) {
+        return KrakenProjectMocks.krakenProject(
+            contextDefinitions,
+            externalContext,
+            externalContextDefinitions,
+            entryPoints(),
+            List.of(rule),
+            functionSignatures()
+        );
+    }
+
+    private KrakenProject krakenProjectWithFunctions(Rule rule, List<Function> functions) {
+        return KrakenProjectMocks.krakenProject(
+            contextDefinitions,
+            null,
+            List.of(),
+            entryPoints(),
+            List.of(rule),
+            functionSignatures(),
+            functions
+        );
+    }
+
     private KrakenProject krakenProject(Rule rule) {
-        return KrakenProjectMocks.krakenProject(contextDefinitions, entryPoints(), List.of(rule), functionSignatures());
+        return krakenProjectWithFunctions(rule, List.of());
     }
 
     private static List<FunctionSignature> functionSignatures() {
         return List.of(
-            function("GetAddress", "Address", List.of("Any")),
-            function("GetAddresses", "Address[]", List.of("Any"))
+            functionSignature("GetAddress", "Address", List.of("Any")),
+            functionSignature("GetAddresses", "Address[]", List.of("Any")),
+            functionSignature("ReturnMe", "Any", List.of("Any"))
         );
+    }
+
+    static class DependencyMatcher extends BaseMatcher<FieldDependency> {
+        private final String contextName;
+        private final String fieldName;
+        private final boolean ccrDependency;
+        private final boolean selfDependency;
+
+        public DependencyMatcher(String contextName, String fieldName, boolean ccrDependency, boolean selfDependency) {
+            this.contextName = contextName;
+            this.fieldName = fieldName;
+            this.ccrDependency = ccrDependency;
+            this.selfDependency = selfDependency;
+        }
+
+        @Override
+        public boolean matches(Object item) {
+            FieldDependency dependency = (FieldDependency) item;
+            return Objects.equals(dependency.getFieldName(), fieldName)
+                && Objects.equals(dependency.getContextName(), contextName)
+                && dependency.isCcrDependency() == ccrDependency
+                && dependency.isSelfDependency() == selfDependency;
+        }
+
+        @Override
+        public void describeTo(Description description) {
+            String ref = fieldName != null
+                ? contextName + "." + fieldName
+                : contextName;
+
+            if(ccrDependency) {
+                description.appendText("Expected context dependency to " + ref);
+            } else if(selfDependency) {
+                description.appendText("Expected self dependency to " + ref);
+            } else {
+                description.appendText("Expected field dependency to " + ref);
+            }
+        }
+
+        public static DependencyMatcher fieldRef(String contextName, String fieldName) {
+            return new DependencyMatcher(contextName, fieldName, false, false);
+        }
+
+        public static DependencyMatcher selfRef(String contextName, String fieldName) {
+            return new DependencyMatcher(contextName, fieldName, false, true);
+        }
+
+        public static DependencyMatcher contextRef(String contextName, String fieldName) {
+            return new DependencyMatcher(contextName, fieldName, true, false);
+        }
+
+        public static DependencyMatcher contextRef(String contextName) {
+            return new DependencyMatcher(contextName, null, true, false);
+        }
     }
 }

@@ -11,7 +11,7 @@ import java.util.List;
 import static io.github.jsonSnapshot.SnapshotMatcher.start;
 import static io.github.jsonSnapshot.SnapshotMatcher.validateSnapshots;
 import static kraken.testing.matchers.KrakenMatchers.*;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static kraken.test.KrakenItestMatchers.matchesSnapshot;
 
 public class EngineSanitySizeRangePayloadTest extends SanityEngineBaseTest {

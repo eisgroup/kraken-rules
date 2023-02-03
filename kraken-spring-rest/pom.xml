@@ -6,11 +6,15 @@
     <parent>
         <groupId>kraken</groupId>
         <artifactId>parent-pom</artifactId>
-        <version>1.22.0-SNAPSHOT</version>
+        <version>1.42.4-SNAPSHOT</version>
     </parent>
     <artifactId>kraken-spring-rest</artifactId>
-    <version>1.22.0-SNAPSHOT</version>
+    <version>1.42.4-SNAPSHOT</version>
     <name>kraken-spring-rest</name>
+
+    <properties>
+        <maven.deploy.skip>true</maven.deploy.skip>
+    </properties>
 
     <profiles>
         <profile>
@@ -23,13 +27,12 @@
                 <build.date></build.date>
                 <build.startTime></build.startTime>
                 <build.revision></build.revision>
+                <build.branch></build.branch>
             </properties>
         </profile>
     </profiles>
 
     <dependencies>
-
-        <!--Kraken-->
         <dependency>
             <groupId>kraken</groupId>
             <artifactId>kraken-model-api</artifactId>
@@ -63,16 +66,11 @@
             <version>1.5.10.RELEASE</version>
         </dependency>
 
-        <!--Swagger-->
+        <!--Openapi & swagger UI -->
         <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>2.5.0</version>
-        </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>2.5.0</version>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>1.6.11</version>
         </dependency>
 
         <!--Testing-->
@@ -101,9 +99,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-jsr310</artifactId>
-            <version>2.9.6</version>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.13.4</version>
         </dependency>
         <dependency>
             <groupId>kraken</groupId>
@@ -128,7 +126,7 @@
             </resource>
         </resources>
         <plugins>
-        <plugin>
+            <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>1.5.10.RELEASE</version>

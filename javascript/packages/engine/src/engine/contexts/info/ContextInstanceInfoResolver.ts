@@ -14,11 +14,11 @@
  *  limitations under the License.
  */
 
-import { Contexts } from "kraken-model";
-import ContextDefinition = Contexts.ContextDefinition;
+import { Contexts } from 'kraken-model'
+import ContextDefinition = Contexts.ContextDefinition
 
-import { ContextInstanceInfo } from "./ContextInstanceInfo";
-import { DataErrorDefinition } from "./DataObjectInfoResolver";
+import { DataErrorDefinition } from './DataObjectInfoResolver'
+import { ContextInstanceInfo } from 'kraken-engine-api'
 
 /**
  * Provides SPI for context instance information resolution. This interface is
@@ -34,7 +34,6 @@ import { DataErrorDefinition } from "./DataObjectInfoResolver";
  * application
  */
 export interface ContextInstanceInfoResolver<T> {
-
     /**
      * Is invoked when dataObject is passed as root and root data context
      * is created. Resolves {@link ContextInstanceInfo} for root context.
@@ -42,7 +41,7 @@ export interface ContextInstanceInfoResolver<T> {
      * @param dataObject    root context data object instance
      * @return              context instance info metadata for root
      */
-    resolveRootInfo: (dataObject: object) => ContextInstanceInfo;
+    resolveRootInfo: (dataObject: object) => ContextInstanceInfo
 
     /**
      * Is invoked when target context instance is extracted from source context using
@@ -61,8 +60,8 @@ export interface ContextInstanceInfoResolver<T> {
         target: ContextDefinition,
         source: ContextDefinition,
         parentInfo: ContextInstanceInfo,
-        index?: number
-    ) => ContextInstanceInfo;
+        index?: number,
+    ) => ContextInstanceInfo
 
     /**
      * Is invoked when child context is generalized and returned as parent context
@@ -78,8 +77,8 @@ export interface ContextInstanceInfoResolver<T> {
         dataObject: object,
         ancestor: ContextDefinition,
         child: ContextDefinition,
-        childInfo: ContextInstanceInfo
-    ) => ContextInstanceInfo;
+        childInfo: ContextInstanceInfo,
+    ) => ContextInstanceInfo
 
     /**
      * Called to transform {@link ContextInstanceInfo} to SPI implementation specific form - T.
@@ -89,7 +88,7 @@ export interface ContextInstanceInfoResolver<T> {
      * @param dataObject                data object instance for this context
      * @return                          implementation specific payloadResult
      */
-    processContextInstanceInfo: (contextInstanceInfo: ContextInstanceInfo, dataObject: object) => T;
+    processContextInstanceInfo: (contextInstanceInfo: ContextInstanceInfo, dataObject: object) => T
 
     /**
      * Validates if type of passed context data object is supported by this SPI implementation.
@@ -97,6 +96,5 @@ export interface ContextInstanceInfoResolver<T> {
      * @param contextDataObject data object instance for extracted context
      * @return                  an array of errors
      */
-    validateContextDataObject: (contextDataObject: object) => DataErrorDefinition[];
-
+    validateContextDataObject: (contextDataObject: object) => DataErrorDefinition[]
 }

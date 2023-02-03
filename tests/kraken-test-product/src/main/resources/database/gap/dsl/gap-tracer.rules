@@ -1,0 +1,96 @@
+Namespace Policy
+
+EntryPoint "TracerSnapshotTest" {
+   "TR_CarCoverage_assert_info",
+   "TR_CarCoverage_assert_warn",
+   "TR_CarCoverage_assert_error",
+   "TR_CarCoverage_Condition_LimitAmt_error",
+   "TR_CarCoverage_Payload_error",
+   "TR_CarCoverage_SizeRange",
+   "TR_CarCoverage_Size",
+   "TR_CarCoverage_length",
+   "TR_CarCoverage_regexp",
+   "TR_CarCoverage_code_assert",
+   "TR_CarCoverage_code_default",
+   "TR_CarCoverage_default",
+   "TR_CarCoverage_Usage",
+   "TR_CarCoverage_Visibility",
+   "TR_CarCoverage_Accessibility",
+   "TR_CarCoverage_Reset",
+   "TR_CarCoverage_Condition_default"
+}
+
+Rule "TR_CarCoverage_Condition_default" On CarCoverage.deductibleAmount {
+    Priority 100
+    When limitAmount > 10 and limitAmount < 50
+    Reset To 15000
+}
+
+Rule "TR_CarCoverage_default" On CarCoverage.deductibleAmount {
+    Priority MIN
+    Reset To 25000
+}
+
+Rule "TR_CarCoverage_Reset" On CarCoverage.limitAmount {
+    Reset To 15000
+}
+
+Rule "TR_CarCoverage_Accessibility" On CarCoverage.deductibleAmount {
+    Set Disabled
+}
+
+Rule "TR_CarCoverage_Visibility" On CarCoverage.deductibleAmount {
+    Set Hidden
+}
+
+Rule "TR_CarCoverage_Usage" On CarCoverage.deductibleAmount {
+    Set Mandatory
+}
+
+Rule "TR_CarCoverage_code_default" On CarCoverage.code {
+    Default To "AA"
+}
+
+Rule "TR_CarCoverage_code_assert" On CarCoverage.code {
+    Assert code == "AA"
+}
+
+Rule "TR_CarCoverage_regexp" On CarCoverage.code {
+    Assert Matches "[A-Z]+"
+}
+
+Rule "TR_CarCoverage_length" On CarCoverage.code {
+    Assert Length 2
+}
+
+Rule "TR_CarCoverage_Size" On Policy.riskItems {
+    Assert Size Min 0
+}
+
+Rule "TR_CarCoverage_SizeRange" On Policy.riskItems {
+    Assert Size Min 0 Max 1
+}
+
+Rule "TR_CarCoverage_assert_info" On CarCoverage.code {
+    Assert code == "AA"
+    Info "info-code" : "info"
+}
+
+Rule "TR_CarCoverage_assert_warn" On CarCoverage.code {
+    Assert code == "AA"
+    Warn "warn-code" : "warn"
+}
+
+Rule "TR_CarCoverage_assert_error" On CarCoverage.code {
+    Assert code == "AA"
+    Error "error-code" : "error"
+}
+
+Rule "TR_CarCoverage_Condition_LimitAmt_error" On CarCoverage.deductibleAmount {
+    When Policy.riskItems[10].model = "Audi"
+    Reset To 15000
+}
+
+Rule "TR_CarCoverage_Payload_error" On CarCoverage.deductibleAmount {
+    Assert Policy.riskItems[10].model = "Audi"
+}

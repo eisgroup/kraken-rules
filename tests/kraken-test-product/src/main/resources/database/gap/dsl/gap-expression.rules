@@ -5,7 +5,9 @@ EntryPoint "Expressions_Date_Nested_Functions" {
 }
 
 rule "Expressions_default_to_date_with_nested_functions" on Policy.txCreateDate {
-    default to PlusYears(PlusYears(Date("2019-05-05"), 1), 2)
+    // WithDay(PlusMonths(2000-01-30, 1), 1)) should be 2000-02-01
+    When Min(2000-02-02, WithDay(PlusMonths(2000-01-30, 1), 1)) = 2000-02-01
+    default to PlusYears(PlusYears(2019-05-05, 1), 2)
 }
 
 Rule "Expressions_default_to_date_with_nested_functions_when_plus_year_0" On Policy.effectiveDate {
@@ -41,7 +43,9 @@ EntryPoint "Expressions_assert_with_proposition_operations" {
 }
 
 Rule "Expressions_assert_with_proposition_operations" On DriverInfo.driverType {
-   Assert NumberOfDaysBetween(Date("2017-10-10"), DriverInfo.trainingCompletionDate) > 365 or PersonInfo.sameHomeAddress && AddressInfo.doNotSolicit || DriverInfo.convicted
+   Assert
+     set daysToCompletion to NumberOfDaysBetween(Date("2017-10-10"), DriverInfo.trainingCompletionDate)
+     return daysToCompletion > 365 or PersonInfo.sameHomeAddress && AddressInfo.doNotSolicit || DriverInfo.convicted
 }
 
 EntryPoint "Expressions_default_to_policy_state_with_if" {
@@ -50,4 +54,59 @@ EntryPoint "Expressions_default_to_policy_state_with_if" {
 
 Rule "Expressions_default_to_policy_state_with_if" On Policy.state {
    Default To if(Count(if(true) then policies) = 2) then "FL" else "CA"
+}
+
+EntryPoint "Expressions_nullsafe" {
+    "Expressions_nullsafe"
+}
+
+Rule "Expressions_nullsafe" On Policy.state {
+    // here txType is a fieldPath: transactionDetails.txType
+    When context?.external?.policy = null and this?.txType = null
+    Assert Insured?.name = null
+}
+
+EntryPoint "Expressions_variables" {
+    "Expressions_variables"
+}
+
+Rule "Expressions_variables" On Policy.state {
+    When
+      set st to state
+      return
+        every s
+        in { st, state, Policy.state, this.state }
+        satisfies
+          set innerState to s
+          set innerState2 to innerState
+          return
+            s = innerState
+            and s = innerState2
+            and s = st
+            and s = Policy.state
+            and s = state
+            and s = this.state
+    Assert
+      set expected to Insured.haveChildren
+      set vehicles to Vehicle
+      set includedVehicles to vehicles?[this.included = expected]
+      return
+        if
+          !IsEmpty(includedVehicles)
+        then
+          set firstIncludedVehicle to includedVehicles[0]
+          return firstIncludedVehicle != null
+        else
+          set result to
+            if expected then true else false
+          return result
+}
+
+EntryPoint "Expressions_escapes" {
+    "Expressions_escapes"
+}
+
+Rule "Expressions_escapes" On Policy.state {
+  // result is a string with symbols: "''"\\
+  Default To Concat({'"', "'", '\'', "\"", '\\', "\\"})
 }

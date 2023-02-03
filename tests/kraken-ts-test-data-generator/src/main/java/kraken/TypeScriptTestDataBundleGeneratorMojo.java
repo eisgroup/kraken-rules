@@ -22,16 +22,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import kraken.runtime.EvaluationMode;
 import org.apache.commons.io.IOUtils;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -41,6 +37,8 @@ import org.apache.maven.plugins.annotations.Parameter;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
+import kraken.documentation.FunctionDocumentationResolver;
+import kraken.el.functionregistry.documentation.LibraryDoc;
 import kraken.el.scope.Scope;
 import kraken.el.serialization.ScopeSerialization;
 import kraken.el.serialization.TypeRegistry;
@@ -72,8 +70,12 @@ public class TypeScriptTestDataBundleGeneratorMojo extends AbstractMojo {
     private String sanityPath;
     @Parameter(property = "sanityBasePath", required = true)
     private String sanityBasePath;
+    @Parameter(property = "sanityMetadataFile", required = true)
+    private String sanityMetadataFile;
     @Parameter(property = "scopeDataPath", required = true)
     private String scopeDataPath;
+    @Parameter(property = "scopeDataPath", required = true)
+    private String docsDataPath;
     @Parameter(property = "resourcesDir", defaultValue = "database/gap/")
     private String resourcesDir;
     @Parameter(property = "sanity", required = true)
@@ -105,7 +107,7 @@ public class TypeScriptTestDataBundleGeneratorMojo extends AbstractMojo {
 
         // generate local scope
         Function<String, Scope> getScope = cdname -> scopeBuilder.buildScope(
-            policyKrakenProject.getContextProjection(cdname)
+            policyKrakenProject.getContextDefinitions().get(cdname)
         );
         Consumer<String> writeScope = scope -> write(
             scopeDataPath,
@@ -114,8 +116,7 @@ public class TypeScriptTestDataBundleGeneratorMojo extends AbstractMojo {
         );
 
         TypeRegistry typeRegistry = new TypeRegistry(
-            getScope.apply("Policy").getParentScope().getAllTypes(),
-            policyKrakenProject.getNamespace()
+            getScope.apply("Policy").getAllTypes()
         );
 
         write(
@@ -176,7 +177,7 @@ public class TypeScriptTestDataBundleGeneratorMojo extends AbstractMojo {
 
     private void loadConfigurationMetadata() {
         try {
-            final FileReader reader = new FileReader("tests/kraken-itests/sanity.data.json");
+            final FileReader reader = new FileReader(sanityMetadataFile);
             final var data = String.join("", IOUtils.readLines(reader));
             this.sanityData = gson.fromJson(data, SanityData.class);
         } catch (IOException e) {
@@ -285,10 +286,12 @@ public class TypeScriptTestDataBundleGeneratorMojo extends AbstractMojo {
     }
 
     private String resolveBundleAsJsonString(String entryPointName, Map<String, Object> context, boolean delta) {
+        var defaultDimensions = new HashMap<String, Object>();
         EntryPointBundle bundle = entryPointBundleFactory.build(
             entryPointName,
-            context == null ? Map.of() : context,
-            delta
+            context == null ? defaultDimensions : context,
+            Set.of(),
+            EvaluationMode.ALL
         );
         return gson.toJson(sortJson(gson.toJsonTree(bundle)));
     }

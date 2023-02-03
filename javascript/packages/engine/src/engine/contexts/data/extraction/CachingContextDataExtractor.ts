@@ -14,8 +14,8 @@
  *  limitations under the License.
  */
 
-import { ContextDataExtractor } from "./ContextDataExtractor.types";
-import { DataContext } from "../DataContext";
+import { ContextDataExtractor } from './ContextDataExtractor.types'
+import { DataContext } from '../DataContext'
 
 /**
  * Caches extraction of {@link DataContext}.
@@ -27,46 +27,40 @@ import { DataContext } from "../DataContext";
  * @since 11.2
  */
 export class CachingContextDataExtractor implements ContextDataExtractor {
+    private readonly cache: Map<string, DataContext[]>
 
-    private readonly cache: Map<string, DataContext[]>;
-
-    constructor(
-        private readonly extractor: ContextDataExtractor
-    ) {
-        this.cache = new Map();
+    constructor(private readonly extractor: ContextDataExtractor) {
+        this.cache = new Map()
     }
 
     extractByPath(root: DataContext, path: string[]): DataContext[] {
-        const key = pathKey(root, path);
+        const key = pathKey(root, path)
         if (this.cache.has(key)) {
-            return this.cache.get(key)!;
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            return this.cache.get(key)!
         } else {
-            const extracted = this.extractor.extractByPath(root, path);
-            this.cache.set(key, extracted);
-            return extracted;
+            const extracted = this.extractor.extractByPath(root, path)
+            this.cache.set(key, extracted)
+            return extracted
         }
     }
     extractByName(childContextName: string, root: DataContext, restriction?: DataContext): DataContext[] {
-        const key = nameKey(childContextName, root, restriction);
+        const key = nameKey(childContextName, root, restriction)
         if (this.cache.has(key)) {
-            return this.cache.get(key)!;
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            return this.cache.get(key)!
         } else {
-            const extracted = this.extractor.extractByName(childContextName, root, restriction);
-            this.cache.set(key, extracted);
-            return extracted;
+            const extracted = this.extractor.extractByName(childContextName, root, restriction)
+            this.cache.set(key, extracted)
+            return extracted
         }
     }
-
 }
 
 function pathKey(root: DataContext, path: string[]): string {
-    return `${root.contextId}:${path.join(".")}`;
+    return `${root.contextId}:${path.join('.')}`
 }
 
-function nameKey(
-    childContextName: string,
-    root: DataContext,
-    restriction: DataContext | undefined
-): string {
-    return `${root.contextId}:${childContextName}:${restriction ? restriction.contextId : ""}:`;
+function nameKey(childContextName: string, root: DataContext, restriction: DataContext | undefined): string {
+    return `${root.contextId}:${childContextName}:${restriction ? restriction.contextId : ''}:`
 }

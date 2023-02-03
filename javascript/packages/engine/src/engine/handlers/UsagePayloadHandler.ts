@@ -14,51 +14,51 @@
  *  limitations under the License.
  */
 
-import { RulePayloadHandler } from "./RulePayloadHandler";
-import { ExpressionEvaluator } from "../runtime/expressions/ExpressionEvaluator";
-import { DataContext } from "../contexts/data/DataContext";
-import { UsagePayloadResult, payloadResultCreator } from "../results/PayloadResult";
+import { RulePayloadHandler } from './RulePayloadHandler'
+import { ExpressionEvaluator } from '../runtime/expressions/ExpressionEvaluator'
+import { UsagePayloadResult, ExpressionEvaluationResult } from 'kraken-engine-api'
 
-import { Expressions } from "../runtime/expressions/Expressions";
+import { Expressions } from '../runtime/expressions/Expressions'
 
-import { Payloads, Rule } from "kraken-model";
-import PayloadType = Payloads.PayloadType;
-import UsagePayload = Payloads.Validation.UsagePayload;
+import { Payloads, Rule } from 'kraken-model'
+import PayloadType = Payloads.PayloadType
+import UsagePayload = Payloads.Validation.UsagePayload
 
-import { expressionFactory } from "../runtime/expressions/ExpressionFactory";
-import { ExpressionEvaluationResult } from "../runtime/expressions/ExpressionEvaluationResult";
-import { ExecutionSession } from "../ExecutionSession";
+import { expressionFactory } from '../runtime/expressions/ExpressionFactory'
+import { ExecutionSession } from '../ExecutionSession'
+import { DataContext } from '../contexts/data/DataContext'
+import { payloadResultCreator } from '../results/PayloadResultCreator'
 
-function isValid(value: any): boolean {
-    // tslint:disable-next-line: triple-equals
-    return value === "" || value == null;
+function isValid(value: unknown): boolean {
+    return value === '' || value == null
 }
 
 export class UsagePayloadHandler implements RulePayloadHandler {
-    constructor(private readonly evaluator: ExpressionEvaluator) { }
+    constructor(private readonly evaluator: ExpressionEvaluator) {}
 
     handlesPayloadType(): Payloads.PayloadType {
-        return PayloadType.USAGE;
+        return PayloadType.USAGE
     }
     executePayload(
-        payload: UsagePayload, rule: Rule, dataContext: DataContext, session: ExecutionSession
+        payload: UsagePayload,
+        rule: Rule,
+        dataContext: DataContext,
+        session: ExecutionSession,
     ): UsagePayloadResult {
-        const expression = expressionFactory.fromPath(Expressions.createPathResolver(dataContext)(rule.targetPath));
-        const result = this.evaluator.evaluate(expression, dataContext);
+        const expression = expressionFactory.fromPath(Expressions.createPathResolver(dataContext)(rule.targetPath))
+        const result = this.evaluator.evaluate(expression, dataContext)
         if (ExpressionEvaluationResult.isError(result)) {
-            throw new Error(`Failed to extract attribute ${expression}`);
+            throw new Error(`Failed to extract attribute ${expression}`)
         }
-        const value = result.success;
+        const value = result.success
 
-        const isUsageMandatory =
-            (Payloads.Validation.UsageType.mandatory === payload.usageType) && isValid(value);
-        const isUsageEmpty =
-            (Payloads.Validation.UsageType.mustBeEmpty === payload.usageType) && !isValid(value);
+        const isUsageMandatory = Payloads.Validation.UsageType.mandatory === payload.usageType && isValid(value)
+        const isUsageEmpty = Payloads.Validation.UsageType.mustBeEmpty === payload.usageType && !isValid(value)
         const templateVariables = this.evaluator.evaluateTemplateVariables(
             payload.errorMessage,
             dataContext,
-            session.expressionContext
-        );
-        return payloadResultCreator.usage(payload, !(isUsageMandatory || isUsageEmpty), templateVariables);
+            session.expressionContext,
+        )
+        return payloadResultCreator.usage(payload, !(isUsageMandatory || isUsageEmpty), templateVariables)
     }
 }

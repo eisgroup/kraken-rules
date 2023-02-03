@@ -40,7 +40,6 @@ import kraken.runtime.engine.dto.bundle.EntryPointBundleFactory;
 import kraken.runtime.engine.evaluation.loop.OrderedEvaluationLoop;
 import kraken.runtime.engine.handlers.RulePayloadProcessorImpl;
 import kraken.runtime.expressions.KrakenExpressionEvaluator;
-import kraken.runtime.expressions.KrakenTypeProviderFactory;
 import kraken.runtime.logging.KrakenDataLogger;
 import kraken.runtime.logging.Slf4jKrakenDataLogger;
 import kraken.runtime.model.context.RuntimeContextDefinition;
@@ -110,12 +109,6 @@ public class RuleEngineBuilder {
         ruleEngine.setContextModelTreeProvider(modelTreeRepository);
         ruleEngine.setDataLogger(krakenDataLogger == null ? new Slf4jKrakenDataLogger() : krakenDataLogger);
         ruleEngine.setKrakenExpressionEvaluator(krakenExpressionEvaluator);
-        ruleEngine.setKrakenTypeProviderFactory(
-                new KrakenTypeProviderFactory(
-                        contextInstanceInfoResolver,
-                        factory
-                )
-        );
 
         return ruleEngine;
     }
@@ -214,7 +207,7 @@ public class RuleEngineBuilder {
         @Override
         public ContextRepository get(String namespace, TargetEnvironment targetEnvironment) {
             final RuntimeContextRepository runtimeContextRepository =
-                    projectRepositoryFactory.resolveContextRepository(namespace);
+                    projectRepositoryFactory.resolveRepository(namespace);
             return new EngineContextRepository(runtimeContextRepository);
         }
     }

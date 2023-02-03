@@ -13,34 +13,31 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+import { Reducer } from 'declarative-js'
+import { ExpressionEvaluationResult, RuleInfo, RuleOverride } from 'kraken-engine-api'
+import { Contexts } from 'kraken-model'
 
-import { RuleOverride } from "./RuleOverride";
-import { RuleInfo } from "./RuleInfo";
-import { DataContext } from "../contexts/data/DataContext";
-import { expressionFactory } from "../runtime/expressions/ExpressionFactory";
-import { Reducer } from "declarative-js";
-import { Expressions } from "../runtime/expressions/Expressions";
-import { ExpressionEvaluator } from "../runtime/expressions/ExpressionEvaluator";
-import { ExpressionEvaluationResult } from "../runtime/expressions/ExpressionEvaluationResult";
-import { Contexts } from "kraken-model";
-import { ErrorCode, KrakenRuntimeError } from "../../error/KrakenRuntimeError";
+import { ErrorCode, KrakenRuntimeError } from '../../error/KrakenRuntimeError'
+import { DataContext } from '../contexts/data/DataContext'
+import { ExpressionEvaluator } from '../runtime/expressions/ExpressionEvaluator'
+import { expressionFactory } from '../runtime/expressions/ExpressionFactory'
+import { Expressions } from '../runtime/expressions/Expressions'
 
 export interface RuleOverrideContextExtractor {
     extract(
         dataContext: DataContext,
         ruleInfo: RuleInfo,
         dependencies: RuleOverride.OverrideDependencyInfo[],
-        timestamp: Date
-    ): RuleOverride.OverridableRuleContextInfo;
+        timestamp: Date,
+    ): RuleOverride.OverridableRuleContextInfo
 }
 
 export class RuleOverrideContextExtractorImpl implements RuleOverrideContextExtractor {
-
     extract(
         dataContext: DataContext,
         ruleInfo: RuleInfo,
         dependencies: RuleOverride.OverrideDependencyInfo[],
-        timestamp: Date
+        timestamp: Date,
     ): RuleOverride.OverridableRuleContextInfo {
         return {
             contextAttributeValue: extractAttributeValue(dataContext, ruleInfo.targetPath),
@@ -49,8 +46,8 @@ export class RuleOverrideContextExtractorImpl implements RuleOverrideContextExtr
             rootContextId: extractRootId(dataContext),
             overrideDependencies: extractOverrideDependencies(dependencies, dataContext),
             rule: ruleInfo,
-            ruleEvaluationTimeStamp: timestamp
-        };
+            ruleEvaluationTimeStamp: timestamp,
+        }
     }
 }
 
@@ -60,32 +57,36 @@ export class RuleOverrideContextExtractorImpl implements RuleOverrideContextExtr
  * @param dataContext   context definition instance, on which rule is defined
  */
 export function extractOverrideDependencies(
-    dependencies: RuleOverride.OverrideDependencyInfo[], dataContext: DataContext
+    dependencies: RuleOverride.OverrideDependencyInfo[],
+    dataContext: DataContext,
 ): Record<string, RuleOverride.OverrideDependency> {
-    const singularRefs = dataContext.externalReferenceObjects.singleDataContexts;
-    const overrideDependencies: RuleOverride.OverrideDependency[] = [];
-    const dependenciesKeys = new Set();
+    const singularRefs = dataContext.externalReferenceObjects.singleDataContexts
+    const overrideDependencies: RuleOverride.OverrideDependency[] = []
+    const dependenciesKeys = new Set()
     for (const dependency of dependencies) {
         if (dependency.contextFieldName === undefined) {
-            continue;
+            continue
         }
-        const ref = singularRefs[dependency.contextName];
+        const ref = singularRefs[dependency.contextName]
         if (!ref) {
-            continue;
+            continue
         }
-        const type = ref.definitionProjection[dependency.contextFieldName].fieldType as Contexts.PrimitiveDataType;
+        const type = ref.definitionProjection[dependency.contextFieldName].fieldType as Contexts.PrimitiveDataType
         if (!Contexts.fieldTypeChecker.isPrimitive(type)) {
-            continue;
+            continue
         }
-        const name = RuleOverride.resolveOverrideDependencyName(ref.contextName, dependency.contextFieldName);
+        const name = RuleOverride.resolveOverrideDependencyName(ref.contextName, dependency.contextFieldName)
         if (dependenciesKeys.has(name)) {
-            continue;
+            continue
         }
-        const value = extractAttributeValue(ref, dependency.contextFieldName);
-        dependenciesKeys.add(name);
-        overrideDependencies.push({ name, type, value });
+        const value = extractAttributeValue(ref, dependency.contextFieldName)
+        dependenciesKeys.add(name)
+        overrideDependencies.push({ name, type, value })
     }
-    return overrideDependencies.reduce(Reducer.toObject(d => d.name), {});
+    return overrideDependencies.reduce(
+        Reducer.toObject(d => d.name),
+        {},
+    )
 }
 
 /**
@@ -96,17 +97,16 @@ export function extractOverrideDependencies(
  * @param {string} targetPath       path to value in data object (context instance)
  * @returns {*} value from data context data object by target path
  */
-export function extractAttributeValue(dataContext: DataContext, targetPath: string): any {
-    const expression =
-        expressionFactory.fromPath(Expressions.createPathResolver(dataContext)(targetPath));
-    const result = ExpressionEvaluator.DEFAULT.evaluate(expression, dataContext);
+export function extractAttributeValue(
+    dataContext: DataContext,
+    targetPath: string,
+): Contexts.KrakenPrimitive | undefined {
+    const expression = expressionFactory.fromPath(Expressions.createPathResolver(dataContext)(targetPath))
+    const result = ExpressionEvaluator.DEFAULT.evaluate(expression, dataContext)
     if (ExpressionEvaluationResult.isError(result)) {
-        throw new KrakenRuntimeError(
-            ErrorCode.EXTRACT_EXPRESSION_FAILED,
-            `Failed to extract attribute ${targetPath}`
-        );
+        throw new KrakenRuntimeError(ErrorCode.EXTRACT_EXPRESSION_FAILED, `Failed to extract attribute ${targetPath}`)
     }
-    return result.success;
+    return result.success as Contexts.KrakenPrimitive | undefined
 }
 
 /**
@@ -114,9 +114,9 @@ export function extractAttributeValue(dataContext: DataContext, targetPath: stri
  * @param dataContext current data context
  */
 export function extractRootId(dataContext: DataContext): string {
-    let dc = dataContext;
+    let dc = dataContext
     while (dc.parent) {
-        dc = dc.parent;
+        dc = dc.parent
     }
-    return dc.contextId;
+    return dc.contextId
 }

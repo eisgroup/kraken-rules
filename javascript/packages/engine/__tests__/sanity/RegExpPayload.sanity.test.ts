@@ -14,33 +14,42 @@
  *  limitations under the License.
  */
 
-import { sanityMocks } from "./_AutoPolicyObject.mocks";
-import { sanityEngine } from "./_SanityEngine";
+import { sanityMocks } from './_AutoPolicyObject.mocks'
+import { sanityEngine } from './_SanityEngine'
+import { FieldMetadataReducer } from '../../src'
 
-describe("Engine Sanity Assertion Payload Test", () => {
-    const { empty, valid, inValid } = sanityMocks;
+describe('Engine Sanity Assertion Payload Test', () => {
+    const { empty, valid, inValid } = sanityMocks
     it("should execute 'RegExpAutoPolicy' entrypoint with empty data", () => {
-        const results = sanityEngine.evaluate(empty(), "RegExpAutoPolicy");
-        expect(results).k_toMatchResultsStats({ total: 5, critical: 0 });
-        expect(results).k_toHaveExpressionsFailures(0);
-        expect(results).k_toMatchResultsSnapshots();
-    });
+        const results = sanityEngine.evaluate(empty(), 'RegExpAutoPolicy')
+        const fieldResults = new FieldMetadataReducer().reduce(results)
+
+        expect(results).k_toMatchResultsStats({ total: 5, critical: 0 })
+        expect(results).k_toHaveExpressionsFailures(0)
+        expect({ entryPointResults: results, fieldResults }).k_toMatchResultsSnapshots()
+    })
     it("should execute 'RegExpAutoPolicy' entrypoint with valid data", () => {
-        const results = sanityEngine.evaluate(valid(), "RegExpAutoPolicy");
-        expect(results).k_toMatchResultsStats({ total: 11, critical: 0 });
-        expect(results).k_toHaveExpressionsFailures(0);
-        expect(results).k_toMatchResultsSnapshots();
-    });
+        const results = sanityEngine.evaluate(valid(), 'RegExpAutoPolicy')
+        const fieldResults = new FieldMetadataReducer().reduce(results)
+
+        expect(results).k_toMatchResultsStats({ total: 11, critical: 0 })
+        expect(results).k_toHaveExpressionsFailures(0)
+        expect({ entryPointResults: results, fieldResults }).k_toMatchResultsSnapshots()
+    })
     it("should execute 'RegExpAutoPolicy' entrypoint with not valid data", () => {
-        const results = sanityEngine.evaluate(inValid(), "RegExpAutoPolicy");
-        expect(results).k_toHaveExpressionsFailures(0);
-        expect(results).k_toMatchResultsStats({ total: 7, critical: 6, warning: 0 });
-        expect(results).k_toMatchResultsSnapshots();
-    });
+        const results = sanityEngine.evaluate(inValid(), 'RegExpAutoPolicy')
+        const fieldResults = new FieldMetadataReducer().reduce(results)
+
+        expect(results).k_toHaveExpressionsFailures(0)
+        expect(results).k_toMatchResultsStats({ total: 7, critical: 6, warning: 0 })
+        expect({ entryPointResults: results, fieldResults }).k_toMatchResultsSnapshots()
+    })
     it("should execute 'RegExpAutoPolicy' entrypoint and reduce results", () => {
-        const results = sanityEngine.evaluate(valid(), "RegExpAutoPolicy");
-        expect(results).k_toMatchResultsStats({ total: 11, critical: 0 });
-        expect(results).k_toHaveExpressionsFailures(0);
-        expect(results).k_toMatchResultsSnapshots();
-    });
-});
+        const results = sanityEngine.evaluate(valid(), 'RegExpAutoPolicy')
+        const fieldResults = new FieldMetadataReducer().reduce(results)
+
+        expect(results).k_toMatchResultsStats({ total: 11, critical: 0 })
+        expect(results).k_toHaveExpressionsFailures(0)
+        expect({ entryPointResults: results, fieldResults }).k_toMatchResultsSnapshots()
+    })
+})

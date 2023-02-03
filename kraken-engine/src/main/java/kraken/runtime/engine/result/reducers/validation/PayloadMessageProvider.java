@@ -20,8 +20,11 @@ import kraken.runtime.engine.result.ValidationPayloadResult;
 
 /**
  * Provides default messages to validation payload results in case validation rules do not have code and/or message specified
+ *
+ * @deprecated Implementation of this SPI does not support localization. Use {@link ValidationMessageProvider} instead.
  */
 @SPI
+@Deprecated(since = "1.24.0", forRemoval = true)
 public interface PayloadMessageProvider {
 
     /**

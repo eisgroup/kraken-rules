@@ -16,8 +16,12 @@
 
 package kraken.runtime.model.expression;
 
+import java.beans.Transient;
 import java.io.Serializable;
 import java.util.Collection;
+
+import kraken.el.ast.Ast;
+import kraken.el.scope.Scope;
 
 /**
  * @author psurinin@eisgroup.com
@@ -32,19 +36,22 @@ public class CompiledExpression implements Serializable {
     private final Serializable compiledLiteralValue;
     private final String compiledLiteralValueType;
     private final Collection<ExpressionVariable> expressionVariables;
+    private final transient Ast ast;
 
     public CompiledExpression(
             String expressionString,
             ExpressionType expressionType,
             Serializable compiledLiteralValue,
             String compiledLiteralValueType,
-            Collection<ExpressionVariable> expressionVariables
+            Collection<ExpressionVariable> expressionVariables,
+            Ast ast
     ) {
         this.expressionString = expressionString;
         this.expressionType = expressionType;
         this.compiledLiteralValue = compiledLiteralValue;
         this.compiledLiteralValueType = compiledLiteralValueType;
         this.expressionVariables = expressionVariables;
+        this.ast = ast;
     }
 
     public String getExpressionString() {
@@ -69,5 +76,10 @@ public class CompiledExpression implements Serializable {
 
     public Collection<ExpressionVariable> getExpressionVariables() {
         return expressionVariables;
+    }
+
+    @Transient
+    public Ast getAst() {
+        return ast;
     }
 }

@@ -60,3 +60,8 @@ request body: (dimensions optional)
 - start locally: `mvn spring-boot:run`
 - start locally with jenkins build properties example: 
 `mvn spring-boot:run -Dbuild.number="123" -Dbuild.date="06-06-1993" -Dbuild.startTime="00:00" -Dbuild.revision="646dr8"`
+
+## API documentation and swagger-ui
+
+- To access swagger ui go to `http://localhost:8888/swagger-ui`
+- OpenAPI specification can be found at `http://localhost:8888/v3/api-docs`

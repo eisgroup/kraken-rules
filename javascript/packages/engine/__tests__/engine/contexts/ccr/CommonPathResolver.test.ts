@@ -14,39 +14,30 @@
  *  limitations under the License.
  */
 
-import { CommonPathResolver } from "../../../../src/engine/contexts/ccr/CommonPathResolver";
+import { CommonPathResolver } from '../../../../src/engine/contexts/ccr/CommonPathResolver'
 
-describe("CommonPathResolver", () => {
-    let resolver: CommonPathResolver;
+describe('CommonPathResolver', () => {
+    let resolver: CommonPathResolver
     beforeEach(() => {
-        resolver = new CommonPathResolver();
-    });
-    it("should find common when equals", () => {
+        resolver = new CommonPathResolver()
+    })
+    it('should find common when equals', () => {
+        const common = resolver.resolveCommon(['Policy', 'Vehicle', 'Driver'], ['Policy', 'Vehicle', 'Driver'])
+        expect(common).toMatchObject(['Policy', 'Vehicle', 'Driver'])
+    })
+    it('should find common when reference children', () => {
         const common = resolver.resolveCommon(
-            ["Policy", "Vehicle", "Driver"],
-            ["Policy", "Vehicle", "Driver"]
-        );
-        expect(common).toMatchObject(["Policy", "Vehicle", "Driver"]);
-    });
-    it("should find common when reference children", () => {
-        const common = resolver.resolveCommon(
-            ["Policy", "Vehicle", "Driver"],
-            ["Policy", "Vehicle", "Driver", "DriverInfo"]
-        );
-        expect(common).toMatchObject(["Policy", "Vehicle", "Driver"]);
-    });
-    it("should find common when reference parent", () => {
-        const common = resolver.resolveCommon(
-            ["Policy", "Vehicle", "Driver"],
-            ["Policy", "Vehicle"]
-        );
-        expect(common).toMatchObject(["Policy", "Vehicle"]);
-    });
-    it("should find common when reference other branch", () => {
-        const common = resolver.resolveCommon(
-            ["Policy", "Vehicle", "Driver"],
-            ["Policy", "Party", "Role"]
-        );
-        expect(common).toMatchObject(["Policy"]);
-    });
-});
+            ['Policy', 'Vehicle', 'Driver'],
+            ['Policy', 'Vehicle', 'Driver', 'DriverInfo'],
+        )
+        expect(common).toMatchObject(['Policy', 'Vehicle', 'Driver'])
+    })
+    it('should find common when reference parent', () => {
+        const common = resolver.resolveCommon(['Policy', 'Vehicle', 'Driver'], ['Policy', 'Vehicle'])
+        expect(common).toMatchObject(['Policy', 'Vehicle'])
+    })
+    it('should find common when reference other branch', () => {
+        const common = resolver.resolveCommon(['Policy', 'Vehicle', 'Driver'], ['Policy', 'Party', 'Role'])
+        expect(common).toMatchObject(['Policy'])
+    })
+})

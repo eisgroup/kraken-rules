@@ -14,105 +14,172 @@
  *  limitations under the License.
  */
 
-import { dateFunctions as f } from "../../../../../src/engine/runtime/expressions/functionLibrary/DateFunctions";
+import { dateFunctions as f } from '../../../../../src/engine/runtime/expressions/functionLibrary/DateFunctions'
 
-describe("Date Functions", () => {
-    it("should create date from numbers", () => {
-        expect(f.Date(2011, 12, 31)).k_toBeDate(new Date(2011, 12, 31));
-        expect(f.Date("2011-12-31")).k_toBeDate(new Date(2011, 12, 31));
-        expect(() => f.Date(2011)).toThrow();
-        expect(() => f.Date()).toThrow();
-    });
-    it("should get day from date", () => {
-        expect(f.GetDay(f.Date("2011-12-31"))).toBe(31);
-        expect(() => f.GetDay()).toThrow();
-        // @ts-expect-error
-        expect(() => f.GetDay(12)).toThrow();
-        // @ts-expect-error
-        expect(() => f.GetDay("12")).toThrow();
-    });
-    it("should get month from date", () => {
-        expect(f.GetMonth(f.Date("2011-12-31"))).toBe(12);
-        expect(() => f.GetMonth()).toThrow();
-        // @ts-expect-error
-        expect(() => f.GetMonth(12)).toThrow();
-        // @ts-expect-error
-        expect(() => f.GetMonth("12")).toThrow();
-    });
-    it("should get year from date", () => {
-        expect(f.GetYear(f.Date("2011-12-31"))).toBe(2011);
-        expect(() => f.GetYear()).toThrow();
-        // @ts-expect-error
-        expect(() => f.GetYear(12)).toThrow();
-        // @ts-expect-error
-        expect(() => f.GetYear("12")).toThrow();
-    });
-    it("should get number of months between", () => {
-        expect(f.NumberOfMonthsBetween(f.Date(2011, 1, 15), f.Date(2011, 2, 15))).toBe(1);
-        expect(f.NumberOfMonthsBetween(f.Date(2011, 1, 16), f.Date(2011, 2, 15))).toBe(0);
-        expect(f.NumberOfMonthsBetween(f.Date(2011, 1, 1), f.Date(2011, 1, 31))).toBe(0);
-        expect(f.NumberOfMonthsBetween(f.Date(2011, 1, 31), f.Date(2011, 2, 1))).toBe(0);
-        expect(f.NumberOfMonthsBetween(f.Date(2012, 2, 28), f.Date(2011, 1, 31))).toBe(12);
-        expect(f.NumberOfMonthsBetween(f.Date(2011, 1, 31), f.Date(2012, 2, 28))).toBe(12);
-        // @ts-expect-error
-        expect(() => f.NumberOfMonthsBetween(1, f.Date(2012, 1, 31))).toThrow();
-        // @ts-expect-error
-        expect(() => f.NumberOfMonthsBetween(f.Date(2012, 1, 31), 1)).toThrow();
-        expect(() => f.NumberOfMonthsBetween(f.Date(2012, 1, 31))).toThrow();
-        expect(() => f.NumberOfMonthsBetween()).toThrow();
-    });
-    it("should get number of years between", () => {
-        expect(f.NumberOfYearsBetween(f.Date(2011, 1, 15), f.Date(2011, 2, 15))).toBe(0);
-        expect(f.NumberOfYearsBetween(f.Date(2011, 12, 31), f.Date(2012, 1, 30))).toBe(0);
-        expect(f.NumberOfYearsBetween(f.Date(2011, 10, 31), f.Date(2012, 10, 30))).toBe(0);
-        expect(f.NumberOfYearsBetween(f.Date(2010, 1, 10), f.Date(2011, 1, 1))).toBe(0);
-        expect(f.NumberOfYearsBetween(f.Date(2010, 1, 16), f.Date(2011, 1, 16))).toBe(1);
-        expect(f.NumberOfYearsBetween(f.Date(2010, 1, 16), f.Date(2011, 12, 16))).toBe(1);
-        expect(f.NumberOfYearsBetween(f.Date(2022, 1, 31), f.Date(2011, 1, 31))).toBe(11);
-        expect(f.NumberOfYearsBetween(f.Date(2011, 1, 31), f.Date(2022, 1, 31))).toBe(11);
-        // @ts-expect-error
-        expect(() => f.NumberOfYearsBetween(1, f.Date(2012, 1, 31))).toThrow();
-        // @ts-expect-error
-        expect(() => f.NumberOfYearsBetween(f.Date(2012, 1, 31), 1)).toThrow();
-        expect(() => f.NumberOfYearsBetween(f.Date(2012, 1, 31))).toThrow();
-        expect(() => f.NumberOfYearsBetween()).toThrow();
-    });
-    it("should format date", () => {
-        expect(f.Format(f.Date(2011, 1, 15), "YYYY-MM-DD")).toBe("2011-01-15");
-        expect(f.Format(f.Date(2011, 1, 15), "YY-MM-DD")).toBe("11-01-15");
-        expect(f.Format(f.Date(2011, 1, 15))).toBe("2011-01-15");
-        expect(f.Format(f.Date(2011, 1, 15), "MM-DD-YYYY")).toBe("01-15-2011");
-        expect(f.Format(f.Date(2011, 1, 15), "DD-MM-YYYY")).toBe("15-01-2011");
-        expect(f.Format(f.Date(2011, 1, 15), "DD MM YYYY")).toBe("15 01 2011");
-        expect(f.Format(f.Date(2011, 1, 15), "DD:MM:YYYY")).toBe("15:01:2011");
-        expect(f.Format(f.Date(2011, 1, 15), "DD/MM/YYYY")).toBe("15/01/2011");
-        expect(f.Format(f.Date(2011, 1, 15), "DD/MM-=-YYYY")).toBe("15/01-=-2011");
-        expect(() => f.Format()).toThrow();
-    });
-    it("should create date from time", () => {
-        const date = new Date(2011, 11, 11, 59, 58);
-        expect(f.AsDate(date).getMinutes()).toBe(0);
-        expect(f.AsDate(date).getHours()).toBe(0);
-    });
-    it("should create date time from date", () => {
-        const date = new Date(2011, 11, 11, 59, 58);
-        expect(f.AsTime(date).getHours()).toBe(0);
-        expect(f.AsTime(date).getMinutes()).toBe(0);
-    });
-    it("should throw on undefined parameters", () => {
-        expect(() => f.AsDate()).toThrow();
-        expect(() => f.AsTime()).toThrow();
-        expect(() => f.PlusDays()).toThrow();
-        expect(() => f.PlusDays(new Date())).toThrow();
-        expect(() => f.PlusMonths()).toThrow();
-        expect(() => f.PlusMonths(new Date())).toThrow();
-        expect(() => f.PlusYears(new Date())).toThrow();
-        expect(() => f.PlusYears()).toThrow();
-        expect(() => f.PlusYears(new Date())).toThrow();
-        expect(() => f.NumberOfDaysBetween()).toThrow();
-        expect(() => f.NumberOfDaysBetween(new Date())).toThrow();
-        expect(() => f.IsDateBetween()).toThrow();
-        expect(() => f.IsDateBetween(new Date())).toThrow();
-        expect(() => f.IsDateBetween(new Date(), new Date())).toThrow();
-    });
-});
+describe('Date Functions', () => {
+    it('should create date from numbers', () => {
+        expect(f.Date(2011, 12, 31)).k_toBeDateEqualTo(new Date('2011-12-31'))
+        expect(f.Date('2011-12-31')).k_toBeDateEqualTo(new Date('2011-12-31'))
+        expect(() => f.Date('22011-12-31')).toThrow()
+        expect(() => f.Date(10000, 12, 31)).toThrow()
+        expect(() => f.Date(2000, 13, 31)).toThrow()
+        expect(() => f.Date(2000, 12, 33)).toThrow()
+        expect(() => f.Date(2011)).toThrow()
+        expect(() => f.Date()).toThrow()
+    })
+    it('should get day from date', () => {
+        expect(f.GetDay(f.Date('2011-12-31'))).toBe(31)
+        expect(() => f.GetDay()).toThrow()
+        // @ts-expect-error testing negative case
+        expect(() => f.GetDay(12)).toThrow()
+        // @ts-expect-error testing negative case
+        expect(() => f.GetDay('12')).toThrow()
+    })
+    it('should get month from date', () => {
+        expect(f.GetMonth(f.Date('2011-12-31'))).toBe(12)
+        expect(() => f.GetMonth()).toThrow()
+        // @ts-expect-error testing negative case
+        expect(() => f.GetMonth(12)).toThrow()
+        // @ts-expect-error testing negative case
+        expect(() => f.GetMonth('12')).toThrow()
+    })
+    it('should get year from date', () => {
+        expect(f.GetYear(f.Date('2011-12-31'))).toBe(2011)
+        expect(() => f.GetYear()).toThrow()
+        // @ts-expect-error testing negative case
+        expect(() => f.GetYear(12)).toThrow()
+        // @ts-expect-error testing negative case
+        expect(() => f.GetYear('12')).toThrow()
+    })
+    it('should get number of months between', () => {
+        expect(f.NumberOfMonthsBetween(f.Date(2011, 1, 15), f.Date(2011, 2, 15))).toBe(1)
+        expect(f.NumberOfMonthsBetween(f.Date(2011, 1, 16), f.Date(2011, 2, 15))).toBe(0)
+        expect(f.NumberOfMonthsBetween(f.Date(2011, 1, 1), f.Date(2011, 1, 31))).toBe(0)
+        expect(f.NumberOfMonthsBetween(f.Date(2011, 1, 31), f.Date(2011, 2, 1))).toBe(0)
+        expect(f.NumberOfMonthsBetween(f.Date(2012, 2, 28), f.Date(2011, 1, 31))).toBe(12)
+        expect(f.NumberOfMonthsBetween(f.Date(2011, 1, 31), f.Date(2012, 2, 28))).toBe(12)
+        // @ts-expect-error testing negative case
+        expect(() => f.NumberOfMonthsBetween(1, f.Date(2012, 1, 31))).toThrow()
+        // @ts-expect-error testing negative case
+        expect(() => f.NumberOfMonthsBetween(f.Date(2012, 1, 31), 1)).toThrow()
+        expect(() => f.NumberOfMonthsBetween(f.Date(2012, 1, 31))).toThrow()
+        expect(() => f.NumberOfMonthsBetween()).toThrow()
+    })
+    it('should get number of years between', () => {
+        expect(f.NumberOfYearsBetween(f.Date(2011, 1, 15), f.Date(2011, 2, 15))).toBe(0)
+        expect(f.NumberOfYearsBetween(f.Date(2011, 12, 31), f.Date(2012, 1, 30))).toBe(0)
+        expect(f.NumberOfYearsBetween(f.Date(2011, 10, 31), f.Date(2012, 10, 30))).toBe(0)
+        expect(f.NumberOfYearsBetween(f.Date(2010, 1, 10), f.Date(2011, 1, 1))).toBe(0)
+        expect(f.NumberOfYearsBetween(f.Date(2010, 1, 16), f.Date(2011, 1, 16))).toBe(1)
+        expect(f.NumberOfYearsBetween(f.Date(2010, 1, 16), f.Date(2011, 12, 16))).toBe(1)
+        expect(f.NumberOfYearsBetween(f.Date(2022, 1, 31), f.Date(2011, 1, 31))).toBe(11)
+        expect(f.NumberOfYearsBetween(f.Date(2011, 1, 31), f.Date(2022, 1, 31))).toBe(11)
+        // @ts-expect-error testing negative case
+        expect(() => f.NumberOfYearsBetween(1, f.Date(2012, 1, 31))).toThrow()
+        // @ts-expect-error testing negative case
+        expect(() => f.NumberOfYearsBetween(f.Date(2012, 1, 31), 1)).toThrow()
+        expect(() => f.NumberOfYearsBetween(f.Date(2012, 1, 31))).toThrow()
+        expect(() => f.NumberOfYearsBetween()).toThrow()
+    })
+    it('should format date', () => {
+        expect(f.Format(f.Date(2011, 1, 15), 'YYYY-MM-DD')).toBe('2011-01-15')
+        expect(f.Format(f.Date(2011, 1, 15), 'YY-MM-DD')).toBe('11-01-15')
+        expect(f.Format(f.Date(2011, 1, 15))).toBe('2011-01-15')
+        expect(f.Format(f.Date(2011, 1, 15), 'MM-DD-YYYY')).toBe('01-15-2011')
+        expect(f.Format(f.Date(2011, 1, 15), 'DD-MM-YYYY')).toBe('15-01-2011')
+        expect(f.Format(f.Date(2011, 1, 15), 'DD MM YYYY')).toBe('15 01 2011')
+        expect(f.Format(f.Date(2011, 1, 15), 'DD:MM:YYYY')).toBe('15:01:2011')
+        expect(f.Format(f.Date(2011, 1, 15), 'DD/MM/YYYY')).toBe('15/01/2011')
+        expect(f.Format(f.Date(2011, 1, 15), 'DD/MM-=-YYYY')).toBe('15/01-=-2011')
+        expect(() => f.Format()).toThrow()
+    })
+    it('should create date from time', () => {
+        const date = new Date(2011, 11, 11, 59, 58)
+        expect(f.AsDate(date).getMinutes()).toBe(0)
+        expect(f.AsDate(date).getHours()).toBe(0)
+    })
+    it('should create date time from date', () => {
+        const date = new Date(2011, 11, 11, 59, 58)
+        expect(f.AsTime(date).getHours()).toBe(0)
+        expect(f.AsTime(date).getMinutes()).toBe(0)
+    })
+    it('should throw on undefined parameters', () => {
+        expect(() => f.AsDate()).toThrow()
+        expect(() => f.AsTime()).toThrow()
+        expect(() => f.PlusDays()).toThrow()
+        expect(() => f.PlusDays(new Date())).toThrow()
+        expect(() => f.PlusMonths()).toThrow()
+        expect(() => f.PlusMonths(new Date())).toThrow()
+        expect(() => f.PlusYears(new Date())).toThrow()
+        expect(() => f.PlusYears()).toThrow()
+        expect(() => f.PlusYears(new Date())).toThrow()
+        expect(() => f.NumberOfDaysBetween()).toThrow()
+        expect(() => f.NumberOfDaysBetween(new Date())).toThrow()
+        expect(() => f.IsDateBetween()).toThrow()
+        expect(() => f.IsDateBetween(new Date())).toThrow()
+        expect(() => f.IsDateBetween(new Date(), new Date())).toThrow()
+    })
+    it('should change year in date', () => {
+        const date = new Date('2011-01-01')
+        expect(f.WithYear(date, 2012)).k_toBeDateEqualTo(new Date('2012-01-01'))
+
+        const dateTime = new Date('2011-01-01T01:01:01Z')
+        expect(f.WithYear(dateTime, 2012)).k_toBeDateTimeEqualTo(new Date('2012-01-01T01:01:01Z'))
+
+        const date2 = new Date('2000-02-29')
+        expect(f.WithYear(date2, 2001)).k_toBeDateEqualTo(new Date('2001-02-28'))
+
+        expect(() => f.WithYear(undefined, 2012)).toThrow()
+        expect(() => f.WithYear(date, undefined)).toThrow()
+        expect(() => f.WithYear(date, 0)).toThrow()
+        expect(() => f.WithYear(date, 10000)).toThrow()
+    })
+    it('should change month in date', () => {
+        const date = new Date('2011-01-01')
+        expect(f.WithMonth(date, 2)).k_toBeDateEqualTo(new Date('2011-02-01'))
+
+        const dateTime = new Date('2011-01-01T01:01:01Z')
+        expect(f.WithMonth(dateTime, 2)).k_toBeDateTimeEqualTo(new Date('2011-02-01T01:01:01Z'))
+
+        const date2 = new Date('2000-01-30')
+        expect(f.WithMonth(date2, 2)).k_toBeDateEqualTo(new Date('2000-02-29'))
+
+        expect(() => f.WithMonth(undefined, 2012)).toThrow()
+        expect(() => f.WithMonth(date, undefined)).toThrow()
+        expect(() => f.WithMonth(date, 0)).toThrow()
+        expect(() => f.WithMonth(date, 13)).toThrow()
+    })
+    it('should change day in date', () => {
+        const date = new Date('2011-01-01')
+        expect(f.WithDay(date, 2)).k_toBeDateEqualTo(new Date('2011-01-02'))
+
+        const dateTime = new Date('2011-01-01T01:01:01Z')
+        expect(f.WithDay(dateTime, 2)).k_toBeDateTimeEqualTo(new Date('2011-01-02T01:01:01Z'))
+
+        expect(() => f.WithDay(undefined, 2012)).toThrow()
+        expect(() => f.WithDay(date, undefined)).toThrow()
+        expect(() => f.WithDay(date, 0)).toThrow()
+        expect(() => f.WithDay(date, 32)).toThrow()
+
+        const date2 = new Date(2000, 1, 28)
+        expect(() => f.WithDay(date2, 30)).toThrow()
+    })
+    it('should add days', () => {
+        const date = new Date('2000-01-01')
+
+        expect(f.PlusDays(date, 1)).k_toBeDateEqualTo(new Date('2000-01-02'))
+        expect(f.PlusDays(date, 32)).k_toBeDateEqualTo(new Date('2000-02-02'))
+    })
+    it('should add months', () => {
+        const date = new Date('2000-01-30')
+
+        expect(f.PlusMonths(date, 1)).k_toBeDateEqualTo(new Date('2000-02-29'))
+        expect(f.PlusMonths(date, 13)).k_toBeDateEqualTo(new Date('2001-02-28'))
+    })
+    it('should add years', () => {
+        const date = new Date('2000-02-29')
+
+        expect(f.PlusYears(date, 1)).k_toBeDateEqualTo(new Date('2001-02-28'))
+        expect(f.PlusYears(date, -1)).k_toBeDateEqualTo(new Date('1999-02-28'))
+    })
+})

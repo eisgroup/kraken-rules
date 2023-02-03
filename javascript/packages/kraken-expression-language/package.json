@@ -1,36 +1,45 @@
 {
     "name": "kraken-expression-language",
-    "version": "1.20.1-autocomplete.3",
+    "version": "1.42.4-stage.0",
     "main": "./target/dist/js/src/index.js",
     "types": "./target/dist/definitions/src/index.d.ts",
+    "publishConfig": {
+        "registry": "https://genesis-npm-release.exigengroup.com/repository/genesis-npm-release/"
+    },
+    "typedocMain": "src/index.ts",
     "dependencies": {
-        "decorate-all": "^1.0.5",
-        "kraken-expression-language-visitor": "1.20.1-autocomplete.3"
+        "fast-levenshtein": "3.0.0",
+        "kraken-expression-language-visitor": "1.42.4-stage.0"
     },
     "devDependencies": {
-        "@babel/cli": "7.1.5",
+        "@types/fast-levenshtein": "0.0.2",
         "@types/jest": "26.0.22",
         "@types/node": "13.9.0",
         "declarative-js": "3.8.15",
+        "decorate-all": "1.0.5",
         "jest": "26.6.3",
-        "rimraf": "2.6.3",
+        "rimraf": "3.0.2",
         "ts-jest": "26.5.0",
         "ts-node": "4.1.0",
-        "tslint": "5.18.0",
         "typescript": "4.2.4"
     },
     "scripts": {
         "v": "tsc -v",
         "test": "jest -c jest.config.js",
         "test:coverage": "jest -c jest.config.js --coverage",
-        "lint": "tslint -c tslint.json -p tsconfig.json -t stylish",
+        "lint": "eslint src test",
         "compile": "tsc --pretty",
-        "babel": "babel target/dist/tsjs/ --out-dir target/dist/js/ --config-file ../../babel.config.js --delete-dir-on-start --ignore ./target/dist/tsjs/__tests__",
-        "babelDev": "babel target/dist/tsjs/ --out-dir target/dist/js/ --config-file ../../babel.config.js --ignore ./target/dist/tsjs/__tests__",
+        "postcompile": "yarn transpile",
+        "transpile": "echo 'no transpile'",
         "del:compiled": "rimraf target/dist && rimraf src/generated",
-        "build": "npm run compile && npm run lint && npm run test:coverage",
-        "prepare": "npm run del:compiled && npm run compile && npm run lint -- --fix && npm run test:coverage && npm run babel",
-        "release": "npm publish",
-        "p:d": "npm run compile && npm run babelDev"
-    }
+        "build": "yarn run compile && yarn run lint && yarn run test:coverage",
+        "prepare": "yarn run del:compiled && yarn run compile && yarn run lint --fix && yarn run test:coverage",
+        "release": "yarn publish",
+        "p:d": "yarn run compile && yarn run babelDev"
+    },
+    "files": [
+        "target/dist/definitions",
+        "target/dist/js"
+    ],
+    "gitHead": "6d16f79f76d6b73678a70625923b852dd9726865"
 }

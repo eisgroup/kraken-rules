@@ -18,10 +18,10 @@ package kraken.runtime.model.rule;
 
 import kraken.runtime.model.Metadata;
 import kraken.runtime.model.MetadataContainer;
+import kraken.dimensions.DimensionSet;
 import kraken.runtime.model.rule.payload.Payload;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author psurinin@eisgroup.com
@@ -35,8 +35,9 @@ public class RuntimeRule implements MetadataContainer {
     private final Condition condition;
     private final Payload payload;
     private final List<Dependency> dependencies;
-    private final boolean dimensional;
+    private final DimensionSet dimensionSet;
     private final Metadata metadata;
+    private final Integer priority;
 
     public RuntimeRule(
             String name,
@@ -45,17 +46,19 @@ public class RuntimeRule implements MetadataContainer {
             Condition condition,
             Payload payload,
             List<Dependency> dependencies,
-            boolean dimensional,
-            Metadata metadata
-            ) {
+            DimensionSet dimensionSet,
+            Metadata metadata,
+            Integer priority
+    ) {
         this.name = name;
         this.context = context;
         this.targetPath = targetPath;
         this.condition = condition;
         this.payload = payload;
+        this.dimensionSet = dimensionSet;
         this.metadata = metadata;
         this.dependencies = dependencies;
-        this.dimensional = dimensional;
+        this.priority = priority;
     }
 
     public String getName() {
@@ -82,13 +85,17 @@ public class RuntimeRule implements MetadataContainer {
         return dependencies;
     }
 
-    public boolean isDimensional() {
-        return dimensional;
+    public DimensionSet getDimensionSet() {
+        return dimensionSet;
     }
 
     @Override
     public Metadata getMetadata() {
         return metadata;
+    }
+
+    public Integer getPriority() {
+        return priority;
     }
 
     @Override

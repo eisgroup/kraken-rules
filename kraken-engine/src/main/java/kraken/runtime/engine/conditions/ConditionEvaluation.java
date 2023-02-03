@@ -28,7 +28,19 @@ import kraken.model.Rule;
  */
 @API
 public enum ConditionEvaluation {
-    APPLICABLE,
-    NOT_APPLICABLE,
-    ERROR
+
+    APPLICABLE("Applicable"),
+    NOT_APPLICABLE("Not Applicable"),
+    ERROR("Error");
+
+    private final String name;
+
+    ConditionEvaluation(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
 }

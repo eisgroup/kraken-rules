@@ -21,6 +21,7 @@ kraken.engine.sanity.check.EngineSanityLengthPayloadTest.shouldExecuteLengthAuto
             "messageCode": "code",
             "message": "String contains more charactes than 20",
             "templateVariables": [],
+            "messageTemplate": "String contains more charactes than 20",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -28,7 +29,8 @@ kraken.engine.sanity.check.EngineSanityLengthPayloadTest.shouldExecuteLengthAuto
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -53,6 +55,7 @@ kraken.engine.sanity.check.EngineSanityLengthPayloadTest.shouldExecuteLengthAuto
             "messageCode": "code",
             "message": "String contains more charactes than 20",
             "templateVariables": [],
+            "messageTemplate": "String contains more charactes than 20",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -60,7 +63,8 @@ kraken.engine.sanity.check.EngineSanityLengthPayloadTest.shouldExecuteLengthAuto
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     }
@@ -91,6 +95,7 @@ kraken.engine.sanity.check.EngineSanityLengthPayloadTest.shouldExecuteLengthAuto
             "messageCode": "code",
             "message": "String contains more charactes than 20",
             "templateVariables": [],
+            "messageTemplate": "String contains more charactes than 20",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -98,7 +103,8 @@ kraken.engine.sanity.check.EngineSanityLengthPayloadTest.shouldExecuteLengthAuto
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -123,6 +129,7 @@ kraken.engine.sanity.check.EngineSanityLengthPayloadTest.shouldExecuteLengthAuto
             "messageCode": "code",
             "message": "String contains more charactes than 20",
             "templateVariables": [],
+            "messageTemplate": "String contains more charactes than 20",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -130,7 +137,8 @@ kraken.engine.sanity.check.EngineSanityLengthPayloadTest.shouldExecuteLengthAuto
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     }
@@ -161,6 +169,7 @@ kraken.engine.sanity.check.EngineSanityLengthPayloadTest.shouldExecuteLengthAuto
             "messageCode": "code",
             "message": "String contains more charactes than 20",
             "templateVariables": [],
+            "messageTemplate": "String contains more charactes than 20",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -168,7 +177,8 @@ kraken.engine.sanity.check.EngineSanityLengthPayloadTest.shouldExecuteLengthAuto
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -193,6 +203,7 @@ kraken.engine.sanity.check.EngineSanityLengthPayloadTest.shouldExecuteLengthAuto
             "messageCode": "code",
             "message": "String contains more charactes than 20",
             "templateVariables": [],
+            "messageTemplate": "String contains more charactes than 20",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -200,7 +211,8 @@ kraken.engine.sanity.check.EngineSanityLengthPayloadTest.shouldExecuteLengthAuto
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     }
@@ -231,6 +243,7 @@ kraken.engine.sanity.check.EngineSanityLengthPayloadTest.shouldExecuteLengthAuto
             "messageCode": "code",
             "message": "String contains more charactes than 20",
             "templateVariables": [],
+            "messageTemplate": "String contains more charactes than 20",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -238,7 +251,8 @@ kraken.engine.sanity.check.EngineSanityLengthPayloadTest.shouldExecuteLengthAuto
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     },
@@ -263,6 +277,7 @@ kraken.engine.sanity.check.EngineSanityLengthPayloadTest.shouldExecuteLengthAuto
             "messageCode": "code",
             "message": "String contains more charactes than 20",
             "templateVariables": [],
+            "messageTemplate": "String contains more charactes than 20",
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -270,7 +285,8 @@ kraken.engine.sanity.check.EngineSanityLengthPayloadTest.shouldExecuteLengthAuto
           },
           "overrideInfo": {
             "isOverridable": false
-          }
+          },
+          "ruleEvaluationStatus": "APPLIED"
         }
       ]
     }

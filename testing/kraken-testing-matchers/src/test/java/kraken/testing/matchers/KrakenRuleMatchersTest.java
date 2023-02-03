@@ -15,27 +15,7 @@
  */
 package kraken.testing.matchers;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-
-import kraken.model.payload.PayloadType;
-import kraken.model.validation.ValidationSeverity;
-import kraken.runtime.engine.dto.RuleEvaluationResult;
-import kraken.runtime.engine.dto.RuleInfo;
-import kraken.runtime.engine.events.ValueChangedEvent;
-import kraken.runtime.engine.result.AccessibilityPayloadResult;
-import kraken.runtime.engine.result.DefaultValuePayloadResult;
-import kraken.runtime.engine.result.ValidationPayloadResult;
-import kraken.runtime.engine.result.VisibilityPayloadResult;
-import kraken.runtime.model.rule.payload.derive.DefaultValuePayload;
-import kraken.runtime.model.rule.payload.ui.AccessibilityPayload;
-import kraken.runtime.model.rule.payload.ui.VisibilityPayload;
-import kraken.runtime.model.rule.payload.validation.ValidationPayload;
-import org.javamoney.moneta.Money;
-import org.junit.Test;
-
+import static kraken.runtime.engine.conditions.ConditionEvaluationResult.APPLICABLE;
 import static kraken.testing.matchers.KrakenRuleMatchers.forAttribute;
 import static kraken.testing.matchers.KrakenRuleMatchers.hasNoValueChange;
 import static kraken.testing.matchers.KrakenRuleMatchers.hasValidationFailed;
@@ -44,15 +24,42 @@ import static kraken.testing.matchers.KrakenRuleMatchers.hasValueChangeTo;
 import static kraken.testing.matchers.KrakenRuleMatchers.hasValueChangeToDateTime;
 import static kraken.testing.matchers.KrakenRuleMatchers.hasValueChangeToMoneyOf;
 import static kraken.testing.matchers.KrakenRuleMatchers.isAccessible;
+import static kraken.testing.matchers.KrakenRuleMatchers.isApplied;
+import static kraken.testing.matchers.KrakenRuleMatchers.isIgnored;
 import static kraken.testing.matchers.KrakenRuleMatchers.isNotAccessible;
 import static kraken.testing.matchers.KrakenRuleMatchers.isNotVisible;
+import static kraken.testing.matchers.KrakenRuleMatchers.isSkipped;
 import static kraken.testing.matchers.KrakenRuleMatchers.isStatusCritical;
 import static kraken.testing.matchers.KrakenRuleMatchers.isStatusInfo;
 import static kraken.testing.matchers.KrakenRuleMatchers.isStatusWarning;
+import static kraken.testing.matchers.KrakenRuleMatchers.isUnused;
 import static kraken.testing.matchers.KrakenRuleMatchers.isVisible;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
+import org.javamoney.moneta.Money;
+import org.junit.Test;
+
+import kraken.model.payload.PayloadType;
+import kraken.model.validation.ValidationSeverity;
+import kraken.runtime.engine.conditions.ConditionEvaluation;
+import kraken.runtime.engine.conditions.ConditionEvaluationResult;
+import kraken.runtime.engine.dto.RuleEvaluationResult;
+import kraken.runtime.engine.dto.RuleInfo;
+import kraken.runtime.engine.events.ValueChangedEvent;
+import kraken.runtime.engine.result.AccessibilityPayloadResult;
+import kraken.runtime.engine.result.AssertionPayloadResult;
+import kraken.runtime.engine.result.DefaultValuePayloadResult;
+import kraken.runtime.engine.result.ValidationPayloadResult;
+import kraken.runtime.engine.result.VisibilityPayloadResult;
+import kraken.runtime.model.rule.payload.validation.AssertionPayload;
 
 /**
  * Unit tests for {@code KrakenRuleMatchers} class.
@@ -71,7 +78,7 @@ public class KrakenRuleMatchersTest {
         when(payloadResult.getVisible()).thenReturn(true);
 
         RuleInfo ruleInfo = rule(PayloadType.VISIBILITY);
-        RuleEvaluationResult evaluationResult = new RuleEvaluationResult(ruleInfo, payloadResult, null, null);
+        RuleEvaluationResult evaluationResult = new RuleEvaluationResult(ruleInfo, payloadResult, APPLICABLE, null);
 
         assertThat(evaluationResult, isVisible());
     }
@@ -79,7 +86,7 @@ public class KrakenRuleMatchersTest {
     @Test
     public void shouldEvaluateVisibilityMatcherToTrueNoPayload() {
         RuleInfo ruleInfo = rule(PayloadType.VISIBILITY);
-        RuleEvaluationResult evaluationResult = new RuleEvaluationResult(ruleInfo, null, null, null);
+        RuleEvaluationResult evaluationResult = new RuleEvaluationResult(ruleInfo, null, APPLICABLE, null);
 
         assertThat(evaluationResult, isVisible());
     }
@@ -90,7 +97,7 @@ public class KrakenRuleMatchersTest {
         when(payloadResult.getVisible()).thenReturn(false);
 
         RuleInfo ruleInfo = rule(PayloadType.VISIBILITY);
-        RuleEvaluationResult evaluationResult = new RuleEvaluationResult(ruleInfo, payloadResult, null, null);
+        RuleEvaluationResult evaluationResult = new RuleEvaluationResult(ruleInfo, payloadResult, APPLICABLE, null);
 
         assertThat(evaluationResult, isNotVisible());
     }
@@ -101,7 +108,7 @@ public class KrakenRuleMatchersTest {
         when(payloadResult.getAccessible()).thenReturn(true);
 
         RuleInfo ruleInfo = rule(PayloadType.ACCESSIBILITY);
-        RuleEvaluationResult evaluationResult = new RuleEvaluationResult(ruleInfo, payloadResult, null, null);
+        RuleEvaluationResult evaluationResult = new RuleEvaluationResult(ruleInfo, payloadResult, APPLICABLE, null);
 
         assertThat(evaluationResult, isAccessible());
     }
@@ -109,7 +116,7 @@ public class KrakenRuleMatchersTest {
     @Test
     public void shouldEvaluateAccessibilityMatcherToTrueNoPayload() {
         RuleInfo ruleInfo = rule(PayloadType.ACCESSIBILITY);
-        RuleEvaluationResult evaluationResult = new RuleEvaluationResult(ruleInfo, null, null, null);
+        RuleEvaluationResult evaluationResult = new RuleEvaluationResult(ruleInfo, null, APPLICABLE, null);
 
         assertThat(evaluationResult, isAccessible());
     }
@@ -120,7 +127,7 @@ public class KrakenRuleMatchersTest {
         when(payloadResult.getAccessible()).thenReturn(false);
 
         RuleInfo ruleInfo = rule(PayloadType.ACCESSIBILITY);
-        RuleEvaluationResult evaluationResult = new RuleEvaluationResult(ruleInfo, payloadResult, null, null);
+        RuleEvaluationResult evaluationResult = new RuleEvaluationResult(ruleInfo, payloadResult, APPLICABLE, null);
 
         assertThat(evaluationResult, isNotAccessible());
     }
@@ -131,15 +138,7 @@ public class KrakenRuleMatchersTest {
         when(payloadResult.getSuccess()).thenReturn(true);
 
         RuleInfo ruleInfo = rule(PayloadType.ASSERTION);
-        RuleEvaluationResult evaluationResult = new RuleEvaluationResult(ruleInfo, payloadResult, null, null);
-
-        assertThat(evaluationResult, hasValidationSucceeded());
-    }
-
-    @Test
-    public void shouldEvaluateValidationMatcherToTrueNoPayload() {
-        RuleInfo ruleInfo = rule(PayloadType.ASSERTION);
-        RuleEvaluationResult evaluationResult = new RuleEvaluationResult(ruleInfo, null, null, null);
+        RuleEvaluationResult evaluationResult = new RuleEvaluationResult(ruleInfo, payloadResult, APPLICABLE, null);
 
         assertThat(evaluationResult, hasValidationSucceeded());
     }
@@ -150,7 +149,7 @@ public class KrakenRuleMatchersTest {
         when(payloadResult.getSuccess()).thenReturn(false);
 
         RuleInfo ruleInfo = rule(PayloadType.ASSERTION);
-        RuleEvaluationResult evaluationResult = new RuleEvaluationResult(ruleInfo, payloadResult, null, null);
+        RuleEvaluationResult evaluationResult = new RuleEvaluationResult(ruleInfo, payloadResult, APPLICABLE, null);
 
         assertThat(evaluationResult, hasValidationFailed());
     }
@@ -161,7 +160,7 @@ public class KrakenRuleMatchersTest {
         when(payloadResult.getValidationSeverity()).thenReturn(ValidationSeverity.info);
 
         RuleInfo ruleInfo = rule(PayloadType.ASSERTION);
-        RuleEvaluationResult evaluationResult = new RuleEvaluationResult(ruleInfo, payloadResult, null, null);
+        RuleEvaluationResult evaluationResult = new RuleEvaluationResult(ruleInfo, payloadResult, APPLICABLE, null);
 
         assertThat(evaluationResult, isStatusInfo());
     }
@@ -172,7 +171,7 @@ public class KrakenRuleMatchersTest {
         when(payloadResult.getValidationSeverity()).thenReturn(ValidationSeverity.warning);
 
         RuleInfo ruleInfo = rule(PayloadType.ASSERTION);
-        RuleEvaluationResult evaluationResult = new RuleEvaluationResult(ruleInfo, payloadResult, null, null);
+        RuleEvaluationResult evaluationResult = new RuleEvaluationResult(ruleInfo, payloadResult, APPLICABLE, null);
 
         assertThat(evaluationResult, isStatusWarning());
     }
@@ -183,7 +182,7 @@ public class KrakenRuleMatchersTest {
         when(payloadResult.getValidationSeverity()).thenReturn(ValidationSeverity.critical);
 
         RuleInfo ruleInfo = rule(PayloadType.ASSERTION);
-        RuleEvaluationResult evaluationResult = new RuleEvaluationResult(ruleInfo, payloadResult, null, null);
+        RuleEvaluationResult evaluationResult = new RuleEvaluationResult(ruleInfo, payloadResult, APPLICABLE, null);
 
         assertThat(evaluationResult, isStatusCritical());
     }
@@ -191,7 +190,7 @@ public class KrakenRuleMatchersTest {
     @Test
     public void shouldEvaluateAttributeMatcher() {
         RuleInfo ruleInfo = rule(PayloadType.DEFAULT);
-        RuleEvaluationResult evaluationResult = new RuleEvaluationResult(ruleInfo, null, null, null);
+        RuleEvaluationResult evaluationResult = new RuleEvaluationResult(ruleInfo, null, APPLICABLE, null);
 
         assertThat(evaluationResult, forAttribute(TARGET_PATH));
     }
@@ -208,7 +207,7 @@ public class KrakenRuleMatchersTest {
         when(payloadResult.getEvents()).thenReturn(List.of(valueChangedEvent));
 
         RuleInfo ruleInfo = rule(PayloadType.DEFAULT);
-        RuleEvaluationResult evaluationResult = new RuleEvaluationResult(ruleInfo, payloadResult, null, null);
+        RuleEvaluationResult evaluationResult = new RuleEvaluationResult(ruleInfo, payloadResult, APPLICABLE, null);
 
         assertThat(evaluationResult, hasValueChangeTo(changeValue));
     }
@@ -225,7 +224,7 @@ public class KrakenRuleMatchersTest {
         when(payloadResult.getEvents()).thenReturn(List.of(valueChangedEvent));
 
         RuleInfo ruleInfo = rule(PayloadType.DEFAULT);
-        RuleEvaluationResult evaluationResult = new RuleEvaluationResult(ruleInfo, payloadResult, null, null);
+        RuleEvaluationResult evaluationResult = new RuleEvaluationResult(ruleInfo, payloadResult, APPLICABLE, null);
 
         assertThat(evaluationResult, hasValueChangeToDateTime(LocalDateTime.now().toLocalDate()));
     }
@@ -242,7 +241,7 @@ public class KrakenRuleMatchersTest {
         when(payloadResult.getEvents()).thenReturn(List.of(valueChangedEvent));
 
         RuleInfo ruleInfo = rule(PayloadType.DEFAULT);
-        RuleEvaluationResult evaluationResult = new RuleEvaluationResult(ruleInfo, payloadResult, null, null);
+        RuleEvaluationResult evaluationResult = new RuleEvaluationResult(ruleInfo, payloadResult, APPLICABLE, null);
 
         assertThat(evaluationResult, hasValueChangeToMoneyOf(BigDecimal.TEN));
     }
@@ -256,7 +255,7 @@ public class KrakenRuleMatchersTest {
         when(payloadResult.getEvents()).thenReturn(List.of(valueChangedEvent));
 
         RuleInfo ruleInfo = rule(PayloadType.DEFAULT);
-        RuleEvaluationResult evaluationResult = new RuleEvaluationResult(ruleInfo, payloadResult, null, null);
+        RuleEvaluationResult evaluationResult = new RuleEvaluationResult(ruleInfo, payloadResult, APPLICABLE, null);
 
         assertThat(evaluationResult, hasNoValueChange());
     }
@@ -268,10 +267,99 @@ public class KrakenRuleMatchersTest {
         when(payloadResult.getEvents()).thenReturn(List.of());
 
         RuleInfo ruleInfo = rule(PayloadType.DEFAULT);
-        RuleEvaluationResult evaluationResult = new RuleEvaluationResult(ruleInfo, payloadResult, null, null);
+        RuleEvaluationResult evaluationResult = new RuleEvaluationResult(ruleInfo, payloadResult, APPLICABLE, null);
 
         assertThat(evaluationResult, hasNoValueChange());
     }
+
+    @Test
+    public void shouldCorrectlyEvaluateWhetherRuleIsUnused() {
+        // No result
+        assertThat(null, isUnused());
+
+        // Negative case
+        RuleEvaluationResult evaluationResult = new RuleEvaluationResult(
+            rule(PayloadType.DEFAULT),
+            null,
+            new ConditionEvaluationResult(ConditionEvaluation.APPLICABLE),
+            null);
+
+        assertThat(evaluationResult, not(isUnused()));
+    }
+
+    @Test
+    public void shouldCorrectlyEvaluateWhetherRuleIsIgnored() {
+        AssertionPayload payloadResult = mock(AssertionPayload.class);
+        when(payloadResult.getSeverity()).thenReturn(ValidationSeverity.critical);
+
+        // Condition evaluation error
+        RuleEvaluationResult evaluationResult = new RuleEvaluationResult(
+            rule(PayloadType.DEFAULT),
+            null,
+            new ConditionEvaluationResult(new RuntimeException()),
+            null);
+
+        assertThat(evaluationResult, isIgnored());
+
+        // Payload error
+        evaluationResult = new RuleEvaluationResult(
+            rule(PayloadType.DEFAULT),
+            new AssertionPayloadResult(new RuntimeException(),
+                 payloadResult),
+            new ConditionEvaluationResult(ConditionEvaluation.APPLICABLE),
+            null);
+
+        assertThat(evaluationResult, isIgnored());
+
+        // Negative case
+        evaluationResult = new RuleEvaluationResult(
+            rule(PayloadType.DEFAULT),
+            new AssertionPayloadResult(true, payloadResult, List.of()),
+            new ConditionEvaluationResult(ConditionEvaluation.APPLICABLE),
+            null);
+
+        assertThat(evaluationResult, not(isIgnored()));
+    }
+
+    @Test
+    public void shouldCorrectlyEvaluateWhetherRuleIsSkipped() {
+        AssertionPayload payloadResult = mock(AssertionPayload.class);
+        when(payloadResult.getSeverity()).thenReturn(ValidationSeverity.critical);
+
+        // Condition does not evaluate to true
+        RuleEvaluationResult evaluationResult = new RuleEvaluationResult(
+            rule(PayloadType.DEFAULT),
+            new AssertionPayloadResult(true, payloadResult, List.of()),
+            new ConditionEvaluationResult(ConditionEvaluation.NOT_APPLICABLE),
+            null);
+
+        assertThat(evaluationResult, isSkipped());
+
+        // Negative case
+        evaluationResult = new RuleEvaluationResult(
+            rule(PayloadType.DEFAULT),
+            new AssertionPayloadResult(true, payloadResult, List.of()),
+            new ConditionEvaluationResult(ConditionEvaluation.APPLICABLE),
+            null);
+
+        assertThat(evaluationResult, not(isSkipped()));
+    }
+
+    @Test
+    public void shouldCorrectlyEvaluateWhetherRuleIsApplied() {
+        AssertionPayload payloadResult = mock(AssertionPayload.class);
+        when(payloadResult.getSeverity()).thenReturn(ValidationSeverity.critical);
+
+        // Condition does not evaluate to true
+        RuleEvaluationResult evaluationResult = new RuleEvaluationResult(
+            rule(PayloadType.DEFAULT),
+            new AssertionPayloadResult(true, payloadResult, List.of()),
+            new ConditionEvaluationResult(ConditionEvaluation.APPLICABLE),
+            null);
+
+        assertThat(evaluationResult, isApplied());
+    }
+
 
     private RuleInfo rule(PayloadType payloadType) {
         return new RuleInfo(RULE_NAME, "Context", TARGET_PATH, payloadType);

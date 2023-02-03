@@ -14,22 +14,22 @@
  *  limitations under the License.
  */
 
-import { RulePayloadHandler } from "./RulePayloadHandler";
-import { AccessibilityPayloadResult, PayloadResultType } from "../results/PayloadResult";
-import { Payloads } from "kraken-model";
-import PayloadType = Payloads.PayloadType;
-import AccessibilityPayload = Payloads.UI.AccessibilityPayload;
+import { RulePayloadHandler } from './RulePayloadHandler'
+import { AccessibilityPayloadResult, PayloadResultType } from 'kraken-engine-api'
+import { Payloads } from 'kraken-model'
+import PayloadType = Payloads.PayloadType
+import AccessibilityPayload = Payloads.UI.AccessibilityPayload
 
 class AccessibilityPayloadHandler implements RulePayloadHandler {
     handlesPayloadType(): PayloadType {
-        return PayloadType.ACCESSIBILITY;
+        return PayloadType.ACCESSIBILITY
     }
     executePayload(payload: AccessibilityPayload): AccessibilityPayloadResult {
         return {
             type: PayloadResultType.ACCESSIBILITY,
-            accessible: payload.accessible
-        };
+            accessible: payload.accessible,
+        }
     }
 }
 
-export const accessibilityPayloadHandler = new AccessibilityPayloadHandler();
+export const accessibilityPayloadHandler = new AccessibilityPayloadHandler()

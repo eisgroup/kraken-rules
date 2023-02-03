@@ -31,62 +31,67 @@ public class DSLModel {
     /**
      * All contexts defined at root level as loose Context declarations
      */
-    private List<DSLContext> contexts;
+    private final List<DSLContext> contexts;
 
     /**
      * All entry points defined at root level as loose EntryPoint declarations
      */
-    private List<DSLEntryPoint> entryPoints;
+    private final List<DSLEntryPoint> entryPoints;
 
     /**
      * All rules defined at root level as loose Rule declarations
      */
-    private List<DSLRule> rules;
+    private final List<DSLRule> rules;
 
     /**
      * All Contexts scope blocks
      */
-    private List<DSLContexts> contextBlocks;
+    private final List<DSLContexts> contextBlocks;
 
     /**
      * External context bound to this model.
      */
-    private DSLExternalContext externalContext;
+    private final DSLExternalContext externalContext;
 
     /**
      * All external context definitions.
      */
-    private List<DSLExternalContextDefinition> externalContextDefinitions;
+    private final List<DSLExternalContextDefinition> externalContextDefinitions;
 
     /**
      * All EntryPoints scope blocks
      */
-    private List<DSLEntryPoints> entryPointBlocks;
+    private final List<DSLEntryPoints> entryPointBlocks;
 
     /**
      * All Rules scope blocks
      */
-    private List<DSLRules> ruleBlocks;
+    private final List<DSLRules> ruleBlocks;
 
     /**
      * Namespace name for this DSL model.
      */
-    private String namespace;
+    private final String namespace;
 
     /**
      * Namespace includes of other namespaces for this DSL model.
      */
-    private List<String> includes;
+    private final List<String> includes;
 
     /**
      * Rule imports from other namespaces for this DSL model.
      */
-    private List<DSLImportReference> ruleImports;
+    private final List<DSLImportReference> ruleImports;
 
     /**
-     * A list of function declarations
+     * A list of function signature declarations
      */
-    private List<DSLFunction> functions;
+    private final List<DSLFunctionSignature> functionSignatures;
+
+    /**
+     * A list of DSL function implementations
+     */
+    private final List<DSLFunction> functions;
 
     public DSLModel(List<DSLContext> contexts,
                     List<DSLEntryPoint> entryPoints,
@@ -99,6 +104,7 @@ public class DSLModel {
                     List<DSLImportReference> ruleImports,
                     DSLExternalContext externalContext,
                     List<DSLExternalContextDefinition> externalContextDefinitions,
+                    List<DSLFunctionSignature> functionSignatures,
                     List<DSLFunction> functions) {
         this.externalContext = externalContext;
         this.externalContextDefinitions = externalContextDefinitions;
@@ -112,6 +118,7 @@ public class DSLModel {
         this.namespace = namespace;
         this.includes = Objects.requireNonNull(includes);
         this.ruleImports = Objects.requireNonNull(ruleImports);
+        this.functionSignatures = Objects.requireNonNull(functionSignatures);
         this.functions = Objects.requireNonNull(functions);
     }
 
@@ -157,6 +164,10 @@ public class DSLModel {
 
     public List<DSLImportReference> getRuleImports() {
         return Collections.unmodifiableList(ruleImports);
+    }
+
+    public List<DSLFunctionSignature> getFunctionSignatures() {
+        return Collections.unmodifiableList(functionSignatures);
     }
 
     public List<DSLFunction> getFunctions() {

@@ -19,12 +19,14 @@ import kraken.model.payload.PayloadType;
 import kraken.runtime.EvaluationSession;
 import kraken.runtime.engine.RulePayloadHandler;
 import kraken.runtime.engine.context.data.DataContext;
+import kraken.runtime.engine.handlers.trace.LengthPayloadEvaluatedOperation;
 import kraken.runtime.engine.result.LengthPayloadResult;
 import kraken.runtime.engine.result.PayloadResult;
 import kraken.runtime.expressions.KrakenExpressionEvaluator;
 import kraken.runtime.model.rule.RuntimeRule;
 import kraken.runtime.model.rule.payload.Payload;
 import kraken.runtime.model.rule.payload.validation.LengthPayload;
+import kraken.tracer.Tracer;
 
 import static kraken.runtime.utils.TargetPathUtils.resolveTargetPath;
 
@@ -59,6 +61,8 @@ public class LengthPayloadHandler implements RulePayloadHandler {
                 ? ((String) target).length() <= lengthPayload.getLength()
                 : true;
         List<String> templateVariables = evaluator.evaluateTemplateVariables(lengthPayload.getErrorMessage(), dataContext, session);
+
+        Tracer.doOperation(new LengthPayloadEvaluatedOperation(lengthPayload, target, success));
         return new LengthPayloadResult(success, lengthPayload, templateVariables);
     }
 

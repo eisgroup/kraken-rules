@@ -16,6 +16,7 @@
 
 package kraken.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,7 @@ import java.util.stream.Stream;
 
 import org.springframework.http.ResponseEntity;
 
+import kraken.model.dimensions.DimensionSetService;
 import kraken.model.EntryPointName;
 import kraken.model.Rule;
 import kraken.model.dsl.KrakenDSLModelParser;
@@ -34,6 +36,7 @@ import kraken.model.project.ResourceKrakenProject;
 import kraken.model.project.validator.KrakenProjectValidationService;
 import kraken.model.project.validator.ValidationMessage;
 import kraken.model.resource.Resource;
+import kraken.runtime.repository.dynamic.DynamicRuleHolder;
 import kraken.runtime.repository.dynamic.DynamicRuleRepository;
 
 public class ReloadableRepository implements DynamicRuleRepository {
@@ -42,34 +45,45 @@ public class ReloadableRepository implements DynamicRuleRepository {
     private final ReloadableStorage storage;
     private final KrakenProjectValidationService krakenProjectValidationService;
 
-    public ReloadableRepository(
-            ReloadableStorage storage,
-            ResourceKrakenProject baseKrakenProject
-    ) {
+    public ReloadableRepository(ReloadableStorage storage, ResourceKrakenProject baseKrakenProject) {
         this.storage = storage;
         this.baseKrakenProject = baseKrakenProject;
         this.krakenProjectValidationService = new KrakenProjectValidationService();
     }
 
     @Override
-    public Stream<Rule> resolveRules(String namespace, String entryPoint, Map<String, Object> context) {
-        final var ruleNames = storage.getEntryPoints()
-                .filter(ep -> ep.getName().equals(entryPoint))
-                .findFirst()
-                .map(EntryPoint::getRuleNames)
-                .orElse(List.of());
+    public Stream<DynamicRuleHolder> resolveDynamicRules(String namespace,
+                                                         String entryPoint,
+                                                         Map<String, Object> context) {
+
+        // builds DimensionSetService by merging all base and stored entry points and rules
+        // so that DimensionSet can be accurately calculated
+        List<EntryPoint> mergedEntryPoints = new ArrayList<>(baseKrakenProject.getEntryPoints());
+        mergedEntryPoints.addAll(storage.getEntryPoints().collect(Collectors.toList()));
+        List<Rule> mergedRules = new ArrayList<>(baseKrakenProject.getRules());
+        mergedRules.addAll(storage.getRules().collect(Collectors.toList()));
+        KrakenProject mergedKrakenProject = baseKrakenProject.with(mergedEntryPoints, mergedRules);
+        DimensionSetService dimensionSetService = new DimensionSetService(mergedKrakenProject);
+
+        var ruleNames = storage.getEntryPoints()
+            .filter(ep -> ep.getName().equals(entryPoint))
+            .findFirst()
+            .map(EntryPoint::getRuleNames)
+            .orElse(List.of());
+
         return storage.getRules()
-                .filter(rule -> ruleNames.contains(rule.getName()));
+            .filter(rule -> ruleNames.contains(rule.getName()))
+            .map(rule -> new DynamicRuleHolder(rule, dimensionSetService.resolveRuleDimensionSet(namespace, rule)));
     }
 
     public Return addRules(EntryPointName entryPointName, String rulesDsl) {
-        final Resource resource = KrakenDSLModelParser.parseResource(rulesDsl);
+        Resource resource = KrakenDSLModelParser.parseResource(rulesDsl);
 
         List<EntryPoint> entryPoints = storage.getEntryPoints().collect(Collectors.toList());
         List<Rule> rules = Stream.concat(storage.getRules(), resource.getRules().stream()).collect(Collectors.toList());
 
-        final ResourceKrakenProject krakenProject = baseKrakenProject.with(entryPoints, rules);
-        final List<ValidationMessage> validationMessages = krakenProjectValidationService
+        ResourceKrakenProject krakenProject = baseKrakenProject.with(entryPoints, rules);
+        List<ValidationMessage> validationMessages = krakenProjectValidationService
                 .validateRulesAndEntryPoints(krakenProject)
                 .getErrors();
         if (!validationMessages.isEmpty()) {

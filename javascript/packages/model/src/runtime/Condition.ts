@@ -14,8 +14,8 @@
  *  limitations under the License.
  */
 
-import { Expressions } from "./Expressions";
+import { Expressions } from './Expressions'
 
 export interface Condition {
-    expression: Expressions.Expression;
+    expression: Expressions.Expression
 }

@@ -32,7 +32,7 @@ import static io.github.jsonSnapshot.SnapshotMatcher.validateSnapshots;
 import static kraken.testing.matchers.KrakenMatchers.hasRuleResults;
 import static kraken.testing.matchers.KrakenMatchers.hasValidationFailures;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public final class EngineSanityLengthPayloadTest extends SanityEngineBaseTest {
 

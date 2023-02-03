@@ -16,10 +16,12 @@
 
 package kraken.runtime.model.entrypoint;
 
+import kraken.dimensions.DimensionSet;
 import kraken.runtime.model.Metadata;
 import kraken.runtime.model.MetadataContainer;
 
 import java.util.Collection;
+import java.util.Set;
 
 /**
  * @author psurinin@eisgroup.com
@@ -29,17 +31,19 @@ public class RuntimeEntryPoint implements MetadataContainer {
     private final String name;
     private final Collection<String> ruleNames;
     private final Collection<String> includedEntryPoints;
+    private final DimensionSet dimensionSet;
     private final Metadata metadata;
 
     public RuntimeEntryPoint(
             String name,
             Collection<String> ruleNames,
             Collection<String> includedEntryPoints,
-            Metadata metadata
-    ) {
+            Metadata metadata,
+            DimensionSet dimensionSet) {
         this.name = name;
         this.ruleNames = ruleNames;
         this.includedEntryPoints = includedEntryPoints;
+        this.dimensionSet = dimensionSet;
         this.metadata = metadata;
     }
 
@@ -53,6 +57,10 @@ public class RuntimeEntryPoint implements MetadataContainer {
 
     public Collection<String> getIncludedEntryPoints() {
         return includedEntryPoints;
+    }
+
+    public DimensionSet getDimensionSet() {
+        return dimensionSet;
     }
 
     @Override

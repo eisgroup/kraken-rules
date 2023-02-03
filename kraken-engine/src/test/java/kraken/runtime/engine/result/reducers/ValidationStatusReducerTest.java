@@ -15,13 +15,27 @@
  */
 package kraken.runtime.engine.result.reducers;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.core.IsEqual.equalTo;
+
+import java.text.MessageFormat;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import kraken.TestRuleBuilder;
+import kraken.el.ast.Ast;
+import kraken.el.ast.builder.AstBuilder;
+import kraken.el.scope.Scope;
 import kraken.model.validation.UsageType;
 import kraken.model.validation.ValidationSeverity;
 import kraken.runtime.engine.EntryPointResult;
@@ -37,15 +51,11 @@ import kraken.runtime.engine.result.reducers.validation.RuleOverrideStatusResolv
 import kraken.runtime.engine.result.reducers.validation.ValidationResult;
 import kraken.runtime.engine.result.reducers.validation.ValidationStatus;
 import kraken.runtime.engine.result.reducers.validation.ValidationStatusReducer;
+import kraken.runtime.model.expression.CompiledExpression;
+import kraken.runtime.model.expression.ExpressionType;
 import kraken.runtime.model.rule.RuntimeRule;
+import kraken.runtime.model.rule.payload.validation.ErrorMessage;
 import kraken.runtime.model.rule.payload.validation.UsagePayload;
-import org.junit.Before;
-import org.junit.Test;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.hasSize;
 
 public class ValidationStatusReducerTest {
 
@@ -131,7 +141,7 @@ public class ValidationStatusReducerTest {
     }
 
     @Test
-    public void shouldTAkeFieldPathAndNameFromRule() {
+    public void shouldTakeFieldPathAndNameFromRule() {
         EntryPointResult entryPointResult = entryPointResult(
                 rule("R01", ValidationSeverity.critical)
         );
@@ -141,7 +151,7 @@ public class ValidationStatusReducerTest {
     }
 
     @Test
-    public void shouldTAkeFieldPathAndNameFromProjection() {
+    public void shouldTakeFieldPathAndNameFromProjection() {
         EntryPointResult entryPointResult = entryPointResult(
                 "policy.details.number",
                 rule("R01", ValidationSeverity.critical)
@@ -150,6 +160,24 @@ public class ValidationStatusReducerTest {
         final ValidationStatus validationStatus = new ValidationStatusReducer().reduce(entryPointResult);
         assertThat(validationStatus.getErrorResults().get(0).getContextFieldInfo().getFieldName(), is("policyNo"));
         assertThat(validationStatus.getErrorResults().get(0).getContextFieldInfo().getFieldPath(), is("policy.details.number"));
+    }
+
+    @Test
+    public void shouldReduceMessageWithEscapedMessageFormatSymbols() {
+        String VALIDATION_MESSAGE = "Policy's data is duplicated because 'number': 'No01' is already { present }";
+        EntryPointResult entryPointResult = entryPointResult(ruleWithErrorMessage("R01", ValidationSeverity.critical,
+            createErrorMessage(List.of("Policy's data is duplicated because 'number': '", "' is already { present }"),
+                "No01")));
+
+        final ValidationStatus validationStatus = new ValidationStatusReducer().reduce(entryPointResult);
+        ValidationResult result = validationStatus.getErrorResults().get(0);
+        assertThat(result.getMessageCode(), equalTo("code"));
+        assertThat(result.getMessage(), equalTo(VALIDATION_MESSAGE));
+        assertThat(result.getMessageTemplate(),
+            equalTo("Policy''s data is duplicated because ''number'': ''{0}'' is already '{' present '}'"));
+
+        String formatted = MessageFormat.format(result.getMessageTemplate(), "No01");
+        assertThat(formatted, equalTo(VALIDATION_MESSAGE));
     }
 
     private EntryPointResult entryPointResult(String fieldPath, RuntimeRule...rules) {
@@ -169,7 +197,8 @@ public class ValidationStatusReducerTest {
 
     private RuleEvaluationResult evaluationResult(RuntimeRule rule){
         return new RuleEvaluationResult(
-                new RuleInfo(rule.getName(),
+                new RuleInfo(
+                        rule.getName(),
                         rule.getContext(),
                         rule.getTargetPath(),
                         rule.getPayload().getType()
@@ -177,13 +206,18 @@ public class ValidationStatusReducerTest {
                 new UsagePayloadResult(
                         false,
                         (UsagePayload) rule.getPayload(),
-                        List.of()
+                        ((UsagePayload) rule.getPayload()).getErrorMessage() != null
+                            ? ((UsagePayload) rule.getPayload()).getErrorMessage().getTemplateExpressions().stream()
+                                .map(CompiledExpression::getExpressionString)
+                                .collect(Collectors.toList())
+                            : List.of()
                 ),
                 ConditionEvaluationResult.APPLICABLE,
                 new OverrideInfo(
                         ((UsagePayload) rule.getPayload()).isOverridable(),
                         ((UsagePayload) rule.getPayload()).getOverrideGroup(),
                         new OverridableRuleContextInfo(
+                                "Policy",
                                 "contextId01",
                                 "contextId01",
                                 "Policy",
@@ -193,6 +227,28 @@ public class ValidationStatusReducerTest {
                         )
                 )
         );
+    }
+
+    private ErrorMessage createErrorMessage(List<String> templateParts, String expression) {
+        List<CompiledExpression> templateExpressions = new ArrayList<>();
+        Ast ast = AstBuilder.from(expression, Scope.dynamic());
+        templateExpressions.add(new CompiledExpression(expression, ExpressionType.COMPLEX, null, null, List.of(), ast));
+        return new ErrorMessage("code", templateParts, templateExpressions);
+    }
+
+    private RuntimeRule ruleWithErrorMessage(String name, ValidationSeverity severity, ErrorMessage message){
+        return TestRuleBuilder.getInstance().payload(
+                new UsagePayload(
+                    message,
+                    severity,
+                    true,
+                    null,
+                    UsageType.mandatory
+                )
+            )
+            .targetPath("policyNo")
+            .name(name)
+            .build();
     }
 
     private RuntimeRule rule(String name, ValidationSeverity severity){

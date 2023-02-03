@@ -19,7 +19,7 @@
  */
 
 export interface DataErrorDefinition {
-    message: string;
+    message: string
 }
 
 export interface DataObjectInfoResolver {
@@ -29,19 +29,19 @@ export interface DataObjectInfoResolver {
      * @param data  data object instance for context
      * @return      context definition name
      */
-    resolveName: (data: object) => string;
+    resolveName: (data: object) => string
     /**
      * Resolve context instance id string from specified data object instance
      *
      * @param data  data object instance for context
      * @return      context instance id string
      */
-    resolveId: (data: object) => string;
+    resolveId: (data: object) => string
     /**
      * Validates if supplied data object is supported by this resolver implementation
      *
      * @param data  data object instance for context
      * @return      an array of error definitions
      */
-    validate: (data: object) => DataErrorDefinition[];
+    validate: (data: object) => DataErrorDefinition[]
 }

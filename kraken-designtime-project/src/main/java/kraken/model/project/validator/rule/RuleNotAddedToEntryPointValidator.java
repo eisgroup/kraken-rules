@@ -27,7 +27,7 @@ import kraken.model.project.validator.ValidationSession;
 /**
  * @author mulevicius
  */
-public class RuleNotAddedToEntryPointValidator {
+public class RuleNotAddedToEntryPointValidator implements RuleValidator {
 
     private final Set<String> allAddedRules;
 
@@ -37,16 +37,21 @@ public class RuleNotAddedToEntryPointValidator {
             .collect(Collectors.toSet());
     }
 
+    @Override
     public void validate(Rule rule, ValidationSession session) {
-        String template = "Rule '%s' is not added to any entry point.";
+        String template = "is not added to any entry point.";
 
         if(!allAddedRules.contains(rule.getName())) {
             session.add(new ValidationMessage(
                 rule,
-                String.format(template, rule.getName()),
+                template,
                 Severity.WARNING
             ));
         }
     }
 
+    @Override
+    public boolean canValidate(Rule rule) {
+        return rule.getName() != null;
+    }
 }

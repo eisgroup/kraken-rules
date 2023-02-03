@@ -40,9 +40,4 @@ public interface ExpressionLanguageFactory {
      */
     String getName();
 
-    /**
-     * @return indicates if this evaluator is a primary evaluator for {@link TargetEnvironment}
-     */
-    boolean isPrimary();
-
 }

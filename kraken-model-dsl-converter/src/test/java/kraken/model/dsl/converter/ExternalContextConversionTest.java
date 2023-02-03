@@ -88,6 +88,58 @@ public class ExternalContextConversionTest {
                         "}" + SEPARATOR, convertedString);
     }
 
+    @Test
+    public void shouldConvertExternalContextsWithContext() {
+        Map<String, ExternalContextDefinition> contextDefExternal = new HashMap<>();
+        contextDefExternal.put("next", createExternalContextDefinition("NextPolicyProjection"));
+        contextDefExternal.put("prev", createExternalContextDefinition("PreviousPolicyProjection"));
+
+        ExternalContext contextExternal = createExternalContext(null, contextDefExternal);
+
+        Map<String, ExternalContext> external = new HashMap<>();
+        external.put("external", contextExternal);
+
+        Map<String, ExternalContextDefinition> contextDefSecurity = new HashMap<>();
+        contextDefSecurity.put("security", createExternalContextDefinition("SecurityContext"));
+
+        ExternalContext context = createExternalContext(external, contextDefSecurity);
+
+        Map<String, ExternalContext> contextMap = new HashMap<>();
+        contextMap.put("context", context);
+
+        ExternalContext externalContext = createExternalContext(contextMap,Map.of());
+
+        String convertedString = convert(externalContext);
+
+        assertEquals(
+                "ExternalContext {" + SEPARATOR +
+                        "    context: {" + SEPARATOR +
+                        "        external: {" + SEPARATOR +
+                        "            next: NextPolicyProjection," + SEPARATOR +
+                        "            prev: PreviousPolicyProjection" + SEPARATOR +
+                        "        }," + SEPARATOR +
+                        "        security: SecurityContext" + SEPARATOR +
+                        "    }" + SEPARATOR +
+                        "}" + SEPARATOR, convertedString);
+    }
+
+    @Test
+    public void shouldConvertExternalContextsWithData() {
+        Map<String, ExternalContextDefinition> parentBounded = new HashMap<>();
+        parentBounded.put("previous", createExternalContextDefinition("PreviousPolicyProjection"));
+        parentBounded.put("security", createExternalContextDefinition("SecurityContext"));
+
+        ExternalContext parent = createExternalContext(Map.of(), parentBounded);
+
+        String convertedString = convert(parent);
+
+        assertEquals(
+                "ExternalContext {" + SEPARATOR +
+                        "    security: SecurityContext," + SEPARATOR +
+                        "    previous: PreviousPolicyProjection" + SEPARATOR +
+                        "}" + SEPARATOR, convertedString);
+    }
+
     private String convert(ExternalContext externalContext) {
         return converter.convert(ResourceBuilder.getInstance()
                 .setExternalContext(externalContext)

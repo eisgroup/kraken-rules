@@ -14,8 +14,8 @@
  *  limitations under the License.
  */
 
-import { PathToNode } from "./PathToNode";
-import { Contexts } from "kraken-model";
+import { PathToNode } from './PathToNode'
+import { Contexts } from 'kraken-model'
 
 /**
  * Reference to the Context instance from root
@@ -25,9 +25,9 @@ export interface ContextReference {
     /**
      * Path from root
      */
-    path: PathToNode;
+    path: PathToNode
     /**
      * Cardinality of reference
      */
-    cardinality: Contexts.Cardinality;
+    cardinality: Contexts.Cardinality
 }

@@ -32,18 +32,17 @@ public interface ExpressionLanguage {
      * @param ast of Kraken Expression Language
      * @return translated expression
      */
-    String translate(Ast ast);
-    
+    Expression translate(Ast ast);
+
     /**
      * Evaluates expression on provided data object
      *
      * @param expression
-     * @param dataObject
-     * @param vars
+     * @param evaluationContext
      * @return evaluated result
      * @throws ExpressionEvaluationException
      */
-    Object evaluate(String expression, Object dataObject, Map<String, Object> vars) throws ExpressionEvaluationException;
+    Object evaluate(Expression expression, EvaluationContext evaluationContext) throws ExpressionEvaluationException;
 
     /**
      * Evaluates set expression which sets value in data object by path expression

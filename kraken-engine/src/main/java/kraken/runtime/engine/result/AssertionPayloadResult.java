@@ -26,14 +26,6 @@ public class AssertionPayloadResult extends ValidationPayloadResult implements E
 
     private Exception exception;
 
-    /**
-     * @deprecated use {@link #AssertionPayloadResult(Boolean, AssertionPayload, List)} instead.
-     */
-    @Deprecated(since = "1.14.0", forRemoval = true)
-    public AssertionPayloadResult(Boolean success, AssertionPayload payload) {
-        super(success, payload, List.of());
-    }
-
     public AssertionPayloadResult(Boolean success, AssertionPayload payload, List<String> templateVariables) {
         super(success, payload, templateVariables);
     }

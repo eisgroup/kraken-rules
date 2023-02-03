@@ -15,15 +15,15 @@
  */
 package kraken.model.dsl.error;
 
-import kraken.model.dsl.KrakenDSLModelParser;
+import java.util.List;
+
 import org.antlr.v4.runtime.DefaultErrorStrategy;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 
-import java.text.MessageFormat;
-import java.util.List;
+import kraken.model.dsl.KrakenDSLModelParser;
 
 /**
  * Custom Error handling strategy for {@link KrakenDSLModelParser}.
@@ -32,12 +32,14 @@ import java.util.List;
  *
  * @author avasiliauskas
  */
-public class DSLErrorStrategy extends DefaultErrorStrategy {
+public class DslErrorStrategy extends DefaultErrorStrategy {
+
+    private final ParseErrorHandler defaultErrorHandler = new DefaultParseErrorHandler();
 
     private final List<ParseErrorHandler> errorHandlerList;
 
-    public DSLErrorStrategy(List<ParseErrorHandler> errorHandlerList) {
-        this.errorHandlerList = errorHandlerList;
+    public DslErrorStrategy() {
+        this.errorHandlerList = List.of(new RuleBodyParseErrorHandler());
     }
 
     /**
@@ -49,13 +51,22 @@ public class DSLErrorStrategy extends DefaultErrorStrategy {
         throw new LineParseCancellationException(
                 errorMessage(recognizer, e.getOffendingToken()),
                 e.getOffendingToken().getLine(),
-                e.getOffendingToken().getCharPositionInLine() + 1,
+                e.getOffendingToken().getCharPositionInLine(),
                 e
         );
     }
 
     @Override
-    public void sync(Parser recognizer) {
+    public Token recoverInline(Parser recognizer) throws RecognitionException {
+        throw new LineParseCancellationException(
+            errorMessage(recognizer, recognizer.getCurrentToken()),
+            recognizer.getCurrentToken().getLine(),
+            recognizer.getCurrentToken().getCharPositionInLine()
+        );
+    }
+
+    @Override
+    public void sync(Parser recognizer) throws RecognitionException {
     }
 
     private String errorMessage(Parser recognizer, Token offendingToken) {
@@ -64,6 +75,6 @@ public class DSLErrorStrategy extends DefaultErrorStrategy {
                 return errorHandler.getErrorMessage(recognizer, offendingToken);
             }
         }
-        return new DefaultParseErrorHandler().getErrorMessage(recognizer, offendingToken);
+        return defaultErrorHandler.getErrorMessage(recognizer, offendingToken);
     }
 }

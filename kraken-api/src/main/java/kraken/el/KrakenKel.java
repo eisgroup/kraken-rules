@@ -29,7 +29,6 @@ public class KrakenKel {
     public static final String EXPRESSION_TARGET = "kraken.rule";
 
     public static final ExpressionLanguageConfiguration CONFIGURATION = ExpressionLanguageConfiguration.builder()
-            .forExpressionTarget(EXPRESSION_TARGET)
             .strictTypeMode()
             .build();
 

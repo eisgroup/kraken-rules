@@ -20,6 +20,7 @@ import static kraken.model.dsl.KrakenDSLModelEntryPointConverter.convertEntryPoi
 import static kraken.model.dsl.KrakenDSLModelExternalContextConverter.convertExternalContext;
 import static kraken.model.dsl.KrakenDSLModelExternalContextDefinitionConverter.convertExternalContextDefinitions;
 import static kraken.model.dsl.KrakenDSLModelFunctionConverter.convertFunctions;
+import static kraken.model.dsl.KrakenDSLModelFunctionSignatureConverter.convertFunctionSignatures;
 import static kraken.model.dsl.KrakenDSLModelRuleConverter.convertRules;
 
 import java.net.URI;
@@ -27,6 +28,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import kraken.model.Function;
 import kraken.model.FunctionSignature;
 import kraken.model.Rule;
 import kraken.model.context.ContextDefinition;
@@ -52,12 +54,13 @@ public class KrakenDSLModelConverter {
     public static Resource toResource(DSLModel dsl, URI uri) {
 
         List<ContextDefinition> contextDefinitions = convertContexts(dsl);
-        List<EntryPoint> entryPoints = convertEntryPoints(dsl);
-        List<Rule> rules = convertRules(dsl);
+        List<EntryPoint> entryPoints = convertEntryPoints(dsl, uri);
+        List<Rule> rules = convertRules(dsl, uri);
         List<RuleImport> ruleImports = convertRuleImports(dsl.getRuleImports());
         List<ExternalContextDefinition> externalContextDefinition = convertExternalContextDefinitions(dsl);
         ExternalContext externalContext = convertExternalContext(dsl, externalContextDefinition);
-        List<FunctionSignature> functions = convertFunctions(dsl);
+        List<FunctionSignature> functionSignatures = convertFunctionSignatures(dsl);
+        List<Function> functions = convertFunctions(dsl);
 
         return new Resource(
             dsl.getNamespace(),
@@ -68,6 +71,7 @@ public class KrakenDSLModelConverter {
             ruleImports,
             externalContext,
             externalContextDefinition,
+            functionSignatures,
             functions,
             uri
         );

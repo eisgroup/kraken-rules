@@ -17,34 +17,19 @@ package kraken.model;
 
 import kraken.annotations.API;
 
+import java.net.URI;
 import java.util.Map;
 
 /**
- * Metadata for the {@link Rule}. Metadata models information about the rule which
- * does not participate directly in rule evaluation logic, but can be used by engine
- * and/or infrastructure to change behavior
+ * Metadata for the {@link MetadataAware} Kraken model item . Metadata models information about Kraken model
+ * item which does not participate directly logic, but can be used by engine and/or infrastructure
+ * to change behavior.
  *
  * @author rimas
  * @since 1.0
  */
 @API
 public interface Metadata {
-
-    /**
-     * @see Metadata#asMap()
-     * @since 1.0.41
-     * @deprecated use {@link Metadata#asMap()} from {@link Rule#getMetadata()} to check if rule has dimensions added
-     */
-    @Deprecated(since = "1.16.0", forRemoval = true)
-    String DIMENSIONAL_LABEL = "__dimensional__";
-
-    /**
-     * @see Metadata#asMap()
-     * @since 1.0.41
-     * @deprecated use {@link Metadata#asMap()} from {@link Rule#getMetadata()} to check if rule has dimensions added
-     */
-    @Deprecated(since = "1.16.0", forRemoval = true)
-    String DIMENSIONAL_VALUE_ENABLED = "true";
 
     /**
      * Returns type of Payload, because several interfaces implementing this interface. According to other languages
@@ -70,6 +55,20 @@ public interface Metadata {
      * @param propertyValue the value of a property
      */
     void setProperty(String propertyName, Object propertyValue);
+
+    /**
+     * Sets the URI of resource from which the {@code KrakenModelItem} was parsed.
+     *
+     * @param uri Kraken model item resource URI.
+     */
+    void setUri(URI uri);
+
+    /**
+     * Returns the URI of resource from which the {@code KrakenModelItem} was parsed.
+     *
+     * @return Kraken model item resource URI.
+     */
+    URI getUri();
 
     /**
      * Indicates if property with such name exists

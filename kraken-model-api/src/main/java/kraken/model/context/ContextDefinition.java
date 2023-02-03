@@ -41,6 +41,20 @@ public interface ContextDefinition extends KrakenModelItem {
 
     void setStrict(boolean strict);
 
+    /**
+     * If set to {@code true}, indicates that context definition is marked as system type.
+     * Such context definitions have the following restrictions:
+     *
+     * <ul>
+     *     <li>Can be only used as a field in other context definitions.</li>
+     *     <li>Cannot have child contexts.</li>
+     *     <li>Cannot be used as target for a rule.</li>
+     * </ul>
+     */
+    boolean isSystem();
+
+    void setSystem(boolean system);
+
     void setChildren(Map<String, ContextNavigation> children);
 
     /**

@@ -17,14 +17,46 @@ package kraken.el.ast;
 
 import kraken.el.ast.token.Token;
 import kraken.el.scope.Scope;
+import kraken.el.scope.ScopeType;
+import kraken.el.scope.type.Type;
 
 /**
  * @author mulevicius
  */
-public class This extends Expression {
+public class This extends Reference {
 
-    public This(Scope scope, Token token) {
-        super(NodeType.THIS, scope, scope.getType(), token);
+    public This(Scope scope, Type evaluationType, Token token) {
+        super(NodeType.THIS, scope, evaluationType, token);
+    }
+
+    @Override
+    public boolean isReferenceInCurrentScope() {
+        return true;
+    }
+
+    @Override
+    public boolean isReferenceInGlobalScope() {
+        return scope.getScopeType() == ScopeType.GLOBAL;
+    }
+
+    @Override
+    public ScopeType findScopeTypeOfReference() {
+        return scope.getScopeType();
+    }
+
+    @Override
+    public boolean isSimpleBeanPath() {
+        return true;
+    }
+
+    @Override
+    public boolean isSimplePath() {
+        return true;
+    }
+
+    @Override
+    public Reference getFirstReference() {
+        return this;
     }
 
     @Override

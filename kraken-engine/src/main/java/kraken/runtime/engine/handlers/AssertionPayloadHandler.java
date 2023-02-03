@@ -21,6 +21,7 @@ import kraken.model.payload.PayloadType;
 import kraken.runtime.EvaluationSession;
 import kraken.runtime.engine.RulePayloadHandler;
 import kraken.runtime.engine.context.data.DataContext;
+import kraken.runtime.engine.handlers.trace.AssertionPayloadEvaluatedOperation;
 import kraken.runtime.engine.result.AssertionPayloadResult;
 import kraken.runtime.engine.result.PayloadResult;
 import kraken.runtime.expressions.KrakenExpressionEvaluationException;
@@ -28,6 +29,8 @@ import kraken.runtime.expressions.KrakenExpressionEvaluator;
 import kraken.runtime.model.rule.RuntimeRule;
 import kraken.runtime.model.rule.payload.Payload;
 import kraken.runtime.model.rule.payload.validation.AssertionPayload;
+import kraken.tracer.Tracer;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +44,7 @@ public class AssertionPayloadHandler implements RulePayloadHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(AssertionPayloadHandler.class);
 
-    private KrakenExpressionEvaluator evaluator;
+    private final KrakenExpressionEvaluator evaluator;
 
     public AssertionPayloadHandler(KrakenExpressionEvaluator evaluator) {
         this.evaluator = evaluator;
@@ -52,7 +55,10 @@ public class AssertionPayloadHandler implements RulePayloadHandler {
         AssertionPayload assertionPayload = (AssertionPayload) payload;
         try {
             Object result = evaluator.evaluate(assertionPayload.getAssertionExpression(), dataContext, session);
-            List<String> templateVariables = evaluator.evaluateTemplateVariables(assertionPayload.getErrorMessage(), dataContext, session);
+            List<String> templateVariables
+                = evaluator.evaluateTemplateVariables(assertionPayload.getErrorMessage(), dataContext, session);
+
+            Tracer.doOperation(new AssertionPayloadEvaluatedOperation(assertionPayload, result));
             return new AssertionPayloadResult(Boolean.TRUE.equals(result), assertionPayload, templateVariables);
         } catch (KrakenExpressionEvaluationException e) {
             logger.debug(
@@ -61,6 +67,7 @@ public class AssertionPayloadHandler implements RulePayloadHandler {
                     rule.getName(),
                     e
             );
+
             return new AssertionPayloadResult(e, assertionPayload);
         }
     }

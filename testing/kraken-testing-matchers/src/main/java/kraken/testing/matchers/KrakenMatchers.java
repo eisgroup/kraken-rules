@@ -18,18 +18,16 @@ package kraken.testing.matchers;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import kraken.model.derive.DefaultValuePayload;
 import kraken.runtime.engine.EntryPointResult;
 import kraken.runtime.engine.dto.RuleEvaluationResult;
+import kraken.runtime.engine.dto.RuleEvaluationStatus;
 import kraken.runtime.engine.result.AccessibilityPayloadResult;
 import kraken.runtime.engine.result.AssertionPayloadResult;
 import kraken.runtime.engine.result.DefaultValuePayloadResult;
-import kraken.runtime.engine.result.ExceptionAwarePayloadResult;
 import kraken.runtime.engine.result.ValidationPayloadResult;
 import kraken.runtime.engine.result.VisibilityPayloadResult;
 import org.hamcrest.Description;
@@ -130,10 +128,11 @@ public class KrakenMatchers {
 
         @Override
         protected boolean matchesSafely(T results, Description mismatchDescription) {
-            long count = results.getApplicableRuleResults().stream()
-                    .filter(ruleEvaluationResult -> ruleEvaluationResult.getPayloadResult() instanceof DefaultValuePayloadResult)
-                    .mapToLong(rer -> ((DefaultValuePayloadResult) rer.getPayloadResult()).getEvents().size())
-                    .sum();
+            long count = results.getAllRuleResults().stream()
+                .filter(rr -> rr.getRuleEvaluationStatus() == RuleEvaluationStatus.APPLIED)
+                .filter(ruleEvaluationResult -> ruleEvaluationResult.getPayloadResult() instanceof DefaultValuePayloadResult)
+                .mapToLong(rer -> ((DefaultValuePayloadResult) rer.getPayloadResult()).getEvents().size())
+                .sum();
             mismatchDescription.appendText("EntryPointResult has " + count + " default value change events");
             return count == numberOfEvents;
         }
@@ -160,10 +159,11 @@ public class KrakenMatchers {
         protected boolean matchesSafely(T results, Description mismatchDescription) {
             Predicate<RuleEvaluationResult> isAccessible =
                     rer -> !((AccessibilityPayloadResult) rer.getPayloadResult()).getAccessible();
-            long count = results.getApplicableRuleResults().stream()
-                    .filter(ruleEvaluationResult -> ruleEvaluationResult.getPayloadResult() instanceof AccessibilityPayloadResult)
-                    .filter(isAccessible)
-                    .count();
+            long count = results.getAllRuleResults().stream()
+                .filter(rr -> rr.getRuleEvaluationStatus() == RuleEvaluationStatus.APPLIED)
+                .filter(ruleEvaluationResult -> ruleEvaluationResult.getPayloadResult() instanceof AccessibilityPayloadResult)
+                .filter(isAccessible)
+                .count();
             mismatchDescription.appendText("EntryPointResult has " + count + " disabled fields");
             return count == numberOfFields;
         }
@@ -376,26 +376,20 @@ public class KrakenMatchers {
         public void describeTo(Description description) {
             description.appendText("Results has " + numberOfErrors + " errors");
         }
-
     }
 
     private static List<RuleEvaluationResult> failed(EntryPointResult result) {
-        return result.getApplicableRuleResults().stream()
-                .filter(rr -> rr.getPayloadResult() instanceof ValidationPayloadResult)
-                .filter(rr -> Boolean.FALSE.equals(((ValidationPayloadResult) rr.getPayloadResult()).getSuccess()))
-                .filter(rr -> !(rr.getPayloadResult() instanceof ExceptionAwarePayloadResult) || ((ExceptionAwarePayloadResult) rr.getPayloadResult()).getException().isEmpty())
-                .collect(Collectors.toList());
+        return result.getAllRuleResults().stream()
+            .filter(rr -> rr.getRuleEvaluationStatus() == RuleEvaluationStatus.APPLIED)
+            .filter(rr -> rr.getPayloadResult() instanceof ValidationPayloadResult)
+            .filter(rr -> Boolean.FALSE.equals(((ValidationPayloadResult) rr.getPayloadResult()).getSuccess()))
+            .collect(Collectors.toList());
     }
 
     private static List<RuleEvaluationResult> errored(EntryPointResult result) {
-        return Stream.concat(
-                result.getAllRuleResults().stream()
-                        .filter(ruleEvaluationResult -> ruleEvaluationResult.getPayloadResult() instanceof ExceptionAwarePayloadResult)
-                        .filter(ruleEvaluationResult -> ((ExceptionAwarePayloadResult) ruleEvaluationResult.getPayloadResult()).getException().isPresent()),
-                result.getAllRuleResults().stream()
-                        .filter(x -> Objects.nonNull(x.getConditionEvaluationResult().getError()))
-        )
-                .collect(Collectors.toList());
+        return result.getAllRuleResults().stream()
+            .filter(r -> r.getRuleEvaluationStatus() == RuleEvaluationStatus.IGNORED)
+            .collect(Collectors.toList());
     }
 
 }

@@ -15,7 +15,6 @@
  */
 package kraken.model.dsl;
 
-import com.google.common.collect.ImmutableList;
 import kraken.model.Condition;
 import kraken.model.ErrorMessage;
 import kraken.model.Expression;
@@ -55,7 +54,9 @@ import kraken.model.validation.UsagePayload;
 import kraken.model.validation.UsageType;
 import kraken.model.validation.ValidationSeverity;
 
+import java.net.URI;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -75,38 +76,41 @@ class KrakenDSLModelRuleConverter {
     private KrakenDSLModelRuleConverter() {
     }
 
-    static List<Rule> convertRules(DSLModel dsl) {
-        List<Rule> rules = convertRuleBlocks(dsl.getNamespace(), dsl.getRuleBlocks(), null);
-        List<Rule> otherRules = convertRules(dsl.getNamespace(), dsl.getRules(), null);
-        return ImmutableList.<Rule>builder()
-                .addAll(rules)
-                .addAll(otherRules)
-                .build();
+    static List<Rule> convertRules(DSLModel dsl, URI resourceUri) {
+        List<Rule> rules = convertRuleBlocks(dsl.getNamespace(), dsl.getRuleBlocks(), resourceUri, null);
+        rules.addAll(convertRules(dsl.getNamespace(), dsl.getRules(), resourceUri, null));
+
+        return Collections.unmodifiableList(rules);
     }
 
-    private static List<Rule> convertRuleBlocks(String namespace, Collection<DSLRules> ruleBlocks, Metadata parentMetadata) {
+    private static List<Rule> convertRuleBlocks(String namespace,
+                                                Collection<DSLRules> ruleBlocks,
+                                                URI resourceUri, Metadata parentMetadata) {
         return ruleBlocks.stream()
-                .flatMap(ruleBlock -> convertRuleBlock(namespace, ruleBlock, parentMetadata).stream())
+                .flatMap(ruleBlock -> convertRuleBlock(namespace, ruleBlock, resourceUri, parentMetadata).stream())
                 .collect(Collectors.toList());
     }
 
-    private static List<Rule> convertRuleBlock(String namespace, DSLRules rules, Metadata parentMetadata) {
-        parentMetadata = merge(parentMetadata, convertMetadata(rules.getMetadata()));
+    private static List<Rule> convertRuleBlock(String namespace, DSLRules dsl, URI resourceURi, Metadata parentMetadata) {
+        parentMetadata = merge(parentMetadata, convertMetadata(dsl.getMetadata(), resourceURi));
 
-        return ImmutableList.<Rule>builder()
-                .addAll(convertRuleBlocks(namespace, rules.getRuleBlocks(), parentMetadata))
-                .addAll(convertRules(namespace, rules.getRules(), parentMetadata))
-                .build();
+        List<Rule> rules = convertRuleBlocks(namespace, dsl.getRuleBlocks(), resourceURi, parentMetadata);
+        rules.addAll(convertRules(namespace, dsl.getRules(), resourceURi, parentMetadata));
+
+        return Collections.unmodifiableList(rules);
     }
 
-    private static List<Rule> convertRules(String namespace, Collection<DSLRule> rules, Metadata parentMetadata) {
+    private static List<Rule> convertRules(String namespace,
+                                           Collection<DSLRule> rules,
+                                           URI resourceUri,
+                                           Metadata parentMetadata) {
         return rules.stream()
-                .map(rule -> convert(namespace, rule))
+                .map(rule -> convert(namespace, rule, resourceUri))
                 .map(rule -> withParentMetadata(rule, parentMetadata))
                 .collect(Collectors.toList());
     }
 
-    private static Rule convert(String namespace, DSLRule dslRule) {
+    private static Rule convert(String namespace, DSLRule dslRule, URI resourceUri) {
         Rule rule = factory.createRule();
         rule.setName(dslRule.getName());
         rule.setDescription(dslRule.getDescription());
@@ -121,8 +125,9 @@ class KrakenDSLModelRuleConverter {
             rule.setCondition(condition);
         }
 
-        rule.setMetadata(convertMetadata(dslRule.getMetadata()));
+        rule.setMetadata(convertMetadata(dslRule.getMetadata(), resourceUri));
         rule.setPayload(convert(dslRule.getPayload()));
+        rule.setPriority(dslRule.getPriority());
         return rule;
     }
 

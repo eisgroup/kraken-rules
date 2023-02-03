@@ -25,10 +25,10 @@ import static java.util.Collections.singletonList;
 
 public class PolicyExtended extends Policy {
 
-    public static final PolicyExtended filled() {
-        final PolicyExtended policy = new PolicyExtended();
-        final BillingInfoExtended billingInfo = new BillingInfoExtended();
-        final CreditCardInfoExtended creditCardInfo = new CreditCardInfoExtended();
+    public static PolicyExtended filled() {
+        PolicyExtended policy = new PolicyExtended();
+        BillingInfoExtended billingInfo = new BillingInfoExtended();
+        CreditCardInfoExtended creditCardInfo = new CreditCardInfoExtended();
         creditCardInfo.setBillingAddress(new BillingAddressExtended(true, "LT", "AZ-21", "Vilnius"));
         billingInfo.setCreditCardInfo(creditCardInfo);
         policy.setBillingInfo(billingInfo);
@@ -40,75 +40,5 @@ public class PolicyExtended extends Policy {
         policy.setTermDetails(new TermDetailsExtended());
         policy.setTransactionDetails(new TransactionDetailsExtended());
         return policy;
-    }
-
-    private BillingInfoExtended billingInfo;
-
-    private AccessTrackInfoExtended accessTrackInfo;
-
-    private TransactionDetailsExtended transactionDetails;
-
-    private List<? extends Party> parties;
-
-    private PolicyDetailExtended policyDetail;
-
-    private List<? extends Vehicle> riskItems;
-
-    private TermDetailsExtended termDetails;
-
-    public TransactionDetailsExtended getTransactionDetails() {
-        return transactionDetails;
-    }
-
-    public void setTransactionDetails(TransactionDetailsExtended transactionDetails) {
-        this.transactionDetails = transactionDetails;
-    }
-
-    public PolicyDetailExtended getPolicyDetail() {
-        return policyDetail;
-    }
-
-    public void setPolicyDetail(PolicyDetailExtended policyDetail) {
-        this.policyDetail = policyDetail;
-    }
-
-    public AccessTrackInfoExtended getAccessTrackInfo() {
-        return accessTrackInfo;
-    }
-
-    public void setAccessTrackInfo(AccessTrackInfoExtended accessTrackInfo) {
-        this.accessTrackInfo = accessTrackInfo;
-    }
-
-    public TermDetailsExtended getTermDetails() {
-        return termDetails;
-    }
-
-    public void setTermDetails(TermDetailsExtended termDetails) {
-        this.termDetails = termDetails;
-    }
-
-    public BillingInfoExtended getBillingInfo() {
-        return billingInfo;
-    }
-
-    public void setBillingInfo(BillingInfoExtended billingInfo) {
-        this.billingInfo = billingInfo;
-    }
-
-    public List<? extends Vehicle> getRiskItems() {
-        return riskItems;
-    }
-
-    public void setRiskItems(List<? extends Vehicle> riskItems) {
-        this.riskItems = riskItems;
-    }
-
-    public List<? extends Party> getParties() {
-        return parties;
-    }
-
-    public void setParties(List<? extends Party> parties) {
-        this.parties = parties;
     }
 }

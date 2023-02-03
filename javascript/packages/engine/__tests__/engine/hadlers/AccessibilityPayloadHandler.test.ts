@@ -14,23 +14,23 @@
  *  limitations under the License.
  */
 
-import { PayloadBuilder } from "kraken-model-builder";
-import { accessibilityPayloadHandler } from "../../../src/engine/handlers/AccessibilityPayloadHandler";
-import { payloadResultTypeChecker } from "../../../src/engine/results/PayloadResult";
-import { Payloads } from "kraken-model";
+import { PayloadBuilder } from 'kraken-model-builder'
+import { Payloads } from 'kraken-model'
+import { accessibilityPayloadHandler } from '../../../src/engine/handlers/AccessibilityPayloadHandler'
+import { payloadResultTypeChecker } from '../../../src/engine/results/PayloadResultTypeChecker'
 
-describe("accessibilityPayloadHandler", () => {
-    it("should create instance", () => {
-        expect(accessibilityPayloadHandler.handlesPayloadType()).toBe(Payloads.PayloadType.ACCESSIBILITY);
-    });
-    it("should return payload payloadResult with type PresentationPayloadResult", () => {
-        const payload = PayloadBuilder.accessibility().notAccessible();
-        const result = accessibilityPayloadHandler.executePayload(payload);
-        expect(payloadResultTypeChecker.isAccessibility(result)).toBeTruthy();
-    });
-    it("should execute payload", () => {
-        const payload = PayloadBuilder.accessibility().notAccessible();
-        const result = accessibilityPayloadHandler.executePayload(payload);
-        expect(result.accessible).toBeFalsy();
-    });
-});
+describe('accessibilityPayloadHandler', () => {
+    it('should create instance', () => {
+        expect(accessibilityPayloadHandler.handlesPayloadType()).toBe(Payloads.PayloadType.ACCESSIBILITY)
+    })
+    it('should return payload payloadResult with type PresentationPayloadResult', () => {
+        const payload = PayloadBuilder.accessibility().notAccessible()
+        const result = accessibilityPayloadHandler.executePayload(payload)
+        expect(payloadResultTypeChecker.isAccessibility(result)).toBeTruthy()
+    })
+    it('should execute payload', () => {
+        const payload = PayloadBuilder.accessibility().notAccessible()
+        const result = accessibilityPayloadHandler.executePayload(payload)
+        expect(result.accessible).toBeFalsy()
+    })
+})

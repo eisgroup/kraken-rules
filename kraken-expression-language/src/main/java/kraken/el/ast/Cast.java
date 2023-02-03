@@ -17,12 +17,13 @@ package kraken.el.ast;
 
 import kraken.el.ast.token.Token;
 import kraken.el.scope.Scope;
+import kraken.el.scope.ScopeType;
 
 public class Cast extends Reference {
 
-    private TypeLiteral typeLiteral;
+    private final TypeLiteral typeLiteral;
 
-    private Reference reference;
+    private final Reference reference;
 
     public Cast(TypeLiteral typeLiteral, Reference reference, Scope scope, Token token) {
         super(NodeType.CAST, scope, scope.resolveTypeOf(typeLiteral.getValue()), token);
@@ -45,7 +46,32 @@ public class Cast extends Reference {
     }
 
     @Override
-    String getFirstToken() {
-        return reference.getFirstToken();
+    public boolean isSimpleBeanPath() {
+        return false;
+    }
+
+    @Override
+    public boolean isSimplePath() {
+        return false;
+    }
+
+    @Override
+    public boolean isReferenceInCurrentScope() {
+        return reference.isReferenceInCurrentScope();
+    }
+
+    @Override
+    public boolean isReferenceInGlobalScope() {
+        return reference.isReferenceInGlobalScope();
+    }
+
+    @Override
+    public ScopeType findScopeTypeOfReference() {
+        return reference.findScopeTypeOfReference();
+    }
+
+    @Override
+    public Reference getFirstReference() {
+        return reference.getFirstReference();
     }
 }

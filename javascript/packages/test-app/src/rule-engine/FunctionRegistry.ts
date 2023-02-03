@@ -14,11 +14,12 @@
  *  limitations under the License.
  */
 
-import { registry } from "kraken-typescript-engine";
+import { registry } from 'kraken-typescript-engine'
 
 export function addFunctionToRegistry(name: string, expression: string, vars: string[]): void {
     registry.add({
         name,
-        function: Function.apply(undefined, vars.concat(expression))
-    });
+        // eslint-disable-next-line prefer-spread
+        function: Function.apply(undefined, vars.concat(expression)),
+    })
 }

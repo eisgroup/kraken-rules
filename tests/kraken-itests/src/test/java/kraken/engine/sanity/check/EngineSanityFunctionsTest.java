@@ -15,7 +15,6 @@
  */
 package kraken.engine.sanity.check;
 
-import com.google.common.collect.ImmutableList;
 import kraken.runtime.EvaluationConfig;
 import kraken.runtime.engine.EntryPointResult;
 import kraken.testproduct.domain.*;
@@ -34,9 +33,10 @@ import java.util.List;
 import static io.github.jsonSnapshot.SnapshotMatcher.start;
 import static io.github.jsonSnapshot.SnapshotMatcher.validateSnapshots;
 import static kraken.testing.matchers.KrakenMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static kraken.test.KrakenItestMatchers.matchesSnapshot;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class EngineSanityFunctionsTest extends SanityEngineBaseTest {
 
@@ -55,7 +55,7 @@ public class EngineSanityFunctionsTest extends SanityEngineBaseTest {
         final Policy policy = new Policy();
         policy.setPolicies(Arrays.asList("fourth", "sixth"));
         final HashMap<String, Object> context = new HashMap<>();
-        context.put("numbers", ImmutableList.of("first", "second", "third", "fifth"));
+        context.put("numbers", List.of("first", "second", "third", "fifth"));
         EvaluationConfig evaluationConfig = new EvaluationConfig(context, "USD");
         final EntryPointResult result = engine.evaluate(policy, "FunctionCheck-Default-With-Count", evaluationConfig);
         assertThat(result, hasNoIgnoredRules());
@@ -188,5 +188,26 @@ public class EngineSanityFunctionsTest extends SanityEngineBaseTest {
         assertThat(result, hasNoValidationFailures());
         assertThat(result, hasRuleResults(29));
         assertThat(result, matchesSnapshot());
+    }
+
+    @Test
+    public void shouldExecuteKelFunction() {
+        COLLCoverage coverage1 = new COLLCoverage(new BigDecimal(50));
+        COLLCoverage coverage2 = new COLLCoverage(new BigDecimal(25));
+        Vehicle vehicle1 = new Vehicle();
+        vehicle1.setCollCoverages(List.of(coverage1, coverage2));
+        COLLCoverage coverage3 = new COLLCoverage(new BigDecimal(125));
+        Vehicle vehicle2 = new Vehicle();
+        vehicle2.setCollCoverages(List.of(coverage3));
+        Policy policy = new Policy();
+        policy.setTransactionDetails(new TransactionDetails());
+        policy.setRiskItems(List.of(vehicle1, vehicle2));
+
+        EntryPointResult result = engine.evaluate(policy, "Expressions_kel_functions");
+
+        assertThat(result, hasNoIgnoredRules());
+        assertThat(result, hasNoValidationFailures());
+        assertThat(result, hasRuleResults(2));
+        assertThat(policy.getTransactionDetails().getTotalLimit(), equalTo(new BigDecimal(200)));
     }
 }

@@ -24,6 +24,7 @@ import java.util.Map;
 
 import kraken.annotations.API;
 import kraken.el.functionregistry.FunctionHeader;
+import kraken.model.Function;
 import kraken.model.FunctionSignature;
 import kraken.model.Rule;
 import kraken.model.context.ContextDefinition;
@@ -52,6 +53,7 @@ public class ResourceBuilder {
     private ExternalContext externalContext;
     private List<ExternalContextDefinition> externalContextDefinitions;
     private Map<FunctionHeader, FunctionSignature> functionSignatures;
+    private Map<String, Function> functions;
     private URI uri;
 
     private ResourceBuilder() {
@@ -62,6 +64,7 @@ public class ResourceBuilder {
         this.contextDefinitions = new ArrayList<>();
         this.externalContextDefinitions = new ArrayList<>();
         this.functionSignatures = new LinkedHashMap<>();
+        this.functions = new LinkedHashMap<>();
     }
 
     public static ResourceBuilder getInstance(){
@@ -79,6 +82,7 @@ public class ResourceBuilder {
             externalContext,
             externalContextDefinitions,
             new ArrayList<>(functionSignatures.values()),
+            new ArrayList<>(functions.values()),
             uri == null ? ResourceUtils.randomResourceUri() : uri
         );
     }
@@ -154,13 +158,11 @@ public class ResourceBuilder {
     }
 
     public ResourceBuilder addFunctionSignature(FunctionSignature functionSignature) {
-        FunctionHeader header = new FunctionHeader(
-            functionSignature.getName(),
-            functionSignature.getParameterTypes().size()
-        );
+        FunctionHeader header = FunctionSignature.toHeader(functionSignature);
         if(functionSignatures.containsKey(header)) {
-            String template = "Cannot add function '%s' to Resource, because function with header '%s' was already added";
-            String message = String.format(template, functionSignature, header);
+            String template = "Cannot add function signature '%s' to Resource, "
+                + "because function with header '%s' was already added";
+            String message = String.format(template, FunctionSignature.format(functionSignature), header);
             throw new IllegalStateException(message);
         }
         this.functionSignatures.put(header, functionSignature);
@@ -169,6 +171,21 @@ public class ResourceBuilder {
 
     public ResourceBuilder addFunctionSignatures(Collection<FunctionSignature> functionSignatures) {
         functionSignatures.forEach(this::addFunctionSignature);
+        return this;
+    }
+
+    public ResourceBuilder addFunction(Function function) {
+        if(functions.containsKey(function.getName())) {
+            String template = "Cannot add function Resource, because function with name '%s' was already added";
+            String message = String.format(template, function.getName());
+            throw new IllegalStateException(message);
+        }
+        this.functions.put(function.getName(), function);
+        return this;
+    }
+
+    public ResourceBuilder addFunctions(Collection<Function> functions) {
+        functions.forEach(this::addFunction);
         return this;
     }
 

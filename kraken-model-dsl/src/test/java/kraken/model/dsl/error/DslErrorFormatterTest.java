@@ -16,8 +16,9 @@
 
 package kraken.model.dsl.error;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import org.hamcrest.CoreMatchers;
-import org.junit.Assert;
 import org.junit.Test;
 
 public class DslErrorFormatterTest {
@@ -34,7 +35,7 @@ public class DslErrorFormatterTest {
                 "four\n" +
                 "five\n";
         String message = DslErrorFormatter.format(dsl, line, startColumn, endColumn);
-        Assert.assertThat(message, CoreMatchers.is("" +
+        assertThat(message, CoreMatchers.is("" +
                 "2 two\n" +
                 "3      error three\n" +
                 "       ^^^^^\n" +
@@ -54,7 +55,7 @@ public class DslErrorFormatterTest {
                 "four\n" +
                 "five\n";
         String message = DslErrorFormatter.format(dsl, line, startColumn, endColumn);
-        Assert.assertThat(message, CoreMatchers.is("" +
+        assertThat(message, CoreMatchers.is("" +
                 "1 errorone\n" +
                 "  ^^^^^\n" +
                 "2 two"
@@ -71,7 +72,7 @@ public class DslErrorFormatterTest {
                 "two\n" +
                 "three error\n";
         String message = DslErrorFormatter.format(dsl, line, startColumn, endColumn);
-        Assert.assertThat(message, CoreMatchers.is("" +
+        assertThat(message, CoreMatchers.is("" +
                 "2 two\n" +
                 "3 three error\n" +
                 "        ^^^^^"
@@ -96,7 +97,7 @@ public class DslErrorFormatterTest {
                 "ten error ten\n" +
                 "eleven\n";
         String message = DslErrorFormatter.format(dsl, line, startColumn, endColumn);
-        Assert.assertThat(message, CoreMatchers.is("" +
+        assertThat(message, CoreMatchers.is("" +
                 " 9 nine\n" +
                 "10 ten error ten\n" +
                 "       ^^^^^\n" +

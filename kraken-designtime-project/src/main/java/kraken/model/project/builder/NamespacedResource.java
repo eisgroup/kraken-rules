@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Set;
 
 import kraken.el.functionregistry.FunctionHeader;
+import kraken.model.Function;
 import kraken.model.FunctionSignature;
 import kraken.model.Rule;
 import kraken.model.context.ContextDefinition;
@@ -43,13 +44,14 @@ class NamespacedResource {
 
     private ExternalContext externalContext;
 
-    private Map<String, ContextDefinition> contextDefinitions = new HashMap<>();
-    private Map<String, ExternalContextDefinition> externalContextDefinitions = new HashMap<>();
-    private Map<String, List<EntryPoint>> entryPoints = new HashMap<>();
-    private Map<String, List<Rule>> rules = new HashMap<>();
-    private Set<RuleImport> ruleImports = new HashSet<>();
-    private Set<String> includes = new HashSet<>();
-    private Map<FunctionHeader, FunctionSignature> functions = new HashMap<>();
+    private final Map<String, ContextDefinition> contextDefinitions = new HashMap<>();
+    private final Map<String, ExternalContextDefinition> externalContextDefinitions = new HashMap<>();
+    private final Map<String, List<EntryPoint>> entryPoints = new HashMap<>();
+    private final Map<String, List<Rule>> rules = new HashMap<>();
+    private final Set<RuleImport> ruleImports = new HashSet<>();
+    private final Set<String> includes = new HashSet<>();
+    private final Map<FunctionHeader, FunctionSignature> functionSignatures = new HashMap<>();
+    private final Map<String, Function> functions = new HashMap<>();
 
     NamespacedResource(String namespace) {
         this.namespace = namespace;
@@ -85,9 +87,12 @@ class NamespacedResource {
         includes.add(include);
     }
 
-    void addFunction(FunctionSignature function) {
-        var header = new FunctionHeader(function.getName(), function.getParameterTypes().size());
-        functions.putIfAbsent(header, function);
+    void addFunctionSignature(FunctionSignature functionSignature) {
+        functionSignatures.putIfAbsent(FunctionSignature.toHeader(functionSignature), functionSignature);
+    }
+
+    void addFunction(Function function) {
+        functions.putIfAbsent(function.getName(), function);
     }
 
     String getNamespace() {
@@ -122,7 +127,11 @@ class NamespacedResource {
         return includes;
     }
 
-    public Map<FunctionHeader, FunctionSignature> getFunctions() {
+    Map<FunctionHeader, FunctionSignature> getFunctionSignatures() {
+        return functionSignatures;
+    }
+
+    Map<String, Function> getFunctions() {
         return functions;
     }
 }

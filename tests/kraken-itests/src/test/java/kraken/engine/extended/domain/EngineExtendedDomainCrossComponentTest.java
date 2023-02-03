@@ -38,7 +38,7 @@ import static java.util.Collections.singletonList;
 import static kraken.testing.matchers.KrakenMatchers.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class EngineExtendedDomainCrossComponentTest extends SanityEngineBaseTest {

@@ -35,7 +35,7 @@ import static io.github.jsonSnapshot.SnapshotMatcher.validateSnapshots;
 import static kraken.testing.matchers.KrakenMatchers.*;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static kraken.test.KrakenItestMatchers.matchesSnapshot;
 
 public class EngineSanityExpressionsTest extends SanityEngineBaseTest {
@@ -380,6 +380,68 @@ public class EngineSanityExpressionsTest extends SanityEngineBaseTest {
 
         assertThat(result, hasNoIgnoredRules());
         assertThat(policy.getTransactionDetails().getChangePremium(), equalTo(new BigDecimal("100000")));
+    }
+
+    @Test
+    public void shouldEvaluateExpressionsWithNullSafeOperator(){
+        Policy policy = new Policy();
+
+        EntryPointResult result = engine.evaluate(policy, "Expressions_nullsafe");
+
+        assertThat(result, hasNoIgnoredRules());
+        assertThat(result, hasRuleResults(1));
+        assertThat(result, hasNoValidationFailures());
+    }
+
+    @Test
+    public void shouldEvaluateExpressionsWithVariables_positive(){
+        Policy policy = new Policy();
+        policy.setState("CA");
+
+        Vehicle vehicle = new Vehicle();
+        vehicle.setIncluded(true);
+        policy.setRiskItems(List.of(vehicle));
+
+        Insured insured = new Insured();
+        insured.setHaveChildren(true);
+        policy.setInsured(insured);
+
+        EntryPointResult result = engine.evaluate(policy, "Expressions_variables");
+
+        assertThat(result, hasNoIgnoredRules());
+        assertThat(result, hasRuleResults(1));
+        assertThat(result, hasNoValidationFailures());
+    }
+
+    @Test
+    public void shouldEvaluateExpressionsWithVariables_negative(){
+        Policy policy = new Policy();
+        policy.setState("CA");
+
+        Vehicle vehicle = new Vehicle();
+        vehicle.setIncluded(true);
+        policy.setRiskItems(List.of(vehicle));
+
+        Insured insured = new Insured();
+        insured.setHaveChildren(false);
+        policy.setInsured(insured);
+
+        EntryPointResult result = engine.evaluate(policy, "Expressions_variables");
+
+        assertThat(result, hasNoIgnoredRules());
+        assertThat(result, hasRuleResults(1));
+        assertThat(result, hasValidationFailures(1));
+    }
+
+    @Test
+    public void shouldEvaluateExpressionsWithEscapes(){
+        Policy policy = new Policy();
+
+        EntryPointResult result = engine.evaluate(policy, "Expressions_escapes");
+
+        assertThat(result, hasNoIgnoredRules());
+        // result is a string with symbols: "''"\\
+        assertThat(policy.getState(), equalTo("\"''\"\\\\"));
     }
 
     private Vehicle createVehicle(String... serviceDates){

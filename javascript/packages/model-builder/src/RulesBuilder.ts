@@ -14,82 +14,103 @@
  *  limitations under the License.
  */
 
-import { Condition, Payloads, Dependency, Rule, Expressions } from "kraken-model";
+import { Condition, Payloads, Dependency, Rule, Expressions, DimensionSet } from 'kraken-model'
 
 export class RulesBuilder {
-    private name: string;
-    private context: string;
-    private targetPath: string;
-    private condition: Condition;
-    private payload: Payloads.Payload;
-    private dependencies: Dependency[];
-    private isDimensional = false;
+    private name?: string
+    private context?: string
+    private targetPath?: string
+    private condition?: Condition
+    private payload?: Payloads.Payload
+    private dependencies?: Dependency[]
+    private dimensionSet: DimensionSet = {
+        variability: 'UNKNOWN',
+    }
 
     static create(): RulesBuilder {
-        return new RulesBuilder();
+        return new RulesBuilder()
     }
 
     setName(name: string): RulesBuilder {
-        this.name = name;
-        return this;
+        this.name = name
+        return this
     }
 
     setTargetPath(path: string): RulesBuilder {
-        this.targetPath = path;
-        return this;
+        this.targetPath = path
+        return this
     }
 
     setContext(contextName: string): RulesBuilder {
-        this.context = contextName;
-        return this;
+        this.context = contextName
+        return this
     }
 
     setCondition(conditionString: string): RulesBuilder {
         this.condition = {
             expression: {
-                expressionType: "COMPLEX",
-                expressionString: conditionString
-            } as Expressions.ComplexExpression
-        };
-        return this;
+                expressionType: 'COMPLEX',
+                expressionString: conditionString,
+            } as Expressions.ComplexExpression,
+        }
+        return this
     }
 
     addDependency(dependency: Dependency): RulesBuilder {
         if (!this.dependencies) {
-            this.dependencies = [];
+            this.dependencies = []
         }
-        this.dependencies.push(dependency);
-        return this;
+        this.dependencies.push(dependency)
+        return this
     }
     setPayload(payload: Payloads.Payload): RulesBuilder {
-        this.payload = payload;
-        return this;
+        this.payload = payload
+        return this
     }
 
-    setDimensional(): RulesBuilder {
-        this.isDimensional = true;
-        return this;
+    setDimensionSet(dimensionSet: string[]): RulesBuilder {
+        this.dimensionSet = {
+            dimensions: dimensionSet,
+            variability: dimensionSet.length ? 'KNOWN' : 'STATIC',
+        }
+        return this
+    }
+
+    setStatic(): RulesBuilder {
+        this.dimensionSet = {
+            dimensions: [],
+            variability: 'STATIC',
+        }
+        return this
     }
 
     build(): Rule {
+        this.isDefined(this.name, 'Name must be defined')
+        this.isDefined(this.targetPath, 'Target path must be defined')
+        this.isDefined(this.payload, 'Payload must be defined')
+        this.isDefined(this.context, 'Context name must be defined')
+
         const rule: Rule = {
-            name: requireValue(this.name, "Name must be defined"),
-            targetPath: requireValue(this.targetPath, "Target path must be defined"),
+            name: this.name,
+            targetPath: this.targetPath,
             condition: this.condition,
-            payload: requireValue(this.payload, "Payload must be defined"),
-            context: requireValue(this.context, "Context name must be defined"),
-            dimensional: this.isDimensional
-        };
-        if (this.dependencies) {
-            rule.dependencies = this.dependencies;
+            payload: this.payload,
+            context: this.context,
+            dimensionSet: this.dimensionSet,
         }
-        return rule;
+        if (this.dependencies) {
+            rule.dependencies = this.dependencies
+        }
+        return rule
+    }
+
+    private isDefined<T>(value: T | undefined, err: string): asserts value is NonNullable<T> {
+        if (value === undefined && value === null) {
+            throw new Error(err)
+        }
+
+        if (typeof value === 'string' && value === '') {
+            throw new Error(err)
+        }
     }
 }
-
-const requireValue = <T>(value: T, err: string) => {
-    if (!value) {
-        throw new Error(err);
-    }
-    return value;
-};

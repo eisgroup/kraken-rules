@@ -37,6 +37,10 @@
       "entryPointName": "Policy:RuleOrderWithComplexField"
     },
     {
+      "id": "RuleOrderWithNoCycleInFunction",
+      "entryPointName": "Policy:RuleOrderWithNoCycleInFunction"
+    },
+    {
       "id": "Expressions-Filter",
       "entryPointName": "Policy:Expressions-Filter"
     },
@@ -57,6 +61,10 @@
       "entryPointName": "Policy:FunctionCheck-Assert-PolicyNumber"
     },
     {
+      "id": "Expressions_kel_functions",
+      "entryPointName": "Policy:Expressions_kel_functions"
+    },
+    {
       "id": "ExpressionContextCheck-Assert-CCR",
       "entryPointName": "Policy:ExpressionContextCheck-Assert-CCR",
       "context": {
@@ -68,6 +76,59 @@
         ],
         "additional": {
           "package": "Pizza"
+        }
+      }
+    },
+    {
+      "id": "ExpressionContextCheck-NestedScope",
+      "entryPointName": "Policy:ExpressionContextCheck-NestedScope",
+      "context": {
+        "additional": {
+          "policies": [
+            {
+              "policyNumber" : "external-context"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "ExpressionContextCheck-NestedFilter",
+      "entryPointName": "Policy:ExpressionContextCheck-NestedFilter",
+      "context": {
+        "additional": {
+          "vehicles": [
+            {
+              "model" : "policy-make"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "ExpressionContextCheck-FlatMapDynamicContext",
+      "entryPointName": "Policy:ExpressionContextCheck-FlatMapDynamicContext",
+      "context": {
+        "additional": {
+          "vehicles": [
+            {
+              "collCoverages" : [
+                {
+                  "code": "first"
+                },
+                {
+                  "code": "second"
+                }
+              ]
+            },
+            {
+              "collCoverages" : [
+                {
+                  "code": "third"
+                }
+              ]
+            }
+          ]
         }
       }
     },
@@ -214,6 +275,14 @@
       "entryPointName": "Policy:Expressions_typeof"
     },
     {
+      "id": "Expressions_nullsafe",
+      "entryPointName": "Policy:Expressions_nullsafe"
+    },
+    {
+      "id": "Expressions_variables",
+      "entryPointName": "Policy:Expressions_variables"
+    },
+    {
       "id": "Expressions_nested_for",
       "entryPointName": "Policy:Expressions_nested_for"
     },
@@ -228,6 +297,10 @@
     {
       "id": "Expressions_compare_sum",
       "entryPointName": "Policy:Expressions_compare_sum"
+    },
+    {
+      "id": "Expressions_escapes",
+      "entryPointName": "Policy:Expressions_escapes"
     },
     {
       "id": "InitAutoPolicy",
@@ -396,6 +469,14 @@
     {
       "id": "Templates",
       "entryPointName": "Policy:Templates"
+    },
+    {
+      "id": "DefaultRuleByPriority",
+      "entryPointName": "Policy:DefaultRuleByPriority"
+    },
+    {
+      "id": "EvaluateWithoutDuplicatedResults",
+      "entryPointName": "Policy:EvaluateWithoutDuplicatedResults"
     }
   ]
 }

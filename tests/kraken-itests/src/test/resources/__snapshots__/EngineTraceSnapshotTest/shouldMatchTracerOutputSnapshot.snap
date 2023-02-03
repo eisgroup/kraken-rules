@@ -1,0 +1,254 @@
+
+--- Started Logging Trace Results For Trace ID: static-trace-id
+-> Rule engine called to evaluate entry point 'Policy:TracerSnapshotTest'. DimensionSetResolver: kraken.model.dimensions.DefaultDimensionSetResolver. Data and configuration: 
+   Root data: {
+     "coverage": {
+       "code": "AA",
+       "limitAmount": 15000,
+       "deductibleAmount": 25000,
+       "id": "CarCoverage-1"
+     },
+     "accessTrackInfo": {
+       "id": "AccessTrackInfo-1"
+     },
+     "transactionDetails": {
+       "id": "TransactionDetails-1"
+     },
+     "riskItems": [
+       {
+         "serviceHistory": [],
+         "collCoverages": [
+           {
+             "code": "ABC",
+             "limitAmount": 15000,
+             "deductibleAmount": 25000,
+             "id": "CollCoverage-1"
+           }
+         ],
+         "id": "Vehicle-1"
+       }
+     ],
+     "termDetails": {
+       "id": "TermDetails-1"
+     },
+     "id": "Policy-1"
+   }
+   Evaluation configuration: {
+     "context": {},
+     "currencyCd": "USD",
+     "evaluationMode": "ALL"
+   }
+   -> Collecting rules for entry point 'Policy:TracerSnapshotTest'
+   <- Collected rules for entry point 'Policy:TracerSnapshotTest':
+      'TR_CarCoverage_Payload_error',
+      'TR_CarCoverage_code_default',
+      'TR_CarCoverage_Condition_default',
+      'TR_CarCoverage_assert_info',
+      'TR_CarCoverage_assert_warn',
+      'TR_CarCoverage_assert_error',
+      'TR_CarCoverage_Reset',
+      'TR_CarCoverage_Usage',
+      'TR_CarCoverage_Condition_LimitAmt_error',
+      'TR_CarCoverage_SizeRange',
+      'TR_CarCoverage_length',
+      'TR_CarCoverage_code_assert',
+      'TR_CarCoverage_Size',
+      'TR_CarCoverage_regexp',
+      'TR_CarCoverage_default',
+      'TR_CarCoverage_Accessibility',
+      'TR_CarCoverage_Visibility'
+   -> Evaluating default rules.
+      -- Resolved 2 data context(s) for rule 'TR_CarCoverage_code_default' target 'CarCoverage':
+         COLLCoverage:CollCoverage-1,
+         CarCoverage:CarCoverage-1.
+      -- Resolved 2 data context(s) for rule 'TR_CarCoverage_Condition_default' target 'CarCoverage':
+         COLLCoverage:CollCoverage-1,
+         CarCoverage:CarCoverage-1.
+      -- Resolved 2 data context(s) for rule 'TR_CarCoverage_Reset' target 'CarCoverage':
+         COLLCoverage:CollCoverage-1,
+         CarCoverage:CarCoverage-1.
+      -- Resolved 2 data context(s) for rule 'TR_CarCoverage_Condition_LimitAmt_error' target 'CarCoverage':
+         COLLCoverage:CollCoverage-1,
+         CarCoverage:CarCoverage-1.
+      -- Resolved 2 data context(s) for rule 'TR_CarCoverage_default' target 'CarCoverage':
+         COLLCoverage:CollCoverage-1,
+         CarCoverage:CarCoverage-1.
+      -> Evaluating rule 'TR_CarCoverage_code_default' on COLLCoverage:CollCoverage-1:code.
+         -- Evaluated 'DefaultValuePayload'. Before value: 'ABC'. After value: 'ABC'.
+      <- Evaluated rule 'TR_CarCoverage_code_default' on COLLCoverage:CollCoverage-1:code. Evaluation status - APPLIED.
+      -> Evaluating rule 'TR_CarCoverage_code_default' on CarCoverage:CarCoverage-1:code.
+         -- Evaluating expression ''AA''.
+         -- Evaluated 'DefaultValuePayload'. Before value: 'NULL'. After value: 'AA'.
+      <- Evaluated rule 'TR_CarCoverage_code_default' on CarCoverage:CarCoverage-1:code. Evaluation status - APPLIED.
+      -> Evaluating rule 'TR_CarCoverage_Reset' on COLLCoverage:CollCoverage-1:limitAmount.
+         -- Evaluating expression '15000'.
+         -- Evaluated 'DefaultValuePayload'. Before value: '15'. After value: '15000'.
+      <- Evaluated rule 'TR_CarCoverage_Reset' on COLLCoverage:CollCoverage-1:limitAmount. Evaluation status - APPLIED.
+      -> Evaluating rule 'TR_CarCoverage_Reset' on CarCoverage:CarCoverage-1:limitAmount.
+         -- Evaluating expression '15000'.
+         -- Evaluated 'DefaultValuePayload'. Before value: '10000'. After value: '15000'.
+      <- Evaluated rule 'TR_CarCoverage_Reset' on CarCoverage:CarCoverage-1:limitAmount. Evaluation status - APPLIED.
+      -> Evaluating rule 'TR_CarCoverage_Condition_default' on COLLCoverage:CollCoverage-1:deductibleAmount with priority 100.
+         -- Evaluating expression '((limitAmount > 10) && (limitAmount < 50))'.
+      <- Evaluated rule 'TR_CarCoverage_Condition_default' on COLLCoverage:CollCoverage-1:deductibleAmount. Evaluation status - SKIPPED.
+      -> Evaluating rule 'TR_CarCoverage_Condition_LimitAmt_error' on COLLCoverage:CollCoverage-1:deductibleAmount with priority 0.
+         -- Evaluating expression '(Policy.riskItems[10].model == 'Audi')'. Cross context references: 
+            Policy: [ Policy:Policy-1 ]
+      <- Evaluated rule 'TR_CarCoverage_Condition_LimitAmt_error' on COLLCoverage:CollCoverage-1:deductibleAmount. Evaluation status - IGNORED.
+      -> Evaluating rule 'TR_CarCoverage_default' on COLLCoverage:CollCoverage-1:deductibleAmount with priority -2147483648.
+         -- Evaluating expression '25000'.
+         -- Evaluated 'DefaultValuePayload'. Before value: '25'. After value: '25000'.
+      <- Evaluated rule 'TR_CarCoverage_default' on COLLCoverage:CollCoverage-1:deductibleAmount. Evaluation status - APPLIED.
+      -> Evaluating rule 'TR_CarCoverage_Condition_default' on CarCoverage:CarCoverage-1:deductibleAmount with priority 100.
+         -- Evaluating expression '((limitAmount > 10) && (limitAmount < 50))'.
+      <- Evaluated rule 'TR_CarCoverage_Condition_default' on CarCoverage:CarCoverage-1:deductibleAmount. Evaluation status - SKIPPED.
+      -> Evaluating rule 'TR_CarCoverage_Condition_LimitAmt_error' on CarCoverage:CarCoverage-1:deductibleAmount with priority 0.
+         -- Evaluating expression '(Policy.riskItems[10].model == 'Audi')'. Cross context references: 
+            Policy: [ Policy:Policy-1 ]
+      <- Evaluated rule 'TR_CarCoverage_Condition_LimitAmt_error' on CarCoverage:CarCoverage-1:deductibleAmount. Evaluation status - IGNORED.
+      -> Evaluating rule 'TR_CarCoverage_default' on CarCoverage:CarCoverage-1:deductibleAmount with priority -2147483648.
+         -- Evaluating expression '25000'.
+         -- Evaluated 'DefaultValuePayload'. Before value: 'NULL'. After value: '25000'.
+      <- Evaluated rule 'TR_CarCoverage_default' on CarCoverage:CarCoverage-1:deductibleAmount. Evaluation status - APPLIED.
+   <- Evaluated default rules.
+      'TR_CarCoverage_code_default' on a total of 2 instances.
+      'TR_CarCoverage_Condition_default' on a total of 2 instances.
+      'TR_CarCoverage_Reset' on a total of 2 instances.
+      'TR_CarCoverage_Condition_LimitAmt_error' on a total of 2 instances.
+      'TR_CarCoverage_default' on a total of 2 instances.
+   -> Evaluating rule 'TR_CarCoverage_Payload_error'.
+      -- Resolved 2 data context(s) for rule 'TR_CarCoverage_Payload_error' target 'CarCoverage':
+         COLLCoverage:CollCoverage-1,
+         CarCoverage:CarCoverage-1.
+      -> Evaluating rule 'TR_CarCoverage_Payload_error' on COLLCoverage:CollCoverage-1:deductibleAmount.
+         -- Evaluating expression '(Policy.riskItems[10].model == 'Audi')'. Cross context references: 
+            Policy: [ Policy:Policy-1 ]
+      <- Evaluated rule 'TR_CarCoverage_Payload_error' on COLLCoverage:CollCoverage-1:deductibleAmount. Evaluation status - IGNORED.
+      -> Evaluating rule 'TR_CarCoverage_Payload_error' on CarCoverage:CarCoverage-1:deductibleAmount.
+         -- Evaluating expression '(Policy.riskItems[10].model == 'Audi')'. Cross context references: 
+            Policy: [ Policy:Policy-1 ]
+      <- Evaluated rule 'TR_CarCoverage_Payload_error' on CarCoverage:CarCoverage-1:deductibleAmount. Evaluation status - IGNORED.
+   <- Evaluated rule 'TR_CarCoverage_Payload_error' on a total of 2 instances.
+   -> Evaluating rule 'TR_CarCoverage_assert_info'.
+      -- Resolved 2 data context(s) for rule 'TR_CarCoverage_assert_info' target 'CarCoverage':
+         COLLCoverage:CollCoverage-1,
+         CarCoverage:CarCoverage-1.
+      -> Evaluating rule 'TR_CarCoverage_assert_info' on COLLCoverage:CollCoverage-1:code.
+         -- Evaluating expression '(code == 'AA')'.
+         -- Evaluated 'AssertionPayload' expression '(code == 'AA')' to false.
+      <- Evaluated rule 'TR_CarCoverage_assert_info' on COLLCoverage:CollCoverage-1:code. Evaluation status - APPLIED.
+      -> Evaluating rule 'TR_CarCoverage_assert_info' on CarCoverage:CarCoverage-1:code.
+         -- Evaluating expression '(code == 'AA')'.
+         -- Evaluated 'AssertionPayload' expression '(code == 'AA')' to true.
+      <- Evaluated rule 'TR_CarCoverage_assert_info' on CarCoverage:CarCoverage-1:code. Evaluation status - APPLIED.
+   <- Evaluated rule 'TR_CarCoverage_assert_info' on a total of 2 instances.
+   -> Evaluating rule 'TR_CarCoverage_assert_warn'.
+      -- Resolved 2 data context(s) for rule 'TR_CarCoverage_assert_warn' target 'CarCoverage':
+         COLLCoverage:CollCoverage-1,
+         CarCoverage:CarCoverage-1.
+      -> Evaluating rule 'TR_CarCoverage_assert_warn' on COLLCoverage:CollCoverage-1:code.
+         -- Evaluating expression '(code == 'AA')'.
+         -- Evaluated 'AssertionPayload' expression '(code == 'AA')' to false.
+      <- Evaluated rule 'TR_CarCoverage_assert_warn' on COLLCoverage:CollCoverage-1:code. Evaluation status - APPLIED.
+      -> Evaluating rule 'TR_CarCoverage_assert_warn' on CarCoverage:CarCoverage-1:code.
+         -- Evaluating expression '(code == 'AA')'.
+         -- Evaluated 'AssertionPayload' expression '(code == 'AA')' to true.
+      <- Evaluated rule 'TR_CarCoverage_assert_warn' on CarCoverage:CarCoverage-1:code. Evaluation status - APPLIED.
+   <- Evaluated rule 'TR_CarCoverage_assert_warn' on a total of 2 instances.
+   -> Evaluating rule 'TR_CarCoverage_assert_error'.
+      -- Resolved 2 data context(s) for rule 'TR_CarCoverage_assert_error' target 'CarCoverage':
+         COLLCoverage:CollCoverage-1,
+         CarCoverage:CarCoverage-1.
+      -> Evaluating rule 'TR_CarCoverage_assert_error' on COLLCoverage:CollCoverage-1:code.
+         -- Evaluating expression '(code == 'AA')'.
+         -- Evaluated 'AssertionPayload' expression '(code == 'AA')' to false.
+      <- Evaluated rule 'TR_CarCoverage_assert_error' on COLLCoverage:CollCoverage-1:code. Evaluation status - APPLIED.
+      -> Evaluating rule 'TR_CarCoverage_assert_error' on CarCoverage:CarCoverage-1:code.
+         -- Evaluating expression '(code == 'AA')'.
+         -- Evaluated 'AssertionPayload' expression '(code == 'AA')' to true.
+      <- Evaluated rule 'TR_CarCoverage_assert_error' on CarCoverage:CarCoverage-1:code. Evaluation status - APPLIED.
+   <- Evaluated rule 'TR_CarCoverage_assert_error' on a total of 2 instances.
+   -> Evaluating rule 'TR_CarCoverage_Usage'.
+      -- Resolved 2 data context(s) for rule 'TR_CarCoverage_Usage' target 'CarCoverage':
+         COLLCoverage:CollCoverage-1,
+         CarCoverage:CarCoverage-1.
+      -> Evaluating rule 'TR_CarCoverage_Usage' on COLLCoverage:CollCoverage-1:deductibleAmount.
+         -- Evaluated 'UsagePayload' to true. Mandatory field has value '25000'.
+      <- Evaluated rule 'TR_CarCoverage_Usage' on COLLCoverage:CollCoverage-1:deductibleAmount. Evaluation status - APPLIED.
+      -> Evaluating rule 'TR_CarCoverage_Usage' on CarCoverage:CarCoverage-1:deductibleAmount.
+         -- Evaluated 'UsagePayload' to true. Mandatory field has value '25000'.
+      <- Evaluated rule 'TR_CarCoverage_Usage' on CarCoverage:CarCoverage-1:deductibleAmount. Evaluation status - APPLIED.
+   <- Evaluated rule 'TR_CarCoverage_Usage' on a total of 2 instances.
+   -> Evaluating rule 'TR_CarCoverage_SizeRange'.
+      -- Resolved 1 data context(s) for rule 'TR_CarCoverage_SizeRange' target 'Policy':
+         Policy:Policy-1.
+      -> Evaluating rule 'TR_CarCoverage_SizeRange' on Policy:Policy-1:riskItems.
+         -- Evaluated 'SizeRangePayload' to true. Collection field size is within expected range.
+      <- Evaluated rule 'TR_CarCoverage_SizeRange' on Policy:Policy-1:riskItems. Evaluation status - APPLIED.
+   <- Evaluated rule 'TR_CarCoverage_SizeRange' on a total of 1 instances.
+   -> Evaluating rule 'TR_CarCoverage_length'.
+      -- Resolved 2 data context(s) for rule 'TR_CarCoverage_length' target 'CarCoverage':
+         COLLCoverage:CollCoverage-1,
+         CarCoverage:CarCoverage-1.
+      -> Evaluating rule 'TR_CarCoverage_length' on COLLCoverage:CollCoverage-1:code.
+         -- Evaluated 'LengthPayload' to false. Expected length '2'. Actual length '3'
+      <- Evaluated rule 'TR_CarCoverage_length' on COLLCoverage:CollCoverage-1:code. Evaluation status - APPLIED.
+      -> Evaluating rule 'TR_CarCoverage_length' on CarCoverage:CarCoverage-1:code.
+         -- Evaluated 'LengthPayload' to true. Expected length '2'. Actual length '2'
+      <- Evaluated rule 'TR_CarCoverage_length' on CarCoverage:CarCoverage-1:code. Evaluation status - APPLIED.
+   <- Evaluated rule 'TR_CarCoverage_length' on a total of 2 instances.
+   -> Evaluating rule 'TR_CarCoverage_code_assert'.
+      -- Resolved 2 data context(s) for rule 'TR_CarCoverage_code_assert' target 'CarCoverage':
+         COLLCoverage:CollCoverage-1,
+         CarCoverage:CarCoverage-1.
+      -> Evaluating rule 'TR_CarCoverage_code_assert' on COLLCoverage:CollCoverage-1:code.
+         -- Evaluating expression '(code == 'AA')'.
+         -- Evaluated 'AssertionPayload' expression '(code == 'AA')' to false.
+      <- Evaluated rule 'TR_CarCoverage_code_assert' on COLLCoverage:CollCoverage-1:code. Evaluation status - APPLIED.
+      -> Evaluating rule 'TR_CarCoverage_code_assert' on CarCoverage:CarCoverage-1:code.
+         -- Evaluating expression '(code == 'AA')'.
+         -- Evaluated 'AssertionPayload' expression '(code == 'AA')' to true.
+      <- Evaluated rule 'TR_CarCoverage_code_assert' on CarCoverage:CarCoverage-1:code. Evaluation status - APPLIED.
+   <- Evaluated rule 'TR_CarCoverage_code_assert' on a total of 2 instances.
+   -> Evaluating rule 'TR_CarCoverage_Size'.
+      -- Resolved 1 data context(s) for rule 'TR_CarCoverage_Size' target 'Policy':
+         Policy:Policy-1.
+      -> Evaluating rule 'TR_CarCoverage_Size' on Policy:Policy-1:riskItems.
+         -- Evaluated 'SizePayload' to true. Expected size no less than 0 - actual size is 1.
+      <- Evaluated rule 'TR_CarCoverage_Size' on Policy:Policy-1:riskItems. Evaluation status - APPLIED.
+   <- Evaluated rule 'TR_CarCoverage_Size' on a total of 1 instances.
+   -> Evaluating rule 'TR_CarCoverage_regexp'.
+      -- Resolved 2 data context(s) for rule 'TR_CarCoverage_regexp' target 'CarCoverage':
+         COLLCoverage:CollCoverage-1,
+         CarCoverage:CarCoverage-1.
+      -> Evaluating rule 'TR_CarCoverage_regexp' on COLLCoverage:CollCoverage-1:code.
+         -- Evaluated 'RegExpPayload' to true. Value 'ABC' matches regular expression '[A-Z]+'.
+      <- Evaluated rule 'TR_CarCoverage_regexp' on COLLCoverage:CollCoverage-1:code. Evaluation status - APPLIED.
+      -> Evaluating rule 'TR_CarCoverage_regexp' on CarCoverage:CarCoverage-1:code.
+         -- Evaluated 'RegExpPayload' to true. Value 'AA' matches regular expression '[A-Z]+'.
+      <- Evaluated rule 'TR_CarCoverage_regexp' on CarCoverage:CarCoverage-1:code. Evaluation status - APPLIED.
+   <- Evaluated rule 'TR_CarCoverage_regexp' on a total of 2 instances.
+   -> Evaluating rule 'TR_CarCoverage_Accessibility'.
+      -- Resolved 2 data context(s) for rule 'TR_CarCoverage_Accessibility' target 'CarCoverage':
+         COLLCoverage:CollCoverage-1,
+         CarCoverage:CarCoverage-1.
+      -> Evaluating rule 'TR_CarCoverage_Accessibility' on COLLCoverage:CollCoverage-1:deductibleAmount.
+         -- Evaluated 'AccessibilityPayload'. The field is set to be disabled.
+      <- Evaluated rule 'TR_CarCoverage_Accessibility' on COLLCoverage:CollCoverage-1:deductibleAmount. Evaluation status - APPLIED.
+      -> Evaluating rule 'TR_CarCoverage_Accessibility' on CarCoverage:CarCoverage-1:deductibleAmount.
+         -- Evaluated 'AccessibilityPayload'. The field is set to be disabled.
+      <- Evaluated rule 'TR_CarCoverage_Accessibility' on CarCoverage:CarCoverage-1:deductibleAmount. Evaluation status - APPLIED.
+   <- Evaluated rule 'TR_CarCoverage_Accessibility' on a total of 2 instances.
+   -> Evaluating rule 'TR_CarCoverage_Visibility'.
+      -- Resolved 2 data context(s) for rule 'TR_CarCoverage_Visibility' target 'CarCoverage':
+         COLLCoverage:CollCoverage-1,
+         CarCoverage:CarCoverage-1.
+      -> Evaluating rule 'TR_CarCoverage_Visibility' on COLLCoverage:CollCoverage-1:deductibleAmount.
+         -- Evaluated 'VisibilityPayload'. The field is set to be hidden.
+      <- Evaluated rule 'TR_CarCoverage_Visibility' on COLLCoverage:CollCoverage-1:deductibleAmount. Evaluation status - APPLIED.
+      -> Evaluating rule 'TR_CarCoverage_Visibility' on CarCoverage:CarCoverage-1:deductibleAmount.
+         -- Evaluated 'VisibilityPayload'. The field is set to be hidden.
+      <- Evaluated rule 'TR_CarCoverage_Visibility' on CarCoverage:CarCoverage-1:deductibleAmount. Evaluation status - APPLIED.
+   <- Evaluated rule 'TR_CarCoverage_Visibility' on a total of 2 instances.
+<- Rule engine call completed. Entry point evaluation timestamp '2023-01-01T00:00'
+--- Finished Logging Trace Results for Trace ID: static-trace-id

@@ -1,0 +1,3 @@
+> This function physically generates each number and returns a collection will every generated number. This is NOT an abstract representation of a mathematical sequence and should not be used for that. Generating very long sequences will negatively effect performance and will require large amounts of memory.
+>
+> Primary use case of this function is to generate a list of numerical values to be displayed in a drop down for the user therefore this functions is designed for generating a countable amount of numbers.

@@ -121,20 +121,43 @@ public class Scope {
      * @return all types accessible in this scope
      */
     public Map<String, Type> getAllTypes() {
-        return Collections.unmodifiableMap(allTypes);
-    }
+        Map<String, Type> mergedAllTypes = new HashMap<>();
+        Map<String, Type> parentAllTypes = Optional.ofNullable(parentScope)
+            .map(Scope::getAllTypes)
+            .orElse(Map.of());
 
+        mergedAllTypes.putAll(parentAllTypes);
+        mergedAllTypes.putAll(allTypes);
+        return Collections.unmodifiableMap(mergedAllTypes);
+    }
 
     /**
      * @param name of symbol
      * @return true if symbol exists in current immediate scope;
      *              a symbol is in current immediate scope if the scope is static and has symbol by name
-     *              or a scope is dynamic and no static parent scope has this symbol
+     *              or a scope is dynamic and symbol is not in a static parent scope of type GLOBAL, LOCAL, PATH or FOR
      */
     public boolean isReferenceInCurrentScope(String name) {
-        return type.getProperties().getReferences().containsKey(name)
-            || type.equals(Type.ANY)
-            && !Optional.ofNullable(parentScope).map(scope -> scope.isReferenceStrictlyInScope(name)).orElse(false);
+        if(isReferenceStrictlyInImmediateScope(name)) {
+            return true;
+        }
+        if(isDynamic()) {
+            return Optional.ofNullable(parentScope)
+                .flatMap(scope -> scope.findScopeTypeOfStrictReference(name))
+                .map(t -> t != ScopeType.GLOBAL
+                    && t != ScopeType.LOCAL
+                    && t != ScopeType.PATH
+                    && t != ScopeType.VARIABLES_MAP)
+                .orElse(true);
+        }
+        return false;
+    }
+
+    private Optional<ScopeType> findScopeTypeOfStrictReference(String name) {
+        if(isReferenceStrictlyInImmediateScope(name)) {
+            return Optional.of(getScopeType());
+        }
+        return Optional.ofNullable(parentScope).flatMap(s -> s.findScopeTypeOfStrictReference(name));
     }
 
     /**
@@ -142,9 +165,17 @@ public class Scope {
      * @return true if symbol exists in strict scope including parents;
      *              if scope is dynamic then reference is not strictly in scope;
      */
-    private boolean isReferenceStrictlyInScope(String name) {
-        return type.getProperties().getReferences().containsKey(name)
+    public boolean isReferenceStrictlyInScope(String name) {
+        return isReferenceStrictlyInImmediateScope(name)
             || Optional.ofNullable(parentScope).map(scope -> scope.isReferenceStrictlyInScope(name)).orElse(false);
+    }
+
+    /**
+     * @param name of symbol
+     * @return true if symbol exists in strict immediate scope
+     */
+    public boolean isReferenceStrictlyInImmediateScope(String name) {
+        return type.getProperties().getReferences().containsKey(name);
     }
 
     /**
@@ -152,9 +183,7 @@ public class Scope {
      * @return true if symbol exists only in global scope but not in any descendant scope
      */
     public boolean isReferenceInGlobalScope(String name) {
-        return ScopeType.GLOBAL == scopeType && isReferenceInCurrentScope(name)
-            || !isReferenceInCurrentScope(name)
-            && Optional.ofNullable(parentScope).map(scope -> scope.isReferenceInGlobalScope(name)).orElse(false);
+        return findScopeTypeOfReference(name) == ScopeType.GLOBAL;
     }
 
     public Scope findClosestScopeOfType(ScopeType scopeType) {
@@ -166,12 +195,34 @@ public class Scope {
 
     /**
      *
+     * @return closest scope that can be referenced by 'this'.
+     *          Only elements from FILTER and LOCAL objects can be referenced by 'this'.
+     */
+    public Scope findClosestReferencableScope() {
+        if(scopeType == ScopeType.FILTER || scopeType == ScopeType.LOCAL) {
+            return this;
+        }
+        return Optional.ofNullable(parentScope)
+            .map(scope -> scope.findClosestReferencableScope())
+            .orElse(this);
+    }
+
+    /**
+     *
+     * @return true if this scope is dynamically typed
+     */
+    public boolean isDynamic() {
+        return type.isDynamic();
+    }
+
+    /**
+     *
      * @param name of function symbol
      * @param paramCount of function
      * @return resolves actual function symbol accessible from within this scope
      */
     public Optional<FunctionSymbol> resolveFunctionSymbol(String name, int paramCount) {
-        if(type.equals(Type.ANY) && ScopeType.GLOBAL == scopeType) {
+        if(isDynamic() && ScopeType.GLOBAL == scopeType) {
             List<FunctionParameter> parameters = new ArrayList<>();
             for(int i = 0; i < paramCount; i++) {
                 parameters.add(new FunctionParameter(i, Type.ANY));
@@ -195,11 +246,13 @@ public class Scope {
      * @return resolves actual reference symbol accessible from within this scope
      */
     public Optional<VariableSymbol> resolveReferenceSymbol(String name) {
-        if(type.equals(Type.ANY) && isReferenceInCurrentScope(name)) {
+        if(isDynamic() && isReferenceInCurrentScope(name)) {
             return Optional.of(new VariableSymbol(name, Type.ANY));
         }
-        return Optional.ofNullable(type.getProperties().getReferences().get(name))
-                .or(() -> Optional.ofNullable(parentScope).flatMap(s -> s.resolveReferenceSymbol(name)));
+        if(isReferenceStrictlyInImmediateScope(name)) {
+            return Optional.of(type.getProperties().getReferences().get(name));
+        }
+        return Optional.ofNullable(parentScope).flatMap(s -> s.resolveReferenceSymbol(name));
     }
 
     /**
@@ -207,24 +260,21 @@ public class Scope {
      * @return a type of scope that has this particular reference symbol
      */
     public ScopeType findScopeTypeOfReference(String name) {
-        if(isReferenceInCurrentScope(name)) {
-            return getScopeType();
-        }
-        return Optional.ofNullable(parentScope)
-            .map(s -> s.findScopeTypeOfReference(name))
+        return findScopeOfReference(name)
+            .map(Scope::getScopeType)
             .orElse(null);
     }
 
     /**
-     * @return all global variable symbols accessible within this scope
+     *
+     * @param name of symbol
+     * @return scope that has this particular reference symbol
      */
-    public Map<String, VariableSymbol> resolveGlobalSymbols() {
-        if(ScopeType.GLOBAL == scopeType) {
-            return type.getProperties().getReferences();
+    public Optional<Scope> findScopeOfReference(String name) {
+        if(isReferenceInCurrentScope(name)) {
+            return Optional.of(this);
         }
-        return Optional.ofNullable(parentScope)
-            .map(s -> s.resolveGlobalSymbols())
-            .orElse(Collections.emptyMap());
+        return Optional.ofNullable(parentScope).flatMap(s -> s.findScopeOfReference(name));
     }
 
     /**
@@ -233,9 +283,6 @@ public class Scope {
      * @return a global type available in the current scope.
      */
     public Type resolveTypeOf(String typeToken) {
-        if(type.equals(Type.ANY)) {
-            return Type.ANY;
-        }
         return Optional.ofNullable(parentScope)
             .map(s -> s.resolveTypeOf(typeToken))
             .orElseGet(() -> toType(typeToken, allTypes));

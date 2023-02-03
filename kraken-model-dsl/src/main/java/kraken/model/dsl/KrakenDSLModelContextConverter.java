@@ -15,7 +15,7 @@
  */
 package kraken.model.dsl;
 
-import com.google.common.collect.ImmutableList;
+
 import kraken.model.context.Cardinality;
 import kraken.model.context.ContextDefinition;
 import kraken.model.context.ContextField;
@@ -27,11 +27,11 @@ import kraken.model.dsl.model.DSLContextField;
 import kraken.model.dsl.model.DSLContexts;
 import kraken.model.dsl.model.DSLModel;
 import kraken.model.factory.RulesModelFactory;
-import org.apache.commons.lang3.StringUtils;
 
 import java.beans.Introspector;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,11 +47,9 @@ class KrakenDSLModelContextConverter {
 
     static List<ContextDefinition> convertContexts(DSLModel dsl) {
         List<ContextDefinition> contexts = convertContextBlocks(dsl.getNamespace(), dsl.getContextBlocks());
-        List<ContextDefinition> otherContexts = convertContexts(dsl.getNamespace(), dsl.getContexts());
-        return ImmutableList.<ContextDefinition>builder()
-                .addAll(contexts)
-                .addAll(otherContexts)
-                .build();
+        contexts.addAll(convertContexts(dsl.getNamespace(), dsl.getContexts()));
+
+        return Collections.unmodifiableList(contexts);
     }
 
     private static List<ContextDefinition> convertContexts(String namespace, Collection<DSLContext> contexts) {
@@ -68,17 +66,15 @@ class KrakenDSLModelContextConverter {
 
     private static Collection<ContextDefinition> convertContextBlock(String namespace, DSLContexts contexts) {
         Collection<ContextDefinition> contextDefinitions = convertContexts(namespace, contexts.getContexts());
-        Collection<ContextDefinition> otherContextDefinitions = convertContextBlocks(namespace, contexts.getContextBlocks());
+        contextDefinitions.addAll(convertContextBlocks(namespace, contexts.getContextBlocks()));
 
-        return ImmutableList.<ContextDefinition>builder()
-                .addAll(contextDefinitions)
-                .addAll(otherContextDefinitions)
-                .build();
+        return Collections.unmodifiableCollection(contextDefinitions);
     }
 
     private static ContextDefinition convert(String namespace, DSLContext context) {
         ContextDefinition contextDefinition = factory.createContextDefinition();
         contextDefinition.setRoot(context.isRoot());
+        contextDefinition.setSystem(context.isSystem());
         contextDefinition.setPhysicalNamespace(namespace);
         contextDefinition.setName(context.getName());
         contextDefinition.setStrict(context.isStrict());

@@ -22,7 +22,7 @@ import kraken.el.scope.type.Type;
 /**
  * @author mulevicius
  */
-public class Null extends LiteralExpression {
+public class Null extends LiteralExpression<Object> {
 
     public Null(Scope scope, Token token) {
         super(null, NodeType.NULL, scope, Type.ANY, token);

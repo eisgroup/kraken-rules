@@ -1,0 +1,101 @@
+
+# generated  by java 
+packages/engine/__tests__/sanity/_SanityDimensions.ts
+packages/engine/__tests__/sanity/_SanityEntryPointNames.d.ts
+packages/test-product-types/index.d.ts
+
+# prettier specific ignores
+*.md
+*.json
+# ignore rules for the UI app
+_npm
+npm
+_npmtmp
+# use global syntax for excludes
+syntax: glob
+
+#exclude intelliJ files
+.idea
+.vagrant
+.node
+*.iml
+*.iws
+*.ipr
+
+#exclude eclipse files
+.settings
+.metadata
+.workspace
+*.project
+*.classpath
+*.springBeans
+*.springWebflow
+maven-eclipse.xml
+
+#common tools files
+*.pmd
+*.checkstyle
+target
+test-output
+.toDelete
+
+# Logs
+logs
+logsPath_IS_UNDEFINED
+*.log
+velocity.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+# Coverage tools
+lib-cov
+coverage
+
+# Dependency directory
+node_modules
+
+# Generated code
+gen
+dist
+transpiled
+build
+build-ts
+generated
+plugin_gen.xml
+plugin.xml_gen
+*.ucls
+dependency-reduced-pom.xml
+
+# Generated css
+**/public/styles/*.css
+**/src/automatic/**/*.ts
+**/src/automatic/**/*.json
+
+# Mac OSX
+.DS_Store
+
+# Eclipse Trace
+*._trace
+
+# Eclipse XText & Xtend
+*/xtend-gen/*
+*/xtext-gen/*
+*/src-gen/*
+
+# Deployment scripts
+docker/dev/connect.bat
+
+# Version backups
+*.versionsBackup
+
+# VSCode folders
+.vscode
+*.hprof
+*.xlsx#
+.npmrc
+
+# Jenkins
+*@tmp

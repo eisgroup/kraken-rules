@@ -7,7 +7,7 @@
     <parent>
         <artifactId>parent-pom</artifactId>
         <groupId>kraken</groupId>
-        <version>1.22.0-SNAPSHOT</version>
+        <version>1.42.4-SNAPSHOT</version>
     </parent>
 
     <artifactId>kraken-runtime-repository-dynamic-api</artifactId>
@@ -16,6 +16,16 @@
         <dependency>
             <groupId>kraken</groupId>
             <artifactId>kraken-model-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

@@ -14,42 +14,42 @@
  *  limitations under the License.
  */
 
-import { withValidation } from "./ValidationHOC";
-import { FieldComponent } from "./FieldComponent";
-import { MultipleField } from "./MultipleField";
-import { InputRendererProps } from "../RenderInputFunctions";
-import { Moment } from "moment";
-import { withMetadata } from "../ContextHOC";
+import { withValidation } from './ValidationHOC'
+import { FieldComponent } from './FieldComponent'
+import { MultipleField } from './MultipleField'
+import { InputRendererProps } from '../RenderInputFunctions'
+import { Moment } from 'moment'
+import { withMetadata } from '../ContextHOC'
 
 export interface InnerInputsComponentProps<T> {
-    metadata: { [key: string]: ValidationMetadata };
-    id: string;
-    value: T;
-    onChange: (det: T) => void;
+    metadata: { [key: string]: ValidationMetadata }
+    id: string
+    value: T
+    onChange: (det: T) => void
 }
 
 export interface ValidationMetadata {
-    isApplicable: boolean;
-    isVisible: boolean;
-    errMessage?: string;
+    isApplicable: boolean
+    isVisible: boolean
+    errMessage?: string
 }
 
-export type InputValue = string | number | Date | boolean | Moment;
+export type InputValue = string | number | Date | boolean | Moment
 
 export interface SingleFieldProps {
-    id: string;
-    value: InputValue | InputValue[];
-    contextName: string;
-    modelFieldName: string;
-    info?: string;
-    onChange: (e: {}) => void;
-    metadata: { [key: string]: ValidationMetadata };
-    renderInput: (config: InputRendererProps<InputValue | InputValue[]>) => JSX.Element;
+    id: string
+    value: InputValue | InputValue[]
+    contextName: string
+    modelFieldName: string
+    info?: string
+    onChange: (e: unknown) => void
+    metadata: { [key: string]: ValidationMetadata }
+    renderInput: (config: InputRendererProps<InputValue | InputValue[]>) => JSX.Element
     /**
      * set this property, when using renderer.select
      */
-    selections?: string[];
+    selections?: string[]
 }
 
-export const SingleField = withMetadata(withValidation(FieldComponent));
-export const ManyFields = withMetadata(withValidation(MultipleField));
+export const SingleField = withMetadata(withValidation(FieldComponent))
+export const ManyFields = withMetadata(withValidation(MultipleField))

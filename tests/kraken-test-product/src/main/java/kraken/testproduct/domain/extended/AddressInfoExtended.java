@@ -18,4 +18,11 @@ package kraken.testproduct.domain.extended;
 import kraken.testproduct.domain.AddressInfo;
 
 public class AddressInfoExtended extends AddressInfo {
+
+    public AddressInfoExtended() {
+    }
+
+    public AddressInfoExtended(Boolean doNotSolicit, String countryCd, String postalCode, String city) {
+        super(doNotSolicit, countryCd, postalCode, city);
+    }
 }

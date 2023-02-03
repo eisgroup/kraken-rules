@@ -17,8 +17,14 @@
 package kraken;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+import kraken.dimensions.DimensionSet;
+import kraken.el.Expression;
+import kraken.el.ast.Ast;
+import kraken.el.ast.builder.AstBuilder;
+import kraken.el.scope.Scope;
 import kraken.model.derive.DefaultingType;
 import kraken.model.validation.UsageType;
 import kraken.model.validation.ValidationSeverity;
@@ -45,6 +51,7 @@ public class TestRuleBuilder {
     private String targetPath;
     private List<Dependency> dependencies;
     private String name;
+    private DimensionSet dimensions;
 
     public static TestRuleBuilder getInstance() {
         return new TestRuleBuilder();
@@ -58,7 +65,8 @@ public class TestRuleBuilder {
                 null,
                 payload,
                 dependencies,
-                false,
+                dimensions,
+                null,
                 null
         );
     }
@@ -78,19 +86,22 @@ public class TestRuleBuilder {
     }
 
     public TestRuleBuilder assertionPayload(String expression, List<String> templateParts, List<String> templateExpressions) {
+        Expression e = expression(expression);
         this.payload = new AssertionPayload(
             new ErrorMessage(
                 "code",
                 templateParts,
                 templateExpressions.stream()
-                    .map(e ->
-                        new CompiledExpression(e, ExpressionType.COMPLEX, null, null, List.of()))
+                    .map(tExp -> {
+                        Expression te = expression(tExp);
+                        return new CompiledExpression(te.getExpression(), ExpressionType.COMPLEX, null, null, List.of(), te.getAst());
+                    })
                     .collect(Collectors.toList())
             ),
             ValidationSeverity.critical,
             false,
             null,
-            new CompiledExpression(expression, ExpressionType.COMPLEX, null, null, List.of())
+            new CompiledExpression(e.getExpression(), ExpressionType.COMPLEX, null, null, List.of(), e.getAst())
         );
         return this;
     }
@@ -100,8 +111,9 @@ public class TestRuleBuilder {
     }
 
     public TestRuleBuilder defaultPayload(String expression, DefaultingType defaultingType) {
+        Expression e = expression(expression);
         this.payload = new DefaultValuePayload(
-                new CompiledExpression(expression, ExpressionType.COMPLEX, null, null, List.of()),
+                new CompiledExpression(e.getExpression(), ExpressionType.COMPLEX, null, null, List.of(), e.getAst()),
                 defaultingType == null ? DefaultingType.defaultValue : defaultingType
         );
         return this;
@@ -164,5 +176,20 @@ public class TestRuleBuilder {
     public TestRuleBuilder name(String name) {
         this.name = name;
         return this;
+    }
+
+    public TestRuleBuilder addDimensionSet(DimensionSet dimensionSet) {
+        this.dimensions = dimensions;
+        return this;
+    }
+
+    public TestRuleBuilder addDimensionSet(Set<String> dimensions) {
+        this.dimensions = DimensionSet.createForDimensions(dimensions);
+        return this;
+    }
+
+    private Expression expression(String expression) {
+        Ast ast = AstBuilder.from(expression, Scope.dynamic());
+        return new Expression(expression, ast);
     }
 }

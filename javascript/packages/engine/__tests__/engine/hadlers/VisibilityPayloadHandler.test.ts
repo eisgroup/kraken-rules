@@ -14,24 +14,23 @@
  *  limitations under the License.
  */
 
-import { PayloadBuilder } from "kraken-model-builder";
-import { visibilityPayloadHandler } from "../../../src/engine/handlers/VisibilityPayloadHandler";
-import { payloadResultTypeChecker } from "../../../src";
-import { Payloads } from "kraken-model";
+import { PayloadBuilder } from 'kraken-model-builder'
+import { visibilityPayloadHandler } from '../../../src/engine/handlers/VisibilityPayloadHandler'
+import { Payloads } from 'kraken-model'
+import { payloadResultTypeChecker } from '../../../src/engine/results/PayloadResultTypeChecker'
 
-describe("visibilityPayloadHandler", () => {
-    it("should create instance", () => {
-        expect(visibilityPayloadHandler.handlesPayloadType()).toBe(Payloads.PayloadType.VISIBILITY);
-    });
-    it("should return payload payloadResult with type VisibilityPayloadResult", () => {
-        const payload = PayloadBuilder.visibility().notVisible();
-        const result = visibilityPayloadHandler.executePayload(payload);
-        expect(payloadResultTypeChecker.isVisibility(result)).toBeTruthy();
-
-    });
-    it("should execute payload", () => {
-        const payload = PayloadBuilder.visibility().notVisible();
-        const result = visibilityPayloadHandler.executePayload(payload);
-        expect(result.visible).toBeFalsy();
-    });
-});
+describe('visibilityPayloadHandler', () => {
+    it('should create instance', () => {
+        expect(visibilityPayloadHandler.handlesPayloadType()).toBe(Payloads.PayloadType.VISIBILITY)
+    })
+    it('should return payload payloadResult with type VisibilityPayloadResult', () => {
+        const payload = PayloadBuilder.visibility().notVisible()
+        const result = visibilityPayloadHandler.executePayload(payload)
+        expect(payloadResultTypeChecker.isVisibility(result)).toBeTruthy()
+    })
+    it('should execute payload', () => {
+        const payload = PayloadBuilder.visibility().notVisible()
+        const result = visibilityPayloadHandler.executePayload(payload)
+        expect(result.visible).toBeFalsy()
+    })
+})

@@ -19,9 +19,9 @@ import java.text.MessageFormat;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import kraken.model.dimensions.DimensionSetService;
 import kraken.converter.KrakenProjectConverter;
 import kraken.converter.RuleConverter;
-import kraken.converter.dimensional.DimensionalRuleChecker;
 import kraken.converter.translation.KrakenExpressionTranslator;
 import kraken.el.TargetEnvironment;
 import kraken.model.project.KrakenProject;
@@ -29,7 +29,6 @@ import kraken.model.project.dependencies.RuleDependencyExtractor;
 import kraken.model.project.repository.KrakenProjectRepository;
 import kraken.model.project.validator.KrakenProjectValidationService;
 import kraken.runtime.repository.KrakenRepositoryException;
-import kraken.runtime.repository.RuntimeContextRepository;
 import kraken.runtime.repository.RuntimeProjectRepository;
 import kraken.runtime.repository.RuntimeProjectRepositoryConfig;
 import kraken.runtime.repository.RuntimeRuleRepository;
@@ -66,14 +65,7 @@ public class RuntimeProjectRepositoryFactory implements RuntimeRepositoryFactory
     }
 
     @Override
-    public RuntimeRuleRepository resolveRuleRepository(String namespace) {
-        return repositories.compute(namespace,
-                (ns, cachedRepository) -> returnOrCreateRuntimeProjectRepository(ns, cachedRepository)
-        );
-    }
-
-    @Override
-    public RuntimeContextRepository resolveContextRepository(String namespace) {
+    public RuntimeProjectRepository resolveRepository(String namespace) {
         return repositories.compute(namespace,
                 (ns, cachedRepository) -> returnOrCreateRuntimeProjectRepository(ns, cachedRepository)
         );
@@ -83,7 +75,7 @@ public class RuntimeProjectRepositoryFactory implements RuntimeRepositoryFactory
                                                                             RuntimeProjectRepository cachedRepository) {
         KrakenProject newKrakenProject = krakenProjectRepository.getKrakenProject(namespace);
         throwIfKrakenProjectIsMissing(namespace, newKrakenProject);
-        if(cachedRepository != null
+        if (cachedRepository != null
                 && newKrakenProject.getIdentifier().equals(cachedRepository.getKrakenProject().getChecksum())) {
             return cachedRepository;
         }
@@ -108,8 +100,13 @@ public class RuntimeProjectRepositoryFactory implements RuntimeRepositoryFactory
                 targetEnvironment,
                 ruleDependencyExtractor
         );
-        DimensionalRuleChecker dimensionalRuleChecker = new DimensionalRuleChecker(krakenProject);
-        RuleConverter ruleConverter = new RuleConverter(ruleDependencyExtractor, krakenExpressionTranslator, dimensionalRuleChecker);
+        DimensionSetService dimensionSetService = new DimensionSetService(krakenProject);
+        RuleConverter ruleConverter = new RuleConverter(
+                ruleDependencyExtractor,
+                krakenExpressionTranslator,
+                dimensionSetService,
+                krakenProject.getNamespace()
+        );
         return new DynamicRuleRepositoryProcessor(
                 krakenProject,
                 ruleConverter,
@@ -121,7 +118,7 @@ public class RuntimeProjectRepositoryFactory implements RuntimeRepositoryFactory
     }
 
     private void throwIfKrakenProjectIsMissing(String namespace, KrakenProject krakenProject) {
-        if(krakenProject == null) {
+        if (krakenProject == null) {
             String format = "Unknown namespace: ''{0}''. This indicates a Kraken Rule deployment gone wrong " +
                     "or Kraken Engine is executed with namespace that does not exist";
             String message = MessageFormat.format(format, namespace);

@@ -31,36 +31,43 @@ import java.util.Objects;
 public class OverridableRuleContextInfo {
 
     /**
+     *
+     * @return namespace that indicates KrakenProject of this evaluation
+     */
+    private final String namespace;
+
+    /**
      * Context on which overridden rule should apply
      */
-    private String contextId;
+    private final String contextId;
 
     /**
      * Root context id
      */
-    private String rootContextId;
+    private final String rootContextId;
 
     /**
      * Name of context that rule was evaluated on
      */
-    private String contextName;
+    private final String contextName;
 
     /**
      * Context attribute value on which rule override is applied
      */
-    private Object contextAttributeValue;
+    private final Object contextAttributeValue;
 
     /**
      * {@link kraken.runtime.RuleEngine} invocation timestamp
      */
-    private LocalDateTime ruleEvaluationTimeStamp;
+    private final LocalDateTime ruleEvaluationTimeStamp;
 
     /**
      * A set of dependencies that overridable evaluation result depends on.
      */
-    private Map<String, OverrideDependency> overrideDependencies;
+    private final Map<String, OverrideDependency> overrideDependencies;
 
     public OverridableRuleContextInfo(
+            String namespace,
             String contextId,
             String rootContextId,
             String contextName,
@@ -68,12 +75,17 @@ public class OverridableRuleContextInfo {
             LocalDateTime ruleEvaluationTimeStamp,
             Map<String, OverrideDependency> overrideDependencies
     ) {
+        this.namespace = namespace;
         this.contextId = contextId;
         this.rootContextId = rootContextId;
         this.contextName = contextName;
         this.contextAttributeValue = contextAttributeValue;
         this.ruleEvaluationTimeStamp = ruleEvaluationTimeStamp;
         this.overrideDependencies = Objects.requireNonNull(overrideDependencies);
+    }
+
+    public String getNamespace() {
+        return namespace;
     }
 
     public String getContextId() {

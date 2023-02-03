@@ -8,7 +8,7 @@
     <parent>
         <artifactId>parent-pom</artifactId>
         <groupId>kraken</groupId>
-        <version>1.22.0-SNAPSHOT</version>
+        <version>1.42.4-SNAPSHOT</version>
     </parent>
 
     <artifactId>kraken-model-dsl</artifactId>
@@ -122,17 +122,6 @@
             <artifactId>kraken-utils</artifactId>
         </dependency>
 
-        <!-- used for Metadata expression parsing in DSLMetadataVisitor.java -->
-        <dependency>
-            <groupId>kraken</groupId>
-            <artifactId>kraken-expression-language-mvel</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>kraken</groupId>
-            <artifactId>kraken-expression-language-interpreter</artifactId>
-            <scope>runtime</scope>
-        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

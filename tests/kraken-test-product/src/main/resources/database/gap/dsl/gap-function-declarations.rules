@@ -1,3 +1,5 @@
 Namespace Policy
 
 Function GetCarCoverage(Policy) : CarCoverage
+Function GetVehicleModel(Vehicle) : String
+Function GetFirstElement(String[]) : String

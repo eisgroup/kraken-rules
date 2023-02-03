@@ -1,21 +1,13 @@
 Namespace Policy
 
 EntryPoint "RuleOrder" {
-    "RULEORDER-COLL-mandatory",
-    "RULEORDER-VEHICLE-mandatory",
-    "RULEORDER-POLICY-mandatory",
-    "RULEORDER-INSURED-mandatory",
-    "RULEORDER-CREDITCARD-mandatory",
-    "RULEORDER-BILLINGADDRESS-mandatory",
-    "RULEORDER-PARTY-mandatory",
     "RULEORDER-COLL",
     "RULEORDER-VEHICLE",
     "RULEORDER-POLICY",
     "RULEORDER-INSURED",
     "RULEORDER-CREDITCARD",
     "RULEORDER-BILLINGADDRESS",
-    "RULEORDER-PARTY",
-    "RULEORDER-Policy-state"
+    "RULEORDER-PARTY"
 }
 
 Rule "RULEORDER-COLL" On COLLCoverage.code {
@@ -27,11 +19,11 @@ Rule "RULEORDER-VEHICLE" On Vehicle.model {
 }
 
 Rule "RULEORDER-POLICY" On Policy.policyNumber {
-    Reset To Concat({Insured.name, CreditCardInfo.cardType})
+    Reset To ConcatInsuredNameWithCreditCardInfo(Insured, CreditCardInfo)
 }
 
 Rule "RULEORDER-CREDITCARD" On CreditCardInfo.cardType {
-    Reset To Concat({Concat(Party[*].relationToPrimaryInsured), BillingAddress.countryCd})
+    Reset To Concat({ConcatPartyRelations(Party), BillingAddress.countryCd})
 }
 
 Rule "RULEORDER-BILLINGADDRESS" On AddressInfo.countryCd {
@@ -39,43 +31,23 @@ Rule "RULEORDER-BILLINGADDRESS" On AddressInfo.countryCd {
 }
 
 Rule "RULEORDER-INSURED" On Insured.name {
-    Reset To Concat(Party[*].relationToPrimaryInsured)
+    Reset To ConcatPartyRelations(Party)
 }
 
 Rule "RULEORDER-PARTY" On Party.relationToPrimaryInsured {
     Reset To "Party"
 }
 
-Rule "RULEORDER-COLL-mandatory" On COLLCoverage.code {
-    Set Mandatory
+Function ConcatPartyRelations(Party[] parties) : String {
+  Concat(parties.relationToPrimaryInsured)
 }
 
-Rule "RULEORDER-VEHICLE-mandatory" On Vehicle.model {
-    Set Mandatory
+Function ConcatInsuredNameWithCreditCardInfo(Insured insured, CreditCardInfo credit) : String {
+  Concat({GetName(insured), credit.cardType})
 }
 
-Rule "RULEORDER-POLICY-mandatory" On Policy.policyNumber {
-    Set Mandatory
-}
-
-Rule "RULEORDER-CREDITCARD-mandatory" On CreditCardInfo.cardType {
-    Set Mandatory
-}
-
-Rule "RULEORDER-BILLINGADDRESS-mandatory" On AddressInfo.countryCd {
-    Set Mandatory
-}
-
-Rule "RULEORDER-INSURED-mandatory" On Insured.name {
-    Set Mandatory
-}
-
-Rule "RULEORDER-PARTY-mandatory" On Party.relationToPrimaryInsured {
-    Set Mandatory
-}
-
-Rule "RULEORDER-Policy-state" On Policy.state {
-    Assert Insured.haveChildren
+Function GetName(Any object) : String {
+  object.name
 }
 
 EntryPoint "RuleOrderWithComplexField" {
@@ -95,6 +67,7 @@ Rule "RuleOrderWithComplexField_Policy_policyNumber" On Policy.policyNumber {
 Rule "RuleOrderWithComplexField_AddressInfo_doNotSolicit" On AddressInfo.doNotSolicit {
     Default To every item in Policy.riskItems satisfies item.rentalCoverage.limitAmount > StringLength(city)
 }
+
 Rule "RuleOrderWithComplexField_PartyRole_limit" On PartyRole.limit {
     Default To 100
 }
@@ -112,5 +85,101 @@ Rule "RuleOrderWithComplexField_AddressInfo_street" On RRCoverage.deductibleAmou
     Default To 10
 }
 
+EntryPoint "FunctionCheck-RulesUsingFunctionOrderCheck" {
+    "Default Car Coverage Limit Amount To 1000", "Default Total Limit To Car Coverage Limit Amount"
+}
 
+Rule "Default Car Coverage Limit Amount To 1000" On CarCoverage.limitAmount {
+    Default To 1000
+}
 
+Rule "Default Total Limit To Car Coverage Limit Amount" On Policy.totalLimit {
+    Default To GetCarCoverage(Policy).limitAmount
+}
+
+EntryPoint "RuleOrderWithNoCycleInFunction" {
+    "RuleOrderWithNoCycleInFunction_Policy_policyNumber",
+    "RuleOrderWithNoCycleInFunction_RRCoverage_limitAmount"
+}
+
+Rule "RuleOrderWithNoCycleInFunction_Policy_policyNumber" On Policy.policyNumber {
+    When Sum(GenericCoverageLimits(Policy.riskItems.collCoverages)) > 100
+    Default To "Large"
+}
+
+Rule "RuleOrderWithNoCycleInFunction_RRCoverage_limitAmount" On RRCoverage.limitAmount {
+    When Policy.policyNumber = "Large"
+    Default To Sum(GenericCoverageLimits(Policy.riskItems.collCoverages))
+}
+
+Function GenericCoverageLimits(CarCoverage[] coverages) : Number[] {
+  for c in coverages return GenericCoverageLimit(c)
+}
+
+Function GenericCoverageLimit(CarCoverage coverage) : Number {
+  coverage.limitAmount
+}
+
+EntryPoint "RuleOrderWithCycleInFunction" {
+    "RuleOrderWithCycleInFunction_Policy_policyNumber",
+    "RuleOrderWithCycleInFunction_CarCoverage_limitAmount"
+}
+
+Rule "RuleOrderWithCycleInFunction_Policy_policyNumber" On Policy.policyNumber {
+    When Sum(GenericCoverageLimits(Policy.riskItems.collCoverages)) > 100
+    Default To "Large"
+}
+
+Rule "RuleOrderWithCycleInFunction_CarCoverage_limitAmount" On CarCoverage.limitAmount {
+    When Policy.policyNumber = "Large"
+    Default To Sum(GenericCoverageLimits(Policy.riskItems.collCoverages))
+}
+
+EntryPoint "DefaultRuleByPriority" {
+    "DefaultPolicyNumber-PriorityMAX-defaultExpressionError",
+    "DefaultPolicyNumber-Priority999-conditionExpressionError",
+    "DefaultPolicyNumber-Priority10",
+    "DefaultPolicyNumber-Priority0",
+    "DefaultPolicyNumber-Priority-10",
+    "DefaultPolicyNumber-PriorityMIN",
+    "DefaultPolicyNumber-PriorityMIN2"
+}
+
+Rule "DefaultPolicyNumber-PriorityMAX-defaultExpressionError" On Policy.policyNumber {
+    Priority MAX
+    Reset To Vehicle[0].model
+}
+
+Rule "DefaultPolicyNumber-Priority999-conditionExpressionError" On Policy.policyNumber {
+    Priority 999
+    When Vehicle[0].model = '999'
+    Reset To '999'
+}
+
+Rule "DefaultPolicyNumber-Priority10" On Policy.policyNumber {
+    Priority 10
+    When Policy.accountName = '10'
+    Reset To '10'
+}
+
+Rule "DefaultPolicyNumber-Priority0" On Policy.policyNumber {
+    When Policy.accountName = '0'
+    Reset To '0'
+}
+
+Rule "DefaultPolicyNumber-Priority-10" On Policy.policyNumber {
+    Priority -10
+    When Policy.accountName = '-10'
+    Reset To '-10'
+}
+
+Rule "DefaultPolicyNumber-PriorityMIN" On Policy.policyNumber {
+    Priority MIN
+    Reset To 'MIN'
+}
+
+Rule "DefaultPolicyNumber-PriorityMIN2" On Policy.policyNumber {
+    Priority MIN
+    When Policy.accountName = 'MIN'
+    Reset To 'MIN'
+}

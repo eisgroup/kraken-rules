@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /*
  *  Copyright 2019 EIS Ltd and/or one of its affiliates.
  *
@@ -14,67 +15,100 @@
  *  limitations under the License.
  */
 
-import { sanityMocks } from "./_AutoPolicyObject.mocks";
-import { sanityEngine } from "./_SanityEngine";
+import { sanityMocks } from './_AutoPolicyObject.mocks'
+import { sanityEngine } from './_SanityEngine'
+import { EntryPointResult } from 'kraken-engine-api'
 
 enum ContextVars {
-    PLAN = "Premium",
-    PACKAGE = "Pizza"
+    PLAN = 'Premium',
+    PACKAGE = 'Pizza',
 }
 
-describe("Engine Expression Context Sanity Test", () => {
-    const { empty } = sanityMocks;
-    it("should check context in condition expression", () => {
-        const policy = empty();
+describe('Engine Expression Context Sanity Test', () => {
+    const { empty } = sanityMocks
+    it('should check context in condition expression', () => {
+        const policy = empty()
         const results = sanityEngine.evaluate(
             policy,
-            "ExpressionContextCheck-Condition",
-            "ExpressionContextCheck-Condition"
-        );
-        expect(policy.policyNumber).toBe(ContextVars.PLAN);
-        expect(policy.transactionDetails!.txReason).toBe(ContextVars.PACKAGE);
-        expect(results).not.k_toHaveExpressionsFailures();
-        results.getAllRuleResults()
-            .forEach(res => expect(res).k_toBeValidRuleResult());
-    });
-    it("should check context in default expression", () => {
-        const policy = empty();
+            'ExpressionContextCheck-Condition',
+            'ExpressionContextCheck-Condition',
+        ) as EntryPointResult
+        expect(policy.policyNumber).toBe(ContextVars.PLAN)
+        expect(policy.transactionDetails!.txReason).toBe(ContextVars.PACKAGE)
+        expect(results).not.k_toHaveExpressionsFailures()
+        results.getAllRuleResults().forEach(res => expect(res).k_toBeValidRuleResult())
+    })
+    it('should check context in default expression', () => {
+        const policy = empty()
         const results = sanityEngine.evaluate(
             policy,
-            "ExpressionContextCheck-Default",
-            "ExpressionContextCheck-Default"
-        );
-        expect(policy.policyNumber).toBe(ContextVars.PLAN);
-        expect(policy.transactionDetails!.txReason).toBe(ContextVars.PACKAGE);
-        expect(results).not.k_toHaveExpressionsFailures();
-        results.getAllRuleResults()
-            .forEach(res => expect(res).k_toBeValidRuleResult());
-    });
-    it("should check context in assertion expression", () => {
-        const policy = empty();
-        policy.policyNumber = ContextVars.PLAN;
-        policy.transactionDetails!.txReason = ContextVars.PACKAGE;
+            'ExpressionContextCheck-Default',
+            'ExpressionContextCheck-Default',
+        ) as EntryPointResult
+        expect(policy.policyNumber).toBe(ContextVars.PLAN)
+        expect(policy.transactionDetails!.txReason).toBe(ContextVars.PACKAGE)
+        expect(results).not.k_toHaveExpressionsFailures()
+        results.getAllRuleResults().forEach(res => expect(res).k_toBeValidRuleResult())
+    })
+    it('should check context in assertion expression', () => {
+        const policy = empty()
+        policy.policyNumber = ContextVars.PLAN
+        policy.transactionDetails!.txReason = ContextVars.PACKAGE
         const results = sanityEngine.evaluate(
             policy,
-            "ExpressionContextCheck-Assert",
-            "ExpressionContextCheck-Assert"
-        );
-        expect(results).not.k_toHaveExpressionsFailures();
-        results.getAllRuleResults()
-            .forEach(res => expect(res).k_toBeValidRuleResult());
-    });
-    it("should check context in assert expression with cross component reference", () => {
-        const policy = empty();
-        policy.policyNumber = ContextVars.PLAN;
-        policy.transactionDetails!.txReason = ContextVars.PACKAGE;
-        policy.insured!.name = ContextVars.PACKAGE;
+            'ExpressionContextCheck-Assert',
+            'ExpressionContextCheck-Assert',
+        ) as EntryPointResult
+        expect(results).not.k_toHaveExpressionsFailures()
+        results.getAllRuleResults().forEach(res => expect(res).k_toBeValidRuleResult())
+    })
+    it('should check context in assert expression with cross component reference', () => {
+        const policy = empty()
+        policy.policyNumber = ContextVars.PLAN
+        policy.transactionDetails!.txReason = ContextVars.PACKAGE
+        policy.insured!.name = ContextVars.PACKAGE
         const results = sanityEngine.evaluate(
             policy,
-            "ExpressionContextCheck-Assert-CCR",
-            "ExpressionContextCheck-Assert-CCR"
-        );
-        expect(results).not.k_toHaveExpressionsFailures();
-        results.getAllRuleResults()
-            .forEach(res => expect(res).k_toBeValidRuleResult());
-    });
-});
+            'ExpressionContextCheck-Assert-CCR',
+            'ExpressionContextCheck-Assert-CCR',
+        ) as EntryPointResult
+        expect(results).not.k_toHaveExpressionsFailures()
+        results.getAllRuleResults().forEach(res => expect(res).k_toBeValidRuleResult())
+    })
+    it('should evaluate nested dynamic context scope', () => {
+        const policy = empty()
+        policy.policyNumber = 'target-context'
+
+        const results = sanityEngine.evaluate(
+            policy,
+            'ExpressionContextCheck-NestedScope',
+            'ExpressionContextCheck-NestedScope',
+        ) as EntryPointResult
+        expect(results).not.k_toHaveExpressionsFailures()
+        results.getAllRuleResults().forEach(res => expect(res).k_toBeValidRuleResult())
+    })
+    it('should evaluate nested filter context scope', () => {
+        const policy = empty()
+        policy.policyNumber = 'policy-make'
+        policy.riskItems![0].model = 'vehicle-make'
+
+        const results = sanityEngine.evaluate(
+            policy,
+            'ExpressionContextCheck-NestedFilter',
+            'ExpressionContextCheck-NestedFilter',
+        ) as EntryPointResult
+        expect(results).not.k_toHaveExpressionsFailures()
+        results.getAllRuleResults().forEach(res => expect(res).k_toBeValidRuleResult())
+    })
+    it('should evaluate by flat mapping dynamic context', () => {
+        const policy = empty()
+        policy.policyNumber = 'last'
+        const results = sanityEngine.evaluate(
+            policy,
+            'ExpressionContextCheck-FlatMapDynamicContext',
+            'ExpressionContextCheck-FlatMapDynamicContext',
+        ) as EntryPointResult
+        expect(results).not.k_toHaveExpressionsFailures()
+        results.getAllRuleResults().forEach(res => expect(res).k_toBeValidRuleResult())
+    })
+})

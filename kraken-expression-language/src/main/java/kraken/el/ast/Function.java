@@ -15,21 +15,22 @@
  */
 package kraken.el.ast;
 
-import kraken.el.ast.token.Token;
-import kraken.el.scope.Scope;
-import kraken.el.scope.type.Type;
-
 import java.util.List;
 import java.util.stream.Collectors;
+
+import kraken.el.ast.token.Token;
+import kraken.el.scope.Scope;
+import kraken.el.scope.ScopeType;
+import kraken.el.scope.type.Type;
 
 /**
  * @author mulevicius
  */
 public class Function extends Reference {
 
-    private String functionName;
+    private final String functionName;
 
-    private List<Expression> parameters;
+    private final List<Expression> parameters;
 
     public Function(String functionName, List<Expression> parameters, Scope scope, Type evaluationType, Token token) {
         super(NodeType.FUNCTION, scope, evaluationType, token);
@@ -46,16 +47,34 @@ public class Function extends Reference {
         return parameters;
     }
 
-    public String getFunctionSignatureString() {
-        return parameters.stream()
-                .map(Expression::getEvaluationType)
-                .map(Type::toString)
-                .collect(Collectors.joining(", ", functionName + "(", ")"));
+    @Override
+    public boolean isReferenceInCurrentScope() {
+        return false;
     }
 
     @Override
-    String getFirstToken() {
-        return functionName + "()";
+    public boolean isReferenceInGlobalScope() {
+        return false;
+    }
+
+    @Override
+    public ScopeType findScopeTypeOfReference() {
+        return null;
+    }
+
+    @Override
+    public boolean isSimpleBeanPath() {
+        return false;
+    }
+
+    @Override
+    public boolean isSimplePath() {
+        return false;
+    }
+
+    @Override
+    public Reference getFirstReference() {
+        return this;
     }
 
     @Override

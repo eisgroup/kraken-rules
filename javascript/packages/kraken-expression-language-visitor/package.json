@@ -1,30 +1,40 @@
 {
     "name": "kraken-expression-language-visitor",
-    "version": "1.20.1-autocomplete.3",
-    "main": "./target/dist/js/index.js",
-    "types": "./target/dist/definitions/index.d.ts",
+    "version": "1.42.4-stage.0",
+    "main": "./target/dist/js/src/index.js",
+    "types": "./target/dist/definitions/src/index.d.ts",
+    "publishConfig": {
+        "registry": "https://genesis-npm-release.exigengroup.com/repository/genesis-npm-release/"
+    },
+    "typedocMain": "src/index.ts",
     "dependencies": {
         "antlr4ts": "0.5.0-alpha.4"
     },
     "devDependencies": {
-        "antlr4ts-cli": "0.5.0-alpha.4",
-        "@babel/cli": "7.1.5",
-        "@types/node": "13.9.0",
         "@types/jest": "26.0.22",
-        "rimraf": "2.6.3",
+        "@types/node": "13.9.0",
+        "antlr4ts-cli": "0.5.0-alpha.4",
+        "jest": "26.6.3",
+        "rimraf": "3.0.2",
+        "ts-jest": "26.5.0",
         "ts-node": "4.1.0",
-        "tslint": "5.18.0",
         "typescript": "4.2.4"
     },
     "scripts": {
-        "lint": "echo 'do not lint generated code'",
-        "compile": "tsc --pretty",
-        "babel": "babel target/dist/tsjs/ --out-dir target/dist/js/ --config-file ../../babel.config.js --delete-dir-on-start --ignore ./target/dist/tsjs/__tests__",
-        "babelDev": "babel target/dist/tsjs/ --out-dir target/dist/js/ --config-file ../../babel.config.js --ignore ./target/dist/tsjs/__tests__",
-        "del:compiled": "rimraf target/dist && rimraf src/generated",
-        "build": "npm run compile && npm run lint",
-        "prepare": "node -v && npm run del:compiled && npm run antlr && npm run compile && npm run lint -- --fix && npm run babel",
-        "release": "npm publish",
-        "antlr": "cd src/antlr/generated/ && antlr4ts -no-listener -lib Value.g4 Common.g4 -visitor Kel.g4"
-    }
+        "lint": "eslint src test --ignore-pattern **/generated/**",
+        "test": "jest",
+        "compile": "yarn run antlr && tsc --pretty",
+        "postcompile": "yarn transpile",
+        "transpile": "echo 'no transpile'",
+        "del:compiled": "rimraf target/dist && rimraf src/antlr/generated",
+        "build": "yarn run compile && yarn run lint",
+        "prepare": "node -v && yarn run del:compiled && yarn run compile && yarn run lint -- --fix",
+        "release": "yarn publish",
+        "antlr": "antlr4ts -Xexact-output-dir -no-listener -visitor ../../../kraken-expression-language/src/main/antlr4/kraken/el/*.g4 -o src/antlr/generated"
+    },
+    "files": [
+        "target/dist/definitions",
+        "target/dist/js"
+    ],
+    "gitHead": "6d16f79f76d6b73678a70625923b852dd9726865"
 }

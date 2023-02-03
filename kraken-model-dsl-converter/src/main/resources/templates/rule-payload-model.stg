@@ -65,7 +65,7 @@ Overridable<overrideGroup(payload.overrideGroup)><endif>
 >>
 
 overrideGroup(overrideGroup) ::= <<
-<if(overrideGroup)> "<overrideGroup>"<endif>
+<if(overrideGroup)> "<overrideGroup; format="deescapeString">"<endif>
 >>
 
 errorMessage(errorMessage) ::= <<
@@ -73,5 +73,5 @@ errorMessage(errorMessage) ::= <<
 >>
 
 message(code, message) ::= <<
-<if(message)>"<code; format="escapeQuotes">" : "<message; format="escapeQuotes">"<else>"<code; format="escapeQuotes">"<endif>
+<if(message)>"<code; format="deescapeString">" : "<message; format="deescapeString">"<else>"<code; format="deescapeString">"<endif>
 >>

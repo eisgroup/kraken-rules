@@ -17,8 +17,7 @@ package kraken.model.factory;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.google.common.collect.Maps;
+import java.util.stream.Collectors;
 
 import kraken.model.*;
 import kraken.model.context.*;
@@ -30,6 +29,7 @@ import kraken.model.entrypoint.EntryPointImpl;
 import kraken.model.impl.*;
 import kraken.model.state.*;
 import kraken.model.validation.*;
+import kraken.namespace.Namespaced;
 
 /**
  * Default implementation of {@link RulesModelFactory}
@@ -39,7 +39,7 @@ import kraken.model.validation.*;
  */
 public class RulesModelFactoryImpl implements RulesModelFactory {
 
-    private List<ClassHolder> classNameHolders = new ArrayList<>();
+    private final List<ClassHolder> classNameHolders = new ArrayList<>();
 
     public RulesModelFactoryImpl() {
         classNameHolders.add(new ClassHolder(ContextDefinition.class, ContextDefinitionImpl.class));
@@ -66,6 +66,12 @@ public class RulesModelFactoryImpl implements RulesModelFactory {
         classNameHolders.add(new ClassHolder(ExternalContextDefinitionAttributeType.class, ExternalContextDefinitionAttributeTypeImpl.class));
         classNameHolders.add(new ClassHolder(ExternalContextDefinitionReference.class, ExternalContextDefinitionReferenceImpl.class));
         classNameHolders.add(new ClassHolder(FunctionSignature.class, FunctionSignatureImpl.class));
+        classNameHolders.add(new ClassHolder(Function.class, FunctionImpl.class));
+        classNameHolders.add(new ClassHolder(FunctionParameter.class, FunctionParameterImpl.class));
+        classNameHolders.add(new ClassHolder(GenericTypeBound.class, GenericTypeBoundImpl.class));
+        classNameHolders.add(new ClassHolder(FunctionDocumentation.class, FunctionDocumentationImpl.class));
+        classNameHolders.add(new ClassHolder(ParameterDocumentation.class, ParameterDocumentationImpl.class));
+        classNameHolders.add(new ClassHolder(FunctionExample.class, FunctionExampleImpl.class));
     }
 
     @Override
@@ -79,11 +85,16 @@ public class RulesModelFactoryImpl implements RulesModelFactory {
         cloned.setName(externalContext.getName());
         cloned.setPhysicalNamespace(externalContext.getPhysicalNamespace());
         cloned.setContexts(
-            Maps.transformValues(externalContext.getContexts(), this::cloneExternalContext)
-        );
+            externalContext.getContexts().values()
+                .stream()
+                .map(this::cloneExternalContext)
+                .collect(Collectors.toMap(Namespaced::getName, ex -> ex)));
         cloned.setExternalContextDefinitions(
-            Maps.transformValues(externalContext.getExternalContextDefinitions(), this::cloneExternalContextDefinitionReference)
-        );
+            externalContext.getExternalContextDefinitions().values()
+                .stream()
+                .map(this::cloneExternalContextDefinitionReference)
+                .collect(Collectors.toMap(ExternalContextDefinitionReference::getName, ex -> ex)));
+
         return cloned;
     }
 
@@ -99,8 +110,11 @@ public class RulesModelFactoryImpl implements RulesModelFactory {
         cloned.setName(externalContextDefinition.getName());
         cloned.setPhysicalNamespace(externalContextDefinition.getPhysicalNamespace());
         cloned.setAttributes(
-            Maps.transformValues(externalContextDefinition.getAttributes(), this::cloneExternalContextDefinitionAttribute)
-        );
+            externalContextDefinition.getAttributes().values()
+                .stream()
+                .map(this::cloneExternalContextDefinitionAttribute)
+                .collect(Collectors.toMap(ExternalContextDefinitionAttribute::getName, o -> o)));
+
         return cloned;
     }
 
@@ -158,9 +172,15 @@ public class RulesModelFactoryImpl implements RulesModelFactory {
          cloned.setPhysicalNamespace(contextDefinition.getPhysicalNamespace());
          cloned.setRoot(contextDefinition.isRoot());
          cloned.setStrict(contextDefinition.isStrict());
+         cloned.setSystem(contextDefinition.isSystem());
          cloned.setParentDefinitions(new ArrayList<>(contextDefinition.getParentDefinitions()));
-         cloned.setContextFields(Maps.transformValues(contextDefinition.getContextFields(), this::cloneContextField));
-         cloned.setChildren(Maps.transformValues(contextDefinition.getChildren(), this::cloneContextNavigation));
+         cloned.setContextFields(contextDefinition.getContextFields().values().stream()
+             .map(this::cloneContextField)
+             .collect(Collectors.toMap(ContextField::getName, c -> c)));
+         cloned.setChildren(contextDefinition.getChildren().values().stream()
+             .map(this::cloneContextNavigation)
+             .collect(Collectors.toMap(ContextNavigation::getTargetName, o -> o)));
+
          return cloned;
     }
 
@@ -384,6 +404,7 @@ public class RulesModelFactoryImpl implements RulesModelFactory {
         cloned.setCondition(rule.getCondition() != null ? cloneCondition(rule.getCondition()) : null);
         cloned.setPayload(clonePayload(rule.getPayload()));
         cloned.setMetadata(rule.getMetadata() != null ? cloneMetadata(rule.getMetadata()) : null);
+        cloned.setPriority(rule.getPriority());
         return cloned;
     }
 
@@ -453,6 +474,103 @@ public class RulesModelFactoryImpl implements RulesModelFactory {
         cloned.setPhysicalNamespace(functionSignature.getPhysicalNamespace());
         cloned.setReturnType(functionSignature.getReturnType());
         cloned.setParameterTypes(new ArrayList<>(functionSignature.getParameterTypes()));
+        cloned.setGenericTypeBounds(functionSignature.getGenericTypeBounds().stream().map(this::cloneGenericTypeBound)
+            .collect(Collectors.toList()));
+        return cloned;
+    }
+
+    @Override
+    public FunctionDocumentation createFunctionDocumentation() {
+        return new FunctionDocumentationImpl();
+    }
+
+    @Override
+    public FunctionDocumentation cloneFunctionDocumentation(FunctionDocumentation documentation) {
+        var cloned = new FunctionDocumentationImpl();
+        cloned.setDescription(documentation.getDescription());
+        cloned.setSince(documentation.getSince());
+        cloned.setExamples(documentation.getExamples().stream()
+            .map(this::cloneFunctionExample)
+            .collect(Collectors.toList()));
+        cloned.setParameterDocumentations(documentation.getParameterDocumentations().stream()
+            .map(this::cloneParameterDocumentation)
+            .collect(Collectors.toList()));
+        return cloned;
+    }
+
+    @Override
+    public ParameterDocumentation createParameterDocumentation() {
+        return new ParameterDocumentationImpl();
+    }
+
+    @Override
+    public ParameterDocumentation cloneParameterDocumentation(ParameterDocumentation parameterDocumentation) {
+        var cloned = new ParameterDocumentationImpl();
+        cloned.setParameterName(parameterDocumentation.getParameterName());
+        cloned.setDescription(parameterDocumentation.getDescription());
+        return cloned;
+    }
+
+    @Override
+    public kraken.model.Function createFunction() {
+        return new FunctionImpl();
+    }
+
+    @Override
+    public kraken.model.Function cloneFunction(kraken.model.Function function) {
+        var cloned = createFunction();
+        cloned.setName(function.getName());
+        cloned.setPhysicalNamespace(function.getPhysicalNamespace());
+        cloned.setReturnType(function.getReturnType());
+        cloned.setParameters(function.getParameters().stream().map(this::cloneFunctionParameter).collect(Collectors.toList()));
+        cloned.setGenericTypeBounds(function.getGenericTypeBounds().stream().map(this::cloneGenericTypeBound)
+            .collect(Collectors.toList()));
+        cloned.setBody(cloneExpression(function.getBody()));
+        cloned.setDocumentation(
+            function.getDocumentation() != null
+                ? cloneFunctionDocumentation(function.getDocumentation())
+                : null
+        );
+        return cloned;
+    }
+
+    @Override
+    public FunctionParameter createFunctionParameter() {
+        return new FunctionParameterImpl();
+    }
+
+    @Override
+    public FunctionParameter cloneFunctionParameter(FunctionParameter functionParameter) {
+        var cloned = createFunctionParameter();
+        cloned.setName(functionParameter.getName());
+        cloned.setType(functionParameter.getType());
+        return cloned;
+    }
+
+    @Override
+    public GenericTypeBound createGenericTypeBound() {
+        return new GenericTypeBoundImpl();
+    }
+
+    @Override
+    public GenericTypeBound cloneGenericTypeBound(GenericTypeBound genericTypeBound) {
+        var cloned = new GenericTypeBoundImpl();
+        cloned.setGeneric(genericTypeBound.getGeneric());
+        cloned.setBound(genericTypeBound.getBound());
+        return cloned;
+    }
+
+    @Override
+    public FunctionExample createFunctionExample() {
+        return new FunctionExampleImpl();
+    }
+
+    @Override
+    public FunctionExample cloneFunctionExample(FunctionExample functionExample) {
+        var cloned = new FunctionExampleImpl();
+        cloned.setExample(functionExample.getExample());
+        cloned.setResult(functionExample.getResult());
+        cloned.setValid(functionExample.isValid());
         return cloned;
     }
 

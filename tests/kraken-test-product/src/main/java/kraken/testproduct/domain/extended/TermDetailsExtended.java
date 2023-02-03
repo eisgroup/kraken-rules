@@ -15,7 +15,21 @@
  */
 package kraken.testproduct.domain.extended;
 
+import java.time.LocalDate;
+
 import kraken.testproduct.domain.TermDetails;
 
 public class TermDetailsExtended extends TermDetails {
+
+    public TermDetailsExtended() {
+    }
+
+    public TermDetailsExtended(Integer termNo) {
+        super(termNo);
+    }
+
+    public TermDetailsExtended(String contractTermTypeCd, Integer termNo, LocalDate termEffectiveDate,
+                               LocalDate termExpirationDate, String termCd) {
+        super(contractTermTypeCd, termNo, termEffectiveDate, termExpirationDate, termCd);
+    }
 }

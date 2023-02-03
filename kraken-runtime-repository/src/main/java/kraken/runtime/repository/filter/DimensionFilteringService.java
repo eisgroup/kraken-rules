@@ -24,6 +24,12 @@ import java.util.Optional;
 import kraken.runtime.model.MetadataContainer;
 import kraken.runtime.model.entrypoint.RuntimeEntryPoint;
 import kraken.runtime.model.rule.RuntimeRule;
+import kraken.runtime.repository.filter.trace.DimensionFilterAppliedOperation;
+import kraken.runtime.repository.filter.trace.EntryPointDimensionFilteringOperation;
+import kraken.runtime.repository.filter.trace.RuleDimensionFilteringOperation;
+import kraken.runtime.repository.filter.trace.MultipleDimensionResultOperation;
+import kraken.tracer.Tracer;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,18 +52,24 @@ public class DimensionFilteringService {
      * @param rules to be filtered
      * @return first {@link RuntimeRule} that is not filtered out or empty if no rules remain
      */
-    public Optional<RuntimeRule> filterRules(Collection<RuntimeRule> rules, Map<String, Object> context) {
-        Collection<RuntimeRule> filteredRules =  filter(rules, context);
-        if (filteredRules.isEmpty()) {
-            return Optional.empty();
-        } else if (filteredRules.size() > 1) {
-            logger.warn(
-                    "Returning first of multiple rules found for name {} and context {}",
-                    rules.iterator().next().getName(),
-                    context
-            );
-        }
-        return Optional.of(filteredRules.iterator().next());
+    public Optional<RuntimeRule> filterRules(String namespace,
+                                             Collection<RuntimeRule> rules,
+                                             Map<String, Object> context) {
+        return Optional.ofNullable(
+            Tracer.doOperation(new RuleDimensionFilteringOperation(rules), () -> {
+                Collection<RuntimeRule> filteredRules = filter(namespace, rules, context);
+
+                if (filteredRules.size() > 1) {
+                    Tracer.doOperation(new MultipleDimensionResultOperation());
+                    logger.warn(
+                        "Returning first of multiple rules found for name {} and context {}",
+                        rules.iterator().next().getName(),
+                        context
+                    );
+                }
+
+                return getItem(filteredRules);
+            }));
     }
 
     /**
@@ -66,25 +78,44 @@ public class DimensionFilteringService {
      * @param entryPoints to be filtered
      * @return first {@link RuntimeEntryPoint} that is not filtered out or empty if no entryPoints remain
      */
-    public Optional<RuntimeEntryPoint> filterEntryPoints(Collection<RuntimeEntryPoint> entryPoints, Map<String, Object> context) {
-        Collection<RuntimeEntryPoint> filteredEntryPoints = filter(entryPoints, context);
-        if (filteredEntryPoints.isEmpty()) {
-            return Optional.empty();
-        } else if (filteredEntryPoints.size() > 1) {
-            logger.warn(
-                    "Returning first of multiple entryPoints found for name {} and context {}",
-                    entryPoints.iterator().next().getName(),
-                    context
-            );
-        }
-        return Optional.of(filteredEntryPoints.iterator().next());
+    public Optional<RuntimeEntryPoint> filterEntryPoints(String namespace,
+                                                         Collection<RuntimeEntryPoint> entryPoints,
+                                                         Map<String, Object> context) {
+        return Optional.ofNullable(
+            Tracer.doOperation(new EntryPointDimensionFilteringOperation(entryPoints), () -> {
+                Collection<RuntimeEntryPoint> filteredEntryPoints = filter(namespace, entryPoints, context);
+
+                if (filteredEntryPoints.size() > 1) {
+                    Tracer.doOperation(new MultipleDimensionResultOperation());
+                    logger.warn(
+                        "Returning first of multiple entryPoints found for name {} and context {}",
+                        entryPoints.iterator().next().getName(),
+                        context
+                    );
+                }
+
+                return getItem(filteredEntryPoints);
+            }));
     }
 
-    private <T extends MetadataContainer> Collection<T> filter(Collection<T> items, Map<String, Object> context) {
-        Collection<T> filteredItems = items;
-        for (DimensionFilter dimensionFilter : filters) {
-            filteredItems = dimensionFilter.filter(Collections.unmodifiableCollection(filteredItems), context);
+    private <T extends MetadataContainer> T getItem(Collection<T> items) {
+        if (items.isEmpty()) {
+            return null;
         }
+
+        return items.iterator().next();
+    }
+
+    private <T extends MetadataContainer> Collection<T> filter(String namespace,
+                                                               Collection<T> items,
+                                                               Map<String, Object> context) {
+        Collection<T> filteredItems = items;
+        
+        for (DimensionFilter dimensionFilter : filters) {
+            filteredItems = dimensionFilter.filter(namespace, Collections.unmodifiableCollection(filteredItems), context);
+            Tracer.doOperation(new DimensionFilterAppliedOperation(dimensionFilter, items, filteredItems));
+        }
+        
         return filteredItems;
     }
 }

@@ -14,15 +14,18 @@
  *  limitations under the License.
  */
 
-import { sanityMocks } from "./_AutoPolicyObject.mocks";
-import { sanityEngine } from "./_SanityEngine";
+import { sanityMocks } from './_AutoPolicyObject.mocks'
+import { sanityEngine } from './_SanityEngine'
+import { FieldMetadataReducer } from '../../src'
 
-describe("Engine Sanity Visibility Payload Test", () => {
-    const { empty } = sanityMocks;
+describe('Engine Sanity Visibility Payload Test', () => {
+    const { empty } = sanityMocks
     it("should execute 'VisibilityAutoPolicy' entrypoint", () => {
-        const results = sanityEngine.evaluate(empty(), "VisibilityAutoPolicy");
-        expect(results).k_toMatchResultsStats({ total: 7, hidden: 7 });
-        expect(results).k_toHaveExpressionsFailures(0);
-        expect(results).k_toMatchResultsSnapshots();
-    });
-});
+        const results = sanityEngine.evaluate(empty(), 'VisibilityAutoPolicy')
+        const fieldResults = new FieldMetadataReducer().reduce(results)
+
+        expect(results).k_toMatchResultsStats({ total: 7, hidden: 7 })
+        expect(results).k_toHaveExpressionsFailures(0)
+        expect({ entryPointResults: results, fieldResults }).k_toMatchResultsSnapshots()
+    })
+})

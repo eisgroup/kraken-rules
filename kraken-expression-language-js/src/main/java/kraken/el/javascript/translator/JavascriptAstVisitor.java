@@ -15,17 +15,63 @@
  */
 package kraken.el.javascript.translator;
 
-import kraken.el.ast.*;
-import kraken.el.ast.visitor.QueuedAstVisitor;
-import kraken.el.scope.ScopeType;
-import kraken.el.scope.type.ArrayType;
-import kraken.el.scope.type.Type;
-
-import java.math.BigDecimal;
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+import javax.annotation.Nonnull;
+
+import kraken.el.ast.AccessByIndex;
+import kraken.el.ast.Addition;
+import kraken.el.ast.And;
+import kraken.el.ast.BooleanLiteral;
+import kraken.el.ast.Cast;
+import kraken.el.ast.CollectionFilter;
+import kraken.el.ast.DateLiteral;
+import kraken.el.ast.DateTimeLiteral;
+import kraken.el.ast.Division;
+import kraken.el.ast.Empty;
+import kraken.el.ast.Equals;
+import kraken.el.ast.Exponent;
+import kraken.el.ast.Expression;
+import kraken.el.ast.ForEach;
+import kraken.el.ast.ForEvery;
+import kraken.el.ast.ForSome;
+import kraken.el.ast.Function;
+import kraken.el.ast.Identifier;
+import kraken.el.ast.If;
+import kraken.el.ast.In;
+import kraken.el.ast.InlineArray;
+import kraken.el.ast.InlineMap;
+import kraken.el.ast.InstanceOf;
+import kraken.el.ast.LessThan;
+import kraken.el.ast.LessThanOrEquals;
+import kraken.el.ast.MatchesRegExp;
+import kraken.el.ast.Modulus;
+import kraken.el.ast.MoreThan;
+import kraken.el.ast.MoreThanOrEquals;
+import kraken.el.ast.Multiplication;
+import kraken.el.ast.Negation;
+import kraken.el.ast.Negative;
+import kraken.el.ast.NotEquals;
+import kraken.el.ast.Null;
+import kraken.el.ast.NumberLiteral;
+import kraken.el.ast.Or;
+import kraken.el.ast.Path;
+import kraken.el.ast.ReferenceValue;
+import kraken.el.ast.StringLiteral;
+import kraken.el.ast.Subtraction;
+import kraken.el.ast.This;
+import kraken.el.ast.TypeOf;
+import kraken.el.ast.ValueBlock;
+import kraken.el.ast.Variable;
+import kraken.el.ast.builder.Literals;
+import kraken.el.ast.visitor.QueuedAstVisitor;
+import kraken.el.scope.ScopeType;
+import kraken.el.scope.type.Type;
 
 /**
  * Converts Kraken Expression Language AST to Javascript expressions
@@ -35,14 +81,17 @@ import java.util.stream.Collectors;
  */
 public class JavascriptAstVisitor extends QueuedAstVisitor<String> {
 
-    private static final String NESTED_ARRAY_FLATTING_FUNCTION = ".reduce(function(p, n) { return p.concat(n) }, [])";
+    private static final String PATH_SEPARATOR = ".";
+    private static final String NULL_SAFE_PATH_SEPARATOR = "?.";
 
-    private final Deque<String> availablePredicateSubject;
+    private static final String NESTED_ARRAY_FLATTING_FUNCTION = "reduce((p, n) => p.concat(n), [])";
 
-    private final Deque<String> currentPredicateSubject;
+    private final Deque<String> availableSubjectNames;
+
+    private final Deque<Subject> currentPredicateSubject;
 
     public JavascriptAstVisitor() {
-        this.availablePredicateSubject = new ArrayDeque(List.of("_x_", "_y_", "_z_", "_a_", "_b_", "_c_", "_d_", "_e_"));
+        this.availableSubjectNames = new ArrayDeque(List.of("_x_", "_y_", "_z_", "_a_", "_b_", "_c_", "_d_", "_e_"));
         this.currentPredicateSubject = new ArrayDeque<>();
     }
 
@@ -53,36 +102,39 @@ public class JavascriptAstVisitor extends QueuedAstVisitor<String> {
 
     @Override
     public String visit(InstanceOf instanceOf) {
-        return "_i" + "(" +
+        return f("_i" + "(" +
                 visit(instanceOf.getLeft()) +
                 ",'" +
                 instanceOf.getTypeLiteral() +
-                "')"
+                "')")
                 ;
     }
 
     @Override
     public String visit(TypeOf typeOf) {
-        return "_t" + "(" +
+        return f("_t" + "(" +
                 visit(typeOf.getLeft()) +
                 ",'" +
                 typeOf.getTypeLiteral() +
-                "')"
+                "')")
                 ;
     }
 
     @Override
     public String visit(CollectionFilter filter) {
-        if(filter.getPredicate() == null) {
-            return visit(filter.getCollection());
+        String collectionString = visit(filter.getCollection());
+
+        if(filter.getPredicate() != null) {
+            String subjectName = availableSubjectNames.pop();
+            Type type = filter.getCollection().getEvaluationType().unwrapArrayType();
+            currentPredicateSubject.push(new Subject(subjectName, type));
+            String filterPredicateString = PATH_SEPARATOR
+                + "filter(" + subjectName + "=>" + visit(filter.getPredicate()) + ")";
+            availableSubjectNames.push(currentPredicateSubject.pop().getSubjectName());
+            return "(" + collectionString + " || [])" + filterPredicateString;
         }
 
-        currentPredicateSubject.push(availablePredicateSubject.pop());
-        String subject = currentPredicateSubject.peek();
-        String filterExpression = ".filter(function(" + subject + ") { return " + visit(filter.getPredicate()) + " })";
-        availablePredicateSubject.push(currentPredicateSubject.pop());
-
-        return visit(filter.getCollection()) + filterExpression;
+        return collectionString;
     }
 
     @Override
@@ -92,7 +144,12 @@ public class JavascriptAstVisitor extends QueuedAstVisitor<String> {
 
     @Override
     public String visit(StringLiteral stringLiteral) {
-        return "'" + stringLiteral.getValue() + "'";
+        return "'" + escape(stringLiteral.getValue()) + "'";
+    }
+
+    private static String escape(String str) {
+        return str.replace("\\", "\\\\")
+            .replace("'", "\\'");
     }
 
     @Override
@@ -102,12 +159,12 @@ public class JavascriptAstVisitor extends QueuedAstVisitor<String> {
 
     @Override
     public String visit(DateLiteral dateLiteral) {
-        return "Date('" + dateLiteral + "')";
+        return f("Date('" + dateLiteral + "')");
     }
 
     @Override
     public String visit(DateTimeLiteral dateTimeLiteral) {
-        return "DateTime('" + dateTimeLiteral + "')";
+        return f("DateTime('" + dateTimeLiteral + "')");
     }
 
     @Override
@@ -155,42 +212,42 @@ public class JavascriptAstVisitor extends QueuedAstVisitor<String> {
 
     @Override
     public String visit(Equals equals) {
-        return "_eq(" + visit(equals.getLeft()) + ", " + visit(equals.getRight()) + ")";
+        return f("_eq(" + visit(equals.getLeft()) + ", " + visit(equals.getRight()) + ")");
     }
 
     @Override
     public String visit(NotEquals notEquals) {
-        return "_neq(" + visit(notEquals.getLeft()) + ", " + visit(notEquals.getRight()) + ")";
+        return f("_neq(" + visit(notEquals.getLeft()) + ", " + visit(notEquals.getRight()) + ")");
     }
 
     @Override
     public String visit(Modulus modulus) {
-        return "_mod(" + visit(modulus.getLeft()) + ", " + visit(modulus.getRight()) + ")";
+        return f("_mod(" + visit(modulus.getLeft()) + ", " + visit(modulus.getRight()) + ")");
     }
 
     @Override
     public String visit(Subtraction subtraction) {
-        return "_sub(" + visit(subtraction.getLeft()) + ", " + visit(subtraction.getRight()) + ")";
+        return f("_sub(" + visit(subtraction.getLeft()) + ", " + visit(subtraction.getRight()) + ")");
     }
 
     @Override
     public String visit(Multiplication multiplication) {
-        return "_mult(" + visit(multiplication.getLeft()) + ", " + visit(multiplication.getRight()) + ")";
+        return f("_mult(" + visit(multiplication.getLeft()) + ", " + visit(multiplication.getRight()) + ")");
     }
 
     @Override
     public String visit(Exponent exponent) {
-        return "_pow(" + visit(exponent.getLeft()) + ", " + visit(exponent.getRight()) + ")";
+        return f("_pow(" + visit(exponent.getLeft()) + ", " + visit(exponent.getRight()) + ")");
     }
 
     @Override
     public String visit(Division division) {
-        return "_div(" + visit(division.getLeft()) + ", " + visit(division.getRight()) + ")";
+        return f("_div(" + visit(division.getLeft()) + ", " + visit(division.getRight()) + ")");
     }
 
     @Override
     public String visit(Addition addition) {
-        return "_add(" + visit(addition.getLeft()) + ", " + visit(addition.getRight()) + ")";
+        return f("_add(" + visit(addition.getLeft()) + ", " + visit(addition.getRight()) + ")");
     }
 
     @Override
@@ -206,7 +263,7 @@ public class JavascriptAstVisitor extends QueuedAstVisitor<String> {
     @Override
     public String visit(InlineArray inlineArray) {
         return inlineArray.getItems().stream()
-                .map(node -> visit(node))
+                .map(this::visit)
                 .collect(Collectors.joining(",", "[", "]"));
     }
 
@@ -219,61 +276,116 @@ public class JavascriptAstVisitor extends QueuedAstVisitor<String> {
 
     @Override
     public String visit(Function function) {
-        return function.getParameters().stream()
-                .map(node -> visit(node))
-                .collect(Collectors.joining(",", function.getFunctionName() + "(", ")"));
+        return f(
+            function.getParameters().stream()
+                .map(this::visit)
+                .collect(Collectors.joining(",", function.getFunctionName() + "(", ")"))
+        );
     }
 
     @Override
     public String visit(Path path) {
-        String pathString = visit(path.getObject());
-        if(path.getObject().getEvaluationType() instanceof ArrayType || path.getObject() instanceof CollectionFilter) {
+        String separator = path.isNullSafe() ? NULL_SAFE_PATH_SEPARATOR : PATH_SEPARATOR;
 
-            currentPredicateSubject.push(availablePredicateSubject.pop());
-            String subject = currentPredicateSubject.peek();
-            pathString += ".map(function(" + subject + ") { return " + subject + "." + visit(path.getProperty()) + " })";
-            availablePredicateSubject.push(currentPredicateSubject.pop());
-
-            if(path.getProperty().getEvaluationType() instanceof ArrayType || path.getProperty().getEvaluationType() == Type.ANY) {
-                pathString += NESTED_ARRAY_FLATTING_FUNCTION;
+        String object = visit(path.getObject());
+        if(path.getObject().getEvaluationType().isAssignableToArray() || path.getObject() instanceof CollectionFilter) {
+            String subjectName = availableSubjectNames.pop();
+            Type type = path.getObject().getEvaluationType().unwrapArrayType();
+            currentPredicateSubject.push(new Subject(subjectName, type));
+            String property = visit(path.getProperty());
+            String expression;
+            if(path.getObject().getEvaluationType().isDynamic()) {
+                expression = f("_flatMap(" + object + "," + subjectName + "=>" + subjectName + separator + property + ")");
+            } else {
+                expression = "(" + object + " || [])" + PATH_SEPARATOR
+                    + "map(" + subjectName + "=>" + subjectName + separator + property + ")";
+                if(path.getProperty().getEvaluationType().isAssignableToArray()) {
+                    expression = expression + PATH_SEPARATOR + NESTED_ARRAY_FLATTING_FUNCTION;
+                }
             }
+            availableSubjectNames.push(currentPredicateSubject.pop().getSubjectName());
+            return expression;
         } else {
-            pathString += "." + visit(path.getProperty());
+            String property = visit(path.getProperty());
+            return object + separator + property;
         }
-        return pathString;
     }
 
     @Override
     public String visit(ReferenceValue reference) {
-        String referenceString = "";
+        return wrapIfMoney(visit(reference.getReference()), reference);
+    }
 
-        // force 'this' if we see that the user refers to property in filter scope object
-        boolean refersToFilterScope = reference.getReference().findScopeTypeOfReference() == ScopeType.FILTER;
+    @Override
+    public String visit(Identifier identifier) {
+        String prefix = "";
 
-        // or in local scope object
-        boolean refersToLocalScope = reference.getReference().findScopeTypeOfReference() == ScopeType.LOCAL;
-
-        if (reference.isStartsWithThis()) {
-            // if user specified explicit 'this', then we have to check the scope type and if we are within filter
-            // then we need to prepend filter predicate variable, otherwise wee assume that user is referring to data object
-            if(reference.getReference().getScope().findClosestScopeOfType(ScopeType.FILTER) != null) {
-                referenceString = currentPredicateSubject.peek() + ".";
-            } else {
-                referenceString = "__dataObject__.";
+        if(currentReferenceValue != null) {
+            ScopeType scopeType = currentReferenceValue.findScopeTypeOfReference();
+            if(currentReferenceValue.getThisNode() == null) {
+                if(scopeType == ScopeType.FILTER) {
+                    // if reference is without this, then resolve property from the closest element that has it.
+                    // If a dynamic type can have that property, then property is resolved dynamically at runtime
+                    // from the closest stack element that has the property.
+                    prefix = findStaticSubjectWithProperty(identifier.getIdentifierToken())
+                        .map(Subject::getSubjectName)
+                        .orElseGet(() -> resolvePropertyDynamically(identifier)) + PATH_SEPARATOR;
+                }
+                if(scopeType == ScopeType.LOCAL) {
+                    prefix = "__dataObject__"  + PATH_SEPARATOR;
+                }
             }
-        } else {
-            // if 'this' is not specified then we have to guess what is the target of the reference.
-            // if reference is contained within some filter scope then we prepend filter predicate variable,
-            // if reference is contained in local scope then we assume that it refers to data object and we transform it to data object reference
-            if (refersToFilterScope) {
-                referenceString = currentPredicateSubject.peek() + ".";
-            } else if (refersToLocalScope) {
-                referenceString = "__dataObject__.";
-            }
+            currentReferenceValue = null;
         }
 
-        referenceString += visit(reference.getReference());
-        return wrapIfMoney(referenceString, reference);
+        // propagate path null safety to field path
+        String fieldPathSeparator = findFirstPathFromClosestReference()
+            .filter(Path::isNullSafe)
+            .map(nullSafePath -> NULL_SAFE_PATH_SEPARATOR)
+            .orElse(PATH_SEPARATOR);
+
+        return Arrays.stream(identifier.getIdentifierParts())
+            .collect(Collectors.joining(fieldPathSeparator, prefix, ""));
+    }
+
+    private String resolvePropertyDynamically(Identifier identifier) {
+        String property = identifier.getIdentifierToken();
+        boolean localScopeCouldHaveProperty = Optional
+            .ofNullable(currentReferenceValue.getScope().findClosestScopeOfType(ScopeType.LOCAL))
+            .map(local -> local.isDynamic() || local.isReferenceStrictlyInImmediateScope(property))
+            .orElse(false);
+        boolean globalScopeCouldHaveProperty = Optional
+            .ofNullable(currentReferenceValue.getScope().findClosestScopeOfType(ScopeType.GLOBAL))
+            .map(global -> global.isDynamic() || global.isReferenceStrictlyInImmediateScope(property))
+            .orElse(false);
+
+        List<String> subjectsThatCouldHaveProperty = currentPredicateSubject.stream()
+            .filter(s -> s.getType().isDynamic() || s.getType().getProperties().getReferences().containsKey(property))
+            .map(Subject::getSubjectName)
+            .collect(Collectors.toList());
+        if(localScopeCouldHaveProperty) {
+            subjectsThatCouldHaveProperty.add("__dataObject__");
+        }
+        if(globalScopeCouldHaveProperty) {
+            subjectsThatCouldHaveProperty.add("__references__");
+        }
+
+        if(subjectsThatCouldHaveProperty.size() == 1) {
+            return subjectsThatCouldHaveProperty.get(0);
+        }
+        return f("_o('" + identifier.getIdentifierParts()[0] + "',[" + String.join(", ", subjectsThatCouldHaveProperty) + "])");
+    }
+
+    private Optional<Subject> findStaticSubjectWithProperty(String property) {
+        for(Subject subject : currentPredicateSubject) {
+            if(subject.getType().getProperties().getReferences().containsKey(property)) {
+                return Optional.of(subject);
+            }
+            if(subject.getType().isDynamic()) {
+                return Optional.empty();
+            }
+        }
+        return Optional.empty();
     }
 
     @Override
@@ -283,55 +395,64 @@ public class JavascriptAstVisitor extends QueuedAstVisitor<String> {
 
     @Override
     public String visit(ForEach forEach) {
-        String forEachString = "(" + visit(forEach.getCollection()) + " || []).map(function(" + forEach.getVar() + ") { return " + visit(forEach.getReturnExpression()) + " })";
-        if(forEach.getReturnExpression().getEvaluationType() instanceof ArrayType || forEach.getReturnExpression().getEvaluationType() == Type.ANY) {
-            forEachString += NESTED_ARRAY_FLATTING_FUNCTION;
+        String collectionString = visit(forEach.getCollection());
+        String returnString = visit(forEach.getReturnExpression());
+
+        String forEachString = "(" + collectionString + " || []).map(" + forEach.getVar() + "=>" + returnString + ")";
+        if(forEach.getReturnExpression().getEvaluationType().isAssignableToArray()) {
+            forEachString  = forEachString + PATH_SEPARATOR + NESTED_ARRAY_FLATTING_FUNCTION;
         }
         return forEachString;
     }
 
     @Override
     public String visit(ForSome forSome) {
-        return "(" + visit(forSome.getCollection()) + " || []).some(function(" + forSome.getVar() + ") { return " + visit(forSome.getReturnExpression()) + " })";
+        String collectionString = visit(forSome.getCollection());
+        String returnString = visit(forSome.getReturnExpression());
+
+        return "(" + collectionString + " || []).some(" + forSome.getVar() + "=>" + returnString + ")";
     }
 
     @Override
     public String visit(ForEvery forEvery) {
-        return "(" + visit(forEvery.getCollection()) + " || []).every(function(" + forEvery.getVar() + ") { return " + visit(forEvery.getReturnExpression()) + " })";
+        String collectionString = visit(forEvery.getCollection());
+        String returnString = visit(forEvery.getReturnExpression());
+
+        return "(" + collectionString + " || []).every(" + forEvery.getVar() + "=>" + returnString + ")";
     }
 
     @Override
     public String visit(This aThis) {
-        String string = ScopeType.FILTER == aThis.getScope().getScopeType()
-                ? currentPredicateSubject.peek()
-                : "__dataObject__";
-        return wrapIfMoney(string, aThis);
+        ScopeType scopeType = currentReferenceValue.findScopeTypeOfReference();
+        if(scopeType == ScopeType.FILTER) {
+            return currentPredicateSubject.peek().getSubjectName();
+        }
+        return "__dataObject__";
     }
 
     private String wrapIfMoney(String string, Expression expression) {
         if(expression.getEvaluationType() == Type.MONEY) {
-            return "FromMoney(" + string + ")";
+            return f("FromMoney(" + string + ")");
         }
         return string;
     }
 
     @Override
-    public String visit(Identifier identifier) {
-        return identifier.getIdentifier();
-    }
-
-    @Override
     public String visit(If anIf) {
-        String thenNode = visit(anIf.getThenExpression());
+        String conditionString = coerceBoolean(anIf.getCondition());
+        String thenString = visit(anIf.getThenExpression());
+        String elseString = anIf.getElseExpression()
+            .map(elseNode -> visit(elseNode))
+            .orElse("undefined");
 
         StringBuilder sb = new StringBuilder();
         sb.append("(")
-                .append(coerceBoolean(anIf.getCondition()))
-                .append(" ? ")
-                .append(thenNode)
-                .append(" : ")
-                .append(anIf.getElseExpression().map(this::visit).orElse("undefined"))
-                .append(")");
+            .append(conditionString)
+            .append(" ? ")
+            .append(thenString)
+            .append(" : ")
+            .append(elseString)
+            .append(")");
 
         return sb.toString();
     }
@@ -341,35 +462,79 @@ public class JavascriptAstVisitor extends QueuedAstVisitor<String> {
         return "undefined";
     }
 
+    @Override
+    public String visit(Empty empty) {
+        return "undefined";
+    }
+
+    @Override
+    public String visit(ValueBlock valueBlock) {
+        return "(()=>{"
+            + valueBlock.getVariables().stream().map(v -> this.visit(v) + ";").collect(Collectors.joining())
+            + "return " + visit(valueBlock.getValue()) + ";"
+            + "})()";
+    }
+
+    @Override
+    public String visit(Variable variable) {
+        return "const " + variable.getVariableName() + "=" + visit(variable.getValue());
+    }
+
     private String coerceBoolean(Expression expression) {
         if(isReference(expression)) {
-            return "_b(" + visit(expression) + ")";
+            return f("_b(" + visit(expression) + ")");
         }
         return visit(expression);
     }
 
     private String coerceNumberOrDate(Expression expression) {
         if(isReference(expression)) {
-            return "_nd(" + visit(expression) + ")";
+            return f("_nd(" + visit(expression) + ")");
         }
         return visit(expression);
     }
 
     private String coerceNumber(Expression expression) {
         if(isReference(expression)) {
-            return "_n(" + visit(expression) + ")";
+            return f("_n(" + visit(expression) + ")");
         }
         return visit(expression);
     }
 
     private String coerceString(Expression expression) {
         if(isReference(expression)) {
-            return "_s(" + visit(expression) + ")";
+            return f("_s(" + visit(expression) + ")");
         }
         return visit(expression);
     }
 
     private boolean isReference(Expression expression) {
-        return expression instanceof ReferenceValue || expression instanceof This;
+        return expression instanceof ReferenceValue;
     }
+
+    private String f(String functionCall) {
+        // at runtime, 'this' object is a function container which has every function assigned
+        return "this" + PATH_SEPARATOR + functionCall;
+    }
+
+    static class Subject {
+        private final String subjectName;
+        private final Type type;
+
+        public Subject(@Nonnull String subjectName, @Nonnull Type type) {
+            this.subjectName = subjectName;
+            this.type = type;
+        }
+
+        @Nonnull
+        public String getSubjectName() {
+            return subjectName;
+        }
+
+        @Nonnull
+        public Type getType() {
+            return type;
+        }
+    }
+
 }

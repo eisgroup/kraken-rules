@@ -19,23 +19,29 @@ import static kraken.el.ast.Template.asTemplateExpression;
 
 import java.util.function.Function;
 
+import org.apache.commons.lang3.BooleanUtils;
+
+import kraken.el.Expression;
 import kraken.el.ast.Ast;
+import kraken.el.ast.AstType;
 import kraken.el.ast.Template;
 import kraken.el.ast.builder.AstBuilder;
-import kraken.el.ast.validation.AstError;
+import kraken.el.ast.builder.AstBuildingException;
+import kraken.el.ast.validation.AstMessage;
 import kraken.el.scope.Scope;
 import kraken.el.scope.type.ArrayType;
 import kraken.el.scope.type.Type;
-import kraken.model.Expression;
 import kraken.model.Rule;
 import kraken.model.context.ContextDefinition;
 import kraken.model.derive.DefaultValuePayload;
 import kraken.model.project.KrakenProject;
+import kraken.model.project.ccr.CrossContextServiceProvider;
 import kraken.model.project.scope.ScopeBuilder;
 import kraken.model.project.scope.ScopeBuilderProvider;
 import kraken.model.project.validator.Severity;
 import kraken.model.project.validator.ValidationMessage;
 import kraken.model.project.validator.ValidationSession;
+import kraken.model.project.validator.rule.message.AstMessageDecoratorService;
 import kraken.model.validation.AssertionPayload;
 import kraken.model.validation.ValidationPayload;
 
@@ -50,18 +56,23 @@ import kraken.model.validation.ValidationPayload;
  * @author avasiliauskas
  * @since 1.0
  */
-public final class RuleExpressionValidator {
+public final class RuleExpressionValidator implements RuleValidator {
 
     private final KrakenProject krakenProject;
 
     private final ScopeBuilder scopeBuilder;
+    private final AstMessageDecoratorService decorator;
 
     public RuleExpressionValidator(KrakenProject krakenProject) {
         this.krakenProject = krakenProject;
-
         this.scopeBuilder = ScopeBuilderProvider.forProject(krakenProject);
+        this.decorator = new AstMessageDecoratorService(
+            krakenProject,
+            CrossContextServiceProvider.forProject(krakenProject)
+        );
     }
 
+    @Override
     public void validate(Rule rule, ValidationSession session) {
         ContextDefinition contextDefinition = krakenProject.getContextDefinitions().get(rule.getContext());
 
@@ -73,18 +84,31 @@ public final class RuleExpressionValidator {
         findErrorsInTemplate(rule, scope, session);
     }
 
+    @Override
+    public boolean canValidate(Rule rule) {
+        return rule.getName() != null
+            && rule.getContext() != null
+            && krakenProject.getContextDefinitions().containsKey(rule.getContext())
+            && rule.getTargetPath() != null
+            && krakenProject.getContextProjection(rule.getContext()).getContextFields().containsKey(rule.getTargetPath());
+    }
+
     private void findErrorsInTemplate(Rule rule, Scope scope, ValidationSession session) {
         if (rule.getPayload() instanceof ValidationPayload
             && ((ValidationPayload) rule.getPayload()).getErrorMessage() != null
             && ((ValidationPayload) rule.getPayload()).getErrorMessage().getErrorMessage() != null) {
 
             String template = ((ValidationPayload) rule.getPayload()).getErrorMessage().getErrorMessage();
-            Ast ast = AstBuilder.from(asTemplateExpression(template), scope);
-            ast.getSyntaxErrors().stream()
-                .map(buildErrorMessageFromSyntaxError(rule, "Error Message Template"))
+            String templateExpression = asTemplateExpression(template);
+            if(!checkIfParseable(templateExpression, "Error Message Template", rule, scope, session)) {
+                return;
+            }
+            Ast ast = AstBuilder.from(templateExpression, scope);
+            ast.getValidationMessages().stream()
+                .map(buildValidationMessageFromAstMessage(rule, "Error Message Template"))
                 .forEach(session::add);
 
-            for (kraken.el.ast.Expression expression : ((Template) ast.getExpression()).getTemplateExpressions()) {
+            for (kraken.el.ast.Expression expression : ast.asTemplate().getTemplateExpressions()) {
                 if (!canFormatAsString(expression.getEvaluationType())) {
                     session.add(new ValidationMessage(
                         rule,
@@ -97,22 +121,25 @@ public final class RuleExpressionValidator {
                         Severity.ERROR
                     ));
                 }
+                checkIfNotEmpty(rule, "Template", expression, session);
             }
         }
     }
 
     private boolean canFormatAsString(Type type) {
-        return type == Type.ANY
-            || type.isPrimitive()
-            || type instanceof ArrayType && canFormatAsString(((ArrayType) type).getElementType());
+        return type.isPrimitive() || type.isDynamic()
+            || type.unwrapArrayType().isPrimitive() || type.unwrapArrayType().isDynamic();
     }
 
     private void findErrorsInAssertion(Rule rule, Scope scope, ValidationSession session) {
         if (rule.getPayload() instanceof AssertionPayload && ((AssertionPayload) rule.getPayload()).getAssertionExpression() != null) {
             String assertionExpression = ((AssertionPayload) rule.getPayload()).getAssertionExpression().getExpressionString();
+            if(!checkIfParseable(assertionExpression, "Assertion", rule, scope, session)) {
+                return;
+            }
             Ast ast = AstBuilder.from(assertionExpression, scope);
-            ast.getSyntaxErrors().stream()
-                .map(buildErrorMessageFromSyntaxError(rule, "Assertion Expression"))
+            ast.getValidationMessages().stream()
+                .map(buildValidationMessageFromAstMessage(rule, "Assertion Expression"))
                 .forEach(session::add);
 
             if (!Type.BOOLEAN.isAssignableFrom(ast.getExpression().getEvaluationType())) {
@@ -122,15 +149,30 @@ public final class RuleExpressionValidator {
                         Severity.ERROR
                 ));
             }
+            checkIfNotEmpty(rule, "Assertion", ast.getExpression(), session);
+        }
+    }
+
+    private void checkIfNotEmpty(Rule rule, String type, kraken.el.ast.Expression e, ValidationSession session) {
+        if(e.isEmpty()) {
+            session.add(new ValidationMessage(
+                rule,
+                String.format("%s expression is logically empty. "
+                    + "Please check if there are unintentional spaces, new lines or comments remaining.", type),
+                Severity.ERROR
+            ));
         }
     }
 
     private void findErrorsInDefault(Rule rule, ContextDefinition contextDefinition, Scope scope, ValidationSession session) {
         if (rule.getPayload() instanceof DefaultValuePayload && ((DefaultValuePayload) rule.getPayload()).getValueExpression() != null) {
             String defaultExpression = ((DefaultValuePayload) rule.getPayload()).getValueExpression().getExpressionString();
+            if(!checkIfParseable(defaultExpression, "Default", rule, scope, session)) {
+                return;
+            }
             Ast ast = AstBuilder.from(defaultExpression, scope);
-            ast.getSyntaxErrors().stream()
-                .map(buildErrorMessageFromSyntaxError(rule, "Default Expression"))
+            ast.getValidationMessages().stream()
+                .map(buildValidationMessageFromAstMessage(rule, "Default Expression"))
                 .forEach(session::add);
 
             Type fieldType = contextDefinition.isStrict()
@@ -145,6 +187,7 @@ public final class RuleExpressionValidator {
                         Severity.ERROR
                 ));
             }
+            checkIfNotEmpty(rule, "Default", ast.getExpression(), session);
         }
     }
 
@@ -159,21 +202,32 @@ public final class RuleExpressionValidator {
 
     private Type determineFieldType(Rule rule, Scope scope) {
         Type contextType = scope.resolveTypeOf(rule.getContext());
-        if(contextType == Type.ANY) {
+        if(contextType.isDynamic()) {
             return Type.ANY;
         }
         if(!contextType.getProperties().getReferences().containsKey(rule.getTargetPath())) {
             return Type.UNKNOWN;
         }
-        return contextType.getProperties().getReferences().get(rule.getTargetPath()).getType();
+        Type fieldType = contextType.getProperties().getReferences().get(rule.getTargetPath()).getType();
+        if(Type.MONEY.equals(fieldType)) {
+            return Type.NUMBER;
+        }
+        if(ArrayType.of(Type.MONEY).equals(fieldType)) {
+            return ArrayType.of(Type.NUMBER);
+        }
+        return fieldType;
     }
 
     private void findErrorsInCondition(Rule rule, Scope scope, ValidationSession session) {
         if (rule.getCondition() != null && rule.getCondition().getExpression() != null) {
             String conditionExpression = rule.getCondition().getExpression().getExpressionString();
+            if(!checkIfParseable(conditionExpression, "Condition", rule, scope, session)) {
+                return;
+            }
+
             Ast ast = AstBuilder.from(conditionExpression, scope);
-            ast.getSyntaxErrors().stream()
-                .map(buildErrorMessageFromSyntaxError(rule, "Condition Expression"))
+            ast.getValidationMessages().stream()
+                .map(buildValidationMessageFromAstMessage(rule, "Condition Expression"))
                 .forEach(session::add);
 
             if (!Type.BOOLEAN.isAssignableFrom(ast.getExpression().getEvaluationType())) {
@@ -183,15 +237,65 @@ public final class RuleExpressionValidator {
                         Severity.ERROR
                 ));
             }
+            checkIfNotEmpty(rule, "Condition", ast.getExpression(), session);
+
+            if (ast.getAstType() == AstType.LITERAL && Boolean.TRUE.equals(ast.getCompiledLiteralValue())) {
+                var message = "Redundant literal value 'true' in rule condition expression. "
+                    + "An empty condition expression is 'true' by default.";
+
+                session.add(new ValidationMessage(rule, message, Severity.INFO));
+            }
         }
     }
 
-    private Function<AstError, ValidationMessage> buildErrorMessageFromSyntaxError(Rule rule, String expressionParent) {
-        return astError -> new ValidationMessage(
+    /**
+     *
+     * @param expression
+     * @param scope
+     * @param session
+     * @return true if parseable; false otherwise, also adds error message to session
+     */
+    private boolean checkIfParseable(String expression, String type, Rule rule, Scope scope, ValidationSession session) {
+        try {
+            AstBuilder.from(expression, scope);
+            return true;
+        } catch (AstBuildingException e) {
+            session.add(new ValidationMessage(
                 rule,
-                String.format("Error found in %s: %s", expressionParent, astError),
+                String.format("%s expression cannot be parsed, because there is an error in expression syntax", type),
                 Severity.ERROR
-        );
+            ));
+            return false;
+        }
     }
 
+    private Function<AstMessage, ValidationMessage> buildValidationMessageFromAstMessage(Rule rule,
+                                                                                         String expressionParent) {
+
+        return astMessage -> {
+            String message = decorator.decorate(astMessage, rule);
+            switch (astMessage.getSeverity()) {
+                case ERROR:
+                    return new ValidationMessage(
+                        rule,
+                        String.format("Error found in %s: %s", expressionParent, message),
+                        Severity.ERROR
+                    );
+                case WARNING:
+                    return new ValidationMessage(
+                        rule,
+                        String.format("Warning about %s: %s", expressionParent, message),
+                        Severity.WARNING
+                    );
+                case INFO:
+                    return new ValidationMessage(
+                        rule,
+                        String.format("Info about %s: %s", expressionParent, message),
+                        Severity.INFO
+                    );
+                default:
+                    throw new IllegalArgumentException("Unknown AstSeverity encountered: " + astMessage.getSeverity());
+            }
+        };
+    }
 }

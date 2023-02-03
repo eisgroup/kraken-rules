@@ -2,9 +2,13 @@ package kraken.engine.sanity.check;
 
 import kraken.model.context.ContextDefinition;
 import kraken.runtime.engine.EntryPointResult;
+import kraken.testproduct.domain.AddressInfo;
 import kraken.testproduct.domain.AnubisCoverage;
+import kraken.testproduct.domain.BillingInfo;
 import kraken.testproduct.domain.COLLCoverage;
 import kraken.testproduct.domain.FullCoverage;
+import kraken.testproduct.domain.Party;
+import kraken.testproduct.domain.PersonInfo;
 import kraken.testproduct.domain.Policy;
 import kraken.testproduct.domain.RRCoverage;
 import kraken.testproduct.domain.Vehicle;
@@ -29,7 +33,7 @@ import static kraken.testing.matchers.KrakenMatchers.hasValidationFailures;
 import static kraken.test.KrakenItestMatchers.matchesSnapshot;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * @author psurinin
@@ -67,13 +71,6 @@ public class EngineSanityInheritanceTest extends SanityEngineBaseTest {
         final ContextDefinition ctx = getResources().getKrakenProject().getContextDefinitions().get("FullCoverage");
 
         assertThat(ctx.getParentDefinitions(), hasSize(2));
-    }
-
-    @Test
-    public void shouldHaveOneParentDefinition(){
-        final ContextDefinition ctx = getResources().getKrakenProject().getContextDefinitions().get("PersonInfo");
-
-        assertThat(ctx.getParentDefinitions(), hasSize(1));
     }
 
     @Test
@@ -209,5 +206,23 @@ public class EngineSanityInheritanceTest extends SanityEngineBaseTest {
         assertThat(result, hasValidationFailures(0));
         assertThat(result, hasNoIgnoredRules());
         assertThat(result, matchesSnapshot());
+    }
+
+    @Test
+    public void shouldEvaluateWithoutDuplicatedResults(){
+        AddressInfo addressInfo = new AddressInfo();
+        addressInfo.setCity("Vilnius");
+        PersonInfo personInfo = new PersonInfo();
+        personInfo.setAddressInfo(addressInfo);
+        Party party = new Party();
+        party.setPersonInfo(personInfo);
+        Policy policy = new Policy();
+        policy.setParties(List.of(party));
+
+        EntryPointResult result = engine.evaluate(policy, "EvaluateWithoutDuplicatedResults");
+
+        assertThat(result, hasApplicableResults(1));
+        assertThat(result, hasValidationFailures(1));
+        assertThat(result, hasNoIgnoredRules());
     }
 }

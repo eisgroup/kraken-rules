@@ -15,6 +15,7 @@
  */
 package kraken.el.ast;
 
+import kraken.el.ast.builder.Literals;
 import kraken.el.ast.token.Token;
 import kraken.el.scope.type.Type;
 import kraken.el.scope.Scope;
@@ -30,6 +31,6 @@ public class StringLiteral extends LiteralExpression<String> {
 
     @Override
     public String toString() {
-        return "'" + getValue() + "'";
+        return "'" + Literals.deescape(getValue()) + "'";
     }
 }

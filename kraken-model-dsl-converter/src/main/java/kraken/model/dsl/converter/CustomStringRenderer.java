@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 EIS Ltd and/or one of its affiliates.
+ *  Copyright 2022 EIS Ltd and/or one of its affiliates.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,16 +15,15 @@
  */
 package kraken.model.dsl.converter;
 
+import kraken.el.ast.builder.Literals;
 import kraken.model.context.PrimitiveFieldDataType;
 import org.stringtemplate.v4.StringRenderer;
 
 import java.util.Locale;
 
 /**
- * Custom string renderer used to format {@link String} with special format flag.
- * Flag <code>primitiveLowerCap</code> will transform string if it is of {@link PrimitiveFieldDataType}
- * to lower cased string with first capital letter, otherwise will return same.
- * Flag <code>escapeQuotes</code> will replace double quotes with single quotes in string.
+ * Custom string renderer used to format {@link String} with custom formats.
+ * Format <code>deescapeString</code> will revert model string escapes when writing string literals from model to DSL
  *
  * @author avasiliauskas
  * @since 1.0.28
@@ -33,12 +32,8 @@ class CustomStringRenderer extends StringRenderer {
 
     @Override
     public String toString(Object o, String formatString, Locale locale) {
-        String str = (String) o;
-        if(formatString == null){
-            return str;
-        }
-        if("escapeQuotes".equals(formatString)){
-            return str.replaceAll("\"", "\'");
+        if("deescapeString".equals(formatString)) {
+            return Literals.deescape((String)o);
         }
         return super.toString(o, formatString, locale);
     }

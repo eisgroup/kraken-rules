@@ -14,14 +14,14 @@
  *  limitations under the License.
  */
 
-import { CachingReferencePathResolver } from "../../../../src/engine/contexts/ccr/CachingReferencePathResolver";
+import { CachingReferencePathResolver } from '../../../../src/engine/contexts/ccr/CachingReferencePathResolver'
 
-describe("CachingReferencePathResolver", () => {
-    it("should cache calls", () => {
-        const resolveReferencePath = jest.fn();
-        const resolver = new CachingReferencePathResolver({ resolveReferencePath });
-        resolver.resolveReferencePath(["a"], "b");
-        resolver.resolveReferencePath(["a"], "b");
-        expect(resolveReferencePath).toHaveBeenCalledTimes(1);
-    });
-});
+describe('CachingReferencePathResolver', () => {
+    it('should cache calls', () => {
+        const resolveReferencePath = jest.fn()
+        const resolver = new CachingReferencePathResolver({ resolveReferencePath })
+        resolver.resolveReferencePath(['a'], 'b')
+        resolver.resolveReferencePath(['a'], 'b')
+        expect(resolveReferencePath).toHaveBeenCalledTimes(1)
+    })
+})

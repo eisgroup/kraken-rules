@@ -49,3 +49,43 @@ Rule "ec-assert-additional" On Policy.txReason {
 Rule "ec-assert-additional-ccr" On Policy.txReason {
     Assert Insured.name = context.additional.package and context.additional.package = txReason
 }
+
+EntryPoint "ExpressionContextCheck-NestedScope" {
+    "ec-assert-nested-scope"
+}
+
+Rule "ec-assert-nested-scope" On Policy.policyNumber {
+    Assert IsEmpty(
+        context.additional.policies[Distinct(for p in {this.policyNumber} return this.policyNumber)[0] = policyNumber]
+    )
+}
+
+EntryPoint "ExpressionContextCheck-NestedFilter" {
+    "ec-assert-nested-filter",
+    "ec-assert-nested-filter-for"
+}
+
+// should resolve 'make' from closest filter ('context.additional.vehicles') even if 'riskItems' is static filter
+Rule "ec-assert-nested-filter" On Policy.policyNumber {
+    Assert !IsEmpty(
+        riskItems[
+            Count(context.additional.vehicles[model = policyNumber]) = 1
+        ]
+    )
+}
+
+Rule "ec-assert-nested-filter-for" On Policy.policyNumber {
+    Assert
+      every model
+      in riskItems.model
+      satisfies IsEmpty(context.additional.vehicles[model = policyNumber])
+}
+
+EntryPoint "ExpressionContextCheck-FlatMapDynamicContext" {
+    "ec-assert-flatmap"
+}
+
+// here context is dynamic and vehicles is a collection and models is a collection. Evaluation should flatmap models.
+Rule "ec-assert-flatmap" On Policy.policyNumber {
+    Assert IsEmpty(context.additional.vehicles.collCoverages[code = policyNumber])
+}

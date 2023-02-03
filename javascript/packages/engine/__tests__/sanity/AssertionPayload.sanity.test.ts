@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /*
  *  Copyright 2019 EIS Ltd and/or one of its affiliates.
  *
@@ -14,46 +15,72 @@
  *  limitations under the License.
  */
 
-import { sanityMocks } from "./_AutoPolicyObject.mocks";
-import { sanityEngine } from "./_SanityEngine";
+import { sanityMocks } from './_AutoPolicyObject.mocks'
+import { sanityEngine } from './_SanityEngine'
+import { FieldMetadataReducer } from '../../src'
+import { MatchableResults } from 'kraken-jest-matchers'
 
-describe("Engine Sanity Assertion Payload Test", () => {
-    const { empty, inValid, valid } = sanityMocks;
+describe('Engine Sanity Assertion Payload Test', () => {
+    const { empty, inValid, valid } = sanityMocks
     it("should execute 'AssertionAutoPolicy' entrypoint with empty data", () => {
-        const results = sanityEngine.evaluate(empty(), "AssertionAutoPolicy");
-        expect(results).k_toMatchResultsStats({ total: 4, critical: 3 });
-        expect(results).k_toHaveExpressionsFailures(1);
-        expect(results).k_toMatchResultsSnapshots();
-    });
+        const results = sanityEngine.evaluate(empty(), 'AssertionAutoPolicy')
+        const fieldResults = new FieldMetadataReducer().reduce(results)
+        const matchableResults = {
+            entryPointResults: results,
+            fieldResults,
+        } as MatchableResults
+
+        expect(results).k_toMatchResultsStats({ total: 4, critical: 3 })
+        expect(results).k_toHaveExpressionsFailures(1)
+        expect(matchableResults).k_toMatchResultsSnapshots()
+    })
     it("should execute 'AssertionAutoPolicy' entrypoint with valid data", () => {
-        const results = sanityEngine.evaluate(valid(), "AssertionAutoPolicy");
-        expect(results).k_toMatchResultsStats({ total: 6, critical: 0 });
-        expect(results).k_toHaveExpressionsFailures(0);
-        expect(results).k_toMatchResultsSnapshots();
-    });
+        const results = sanityEngine.evaluate(valid(), 'AssertionAutoPolicy')
+        const fieldResults = new FieldMetadataReducer().reduce(results)
+        const matchableResults = {
+            entryPointResults: results,
+            fieldResults,
+        } as MatchableResults
+
+        expect(results).k_toMatchResultsStats({ total: 6, critical: 0 })
+        expect(results).k_toHaveExpressionsFailures(0)
+        expect(matchableResults).k_toMatchResultsSnapshots()
+    })
     it("should execute 'AssertionAutoPolicy' entrypoint with not valid data", async () => {
-        const results = sanityEngine.evaluate(inValid(), "AssertionAutoPolicy");
-        expect(results).k_toMatchResultsStats({ total: 4, critical: 4 });
-        expect(results).k_toHaveExpressionsFailures(0);
-        expect(results).k_toMatchResultsSnapshots();
-    });
+        const results = sanityEngine.evaluate(inValid(), 'AssertionAutoPolicy')
+        const fieldResults = new FieldMetadataReducer().reduce(results)
+        const matchableResults = {
+            entryPointResults: results,
+            fieldResults,
+        } as MatchableResults
+
+        expect(results).k_toMatchResultsStats({ total: 4, critical: 4 })
+        expect(results).k_toHaveExpressionsFailures(0)
+        expect(matchableResults).k_toMatchResultsSnapshots()
+    })
     it("should execute 'AssertionAutoPolicy' entrypoint with not valid data with restriction", () => {
-        const data = inValid();
-        const results = sanityEngine.evaluateSubTree(data, data.riskItems![0], "AssertionAutoPolicy");
-        expect(results).k_toMatchResultsStats({ total: 1, critical: 1 });
-        expect(results).k_toHaveExpressionsFailures(0);
-        expect(results).k_toMatchResultsSnapshots();
-    });
+        const data = inValid()
+        const results = sanityEngine.evaluateSubTree(data, data.riskItems![0], 'AssertionAutoPolicy')
+        const fieldResults = new FieldMetadataReducer().reduce(results)
+        const matchableResults = {
+            entryPointResults: results,
+            fieldResults,
+        } as MatchableResults
+
+        expect(results).k_toMatchResultsStats({ total: 1, critical: 1 })
+        expect(results).k_toHaveExpressionsFailures(0)
+        expect(matchableResults).k_toMatchResultsSnapshots()
+    })
 
     it("should evaluate 'AssertionAutoPolicy' with node that has no rule", () => {
-        const data = valid();
+        const data = valid()
         data.insured = {
-            id: "121",
-            cd: "Insured",
-            name: "insuredName"
-        };
-        const results = sanityEngine.evaluateSubTree(data, data.insured, "AssertionAutoPolicy");
-        expect(results).k_toMatchResultsStats({ total: 0, critical: 0 });
-        expect(results).k_toHaveExpressionsFailures(0);
-    });
-});
+            id: '121',
+            cd: 'Insured',
+            name: 'insuredName',
+        }
+        const results = sanityEngine.evaluateSubTree(data, data.insured, 'AssertionAutoPolicy')
+        expect(results).k_toMatchResultsStats({ total: 0, critical: 0 })
+        expect(results).k_toHaveExpressionsFailures(0)
+    })
+})

@@ -15,12 +15,13 @@
  */
 package kraken.el.ast;
 
-import kraken.el.ast.token.Token;
-import kraken.el.scope.Scope;
-import kraken.el.scope.type.GenericType;
-import kraken.el.scope.type.Type;
-
+import java.util.Map;
 import java.util.Objects;
+
+import kraken.el.ast.token.Token;
+import kraken.el.ast.typeguard.TypeFact;
+import kraken.el.scope.Scope;
+import kraken.el.scope.type.Type;
 
 /**
  * @author mulevicius
@@ -37,9 +38,6 @@ public abstract class Expression {
     protected Token token;
 
     public Expression(NodeType nodeType, Scope scope, Type evaluationType, Token token) {
-        if(evaluationType instanceof GenericType) {
-            throw new IllegalStateException();
-        }
         this.nodeType = Objects.requireNonNull(nodeType);
         this.scope = Objects.requireNonNull(scope);
         this.evaluationType = Objects.requireNonNull(evaluationType);
@@ -60,5 +58,25 @@ public abstract class Expression {
 
     public Token getToken() {
         return token;
+    }
+
+    /**
+     * @return type facts that were deduced in scope of this expression node
+     */
+    public Map<String, TypeFact> getDeducedTypeFacts() {
+        return Map.of();
+    }
+
+    /**
+     * Returns true if expression is semantically empty.
+     * Semantically empty expression is when it does not have any logic.
+     * Semantically empty expression can be when expression consists only of symbols that does not express logic,
+     * like empty spaces, comments or new lines.
+     * Note, that semantically empty expression is still considered as a valid expression in KEL.
+     *
+     * @return
+     */
+    public boolean isEmpty() {
+        return false;
     }
 }

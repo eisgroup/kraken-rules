@@ -13,121 +13,189 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-import { RulesBuilder, PayloadBuilder } from "kraken-model-builder";
-import { Payloads } from "kraken-model";
+import {
+    AssertionPayloadResult,
+    ConditionEvaluation,
+    LengthPayloadResult,
+    RegExpPayloadResult,
+    RuleEvaluationResults,
+    SizePayloadResult,
+    UsagePayloadResult,
+} from 'kraken-engine-api'
+import { Payloads } from 'kraken-model'
+import { PayloadBuilder, RulesBuilder } from 'kraken-model-builder'
 
-import { RuleEvaluationResults } from "../../../src/dto/RuleEvaluationResults";
-import ValidationRuleEvaluationResult = RuleEvaluationResults.ValidationRuleEvaluationResult;
+import { DefaultConditionEvaluationResult } from '../../../src/dto/DefaultConditionEvaluationResult'
+import { DefaultContextFieldInfo } from '../../../src/dto/DefaultContextFieldInfo'
+import { DefaultRuleInfo } from '../../../src/engine/results/DefaultRuleInfo'
+import { Localization } from '../../../src/engine/results/Localization'
+import { payloadResultCreator } from '../../../src/engine/results/PayloadResultCreator'
+import { mock } from '../../mock'
 
-import { Localization } from "../../../src/engine/results/Localization";
-import defaultMessages = Localization.defaultMessages;
-import errorMessage = Localization.errorMessage;
+import ValidationRuleEvaluationResult = RuleEvaluationResults.ValidationRuleEvaluationResult
 
-import { ConditionEvaluationResult, ConditionEvaluation } from "../../../src/dto/ConditionEvaluationResult";
-import { mock } from "../../mock";
-import { RuleInfo } from "../../../src/engine/results/RuleInfo";
-import { ContextFieldInfo } from "../../../src/dto/ContextFieldInfo";
-import { payloadResultCreator } from "../../../src/engine/results/PayloadResult";
+import defaultMessages = Localization.defaultMessages
+import errorMessage = Localization.errorMessage
+import defaultValidationMessages = Localization.defaultValidationMessages
+import resolveMessage = Localization.resolveMessage
 
-const rule = (p: Payloads.Payload) => new RulesBuilder()
-    .setName("r01")
-    .setContext("mock")
-    .setTargetPath("mock")
-    .setPayload(p)
-    .build();
-const info = () => new ContextFieldInfo(
-    mock.dataContextEmpty(),
-    "state"
-);
+const rule = (p: Payloads.Payload) =>
+    new RulesBuilder().setName('r01').setContext('mock').setTargetPath('mock').setPayload(p).build()
+const info = () => new DefaultContextFieldInfo(mock.dataContextEmpty(), 'state')
 
-describe("Localization", () => {
-    it("should leave error code defined and resolve message", () => {
-        const payload = PayloadBuilder.lengthLimit().limit(0);
+describe('Localization', () => {
+    it('[deprecated] should leave error code defined and resolve message', () => {
+        const payload = PayloadBuilder.lengthLimit().limit(0)
         payload.errorMessage = {
-            errorCode: "BR",
+            errorCode: 'BR',
             templateParts: [],
-            templateExpressions: []
-        };
+            templateExpressions: [],
+        }
         const res: ValidationRuleEvaluationResult = {
             kind: RuleEvaluationResults.Kind.VALIDATION,
-            ruleInfo: new RuleInfo(rule(payload)),
-            conditionEvaluationResult: ConditionEvaluationResult.of(ConditionEvaluation.APPLICABLE),
+            ruleInfo: new DefaultRuleInfo(rule(payload)),
+            conditionEvaluationResult: DefaultConditionEvaluationResult.of(ConditionEvaluation.APPLICABLE),
             payloadResult: payloadResultCreator.length(payload, false, []),
             overrideInfo: {
                 overridable: false,
-                overrideApplicable: false
-            }
-        };
-        const message = errorMessage(defaultMessages)(res, info());
-        expect(message.errorCode).toBe("BR");
-        expect(message.errorMessage).toBe("Text must not be longer than 0");
-    });
-    it("should resolve error message for length rule", () => {
-        const payload = PayloadBuilder.lengthLimit().limit(0);
-        payload.errorMessage = undefined;
+                overrideApplicable: false,
+            },
+        }
+        const message = errorMessage(defaultMessages)(res, info())
+        expect(message.errorCode).toBe('BR')
+        expect(message.errorMessage).toBe('Text must not be longer than 0')
+    })
+    it('[deprecated] should resolve error message for length rule', () => {
+        const payload = PayloadBuilder.lengthLimit().limit(0)
+        payload.errorMessage = undefined
         const res: ValidationRuleEvaluationResult = {
             kind: RuleEvaluationResults.Kind.VALIDATION,
-            ruleInfo: new RuleInfo(rule(payload)),
-            conditionEvaluationResult: ConditionEvaluationResult.of(ConditionEvaluation.APPLICABLE),
+            ruleInfo: new DefaultRuleInfo(rule(payload)),
+            conditionEvaluationResult: DefaultConditionEvaluationResult.of(ConditionEvaluation.APPLICABLE),
             payloadResult: payloadResultCreator.length(payload, false, []),
             overrideInfo: {
                 overridable: false,
-                overrideApplicable: false
-            }
-        };
-        const message = errorMessage(defaultMessages)(res, info());
-        expect(message.errorCode).toBe("rule-length-error");
-        expect(message.errorMessage).toBe("Text must not be longer than 0");
-    });
-    it("should resolve error message for usage.mandatory rule", () => {
-        const payload = PayloadBuilder.usage().is(Payloads.Validation.UsageType.mandatory);
-        payload.errorMessage = undefined;
+                overrideApplicable: false,
+            },
+        }
+        const message = errorMessage(defaultMessages)(res, info())
+        expect(message.errorCode).toBe('rule-length-error')
+        expect(message.errorMessage).toBe('Text must not be longer than 0')
+    })
+    it('[deprecated] should resolve error message for usage.mandatory rule', () => {
+        const payload = PayloadBuilder.usage().is(Payloads.Validation.UsageType.mandatory)
+        payload.errorMessage = undefined
         const res: ValidationRuleEvaluationResult = {
             kind: RuleEvaluationResults.Kind.VALIDATION,
-            ruleInfo: new RuleInfo(rule(payload)),
-            conditionEvaluationResult: ConditionEvaluationResult.of(ConditionEvaluation.APPLICABLE),
+            ruleInfo: new DefaultRuleInfo(rule(payload)),
+            conditionEvaluationResult: DefaultConditionEvaluationResult.of(ConditionEvaluation.APPLICABLE),
             payloadResult: payloadResultCreator.usage(payload, false, []),
             overrideInfo: {
                 overridable: false,
-                overrideApplicable: false
-            }
-        };
-        const message = errorMessage(defaultMessages)(res, info());
-        expect(message.errorCode).toBe("rule-mandatory-error");
-        expect(message.errorMessage).toBe("Field is mandatory");
-    });
-    it("should resolve error message for usage.empty rule", () => {
-        const payload = PayloadBuilder.usage().is(Payloads.Validation.UsageType.mustBeEmpty);
-        payload.errorMessage = undefined;
+                overrideApplicable: false,
+            },
+        }
+        const message = errorMessage(defaultMessages)(res, info())
+        expect(message.errorCode).toBe('rule-mandatory-error')
+        expect(message.errorMessage).toBe('Field is mandatory')
+    })
+    it('[deprecated] should resolve error message for usage.empty rule', () => {
+        const payload = PayloadBuilder.usage().is(Payloads.Validation.UsageType.mustBeEmpty)
+        payload.errorMessage = undefined
         const res: ValidationRuleEvaluationResult = {
             kind: RuleEvaluationResults.Kind.VALIDATION,
-            ruleInfo: new RuleInfo(rule(payload)),
-            conditionEvaluationResult: ConditionEvaluationResult.of(ConditionEvaluation.APPLICABLE),
+            ruleInfo: new DefaultRuleInfo(rule(payload)),
+            conditionEvaluationResult: DefaultConditionEvaluationResult.of(ConditionEvaluation.APPLICABLE),
             payloadResult: payloadResultCreator.usage(payload, false, []),
             overrideInfo: {
                 overridable: false,
-                overrideApplicable: false
-            }
-        };
-        const message = errorMessage(defaultMessages)(res, info());
-        expect(message.errorCode).toBe("rule-mandatory-empty-error");
-        expect(message.errorMessage).toBe("Field must be empty");
-    });
-    it("should resolve error message for regexp rule", () => {
-        const payload = PayloadBuilder.regExp().match("*");
-        payload.errorMessage = undefined;
+                overrideApplicable: false,
+            },
+        }
+        const message = errorMessage(defaultMessages)(res, info())
+        expect(message.errorCode).toBe('rule-mandatory-empty-error')
+        expect(message.errorMessage).toBe('Field must be empty')
+    })
+    it('[deprecated] should resolve error message for regexp rule', () => {
+        const payload = PayloadBuilder.regExp().match('*')
+        payload.errorMessage = undefined
         const res: ValidationRuleEvaluationResult = {
             kind: RuleEvaluationResults.Kind.VALIDATION,
-            ruleInfo: new RuleInfo(rule(payload)),
-            conditionEvaluationResult: ConditionEvaluationResult.of(ConditionEvaluation.APPLICABLE),
+            ruleInfo: new DefaultRuleInfo(rule(payload)),
+            conditionEvaluationResult: DefaultConditionEvaluationResult.of(ConditionEvaluation.APPLICABLE),
             payloadResult: payloadResultCreator.regexp(payload, false, []),
             overrideInfo: {
                 overridable: false,
-                overrideApplicable: false
-            }
-        };
-        const message = errorMessage(defaultMessages)(res, info());
-        expect(message.errorCode).toBe("rule-regexp-error");
-        expect(message.errorMessage).toBe("Field must match regular expression pattern: *");
-    });
-});
+                overrideApplicable: false,
+            },
+        }
+        const message = errorMessage(defaultMessages)(res, info())
+        expect(message.errorCode).toBe('rule-regexp-error')
+        expect(message.errorMessage).toBe('Field must match regular expression pattern: *')
+    })
+    it('should leave error code defined and resolve message', () => {
+        const payload = PayloadBuilder.lengthLimit().limit(0)
+        payload.errorMessage = {
+            errorCode: 'BR',
+            templateParts: [],
+            templateExpressions: [],
+        }
+        const payloadResult: LengthPayloadResult = payloadResultCreator.length(payload, false, [])
+        const message = resolveMessage(payloadResult, defaultValidationMessages)
+        expect(message.errorCode).toBe('BR')
+        expect(message.errorMessage).toBe('Text must not be longer than {{0}}')
+        expect(message.templateVariables).toStrictEqual(['0'])
+    })
+    it('should resolve error message for assertion rule', () => {
+        const payload = PayloadBuilder.asserts().that('true', 'expression is true')
+        payload.errorMessage = undefined
+        const payloadResult: AssertionPayloadResult = payloadResultCreator.assertion(payload, false, [])
+        const message = resolveMessage(payloadResult, defaultValidationMessages)
+        expect(message.errorCode).toBe('rule-assertion-error')
+        expect(message.errorMessage).toBe('Assertion failed')
+    })
+    it('should resolve error message for length rule', () => {
+        const payload = PayloadBuilder.lengthLimit().limit(0)
+        payload.errorMessage = undefined
+        const payloadResult: LengthPayloadResult = payloadResultCreator.length(payload, false, [])
+        const message = resolveMessage(payloadResult, defaultValidationMessages)
+        expect(message.errorCode).toBe('rule-length-error')
+        expect(message.errorMessage).toBe('Text must not be longer than {{0}}')
+        expect(message.templateVariables).toStrictEqual(['0'])
+    })
+    it('should resolve error message for size rule', () => {
+        const payload = PayloadBuilder.size().min(10)
+        payload.errorMessage = undefined
+        const payloadResult: SizePayloadResult = payloadResultCreator.size(payload, false, [])
+        const message = resolveMessage(payloadResult, defaultValidationMessages)
+        expect(message.errorCode).toBe('rule-size-error')
+        expect(message.errorMessage).toBe('Array length is invalid')
+    })
+    it('should resolve error message for usage.mandatory rule', () => {
+        const payload = PayloadBuilder.usage().is(Payloads.Validation.UsageType.mandatory)
+        payload.errorMessage = undefined
+        const payloadResult: UsagePayloadResult = payloadResultCreator.usage(payload, false, [])
+        const message = resolveMessage(payloadResult, defaultValidationMessages)
+        expect(message.errorCode).toBe('rule-mandatory-error')
+        expect(message.errorMessage).toBe('Field is mandatory')
+        expect(message.templateVariables).toHaveLength(0)
+    })
+    it('should resolve error message for usage.empty rule', () => {
+        const payload = PayloadBuilder.usage().is(Payloads.Validation.UsageType.mustBeEmpty)
+        payload.errorMessage = undefined
+        const payloadResult: UsagePayloadResult = payloadResultCreator.usage(payload, false, [])
+        const message = resolveMessage(payloadResult, defaultValidationMessages)
+        expect(message.errorCode).toBe('rule-mandatory-empty-error')
+        expect(message.errorMessage).toBe('Field must be empty')
+        expect(message.templateVariables).toHaveLength(0)
+    })
+    it('should resolve error message for regexp rule', () => {
+        const payload = PayloadBuilder.regExp().match('*')
+        payload.errorMessage = undefined
+        const payloadResult: RegExpPayloadResult = payloadResultCreator.regexp(payload, false, [])
+        const message = resolveMessage(payloadResult, defaultValidationMessages)
+        expect(message.errorCode).toBe('rule-regexp-error')
+        expect(message.errorMessage).toBe('Field must match regular expression pattern: {{0}}')
+        expect(message.templateVariables).toStrictEqual(['*'])
+    })
+})

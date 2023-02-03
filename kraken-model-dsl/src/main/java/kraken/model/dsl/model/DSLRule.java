@@ -36,7 +36,9 @@ public class DSLRule {
 
     private DSLPayload payload;
 
-    public DSLRule(DSLMetadata metadata, String name, String description, String contextName, String fieldName, DSLExpression condition, DSLPayload payload) {
+    private Integer priority;
+
+    public DSLRule(DSLMetadata metadata, String name, String description, String contextName, String fieldName, DSLExpression condition, DSLPayload payload, Integer priority) {
         this.metadata = metadata;
         this.name = Objects.requireNonNull(name);
         this.description = description;
@@ -44,6 +46,7 @@ public class DSLRule {
         this.fieldName = Objects.requireNonNull(fieldName);
         this.condition = condition;
         this.payload = Objects.requireNonNull(payload);
+        this.priority = priority;
     }
 
     public String getName() {
@@ -72,5 +75,9 @@ public class DSLRule {
 
     public DSLMetadata getMetadata() {
         return metadata;
+    }
+
+    public Integer getPriority() {
+        return priority;
     }
 }

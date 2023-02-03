@@ -24,6 +24,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.cache2k.Cache;
+import org.cache2k.Cache2kBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kraken.converter.RuleConverter;
 import kraken.model.Rule;
 import kraken.model.project.KrakenProject;
@@ -32,11 +37,9 @@ import kraken.model.project.validator.KrakenProjectValidationService;
 import kraken.model.project.validator.ValidationResult;
 import kraken.namespace.Namespaced;
 import kraken.runtime.model.rule.RuntimeRule;
+import kraken.runtime.repository.dynamic.trace.QueryingDynamicRulesOperation;
 import kraken.runtime.repository.filter.DimensionFilteringService;
-import org.cache2k.Cache;
-import org.cache2k.Cache2kBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import kraken.tracer.Tracer;
 
 /**
  * Iterates over each {@link DynamicRuleRepository} and resolves rules for entryPoint.
@@ -87,33 +90,47 @@ public class DynamicRuleRepositoryProcessor {
     private Stream<RuntimeRule> resolveRules(DynamicRuleRepository dynamicRuleRepository,
                                              String entryPoint,
                                              Map<String, Object> context) {
-        return dynamicRuleRepository.resolveRules(krakenProject.getNamespace(), entryPoint, context)
-                .map(this::convertOrReadFromCache)
-                .collect(Collectors.collectingAndThen(Collectors.groupingBy(RuntimeRule::getName), allRules ->
-                        allRules.values()
-                                .stream()
-                                .map(rules -> getRule(rules, context))
-                                .filter(Objects::nonNull)));
+        return Tracer.doOperation(
+                new QueryingDynamicRulesOperation(dynamicRuleRepository.getClass().getSimpleName()),
+                () -> dynamicRuleRepository.resolveDynamicRules(krakenProject.getNamespace(), entryPoint, context)
+                    .map(this::convertOrReadFromCache)
+                    .collect(Collectors.groupingBy(RuntimeRule::getName))
+            )
+            .values()
+            .stream()
+            .map(rules -> getRule(rules, context))
+            .filter(Objects::nonNull);
     }
 
     private RuntimeRule getRule(List<RuntimeRule> rules, Map<String, Object> context) {
-        return rules.isEmpty() ? null : dimensionFilteringService.filterRules(rules, context).orElse(null);
+        if (rules.size() == 1 && !rules.iterator().next().getDimensionSet().isDimensional()) {
+            return rules.iterator().next();
+        }
+
+        return rules.isEmpty()
+            ? null
+            : dimensionFilteringService.filterRules(krakenProject.getNamespace(), rules, context).orElse(null);
     }
 
-    private RuntimeRule convertOrReadFromCache(Rule rule) {
+    private RuntimeRule convertOrReadFromCache(DynamicRuleHolder dynamicRuleHolder) {
+        var rule = dynamicRuleHolder.getRule();
         if(rule.getRuleVariationId() == null) {
             logger.warn("Dynamic Rule '{}' does not have ruleVariationId defined. " +
                     "Validation and caching will be skipped for this rule.", rule.getName());
-            return ruleConverter.convert(rule);
+            return convert(dynamicRuleHolder);
         }
 
         String key = rule.getName() + "_" + rule.getRuleVariationId();
-        return cache.computeIfAbsent(key, () -> validateAndConvert(rule));
+        return cache.computeIfAbsent(key, () -> validateAndConvert(dynamicRuleHolder));
     }
 
-    private RuntimeRule validateAndConvert(Rule rule) {
-        validate(rule);
-        return ruleConverter.convert(rule);
+    private RuntimeRule validateAndConvert(DynamicRuleHolder dynamicRuleHolder) {
+        validate(dynamicRuleHolder.getRule());
+        return convert(dynamicRuleHolder);
+    }
+
+    private RuntimeRule convert(DynamicRuleHolder dynamicRuleHolder) {
+        return ruleConverter.convertDynamicRule(dynamicRuleHolder);
     }
 
     private void validate(Rule rule) {
