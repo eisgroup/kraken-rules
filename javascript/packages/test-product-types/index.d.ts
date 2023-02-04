@@ -205,6 +205,7 @@ export namespace TestProduct {
             policyCurrency?: string;
             policyDetail?: kraken.testproduct.domain.PolicyDetail;
             policyNumber?: string;
+            policyValue?: { amount: number, currency: string };
             refToCustomer?: any;
             referer?: kraken.testproduct.domain.Referer;
             riskItems?: kraken.testproduct.domain.Vehicle[];

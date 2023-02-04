@@ -1,6 +1,6 @@
 {
     "name": "kraken-engine-api",
-    "version": "1.42.4-stage.0",
+    "version": "1.43.1-stage.0",
     "description": "Kraken Engine API",
     "main": "target/dist/js/src/index.js",
     "types": "target/dist/definitions/src/index.d.ts",
@@ -9,7 +9,7 @@
         "registry": "https://genesis-npm-release.exigengroup.com/repository/genesis-npm-release/"
     },
     "dependencies": {
-        "kraken-model": "1.42.4-stage.0"
+        "kraken-model": "1.43.1-stage.0"
     },
     "devDependencies": {
         "@types/node": "13.9.0",
@@ -25,7 +25,7 @@
         "compile": "tsc -pretty",
         "postcompile": "yarn transpile",
         "transpile": "echo 'no transpile'",
-        "del:compiled": "rimraf target/dist",
+        "del:compiled": "rimraf target",
         "build": "yarn run compile && yarn run lint",
         "prepare": "yarn run del:compiled && yarn run compile && yarn run lint -- --fix",
         "release": "yarn publish"
@@ -34,5 +34,5 @@
         "target/dist/definitions",
         "target/dist/js"
     ],
-    "gitHead": "6d16f79f76d6b73678a70625923b852dd9726865"
+    "gitHead": "05f656580777b0f80593998730cb1cc134a217f7"
 }

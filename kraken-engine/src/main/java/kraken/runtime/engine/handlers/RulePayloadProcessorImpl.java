@@ -79,6 +79,8 @@ public class RulePayloadProcessorImpl implements RulePayloadProcessor {
         processor.addHandler(new LengthPayloadHandler(evaluator));
         processor.addHandler(new SizePayloadHandler(evaluator));
         processor.addHandler(new SizeRangePayloadHandler(evaluator));
+        processor.addHandler(new NumberSetPayloadHandler(evaluator));
+        processor.addHandler(new ValueListPayloadHandler(evaluator));
         return processor;
     }
 

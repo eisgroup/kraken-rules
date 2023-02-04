@@ -233,7 +233,7 @@ public class Value {
 
     private boolean isValueEqualTo(Value v) {
         if(isNumber() && v.isNumber()) {
-            return Objects.equals(Numbers.normalized(asNumber()).stripTrailingZeros(), Numbers.normalized(v.asNumber()).stripTrailingZeros());
+            return Numbers.areEqual(asNumber(), v.asNumber());
         }
         return Objects.equals(getValue(), v.getValue());
     }

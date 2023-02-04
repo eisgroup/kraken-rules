@@ -1,0 +1,19 @@
+Namespace Policy
+
+EntryPoint "NumberSet" {
+  "Policy.termNo-numberSet",
+  "Vehicle.newValue-numberSet",
+  "CreditCardInfo.cardCreditLimitAmount-numberSet"
+}
+
+Rule "Policy.termNo-numberSet" On Policy.termNo {
+  Assert Number Min 1
+}
+
+Rule "Vehicle.newValue-numberSet" On Vehicle.newValue {
+  Assert Number Min 1000 Max 1000000 Step 0.01
+}
+
+Rule "CreditCardInfo.cardCreditLimitAmount-numberSet" On CreditCardInfo.cardCreditLimitAmount {
+  Assert Number Min 5 Max 1000 Step 10
+}

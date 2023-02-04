@@ -15,16 +15,21 @@
  */
 package kraken.model.dsl;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import kraken.model.Rule;
+import kraken.model.ValueList;
+import kraken.model.ValueList.DataType;
 import kraken.model.derive.DefaultValuePayload;
 import kraken.model.derive.DefaultingType;
 import kraken.model.dsl.error.LineParseCancellationException;
+import kraken.model.payload.PayloadType;
 import kraken.model.resource.Resource;
 import kraken.model.state.AccessibilityPayload;
 import kraken.model.validation.AssertionPayload;
 import kraken.model.validation.LengthPayload;
+import kraken.model.validation.NumberSetPayload;
 import kraken.model.validation.RegExpPayload;
 import kraken.model.validation.SizeOrientation;
 import kraken.model.validation.SizePayload;
@@ -32,6 +37,8 @@ import kraken.model.validation.SizeRangePayload;
 import kraken.model.validation.UsagePayload;
 import kraken.model.validation.UsageType;
 import kraken.model.validation.ValidationSeverity;
+import kraken.model.validation.ValueListPayload;
+
 import org.junit.Test;
 
 import static kraken.model.dsl.KrakenDSLModelParser.parseResource;
@@ -40,6 +47,7 @@ import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThrows;
 
 /**
@@ -197,6 +205,17 @@ public class KrakenModelDSLParserRuleTest {
     }
 
     @Test
+    public void shouldParseNumberSetPayload() {
+        Resource model = parseResource("Rule 'rule1' On Coverage.limitAmount { Assert Number Min -10.15 Max 20 Step 1.1 }");
+
+        Rule rule = model.getRules().get(0);
+        assertThat(rule.getPayload(), instanceOf(NumberSetPayload.class));
+        assertThat(((NumberSetPayload)rule.getPayload()).getMin(), equalTo(new BigDecimal("-10.15")));
+        assertThat(((NumberSetPayload)rule.getPayload()).getMax(), equalTo(new BigDecimal("20")));
+        assertThat(((NumberSetPayload)rule.getPayload()).getStep(), equalTo(new BigDecimal("1.1")));
+    }
+
+    @Test
     public void shouldParseUsagePayload() {
         Resource model = parseResource("Rules{Rule 'rule1' On Coverage.limitAmount { Set Mandatory Overridable}}");
 
@@ -270,6 +289,66 @@ public class KrakenModelDSLParserRuleTest {
         assertThat(rule.getPayload(), instanceOf(SizePayload.class));
         assertThat(((SizePayload) rule.getPayload()).getOrientation(), is(SizeOrientation.EQUALS));
         assertThat(((SizePayload) rule.getPayload()).getSize(), is(1));
+    }
+
+    @Test
+    public void shouldParseValueListRuleForStringValue() {
+        Resource model = parseResource("Rule 'valueListStrings' On Coverage.code { " +
+            "Assert In \"MED\", \"COLL\" " +
+            "}");
+
+        Rule rule = model.getRules().get(0);
+
+        assertNotNull(rule.getPayload());
+        assertThat(rule.getPayload(), instanceOf(ValueListPayload.class));
+
+        ValueListPayload valueListPayload = (ValueListPayload) rule.getPayload();
+
+        assertThat(valueListPayload.getPayloadType(), is(PayloadType.VALUE_LIST));
+        assertThat(valueListPayload.getSeverity(), is(ValidationSeverity.critical));
+        assertThat(valueListPayload.isOverridable(), is(false));
+
+        assertNotNull(valueListPayload.getValueList());
+
+        ValueList valueList = valueListPayload.getValueList();
+
+        assertThat(valueList.getValueType(), is(DataType.STRING));
+        assertThat(valueList.getValues(), containsInAnyOrder("MED", "COLL"));
+    }
+
+    @Test
+    public void shouldParseValueListRuleForDecimalValue() {
+        Resource model = parseResource("Rule 'valueListStrings' On Coverage.limitAmt { " +
+            "Assert In 10, 500.0, 52.5" +
+            "}");
+
+        Rule rule = model.getRules().get(0);
+
+        assertNotNull(rule.getPayload());
+        assertThat(rule.getPayload(), instanceOf(ValueListPayload.class));
+
+        ValueListPayload valueListPayload = (ValueListPayload) rule.getPayload();
+
+        assertThat(valueListPayload.getPayloadType(), is(PayloadType.VALUE_LIST));
+        assertThat(valueListPayload.getSeverity(), is(ValidationSeverity.critical));
+        assertThat(valueListPayload.isOverridable(), is(false));
+
+        assertNotNull(valueListPayload.getValueList());
+
+        ValueList valueList = valueListPayload.getValueList();
+
+        assertThat(valueList.getValueType(), is(DataType.DECIMAL));
+        assertThat(valueList.getValues(),
+            containsInAnyOrder(BigDecimal.valueOf(10), BigDecimal.valueOf(500.0), BigDecimal.valueOf(52.5)));
+    }
+
+    @Test
+    public void shouldThrowExceptionIfValueListRuleCannotBeParsed() {
+        assertThrows(LineParseCancellationException.class, () -> {
+            parseResource("Rule 'valueListStrings' On Coverage.limitAmt { " +
+                "Assert In 10, 500.0, \"MED\"" +
+                "}");
+        });
     }
 
     @Test

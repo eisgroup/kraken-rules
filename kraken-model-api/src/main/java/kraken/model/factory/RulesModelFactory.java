@@ -43,10 +43,12 @@ import kraken.model.state.AccessibilityPayload;
 import kraken.model.state.VisibilityPayload;
 import kraken.model.validation.AssertionPayload;
 import kraken.model.validation.LengthPayload;
+import kraken.model.validation.NumberSetPayload;
 import kraken.model.validation.RegExpPayload;
 import kraken.model.validation.SizePayload;
 import kraken.model.validation.SizeRangePayload;
 import kraken.model.validation.UsagePayload;
+import kraken.model.validation.ValueListPayload;
 
 /**
  * Provides factory methods for creating new instances of kraken models or for deep cloning existing kraken models.
@@ -122,11 +124,18 @@ public interface RulesModelFactory {
     SizeRangePayload createSizeRangePayload();
     SizeRangePayload cloneSizeRangePayload(SizeRangePayload sizeRangePayload);
 
+    NumberSetPayload createNumberSetPayload();
+    NumberSetPayload cloneNumberSetPayload(NumberSetPayload numberSetPayload);
+
     RegExpPayload createRegExpPayload();
     RegExpPayload cloneRegExpPayload(RegExpPayload regExpPayload);
 
     UsagePayload createUsagePayload();
     UsagePayload cloneUsagePayload(UsagePayload usagePayload);
+
+    ValueListPayload createValueListPayload();
+
+    ValueListPayload cloneValueListPayload(ValueListPayload valueListPayload);
 
     Condition createCondition();
     Condition cloneCondition(Condition condition);

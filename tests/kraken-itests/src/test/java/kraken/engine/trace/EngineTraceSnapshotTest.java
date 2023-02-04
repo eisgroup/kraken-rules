@@ -120,9 +120,11 @@ public class EngineTraceSnapshotTest extends EngineBaseTest {
     private Policy policy() {
         var policy = new Policy();
         policy.setId("Policy-1");
+        policy.setState("OT");
 
         var vehicle = new Vehicle();
         vehicle.setId("Vehicle-1");
+        vehicle.setCostNew(new BigDecimal("30000"));
         policy.setRiskItems(List.of(vehicle));
 
         var collCoverage = new COLLCoverage();

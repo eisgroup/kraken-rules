@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-import { Payloads } from 'kraken-model'
+import { Payloads, ValueList } from 'kraken-model'
 import { ExpressionEvaluationResult } from '../runtime/expressions/ExpressionEvaluationResult'
 import { RuleEvent } from './Events'
 
@@ -28,7 +28,9 @@ export enum PayloadResultType {
     USAGE = 64,
     ACCESSIBILITY = 128,
     VISIBILITY = 256,
-    NOT_APPLICABLE = 512,
+    NUMBER_SET = 512,
+    NOT_APPLICABLE = 1024,
+    VALUE_LIST = 2048,
 }
 
 export interface PayloadResult {
@@ -105,4 +107,16 @@ export interface RegExpPayloadResult extends ValidationPayloadResult {
 export interface UsagePayloadResult extends ValidationPayloadResult {
     type: PayloadResultType.USAGE
     usageType: Payloads.Validation.UsageType
+}
+
+export interface NumberSetPayloadResult extends ValidationPayloadResult {
+    type: PayloadResultType.NUMBER_SET
+    min?: number
+    max?: number
+    step?: number
+}
+
+export interface ValueListPayloadResult extends ValidationPayloadResult {
+    type: PayloadResultType.VALUE_LIST
+    valueList: ValueList
 }

@@ -17,6 +17,7 @@ import {
     AssertionPayloadResult,
     ConditionEvaluation,
     LengthPayloadResult,
+    NumberSetPayloadResult,
     RegExpPayloadResult,
     RuleEvaluationResults,
     SizePayloadResult,
@@ -197,5 +198,75 @@ describe('Localization', () => {
         expect(message.errorCode).toBe('rule-regexp-error')
         expect(message.errorMessage).toBe('Field must match regular expression pattern: {{0}}')
         expect(message.templateVariables).toStrictEqual(['*'])
+    })
+    describe('NumberSetPayload', () => {
+        it('should resolve error message for min max step', () => {
+            const payload = PayloadBuilder.numberSet().within(0, 10, 2)
+            const payloadResult: NumberSetPayloadResult = payloadResultCreator.numberSet(payload, false, [])
+            const message = resolveMessage(payloadResult, defaultValidationMessages)
+            expect(message.errorCode).toBe('number-set-min-max-step-error')
+            expect(message.errorMessage).toBe(
+                'Value must be in interval between {{0}} and {{1}} inclusively with increment {{2}}',
+            )
+            expect(message.templateVariables).toStrictEqual(['0', '10', '2'])
+        })
+        it('should resolve error message for min max', () => {
+            const payload = PayloadBuilder.numberSet().within(0, 10)
+            const payloadResult: NumberSetPayloadResult = payloadResultCreator.numberSet(payload, false, [])
+            const message = resolveMessage(payloadResult, defaultValidationMessages)
+            expect(message.errorCode).toBe('number-set-min-max-error')
+            expect(message.errorMessage).toBe('Value must be in interval between {{0}} and {{1}} inclusively')
+            expect(message.templateVariables).toStrictEqual(['0', '10'])
+        })
+        it('should resolve error message for min', () => {
+            const payload = PayloadBuilder.numberSet().greaterThanOrEqualTo(1)
+            const payloadResult: NumberSetPayloadResult = payloadResultCreator.numberSet(payload, false, [])
+            const message = resolveMessage(payloadResult, defaultValidationMessages)
+            expect(message.errorCode).toBe('number-set-min-error')
+            expect(message.errorMessage).toBe('Value must be {{0}} or larger')
+            expect(message.templateVariables).toStrictEqual(['1'])
+        })
+        it('should resolve error message for min step', () => {
+            const payload = PayloadBuilder.numberSet().greaterThanOrEqualTo(1, 2)
+            const payloadResult: NumberSetPayloadResult = payloadResultCreator.numberSet(payload, false, [])
+            const message = resolveMessage(payloadResult, defaultValidationMessages)
+            expect(message.errorCode).toBe('number-set-min-step-error')
+            expect(message.errorMessage).toBe('Value must be {{0}} or larger with increment {{1}}')
+            expect(message.templateVariables).toStrictEqual(['1', '2'])
+        })
+        it('should resolve error message for max', () => {
+            const payload = PayloadBuilder.numberSet().lessThanOrEqualTo(10)
+            const payloadResult: NumberSetPayloadResult = payloadResultCreator.numberSet(payload, false, [])
+            const message = resolveMessage(payloadResult, defaultValidationMessages)
+            expect(message.errorCode).toBe('number-set-max-error')
+            expect(message.errorMessage).toBe('Value must be {{0}} or smaller')
+            expect(message.templateVariables).toStrictEqual(['10'])
+        })
+        it('should resolve error message for max step', () => {
+            const payload = PayloadBuilder.numberSet().lessThanOrEqualTo(10, 2)
+            const payloadResult: NumberSetPayloadResult = payloadResultCreator.numberSet(payload, false, [])
+            const message = resolveMessage(payloadResult, defaultValidationMessages)
+            expect(message.errorCode).toBe('number-set-max-step-error')
+            expect(message.errorMessage).toBe('Value must be {{0}} or smaller with decrement {{1}}')
+            expect(message.templateVariables).toStrictEqual(['10', '2'])
+        })
+        it('should handle null', () => {
+            const payload = {
+                type: Payloads.PayloadType.NUMBER_SET,
+                severity: Payloads.Validation.ValidationSeverity.critical,
+                min: null,
+            }
+            const payloadResult: NumberSetPayloadResult = payloadResultCreator.numberSet(payload, false, [])
+            expect(() => resolveMessage(payloadResult, defaultValidationMessages)).toThrow()
+        })
+        it('should handle undefined', () => {
+            const payload = {
+                type: Payloads.PayloadType.NUMBER_SET,
+                severity: Payloads.Validation.ValidationSeverity.critical,
+                min: undefined,
+            }
+            const payloadResult: NumberSetPayloadResult = payloadResultCreator.numberSet(payload, false, [])
+            expect(() => resolveMessage(payloadResult, defaultValidationMessages)).toThrow()
+        })
     })
 })

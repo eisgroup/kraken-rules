@@ -19,6 +19,8 @@ import kraken.testproduct.domain.meta.Identifiable;
 
 import java.util.List;
 
+import javax.money.MonetaryAmount;
+
 public class Policy extends Identifiable {
 
     private Referer referer;
@@ -46,6 +48,8 @@ public class Policy extends Identifiable {
     private String state;
 
     private String policyNumber;
+
+    private MonetaryAmount policyValue;
 
     private List<String> policies;
 
@@ -212,5 +216,13 @@ public class Policy extends Identifiable {
 
     public void setReferer(Referer referer) {
         this.referer = referer;
+    }
+
+    public MonetaryAmount getPolicyValue() {
+        return policyValue;
+    }
+
+    public void setPolicyValue(MonetaryAmount policyValue) {
+        this.policyValue = policyValue;
     }
 }

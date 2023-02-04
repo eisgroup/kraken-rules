@@ -14,11 +14,11 @@
  *  limitations under the License.
  */
 
-import { ExpressionEvaluationResult } from 'kraken-engine-api'
 import {
     AssertionPayloadResult,
     DefaultValuePayloadResult,
     ErrorMessage,
+    ExpressionEvaluationResult,
     LengthPayloadResult,
     PayloadResultType,
     RegExpPayloadResult,
@@ -26,6 +26,8 @@ import {
     SizePayloadResult,
     SizeRangePayloadResult,
     UsagePayloadResult,
+    NumberSetPayloadResult,
+    ValueListPayloadResult,
 } from 'kraken-engine-api'
 import { Payloads } from 'kraken-model'
 
@@ -118,6 +120,20 @@ export const payloadResultCreator = {
         }
     },
 
+    valueList(
+        payload: Payloads.Validation.ValueListPayload,
+        success: boolean,
+        templateVariables: string[],
+    ): ValueListPayloadResult {
+        return {
+            type: PayloadResultType.VALUE_LIST,
+            valueList: payload.valueList,
+            success,
+            message: format(payload.errorMessage, templateVariables),
+            validationSeverity: payload.severity,
+        }
+    },
+
     default(events: RuleEvent[]): DefaultValuePayloadResult {
         return {
             type: PayloadResultType.DEFAULT,
@@ -134,6 +150,22 @@ export const payloadResultCreator = {
 
     defaultNoEvents(): DefaultValuePayloadResult {
         return { type: PayloadResultType.DEFAULT, events: [] }
+    },
+
+    numberSet(
+        payload: Payloads.Validation.NumberSetPayload,
+        success: boolean,
+        templateVariables: string[],
+    ): NumberSetPayloadResult {
+        return {
+            type: PayloadResultType.NUMBER_SET,
+            success,
+            min: payload.min,
+            max: payload.max,
+            step: payload.step,
+            message: format(payload.errorMessage, templateVariables),
+            validationSeverity: payload.severity,
+        }
     },
 }
 

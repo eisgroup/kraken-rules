@@ -15,6 +15,7 @@
  */
 
 import { Expressions } from './Expressions'
+import { ValueList } from './ValueList'
 
 export namespace Payloads {
     export interface Payload {
@@ -35,6 +36,8 @@ export namespace Payloads {
         LENGTH = 'LENGTH',
         SIZE = 'SIZE',
         SIZE_RANGE = 'SIZE_RANGE',
+        NUMBER_SET = 'NUMBER_SET',
+        VALUE_LIST = 'VALUE_LIST',
     }
     /**
      * To resolve {@link EvaluationType} by the PayloadType use
@@ -50,6 +53,8 @@ export namespace Payloads {
             case PayloadType.SIZE:
             case PayloadType.SIZE_RANGE:
             case PayloadType.USAGE:
+            case PayloadType.NUMBER_SET:
+            case PayloadType.VALUE_LIST:
                 return 'VALIDATION'
             case PayloadType.DEFAULT:
                 return 'DEFAULT'
@@ -130,6 +135,25 @@ export namespace Payloads {
             max: number
         }
 
+        /**
+         * NumberSetPayload allows to assert that the field value is in some number set.
+         * Can only be applied on numerical fields.
+         */
+        export interface NumberSetPayload extends ValidationPayload {
+            min?: number
+            max?: number
+            step?: number
+        }
+
+        /**
+         * A payload that allows to assert that the collection of values defined in
+         * {@link ValueList} contains field value. Can be applied on numerical and
+         * string primitive data fields as defined in {@link ValueList.DataType}.
+         */
+        export interface ValueListPayload extends ValidationPayload {
+            valueList: ValueList
+        }
+
         export interface ErrorMessage {
             templateParts: string[]
             templateExpressions: Expressions.Expression[]
@@ -198,6 +222,12 @@ export namespace Payloads {
     export function isUsagePayload(p: Payload): p is Validation.UsagePayload {
         return p.type === PayloadType.USAGE
     }
+    export function isNumberSetPayload(p: Payload): p is Validation.NumberSetPayload {
+        return p.type === PayloadType.NUMBER_SET
+    }
+    export function isValueListPayload(p: Payload): p is Validation.ValueListPayload {
+        return p.type === PayloadType.VALUE_LIST
+    }
     export function isValidationPayload(p: Payload): p is Validation.ValidationPayload {
         return (
             isAssertionPayload(p) ||
@@ -205,7 +235,9 @@ export namespace Payloads {
             isLengthPayload(p) ||
             isRegExpPayload(p) ||
             isSizePayload(p) ||
-            isSizeRangePayload(p)
+            isSizeRangePayload(p) ||
+            isNumberSetPayload(p) ||
+            isValueListPayload(p)
         )
     }
 }

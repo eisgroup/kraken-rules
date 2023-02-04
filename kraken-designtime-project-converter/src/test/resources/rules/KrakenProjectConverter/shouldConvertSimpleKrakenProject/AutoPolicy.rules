@@ -14,11 +14,16 @@ Context CarCoverage Is Coverage {
 
 EntryPoint "Validation" {
   EntryPoint "Default",
-  "AssertRule"
+  "AssertRule",
+  "ValueList"
 }
 
 Rule "AssertRule" On AutoPolicy.policyCd {
   Assert Sum(Limits(CarCoverage)) <= maxLimitAmount
+}
+
+Rule "ValueList" On AutoPolicy.policyCd {
+  Assert in "Individual", "Commercial"
 }
 
 @Dimension("PackageCd", "Pizza")

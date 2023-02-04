@@ -31,6 +31,7 @@ import java.time.Month;
 import org.junit.Test;
 
 import kraken.el.ExpressionEvaluationException;
+import kraken.el.ast.builder.Literals;
 
 /**
  * @author psurinin
@@ -76,6 +77,27 @@ public class DateFunctionsTest {
         LocalDateTime localDateTime = DateFunctions.plusMonths(LocalDateTime.of(2011, 11, 11, 0, 0), 1);
         assertThat(localDate.getMonth().getValue(), is(12));
         assertThat(localDateTime.getMonth().getValue(), is(12));
+    }
+
+    @Test
+    public void shouldAddDaysAndPreserveTime() {
+        var date = Literals.getDateTime("2000-01-01T07:33:33Z");
+        assertThat(DateFunctions.plusDays(date, 1), equalTo(Literals.getDateTime("2000-01-02T07:33:33Z")));
+        assertThat(DateFunctions.plusDays(date, 32), equalTo(Literals.getDateTime("2000-02-02T07:33:33Z")));
+    }
+
+    @Test
+    public void shouldAddMonthsAndPreserveTime() {
+        var date = Literals.getDateTime("2000-01-30T07:33:33Z");
+        assertThat(DateFunctions.plusMonths(date, 1), equalTo(Literals.getDateTime("2000-02-29T07:33:33Z")));
+        assertThat(DateFunctions.plusMonths(date, 13), equalTo(Literals.getDateTime("2001-02-28T07:33:33Z")));
+    }
+
+    @Test
+    public void shouldAddYearsAndPreserveTime() {
+        var date = Literals.getDateTime("2000-02-29T07:33:33Z");
+        assertThat(DateFunctions.plusYears(date, 1), equalTo(Literals.getDateTime("2001-02-28T07:33:33Z")));
+        assertThat(DateFunctions.plusYears(date, -1), equalTo(Literals.getDateTime("1999-02-28T07:33:33Z")));
     }
 
     @Test

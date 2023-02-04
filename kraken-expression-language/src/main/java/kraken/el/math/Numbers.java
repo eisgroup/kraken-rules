@@ -21,6 +21,8 @@ import java.math.RoundingMode;
 import java.util.Collection;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.money.MonetaryAmount;
 
 /**
@@ -122,11 +124,41 @@ public class Numbers {
         return normalized(number).stripTrailingZeros().toPlainString();
     }
 
+    public static boolean isValueInNumberSet(@Nonnull Number valueNum,
+                                             @Nullable Number minNum,
+                                             @Nullable Number maxNum,
+                                             @Nullable Number stepNum) {
+        var value = Numbers.normalized(valueNum);
+        var min = minNum != null ? Numbers.normalized(minNum) : null;
+        var max = maxNum != null ? Numbers.normalized(maxNum) : null;
+        var step = stepNum != null ? Numbers.normalized(stepNum) : null;
+        if(min != null && value.compareTo(min) < 0) {
+            return false;
+        }
+        if(max != null && value.compareTo(max) > 0) {
+            return false;
+        }
+        if(step != null) {
+            var shiftedValue = value;
+            if(min != null) {
+                shiftedValue = shiftedValue.subtract(min);
+            } else if(max != null) {
+                shiftedValue = shiftedValue.subtract(max);
+            }
+            return shiftedValue.remainder(step).compareTo(BigDecimal.ZERO) == 0;
+        }
+        return true;
+    }
+
     public static BigDecimal normalized(Number number) {
         if(number instanceof BigDecimal) {
             return (BigDecimal) number;
         }
         return new BigDecimal(number.toString(), DEFAULT_MATH_CONTEXT);
+    }
+
+    public static boolean areEqual(Number first, Number second) {
+        return compareTo(first, second) == 0;
     }
 
     public static int compareTo(Number first, Number second) {

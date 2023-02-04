@@ -182,4 +182,24 @@ describe('Date Functions', () => {
         expect(f.PlusYears(date, 1)).k_toBeDateEqualTo(new Date('2001-02-28'))
         expect(f.PlusYears(date, -1)).k_toBeDateEqualTo(new Date('1999-02-28'))
     })
+    it('should add days to date and preserve time', () => {
+        const date = new Date('2000-01-01T07:33:33Z')
+
+        expect(f.PlusDays(date, 1)).k_toBeDateTimeEqualTo(new Date('2000-01-02T07:33:33Z'))
+        expect(f.PlusDays(date, 32)).k_toBeDateTimeEqualTo(new Date('2000-02-02T07:33:33Z'))
+    })
+    it('should add months to date and preserve time', () => {
+        const date = new Date('2000-01-30T07:33:33Z')
+
+        expect(f.PlusMonths(date, 1)).k_toBeDateTimeEqualTo(new Date('2000-02-29T07:33:33Z'))
+        expect(f.PlusMonths(date, 13)).k_toBeDateTimeEqualTo(new Date('2001-02-28T07:33:33Z'))
+    })
+    it('should add years to date and preserve time', () => {
+        const date = new Date('2000-02-29T07:33:33Z')
+
+        expect(f.PlusYears(date, 1)).k_toBeDateTimeEqualTo(new Date('2001-02-28T07:33:33Z'))
+
+        //GENESIS-222170
+        //expect(f.PlusYears(date, -1)).k_toBeDateTimeEqualTo(new Date('1999-02-28T07:33:33Z'))
+    })
 })

@@ -17,18 +17,23 @@ package kraken.model.project.validator.rule;
 
 import static kraken.model.project.validator.Severity.ERROR;
 
+import java.math.BigDecimal;
+
 import kraken.model.Rule;
+import kraken.model.ValueList;
 import kraken.model.derive.DefaultValuePayload;
 import kraken.model.project.validator.ValidationMessage;
 import kraken.model.project.validator.ValidationSession;
 import kraken.model.project.validator.namespaced.NamespacedValidator;
 import kraken.model.validation.AssertionPayload;
 import kraken.model.validation.LengthPayload;
+import kraken.model.validation.NumberSetPayload;
 import kraken.model.validation.RegExpPayload;
 import kraken.model.validation.SizePayload;
 import kraken.model.validation.SizeRangePayload;
 import kraken.model.validation.UsagePayload;
 import kraken.model.validation.ValidationPayload;
+import kraken.model.validation.ValueListPayload;
 
 /**
  * Validates Kraken Rule model. Ensures that mandatory model properties are set and that model is consistent.
@@ -124,11 +129,43 @@ public class RuleModelValidator implements RuleValidator {
                     session.add(errorMessage(rule, "length must be positive"));
                 }
             }
+            if(rule.getPayload() instanceof NumberSetPayload) {
+                var payload = (NumberSetPayload) rule.getPayload();
+                if(payload.getMin() == null && payload.getMax() == null) {
+                    session.add(errorMessage(rule, "min or max must be set"));
+                }
+                if(payload.getMin() != null && payload.getMax() != null) {
+                    if(payload.getMin().compareTo(payload.getMax()) >= 0) {
+                        session.add(errorMessage(rule, "min must be smaller than max"));
+                    }
+                }
+                if(payload.getStep() != null) {
+                    if(payload.getStep().compareTo(BigDecimal.ZERO) <= 0) {
+                        session.add(errorMessage(rule, "step must be more than zero"));
+                    }
+                }
+            }
             if(!(rule.getPayload() instanceof DefaultValuePayload)) {
                 if(rule.getPriority() != null) {
                     String payloadType = rule.getPayload().getPayloadType().getTypeName();
                     session.add(errorMessage(rule, "priority cannot be set because rule payload type is " + payloadType
                         + " - priority is supported only for defaulting rules."));
+                }
+            }
+            if (rule.getPayload() instanceof ValueListPayload) {
+                ValueListPayload valueListPayload = (ValueListPayload) rule.getPayload();
+                ValueList valueList = valueListPayload.getValueList();
+
+                if (valueList == null) {
+                    session.add(errorMessage(rule, "ValueList must be set"));
+                } else {
+                    if (valueList.getValueType() == null) {
+                        session.add(errorMessage(rule, "ValueList data type must be set"));
+                    }
+
+                    if (valueList.getValues() == null || valueList.getValues().isEmpty()) {
+                        session.add(errorMessage(rule, "ValueList should contain at least one value"));
+                    }
                 }
             }
         }

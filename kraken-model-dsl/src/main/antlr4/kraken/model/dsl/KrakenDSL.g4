@@ -65,6 +65,8 @@ payload : usagePayload
         | sizePayload
         | sizeRangePayload
         | assertionPayload
+        | numberSetPayload
+        | valueListPayload
         ;
 usagePayload : SET MANDATORY payloadMessage? override?   #Mandatory
              | ASSERT EMPTY payloadMessage? override?    #Empty
@@ -79,6 +81,11 @@ regExpPayload : ASSERT MATCHES regExp=STRING payloadMessage? override?;
 sizePayload : ASSERT SIZE (MIN | MAX)? size=positiveIntegerLiteral payloadMessage? override?;
 sizeRangePayload : ASSERT SIZE MIN sizeFrom=positiveIntegerLiteral MAX sizeTo=positiveIntegerLiteral payloadMessage? override?;
 lengthPayload : ASSERT LENGTH length=positiveIntegerLiteral payloadMessage? override?;
+numberSetPayload : ASSERT NUMBER (minNumber | maxNumber | (minNumber maxNumber)) stepNumber? payloadMessage? override?;
+minNumber: MIN decimalLiteral;
+maxNumber: MAX decimalLiteral;
+stepNumber: STEP positiveDecimalLiteral;
+valueListPayload : ASSERT OP_IN (decimalValues | stringValues) payloadMessage? override?;
 override : OVERRIDABLE group=STRING?;
 payloadMessage : (ERROR | WARN | INFO) code=STRING (COLON message=STRING)?;
 
@@ -87,6 +94,8 @@ entryPoint : annotations? ENTRYPOINT entryPointName=STRING L_CURLY_BRACKETS entr
 entryPointItems : entryPointItem (COMMA entryPointItem)*;
 entryPointItem : ruleName | ENTRYPOINT entryPointName=STRING;
 ruleNames : ruleName (COMMA ruleName)*;
+decimalValues : decimalLiteral (COMMA decimalLiteral)*;
+stringValues : STRING (COMMA STRING)*;
 
 functionImplementation : functionDoc?
                          FUNCTION genericBounds? functionName=modelIdentifier
@@ -123,3 +132,4 @@ modelIdentifier : IDENTIFIER | krakenModelReservedWordNoChild | kelReservedWord;
 fieldType : IDENTIFIER | krakenModelReservedWordNoChild;
 
 integerLiteral : OP_MINUS? positiveIntegerLiteral;
+decimalLiteral : OP_MINUS? positiveDecimalLiteral;

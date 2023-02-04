@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-import { Payloads } from 'kraken-model'
+import { Payloads, ValueList } from 'kraken-model'
 
 import UsageType = Payloads.Validation.UsageType
 import ValidationSeverity = Payloads.Validation.ValidationSeverity
@@ -31,6 +31,8 @@ import PayloadType = Payloads.PayloadType
 import AccessibilityPayload = Payloads.UI.AccessibilityPayload
 import VisibilityPayload = Payloads.UI.VisibilityPayload
 import DefaultValuePayload = Payloads.Derive.DefaultValuePayload
+import ValueListPayload = Payloads.Validation.ValueListPayload
+import NumberSetPayload = Payloads.Validation.NumberSetPayload
 
 export class PayloadBuilder {
     static usage(): UsagePayloadBuilder {
@@ -56,6 +58,12 @@ export class PayloadBuilder {
     }
     static size(): SizePayloadBuilder {
         return new SizePayloadBuilder()
+    }
+    static numberSet(): NumberSetPayloadBuilder {
+        return new NumberSetPayloadBuilder()
+    }
+    static valueList() {
+        return new ValueListPayloadBuilder()
     }
 }
 
@@ -274,6 +282,51 @@ export class AccessibilityPayloadBuilder {
         return {
             type: this.type,
             accessible: false,
+        }
+    }
+}
+
+export class NumberSetPayloadBuilder {
+    greaterThanOrEqualTo(min: number, step?: number): NumberSetPayload {
+        return {
+            type: PayloadType.NUMBER_SET,
+            severity: ValidationSeverity.critical,
+            min,
+            step,
+        }
+    }
+
+    lessThanOrEqualTo(max: number, step?: number): NumberSetPayload {
+        return {
+            type: PayloadType.NUMBER_SET,
+            severity: ValidationSeverity.critical,
+            max,
+            step,
+        }
+    }
+
+    within(min: number, max: number, step?: number): NumberSetPayload {
+        return {
+            type: PayloadType.NUMBER_SET,
+            severity: ValidationSeverity.critical,
+            min,
+            max,
+            step,
+        }
+    }
+}
+
+export class ValueListPayloadBuilder {
+    valueList(valueList: ValueList): ValueListPayload {
+        return {
+            type: PayloadType.VALUE_LIST,
+            valueList: valueList,
+            severity: ValidationSeverity.critical,
+            errorMessage: {
+                errorCode: 'value-list-generated',
+                templateParts: ['Value list does not contain provided value'],
+                templateExpressions: [],
+            },
         }
     }
 }

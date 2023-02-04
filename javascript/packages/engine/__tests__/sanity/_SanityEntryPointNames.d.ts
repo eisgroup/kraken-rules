@@ -87,4 +87,6 @@ export type EntryPointName = "ForRestrictionCache"
 	| "Math_DevTesting" 
 	| "Templates" 
 	| "DefaultRuleByPriority" 
-	| "EvaluateWithoutDuplicatedResults";
+	| "EvaluateWithoutDuplicatedResults" 
+	| "ValueListPayload" 
+	| "NumberSet";

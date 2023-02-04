@@ -16,6 +16,7 @@
      },
      "riskItems": [
        {
+         "costNew": 30000,
          "serviceHistory": [],
          "collCoverages": [
            {
@@ -31,6 +32,7 @@
      "termDetails": {
        "id": "TermDetails-1"
      },
+     "state": "OT",
      "id": "Policy-1"
    }
    Evaluation configuration: {
@@ -42,7 +44,9 @@
    <- Collected rules for entry point 'Policy:TracerSnapshotTest':
       'TR_CarCoverage_Payload_error',
       'TR_CarCoverage_code_default',
+      'TR_Vehicle_costNew_numberSet',
       'TR_CarCoverage_Condition_default',
+      'TR_Policy_ValueList',
       'TR_CarCoverage_assert_info',
       'TR_CarCoverage_assert_warn',
       'TR_CarCoverage_assert_error',
@@ -129,6 +133,20 @@
             Policy: [ Policy:Policy-1 ]
       <- Evaluated rule 'TR_CarCoverage_Payload_error' on CarCoverage:CarCoverage-1:deductibleAmount. Evaluation status - IGNORED.
    <- Evaluated rule 'TR_CarCoverage_Payload_error' on a total of 2 instances.
+   -> Evaluating rule 'TR_Vehicle_costNew_numberSet'.
+      -- Resolved 1 data context(s) for rule 'TR_Vehicle_costNew_numberSet' target 'Vehicle':
+         Vehicle:Vehicle-1.
+      -> Evaluating rule 'TR_Vehicle_costNew_numberSet' on Vehicle:Vehicle-1:costNew.
+         -- Evaluated 'NumberSetPayload' to true. 30000 ∈ [10000, 50000] with step 50.
+      <- Evaluated rule 'TR_Vehicle_costNew_numberSet' on Vehicle:Vehicle-1:costNew. Evaluation status - APPLIED.
+   <- Evaluated rule 'TR_Vehicle_costNew_numberSet' on a total of 1 instances.
+   -> Evaluating rule 'TR_Policy_ValueList'.
+      -- Resolved 1 data context(s) for rule 'TR_Policy_ValueList' target 'Policy':
+         Policy:Policy-1.
+      -> Evaluating rule 'TR_Policy_ValueList' on Policy:Policy-1:state.
+         -- Evaluated 'ValueListPayload' to 'false'. Field value 'OT' is not one of 'NY, FL'
+      <- Evaluated rule 'TR_Policy_ValueList' on Policy:Policy-1:state. Evaluation status - APPLIED.
+   <- Evaluated rule 'TR_Policy_ValueList' on a total of 1 instances.
    -> Evaluating rule 'TR_CarCoverage_assert_info'.
       -- Resolved 2 data context(s) for rule 'TR_CarCoverage_assert_info' target 'CarCoverage':
          COLLCoverage:CollCoverage-1,

@@ -140,6 +140,15 @@ Array [
   Object {
     "evaluationType": Object {
       "assignableToArray": false,
+      "typeName": "Money",
+    },
+    "relevanceOrder": 1,
+    "text": "policyValue",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
       "typeName": "Unknown",
     },
     "relevanceOrder": 1,
@@ -2144,6 +2153,15 @@ Array [
   Object {
     "evaluationType": Object {
       "assignableToArray": false,
+      "typeName": "Money",
+    },
+    "relevanceOrder": 1,
+    "text": "policyValue",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
       "typeName": "Unknown",
     },
     "relevanceOrder": 1,
@@ -2414,6 +2432,15 @@ Array [
     },
     "relevanceOrder": 1,
     "text": "policyNumber",
+    "type": "reference",
+  },
+  Object {
+    "evaluationType": Object {
+      "assignableToArray": false,
+      "typeName": "Money",
+    },
+    "relevanceOrder": 1,
+    "text": "policyValue",
     "type": "reference",
   },
   Object {

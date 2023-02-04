@@ -212,6 +212,12 @@ DataContext {
         "fieldType": "STRING",
         "name": "policyNumber",
       },
+      "policyValue": Object {
+        "cardinality": "SINGLE",
+        "fieldPath": "policyValue",
+        "fieldType": "MONEY",
+        "name": "policyValue",
+      },
       "refToCustomer": Object {
         "cardinality": "SINGLE",
         "fieldPath": "refToCustomer",
@@ -653,6 +659,12 @@ DataContext {
           "fieldPath": "policyNumber",
           "fieldType": "STRING",
           "name": "policyNumber",
+        },
+        "policyValue": Object {
+          "cardinality": "SINGLE",
+          "fieldPath": "policyValue",
+          "fieldType": "MONEY",
+          "name": "policyValue",
         },
         "refToCustomer": Object {
           "cardinality": "SINGLE",

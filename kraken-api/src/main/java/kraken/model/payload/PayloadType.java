@@ -33,7 +33,9 @@ public enum PayloadType {
     VISIBILITY("VisibilityPayload", EvaluationType.VISIBILITY),
     LENGTH("LengthPayload", EvaluationType.VALIDATION),
     SIZE("SizePayload", EvaluationType.VALIDATION),
-    SIZE_RANGE("SizeRangePayload", EvaluationType.VALIDATION);
+    SIZE_RANGE("SizeRangePayload", EvaluationType.VALIDATION),
+    NUMBER_SET("NumberSetPayload", EvaluationType.VALIDATION),
+    VALUE_LIST("ValueListPayload", EvaluationType.VALIDATION);
 
     private String typeName;
 

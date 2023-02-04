@@ -32,11 +32,13 @@ import kraken.runtime.engine.dto.RuleEvaluationStatus;
 import kraken.runtime.engine.dto.RuleInfo;
 import kraken.runtime.engine.result.AssertionPayloadResult;
 import kraken.runtime.engine.result.LengthPayloadResult;
+import kraken.runtime.engine.result.NumberSetPayloadResult;
 import kraken.runtime.engine.result.RegExpPayloadResult;
 import kraken.runtime.engine.result.SizePayloadResult;
 import kraken.runtime.engine.result.SizeRangePayloadResult;
 import kraken.runtime.engine.result.UsagePayloadResult;
 import kraken.runtime.engine.result.ValidationPayloadResult;
+import kraken.runtime.engine.result.ValueListPayloadResult;
 import kraken.runtime.engine.result.reducers.EntryPointResultReducer;
 import kraken.runtime.engine.result.reducers.validation.ValidationMessageProvider.ValidationMessage;
 import kraken.runtime.engine.result.reducers.validation.trace.EntryPointResultReducingOperation;
@@ -226,6 +228,12 @@ public class ValidationStatusReducer implements EntryPointResultReducer<Validati
             }
             if (payloadResult instanceof UsagePayloadResult) {
                 return validationMessageProvider.usageErrorMessage((UsagePayloadResult) payloadResult);
+            }
+            if (payloadResult instanceof NumberSetPayloadResult) {
+                return validationMessageProvider.numberSetErrorMessage((NumberSetPayloadResult) payloadResult);
+            }
+            if (payloadResult instanceof ValueListPayloadResult) {
+                return validationMessageProvider.valueListErrorMessage((ValueListPayloadResult) payloadResult);
             }
             throw new IllegalStateException("Unknown payload result type encountered: " + payloadResult.getClass());
         }

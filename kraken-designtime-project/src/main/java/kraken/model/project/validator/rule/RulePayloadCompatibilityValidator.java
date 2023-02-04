@@ -17,6 +17,9 @@ package kraken.model.project.validator.rule;
 
 import static kraken.model.context.Cardinality.MULTIPLE;
 import static kraken.model.context.Cardinality.SINGLE;
+import static kraken.model.context.PrimitiveFieldDataType.DECIMAL;
+import static kraken.model.context.PrimitiveFieldDataType.INTEGER;
+import static kraken.model.context.PrimitiveFieldDataType.MONEY;
 import static kraken.model.context.PrimitiveFieldDataType.STRING;
 import static kraken.model.context.PrimitiveFieldDataType.isPrimitiveType;
 import static kraken.model.context.SystemDataTypes.isSystemDataType;
@@ -27,6 +30,7 @@ import java.util.function.Predicate;
 
 import kraken.model.Payload;
 import kraken.model.Rule;
+import kraken.model.ValueList.DataType;
 import kraken.model.context.Cardinality;
 import kraken.model.context.ContextDefinition;
 import kraken.model.context.ContextField;
@@ -41,10 +45,12 @@ import kraken.model.state.AccessibilityPayload;
 import kraken.model.state.VisibilityPayload;
 import kraken.model.validation.AssertionPayload;
 import kraken.model.validation.LengthPayload;
+import kraken.model.validation.NumberSetPayload;
 import kraken.model.validation.RegExpPayload;
 import kraken.model.validation.SizePayload;
 import kraken.model.validation.SizeRangePayload;
 import kraken.model.validation.UsagePayload;
+import kraken.model.validation.ValueListPayload;
 
 /**
  * <p>
@@ -103,31 +109,46 @@ import kraken.model.validation.UsagePayload;
  * <li>{@link SizeRangePayload}</li>
  * <li>{@link AssertionPayload}</li>
  * </ul>
+ * {@link PrimitiveFieldDataType} supported in {@link DataType} and {@link Cardinality#SINGLE}:
+ * <ul>
+ * <li>{@link ValueListPayload}</li>
+ * </ul>
  *
  * @author mulevicius
  */
 public class RulePayloadCompatibilityValidator implements RuleValidator {
 
     private static final List<PayloadCompatibility> payloadCompatibility = List.of(
-            forPayload(DefaultValuePayload.class, f -> isPrimitiveType(f.getFieldType()) && f.getCardinality() == SINGLE),
-            forPayload(AccessibilityPayload.class, f -> !isSystemDataType(f.getFieldType())),
-            forPayload(VisibilityPayload.class, f -> !isSystemDataType(f.getFieldType())),
-            forPayload(SizePayload.class, f -> f.getCardinality() == MULTIPLE),
-            forPayload(SizeRangePayload.class, f -> f.getCardinality() == MULTIPLE),
-            forPayload(
-                RegExpPayload.class,
-                f -> isPrimitiveType(f.getFieldType()) && f.getCardinality() == SINGLE,
-                f -> isPrimitiveType(f.getFieldType()) && f.getCardinality() == SINGLE
-                    && PrimitiveFieldDataType.valueOf(f.getFieldType()) == STRING
-            ),
-            forPayload(
-                LengthPayload.class,
-                f -> isPrimitiveType(f.getFieldType()) && f.getCardinality() == SINGLE,
-                f -> isPrimitiveType(f.getFieldType()) && f.getCardinality() == SINGLE
-                    && PrimitiveFieldDataType.valueOf(f.getFieldType()) == STRING
-            ),
-            forPayload(UsagePayload.class, f -> f.getCardinality() == SINGLE),
-            forPayload(AssertionPayload.class, f -> true)
+        forPayload(DefaultValuePayload.class, f -> isPrimitiveType(f.getFieldType()) && f.getCardinality() == SINGLE),
+        forPayload(AccessibilityPayload.class, f -> !isSystemDataType(f.getFieldType())),
+        forPayload(VisibilityPayload.class, f -> !isSystemDataType(f.getFieldType())),
+        forPayload(SizePayload.class, f -> f.getCardinality() == MULTIPLE),
+        forPayload(SizeRangePayload.class, f -> f.getCardinality() == MULTIPLE),
+        forPayload(
+            RegExpPayload.class,
+            f -> isPrimitiveType(f.getFieldType()) && f.getCardinality() == SINGLE,
+            f -> isPrimitiveType(f.getFieldType()) && f.getCardinality() == SINGLE
+                && PrimitiveFieldDataType.valueOf(f.getFieldType()) == STRING
+        ),
+        forPayload(
+            LengthPayload.class,
+            f -> isPrimitiveType(f.getFieldType()) && f.getCardinality() == SINGLE,
+            f -> isPrimitiveType(f.getFieldType()) && f.getCardinality() == SINGLE
+                && PrimitiveFieldDataType.valueOf(f.getFieldType()) == STRING
+        ),
+        forPayload(UsagePayload.class, f -> f.getCardinality() == SINGLE),
+        forPayload(
+            NumberSetPayload.class,
+            f -> isPrimitiveType(f.getFieldType())
+                && (PrimitiveFieldDataType.valueOf(f.getFieldType()) == DECIMAL
+                || PrimitiveFieldDataType.valueOf(f.getFieldType()) == MONEY
+                || PrimitiveFieldDataType.valueOf(f.getFieldType()) == INTEGER)
+                && f.getCardinality() == SINGLE
+        ),
+        forPayload(AssertionPayload.class, f -> true),
+        forPayload(
+            ValueListPayload.class,
+            f -> f.getCardinality() == SINGLE && DataType.isSupportedFieldDataType(f.getFieldType()))
     );
 
     private final KrakenProject krakenProject;

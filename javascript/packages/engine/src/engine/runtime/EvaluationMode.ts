@@ -52,6 +52,8 @@ const payloadTypes: { [key in PayloadType]: number } = {
     [PayloadType.SIZE_RANGE]: 1 << 6,
     [PayloadType.USAGE]: 1 << 7,
     [PayloadType.VISIBILITY]: 1 << 8,
+    [PayloadType.NUMBER_SET]: 1 << 9,
+    [PayloadType.VALUE_LIST]: 1 << 10,
 }
 
 const modeMasks: { [key in EvaluationMode]: number } = {

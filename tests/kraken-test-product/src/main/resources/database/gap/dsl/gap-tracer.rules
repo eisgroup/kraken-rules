@@ -4,6 +4,7 @@ EntryPoint "TracerSnapshotTest" {
    "TR_CarCoverage_assert_info",
    "TR_CarCoverage_assert_warn",
    "TR_CarCoverage_assert_error",
+   "TR_Vehicle_costNew_numberSet",
    "TR_CarCoverage_Condition_LimitAmt_error",
    "TR_CarCoverage_Payload_error",
    "TR_CarCoverage_SizeRange",
@@ -17,7 +18,8 @@ EntryPoint "TracerSnapshotTest" {
    "TR_CarCoverage_Visibility",
    "TR_CarCoverage_Accessibility",
    "TR_CarCoverage_Reset",
-   "TR_CarCoverage_Condition_default"
+   "TR_CarCoverage_Condition_default",
+   "TR_Policy_ValueList"
 }
 
 Rule "TR_CarCoverage_Condition_default" On CarCoverage.deductibleAmount {
@@ -93,4 +95,12 @@ Rule "TR_CarCoverage_Condition_LimitAmt_error" On CarCoverage.deductibleAmount {
 
 Rule "TR_CarCoverage_Payload_error" On CarCoverage.deductibleAmount {
     Assert Policy.riskItems[10].model = "Audi"
+}
+
+Rule "TR_Vehicle_costNew_numberSet" On Vehicle.costNew {
+    Assert Number Min 10000 Max 50000 Step 50
+}
+
+Rule "TR_Policy_ValueList" on Policy.state {
+    Assert in "NY", "FL"
 }

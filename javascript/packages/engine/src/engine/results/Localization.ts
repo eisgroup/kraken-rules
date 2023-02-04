@@ -23,8 +23,10 @@ import {
     SizeRangePayloadResult,
     UsagePayloadResult,
     ValidationPayloadResult,
+    ValueListPayloadResult,
     RuleEvaluationResults,
     ContextFieldInfo,
+    NumberSetPayloadResult,
 } from 'kraken-engine-api'
 import { Payloads } from 'kraken-model'
 import ValidationRuleEvaluationResult = RuleEvaluationResults.ValidationRuleEvaluationResult
@@ -102,6 +104,10 @@ export namespace Localization {
          * default message to set for failing array length range rule
          */
         sizeRange: ProvidedErrorMessage
+        /**
+         * default message to set for failing value size rule
+         */
+        valueList: ProvidedErrorMessage
     }
 
     /**
@@ -138,6 +144,10 @@ export namespace Localization {
         sizeRange: {
             errorCode: 'rule-size-range-error',
             errorMessage: () => 'Array length is invalid',
+        },
+        valueList: {
+            errorCode: 'rule-value-list-error',
+            errorMessage: () => 'Field must match one of values defined in value list',
         },
     }
 
@@ -235,6 +245,16 @@ export namespace Localization {
                     templateVariables: [],
                 }
             }
+            if (payloadResultTypeChecker.isValueList(payloadResult)) {
+                return {
+                    errorCode: defaultCodeIfAbsent(messages.valueList.errorCode),
+                    errorMessage: messages.valueList.errorMessage({
+                        contextId: contextInfo.contextId,
+                        contextName: contextInfo.contextName,
+                    }),
+                    templateVariables: [],
+                }
+            }
             throw new Error('Unknown validation payload type encountered')
         }
 
@@ -282,6 +302,19 @@ export namespace Localization {
          * This is invoked only when validation severity is ERROR.
          */
         sizeRangeErrorMessage: (payloadResult: SizeRangePayloadResult) => ValidationMessage
+
+        /**
+         * @param payloadResult Result of number set payload, can be used to parametrize validation message.
+         * @return Default error message to set for number set validation result.
+         * This is invoked only when validation severity is ERROR.
+         */
+        numberSetErrorMessage: (payloadResult: NumberSetPayloadResult) => ValidationMessage
+        /**
+         * @param payloadResult Result of value list payload, can be used to parametrize validation message.
+         * @return Default error message to set for value list validation result.
+         * This is invoked only when validation severity is ERROR.
+         */
+        valueListErrorMessage: (payloadResult: ValueListPayloadResult) => ValidationMessage
     }
 
     /**
@@ -345,6 +378,62 @@ export namespace Localization {
             }
             throw new Error('Unknown usage type encountered: ' + payloadResult.usageType)
         },
+        numberSetErrorMessage(payloadResult: NumberSetPayloadResult): Localization.ValidationMessage {
+            const min = payloadResult.min
+            const max = payloadResult.max
+            const step = payloadResult.step
+
+            if (min != undefined && max != undefined && step != undefined) {
+                return {
+                    code: 'number-set-min-max-step-error',
+                    message: 'Value must be in interval between {{0}} and {{1}} inclusively with increment {{2}}',
+                    parameters: [min, max, step],
+                }
+            }
+            if (min != undefined && max == undefined && step != undefined) {
+                return {
+                    code: 'number-set-min-step-error',
+                    message: 'Value must be {{0}} or larger with increment {{1}}',
+                    parameters: [min, step],
+                }
+            }
+            if (min == undefined && max != undefined && step != undefined) {
+                return {
+                    code: 'number-set-max-step-error',
+                    message: 'Value must be {{0}} or smaller with decrement {{1}}',
+                    parameters: [max, step],
+                }
+            }
+            if (min != undefined && max != undefined && step == undefined) {
+                return {
+                    code: 'number-set-min-max-error',
+                    message: 'Value must be in interval between {{0}} and {{1}} inclusively',
+                    parameters: [min, max],
+                }
+            }
+            if (min != undefined && max == undefined && step == undefined) {
+                return {
+                    code: 'number-set-min-error',
+                    message: 'Value must be {{0}} or larger',
+                    parameters: [min],
+                }
+            }
+            if (min == undefined && max != undefined && step == undefined) {
+                return {
+                    code: 'number-set-max-error',
+                    message: 'Value must be {{0}} or smaller',
+                    parameters: [max],
+                }
+            }
+            throw new Error('Invalid number set payload encountered: min, max and step are undefined')
+        },
+        valueListErrorMessage(payloadResult: ValueListPayloadResult): Localization.ValidationMessage {
+            return {
+                code: 'rule-value-list-error',
+                message: 'Value must be one of: {{0}}',
+                parameters: [payloadResult.valueList.values.map(value => value.toString()).join(', ')],
+            }
+        },
     }
 
     /**
@@ -391,6 +480,12 @@ export namespace Localization {
         }
         if (payloadResultTypeChecker.isUsage(p)) {
             return defaultProvider.usageErrorMessage(p)
+        }
+        if (payloadResultTypeChecker.isNumberSet(p)) {
+            return defaultProvider.numberSetErrorMessage(p)
+        }
+        if (payloadResultTypeChecker.isValueList(p)) {
+            return defaultProvider.valueListErrorMessage(p)
         }
         throw new Error('Unknown validation payload type encountered: ' + p.type)
     }

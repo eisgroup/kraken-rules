@@ -42,10 +42,12 @@ import kraken.model.state.AccessibilityPayload;
 import kraken.model.state.VisibilityPayload;
 import kraken.model.validation.AssertionPayload;
 import kraken.model.validation.LengthPayload;
+import kraken.model.validation.NumberSetPayload;
 import kraken.model.validation.RegExpPayload;
 import kraken.model.validation.SizePayload;
 import kraken.model.validation.SizeRangePayload;
 import kraken.model.validation.UsagePayload;
+import kraken.model.validation.ValueListPayload;
 
 /**
  * Converts Rules model to Rules DSL model as a <code>string<code/>.
@@ -102,11 +104,13 @@ public class DSLModelConverter {
         template.registerRenderer(UsagePayload.class, payloadRenderer::usagePayloadRenderer);
         template.registerRenderer(SizePayload.class, payloadRenderer::sizePayloadRenderer);
         template.registerRenderer(RegExpPayload.class, payloadRenderer::regExpPayloadRenderer);
+        template.registerRenderer(NumberSetPayload.class, payloadRenderer::numberSetPayloadRenderer);
         template.registerRenderer(AssertionPayload.class, payloadRenderer::assertionPayloadRenderer);
         template.registerRenderer(SizeRangePayload.class, payloadRenderer::sizeRangePayloadRenderer);
         template.registerRenderer(LengthPayload.class, payloadRenderer::lengthPayloadRenderer);
         template.registerRenderer(VisibilityPayload.class, payloadRenderer::visibilityPayloadRenderer);
         template.registerRenderer(AccessibilityPayload.class, payloadRenderer::accessibilityPayloadRenderer);
+        template.registerRenderer(ValueListPayload.class, payloadRenderer::valueListPayloadRenderer);
         template.registerRenderer(Cardinality.class, ContextDefinitionRenderer::cardinalityRenderer);
         template.registerRenderer(String.class, new CustomStringRenderer());
         template.registerRenderer(Number.class, new CustomNumberRenderer());

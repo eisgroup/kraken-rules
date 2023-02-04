@@ -19,11 +19,12 @@ import kraken.model.validation.SizeRangePayload;
 import kraken.model.validation.UsagePayload;
 import kraken.model.validation.UsageType;
 import kraken.model.validation.ValidationSeverity;
+import kraken.model.validation.ValueListPayload;
+
 import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -597,6 +598,50 @@ public class RuleConversionTest {
     }
 
     @Test
+    public void shouldConvertValueListRuleWithDescriptionForStringValues() {
+        Rule rule = createValueListRule(
+            ValueList.fromString(List.of("CD1", "CD2", "CD3"))
+        );
+
+        String convertedRule = convert(rule);
+
+        assertEquals(
+            "Rule \"Coverage_code_valueList_rule\" On Coverage.code {" +
+                System.lineSeparator() +
+                "    Description \"Value List Rule\"" +
+                System.lineSeparator() +
+                "    Assert In \"CD1\", \"CD2\", \"CD3\"" +
+                System.lineSeparator() +
+                "}" + System.lineSeparator() +
+                System.lineSeparator(),
+            convertedRule
+        );
+    }
+
+    @Test
+    public void shouldConvertValueListRuleWithDescriptionForDecimalValues() {
+        Rule rule = createValueListRule(
+            ValueList.fromNumber(
+                List.of(BigDecimal.valueOf(10), BigDecimal.valueOf(51.334), new BigDecimal("1E+6"))
+            )
+        );
+
+        String convertedRule = convert(rule);
+
+        assertEquals(
+            "Rule \"Coverage_code_valueList_rule\" On Coverage.code {" +
+                System.lineSeparator() +
+                "    Description \"Value List Rule\"" +
+                System.lineSeparator() +
+                "    Assert In 10, 51.334, 1000000" +
+                System.lineSeparator() +
+                "}" + System.lineSeparator() +
+                System.lineSeparator(),
+            convertedRule
+        );
+    }
+
+    @Test
     public void shouldConvertRulesCollection() {
         String rules = convert(Arrays.asList(
                 createDefaultRule(DefaultingType.defaultValue, "null"),
@@ -931,6 +976,65 @@ public class RuleConversionTest {
         );
     }
 
+    @Test
+    public void shouldConvertNumberSetRuleWithMinMaxStep(){
+        String dsl = convert(createFullNumberSetRule(new BigDecimal("1"), new BigDecimal("10"), new BigDecimal("1")));
+        assertEquals(
+            "Rule \"rule01\" On Driver.limitAmount {" + System.lineSeparator() +
+                "    Assert Number Min 1 Max 10 Step 1" + System.lineSeparator() +
+                "    Error \"code\" : \"message\"" + System.lineSeparator() +
+                "    Overridable \"group\"" + System.lineSeparator() +
+                "}" + System.lineSeparator() +
+                System.lineSeparator(),
+            dsl
+        );
+    }
+
+    @Test
+    public void shouldConvertNumberSetRuleWithMaxOnly(){
+        String dsl = convert(createSimpleNumberSetRule(null, new BigDecimal("1E+6"), null));
+        assertEquals(
+            "Rule \"rule01\" On Driver.limitAmount {" + System.lineSeparator() +
+                "    Assert Number Max 1000000" + System.lineSeparator() +
+                "}" + System.lineSeparator() +
+                System.lineSeparator(),
+            dsl
+        );
+    }
+
+    private Rule createFullNumberSetRule(BigDecimal min, BigDecimal max, BigDecimal step) {
+        Rule rule = factory.createRule();
+        var payload = factory.createNumberSetPayload();
+        payload.setMin(min);
+        payload.setMax(max);
+        payload.setStep(step);
+        payload.setSeverity(ValidationSeverity.critical);
+        payload.setOverridable(true);
+        payload.setOverrideGroup("group");
+        var message = factory.createErrorMessage();
+        message.setErrorCode("code");
+        message.setErrorMessage("message");
+        payload.setErrorMessage(message);
+        rule.setPayload(payload);
+        rule.setContext("Driver");
+        rule.setTargetPath("limitAmount");
+        rule.setName("rule01");
+        return rule;
+    }
+
+    private Rule createSimpleNumberSetRule(BigDecimal min, BigDecimal max, BigDecimal step) {
+        Rule rule = factory.createRule();
+        var payload = factory.createNumberSetPayload();
+        payload.setMin(min);
+        payload.setMax(max);
+        payload.setStep(step);
+        rule.setPayload(payload);
+        rule.setContext("Driver");
+        rule.setTargetPath("limitAmount");
+        rule.setName("rule01");
+        return rule;
+    }
+
     private Rule createRegExpRule(String regExp) {
         Rule rule = factory.createRule();
         rule.setPayload(createRegExpPayload(regExp));
@@ -1106,6 +1210,31 @@ public class RuleConversionTest {
     private AssertionPayload createAssertionPayload(String assertionString){
         AssertionPayload payload = factory.createAssertionPayload();
         payload.setAssertionExpression(createExpression(assertionString));
+        return payload;
+    }
+
+    private Rule createValueListRule(ValueList valueList) {
+        Rule rule = factory.createRule();
+
+        ValueListPayload payload = createValueListPayload(valueList);
+        rule.setPayload(payload);
+        rule.setDescription("Value List Rule");
+        rule.setContext("Coverage");
+        rule.setTargetPath("code");
+        rule.setName("Coverage_code_valueList_rule");
+        rule.setPhysicalNamespace("val");
+
+        return rule;
+    }
+
+    private ValueListPayload createValueListPayload(ValueList valueList) {
+        ValueListPayload payload = factory.createValueListPayload();
+        payload.setOverrideGroup("OverrideGroup");
+        payload.setOverridable(true);
+        payload.setErrorMessage(createErrorMessage("ValueListCode", "ValueListMessage"));
+        payload.setSeverity(ValidationSeverity.critical);
+        payload.setValueList(valueList);
+
         return payload;
     }
 

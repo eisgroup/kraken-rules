@@ -23,10 +23,12 @@ import kraken.annotations.API;
 import kraken.model.validation.UsageType;
 import kraken.runtime.engine.result.AssertionPayloadResult;
 import kraken.runtime.engine.result.LengthPayloadResult;
+import kraken.runtime.engine.result.NumberSetPayloadResult;
 import kraken.runtime.engine.result.RegExpPayloadResult;
 import kraken.runtime.engine.result.SizePayloadResult;
 import kraken.runtime.engine.result.SizeRangePayloadResult;
 import kraken.runtime.engine.result.UsagePayloadResult;
+import kraken.runtime.engine.result.ValueListPayloadResult;
 
 /**
  * Provides default messages.
@@ -46,8 +48,15 @@ public class DefaultValidationMessageProvider implements ValidationMessageProvid
         USAGE_EMPTY("rule-mandatory-empty-error", "Field must be empty"),
         REGEXP("rule-regexp-error", "Field must match regular expression pattern: {0}"),
         LENGTH("rule-length-error", "Text must not be longer than {0}"),
+        NUMBER_SET_MIN("number-set-min-error", "Value must be {0} or larger"),
+        NUMBER_SET_MAX("number-set-max-error", "Value must be {0} or smaller"),
+        NUMBER_SET_MIN_MAX("number-set-min-max-error", "Value must be in interval between {0} and {1} inclusively"),
+        NUMBER_SET_MIN_STEP("number-set-min-step-error", "Value must be {0} or larger with increment {1}"),
+        NUMBER_SET_MAX_STEP("number-set-max-step-error", "Value must be {0} or smaller with decrement {1}"),
+        NUMBER_SET_MIN_MAX_STEP("number-set-min-max-step-error", "Value must be in interval between {0} and {1} inclusively with increment {2}"),
         SIZE("rule-size-error", "Invalid collection size"),
-        SIZE_RANGE("rule-size-range-error", "Invalid collection size");
+        SIZE_RANGE("rule-size-range-error", "Invalid collection size"),
+        VALUE_LIST("value-list-error", "Value must be one of: {0}");
 
         private final String code;
         private final String message;
@@ -106,6 +115,44 @@ public class DefaultValidationMessageProvider implements ValidationMessageProvid
     @Nonnull
     public ValidationMessage sizeRangeErrorMessage(@Nonnull SizeRangePayloadResult payloadResult) {
         return new ValidationMessage(MESSAGE.SIZE_RANGE.code, MESSAGE.SIZE_RANGE.message);
+    }
+
+    @Nonnull
+    @Override
+    public ValidationMessage numberSetErrorMessage(@Nonnull NumberSetPayloadResult payloadResult) {
+        var min = payloadResult.getMin();
+        var max = payloadResult.getMax();
+        var step = payloadResult.getStep();
+
+        if(min != null && max != null && step != null) {
+            return new ValidationMessage(MESSAGE.NUMBER_SET_MIN_MAX_STEP.code, MESSAGE.NUMBER_SET_MIN_MAX_STEP.message);
+        }
+        if(min != null && max == null && step != null) {
+            return new ValidationMessage(MESSAGE.NUMBER_SET_MIN_STEP.code, MESSAGE.NUMBER_SET_MIN_STEP.message);
+        }
+        if(min == null && max != null && step != null) {
+            return new ValidationMessage(MESSAGE.NUMBER_SET_MAX_STEP.code, MESSAGE.NUMBER_SET_MAX_STEP.message);
+        }
+        if(min != null && max != null && step == null) {
+            return new ValidationMessage(MESSAGE.NUMBER_SET_MIN_MAX.code, MESSAGE.NUMBER_SET_MIN_MAX.message);
+        }
+        if(min != null && max == null && step == null) {
+            return new ValidationMessage(MESSAGE.NUMBER_SET_MIN.code, MESSAGE.NUMBER_SET_MIN.message);
+        }
+        if(min == null && max != null && step == null) {
+            return new ValidationMessage(MESSAGE.NUMBER_SET_MAX.code, MESSAGE.NUMBER_SET_MAX.message);
+        }
+        throw new IllegalArgumentException("Cannot resolve error message for number set payload");
+    }
+
+    @Nonnull
+    @Override
+    public ValidationMessage valueListErrorMessage(@Nonnull ValueListPayloadResult payloadResult) {
+        return new ValidationMessage(
+            MESSAGE.VALUE_LIST.code,
+            MESSAGE.VALUE_LIST.message,
+            List.of(payloadResult.getValueList().valuesAsString())
+        );
     }
 
 }

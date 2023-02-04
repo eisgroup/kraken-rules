@@ -150,6 +150,8 @@ krakenModelReservedWordNoChild : DESCRIPTION
                                | OVERRIDABLE
                                | MIN
                                | MAX
+                               | STEP
+                               | NUMBER
                                | SIZE
                                | WHEN
                                | ASSERT

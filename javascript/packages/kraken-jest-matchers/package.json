@@ -1,6 +1,6 @@
 {
     "name": "kraken-jest-matchers",
-    "version": "1.42.4-stage.0",
+    "version": "1.43.1-stage.0",
     "description": "Additional Jest matchers to use in Kraken Tests",
     "main": "target/dist/js/src/index.js",
     "types": "target/dist/definitions/src/index.d.ts",
@@ -12,8 +12,8 @@
     "typedocMain": "src/index.ts",
     "dependencies": {
         "declarative-js": "3.8.15",
-        "kraken-engine-api": "1.42.4-stage.0",
-        "kraken-model": "1.42.4-stage.0"
+        "kraken-engine-api": "1.43.1-stage.0",
+        "kraken-model": "1.43.1-stage.0"
     },
     "devDependencies": {
         "@types/jest": "26.0.22",
@@ -41,7 +41,7 @@
         "compile": "tsc --pretty",
         "postcompile": "yarn transpile",
         "transpile": "echo 'no transpile'",
-        "del:compiled": "rimraf target/dist",
+        "del:compiled": "rimraf target",
         "build": "yarn run compile && yarn run lint && yarn run test:coverage",
         "prepare": "yarn run del:compiled && yarn run compile && yarn run lint --fix && yarn run test:coverage",
         "release": "yarn publish"
@@ -50,5 +50,5 @@
         "target/dist/definitions",
         "target/dist/js"
     ],
-    "gitHead": "6d16f79f76d6b73678a70625923b852dd9726865"
+    "gitHead": "05f656580777b0f80593998730cb1cc134a217f7"
 }

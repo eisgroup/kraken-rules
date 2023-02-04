@@ -1,6 +1,6 @@
 {
     "name": "kraken-model-builder",
-    "version": "1.42.4-stage.0",
+    "version": "1.43.1-stage.0",
     "description": "Kraken model artifacts builder, must be used ONLY as a devDependency",
     "main": "target/dist/js/src/index.js",
     "types": "target/dist/definitions/src/index.d.ts",
@@ -11,7 +11,7 @@
     },
     "typedocMain": "src/index.ts",
     "dependencies": {
-        "kraken-model": "1.42.4-stage.0"
+        "kraken-model": "1.43.1-stage.0"
     },
     "devDependencies": {
         "@types/node": "13.9.0",
@@ -21,7 +21,7 @@
         "ts-node": "4.1.0",
         "typescript": "4.2.4"
     },
-    "gitHead": "6d16f79f76d6b73678a70625923b852dd9726865",
+    "gitHead": "05f656580777b0f80593998730cb1cc134a217f7",
     "scripts": {
         "lint": "eslint src",
         "compile": "tsc --pretty",

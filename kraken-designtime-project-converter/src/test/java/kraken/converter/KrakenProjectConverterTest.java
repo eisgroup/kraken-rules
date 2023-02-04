@@ -16,6 +16,7 @@
 package kraken.converter;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
@@ -45,6 +46,7 @@ import kraken.runtime.model.project.RuntimeKrakenProject;
 import kraken.runtime.model.rule.RuntimeRule;
 import kraken.runtime.model.rule.payload.derive.DefaultValuePayload;
 import kraken.runtime.model.rule.payload.validation.AssertionPayload;
+import kraken.runtime.model.rule.payload.validation.ValueListPayload;
 
 /**
  * @author mulevicius
@@ -97,11 +99,11 @@ public class KrakenProjectConverterTest {
 
         RuntimeEntryPoint validationEntryPoint = krakenProject.getEntryPoints().stream()
                 .filter(ep -> ep.getName().equals("Validation")).findFirst().get();
-        assertThat(validationEntryPoint.getRuleNames().size(), is(1));
+        assertThat(validationEntryPoint.getRuleNames().size(), is(2));
         assertThat(validationEntryPoint.getIncludedEntryPoints().size(), is(1));
 
         // Assert Rules
-        assertThat(krakenProject.getRules().size(), is(3));
+        assertThat(krakenProject.getRules().size(), is(4));
 
         RuntimeRule defaultRule = krakenProject.getRules().stream()
                 .filter(r -> r.getName().equals("DefaultRule")).findFirst().get();
@@ -155,6 +157,16 @@ public class KrakenProjectConverterTest {
                 nullValue());
         assertThat(((AssertionPayload)pizzaAssertRule.getPayload()).getAssertionExpression().getExpressionVariables(),
                 hasSize(1));
+
+        RuntimeRule valueListRule = krakenProject.getRules().stream()
+            .filter(r -> r.getName().equals("ValueList")).findFirst().get();
+
+        assertThat(valueListRule.getContext(), is("AutoPolicy"));
+        assertThat(valueListRule.getTargetPath(), is("policyCd"));
+        assertThat(valueListRule.getCondition(), nullValue());
+        assertThat(valueListRule.getMetadata().getProperties().values(), empty());
+        assertThat(valueListRule.getDependencies(), empty());
+        assertThat(((ValueListPayload) valueListRule.getPayload()).getValueList(), notNullValue());
 
         assertThat(krakenProject.getFunctions(), hasKey("Limits"));
         CompiledFunction limitsFunction = krakenProject.getFunctions().get("Limits");

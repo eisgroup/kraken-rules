@@ -477,6 +477,14 @@
     {
       "id": "EvaluateWithoutDuplicatedResults",
       "entryPointName": "Policy:EvaluateWithoutDuplicatedResults"
+    },
+    {
+      "id": "ValueListPayload",
+      "entryPointName": "Policy:ValueListPayload"
+    },
+    {
+      "id": "NumberSet",
+      "entryPointName": "Policy:NumberSet"
     }
   ]
 }

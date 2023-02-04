@@ -19,6 +19,8 @@ import java.util.Locale;
 
 import org.stringtemplate.v4.NumberRenderer;
 
+import kraken.el.math.Numbers;
+
 /**
  * Custom number renderer used to format {@link Number} with custom formats.
  * Format <code>minMaxOrInteger</code> will render {@link Integer#MIN_VALUE} as MIN, {@link Integer#MAX_VALUE} as MAX,
@@ -44,6 +46,9 @@ public class CustomNumberRenderer extends NumberRenderer {
             }
             throw new IllegalArgumentException("Cannot render number with 'minMaxOrInteger' format, "
                 + "because number is not an Integer.");
+        }
+        if(o instanceof Number && formatString == null) {
+            return Numbers.toString((Number)o);
         }
         return super.toString(o, formatString, locale);
     }

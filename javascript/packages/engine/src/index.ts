@@ -87,6 +87,7 @@ export {
     LengthPayloadResult,
     RegExpPayloadResult,
     UsagePayloadResult,
+    ValueListPayloadResult,
     RuleEvent,
     FieldMetadata,
     FieldMetadataResult,

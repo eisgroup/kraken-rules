@@ -19,6 +19,7 @@ import {
     AssertionPayloadResult,
     DefaultValuePayloadResult,
     LengthPayloadResult,
+    NumberSetPayloadResult,
     PayloadResult,
     PayloadResultType,
     RegExpPayloadResult,
@@ -26,6 +27,7 @@ import {
     SizeRangePayloadResult,
     UsagePayloadResult,
     ValidationPayloadResult,
+    ValueListPayloadResult,
     VisibilityPayloadResult,
 } from 'kraken-engine-api'
 import { Payloads } from 'kraken-model'
@@ -37,7 +39,9 @@ const VALIDATION_MASK =
     PayloadResultType.SIZE_RANGE |
     PayloadResultType.LENGTH |
     PayloadResultType.REGEXP |
-    PayloadResultType.USAGE
+    PayloadResultType.USAGE |
+    PayloadResultType.NUMBER_SET |
+    PayloadResultType.VALUE_LIST
 
 export const payloadResultTypeChecker = {
     isAssertion(result: PayloadResult): result is AssertionPayloadResult {
@@ -64,6 +68,10 @@ export const payloadResultTypeChecker = {
         return Boolean(result.type & PayloadResultType.REGEXP)
     },
 
+    isNumberSet(result: PayloadResult): result is NumberSetPayloadResult {
+        return Boolean(result.type & PayloadResultType.NUMBER_SET)
+    },
+
     isUsage(result: PayloadResult): result is UsagePayloadResult {
         return result.type === PayloadResultType.USAGE
     },
@@ -82,6 +90,10 @@ export const payloadResultTypeChecker = {
 
     isVisibility(result: PayloadResult): result is VisibilityPayloadResult {
         return Boolean(result.type & PayloadResultType.VISIBILITY)
+    },
+
+    isValueList(result: PayloadResult): result is ValueListPayloadResult {
+        return Boolean(result.type & PayloadResultType.VALUE_LIST)
     },
 
     isValidation(result: PayloadResult): result is ValidationPayloadResult {

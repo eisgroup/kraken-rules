@@ -25,6 +25,8 @@ import java.util.List;
 
 import static java.util.Collections.*;
 
+import javax.money.MonetaryAmount;
+
 /**
  * @author avasiliauskas
  */
@@ -33,6 +35,10 @@ public class MockAutoPolicyBuilder {
     private String policyNumber;
 
     private String state;
+
+    private String policyCurrency;
+
+    private MonetaryAmount policyValue;
 
     private Integer createdFromPolicyRev;
 
@@ -72,6 +78,16 @@ public class MockAutoPolicyBuilder {
 
     public MockAutoPolicyBuilder addPolicyNumber(String policyNumber) {
         this.policyNumber = policyNumber;
+        return this;
+    }
+
+    public MockAutoPolicyBuilder addPolicyCurrency(String policyCurrency) {
+        this.policyCurrency = policyCurrency;
+        return this;
+    }
+
+    public MockAutoPolicyBuilder addPolicyValue(MonetaryAmount policyValue) {
+        this.policyValue = policyValue;
         return this;
     }
 
@@ -333,6 +349,8 @@ public class MockAutoPolicyBuilder {
     public Policy build() {
         policy = new Policy();
         policy.setPolicyNumber(policyNumber);
+        policy.setPolicyCurrency(policyCurrency);
+        policy.setPolicyValue(policyValue);
         policy.setState(state);
         policy.setCreatedFromPolicyRev(createdFromPolicyRev);
         policy.setTransactionDetails(transactionDetails);

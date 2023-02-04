@@ -32,10 +32,12 @@ import kraken.runtime.model.rule.payload.ui.AccessibilityPayload;
 import kraken.runtime.model.rule.payload.validation.AssertionPayload;
 import kraken.runtime.model.rule.payload.validation.ErrorMessage;
 import kraken.runtime.model.rule.payload.validation.LengthPayload;
+import kraken.runtime.model.rule.payload.validation.NumberSetPayload;
 import kraken.runtime.model.rule.payload.validation.RegExpPayload;
 import kraken.runtime.model.rule.payload.validation.SizePayload;
 import kraken.runtime.model.rule.payload.validation.SizeRangePayload;
 import kraken.runtime.model.rule.payload.validation.UsagePayload;
+import kraken.runtime.model.rule.payload.validation.ValueListPayload;
 import kraken.runtime.repository.dynamic.DynamicRuleHolder;
 
 /**
@@ -171,6 +173,30 @@ public class RuleConverter {
                     p.isOverridable(),
                     p.getOverrideGroup(),
                     convertRuleExpression(rule, p.getAssertionExpression())
+            );
+        }
+        if(payload instanceof kraken.model.validation.NumberSetPayload) {
+            var p = (kraken.model.validation.NumberSetPayload) payload;
+            return new NumberSetPayload(
+                p.getMin(),
+                p.getMax(),
+                p.getStep(),
+                convert(rule, p.getErrorMessage()),
+                p.getSeverity(),
+                p.isOverridable(),
+                p.getOverrideGroup()
+            );
+        }
+        if (payload instanceof  kraken.model.validation.ValueListPayload) {
+            kraken.model.validation.ValueListPayload valueListPayload
+                = (kraken.model.validation.ValueListPayload) payload;
+
+            return new ValueListPayload(
+                convert(rule, valueListPayload.getErrorMessage()),
+                valueListPayload.getSeverity(),
+                valueListPayload.isOverridable(),
+                valueListPayload.getOverrideGroup(),
+                valueListPayload.getValueList()
             );
         }
         throw new IllegalStateException("Unknown Payload: " + payload.getClass());

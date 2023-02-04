@@ -1,0 +1,338 @@
+kraken.engine.sanity.check.EngineSanityValueListPayloadTest.shouldExecuteValueListPayloadWithInvalidData=[
+  {
+    "Policy:-1:createdFromPolicyRev": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "createdFromPolicyRev",
+        "fieldPath": "createdFromPolicyRev"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "Policy revision must be within allowed values",
+            "context": "Policy",
+            "targetPath": "createdFromPolicyRev",
+            "payloadType": "VALUE_LIST"
+          },
+          "payloadResult": {
+            "valueList": {
+              "valueType": "DECIMAL",
+              "values": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            },
+            "success": false,
+            "messageCode": "code",
+            "message": "err-integer-value-list",
+            "templateVariables": [],
+            "messageTemplate": "err-integer-value-list",
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          },
+          "ruleEvaluationStatus": "APPLIED"
+        }
+      ]
+    },
+    "Policy:-1:policyCurrency": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "policyCurrency",
+        "fieldPath": "policyCurrency"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "Policy currency must be within allowed values",
+            "context": "Policy",
+            "targetPath": "policyCurrency",
+            "payloadType": "VALUE_LIST"
+          },
+          "payloadResult": {
+            "valueList": {
+              "valueType": "STRING",
+              "values": [
+                "USD",
+                "CAD"
+              ]
+            },
+            "success": false,
+            "messageCode": "code",
+            "message": "err-string-value-list",
+            "templateVariables": [],
+            "messageTemplate": "err-string-value-list",
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          },
+          "ruleEvaluationStatus": "APPLIED"
+        }
+      ]
+    },
+    "Policy:-1:policyValue": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "policyValue",
+        "fieldPath": "policyValue"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "Policy value must be within allowed values",
+            "context": "Policy",
+            "targetPath": "policyValue",
+            "payloadType": "VALUE_LIST"
+          },
+          "payloadResult": {
+            "valueList": {
+              "valueType": "DECIMAL",
+              "values": [
+                100.0,
+                200,
+                350,
+                400.99
+              ]
+            },
+            "success": false,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          },
+          "ruleEvaluationStatus": "APPLIED"
+        }
+      ]
+    },
+    "RRCoverage:-1:limitAmount": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "RRCoverage",
+        "fieldName": "limitAmount",
+        "fieldPath": "limitAmount"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "RRCoverage limit must be within allowed values",
+            "context": "RRCoverage",
+            "targetPath": "limitAmount",
+            "payloadType": "VALUE_LIST"
+          },
+          "payloadResult": {
+            "valueList": {
+              "valueType": "DECIMAL",
+              "values": [
+                800000,
+                900000,
+                1000000,
+                800000.99
+              ]
+            },
+            "success": false,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          },
+          "ruleEvaluationStatus": "APPLIED"
+        }
+      ]
+    }
+  }
+]
+
+
+kraken.engine.sanity.check.EngineSanityValueListPayloadTest.shouldExecuteValueListPayloadWithValidData=[
+  {
+    "Policy:-1:createdFromPolicyRev": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "createdFromPolicyRev",
+        "fieldPath": "createdFromPolicyRev"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "Policy revision must be within allowed values",
+            "context": "Policy",
+            "targetPath": "createdFromPolicyRev",
+            "payloadType": "VALUE_LIST"
+          },
+          "payloadResult": {
+            "valueList": {
+              "valueType": "DECIMAL",
+              "values": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            },
+            "success": true,
+            "messageCode": "code",
+            "message": "err-integer-value-list",
+            "templateVariables": [],
+            "messageTemplate": "err-integer-value-list",
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          },
+          "ruleEvaluationStatus": "APPLIED"
+        }
+      ]
+    },
+    "Policy:-1:policyCurrency": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "policyCurrency",
+        "fieldPath": "policyCurrency"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "Policy currency must be within allowed values",
+            "context": "Policy",
+            "targetPath": "policyCurrency",
+            "payloadType": "VALUE_LIST"
+          },
+          "payloadResult": {
+            "valueList": {
+              "valueType": "STRING",
+              "values": [
+                "USD",
+                "CAD"
+              ]
+            },
+            "success": true,
+            "messageCode": "code",
+            "message": "err-string-value-list",
+            "templateVariables": [],
+            "messageTemplate": "err-string-value-list",
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          },
+          "ruleEvaluationStatus": "APPLIED"
+        }
+      ]
+    },
+    "Policy:-1:policyValue": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "Policy",
+        "fieldName": "policyValue",
+        "fieldPath": "policyValue"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "Policy value must be within allowed values",
+            "context": "Policy",
+            "targetPath": "policyValue",
+            "payloadType": "VALUE_LIST"
+          },
+          "payloadResult": {
+            "valueList": {
+              "valueType": "DECIMAL",
+              "values": [
+                100.0,
+                200,
+                350,
+                400.99
+              ]
+            },
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          },
+          "ruleEvaluationStatus": "APPLIED"
+        }
+      ]
+    },
+    "RRCoverage:-1:limitAmount": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "RRCoverage",
+        "fieldName": "limitAmount",
+        "fieldPath": "limitAmount"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "RRCoverage limit must be within allowed values",
+            "context": "RRCoverage",
+            "targetPath": "limitAmount",
+            "payloadType": "VALUE_LIST"
+          },
+          "payloadResult": {
+            "valueList": {
+              "valueType": "DECIMAL",
+              "values": [
+                800000,
+                900000,
+                1000000,
+                800000.99
+              ]
+            },
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          },
+          "ruleEvaluationStatus": "APPLIED"
+        }
+      ]
+    }
+  }
+]

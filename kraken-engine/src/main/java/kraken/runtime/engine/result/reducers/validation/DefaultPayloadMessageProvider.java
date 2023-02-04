@@ -21,11 +21,15 @@ import kraken.annotations.API;
 import kraken.model.validation.UsageType;
 import kraken.runtime.engine.result.AssertionPayloadResult;
 import kraken.runtime.engine.result.LengthPayloadResult;
+import kraken.runtime.engine.result.NumberSetPayloadResult;
 import kraken.runtime.engine.result.RegExpPayloadResult;
 import kraken.runtime.engine.result.SizePayloadResult;
 import kraken.runtime.engine.result.SizeRangePayloadResult;
 import kraken.runtime.engine.result.UsagePayloadResult;
 import kraken.runtime.engine.result.ValidationPayloadResult;
+import kraken.runtime.engine.result.ValueListPayloadResult;
+import kraken.runtime.engine.result.reducers.validation.DefaultValidationMessageProvider.MESSAGE;
+import kraken.runtime.engine.result.reducers.validation.ValidationMessageProvider.ValidationMessage;
 
 /**
  * Provides default messages. Can be extended to override only specific payload messages.
@@ -72,6 +76,10 @@ public class DefaultPayloadMessageProvider implements PayloadMessageProvider {
         return new DefaultMessage("rule-size-range-error", "Invalid collection size");
     }
 
+    private DefaultMessage getValueListMessage() {
+        return new DefaultMessage(MESSAGE.VALUE_LIST.getCode(), MESSAGE.VALUE_LIST.getMessage());
+    }
+
     @Override
     public DefaultMessage resolveByPayloadResult(ValidationPayloadResult validationPayloadResult) {
         if (validationPayloadResult instanceof AssertionPayloadResult) {
@@ -101,6 +109,39 @@ public class DefaultPayloadMessageProvider implements PayloadMessageProvider {
             if (payloadResult.getUsageType() == UsageType.mustBeEmpty) {
                 return getUsageEmptyMessage();
             }
+        }
+        if(validationPayloadResult instanceof NumberSetPayloadResult) {
+            NumberSetPayloadResult payloadResult = (NumberSetPayloadResult) validationPayloadResult;
+            var min = payloadResult.getMin();
+            var max = payloadResult.getMax();
+            var step = payloadResult.getStep();
+
+            if(min != null && max != null && step != null) {
+                return new DefaultMessage(MESSAGE.NUMBER_SET_MIN_MAX_STEP.getCode(),
+                    MESSAGE.NUMBER_SET_MIN_MAX_STEP.getMessage());
+            }
+            if(min != null && max == null && step != null) {
+                return new DefaultMessage(MESSAGE.NUMBER_SET_MIN_STEP.getCode(),
+                    MESSAGE.NUMBER_SET_MIN_STEP.getMessage());
+            }
+            if(min == null && max != null && step != null) {
+                return new DefaultMessage(MESSAGE.NUMBER_SET_MAX_STEP.getCode(),
+                    MESSAGE.NUMBER_SET_MAX_STEP.getMessage());
+            }
+            if(min != null && max != null && step == null) {
+                return new DefaultMessage(MESSAGE.NUMBER_SET_MIN_MAX.getCode(),
+                    MESSAGE.NUMBER_SET_MIN_MAX.getMessage());
+            }
+            if(min != null && max == null && step == null) {
+                return new DefaultMessage(MESSAGE.NUMBER_SET_MIN.getCode(), MESSAGE.NUMBER_SET_MIN.getMessage());
+            }
+            if(min == null && max != null && step == null) {
+                return new DefaultMessage(MESSAGE.NUMBER_SET_MAX.getCode(), MESSAGE.NUMBER_SET_MAX.getMessage());
+            }
+            throw new IllegalArgumentException("Cannot resolve error message for number set payload");
+        }
+        if (validationPayloadResult instanceof ValueListPayloadResult) {
+            return getValueListMessage();
         }
         throw new IllegalStateException("Unknown payload result type encountered: " + validationPayloadResult.getClass());
     }

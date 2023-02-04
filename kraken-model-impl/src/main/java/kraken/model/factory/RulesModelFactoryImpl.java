@@ -72,6 +72,8 @@ public class RulesModelFactoryImpl implements RulesModelFactory {
         classNameHolders.add(new ClassHolder(FunctionDocumentation.class, FunctionDocumentationImpl.class));
         classNameHolders.add(new ClassHolder(ParameterDocumentation.class, ParameterDocumentationImpl.class));
         classNameHolders.add(new ClassHolder(FunctionExample.class, FunctionExampleImpl.class));
+        classNameHolders.add(new ClassHolder(NumberSetPayload.class, NumberSetPayloadImpl.class));
+        classNameHolders.add(new ClassHolder(ValueListPayload.class, ValueListPayloadImpl.class));
     }
 
     @Override
@@ -337,6 +339,21 @@ public class RulesModelFactoryImpl implements RulesModelFactory {
     }
 
     @Override
+    public NumberSetPayload createNumberSetPayload() {
+        return new NumberSetPayloadImpl();
+    }
+
+    @Override
+    public NumberSetPayload cloneNumberSetPayload(NumberSetPayload numberSetPayload) {
+        var cloned = createNumberSetPayload();
+        cloned.setMin(numberSetPayload.getMin());
+        cloned.setMax(numberSetPayload.getMax());
+        cloned.setStep(numberSetPayload.getStep());
+        copyValidationPayload(numberSetPayload, cloned);
+        return cloned;
+    }
+
+    @Override
     public UsagePayload createUsagePayload() {
         return new UsagePayloadImpl();
     }
@@ -346,6 +363,20 @@ public class RulesModelFactoryImpl implements RulesModelFactory {
         var cloned = createUsagePayload();
         cloned.setUsageType(usagePayload.getUsageType());
         copyValidationPayload(usagePayload, cloned);
+        return cloned;
+    }
+
+    @Override
+    public ValueListPayload createValueListPayload() {
+        return new ValueListPayloadImpl();
+    }
+
+    @Override
+    public ValueListPayload cloneValueListPayload(ValueListPayload valueListPayload) {
+        var cloned = createValueListPayload();
+        cloned.setValueList(valueListPayload.getValueList());
+        copyValidationPayload(valueListPayload, cloned);
+
         return cloned;
     }
 
@@ -436,6 +467,12 @@ public class RulesModelFactoryImpl implements RulesModelFactory {
         }
         if(payload instanceof AssertionPayload) {
             return cloneAssertionPayload((AssertionPayload) payload);
+        }
+        if(payload instanceof NumberSetPayload) {
+            return cloneNumberSetPayload((NumberSetPayload) payload);
+        }
+        if (payload instanceof ValueListPayload) {
+            return cloneValueListPayload((ValueListPayload) payload);
         }
         throw new IllegalArgumentException(
             "Error while cloning payload object because payload object is instance of unknown class: "

@@ -127,6 +127,23 @@ beforeEach(() => {
                 .setTargetPath(Policy.fields.riskItems.name)
                 .setPayload(PayloadBuilder.size().range(0, 1))
                 .build(),
+            new RulesBuilder()
+                .setContext(Policy.name)
+                .setName('Eval_NumberSet')
+                .setTargetPath(Policy.fields.termNo.name)
+                .setPayload(PayloadBuilder.numberSet().greaterThanOrEqualTo(1, 1))
+                .build(),
+            new RulesBuilder()
+                .setContext(Policy.name)
+                .setName('Eval_ValueList')
+                .setTargetPath(Policy.fields.contractTermTypeCd.name)
+                .setPayload(
+                    PayloadBuilder.valueList().valueList({
+                        values: ['MONTHLY', 'ANNUAL'],
+                        valueType: 'STRING',
+                    }),
+                )
+                .build(),
         ],
         entryPointName: 'EvalOptionsTest',
     })
@@ -338,7 +355,7 @@ describe('SyncEngine', () => {
 
         const resultTypes = epResult.getApplicableResults().map(ruleResult => ruleResult.ruleInfo.payloadtype)
 
-        expect(resultTypes).toHaveLength(9)
+        expect(resultTypes).toHaveLength(Object.keys(PayloadType).length)
         expect(resultTypes).toEqual(expect.arrayContaining(Object.keys(PayloadType)))
     })
 

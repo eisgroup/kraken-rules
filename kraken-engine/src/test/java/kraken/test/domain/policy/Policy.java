@@ -15,10 +15,13 @@
  */
 package kraken.test.domain.policy;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.money.MonetaryAmount;
 
 /**
  * Created by rimas on 25/01/17.
@@ -27,7 +30,17 @@ public class Policy {
 
     private String policyNo;
 
+    private String policyCurrency;
+
+    private BigDecimal policyLimit;
+
+    private MonetaryAmount policyCost;
+
+    private Integer policyTermNo;
+
     private Insured insured;
+
+    private Integer termNo;
 
     private List<RiskItem> riskItems;
 
@@ -55,6 +68,38 @@ public class Policy {
         this.policyNo = policyNo;
     }
 
+    public String getPolicyCurrency() {
+        return policyCurrency;
+    }
+
+    public void setPolicyCurrency(String policyCurrency) {
+        this.policyCurrency = policyCurrency;
+    }
+
+    public BigDecimal getPolicyLimit() {
+        return policyLimit;
+    }
+
+    public void setPolicyLimit(BigDecimal policyLimit) {
+        this.policyLimit = policyLimit;
+    }
+
+    public Integer getPolicyTermNo() {
+        return policyTermNo;
+    }
+
+    public void setPolicyTermNo(Integer policyTermNo) {
+        this.policyTermNo = policyTermNo;
+    }
+
+    public MonetaryAmount getPolicyCost() {
+        return policyCost;
+    }
+
+    public void setPolicyCost(MonetaryAmount policyCost) {
+        this.policyCost = policyCost;
+    }
+
     public void setRiskItems(List<RiskItem> riskItems) {
         this.riskItems = riskItems;
     }
@@ -69,5 +114,13 @@ public class Policy {
 
     public void setInsured(Insured insured) {
         this.insured = insured;
+    }
+
+    public Integer getTermNo() {
+        return termNo;
+    }
+
+    public void setTermNo(Integer termNo) {
+        this.termNo = termNo;
     }
 }

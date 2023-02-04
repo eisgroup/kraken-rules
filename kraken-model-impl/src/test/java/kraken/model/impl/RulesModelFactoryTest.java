@@ -69,6 +69,7 @@ public class RulesModelFactoryTest {
         AccessibilityPayload.class,
         VisibilityPayload.class,
         AssertionPayload.class,
+        NumberSetPayload.class,
         RegExpPayload.class,
         UsagePayload.class,
         Condition.class,
@@ -90,7 +91,8 @@ public class RulesModelFactoryTest {
         GenericTypeBound.class,
         FunctionDocumentation.class,
         FunctionExample.class,
-        ParameterDocumentation.class
+        ParameterDocumentation.class,
+        ValueListPayload.class
     );
 
     @Test
@@ -194,6 +196,12 @@ public class RulesModelFactoryTest {
     }
 
     @Test
+    public void shouldCreateValueListPayload() {
+        RulesModelFactory instance = RulesModelFactory.getInstance();
+        assertThat(instance.createValueListPayload(), instanceOf(instance.getImplClass(ValueListPayload.class)));
+    }
+
+    @Test
     public void shouldCreateCondition() {
         RulesModelFactory instance = RulesModelFactory.getInstance();
         assertThat(instance.createCondition(), instanceOf(instance.getImplClass(Condition.class)));
@@ -224,11 +232,19 @@ public class RulesModelFactoryTest {
     }
 
     @Test
-    public void shouldCreateLenghtPayload() {
+    public void shouldCreateLengthPayload() {
         final RulesModelFactory instance = RulesModelFactory.getInstance();
         final LengthPayload lengthPayload = RulesModelFactory.getInstance().createLengthPayload();
         assertThat(lengthPayload, notNullValue());
         assertThat(lengthPayload, instanceOf(instance.getImplClass(LengthPayload.class)));
+    }
+
+    @Test
+    public void shouldCreateNumberSetPayload() {
+        RulesModelFactory instance = RulesModelFactory.getInstance();
+        NumberSetPayload payload = RulesModelFactory.getInstance().createNumberSetPayload();
+        assertThat(payload, notNullValue());
+        assertThat(payload, instanceOf(instance.getImplClass(NumberSetPayload.class)));
     }
 
     @Test

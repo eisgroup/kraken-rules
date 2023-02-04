@@ -24,10 +24,12 @@ import kraken.annotations.API;
 import kraken.annotations.SPI;
 import kraken.runtime.engine.result.AssertionPayloadResult;
 import kraken.runtime.engine.result.LengthPayloadResult;
+import kraken.runtime.engine.result.NumberSetPayloadResult;
 import kraken.runtime.engine.result.RegExpPayloadResult;
 import kraken.runtime.engine.result.SizePayloadResult;
 import kraken.runtime.engine.result.SizeRangePayloadResult;
 import kraken.runtime.engine.result.UsagePayloadResult;
+import kraken.runtime.engine.result.ValueListPayloadResult;
 
 /**
  * Provides default messages for validation payload results in case validation rules do not have code
@@ -81,6 +83,20 @@ public interface ValidationMessageProvider {
      * This is invoked only when validation severity is ERROR.
      */
     @Nonnull ValidationMessage sizeRangeErrorMessage(@Nonnull SizeRangePayloadResult payloadResult);
+
+    /**
+     * @param payloadResult Result of number set payload, can be used to parametrize validation message.
+     * @return Default error message to set for number set validation result.
+     * This is invoked only when validation severity is ERROR.
+     */
+    @Nonnull ValidationMessage numberSetErrorMessage(@Nonnull NumberSetPayloadResult payloadResult);
+
+    /**
+     * @param payloadResult Result of value size payload, can be used to parametrize validation massage.
+     * @return Default error message to set for value list validation result. This method is only invoked
+     *     when validation severity is ERROR.
+     */
+    @Nonnull ValidationMessage valueListErrorMessage(@Nonnull ValueListPayloadResult payloadResult);
 
     /**
      * Represents default message that will be set in rule validation result when rule itself do not have specific

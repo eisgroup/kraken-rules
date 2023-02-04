@@ -62,4 +62,5 @@ public class RuleModelValidatorTest {
                 + "- priority is supported only for defaulting rules.")
         );
     }
+
 }

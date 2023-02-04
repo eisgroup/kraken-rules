@@ -22,10 +22,12 @@ import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupFile;
 
+import kraken.model.ValueList;
 import kraken.model.derive.DefaultValuePayload;
 import kraken.model.validation.SizePayload;
 import kraken.model.validation.UsagePayload;
 import kraken.model.validation.ValidationSeverity;
+import kraken.model.validation.ValueListPayload;
 
 /**
  * Used by {@link DSLModelConverter} to render {@link kraken.model.Payload}
@@ -46,6 +48,8 @@ class PayloadRenderer {
             new STGroupFile(URL, StandardCharsets.UTF_8.name(), '<', '>');
         template.registerRenderer(ValidationSeverity.class, this::validationSeverityRenderer);
         template.registerRenderer(String.class, new CustomStringRenderer());
+        template.registerRenderer(Number.class, new CustomNumberRenderer());
+        template.registerRenderer(ValueList.class, new ValueListRenderer());
         errorListener = new DefaultErrorListener();
         template.setListener(errorListener);
     }
@@ -87,6 +91,10 @@ class PayloadRenderer {
         return renderPayload(payload, "sizeRangePayload");
     }
 
+    String numberSetPayloadRenderer(Object payload, String s, Locale locale) {
+        return renderPayload(payload, "numberSetPayload");
+    }
+
     String lengthPayloadRenderer(Object payload, String s, Locale locale) {
         return renderPayload(payload, "lengthPayload");
     }
@@ -123,6 +131,10 @@ class PayloadRenderer {
                         "DefaultValuePayload can not be constructed with defaulting type: " + defaultValuePayload.getDefaultingType()
                 );
         }
+    }
+
+    String valueListPayloadRenderer(Object payload, String formatString, Locale locale) {
+        return renderPayload(payload,"valueListPayload");
     }
 
     private String renderPayload(Object payload, String instanceName){

@@ -16,13 +16,21 @@
 package kraken.model.dsl.visitor;
 
 import kraken.el.ast.builder.Literals;
+import kraken.model.ValueList;
+import kraken.model.dsl.KrakenDSL.ValueListPayloadContext;
+import kraken.model.dsl.KrakenDSL.NumberSetPayloadContext;
 import kraken.model.dsl.KrakenDSLBaseVisitor;
 import kraken.model.dsl.KrakenDSL;
 import kraken.model.dsl.model.*;
 
 import static java.util.Objects.nonNull;
 import static kraken.el.ast.builder.Literals.escape;
+import static kraken.el.ast.builder.Literals.getDecimal;
 import static kraken.el.ast.builder.Literals.stripQuotes;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author mulevicius
@@ -97,6 +105,24 @@ public class DSLPayloadVisitor extends KrakenDSLBaseVisitor<DSLPayload> {
     }
 
     @Override
+    public DSLPayload visitNumberSetPayload(NumberSetPayloadContext ctx) {
+        BigDecimal min = ctx.minNumber() != null
+            ? Literals.getDecimal(ctx.minNumber().decimalLiteral().getText())
+            : null;
+        BigDecimal max = ctx.maxNumber() != null
+            ? Literals.getDecimal(ctx.maxNumber().decimalLiteral().getText())
+            : null;
+        BigDecimal step = ctx.stepNumber() != null
+            ? Literals.getDecimal(ctx.stepNumber().positiveDecimalLiteral().getText())
+            : null;
+        String code = code(ctx.payloadMessage());
+        String message = message(ctx.payloadMessage());
+        DSLSeverity severity = validationSeverity(ctx.payloadMessage());
+        return new DSLNumberSetPayload(min, max, step, code, message, severity,
+            isOverridable(ctx.override()), overrideGroup(ctx.override()));
+    }
+
+    @Override
     public DSLPayload visitDefault(KrakenDSL.DefaultContext ctx) {
         DSLExpression defaultValueExpression = ExpressionReader.read(ctx.inlineExpression());
         return new DSLDefaultValuePayload(defaultValueExpression, DSLDefaultingType.DEFAULT);
@@ -132,6 +158,46 @@ public class DSLPayloadVisitor extends KrakenDSLBaseVisitor<DSLPayload> {
         String message = message(ctx.payloadMessage());
         String code = code(ctx.payloadMessage());
         return new DSLUsageValidationPayload(code, message, severity, DSLUsageType.EMPTY, isOverridable(ctx.override()), overrideGroup(ctx.override()));
+    }
+
+    @Override
+    public DSLPayload visitValueListPayload(ValueListPayloadContext ctx) {
+        String code = code(ctx.payloadMessage());
+        String message = message(ctx.payloadMessage());
+
+        DSLSeverity severity = validationSeverity(ctx.payloadMessage());
+
+        if (ctx.stringValues() != null) {
+            List<String> values = ctx.stringValues().STRING()
+                .stream()
+                .map(stringValue -> escape(stripQuotes(stringValue.getText())))
+                .collect(Collectors.toUnmodifiableList());
+
+            return new DSLValueListPayload(
+                code,
+                message,
+                severity,
+                isOverridable(ctx.override()),
+                overrideGroup(ctx.override()),
+                ValueList.fromString(values));
+        }
+
+        if (ctx.decimalValues() != null) {
+            List<Number> values = ctx.decimalValues().decimalLiteral()
+                .stream()
+                .map(decimalValue -> getDecimal(decimalValue.getText()))
+                .collect(Collectors.toUnmodifiableList());
+
+            return new DSLValueListPayload(
+                code,
+                message,
+                severity,
+                isOverridable(ctx.override()),
+                overrideGroup(ctx.override()),
+                ValueList.fromNumber(values));
+        }
+
+        throw new IllegalStateException("Unsupported value type encountered in DSL for value list payload.");
     }
 
     private String code(KrakenDSL.PayloadMessageContext ctx) {

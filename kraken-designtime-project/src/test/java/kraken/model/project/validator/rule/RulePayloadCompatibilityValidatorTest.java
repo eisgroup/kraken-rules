@@ -28,7 +28,6 @@ import kraken.model.context.SystemDataTypes;
 import kraken.model.derive.DefaultValuePayload;
 import kraken.model.factory.RulesModelFactory;
 import kraken.model.project.KrakenProject;
-import kraken.model.project.validator.ValidationMessage;
 import kraken.model.project.validator.ValidationSession;
 import kraken.model.state.AccessibilityPayload;
 import kraken.model.validation.AssertionPayload;
@@ -37,6 +36,8 @@ import kraken.model.validation.RegExpPayload;
 import kraken.model.validation.SizePayload;
 import kraken.model.validation.SizeRangePayload;
 import kraken.model.validation.UsagePayload;
+import kraken.model.validation.ValueListPayload;
+
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Test;
@@ -186,6 +187,40 @@ public class RulePayloadCompatibilityValidatorTest {
         assertThat(payload, compatibleWithMultipleSystem());
         assertThat(payload, compatibleWithSingleComplex());
         assertThat(payload, compatibleWithMultipleComplex());
+    }
+
+    @Test
+    public void shouldValidateNumberSetPayloadCompatibility() {
+        var payload = factory.createNumberSetPayload();
+
+        assertThat(payload, compatibleWithSinglePrimitive(INTEGER));
+        assertThat(payload, compatibleWithSinglePrimitive(DECIMAL));
+        assertThat(payload, compatibleWithSinglePrimitive(MONEY));
+        assertThat(payload, not(compatibleWithSinglePrimitive(DATE)));
+        assertThat(payload, not(compatibleWithSinglePrimitive(DATETIME)));
+        assertThat(payload, not(compatibleWithSinglePrimitive(BOOLEAN)));
+        assertThat(payload, not(compatibleWithSinglePrimitive(STRING)));
+        assertThat(payload, not(compatibleWithMultiplePrimitive()));
+        assertThat(payload, not(compatibleWithSingleSystem()));
+        assertThat(payload, not(compatibleWithMultipleSystem()));
+        assertThat(payload, not(compatibleWithSingleComplex()));
+        assertThat(payload, not(compatibleWithMultipleComplex()));
+    }
+
+    @Test
+    public void shouldValidateValueListPayloadCompatibility() {
+        ValueListPayload payload = factory.createValueListPayload();
+
+        assertThat(payload, compatibleWithSinglePrimitive(MONEY));
+        assertThat(payload, compatibleWithSinglePrimitive(DECIMAL));
+        assertThat(payload, compatibleWithSinglePrimitive(INTEGER));
+        assertThat(payload, compatibleWithSinglePrimitive(STRING));
+        assertThat(payload, not(compatibleWithSinglePrimitive(BOOLEAN)));
+        assertThat(payload, not(compatibleWithSinglePrimitive(DATE)));
+        assertThat(payload, not(compatibleWithSinglePrimitive(DATETIME)));
+        assertThat(payload, not(compatibleWithMultiplePrimitive()));
+        assertThat(payload, not(compatibleWithSingleComplex()));
+        assertThat(payload, not(compatibleWithMultipleComplex()));
     }
 
     static class IsPayloadCompatibleWith extends TypeSafeMatcher<Payload> {

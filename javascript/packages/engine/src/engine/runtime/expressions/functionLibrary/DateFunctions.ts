@@ -56,14 +56,8 @@ function PlusYears(dateArg?: Date, num?: number): Date {
     if (num == undefined) {
         throw new Error(message('PlusYears', message.reason.secondParam))
     }
-    const date = new Date(
-        dateArg.getFullYear() + num,
-        dateArg.getMonth(),
-        dateArg.getDate(),
-        dateArg.getHours(),
-        dateArg.getMinutes(),
-        dateArg.getMilliseconds(),
-    )
+    const date = new Date(dateArg)
+    date.setFullYear(date.getFullYear() + num)
 
     return resetToLastValidDayOfMonthIfNeeded(date, dateArg.getDate())
 }
@@ -75,14 +69,8 @@ function PlusMonths(dateArg?: Date, num?: number): Date {
     if (num == undefined) {
         throw new Error(message('PlusMonths', message.reason.secondParam))
     }
-    const date = new Date(
-        dateArg.getFullYear(),
-        dateArg.getMonth() + num,
-        dateArg.getDate(),
-        dateArg.getHours(),
-        dateArg.getMinutes(),
-        dateArg.getMilliseconds(),
-    )
+    const date = new Date(dateArg)
+    date.setMonth(date.getMonth() + num)
 
     return resetToLastValidDayOfMonthIfNeeded(date, dateArg.getDate())
 }
@@ -94,14 +82,9 @@ function PlusDays(dateArg?: Date, num?: number): Date {
     if (num == undefined) {
         throw new Error(message('PlusDays', message.reason.secondParam))
     }
-    return new Date(
-        dateArg.getFullYear(),
-        dateArg.getMonth(),
-        dateArg.getDate() + num,
-        dateArg.getHours(),
-        dateArg.getMinutes(),
-        dateArg.getMilliseconds(),
-    )
+    const date = new Date(dateArg)
+    date.setDate(date.getDate() + num)
+    return date
 }
 
 function AsDate(dateArg?: Date): Date {

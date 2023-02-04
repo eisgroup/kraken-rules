@@ -30,8 +30,20 @@ sizeRangePayload(payload) ::= <<
 Assert Size Min <payload.min> Max <payload.max><validationMessage(payload)><overridable(payload)>
 >>
 
+numberSetPayload(payload) ::= <<
+Assert Number<\\\>
+<if(payload.min)> Min <payload.min><endif><\\\>
+<if(payload.max)> Max <payload.max><endif><\\\>
+<if(payload.step)> Step <payload.step><endif><\\\>
+<validationMessage(payload)><overridable(payload)>
+>>
+
 lengthPayload(payload) ::= <<
 Assert Length <payload.length><validationMessage(payload)><overridable(payload)>
+>>
+
+valueListPayload(payload) ::= <<
+Assert In <payload.valueList>
 >>
 
 defaultValuePayload(payload) ::= <<

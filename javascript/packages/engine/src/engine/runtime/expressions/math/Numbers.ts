@@ -39,6 +39,7 @@ export const Numbers = {
     maxInArray,
     sequence,
     normalized,
+    isValueInNumberSet,
 }
 
 function add(first: number, second: number): number {
@@ -158,6 +159,35 @@ function sign(n: number): number {
     } else {
         return -1
     }
+}
+
+function isValueInNumberSet(
+    valueNum: number,
+    minNum: number | undefined,
+    maxNum: number | undefined,
+    stepNum: number | undefined,
+): boolean {
+    const value = normalized(valueNum)
+    const min = minNum !== undefined ? normalized(minNum) : undefined
+    const max = maxNum !== undefined ? normalized(maxNum) : undefined
+    const step = stepNum !== undefined ? normalized(stepNum) : undefined
+
+    if (min && value.isLessThan(min)) {
+        return false
+    }
+    if (max && value.isGreaterThan(max)) {
+        return false
+    }
+    if (step) {
+        let shiftedValue = value
+        if (min) {
+            shiftedValue = shiftedValue.minus(min)
+        } else if (max) {
+            shiftedValue = shiftedValue.minus(max)
+        }
+        return shiftedValue.modulo(step).isZero()
+    }
+    return true
 }
 
 function toString(n: number): string {

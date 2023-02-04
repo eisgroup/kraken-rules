@@ -30,6 +30,7 @@ import kraken.model.dsl.model.DSLDefaultingType;
 import kraken.model.dsl.model.DSLExpression;
 import kraken.model.dsl.model.DSLLengthValidationPayload;
 import kraken.model.dsl.model.DSLModel;
+import kraken.model.dsl.model.DSLNumberSetPayload;
 import kraken.model.dsl.model.DSLPayload;
 import kraken.model.dsl.model.DSLRegExpValidationPayload;
 import kraken.model.dsl.model.DSLRule;
@@ -40,12 +41,14 @@ import kraken.model.dsl.model.DSLSizePayload;
 import kraken.model.dsl.model.DSLSizeRangePayload;
 import kraken.model.dsl.model.DSLUsageType;
 import kraken.model.dsl.model.DSLUsageValidationPayload;
+import kraken.model.dsl.model.DSLValueListPayload;
 import kraken.model.dsl.model.DSLVisibilityPayload;
 import kraken.model.factory.RulesModelFactory;
 import kraken.model.state.AccessibilityPayload;
 import kraken.model.state.VisibilityPayload;
 import kraken.model.validation.AssertionPayload;
 import kraken.model.validation.LengthPayload;
+import kraken.model.validation.NumberSetPayload;
 import kraken.model.validation.RegExpPayload;
 import kraken.model.validation.SizeOrientation;
 import kraken.model.validation.SizePayload;
@@ -53,6 +56,7 @@ import kraken.model.validation.SizeRangePayload;
 import kraken.model.validation.UsagePayload;
 import kraken.model.validation.UsageType;
 import kraken.model.validation.ValidationSeverity;
+import kraken.model.validation.ValueListPayload;
 
 import java.net.URI;
 import java.util.Collection;
@@ -211,6 +215,31 @@ class KrakenDSLModelRuleConverter {
             payload.setSeverity(convert(p.getSeverity()));
             payload.setOverridable(p.isOverridable());
             payload.setOverrideGroup(p.getOverrideGroup());
+            return payload;
+        }
+        if (dslPayload instanceof DSLNumberSetPayload) {
+            DSLNumberSetPayload p = (DSLNumberSetPayload) dslPayload;
+            NumberSetPayload payload = factory.createNumberSetPayload();
+            payload.setMin(p.getMin());
+            payload.setMax(p.getMax());
+            payload.setStep(p.getStep());
+            payload.setErrorMessage(convert(p.getCode() ,p.getMessage()));
+            payload.setSeverity(convert(p.getSeverity()));
+            payload.setOverridable(p.isOverridable());
+            payload.setOverrideGroup(p.getOverrideGroup());
+            return payload;
+        }
+
+        if (dslPayload instanceof DSLValueListPayload) {
+            DSLValueListPayload dslValueListPayload = (DSLValueListPayload) dslPayload;
+            ValueListPayload payload = factory.createValueListPayload();
+
+            payload.setValueList(dslValueListPayload.getValueList());
+            payload.setErrorMessage(convert(dslValueListPayload.getCode(), dslValueListPayload.getMessage()));
+            payload.setSeverity(convert(dslValueListPayload.getSeverity()));
+            payload.setOverridable(dslValueListPayload.isOverridable());
+            payload.setOverrideGroup(dslValueListPayload.getOverrideGroup());
+
             return payload;
         }
 

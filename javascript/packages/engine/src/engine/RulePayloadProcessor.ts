@@ -34,6 +34,7 @@ import { accessibilityPayloadHandler } from './handlers/AccessibilityPayloadHand
 import { visibilityPayloadHandler } from './handlers/VisibilityPayloadHandler'
 import { RegExpPayloadHandler } from './handlers/RegExpPayloadHandler'
 import { UsagePayloadHandler } from './handlers/UsagePayloadHandler'
+import { NumberSetPayloadHandler } from './handlers/NumberSetPayloadHandler'
 import { LengthPayloadHandler } from './handlers/LengthPayloadHandler'
 import { SizePayloadHandler } from './handlers/SizePayloadHandler'
 import { SizeRangePayloadHandler } from './handlers/SizeRangePayloadHandler'
@@ -50,6 +51,7 @@ import { DefaultRuleInfo } from './results/DefaultRuleInfo'
 import { DataContextDependency, DataContextUpdater } from './contexts/data/updater/DataContextUpdater'
 import { RuleConditionProcessor } from './RuleConditionProcessor'
 import ExpressionVariable = Expressions.ExpressionVariable
+import { ValueListPayloadHandler } from './handlers/ValueListPayloadHandler'
 
 export type RuleEvaluation = {
     rule: Rule
@@ -79,6 +81,8 @@ export class RulePayloadProcessor {
             new LengthPayloadHandler(expressionEvaluator),
             new SizePayloadHandler(expressionEvaluator),
             new SizeRangePayloadHandler(expressionEvaluator),
+            new NumberSetPayloadHandler(expressionEvaluator),
+            new ValueListPayloadHandler(expressionEvaluator),
         ].reduce(
             toMap(h => h.handlesPayloadType().toString()),
             Map(),

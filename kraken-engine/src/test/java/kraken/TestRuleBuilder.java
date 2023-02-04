@@ -16,6 +16,7 @@
 
 package kraken;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -24,7 +25,9 @@ import kraken.dimensions.DimensionSet;
 import kraken.el.Expression;
 import kraken.el.ast.Ast;
 import kraken.el.ast.builder.AstBuilder;
+import kraken.el.math.Numbers;
 import kraken.el.scope.Scope;
+import kraken.model.ValueList;
 import kraken.model.derive.DefaultingType;
 import kraken.model.validation.UsageType;
 import kraken.model.validation.ValidationSeverity;
@@ -38,8 +41,10 @@ import kraken.runtime.model.rule.payload.ui.VisibilityPayload;
 import kraken.runtime.model.rule.payload.validation.AssertionPayload;
 import kraken.runtime.model.rule.payload.validation.ErrorMessage;
 import kraken.runtime.model.rule.payload.validation.LengthPayload;
+import kraken.runtime.model.rule.payload.validation.NumberSetPayload;
 import kraken.runtime.model.rule.payload.validation.RegExpPayload;
 import kraken.runtime.model.rule.payload.validation.UsagePayload;
+import kraken.runtime.model.rule.payload.validation.ValueListPayload;
 
 /**
  * @author psurinin@eisgroup.com
@@ -160,6 +165,32 @@ public class TestRuleBuilder {
                 null,
                 usageType
         );
+        return this;
+    }
+
+    public TestRuleBuilder numberSetPayload(Number min, Number max, Number step) {
+        this.payload = new NumberSetPayload(
+            min != null ? Numbers.normalized(min) : null,
+            max != null ? Numbers.normalized(max) : null,
+            step != null ? Numbers.normalized(step) : null,
+            null, ValidationSeverity.critical, false, null
+        );
+        return this;
+    }
+
+    public TestRuleBuilder valueListPayload(ValueList valueList) {
+        return valueListPayload(valueList, null);
+    }
+
+    public TestRuleBuilder valueListPayload(ValueList valueList, String errorMessage) {
+        this.payload = new ValueListPayload(
+            new ErrorMessage("code", errorMessage == null ? List.of() : List.of(errorMessage), List.of()),
+            ValidationSeverity.critical,
+            false,
+            null,
+            valueList
+        );
+
         return this;
     }
 
