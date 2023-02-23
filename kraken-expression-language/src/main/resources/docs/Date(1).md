@@ -1,0 +1,2 @@
+> Be aware when creating date-time without explicit time zone, date-time will be created with a working machine time zone shift. For UI engine it is browser timezone, for server it is server timezone. It may cause different behaviour depending on execution runtime.
+It is not recommended to create a date-time without a time zone as `2021-01-01T01:01:01`. It is recommended to create date-time with a time zone as `2021-01-01T01:01:01Z` instead. Using this function with the string containing time zone will have deterministic behaviour.

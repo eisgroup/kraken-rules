@@ -39,17 +39,19 @@ public final class ValueListPayloadEvaluatedOperation implements VoidOperation {
 
     @Override
     public String describe() {
-        var value = fieldValue == null ? "null" : TemplateParameterRenderer.render(fieldValue);
-        var template = "Evaluated '%s' to '%s'. Field value '%s'%s";
-        var statusTemplate = evaluationState
+        var value = TemplateParameterRenderer.render(fieldValue);
+        var template = "Evaluated '%s' to '%s'. Field value '%s'%s.";
+        var payloadResultStatus = evaluationState
             ? ""
-            : " is not one of '%s'";
+            : String.format(" is not one of [ %s ]", valueListPayload.getValueList().valuesAsString());
 
-        return String.format(template,
+        return String.format(
+            template,
             valueListPayload.getType().getTypeName(),
             evaluationState,
             value,
-            String.format(statusTemplate, valueListPayload.getValueList().valuesAsString()));
+            payloadResultStatus
+        );
     }
 
 }

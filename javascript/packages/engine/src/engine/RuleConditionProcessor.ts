@@ -17,7 +17,6 @@
 import { Condition } from 'kraken-model'
 import { ConditionEvaluationResult, ConditionEvaluation, ExpressionEvaluationResult } from 'kraken-engine-api'
 import { ExpressionEvaluator } from './runtime/expressions/ExpressionEvaluator'
-import { expressionFactory } from './runtime/expressions/ExpressionFactory'
 import { ExecutionSession } from './ExecutionSession'
 import { DataContext } from './contexts/data/DataContext'
 import { DefaultConditionEvaluationResult } from '../dto/DefaultConditionEvaluationResult'
@@ -33,11 +32,7 @@ export class RuleConditionProcessor {
         if (!condition) {
             return DefaultConditionEvaluationResult.of(ConditionEvaluation.APPLICABLE)
         }
-        const expressionResult = this.evaluator.evaluate(
-            expressionFactory.fromExpression(condition.expression),
-            dataContext,
-            session.expressionContext,
-        )
+        const expressionResult = this.evaluator.evaluate(condition.expression, dataContext, session.expressionContext)
         if (ExpressionEvaluationResult.isError(expressionResult)) {
             return DefaultConditionEvaluationResult.fromError(expressionResult)
         }

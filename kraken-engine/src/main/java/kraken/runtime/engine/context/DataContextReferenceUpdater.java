@@ -28,7 +28,7 @@ import kraken.cross.context.path.CrossContextPath;
 import kraken.runtime.KrakenRuntimeException;
 import kraken.runtime.engine.context.data.DataContext;
 import kraken.runtime.engine.context.data.DataContexts;
-import kraken.runtime.engine.context.data.ExternalDataReference;
+import kraken.runtime.engine.context.data.DataReference;
 import kraken.runtime.model.rule.Dependency;
 
 /**
@@ -52,14 +52,9 @@ class DataContextReferenceUpdater {
     }
 
     public void update(DataContext dataContext) {
-        Map<String, ExternalDataReference> references = referenceExtractions(dataContext)
-                .collect(
-                        Collectors.toMap(
-                                ReferenceExtractionInfo::getDependencyName,
-                                info -> new ExternalDataReference(info.getDependencyName(), extractReferences.apply(info), info.getCardinality())
-                        )
-                );
-        dataContext.getExternalReferences().putAll(references);
+        referenceExtractions(dataContext)
+            .forEach(ref -> dataContext.updateReference(
+                new DataReference(ref.getDependencyName(), extractReferences.apply(ref), ref.getCardinality())));
     }
 
     private Stream<ReferenceExtractionInfo> referenceExtractions(DataContext dataContext) {

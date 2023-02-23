@@ -49,6 +49,12 @@ public class DateFunctionsTest {
     }
 
     @Test
+    public void shouldCreateDateWithoutZulu() {
+        LocalDateTime localDateTime = DateFunctions.dateTime("2011-11-11T00:00:00");
+        assertThat(localDateTime, equalTo(LocalDateTime.of(2011, 11,11,00,00)));
+    }
+
+    @Test
     public void shouldAddDays() {
         LocalDate localDate = DateFunctions.plusDays(date("2011-11-11"), 1);
         LocalDateTime localDateTime = DateFunctions.plusDays(LocalDateTime.of(2011, 11, 11, 0, 0), 1);
@@ -77,6 +83,13 @@ public class DateFunctionsTest {
         LocalDateTime localDateTime = DateFunctions.plusMonths(LocalDateTime.of(2011, 11, 11, 0, 0), 1);
         assertThat(localDate.getMonth().getValue(), is(12));
         assertThat(localDateTime.getMonth().getValue(), is(12));
+
+        LocalDate localDate2 = date("2000-01-30");
+        assertThat(DateFunctions.plusMonths(localDate2, 1).getMonth().getValue(), is(2));
+        assertThat(DateFunctions.plusMonths(localDate2, 1).getDayOfMonth(), is(29));
+
+        assertThat(DateFunctions.plusMonths(localDate2, 13).getMonth().getValue(), is(2));
+        assertThat(DateFunctions.plusMonths(localDate2, 13).getDayOfMonth(), is(28));
     }
 
     @Test
@@ -84,6 +97,12 @@ public class DateFunctionsTest {
         var date = Literals.getDateTime("2000-01-01T07:33:33Z");
         assertThat(DateFunctions.plusDays(date, 1), equalTo(Literals.getDateTime("2000-01-02T07:33:33Z")));
         assertThat(DateFunctions.plusDays(date, 32), equalTo(Literals.getDateTime("2000-02-02T07:33:33Z")));
+
+        LocalDateTime date2 = LocalDateTime.of(2005, 03, 9, 01, 01, 01);
+        assertThat(DateFunctions.plusDays(date2, 30), equalTo(LocalDateTime.of(2005, 04, 8, 01, 01, 01)));
+
+        LocalDateTime date3 = LocalDateTime.of(2005, 04, 8, 23, 33, 33);
+        assertThat(DateFunctions.plusDays(date3, -30), equalTo(LocalDateTime.of(2005, 03, 9, 23, 33, 33)));
     }
 
     @Test
@@ -91,6 +110,14 @@ public class DateFunctionsTest {
         var date = Literals.getDateTime("2000-01-30T07:33:33Z");
         assertThat(DateFunctions.plusMonths(date, 1), equalTo(Literals.getDateTime("2000-02-29T07:33:33Z")));
         assertThat(DateFunctions.plusMonths(date, 13), equalTo(Literals.getDateTime("2001-02-28T07:33:33Z")));
+
+        LocalDateTime date2 = LocalDateTime.of(2005, 03, 9, 01, 01, 01);
+        assertThat(DateFunctions.plusMonths(date2, -12), equalTo(LocalDateTime.of(2004, 03, 9, 01, 01, 01)));
+        assertThat(DateFunctions.plusMonths(date2, 1), equalTo(LocalDateTime.of(2005, 04, 9, 01, 01, 01)));
+
+        LocalDateTime date3 = LocalDateTime.of(2005, 03, 9, 23, 33, 33);
+        assertThat(DateFunctions.plusMonths(date3, -12), equalTo(LocalDateTime.of(2004, 03, 9, 23, 33, 33)));
+        assertThat(DateFunctions.plusMonths(date3, 1), equalTo(LocalDateTime.of(2005, 04, 9, 23, 33, 33)));
     }
 
     @Test
@@ -98,12 +125,32 @@ public class DateFunctionsTest {
         var date = Literals.getDateTime("2000-02-29T07:33:33Z");
         assertThat(DateFunctions.plusYears(date, 1), equalTo(Literals.getDateTime("2001-02-28T07:33:33Z")));
         assertThat(DateFunctions.plusYears(date, -1), equalTo(Literals.getDateTime("1999-02-28T07:33:33Z")));
+
+        LocalDateTime date2 = LocalDateTime.of(2004, 02, 29, 01, 01, 01, 00);
+        assertThat(DateFunctions.plusYears(date2, 1), equalTo(LocalDateTime.of(2005, 02, 28, 01, 01, 01, 00)));
+        assertThat(DateFunctions.plusYears(date2, -1), equalTo(LocalDateTime.of(2003, 02, 28, 01, 01, 01, 00)));
+
+        LocalDateTime date3 = LocalDateTime.of(2004, 02, 29, 23, 33, 33, 00);
+        assertThat(DateFunctions.plusYears(date3, 1), equalTo(LocalDateTime.of(2005, 02, 28, 23, 33, 33, 00)));
+        assertThat(DateFunctions.plusYears(date3, -1), equalTo(LocalDateTime.of(2003, 02, 28, 23, 33, 33, 00)));
+    }
+
+    @Test
+    public void shouldAddYearsAndPreserveTimeOnNewYearsEve() {
+        var date = LocalDateTime.of(2004, 12, 31, 23, 33, 33, 00);
+        assertThat(DateFunctions.plusYears(date, 1), equalTo(LocalDateTime.of(2005, 12, 31, 23, 33, 33, 00)));
+        assertThat(DateFunctions.plusYears(date, -1), equalTo(LocalDateTime.of(2003, 12, 31, 23, 33, 33, 00)));
+
+        var date2 = LocalDateTime.of(2005, 01, 1, 01, 01, 01, 00);
+        assertThat(DateFunctions.plusYears(date2, 1), equalTo(LocalDateTime.of(2006, 01, 1, 01, 01, 01, 00)));
+        assertThat(DateFunctions.plusYears(date2, -1), equalTo(LocalDateTime.of(2004, 01, 1, 01, 01, 01, 00)));
+
     }
 
     @Test
     public void shouldThrowOnAddMonthsWithIllegalType() {
         assertThrows(ExpressionEvaluationException.class,
-                () -> DateFunctions.plusMonths("2011-11-11", 1));
+            () -> DateFunctions.plusMonths("2011-11-11", 1));
     }
 
     @Test
@@ -112,6 +159,15 @@ public class DateFunctionsTest {
         LocalDateTime localDateTime = DateFunctions.plusYears(LocalDateTime.of(2011, 11, 11, 0, 0), 1);
         assertThat(localDate.getYear(), is(2012));
         assertThat(localDateTime.getYear(), is(2012));
+
+        LocalDate localDate2 = date("2000-02-29");
+        assertThat(DateFunctions.plusYears(localDate2, 1).getYear(), is(2001));
+        assertThat(DateFunctions.plusYears(localDate2, 1).getMonth().getValue(), is(02));
+        assertThat(DateFunctions.plusYears(localDate2, 1).getDayOfMonth(), is(28));
+
+        assertThat(DateFunctions.plusYears(localDate2, -1).getYear(), is(1999));
+        assertThat(DateFunctions.plusYears(localDate2, -1).getMonth().getValue(), is(02));
+        assertThat(DateFunctions.plusYears(localDate2, -1).getDayOfMonth(), is(28));
     }
 
     @Test
@@ -217,6 +273,7 @@ public class DateFunctionsTest {
     @Test
     public void shouldFormatDate() {
         assertThat(DateFunctions.format(LocalDate.of(2011, 12, 31), "YYYY-MM-DD"), is("2011-12-31"));
+        assertThat(DateFunctions.format(LocalDate.of(2011, 12, 31), "YY-MM-DD"), is("11-12-31"));
         assertThat(DateFunctions.format(LocalDate.of(2011, 12, 31), null), is("2011-12-31"));
         assertThat(DateFunctions.format(LocalDate.of(2011, 12, 31), "MM-DD-YYYY"), is("12-31-2011"));
         assertThat(DateFunctions.format(LocalDate.of(2011, 12, 31), "DD-MM-YYYY"), is("31-12-2011"));
@@ -340,6 +397,13 @@ public class DateFunctionsTest {
     }
 
     @Test
+    public void shouldReturnWithYearFromDateAndPreserveTime() {
+        assertThat(DateFunctions.withYear(LocalDateTime.of(2000, 02, 29, 01, 01, 01), 1999),
+            equalTo(LocalDateTime.of(1999, 02, 28, 01, 01, 01))
+        );
+    }
+
+    @Test
     public void shouldReturnWithMonthFromDate() {
         assertThat(
             DateFunctions.withMonth(date("2011-11-11"), 2),
@@ -361,6 +425,13 @@ public class DateFunctionsTest {
     }
 
     @Test
+    public void shouldReturnWithMonthFromDateAndPreserveTime() {
+        assertThat(DateFunctions.withMonth(LocalDateTime.of(2011, 03, 30, 23, 33, 33), 2),
+            equalTo(LocalDateTime.of(2011, 02, 28, 23, 33, 33))
+        );
+    }
+
+    @Test
     public void shouldReturnWithDayFromDate() {
         assertThat(
             DateFunctions.withDay(date("2011-11-11"), 2),
@@ -378,4 +449,10 @@ public class DateFunctionsTest {
         assertThrows(ExpressionEvaluationException.class, () -> DateFunctions.withDay(date("2000-02-28"), 30));
     }
 
+    @Test
+    public void shouldReturnWithDayFromDateAndPreserveTime() {
+        assertThat(DateFunctions.withDay(LocalDateTime.of(1999, 03, 31, 23, 33, 33), 10),
+            equalTo(LocalDateTime.of(1999, 03, 10, 23, 33, 33))
+        );
+    }
 }

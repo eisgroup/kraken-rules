@@ -429,7 +429,7 @@ export namespace Localization {
         },
         valueListErrorMessage(payloadResult: ValueListPayloadResult): Localization.ValidationMessage {
             return {
-                code: 'rule-value-list-error',
+                code: 'value-list-error',
                 message: 'Value must be one of: {{0}}',
                 parameters: [payloadResult.valueList.values.map(value => value.toString()).join(', ')],
             }

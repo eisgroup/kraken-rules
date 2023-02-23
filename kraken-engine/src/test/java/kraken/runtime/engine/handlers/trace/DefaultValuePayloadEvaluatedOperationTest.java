@@ -47,7 +47,7 @@ public class DefaultValuePayloadEvaluatedOperationTest {
             new DefaultValuePayloadEvaluatedOperation(defaultValuePayload, null, "updated");
 
         assertThat(defaultValuePayloadOp.describe(),
-            is("Evaluated 'DefaultValuePayload'. Before value: 'NULL'. After value: 'updated'."));
+            is("Evaluated 'DefaultValuePayload'. Before value: ''. After value: 'updated'."));
     }
 
     @Test

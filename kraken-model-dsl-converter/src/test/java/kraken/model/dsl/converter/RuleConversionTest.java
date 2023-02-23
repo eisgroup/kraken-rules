@@ -612,6 +612,10 @@ public class RuleConversionTest {
                 System.lineSeparator() +
                 "    Assert In \"CD1\", \"CD2\", \"CD3\"" +
                 System.lineSeparator() +
+                "    Error \"ValueListCode\" : \"ValueListMessage\"" +
+                System.lineSeparator() +
+                "    Overridable \"OverrideGroup\"" +
+                System.lineSeparator() +
                 "}" + System.lineSeparator() +
                 System.lineSeparator(),
             convertedRule
@@ -634,6 +638,10 @@ public class RuleConversionTest {
                 "    Description \"Value List Rule\"" +
                 System.lineSeparator() +
                 "    Assert In 10, 51.334, 1000000" +
+                System.lineSeparator() +
+                "    Error \"ValueListCode\" : \"ValueListMessage\"" +
+                System.lineSeparator() +
+                "    Overridable \"OverrideGroup\"" +
                 System.lineSeparator() +
                 "}" + System.lineSeparator() +
                 System.lineSeparator(),
@@ -1223,6 +1231,7 @@ public class RuleConversionTest {
         rule.setTargetPath("code");
         rule.setName("Coverage_code_valueList_rule");
         rule.setPhysicalNamespace("val");
+
 
         return rule;
     }

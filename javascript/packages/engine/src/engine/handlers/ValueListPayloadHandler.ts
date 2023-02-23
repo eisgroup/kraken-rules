@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-import { Payloads, Rule, ValueListDataType } from 'kraken-model'
+import { Payloads, Rule, ValueList, ValueListDataType } from 'kraken-model'
 import { RulePayloadHandler } from './RulePayloadHandler'
 import { ExecutionSession } from '../ExecutionSession'
 import { DataContext } from '../contexts/data/DataContext'
@@ -23,10 +23,10 @@ import { ValueListPayloadResult, ExpressionEvaluationResult } from 'kraken-engin
 import PayloadType = Payloads.PayloadType
 import { ExpressionEvaluator } from '../runtime/expressions/ExpressionEvaluator'
 import { Expressions } from '../runtime/expressions/Expressions'
-import { expressionFactory } from '../runtime/expressions/ExpressionFactory'
 import { Moneys } from '../runtime/expressions/math/Moneys'
 import ValueListPayload = Payloads.Validation.ValueListPayload
 import { payloadResultCreator } from '../results/PayloadResultCreator'
+import { logger } from '../../utils/DevelopmentLogger'
 
 /**
  * A payload handler specific to {@link ValueListPayload}. Evaluates that field value
@@ -55,7 +55,11 @@ export class ValueListPayloadHandler implements RulePayloadHandler {
             session.expressionContext,
         )
 
-        return payloadResultCreator.valueList(payload, this.doExecute(value, payload), templateVariables)
+        const result = this.doExecute(value, payload)
+
+        logger.debug(() => this.describePayloadResult(payload, result, value))
+
+        return payloadResultCreator.valueList(payload, result, templateVariables)
     }
 
     private doExecute(fieldValue: unknown, payload: ValueListPayload): boolean {
@@ -69,12 +73,12 @@ export class ValueListPayloadHandler implements RulePayloadHandler {
     }
 
     private resolveFieldValue(rule: Rule, dataContext: DataContext): unknown {
-        const expression = expressionFactory.fromPath(Expressions.createPathResolver(dataContext)(rule.targetPath))
-        const result = this.evaluator.evaluate(expression, dataContext)
-        if (ExpressionEvaluationResult.isError(result)) {
-            throw new Error(`Failed to resolver attribute value for path ${rule.targetPath}`)
+        const path = Expressions.createPathResolver(dataContext)(rule.targetPath)
+        const valueResult = this.evaluator.evaluateGet(path, dataContext.dataObject)
+        if (ExpressionEvaluationResult.isError(valueResult)) {
+            throw new Error(`Failed to extract attribute '${path}'`)
         }
-        return result.success
+        return valueResult.success
     }
 
     private coerce(value: unknown, dataType: ValueListDataType): unknown {
@@ -103,5 +107,17 @@ export class ValueListPayloadHandler implements RulePayloadHandler {
             return value as number
         }
         throw Error(`Unable to convert ${value} to a number.`)
+    }
+
+    private describePayloadResult(payload: ValueListPayload, result: boolean, value: unknown): string {
+        const payloadResultStatus = result ? `` : `is not one of [ ${this.describeValueList(payload.valueList)} ]`
+
+        return `Evaluated '${payload.type}' to ${result}. Field value '${ExpressionEvaluator.render(
+            value,
+        )}' ${payloadResultStatus}.`
+    }
+
+    private describeValueList(valueList: ValueList): string {
+        return valueList.values.map(v => v.toString()).join(', ')
     }
 }

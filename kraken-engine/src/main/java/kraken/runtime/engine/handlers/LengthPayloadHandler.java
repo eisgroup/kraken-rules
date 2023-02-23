@@ -56,13 +56,12 @@ public class LengthPayloadHandler implements RulePayloadHandler {
         final LengthPayload lengthPayload = (LengthPayload) payload;
 
         String path = resolveTargetPath(rule, dataContext);
-        final Object target = evaluator.evaluateGetProperty(path, dataContext.getDataObject());
-        boolean success = target instanceof String
-                ? ((String) target).length() <= lengthPayload.getLength()
-                : true;
+        Object target = evaluator.evaluateGetProperty(path, dataContext.getDataObject());
+        int targetLength = target instanceof String ? ((String) target).length() : 0;
+        boolean success = targetLength <= lengthPayload.getLength();
         List<String> templateVariables = evaluator.evaluateTemplateVariables(lengthPayload.getErrorMessage(), dataContext, session);
 
-        Tracer.doOperation(new LengthPayloadEvaluatedOperation(lengthPayload, target, success));
+        Tracer.doOperation(new LengthPayloadEvaluatedOperation(lengthPayload, targetLength, success));
         return new LengthPayloadResult(success, lengthPayload, templateVariables);
     }
 

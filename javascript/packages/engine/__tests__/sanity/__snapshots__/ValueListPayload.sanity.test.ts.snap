@@ -292,7 +292,7 @@ Object {
       "resolvedTargetPath": "policyValue",
       "ruleResults": Array [
         Object {
-          "errorCode": "rule-value-list-error",
+          "errorCode": "value-list-error",
           "errorMessage": "Value must be one of: {{0}}",
           "isFailed": true,
           "isOverridable": false,
@@ -332,7 +332,7 @@ Object {
       "resolvedTargetPath": "limitAmount",
       "ruleResults": Array [
         Object {
-          "errorCode": "rule-value-list-error",
+          "errorCode": "value-list-error",
           "errorMessage": "Value must be one of: {{0}}",
           "isFailed": true,
           "isOverridable": false,
@@ -656,7 +656,7 @@ Object {
       "resolvedTargetPath": "policyValue",
       "ruleResults": Array [
         Object {
-          "errorCode": "rule-value-list-error",
+          "errorCode": "value-list-error",
           "errorMessage": "Value must be one of: {{0}}",
           "isFailed": false,
           "isOverridable": false,
@@ -696,7 +696,7 @@ Object {
       "resolvedTargetPath": "limitAmount",
       "ruleResults": Array [
         Object {
-          "errorCode": "rule-value-list-error",
+          "errorCode": "value-list-error",
           "errorMessage": "Value must be one of: {{0}}",
           "isFailed": false,
           "isOverridable": false,

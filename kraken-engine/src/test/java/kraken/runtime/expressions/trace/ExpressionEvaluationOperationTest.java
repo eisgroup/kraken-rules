@@ -20,15 +20,16 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import kraken.model.context.Cardinality;
 import kraken.runtime.engine.context.data.DataContext;
-import kraken.runtime.engine.context.data.ExternalDataReference;
+import kraken.runtime.engine.context.data.DataReference;
 import kraken.runtime.model.expression.CompiledExpression;
 import kraken.runtime.model.expression.ExpressionVariable;
 import kraken.runtime.model.expression.ExpressionVariableType;
@@ -45,59 +46,89 @@ public class ExpressionEvaluationOperationTest {
     @Mock
     private CompiledExpression expression;
 
-    @Mock
-    private DataContext dataContext;
-
-    @Mock
-    private ExternalDataReference ccrExtDataContext;
-
-    @Mock
-    private DataContext ccrDataContext;
-
     @Test
     public void shouldCreateCorrectDescriptionForExpressionEvaluationWithCrossContexts() {
         var ccrVariable = new ExpressionVariable("CCRContext", ExpressionVariableType.CROSS_CONTEXT);
+        var referenceDataContext = context("SpecificCCRContext", "id", List.of());
+        var reference = new DataReference("CCRContext", List.of(referenceDataContext), Cardinality.MULTIPLE);
+        var rootDataContext = context("Root", "1", List.of(reference));
 
         when(expression.getExpressionString()).thenReturn("(CCRContext.field == false)");
         when(expression.getExpressionVariables()).thenReturn(List.of(ccrVariable));
-        when(dataContext.getExternalReferences()).thenReturn(Map.of("CCRContext", ccrExtDataContext));
 
-        when(ccrDataContext.getContextName()).thenReturn("CCRContext");
-        when(ccrDataContext.getContextId()).thenReturn("ID");
-        when(ccrExtDataContext.getDataContexts()).thenReturn(List.of(ccrDataContext));
-        when(ccrExtDataContext.getName()).thenReturn("ccrCtx");
-
-        var expEvalOp = new ExpressionEvaluationOperation(expression, dataContext);
+        var expEvalOp = new ExpressionEvaluationOperation(expression, rootDataContext);
 
         assertThat(expEvalOp.describe(),
             is("Evaluating expression '(CCRContext.field == false)'. Cross context references: "
                 + System.lineSeparator()
-                + "ccrCtx: [ CCRContext:ID ]"));
+                + "CCRContext=[SpecificCCRContext:id]"));
     }
 
     @Test
     public void shouldCreateCorrectDescriptionForExpressionEvaluationNoCrossContexts() {
         when(expression.getExpressionString()).thenReturn("(CCRContext.field == false)");
+        var rootDataContext = context("Root", "1", List.of());
 
-        var expEvalOp = new ExpressionEvaluationOperation(expression, dataContext);
+        var expEvalOp = new ExpressionEvaluationOperation(expression, rootDataContext);
 
-        assertThat(expEvalOp.describe(),
-            is("Evaluating expression '(CCRContext.field == false)'."));
+        assertThat(expEvalOp.describe(), is("Evaluating expression '(CCRContext.field == false)'."));
     }
 
     @Test
     public void shouldCreateCorrectDescriptionForExpressionEvaluationUnresolvedCrossContexts() {
         var ccrVariable = new ExpressionVariable("CCRContext", ExpressionVariableType.CROSS_CONTEXT);
+        var rootDataContext = context("Root", "1", List.of());
 
         when(expression.getExpressionVariables()).thenReturn(List.of(ccrVariable));
         when(expression.getExpressionString()).thenReturn("(CCRContext.field == false)");
 
-        var expEvalOp = new ExpressionEvaluationOperation(expression, dataContext);
+        var expEvalOp = new ExpressionEvaluationOperation(expression, rootDataContext);
 
         assertThat(expEvalOp.describe(),
             is("Evaluating expression '(CCRContext.field == false)'. Cross context references: "
                 + System.lineSeparator()
-                + "No cross contexts resolved for 'CCRContext'"));
+                + "CCRContext=null"));
     }
 
+    @Test
+    public void shouldCreateCorrectDescriptionForExpressionEvaluationNullSingularCrossContexts() {
+        var ccrVariable = new ExpressionVariable("CCRContext", ExpressionVariableType.CROSS_CONTEXT);
+        var reference = new DataReference("CCRContext", List.of(), Cardinality.SINGLE);
+        var rootDataContext = context("Root", "1", List.of(reference));
+
+        when(expression.getExpressionVariables()).thenReturn(List.of(ccrVariable));
+        when(expression.getExpressionString()).thenReturn("(CCRContext.field == false)");
+
+        var expEvalOp = new ExpressionEvaluationOperation(expression, rootDataContext);
+
+        assertThat(expEvalOp.describe(),
+            is("Evaluating expression '(CCRContext.field == false)'. Cross context references: "
+                + System.lineSeparator()
+                + "CCRContext=null"));
+    }
+
+    @Test
+    public void shouldCreateCorrectDescriptionForExpressionEvaluationEmptyMultipleCrossContexts() {
+        var ccrVariable = new ExpressionVariable("CCRContext", ExpressionVariableType.CROSS_CONTEXT);
+        var reference = new DataReference("CCRContext", List.of(), Cardinality.MULTIPLE);
+        var rootDataContext = context("Root", "1", List.of(reference));
+
+        when(expression.getExpressionVariables()).thenReturn(List.of(ccrVariable));
+        when(expression.getExpressionString()).thenReturn("(CCRContext.field == false)");
+
+        var expEvalOp = new ExpressionEvaluationOperation(expression, rootDataContext);
+
+        assertThat(expEvalOp.describe(),
+            is("Evaluating expression '(CCRContext.field == false)'. Cross context references: "
+                + System.lineSeparator()
+                + "CCRContext=[]"));
+    }
+
+    private DataContext context(String name, String id, List<DataReference> references) {
+        var context = new DataContext();
+        context.setContextName(name);
+        context.setContextId(id);
+        references.forEach(context::updateReference);
+        return context;
+    }
 }

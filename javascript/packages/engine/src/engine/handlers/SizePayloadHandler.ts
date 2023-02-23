@@ -22,10 +22,10 @@ import { RulePayloadHandler } from './RulePayloadHandler'
 import { ExpressionEvaluator } from '../runtime/expressions/ExpressionEvaluator'
 import { SizePayloadResult, ExpressionEvaluationResult } from 'kraken-engine-api'
 import { Expressions } from '../runtime/expressions/Expressions'
-import { expressionFactory } from '../runtime/expressions/ExpressionFactory'
 import { ExecutionSession } from '../ExecutionSession'
 import { DataContext } from '../contexts/data/DataContext'
 import { payloadResultCreator } from '../results/PayloadResultCreator'
+import { logger } from '../../utils/DevelopmentLogger'
 
 export class SizePayloadHandler implements RulePayloadHandler {
     constructor(private readonly evaluator: ExpressionEvaluator) {}
@@ -39,34 +39,60 @@ export class SizePayloadHandler implements RulePayloadHandler {
         dataContext: DataContext,
         session: ExecutionSession,
     ): SizePayloadResult {
-        const expression = expressionFactory.fromPath(Expressions.createPathResolver(dataContext)(rule.targetPath))
-        const exResult = this.evaluator.evaluate(expression, dataContext)
-        if (ExpressionEvaluationResult.isError(exResult)) {
-            throw new Error(`Failed to extract attribute ${expression}`)
+        const path = Expressions.createPathResolver(dataContext)(rule.targetPath)
+        const valueResult = this.evaluator.evaluateGet(path, dataContext.dataObject)
+        if (ExpressionEvaluationResult.isError(valueResult)) {
+            throw new Error(`Failed to extract attribute '${path}'`)
         }
-        let target = exResult.success
+        let value = valueResult.success
         const templateVariables = this.evaluator.evaluateTemplateVariables(
             payload.errorMessage,
             dataContext,
             session.expressionContext,
         )
-        const result = (success: boolean) => payloadResultCreator.size(payload, success, templateVariables)
 
-        if (target == undefined) {
-            target = []
+        if (value == undefined) {
+            value = []
         }
-        if (Array.isArray(target)) {
+
+        let result = true
+        if (Array.isArray(value)) {
             switch (payload.orientation) {
                 case Orientation.MIN:
-                    return result(target.length >= payload.size)
+                    result = value.length >= payload.size
+                    break
                 case Orientation.MAX:
-                    return result(target.length <= payload.size)
+                    result = value.length <= payload.size
+                    break
                 case Orientation.EQUALS:
-                    return result(target.length === payload.size)
+                    result = value.length === payload.size
+                    break
                 default:
                     throw new Error('Failed to find size payload orientation with value ' + payload.orientation)
             }
         }
-        return result(true)
+
+        logger.debug(() => this.describePayloadResult(payload, result, value))
+
+        return payloadResultCreator.size(payload, result, templateVariables)
+    }
+
+    private describePayloadResult(payload: SizePayload, result: boolean, value: unknown): string {
+        const expectedSize = this.describeExpectedSize(payload)
+        const actualSize = Array.isArray(value) ? value.length : ''
+        return `Evaluated '${payload.type}' to ${result}. Expected size ${expectedSize} - actual size is ${actualSize}.`
+    }
+
+    private describeExpectedSize(payload: SizePayload) {
+        switch (payload.orientation) {
+            case Orientation.MIN:
+                return `no less than ${payload.size}`
+            case Orientation.MAX:
+                return `no more than ${payload.size}`
+            case Orientation.EQUALS:
+                return `equal to ${payload.size}`
+            default:
+                return 'unknown'
+        }
     }
 }

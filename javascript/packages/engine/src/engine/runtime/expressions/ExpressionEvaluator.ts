@@ -16,18 +16,17 @@
 import { Reducer } from 'declarative-js'
 
 import { FunctionRegistry, FunctionDeclaration } from './functionLibrary/Registry'
-import { RuntimeExpression } from './RuntimeExpression'
 import { pathAccessor } from './PathAccessor'
 import { ComplexEvaluator } from './ComplexEvaluator'
 import { ExpressionEvaluationResult, ExpressionEvaluationResult as Expression } from 'kraken-engine-api'
-import { Payloads } from 'kraken-model'
+import { Payloads, Expressions, Contexts } from 'kraken-model'
 import ErrorMessage = Payloads.Validation.ErrorMessage
-import { expressionFactory } from './ExpressionFactory'
 import { Numbers } from './math/Numbers'
 import { dateFunctions } from './functionLibrary/DateFunctions'
 import { Moneys } from './math/Moneys'
-import { DataContext } from '../../contexts/data/DataContext'
+import { DataContext, DataReference } from '../../contexts/data/DataContext'
 import { ErrorCode, KrakenRuntimeError } from '../../../error/KrakenRuntimeError'
+import { logger } from '../../../utils/DevelopmentLogger'
 
 /**
  * Global expression functions registry.
@@ -110,43 +109,46 @@ export class ExpressionEvaluator {
     }
 
     /**
-     * Evaluates {@Link RuntimeExpression} on {@Link DataContext} and context object.
+     * Evaluates {@Link Expressions.Expression} on {@Link DataContext} and context object.
      *
-     * @param expression    to evaluate. IT can be constructed with global object "expressionFactory"
+     * @param expression    to evaluate
      * @param dataContext   contains data object and external references, that can
      *                      be accessed in expression string. External references can be
      *                      accessed from ComplexExpressions.
      * @param context       optional parameter, that provides external context. Can be
      *                      Accessed from ComplexExpressions.
      * @returns result of expression.
-     * @throws  if expression is not {@Link RuntimeExpression}
+     * @throws  if expression is not {@Link Expressions.Expression}
      * @throws  error on invalid complex expression. The cause can be invalid expression context,
      *          invalid complex expression or invalid complex expression result for {@code NaN},
      *          {@code -Infinity} or {@code +Infinity}
      */
     evaluate(
-        expression: RuntimeExpression,
+        expression: Expressions.Expression,
         dataContext: DataContext,
         context?: Record<string, unknown>,
     ): Expression.Result {
-        switch (expression.type) {
-            case 'PropertyExpression':
-                return Expression.expressionSuccess(dataContext.dataObject[expression.expression])
-            case 'PathExpression':
-                return Expression.expressionSuccess(pathAccessor.access(dataContext.dataObject, expression.expression))
-            case 'LiteralExpression':
-                if (expression.valueType === 'Date' || expression.valueType === 'DateTime') {
-                    return Expression.expressionSuccess(new Date(expression.value as string))
+        logger.debug(() => this.describeExpressionEvaluation(expression, dataContext))
+
+        switch (expression.expressionType) {
+            case 'PATH':
+                return this.evaluateGet(expression.expressionString, dataContext.dataObject)
+            case 'LITERAL':
+                if (
+                    expression.compiledLiteralValueType === 'Date' ||
+                    expression.compiledLiteralValueType === 'DateTime'
+                ) {
+                    return Expression.expressionSuccess(new Date(expression.compiledLiteralValue as string))
                 }
-                return Expression.expressionSuccess(expression.value)
-            case 'ComplexExpression':
+                return Expression.expressionSuccess(expression.compiledLiteralValue)
+            case 'COMPLEX':
                 return this.#evaluator.evaluate({
                     expressionContext: {
                         dataObject: dataContext.dataObject,
-                        references: dataContext.externalReferenceObjects.references,
+                        references: dataContext.objectReferences,
                         context,
                     },
-                    expression: expression.expression,
+                    expression: expression.expressionString,
                 })
             default:
                 throw new KrakenRuntimeError(
@@ -155,6 +157,37 @@ export class ExpressionEvaluator {
                 )
         }
     }
+
+    /**
+     * Evaluates {@Link Contexts.ContextNavigation} expression on {@Link DataContext}.
+     *
+     * @param navigationExpression
+     * @param dataContext
+     */
+    evaluateNavigationExpression(
+        navigationExpression: Contexts.ContextNavigation,
+        dataContext: DataContext,
+    ): Expression.Result {
+        const expression = navigationExpression.navigationExpression
+        switch (expression.expressionType) {
+            case 'PATH':
+                return this.evaluateGet(expression.expressionString, dataContext.dataObject)
+            case 'COMPLEX':
+                return this.#evaluator.evaluate({
+                    expressionContext: {
+                        dataObject: dataContext.dataObject,
+                        references: {},
+                    },
+                    expression: expression.expressionString,
+                })
+            default:
+                throw new KrakenRuntimeError(
+                    ErrorCode.UNKNOWN_EXPRESSION_TYPE,
+                    `Evaluation of navigation expression ${JSON.stringify(expression)} is not supported`,
+                )
+        }
+    }
+
     /**
      * Set value to object at path.
      *
@@ -172,6 +205,17 @@ export class ExpressionEvaluator {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     evaluateSet(path: string, dataObject: any, value: unknown): Expression.Result {
         return Expression.expressionSuccess(pathAccessor.accessAndSet(dataObject, path, value))
+    }
+
+    /**
+     * Get value from object by path
+     *
+     * @param path a dot separated path
+     * @param dataObject
+     */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    evaluateGet(path: string, dataObject: any): Expression.Result {
+        return Expression.expressionSuccess(pathAccessor.access(dataObject, path))
     }
 
     /**
@@ -193,7 +237,7 @@ export class ExpressionEvaluator {
     ): string[] {
         return message
             ? message.templateExpressions
-                  .map(p => this.evaluate(expressionFactory.fromExpression(p), dataContext, context))
+                  .map(p => this.evaluate(p, dataContext, context))
                   .map(result => (ExpressionEvaluationResult.isError(result) ? undefined : result.success))
                   .map(ExpressionEvaluator.render)
             : []
@@ -204,6 +248,30 @@ export class ExpressionEvaluator {
      */
     rebuildFunctions(): void {
         this.#evaluator.rebuildFunctionInvokerIfNeeded()
+    }
+
+    private describeExpressionEvaluation(expression: Expressions.Expression, dataContext: DataContext): string {
+        let ccrDescription = ''
+        if (expression.expressionType === 'COMPLEX') {
+            const ccrVariables = expression.expressionVariables?.filter(ref => ref.type === 'CROSS_CONTEXT')
+            if (ccrVariables?.length) {
+                const ccrString = ccrVariables
+                    .map(ref => `${ref.name}=${this.describeReference(dataContext.dataContextReferences[ref.name])}`)
+                    .join('\n')
+                ccrDescription = `Cross context references:\n${ccrString}.`
+            }
+        }
+        return `Evaluating expression '${expression.expressionString}'. ${ccrDescription}`
+    }
+
+    private describeReference(reference: DataReference | undefined): string {
+        if (!reference) {
+            return 'null'
+        }
+        if (reference.cardinality === 'SINGLE') {
+            return reference.dataContexts[0]?.id ?? 'null'
+        }
+        return `[${reference.dataContexts.map(c => c.id).join(',')}]`
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

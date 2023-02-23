@@ -21,10 +21,10 @@ import { Expressions } from '../runtime/expressions/Expressions'
 import { Payloads, Rule } from 'kraken-model'
 import LengthPayload = Payloads.Validation.LengthPayload
 import PayloadType = Payloads.PayloadType
-import { expressionFactory } from '../runtime/expressions/ExpressionFactory'
 import { ExecutionSession } from '../ExecutionSession'
 import { DataContext } from '../contexts/data/DataContext'
 import { payloadResultCreator } from '../results/PayloadResultCreator'
+import { logger } from '../../utils/DevelopmentLogger'
 
 export class LengthPayloadHandler implements RulePayloadHandler {
     constructor(private readonly evaluator: ExpressionEvaluator) {}
@@ -38,15 +38,14 @@ export class LengthPayloadHandler implements RulePayloadHandler {
         dataContext: DataContext,
         session: ExecutionSession,
     ): LengthPayloadResult {
-        const targetPathExpression = expressionFactory.fromPath(
-            Expressions.createPathResolver(dataContext)(rule.targetPath),
-        )
-        const result = this.evaluator.evaluate(targetPathExpression, dataContext)
-        if (ExpressionEvaluationResult.isError(result)) {
-            throw new Error(`Failed to extract attribute '${rule.targetPath}'`)
+        const path = Expressions.createPathResolver(dataContext)(rule.targetPath)
+        const valueResult = this.evaluator.evaluateGet(path, dataContext.dataObject)
+        if (ExpressionEvaluationResult.isError(valueResult)) {
+            throw new Error(`Failed to extract attribute '${path}'`)
         }
-        const target = result.success
-        const success = typeof target === 'string' ? (target as string).length <= payload.length : true
+        const value = valueResult.success
+        const valueLength = typeof value === 'string' ? (value as string).length : 0
+        const success = valueLength <= payload.length
 
         const templateVariables = this.evaluator.evaluateTemplateVariables(
             payload.errorMessage,
@@ -54,6 +53,10 @@ export class LengthPayloadHandler implements RulePayloadHandler {
             session.expressionContext,
         )
 
+        logger.debug(
+            () =>
+                `Evaluated '${payload.type}' to ${success}. Expected length '${payload.length}'. Actual length '${valueLength}'`,
+        )
         return payloadResultCreator.length(payload, success, templateVariables)
     }
 }

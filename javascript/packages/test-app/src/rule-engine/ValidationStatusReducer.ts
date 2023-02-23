@@ -16,7 +16,6 @@
 
 import { Payloads } from 'kraken-model'
 import ValidationSeverity = Payloads.Validation.ValidationSeverity
-
 import { Reducer, optional } from 'declarative-js'
 import flat = Reducer.flat
 import groupBy = Reducer.groupBy

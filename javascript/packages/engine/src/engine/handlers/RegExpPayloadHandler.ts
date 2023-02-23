@@ -23,10 +23,10 @@ import { Expressions } from '../runtime/expressions/Expressions'
 import { Payloads, Rule } from 'kraken-model'
 import PayloadType = Payloads.PayloadType
 
-import { expressionFactory } from '../runtime/expressions/ExpressionFactory'
 import { ExecutionSession } from '../ExecutionSession'
 import { DataContext } from '../contexts/data/DataContext'
 import { payloadResultCreator } from '../results/PayloadResultCreator'
+import { logger } from '../../utils/DevelopmentLogger'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function isSuccess(value: any, payload: Payloads.Validation.RegExpPayload): boolean {
@@ -47,17 +47,28 @@ export class RegExpPayloadHandler implements RulePayloadHandler {
         dataContext: DataContext,
         session: ExecutionSession,
     ): RegExpPayloadResult {
-        const expression = expressionFactory.fromPath(Expressions.createPathResolver(dataContext)(rule.targetPath))
-        const result = this.evaluator.evaluate(expression, dataContext)
-        if (ExpressionEvaluationResult.isError(result)) {
-            throw new Error(`Failed to evaluate regular expression: '${expression}'`)
+        const path = Expressions.createPathResolver(dataContext)(rule.targetPath)
+        const valueResult = this.evaluator.evaluateGet(path, dataContext.dataObject)
+        if (ExpressionEvaluationResult.isError(valueResult)) {
+            throw new Error(`Failed to extract attribute '${path}'`)
         }
-        const value = result.success
+        const value = valueResult.success
         const templateVariables = this.evaluator.evaluateTemplateVariables(
             payload.errorMessage,
             dataContext,
             session.expressionContext,
         )
-        return payloadResultCreator.regexp(payload, isSuccess(value, payload), templateVariables)
+        const evaluationResult = isSuccess(value, payload)
+
+        logger.debug(() => this.describePayloadResult(payload, evaluationResult, value))
+
+        return payloadResultCreator.regexp(payload, evaluationResult, templateVariables)
+    }
+
+    private describePayloadResult(payload: Payloads.Validation.RegExpPayload, result: boolean, value: unknown): string {
+        const explanationStr = result ? 'matches' : 'does not match'
+        return `Evaluated '${payload.type}' to ${result}. Value '${ExpressionEvaluator.render(
+            value,
+        )}' ${explanationStr} regular expression '${payload.regExp}'.`
     }
 }

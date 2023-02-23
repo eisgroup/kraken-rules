@@ -35,9 +35,9 @@ public final class ErrorOperation implements VoidOperation {
 
     @Override
     public String describe() {
-        return String.format("An error occurred during trace. %s %s",
-            message != null ? "Error message: " + message + ", " : "",
-            firstStackElement != null ? "Error occurred at: " + firstStackElement : "");
+        return String.format("An error occurred.%s%s",
+            message != null ? " Error message: " + message + "." : "",
+            firstStackElement != null ? " Error occurred at: " + firstStackElement : ".");
     }
 
 }

@@ -16,20 +16,21 @@
 
 import { RulePayloadHandler } from './RulePayloadHandler'
 import { ExpressionEvaluator } from '../runtime/expressions/ExpressionEvaluator'
-import { UsagePayloadResult, ExpressionEvaluationResult } from 'kraken-engine-api'
+import { ExpressionEvaluationResult, UsagePayloadResult } from 'kraken-engine-api'
 
 import { Expressions } from '../runtime/expressions/Expressions'
 
 import { Payloads, Rule } from 'kraken-model'
-import PayloadType = Payloads.PayloadType
-import UsagePayload = Payloads.Validation.UsagePayload
 
-import { expressionFactory } from '../runtime/expressions/ExpressionFactory'
 import { ExecutionSession } from '../ExecutionSession'
 import { DataContext } from '../contexts/data/DataContext'
 import { payloadResultCreator } from '../results/PayloadResultCreator'
+import { logger } from '../../utils/DevelopmentLogger'
+import PayloadType = Payloads.PayloadType
+import UsagePayload = Payloads.Validation.UsagePayload
+import UsageType = Payloads.Validation.UsageType
 
-function isValid(value: unknown): boolean {
+function isEmpty(value: unknown): boolean {
     return value === '' || value == null
 }
 
@@ -45,20 +46,48 @@ export class UsagePayloadHandler implements RulePayloadHandler {
         dataContext: DataContext,
         session: ExecutionSession,
     ): UsagePayloadResult {
-        const expression = expressionFactory.fromPath(Expressions.createPathResolver(dataContext)(rule.targetPath))
-        const result = this.evaluator.evaluate(expression, dataContext)
-        if (ExpressionEvaluationResult.isError(result)) {
-            throw new Error(`Failed to extract attribute ${expression}`)
+        const path = Expressions.createPathResolver(dataContext)(rule.targetPath)
+        const valueResult = this.evaluator.evaluateGet(path, dataContext.dataObject)
+        if (ExpressionEvaluationResult.isError(valueResult)) {
+            throw new Error(`Failed to extract attribute '${path}'`)
         }
-        const value = result.success
+        const value = valueResult.success
 
-        const isUsageMandatory = Payloads.Validation.UsageType.mandatory === payload.usageType && isValid(value)
-        const isUsageEmpty = Payloads.Validation.UsageType.mustBeEmpty === payload.usageType && !isValid(value)
+        let result = true
+        if (Payloads.Validation.UsageType.mandatory === payload.usageType) {
+            result = !isEmpty(value)
+        } else if (Payloads.Validation.UsageType.mustBeEmpty === payload.usageType) {
+            result = isEmpty(value)
+        }
+
         const templateVariables = this.evaluator.evaluateTemplateVariables(
             payload.errorMessage,
             dataContext,
             session.expressionContext,
         )
-        return payloadResultCreator.usage(payload, !(isUsageMandatory || isUsageEmpty), templateVariables)
+
+        logger.debug(() => this.describePayloadResult(payload, result, value))
+
+        return payloadResultCreator.usage(payload, result, templateVariables)
+    }
+
+    private describePayloadResult(payload: UsagePayload, result: boolean, value: unknown): string {
+        const resultDescription = this.describePayloadResultType(payload, result, value)
+        return `Evaluated '${payload.type}' to ${result}. ${resultDescription}.`
+    }
+
+    private describePayloadResultType(payload: UsagePayload, result: boolean, value: unknown): string {
+        switch (payload.usageType) {
+            case UsageType.mandatory:
+                return result
+                    ? `Field is mandatory and it has value '${ExpressionEvaluator.render(value)}'`
+                    : `Field is mandatory but it has no value`
+            case UsageType.mustBeEmpty:
+                return result
+                    ? `Field must be empty and it has no value`
+                    : `Field must be empty but it has value '${ExpressionEvaluator.render(value)}'`
+            default:
+                return ''
+        }
     }
 }

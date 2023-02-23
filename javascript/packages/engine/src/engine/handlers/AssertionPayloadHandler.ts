@@ -21,9 +21,9 @@ import { Payloads, Rule } from 'kraken-model'
 import { ExecutionSession } from '../ExecutionSession'
 import PayloadType = Payloads.PayloadType
 import AssertionPayload = Payloads.Validation.AssertionPayload
-import { expressionFactory } from '../runtime/expressions/ExpressionFactory'
 import { DataContext } from '../contexts/data/DataContext'
 import { payloadResultCreator } from '../results/PayloadResultCreator'
+import { logger } from '../../utils/DevelopmentLogger'
 
 /**
  * Payload handler implementation to process {@link AssertionPayload}s.
@@ -40,7 +40,7 @@ export class AssertionPayloadHandler implements RulePayloadHandler {
         session: ExecutionSession,
     ): AssertionPayloadResult {
         const expressionResult = this.evaluator.evaluate(
-            expressionFactory.fromExpression(payload.assertionExpression),
+            payload.assertionExpression,
             dataContext,
             session.expressionContext,
         )
@@ -50,6 +50,10 @@ export class AssertionPayloadHandler implements RulePayloadHandler {
             session.expressionContext,
         )
         if (ExpressionEvaluationResult.isSuccess(expressionResult)) {
+            logger.debug(
+                () =>
+                    `Evaluated '${payload.type}' expression '${payload.assertionExpression.expressionString}' to ${expressionResult.success}.`,
+            )
             return payloadResultCreator.assertion(payload, Boolean(expressionResult.success), templateVariables)
         }
         return payloadResultCreator.assertionFail(expressionResult)

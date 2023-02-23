@@ -21,7 +21,7 @@ import java.util.Map;
 import kraken.model.context.Cardinality;
 import kraken.model.context.PrimitiveFieldDataType;
 import kraken.runtime.engine.context.data.DataContext;
-import kraken.runtime.engine.context.data.ExternalDataReference;
+import kraken.runtime.engine.context.data.DataReference;
 import kraken.runtime.engine.dto.OverrideDependency;
 import kraken.runtime.expressions.KrakenExpressionEvaluator;
 import kraken.runtime.model.context.ContextField;
@@ -51,9 +51,9 @@ public class OverrideDependencyExtractor {
         }
 
         for(Dependency dependency : rule.getDependencies()) {
-            if(isCrossContextFieldDependency(dependency)) {
-                ExternalDataReference reference = dataContext.getExternalReferences().get(dependency.getContextName());
-                if(isCrossContextReferenceSingular(reference)) {
+            if(isFieldDependency(dependency)) {
+                DataReference reference = dataContext.getDataContextReferences().get(dependency.getContextName());
+                if(isReferenceSingular(reference)) {
                     ContextField contextField = reference.getDataContext().getContextDefinition().getFields().get(dependency.getFieldName());
                     if (isFieldSimplePrimitive(contextField)) {
                         Object value = krakenExpressionEvaluator.evaluateGetProperty(
@@ -71,11 +71,11 @@ public class OverrideDependencyExtractor {
         return overrideDependencies;
     }
 
-    private boolean isCrossContextFieldDependency(Dependency dependency) {
+    private boolean isFieldDependency(Dependency dependency) {
         return (dependency.isCcrDependency() || dependency.isSelfDependency()) && dependency.getFieldName() != null;
     }
 
-    private boolean isCrossContextReferenceSingular(ExternalDataReference reference) {
+    private boolean isReferenceSingular(DataReference reference) {
         return reference != null && reference.getCardinality() == Cardinality.SINGLE;
     }
 

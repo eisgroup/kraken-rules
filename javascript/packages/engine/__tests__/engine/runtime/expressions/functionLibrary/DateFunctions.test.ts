@@ -20,7 +20,11 @@ describe('Date Functions', () => {
     it('should create date from numbers', () => {
         expect(f.Date(2011, 12, 31)).k_toBeDateEqualTo(new Date('2011-12-31'))
         expect(f.Date('2011-12-31')).k_toBeDateEqualTo(new Date('2011-12-31'))
-        expect(() => f.Date('22011-12-31')).toThrow()
+        expect(f.Date('2011-11-11T00:00:00')).k_toBeDateEqualTo(new Date('2011-11-11'))
+        expect(f.Date(2017, 1, 1)).k_toBeDateEqualTo(f.Date(2017, 1, 1))
+        expect(f.Date(2018, 7, 1)).k_toBeDateEqualTo(f.Date(2018, 7, 1))
+        expect(() => f.Date('22011-11-11')).toThrow()
+        expect(() => f.Date('2011-11-1100:00:00')).toThrow()
         expect(() => f.Date(10000, 12, 31)).toThrow()
         expect(() => f.Date(2000, 13, 31)).toThrow()
         expect(() => f.Date(2000, 12, 33)).toThrow()
@@ -50,6 +54,23 @@ describe('Date Functions', () => {
         expect(() => f.GetYear(12)).toThrow()
         // @ts-expect-error testing negative case
         expect(() => f.GetYear('12')).toThrow()
+    })
+    it('should count number of days between', () => {
+        expect(f.NumberOfDaysBetween(f.Date(2018, 7, 1), f.Date(2018, 7, 10))).toBe(9)
+
+        expect(f.NumberOfDaysBetween(f.Date('2017-01-01'), f.Date('2018-07-01'))).toBe(546)
+        expect(f.NumberOfDaysBetween(f.Date(2017, 1, 1), f.Date(2018, 7, 1))).toBe(546)
+        expect(f.NumberOfDaysBetween(f.Date(2018, 7, 1), f.Date(2017, 1, 1))).toBe(546)
+
+        expect(f.NumberOfDaysBetween(f.Date(2018, 7, 10), f.Date(2018, 7, 1))).toBe(9)
+    })
+    it('should define is date between true', () => {
+        expect(f.IsDateBetween(new Date(2018, 7, 5), new Date(2018, 7, 1), new Date(2018, 7, 10))).toBe(true)
+        expect(f.IsDateBetween(new Date(2018, 7, 1), new Date(2018, 7, 1), new Date(2018, 7, 10))).toBe(true)
+        expect(f.IsDateBetween(new Date(2018, 7, 10), new Date(2018, 7, 1), new Date(2018, 7, 10))).toBe(true)
+    })
+    it('should define is date between false', () => {
+        expect(f.IsDateBetween(new Date(2018, 8, 5), new Date(2018, 7, 1), new Date(2018, 7, 10))).toBe(false)
     })
     it('should get number of months between', () => {
         expect(f.NumberOfMonthsBetween(f.Date(2011, 1, 15), f.Date(2011, 2, 15))).toBe(1)
@@ -134,6 +155,10 @@ describe('Date Functions', () => {
         expect(() => f.WithYear(date, 0)).toThrow()
         expect(() => f.WithYear(date, 10000)).toThrow()
     })
+    it('should change year in date and preserve time', () => {
+        const dateTime = new Date('2000-02-29T01:01:01Z')
+        expect(f.WithYear(dateTime, 1999)).k_toBeDateTimeEqualTo(new Date('1999-02-28T01:01:01Z'))
+    })
     it('should change month in date', () => {
         const date = new Date('2011-01-01')
         expect(f.WithMonth(date, 2)).k_toBeDateEqualTo(new Date('2011-02-01'))
@@ -149,6 +174,10 @@ describe('Date Functions', () => {
         expect(() => f.WithMonth(date, 0)).toThrow()
         expect(() => f.WithMonth(date, 13)).toThrow()
     })
+    it('should change month in date and preserve time', () => {
+        const dateTime = new Date('2011-03-30T23:33:33Z')
+        expect(f.WithMonth(dateTime, 2)).k_toBeDateTimeEqualTo(new Date('2011-02-28T23:33:33Z'))
+    })
     it('should change day in date', () => {
         const date = new Date('2011-01-01')
         expect(f.WithDay(date, 2)).k_toBeDateEqualTo(new Date('2011-01-02'))
@@ -163,6 +192,10 @@ describe('Date Functions', () => {
 
         const date2 = new Date(2000, 1, 28)
         expect(() => f.WithDay(date2, 30)).toThrow()
+    })
+    it('should change day in date and preserve time', () => {
+        const date = new Date('1999-03-31T23:33:33Z')
+        expect(f.WithDay(date, 10)).k_toBeDateTimeEqualTo(new Date('1999-03-10T23:33:33Z'))
     })
     it('should add days', () => {
         const date = new Date('2000-01-01')
@@ -184,22 +217,56 @@ describe('Date Functions', () => {
     })
     it('should add days to date and preserve time', () => {
         const date = new Date('2000-01-01T07:33:33Z')
-
         expect(f.PlusDays(date, 1)).k_toBeDateTimeEqualTo(new Date('2000-01-02T07:33:33Z'))
         expect(f.PlusDays(date, 32)).k_toBeDateTimeEqualTo(new Date('2000-02-02T07:33:33Z'))
+
+        const date2 = new Date('2005-03-09T01:01:01Z')
+        expect(f.PlusDays(date2, 30)).k_toBeDateTimeEqualTo(new Date('2005-04-08T01:01:01Z'))
+
+        const date3 = new Date('2005-04-08T23:33:33Z')
+        expect(f.PlusDays(date3, -30)).k_toBeDateTimeEqualTo(new Date('2005-03-09T23:33:33Z'))
     })
     it('should add months to date and preserve time', () => {
         const date = new Date('2000-01-30T07:33:33Z')
 
         expect(f.PlusMonths(date, 1)).k_toBeDateTimeEqualTo(new Date('2000-02-29T07:33:33Z'))
         expect(f.PlusMonths(date, 13)).k_toBeDateTimeEqualTo(new Date('2001-02-28T07:33:33Z'))
+
+        const date3 = new Date('2005-03-09T01:01:01Z')
+
+        expect(f.PlusMonths(date3, -12)).k_toBeDateTimeEqualTo(new Date('2004-03-09T01:01:01Z'))
+        expect(f.PlusMonths(date3, 1)).k_toBeDateTimeEqualTo(new Date('2005-04-09T01:01:01Z'))
+
+        const date2 = new Date('2005-03-09T23:33:33Z')
+
+        expect(f.PlusMonths(date2, -12)).k_toBeDateTimeEqualTo(new Date('2004-03-09T23:33:33Z'))
+        expect(f.PlusMonths(date2, 1)).k_toBeDateTimeEqualTo(new Date('2005-04-09T23:33:33Z'))
     })
     it('should add years to date and preserve time', () => {
         const date = new Date('2000-02-29T07:33:33Z')
 
         expect(f.PlusYears(date, 1)).k_toBeDateTimeEqualTo(new Date('2001-02-28T07:33:33Z'))
+        expect(f.PlusYears(date, -1)).k_toBeDateTimeEqualTo(new Date('1999-02-28T07:33:33Z'))
 
-        //GENESIS-222170
-        //expect(f.PlusYears(date, -1)).k_toBeDateTimeEqualTo(new Date('1999-02-28T07:33:33Z'))
+        const date2 = new Date('2004-02-29T01:01:01Z')
+
+        expect(f.PlusYears(date2, 1)).k_toBeDateTimeEqualTo(new Date('2005-02-28T01:01:01Z'))
+        expect(f.PlusYears(date2, -1)).k_toBeDateTimeEqualTo(new Date('2003-02-28T01:01:01Z'))
+
+        const date3 = new Date('2004-02-29T23:33:33Z')
+
+        expect(f.PlusYears(date3, 1)).k_toBeDateTimeEqualTo(new Date('2005-02-28T23:33:33Z'))
+        expect(f.PlusYears(date3, -1)).k_toBeDateTimeEqualTo(new Date('2003-02-28T23:33:33Z'))
+    })
+    it('should add years to date and preserve on new years eve', () => {
+        const date = new Date('2004-12-31T23:33:33Z')
+
+        expect(f.PlusYears(date, 1)).k_toBeDateTimeEqualTo(new Date('2005-12-31T23:33:33Z'))
+        expect(f.PlusYears(date, -1)).k_toBeDateTimeEqualTo(new Date('2003-12-31T23:33:33Z'))
+
+        const date2 = new Date('2005-01-01T01:01:01Z')
+
+        expect(f.PlusYears(date2, 1)).k_toBeDateTimeEqualTo(new Date('2006-01-01T01:01:01Z'))
+        expect(f.PlusYears(date2, -1)).k_toBeDateTimeEqualTo(new Date('2004-01-01T01:01:01Z'))
     })
 })

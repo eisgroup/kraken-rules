@@ -24,7 +24,7 @@ import kraken.TestRuleBuilder;
 import kraken.model.context.Cardinality;
 import kraken.model.context.PrimitiveFieldDataType;
 import kraken.runtime.engine.context.data.DataContext;
-import kraken.runtime.engine.context.data.ExternalDataReference;
+import kraken.runtime.engine.context.data.DataReference;
 import kraken.runtime.engine.dto.OverrideDependency;
 import kraken.runtime.expressions.KrakenExpressionEvaluator;
 import kraken.runtime.model.context.RuntimeContextDefinition;
@@ -159,31 +159,29 @@ public class OverrideDependencyExtractorTest {
     private DataContext context(
             String name,
             Collection<ContextField> fields,
-            Collection<ExternalDataReference> contextReferences
+            Collection<DataReference> contextReferences
     ) {
         DataContext dataContext = new DataContext();
         dataContext.setContextName(name);
         dataContext.setDataObject(
-                fields.stream().collect(Collectors.toMap(ContextField::getFieldPath, c -> c.getFieldPath() + "Value"))
+            fields.stream().collect(Collectors.toMap(ContextField::getFieldPath, c -> c.getFieldPath() + "Value"))
         );
-        dataContext.setExternalReferences(
-                contextReferences.stream().collect(Collectors.toMap(ExternalDataReference::getName, r -> r))
-        );
+        contextReferences.forEach(dataContext::updateReference);
         Map<String, ContextField> fieldMap = fields.stream().collect(Collectors.toMap(ContextField::getName, f -> f));
         dataContext.setContextDefinition(new RuntimeContextDefinition(name, Map.of(), fieldMap, List.of()));
         return dataContext;
     }
 
-    private ExternalDataReference ref(DataContext dataContext) {
+    private DataReference ref(DataContext dataContext) {
         return ref(dataContext, Cardinality.SINGLE);
     }
 
-    private ExternalDataReference ref(DataContext dataContext, Cardinality cardinality) {
+    private DataReference ref(DataContext dataContext, Cardinality cardinality) {
         return ref(dataContext.getContextName(), dataContext, cardinality);
     }
 
-    private ExternalDataReference ref(String refName, DataContext dataContext, Cardinality cardinality) {
-        return new ExternalDataReference(refName, List.of(dataContext), cardinality);
+    private DataReference ref(String refName, DataContext dataContext, Cardinality cardinality) {
+        return new DataReference(refName, List.of(dataContext), cardinality);
     }
 
     private RuntimeRule rule(Dependency... dependencies) {

@@ -20,7 +20,6 @@ import { Contexts } from 'kraken-model'
 import { ErrorCode, KrakenRuntimeError } from '../../error/KrakenRuntimeError'
 import { DataContext } from '../contexts/data/DataContext'
 import { ExpressionEvaluator } from '../runtime/expressions/ExpressionEvaluator'
-import { expressionFactory } from '../runtime/expressions/ExpressionFactory'
 import { Expressions } from '../runtime/expressions/Expressions'
 
 export interface RuleOverrideContextExtractor {
@@ -60,17 +59,17 @@ export function extractOverrideDependencies(
     dependencies: RuleOverride.OverrideDependencyInfo[],
     dataContext: DataContext,
 ): Record<string, RuleOverride.OverrideDependency> {
-    const singularRefs = dataContext.externalReferenceObjects.singleDataContexts
     const overrideDependencies: RuleOverride.OverrideDependency[] = []
     const dependenciesKeys = new Set()
     for (const dependency of dependencies) {
         if (dependency.contextFieldName === undefined) {
             continue
         }
-        const ref = singularRefs[dependency.contextName]
-        if (!ref) {
+        const dataReference = dataContext.dataContextReferences[dependency.contextName]
+        if (!dataReference || dataReference.cardinality !== 'SINGLE' || !dataReference.dataContexts.length) {
             continue
         }
+        const ref = dataReference.dataContexts[0]
         const type = ref.definitionProjection[dependency.contextFieldName].fieldType as Contexts.PrimitiveDataType
         if (!Contexts.fieldTypeChecker.isPrimitive(type)) {
             continue
@@ -101,10 +100,10 @@ export function extractAttributeValue(
     dataContext: DataContext,
     targetPath: string,
 ): Contexts.KrakenPrimitive | undefined {
-    const expression = expressionFactory.fromPath(Expressions.createPathResolver(dataContext)(targetPath))
-    const result = ExpressionEvaluator.DEFAULT.evaluate(expression, dataContext)
+    const path = Expressions.createPathResolver(dataContext)(targetPath)
+    const result = ExpressionEvaluator.DEFAULT.evaluateGet(path, dataContext.dataObject)
     if (ExpressionEvaluationResult.isError(result)) {
-        throw new KrakenRuntimeError(ErrorCode.EXTRACT_EXPRESSION_FAILED, `Failed to extract attribute ${targetPath}`)
+        throw new KrakenRuntimeError(ErrorCode.EXTRACT_EXPRESSION_FAILED, `Failed to extract attribute ${path}`)
     }
     return result.success as Contexts.KrakenPrimitive | undefined
 }

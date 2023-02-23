@@ -95,13 +95,13 @@ beforeEach(() => {
                 .setContext(Policy.name)
                 .setName('Eval_Default')
                 .setTargetPath(Policy.fields.policyNumber.name)
-                .setPayload(PayloadBuilder.default().to('P0001'))
+                .setPayload(PayloadBuilder.default().to('"P0001"'))
                 .build(),
             new RulesBuilder()
                 .setContext(Policy.name)
                 .setName('Eval_Assert')
                 .setTargetPath(Policy.fields.policyNumber.name)
-                .setPayload(PayloadBuilder.asserts().that('policyNumber == "P0001"'))
+                .setPayload(PayloadBuilder.asserts().that('__dataObject__.policyNumber == "P0001"'))
                 .build(),
             new RulesBuilder()
                 .setContext(Policy.name)

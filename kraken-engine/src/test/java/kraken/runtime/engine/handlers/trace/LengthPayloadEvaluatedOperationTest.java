@@ -44,7 +44,7 @@ public class LengthPayloadEvaluatedOperationTest {
         when(lengthPayload.getLength()).thenReturn(10);
         when(lengthPayload.getType()).thenReturn(PayloadType.LENGTH);
 
-        var lengthPayloadOp = new LengthPayloadEvaluatedOperation(lengthPayload, "failingString", false);
+        var lengthPayloadOp = new LengthPayloadEvaluatedOperation(lengthPayload, 13, false);
 
         assertThat(lengthPayloadOp.describe(),
             is("Evaluated 'LengthPayload' to false. Expected length '10'. Actual length '13'"));
@@ -55,7 +55,7 @@ public class LengthPayloadEvaluatedOperationTest {
         when(lengthPayload.getLength()).thenReturn(100);
         when(lengthPayload.getType()).thenReturn(PayloadType.LENGTH);
 
-        var lengthPayloadOp = new LengthPayloadEvaluatedOperation(lengthPayload, "passingString", true);
+        var lengthPayloadOp = new LengthPayloadEvaluatedOperation(lengthPayload, 13, true);
 
         assertThat(lengthPayloadOp.describe(),
             is("Evaluated 'LengthPayload' to true. Expected length '100'. Actual length '13'"));

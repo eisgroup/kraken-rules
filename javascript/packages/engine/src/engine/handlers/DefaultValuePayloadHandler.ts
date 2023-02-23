@@ -21,7 +21,6 @@ import { ExecutionSession } from '../ExecutionSession'
 import { payloadResultCreator } from '../results/PayloadResultCreator'
 import { ValueChangedEvent } from '../results/ValueChangedEvent'
 import { ExpressionEvaluator } from '../runtime/expressions/ExpressionEvaluator'
-import { expressionFactory } from '../runtime/expressions/ExpressionFactory'
 import { Expressions } from '../runtime/expressions/Expressions'
 import { Moneys } from '../runtime/expressions/math/Moneys'
 import { RulePayloadHandler } from './RulePayloadHandler'
@@ -69,8 +68,7 @@ export class DefaultValuePayloadHandler implements RulePayloadHandler {
 
         const value = this.resolveCurrentFieldValue(targetPath, dataCtx)
 
-        const expression = expressionFactory.fromExpression(payload.valueExpression)
-        const expressionResult = this.evaluator.evaluate(expression, dataCtx, session.expressionContext)
+        const expressionResult = this.evaluator.evaluate(payload.valueExpression, dataCtx, session.expressionContext)
         if (ExpressionEvaluationResult.isError(expressionResult)) {
             return payloadResultCreator.defaultFail(expressionResult)
         }
@@ -98,16 +96,23 @@ export class DefaultValuePayloadHandler implements RulePayloadHandler {
             return payloadResultCreator.defaultNoEvents()
         }
 
+        logger.debug(
+            () =>
+                `Evaluated '${payload.type}'. Before value: '${ExpressionEvaluator.render(
+                    value,
+                )}'. After value: '${ExpressionEvaluator.render(updatedValue)}'.`,
+        )
+
         return payloadResultCreator.default([
             new ValueChangedEvent(targetPath, dataCtx.contextName, dataCtx.contextId, updatedValue, value),
         ])
     }
 
-    private resolveCurrentFieldValue(targetPath: string, dataCtx: DataContext): unknown {
-        const targetExpression = expressionFactory.fromPath(targetPath)
-        const result = this.evaluator.evaluate(targetExpression, dataCtx)
+    private resolveCurrentFieldValue(targetPath: string, dataContext: DataContext): unknown {
+        const path = Expressions.createPathResolver(dataContext)(targetPath)
+        const result = this.evaluator.evaluateGet(path, dataContext.dataObject)
         if (ExpressionEvaluationResult.isError(result)) {
-            throw new Error(`Failed to extract attribute ${targetPath}`)
+            throw new Error(`Failed to extract attribute '${targetPath}'`)
         }
         return result.success
     }
@@ -187,7 +192,7 @@ export class DefaultValuePayloadHandler implements RulePayloadHandler {
         }' because value type is not assignable to field type '${this.toTypeSymbol(
             field,
         )}'. Rule will be silently ignored.`
-        logger.warning(message)
+        logger.warning(() => message)
         return ExpressionEvaluationResult.expressionError({ message, severity: 'critical' })
     }
 

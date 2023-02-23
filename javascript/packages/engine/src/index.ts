@@ -44,7 +44,6 @@ export { ValueChangedEvent } from './engine/results/ValueChangedEvent'
 export { conditionEvaluationTypeChecker } from './dto/DefaultConditionEvaluationResult'
 
 export { DataContext } from './engine/contexts/data/DataContext'
-export { DataContextTypes } from './engine/contexts/data/DataContext.types'
 
 // field metadata reducer
 export * from './engine/results/field_metadata_reducer/FieldErrorMessage'

@@ -28,13 +28,7 @@ export class DataContextUpdaterImpl implements DataContextUpdater {
     update(dataContext: DataContext, dependency: DataContextDependency): void {
         const extractionInfo = this.getExtractionInfo(dataContext, dependency.contextName)
         const refs = this.resolveReferences(extractionInfo.extractionRoot, extractionInfo.extractionPath)
-        if (refs.length) {
-            if (extractionInfo.cardinality === 'SINGLE') {
-                dataContext.externalReferenceObjects.addSingle(dependency.contextName, refs[0])
-            } else {
-                dataContext.externalReferenceObjects.addMultiple(dependency.contextName, refs)
-            }
-        }
+        dataContext.updateReference(dependency.contextName, extractionInfo.cardinality, refs)
     }
 
     private getExtractionInfo(dataContext: DataContext, dependencyName: string): ReferenceExtractionInfo {

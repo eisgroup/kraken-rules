@@ -15,6 +15,7 @@
  */
 
 import { Condition, Payloads, Dependency, Rule, Expressions, DimensionSet } from 'kraken-model'
+import ExpressionVariable = Expressions.ExpressionVariable
 
 export class RulesBuilder {
     private name?: string
@@ -46,11 +47,12 @@ export class RulesBuilder {
         return this
     }
 
-    setCondition(conditionString: string): RulesBuilder {
+    setCondition(conditionString: string, expressionVariables?: ExpressionVariable[]): RulesBuilder {
         this.condition = {
             expression: {
                 expressionType: 'COMPLEX',
                 expressionString: conditionString,
+                expressionVariables,
             } as Expressions.ComplexExpression,
         }
         return this

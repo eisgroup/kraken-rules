@@ -17,8 +17,8 @@
 
 import { mock } from '../../../mock'
 import { TestProduct } from 'kraken-test-product'
-import { ComplexExpression } from '../../../../src/engine/runtime/expressions/RuntimeExpression'
 import { ExpressionEvaluationResult } from 'kraken-engine-api'
+import { Expressions } from 'kraken-model'
 
 const { evaluator } = mock
 
@@ -28,10 +28,10 @@ export const q = (value: string) => {
     return modValue
 }
 
-function complex(expression: string): ComplexExpression {
+function complex(expressionString: string): Expressions.Expression {
     return {
-        type: 'ComplexExpression',
-        expression,
+        expressionType: 'COMPLEX',
+        expressionString,
     }
 }
 

@@ -44,6 +44,7 @@ Assert Length <payload.length><validationMessage(payload)><overridable(payload)>
 
 valueListPayload(payload) ::= <<
 Assert In <payload.valueList>
+<validationMessage(payload)><overridable(payload)>
 >>
 
 defaultValuePayload(payload) ::= <<

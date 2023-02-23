@@ -19,7 +19,6 @@ import ContextDefinition = Contexts.ContextDefinition
 import { DataContextBuilder } from './DataContextBuilder'
 import { requireDefinedValue } from '../../../utils/Utils'
 import { ExpressionEvaluator } from '../../runtime/expressions/ExpressionEvaluator'
-import { expressionFactory } from '../../runtime/expressions/ExpressionFactory'
 import { ExpressionEvaluationResult } from 'kraken-engine-api'
 import { DataContext } from './DataContext'
 
@@ -60,8 +59,8 @@ export class ExtractedChildDataContextBuilder {
     private extract(info: ContextChildExtractionInfo): object | object[] {
         const children = requireDefinedValue(info.parentContextDefinition.children, 'Children cannot be null')
         const navigation = children[info.childContextName]
-        const expressionResult = this.expressionEvaluator.evaluate(
-            expressionFactory.fromNavigation(navigation),
+        const expressionResult = this.expressionEvaluator.evaluateNavigationExpression(
+            navigation,
             info.parentDataContext,
         )
 

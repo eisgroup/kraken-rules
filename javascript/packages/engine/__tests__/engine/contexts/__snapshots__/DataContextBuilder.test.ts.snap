@@ -4,6 +4,15 @@ exports[`DataContextBuilder should build from extracted array first element 1`] 
 DataContext {
   "contextId": "3",
   "contextName": "Party",
+  "dataContextReferences": Object {
+    "Party": Object {
+      "cardinality": "SINGLE",
+      "dataContexts": Array [
+        [Circular],
+      ],
+      "name": "Party",
+    },
+  },
   "dataObject": Object {
     "cd": "Party",
     "id": "3",
@@ -32,36 +41,40 @@ DataContext {
       "name": "roles",
     },
   },
-  "externalReferenceObjects": ExternalReferences {
-    "references": Object {
-      "Party": Object {
-        "cd": "Party",
-        "id": "3",
-        "personInfo": Object {
-          "cd": "PersonInfo",
-          "id": "4",
-        },
-        "roles": Array [
-          Object {
-            "cd": "PartyRole",
-            "id": "5",
-          },
-        ],
-      },
-    },
-    "singleDataContexts": Object {
-      "Party": [Circular],
-    },
-  },
   "id": "Party:3",
   "info": Object {
     "getContextInstanceId": [Function],
     "getContextName": [Function],
   },
   "inheritedContextNames": Array [],
+  "objectReferences": Object {
+    "Party": Object {
+      "cd": "Party",
+      "id": "3",
+      "personInfo": Object {
+        "cd": "PersonInfo",
+        "id": "4",
+      },
+      "roles": Array [
+        Object {
+          "cd": "PartyRole",
+          "id": "5",
+        },
+      ],
+    },
+  },
   "parent": DataContext {
     "contextId": "0",
     "contextName": "Policy",
+    "dataContextReferences": Object {
+      "Policy": Object {
+        "cardinality": "SINGLE",
+        "dataContexts": Array [
+          [Circular],
+        ],
+        "name": "Policy",
+      },
+    },
     "dataObject": Object {
       "accessTrackInfo": Object {
         "cd": "AccessTrackInfo",
@@ -309,78 +322,73 @@ DataContext {
         "name": "versionDescription",
       },
     },
-    "externalReferenceObjects": ExternalReferences {
-      "references": Object {
-        "Policy": Object {
-          "accessTrackInfo": Object {
-            "cd": "AccessTrackInfo",
-            "id": "9",
-          },
-          "billingInfo": Object {
-            "cd": "BillingInfo",
-            "creditCardInfo": Object {
-              "cd": "CreditCardInfo",
-              "id": "2",
-            },
-            "id": "1",
-          },
-          "cd": "Policy",
-          "id": "0",
-          "insured": Object {
-            "addressInfo": Object {
-              "cd": "AddressInfo",
-              "id": "iai1",
-            },
-            "cd": "Insured",
-            "id": "insured-1-id",
-          },
-          "parties": Array [
-            Object {
-              "cd": "Party",
-              "id": "3",
-              "personInfo": Object {
-                "cd": "PersonInfo",
-                "id": "4",
-              },
-              "roles": Array [
-                Object {
-                  "cd": "PartyRole",
-                  "id": "5",
-                },
-              ],
-            },
-          ],
-          "policyDetail": Object {
-            "cd": "PolicyDetail",
-            "id": "11",
-          },
-          "riskItems": Array [
-            Object {
-              "addressInfo": Object {
-                "cd": "AddressInfo",
-                "id": "7",
-              },
-              "cd": "Vehicle",
-              "id": "6",
-            },
-          ],
-          "termDetails": Object {},
-          "transactionDetails": Object {
-            "cd": "TransactionDetails",
-            "id": "8",
-          },
-        },
-      },
-      "singleDataContexts": Object {
-        "Policy": [Circular],
-      },
-    },
     "id": "Policy:0",
     "info": Object {
       "getContextInstanceId": [Function],
       "getContextName": [Function],
     },
     "inheritedContextNames": Array [],
+    "objectReferences": Object {
+      "Policy": Object {
+        "accessTrackInfo": Object {
+          "cd": "AccessTrackInfo",
+          "id": "9",
+        },
+        "billingInfo": Object {
+          "cd": "BillingInfo",
+          "creditCardInfo": Object {
+            "cd": "CreditCardInfo",
+            "id": "2",
+          },
+          "id": "1",
+        },
+        "cd": "Policy",
+        "id": "0",
+        "insured": Object {
+          "addressInfo": Object {
+            "cd": "AddressInfo",
+            "id": "iai1",
+          },
+          "cd": "Insured",
+          "id": "insured-1-id",
+        },
+        "parties": Array [
+          Object {
+            "cd": "Party",
+            "id": "3",
+            "personInfo": Object {
+              "cd": "PersonInfo",
+              "id": "4",
+            },
+            "roles": Array [
+              Object {
+                "cd": "PartyRole",
+                "id": "5",
+              },
+            ],
+          },
+        ],
+        "policyDetail": Object {
+          "cd": "PolicyDetail",
+          "id": "11",
+        },
+        "riskItems": Array [
+          Object {
+            "addressInfo": Object {
+              "cd": "AddressInfo",
+              "id": "7",
+            },
+            "cd": "Vehicle",
+            "id": "6",
+          },
+        ],
+        "termDetails": Object {},
+        "transactionDetails": Object {
+          "cd": "TransactionDetails",
+          "id": "8",
+        },
+      },
+    },
     "parent": undefined,
   },
 }
@@ -390,6 +398,15 @@ exports[`DataContextBuilder should build from extracted object 1`] = `
 DataContext {
   "contextId": "iai1",
   "contextName": "AddressInfo",
+  "dataContextReferences": Object {
+    "AddressInfo": Object {
+      "cardinality": "SINGLE",
+      "dataContexts": Array [
+        [Circular],
+      ],
+      "name": "AddressInfo",
+    },
+  },
   "dataObject": Object {
     "cd": "AddressInfo",
     "id": "iai1",
@@ -432,26 +449,30 @@ DataContext {
       "name": "street",
     },
   },
-  "externalReferenceObjects": ExternalReferences {
-    "references": Object {
-      "AddressInfo": Object {
-        "cd": "AddressInfo",
-        "id": "iai1",
-      },
-    },
-    "singleDataContexts": Object {
-      "AddressInfo": [Circular],
-    },
-  },
   "id": "AddressInfo:iai1",
   "info": Object {
     "getContextInstanceId": [Function],
     "getContextName": [Function],
   },
   "inheritedContextNames": Array [],
+  "objectReferences": Object {
+    "AddressInfo": Object {
+      "cd": "AddressInfo",
+      "id": "iai1",
+    },
+  },
   "parent": DataContext {
     "contextId": "insured-1-id",
     "contextName": "Insured",
+    "dataContextReferences": Object {
+      "Insured": Object {
+        "cardinality": "SINGLE",
+        "dataContexts": Array [
+          [Circular],
+        ],
+        "name": "Insured",
+      },
+    },
     "dataObject": Object {
       "addressInfo": Object {
         "cd": "AddressInfo",
@@ -486,30 +507,34 @@ DataContext {
         "name": "name",
       },
     },
-    "externalReferenceObjects": ExternalReferences {
-      "references": Object {
-        "Insured": Object {
-          "addressInfo": Object {
-            "cd": "AddressInfo",
-            "id": "iai1",
-          },
-          "cd": "Insured",
-          "id": "insured-1-id",
-        },
-      },
-      "singleDataContexts": Object {
-        "Insured": [Circular],
-      },
-    },
     "id": "Insured:insured-1-id",
     "info": Object {
       "getContextInstanceId": [Function],
       "getContextName": [Function],
     },
     "inheritedContextNames": Array [],
+    "objectReferences": Object {
+      "Insured": Object {
+        "addressInfo": Object {
+          "cd": "AddressInfo",
+          "id": "iai1",
+        },
+        "cd": "Insured",
+        "id": "insured-1-id",
+      },
+    },
     "parent": DataContext {
       "contextId": "0",
       "contextName": "Policy",
+      "dataContextReferences": Object {
+        "Policy": Object {
+          "cardinality": "SINGLE",
+          "dataContexts": Array [
+            [Circular],
+          ],
+          "name": "Policy",
+        },
+      },
       "dataObject": Object {
         "accessTrackInfo": Object {
           "cd": "AccessTrackInfo",
@@ -757,78 +782,73 @@ DataContext {
           "name": "versionDescription",
         },
       },
-      "externalReferenceObjects": ExternalReferences {
-        "references": Object {
-          "Policy": Object {
-            "accessTrackInfo": Object {
-              "cd": "AccessTrackInfo",
-              "id": "9",
-            },
-            "billingInfo": Object {
-              "cd": "BillingInfo",
-              "creditCardInfo": Object {
-                "cd": "CreditCardInfo",
-                "id": "2",
-              },
-              "id": "1",
-            },
-            "cd": "Policy",
-            "id": "0",
-            "insured": Object {
-              "addressInfo": Object {
-                "cd": "AddressInfo",
-                "id": "iai1",
-              },
-              "cd": "Insured",
-              "id": "insured-1-id",
-            },
-            "parties": Array [
-              Object {
-                "cd": "Party",
-                "id": "3",
-                "personInfo": Object {
-                  "cd": "PersonInfo",
-                  "id": "4",
-                },
-                "roles": Array [
-                  Object {
-                    "cd": "PartyRole",
-                    "id": "5",
-                  },
-                ],
-              },
-            ],
-            "policyDetail": Object {
-              "cd": "PolicyDetail",
-              "id": "11",
-            },
-            "riskItems": Array [
-              Object {
-                "addressInfo": Object {
-                  "cd": "AddressInfo",
-                  "id": "7",
-                },
-                "cd": "Vehicle",
-                "id": "6",
-              },
-            ],
-            "termDetails": Object {},
-            "transactionDetails": Object {
-              "cd": "TransactionDetails",
-              "id": "8",
-            },
-          },
-        },
-        "singleDataContexts": Object {
-          "Policy": [Circular],
-        },
-      },
       "id": "Policy:0",
       "info": Object {
         "getContextInstanceId": [Function],
         "getContextName": [Function],
       },
       "inheritedContextNames": Array [],
+      "objectReferences": Object {
+        "Policy": Object {
+          "accessTrackInfo": Object {
+            "cd": "AccessTrackInfo",
+            "id": "9",
+          },
+          "billingInfo": Object {
+            "cd": "BillingInfo",
+            "creditCardInfo": Object {
+              "cd": "CreditCardInfo",
+              "id": "2",
+            },
+            "id": "1",
+          },
+          "cd": "Policy",
+          "id": "0",
+          "insured": Object {
+            "addressInfo": Object {
+              "cd": "AddressInfo",
+              "id": "iai1",
+            },
+            "cd": "Insured",
+            "id": "insured-1-id",
+          },
+          "parties": Array [
+            Object {
+              "cd": "Party",
+              "id": "3",
+              "personInfo": Object {
+                "cd": "PersonInfo",
+                "id": "4",
+              },
+              "roles": Array [
+                Object {
+                  "cd": "PartyRole",
+                  "id": "5",
+                },
+              ],
+            },
+          ],
+          "policyDetail": Object {
+            "cd": "PolicyDetail",
+            "id": "11",
+          },
+          "riskItems": Array [
+            Object {
+              "addressInfo": Object {
+                "cd": "AddressInfo",
+                "id": "7",
+              },
+              "cd": "Vehicle",
+              "id": "6",
+            },
+          ],
+          "termDetails": Object {},
+          "transactionDetails": Object {
+            "cd": "TransactionDetails",
+            "id": "8",
+          },
+        },
+      },
       "parent": undefined,
     },
   },

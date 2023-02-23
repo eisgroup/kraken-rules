@@ -46,7 +46,7 @@ describe('RuleOverride', () => {
             field: Policy.fields.policyNumber.name,
             value: 'P01',
         })
-        policy.externalReferenceObjects.addSingle('AddressInfo', address)
+        policy.updateReference('AddressInfo', 'SINGLE', [address])
         const overrideDependencies = extractOverrideDependencies(createOverrideDependencyInfos(dependency), policy)
 
         expect(Object.keys(overrideDependencies)).toHaveLength(1)
@@ -68,7 +68,7 @@ describe('RuleOverride', () => {
             field: Policy.fields.policyNumber.name,
             value: 'P01',
         })
-        policy.externalReferenceObjects.addSingle('AddressInfo', address)
+        policy.updateReference('AddressInfo', 'SINGLE', [address])
         const overrideDependencies = extractOverrideDependencies(
             createOverrideDependencyInfos({ name: AddressInfo.name }),
             policy,
@@ -88,7 +88,7 @@ describe('RuleOverride', () => {
             field: Policy.fields.policyNumber.name,
             value: 'P01',
         })
-        policy.externalReferenceObjects.addSingle('AddressInfo', address)
+        policy.updateReference('AddressInfo', 'SINGLE', [address])
         const overrideDependencies = extractOverrideDependencies(createOverrideDependencyInfos(dependency), policy)
 
         expect(Object.keys(overrideDependencies)).toHaveLength(0)
@@ -105,7 +105,7 @@ describe('RuleOverride', () => {
             field: Policy.fields.policyNumber.name,
             value: 'P01',
         })
-        policy.externalReferenceObjects.addMultiple('AddressInfo', [address])
+        policy.updateReference('AddressInfo', 'MULTIPLE', [address])
         const overrideDependencies = extractOverrideDependencies(createOverrideDependencyInfos(dependency), policy)
 
         expect(Object.keys(overrideDependencies)).toHaveLength(0)
@@ -136,9 +136,9 @@ describe('RuleOverride', () => {
             field: Policy.fields.policyNumber.name,
             value: 'P01',
         })
-        policy.externalReferenceObjects.addMultiple('AddressInfo', [address])
-        policy.externalReferenceObjects.addSingle('COLLCoverage', cOLLCoverage)
-        policy.externalReferenceObjects.addSingle('CreditCardInfo', creditCard)
+        policy.updateReference('AddressInfo', 'MULTIPLE', [address])
+        policy.updateReference('COLLCoverage', 'SINGLE', [cOLLCoverage])
+        policy.updateReference('CreditCardInfo', 'SINGLE', [creditCard])
         const overrideDependencies = extractOverrideDependencies(deps, policy)
 
         expect(Object.keys(overrideDependencies)).toHaveLength(2)
@@ -171,9 +171,9 @@ describe('RuleOverride', () => {
             field: Policy.fields.policyNumber.name,
             value: 'P01',
         })
-        policy.externalReferenceObjects.addMultiple('AddressInfo', [address])
-        policy.externalReferenceObjects.addSingle('COLLCoverage', cOLLCoverage)
-        policy.externalReferenceObjects.addSingle('CreditCardInfo', creditCard)
+        policy.updateReference('AddressInfo', 'MULTIPLE', [address])
+        policy.updateReference('COLLCoverage', 'SINGLE', [cOLLCoverage])
+        policy.updateReference('CreditCardInfo', 'SINGLE', [creditCard])
         const overrideDependencies = extractOverrideDependencies(depInfos, policy)
 
         expect(Object.keys(overrideDependencies)).toHaveLength(2)

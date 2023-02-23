@@ -16,8 +16,8 @@
 
 import { ExpressionEvaluationResult } from 'kraken-engine-api'
 import { mock } from '../../../mock'
-import { ComplexExpression } from '../../../../src/engine/runtime/expressions/RuntimeExpression'
 import { DataContext } from '../../../../src/engine/contexts/data/DataContext'
+import { Expressions } from 'kraken-model'
 
 const { evaluator } = mock
 
@@ -33,10 +33,10 @@ function unwrap(expressionResult: ExpressionEvaluationResult.Result): Date {
     return new Date(expressionResult.success as string)
 }
 
-function complex(expression: string): ComplexExpression {
+function complex(expression: string): Expressions.Expression {
     return {
-        type: 'ComplexExpression',
-        expression,
+        expressionType: 'COMPLEX',
+        expressionString: expression,
     }
 }
 

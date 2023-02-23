@@ -80,7 +80,9 @@ export class OrderedEvaluationLoop {
 
         this.validateDefaultsOnOneField(results)
 
-        logger.info({ results })
+        logger.info(() => {
+            return { results }
+        }, true)
         return new DefaultEntryPointResult(results)
     }
 
@@ -89,11 +91,28 @@ export class OrderedEvaluationLoop {
         provider: ContextDataProvider,
         session: ExecutionSession,
     ): RuleOnInstanceEvaluationResult[] {
-        logger.group('Default rules evaluation')
         const defaultRules = entryPointEvaluation.rules.filter(r => r.payload.type === PayloadType.DEFAULT)
-        const results = this.doEvaluateDefaultRules(defaultRules, entryPointEvaluation.fieldOrder, provider, session)
-        logger.groupEnd('Default rules evaluation')
-        return results
+
+        return logger.groupDebug(
+            () => 'Evaluating default rules',
+            () => this.doEvaluateDefaultRules(defaultRules, entryPointEvaluation.fieldOrder, provider, session),
+            results => this.describeDefaultRuleResults(defaultRules, results),
+        )
+    }
+
+    private describeDefaultRuleResults(defaultRules: Rule[], results: RuleOnInstanceEvaluationResult[]): string {
+        return (
+            'Evaluated default rules.\n' +
+            defaultRules
+                .map(rule => {
+                    const count = results.filter(r => r.result.ruleInfo.ruleName === rule.name).length
+                    return (
+                        `Evaluated rule '${rule.name}' on a total of ${count} instances.` +
+                        (count === 0 ? ' Evaluation status - UNUSED.' : '')
+                    )
+                })
+                .join('\n')
+        )
     }
 
     private doEvaluateDefaultRules(
@@ -122,7 +141,17 @@ export class OrderedEvaluationLoop {
         defaultRules: Rule[],
         provider: ContextDataProvider,
     ): Record<string, FieldEvaluation> {
-        logger.group('Context extraction')
+        return logger.groupDebug(
+            () => 'Context extraction',
+            () => this.doBuildDefaultRuleEvaluations(defaultRules, provider),
+            () => 'Context extraction',
+        )
+    }
+
+    private doBuildDefaultRuleEvaluations(
+        defaultRules: Rule[],
+        provider: ContextDataProvider,
+    ): Record<string, FieldEvaluation> {
         const defaultRuleEvaluations: Record<string, FieldEvaluation> = {}
         for (const rule of defaultRules) {
             for (const dataContext of this.resolveContexts(rule, provider)) {
@@ -140,7 +169,6 @@ export class OrderedEvaluationLoop {
                 })
             }
         }
-        logger.groupEnd('Context extraction')
         return defaultRuleEvaluations
     }
 
@@ -153,10 +181,11 @@ export class OrderedEvaluationLoop {
         let appliedRuleEvaluation: RuleEvaluation | undefined = undefined
         for (const evaluation of priorityOrderedEvaluations) {
             if (appliedRuleEvaluation && appliedRuleEvaluation.priority > evaluation.priority) {
-                const fieldId = this.toFieldId(evaluation.dataContext, evaluation.rule.targetPath)
-                logger.debug(
-                    `Suppressing rule '${evaluation.rule.name}' with priority '${evaluation.priority}' on ${fieldId} because rule '${appliedRuleEvaluation.rule.name}' with higher priority '${appliedRuleEvaluation.priority}' was applied. Evaluation status - UNUSED.`,
-                )
+                const appliedEvaluation = appliedRuleEvaluation
+                logger.debug(() => {
+                    const fieldId = this.toFieldId(evaluation.dataContext, evaluation.rule.targetPath)
+                    return `Suppressing rule '${evaluation.rule.name}' with priority '${evaluation.priority}' on ${fieldId} because rule '${appliedEvaluation.rule.name}' with higher priority '${appliedEvaluation.priority}' was applied. Evaluation status - UNUSED.`
+                })
                 continue
             }
 
@@ -175,16 +204,10 @@ export class OrderedEvaluationLoop {
         provider: ContextDataProvider,
         session: ExecutionSession,
     ): RuleOnInstanceEvaluationResult[] {
-        logger.group('Other rules evaluation')
-
-        const results = entryPointEvaluation.rules
+        return entryPointEvaluation.rules
             .filter(r => r.payload.type !== PayloadType.DEFAULT)
             .map(rule => this.evaluateRule(rule, provider, session))
             .reduce((p, n) => p.concat(n), [])
-
-        logger.groupEnd('Other rules evaluation')
-
-        return results
     }
 
     private evaluateRule(
@@ -192,19 +215,23 @@ export class OrderedEvaluationLoop {
         provider: ContextDataProvider,
         session: ExecutionSession,
     ): RuleOnInstanceEvaluationResult[] {
-        logger.group(`Rule evaluation: ${rule.name}`)
-
-        const results = this.resolveContexts(rule, provider)
-            .map(dataContext => <RuleEvaluation>{ rule, dataContext })
-            .map(evaluation => this.evaluateRulePayload(evaluation, session, false))
-
-        logger.debug(
-            `Evaluated rule ${rule.name} on a total of ${results.length} instances.` +
+        return logger.groupDebug(
+            () => `Evaluating rule '${rule.name}'`,
+            () => this.doEvaluateRule(rule, provider, session),
+            results =>
+                `Evaluated rule '${rule.name}' on a total of ${results.length} instances.` +
                 (results.length === 0 ? ' Evaluation status - UNUSED.' : ''),
         )
-        logger.groupEnd(`Rule evaluation: ${rule.name}`)
+    }
 
-        return results
+    private doEvaluateRule(
+        rule: Rule,
+        provider: ContextDataProvider,
+        session: ExecutionSession,
+    ): RuleOnInstanceEvaluationResult[] {
+        return this.resolveContexts(rule, provider)
+            .map(dataContext => <RuleEvaluation>{ rule, dataContext })
+            .map(evaluation => this.evaluateRulePayload(evaluation, session, false))
     }
 
     private evaluateRulePayload(
@@ -212,25 +239,40 @@ export class OrderedEvaluationLoop {
         session: ExecutionSession,
         prioritizedEvaluation: boolean,
     ): RuleOnInstanceEvaluationResult {
-        const result: RuleOnInstanceEvaluationResult = {
+        return logger.groupDebug(
+            () => this.describeRuleOnInstanceEvaluation(evaluation, prioritizedEvaluation),
+            () => this.doEvaluateRulePayload(evaluation, session),
+            result => this.describeRuleOnInstanceEvaluationResult(evaluation, result),
+        )
+    }
+
+    private doEvaluateRulePayload(
+        evaluation: RuleEvaluation,
+        session: ExecutionSession,
+    ): RuleOnInstanceEvaluationResult {
+        return {
             result: this.rulePayloadProcessor.processRule(evaluation, session),
             dataContext: evaluation.dataContext,
         }
+    }
 
+    private describeRuleOnInstanceEvaluation(evaluation: RuleEvaluation, prioritizedEvaluation: boolean): string {
         const fieldId = this.toFieldId(evaluation.dataContext, evaluation.rule.targetPath)
-        const evaluationStatus = this.resolveEvaluationStatus(result)
-
         if (evaluation.rule.payload.type === PayloadType.DEFAULT && prioritizedEvaluation) {
-            logger.debug(
-                `Evaluated rule '${evaluation.rule.name}' on ${fieldId} with priority ${evaluation.priority}. Evaluation status - ${evaluationStatus}.`,
-            )
+            return `Evaluating rule '${evaluation.rule.name}' on ${fieldId} with priority ${evaluation.priority}`
         } else {
-            logger.debug(
-                `Evaluated rule '${evaluation.rule.name}' on ${fieldId}. Evaluation status - ${evaluationStatus}.`,
-            )
+            return `Evaluating rule '${evaluation.rule.name}' on ${fieldId}`
         }
+    }
 
-        return result
+    private describeRuleOnInstanceEvaluationResult(
+        evaluation: RuleEvaluation,
+        result: RuleOnInstanceEvaluationResult,
+    ): string {
+        const fieldId = this.toFieldId(evaluation.dataContext, evaluation.rule.targetPath)
+        return `Evaluated rule '${
+            evaluation.rule.name
+        }' on ${fieldId}. Evaluation status - ${this.resolveEvaluationStatus(result)}.`
     }
 
     private resolveEvaluationStatus(result: RuleOnInstanceEvaluationResult): 'SKIPPED' | 'APPLIED' | 'IGNORED' {
@@ -248,13 +290,20 @@ export class OrderedEvaluationLoop {
 
     private resolveContexts(rule: Rule, provider: ContextDataProvider): DataContext[] {
         const contexts = provider.resolveContextData(rule.context)
-
-        logger.debug(`Resolved ${contexts.length} data context(s) for rule '${rule.name}' target '${rule.context}'.`)
-
+        logger.debug(() => this.describeResolvedContexts(contexts, rule))
         return contexts
     }
 
-    private addResult(result: RuleOnInstanceEvaluationResult, results: Record<string, FieldEvaluationResult>) {
+    private describeResolvedContexts(contexts: DataContext[], rule: Rule): string {
+        if (contexts.length === 0) {
+            return `Resolved 0 data context(s) for rule '${rule.name}' target '${rule.context}'.`
+        } else {
+            const contextString = contexts.map(c => `${c.contextName}:${c.contextId}`).join('\n')
+            return `Resolved ${contexts.length} data context(s) for rule '${rule.name}' target '${rule.context}':\n${contextString}`
+        }
+    }
+
+    private addResult(result: RuleOnInstanceEvaluationResult, results: Record<string, FieldEvaluationResult>): void {
         const dataContext = result.dataContext
         const fieldName = result.result.ruleInfo.targetPath
         const id = this.toFieldId(dataContext, fieldName)

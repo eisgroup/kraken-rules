@@ -15,10 +15,11 @@
  */
 package kraken.runtime.expressions.trace;
 
-import java.util.Optional;
 import java.util.stream.Collectors;
 
+import kraken.model.context.Cardinality;
 import kraken.runtime.engine.context.data.DataContext;
+import kraken.runtime.engine.context.data.DataReference;
 import kraken.runtime.model.expression.CompiledExpression;
 import kraken.runtime.model.expression.ExpressionVariableType;
 import kraken.tracer.VoidOperation;
@@ -65,12 +66,21 @@ public final class ExpressionEvaluationOperation implements VoidOperation {
         }
 
         return System.lineSeparator() + expressionVars.stream()
-            .map(expVar -> Optional.ofNullable(dataContext.getExternalReferences().get(expVar.getName()))
-                .map(extDataRef -> extDataRef.getName() + ": [ " + extDataRef.getDataContexts().stream()
-                    .map(dataContext -> dataContext.getContextName() + ":" + dataContext.getContextId())
-                    .collect(Collectors.joining(", ")) + " ]")
-                .orElse("No cross contexts resolved for '" + expVar.getName() + "'"))
+            .map(expVar -> expVar.getName() + "=" + describe(dataContext.getDataContextReferences().get(expVar.getName())))
             .collect(Collectors.joining("," + System.lineSeparator()));
+    }
+
+    private String describe(DataReference ref) {
+        if(ref == null) {
+            return "null";
+        }
+        if(ref.getCardinality() == Cardinality.SINGLE) {
+            return ref.getDataContext() == null ? "null" : ref.getDataContext().getIdString();
+        } else {
+            return ref.getDataContexts().stream()
+                .map(DataContext::getIdString)
+                .collect(Collectors.joining(",", "[", "]"));
+        }
     }
 
 }

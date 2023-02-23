@@ -52,6 +52,6 @@ public class TemplateParameterRenderer {
                 .map(TemplateParameterRenderer::render)
                 .collect(Collectors.joining(", ", "[", "]"));
         }
-        return object == null ?  "" : object.toString();
+        return object == null ? "" : object.toString();
     }
 }

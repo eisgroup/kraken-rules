@@ -16,18 +16,26 @@
 
 import { Contexts } from 'kraken-model'
 import ContextField = Contexts.ContextField
-import { ExternalReferences } from './ExternalReferences'
 import { ContextInstanceInfo } from 'kraken-engine-api'
+import Cardinality = Contexts.Cardinality
 
 /**
  * DTO wrapper for data context object instance
  */
 export class DataContext {
-    public externalReferenceObjects: ExternalReferences
     public readonly id: string
     // lazy props
     public path?: string[]
     public parentChain?: DataContext[]
+
+    /**
+     * A record of all references to DataContexts by name. It does contain references to self DataContext as well.
+     */
+    public dataContextReferences: Record<string, DataReference>
+    /**
+     * A record of all references to data objects by name. It does contain references to self data object as well.
+     */
+    public objectReferences: Record<string, object | object[] | undefined>
 
     /**
      * @param contextId     Identifies particular data context instance
@@ -36,8 +44,7 @@ export class DataContext {
      * @param info          Information about data object
      * @param definitionProjection    Holds all fields that are of for this context
      * @param parent                Parent data context form which this data context was extracted
-     * @param externalReferences    References to other data contexts, that are in object,
-     *                              where key is context definition name
+     * @param inheritedContextNames   Inherited context definition names by this context
      */
     constructor(
         public readonly contextId: string,
@@ -48,12 +55,21 @@ export class DataContext {
         public readonly parent?: DataContext | undefined,
         public readonly inheritedContextNames: string[] = [],
     ) {
-        this.externalReferenceObjects = new ExternalReferences()
+        this.dataContextReferences = {}
+        this.objectReferences = {}
 
-        this.externalReferenceObjects.addSingle(contextName, this)
-        for (const name of inheritedContextNames) {
-            this.externalReferenceObjects.addSingle(name, this)
+        const selfReference: DataReference = {
+            name: contextName,
+            cardinality: 'SINGLE',
+            dataContexts: [this],
         }
+        this.objectReferences[contextName] = dataObject
+        this.dataContextReferences[contextName] = selfReference
+        for (const inheritedContextName of inheritedContextNames) {
+            this.objectReferences[inheritedContextName] = dataObject
+            this.dataContextReferences[inheritedContextName] = selfReference
+        }
+
         this.id = `${this.contextName}:${this.contextId}`
     }
 
@@ -73,6 +89,16 @@ export class DataContext {
             this.parentChain = getParents(this)
         }
         return this.parentChain
+    }
+
+    updateReference(name: string, cardinality: Cardinality, dataContexts: DataContext[]) {
+        this.objectReferences[name] =
+            cardinality === 'SINGLE' ? dataContexts[0]?.dataObject : dataContexts.map(d => d.dataObject)
+        this.dataContextReferences[name] = {
+            name,
+            cardinality,
+            dataContexts,
+        }
     }
 }
 
@@ -94,4 +120,10 @@ function getParents(dataContext: DataContext): DataContext[] {
         current = current.parent
     }
     return contexts.reverse()
+}
+
+export type DataReference = {
+    name: string
+    dataContexts: DataContext[]
+    cardinality: Cardinality
 }

@@ -64,7 +64,7 @@ export class ContextDataExtractorImpl implements ContextDataExtractor {
     }
 
     extractByName(childContextName: string, root: DataContext, restriction?: DataContext): DataContext[] {
-        logger.debug(`Extracting context definition '${childContextName}' instance`)
+        logger.debug(() => `Extracting context definition '${childContextName}' instance`)
         if (!childContextName) {
             throw new KrakenRuntimeError(ErrorCode.INCORRECT_MODEL_TREE, 'childContextName must be defined')
         }
@@ -91,7 +91,7 @@ export class ContextDataExtractorImpl implements ContextDataExtractor {
     }
 
     private extractContexts(paths: ContextDefinition[], root: DataContext, restriction?: DataContext): DataContext[] {
-        logger.debug(`Path to extract '${paths.map(p => p.name).join('->')}'`)
+        logger.debug(() => `Path to extract '${paths.map(p => p.name).join('->')}'`)
         let contexts = [root]
         for (let i = 0; i < paths.length; i++) {
             if (i === paths.length - 1) break

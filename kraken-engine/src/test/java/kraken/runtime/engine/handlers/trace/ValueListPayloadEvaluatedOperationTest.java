@@ -43,23 +43,21 @@ public class ValueListPayloadEvaluatedOperationTest {
     @Test
     public void shouldCreateCorrectDescriptionForFieldNoValue() {
         when(valueListPayload.getType()).thenReturn(PayloadType.VALUE_LIST);
-        when(valueListPayload.getValueList()).thenReturn(ValueList.fromString(List.of("EUR")));
 
         ValueListPayloadEvaluatedOperation operation
             = new ValueListPayloadEvaluatedOperation(valueListPayload, null, true);
 
-        assertThat(operation.describe(), is("Evaluated 'ValueListPayload' to 'true'. Field value 'null'"));
+        assertThat(operation.describe(), is("Evaluated 'ValueListPayload' to 'true'. Field value ''."));
     }
 
     @Test
     public void shouldCreateCorrectDescriptionForFieldValueSuccess() {
         when(valueListPayload.getType()).thenReturn(PayloadType.VALUE_LIST);
-        when(valueListPayload.getValueList()).thenReturn(ValueList.fromString(List.of("USD")));
 
         ValueListPayloadEvaluatedOperation operation
             = new ValueListPayloadEvaluatedOperation(valueListPayload, "USD", true);
 
-        assertThat(operation.describe(), is("Evaluated 'ValueListPayload' to 'true'. Field value 'USD'"));
+        assertThat(operation.describe(), is("Evaluated 'ValueListPayload' to 'true'. Field value 'USD'."));
     }
 
     @Test
@@ -71,7 +69,7 @@ public class ValueListPayloadEvaluatedOperationTest {
             = new ValueListPayloadEvaluatedOperation(valueListPayload, "USD", false);
 
         assertThat(operation.describe(),
-            is("Evaluated 'ValueListPayload' to 'false'. Field value 'USD' is not one of 'LTL, EUR'"));
+            is("Evaluated 'ValueListPayload' to 'false'. Field value 'USD' is not one of [ LTL, EUR ]."));
     }
 
 }

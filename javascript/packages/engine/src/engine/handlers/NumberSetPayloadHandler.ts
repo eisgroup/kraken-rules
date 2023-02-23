@@ -20,13 +20,13 @@ import { RulePayloadHandler } from './RulePayloadHandler'
 import { ExpressionEvaluator } from '../runtime/expressions/ExpressionEvaluator'
 import { NumberSetPayloadResult, ExpressionEvaluationResult } from 'kraken-engine-api'
 import { Expressions } from '../runtime/expressions/Expressions'
-import { expressionFactory } from '../runtime/expressions/ExpressionFactory'
 import { ExecutionSession } from '../ExecutionSession'
 import { DataContext } from '../contexts/data/DataContext'
 import { payloadResultCreator } from '../results/PayloadResultCreator'
 import NumberSetPayload = Payloads.Validation.NumberSetPayload
 import { Numbers } from '../runtime/expressions/math/Numbers'
 import { Moneys } from '../runtime/expressions/math/Moneys'
+import { logger } from '../../utils/DevelopmentLogger'
 
 export class NumberSetPayloadHandler implements RulePayloadHandler {
     constructor(private readonly evaluator: ExpressionEvaluator) {}
@@ -40,13 +40,13 @@ export class NumberSetPayloadHandler implements RulePayloadHandler {
         dataContext: DataContext,
         session: ExecutionSession,
     ): NumberSetPayloadResult {
-        const expression = expressionFactory.fromPath(Expressions.createPathResolver(dataContext)(rule.targetPath))
-        const expressionResult = this.evaluator.evaluate(expression, dataContext)
-        if (ExpressionEvaluationResult.isError(expressionResult)) {
-            throw new Error(`Failed to extract attribute ${expression}`)
+        const path = Expressions.createPathResolver(dataContext)(rule.targetPath)
+        const valueResult = this.evaluator.evaluateGet(path, dataContext.dataObject)
+        if (ExpressionEvaluationResult.isError(valueResult)) {
+            throw new Error(`Failed to extract attribute '${path}'`)
         }
 
-        let value = expressionResult.success
+        let value = valueResult.success
         let success = true
         if (Moneys.isMoney(value)) {
             value = value.amount
@@ -61,6 +61,17 @@ export class NumberSetPayloadHandler implements RulePayloadHandler {
             dataContext,
             session.expressionContext,
         )
+
+        logger.debug(() => this.describePayloadResult(payload, success, value))
+
         return payloadResultCreator.numberSet(payload, success, templateVariables)
+    }
+
+    private describePayloadResult(payload: NumberSetPayload, result: boolean, value: unknown): string {
+        const inSet = result ? '∈' : '∉'
+        const min = payload.min !== undefined ? payload.min : '∞'
+        const max = payload.max !== undefined ? payload.max : '∞'
+        const stepMsg = payload.step !== undefined ? ` with step ${payload.step}` : ''
+        return `Evaluated '${payload.type}' to ${result}. ${value} ${inSet} [${min}, ${max}]${stepMsg}.`
     }
 }

@@ -76,7 +76,7 @@ export class ComplexEvaluator {
             const result = this.functionCache.compute(expression, declarations).apply(this.functionInvoker, variables)
             return this.validResult(result, expression)
         } catch (error) {
-            logger.warning(`Expression evaluation failed:`, `\n\texpression: ${expression}`, error)
+            logger.debug(() => [`Expression evaluation failed: '${expression}'`, error])
             return Result.expressionError({
                 severity: 'info',
                 message: `Expression: '${expression}' failed`,

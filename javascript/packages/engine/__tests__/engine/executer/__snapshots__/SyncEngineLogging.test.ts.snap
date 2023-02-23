@@ -1,0 +1,106 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SyncEngine Should debug log in development environment 1`] = `
+"-> Kraken logs: 'EngineDebugLoggingTest'
+   -- {
+        \\"evaluationConfig\\": {
+          \\"context\\": {},
+          \\"currencyCd\\": \\"USD\\"
+        }
+      }
+   -- UI engine (1.2.3) and backend engine (1) versions are different.
+   -> Evaluating default rules
+      -> Context extraction
+         -- Extracting context definition 'Policy' instance
+         -- Path to extract 'Policy'
+         -- Resolved 1 data context(s) for rule 'Default' target 'Policy':
+            Policy:0
+      <- Context extraction
+      -> Evaluating rule 'Default' on Policy:0:policyNumber
+         -- Evaluating expression '\\"P0001\\"'. 
+         -- Evaluated 'DEFAULT'. Before value: ''. After value: 'P0001'.
+      <- Evaluated rule 'Default' on Policy:0:policyNumber. Evaluation status - APPLIED.
+   <- Evaluated default rules.
+      Evaluated rule 'Default' on a total of 1 instances.
+   -> Evaluating rule 'Accessibility'
+      -- Resolved 1 data context(s) for rule 'Accessibility' target 'Policy':
+         Policy:0
+      -> Evaluating rule 'Accessibility' on Policy:0:policyNumber
+         -- Evaluated 'ACCESSIBILITY'. The field is set to be disabled.
+      <- Evaluated rule 'Accessibility' on Policy:0:policyNumber. Evaluation status - APPLIED.
+   <- Evaluated rule 'Accessibility' on a total of 1 instances.
+   -> Evaluating rule 'Visibility'
+      -- Resolved 1 data context(s) for rule 'Visibility' target 'Policy':
+         Policy:0
+      -> Evaluating rule 'Visibility' on Policy:0:policyNumber
+         -- Evaluated 'VISIBILITY'. The field is set to be hidden.
+      <- Evaluated rule 'Visibility' on Policy:0:policyNumber. Evaluation status - APPLIED.
+   <- Evaluated rule 'Visibility' on a total of 1 instances.
+   -> Evaluating rule 'Usage'
+      -- Resolved 1 data context(s) for rule 'Usage' target 'Policy':
+         Policy:0
+      -> Evaluating rule 'Usage' on Policy:0:policyNumber
+         -- Evaluated 'USAGE' to true. Field is mandatory and it has value 'P0001'.
+      <- Evaluated rule 'Usage' on Policy:0:policyNumber. Evaluation status - APPLIED.
+   <- Evaluated rule 'Usage' on a total of 1 instances.
+   -> Evaluating rule 'Assert'
+      -- Resolved 1 data context(s) for rule 'Assert' target 'Policy':
+         Policy:0
+      -> Evaluating rule 'Assert' on Policy:0:policyNumber
+         -- Evaluating expression '!this._eq(__references__.Policy.policyNumber, undefined)'. Cross context references:
+            Policy=Policy:0.
+         -- Evaluating expression '__dataObject__.policyNumber == \\"P0001\\"'. 
+         -- Evaluated 'ASSERTION' expression '__dataObject__.policyNumber == \\"P0001\\"' to true.
+      <- Evaluated rule 'Assert' on Policy:0:policyNumber. Evaluation status - APPLIED.
+   <- Evaluated rule 'Assert' on a total of 1 instances.
+   -> Evaluating rule 'RegExp'
+      -- Resolved 1 data context(s) for rule 'RegExp' target 'Policy':
+         Policy:0
+      -> Evaluating rule 'RegExp' on Policy:0:policyNumber
+         -- Evaluated 'REGEX' to true. Value 'P0001' matches regular expression '[A-Z]+'.
+      <- Evaluated rule 'RegExp' on Policy:0:policyNumber. Evaluation status - APPLIED.
+   <- Evaluated rule 'RegExp' on a total of 1 instances.
+   -> Evaluating rule 'Length'
+      -- Resolved 1 data context(s) for rule 'Length' target 'Policy':
+         Policy:0
+      -> Evaluating rule 'Length' on Policy:0:policyNumber
+         -- Evaluated 'LENGTH' to true. Expected length '5'. Actual length '5'
+      <- Evaluated rule 'Length' on Policy:0:policyNumber. Evaluation status - APPLIED.
+   <- Evaluated rule 'Length' on a total of 1 instances.
+   -> Evaluating rule 'MinSize'
+      -- Resolved 1 data context(s) for rule 'MinSize' target 'Policy':
+         Policy:0
+      -> Evaluating rule 'MinSize' on Policy:0:riskItems
+         -- Evaluated 'SIZE' to true. Expected size no less than 0 - actual size is 1.
+      <- Evaluated rule 'MinSize' on Policy:0:riskItems. Evaluation status - APPLIED.
+   <- Evaluated rule 'MinSize' on a total of 1 instances.
+   -> Evaluating rule 'MaxSize'
+      -- Resolved 1 data context(s) for rule 'MaxSize' target 'Policy':
+         Policy:0
+      -> Evaluating rule 'MaxSize' on Policy:0:riskItems
+         -- Evaluated 'SIZE' to true. Expected size no more than 5 - actual size is 1.
+      <- Evaluated rule 'MaxSize' on Policy:0:riskItems. Evaluation status - APPLIED.
+   <- Evaluated rule 'MaxSize' on a total of 1 instances.
+   -> Evaluating rule 'SizeRange'
+      -- Resolved 1 data context(s) for rule 'SizeRange' target 'Policy':
+         Policy:0
+      -> Evaluating rule 'SizeRange' on Policy:0:riskItems
+         -- Evaluated 'SIZE_RANGE' to true. Collection field size is within expected range..
+      <- Evaluated rule 'SizeRange' on Policy:0:riskItems. Evaluation status - APPLIED.
+   <- Evaluated rule 'SizeRange' on a total of 1 instances.
+   -> Evaluating rule 'NumberSet'
+      -- Resolved 1 data context(s) for rule 'NumberSet' target 'Policy':
+         Policy:0
+      -> Evaluating rule 'NumberSet' on Policy:0:termNo
+         -- Evaluated 'NUMBER_SET' to true. undefined ∈ [1, ∞] with step 1.
+      <- Evaluated rule 'NumberSet' on Policy:0:termNo. Evaluation status - APPLIED.
+   <- Evaluated rule 'NumberSet' on a total of 1 instances.
+   -> Evaluating rule 'ValueList'
+      -- Resolved 1 data context(s) for rule 'ValueList' target 'Policy':
+         Policy:0
+      -> Evaluating rule 'ValueList' on Policy:0:contractTermTypeCd
+         -- Evaluated 'VALUE_LIST' to true. Field value '' .
+      <- Evaluated rule 'ValueList' on Policy:0:contractTermTypeCd. Evaluation status - APPLIED.
+   <- Evaluated rule 'ValueList' on a total of 1 instances.
+<- Kraken logs: 'EngineDebugLoggingTest'. Timestamp: Sat, 01 Jan 2022 10:00:00 GMT"
+`;

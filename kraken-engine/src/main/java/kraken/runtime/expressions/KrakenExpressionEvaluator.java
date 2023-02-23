@@ -33,11 +33,9 @@ import kraken.el.ast.builder.AstBuilder;
 import kraken.el.functionregistry.FunctionInvoker;
 import kraken.el.interpreter.evaluator.InterpretingExpressionEvaluator;
 import kraken.el.scope.Scope;
-import kraken.model.context.Cardinality;
 import kraken.runtime.utils.TemplateParameterRenderer;
 import kraken.runtime.EvaluationSession;
 import kraken.runtime.engine.context.data.DataContext;
-import kraken.runtime.engine.context.data.ExternalDataReference;
 import kraken.runtime.expressions.trace.ExpressionEvaluationOperation;
 import kraken.runtime.model.context.ContextNavigation;
 import kraken.runtime.model.expression.CompiledExpression;
@@ -173,24 +171,8 @@ public class KrakenExpressionEvaluator {
     }
 
     private static Map<String, Object> createExpressionVars(EvaluationSession session, DataContext dataContext) {
-        final HashMap<String, Object> vars = new HashMap<>();
-        for(ExternalDataReference reference : dataContext.getExternalReferences().values()) {
-            if(reference.getCardinality() == Cardinality.SINGLE) {
-                if(reference.getDataContext() != null) {
-                    vars.put(reference.getName(), reference.getDataContext().getDataObject());
-                }
-            } else if(reference.getCardinality() == Cardinality.MULTIPLE) {
-                vars.put(reference.getName(), reference.getDataContexts().stream().map(DataContext::getDataObject).collect(Collectors.toList()));
-            }
-        }
-
+        var vars = new HashMap<>(dataContext.getObjectReferences());
         vars.put("context", session.getExpressionContext());
-
-        if(dataContext.getContextDefinition() != null) {
-            dataContext.getContextDefinition().getInheritedContexts()
-                    .forEach(inheritedName -> vars.put(inheritedName, dataContext.getDataObject()));
-        }
-        vars.put(dataContext.getContextName(), dataContext.getDataObject());
         return vars;
     }
 

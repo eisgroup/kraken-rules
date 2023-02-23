@@ -45,7 +45,7 @@ public final class SizeRangePayloadEvaluatedOperation implements VoidOperation {
     public String describe() {
         var template = "Evaluated '%s' to %s. %s";
         var successTemplate = "Collection field size is within expected range.";
-        var failureTemplate = "Expected size withing %s and %s. Actual size is %s.";
+        var failureTemplate = "Expected size within %s and %s. Actual size is %s.";
 
         return String.format(template,
             sizeRangePayload.getType().getTypeName(),

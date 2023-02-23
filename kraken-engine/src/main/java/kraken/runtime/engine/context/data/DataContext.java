@@ -15,10 +15,12 @@
  */
 package kraken.runtime.engine.context.data;
 
+import kraken.model.context.Cardinality;
 import kraken.runtime.model.context.RuntimeContextDefinition;
 import kraken.runtime.engine.context.info.ContextInstanceInfo;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * DTO wrapper for data context object instance
@@ -47,11 +49,14 @@ public class DataContext {
 
     private ContextInstanceInfo contextInstanceInfo;
 
-    private transient RuntimeContextDefinition contextDefinition;
+    private RuntimeContextDefinition contextDefinition;
+
     /**
      * References from {@link DataContext} to other {@link DataContext}s.
      */
-    private transient Map<String, ExternalDataReference> externalReferences = new HashMap<>();
+    private Map<String, DataReference> dataContextReferences = new HashMap<>();
+
+    private Map<String, Object> objectReferences = new HashMap<>();
 
     public void setContextDefinition(RuntimeContextDefinition contextDefinition) {
         this.contextDefinition = contextDefinition;
@@ -101,12 +106,35 @@ public class DataContext {
         this.parentDataContext = parentDataContext;
     }
 
-    public Map<String, ExternalDataReference> getExternalReferences() {
-        return externalReferences;
+    public Map<String, DataReference> getDataContextReferences() {
+        var selfReference = new DataReference(contextName, List.of(this), Cardinality.SINGLE);
+        Map<String, DataReference> dataContextReferencesCopy = new HashMap<>(dataContextReferences);
+        dataContextReferencesCopy.put(contextName, selfReference);
+        if(contextDefinition != null) {
+            for (var inheritedContextName : contextDefinition.getInheritedContexts()) {
+                dataContextReferencesCopy.put(inheritedContextName, selfReference);
+            }
+        }
+        return dataContextReferencesCopy;
     }
 
-    public void setExternalReferences(Map<String, ExternalDataReference> externalReferences) {
-        this.externalReferences = externalReferences;
+    public Map<String, Object> getObjectReferences() {
+        Map<String, Object> objectReferencesCopy = new HashMap<>(objectReferences);
+        objectReferencesCopy.put(contextName, dataObject);
+        if(contextDefinition != null) {
+            for (var inheritedContextName : contextDefinition.getInheritedContexts()) {
+                objectReferencesCopy.put(inheritedContextName, dataObject);
+            }
+        }
+        return objectReferencesCopy;
+    }
+
+    public void updateReference(DataReference reference) {
+        var objectReference = reference.getCardinality() == Cardinality.SINGLE
+            ? (reference.getDataContext() != null ? reference.getDataContext().getDataObject() : null)
+            : reference.getDataContexts().stream().map(c -> c.dataObject).collect(Collectors.toList());
+        this.objectReferences.put(reference.getName(), objectReference);
+        this.dataContextReferences.put(reference.getName(), reference);
     }
 
     public RuntimeContextDefinition getContextDefinition() {

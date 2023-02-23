@@ -82,7 +82,7 @@
       <- Evaluated rule 'TR_CarCoverage_code_default' on COLLCoverage:CollCoverage-1:code. Evaluation status - APPLIED.
       -> Evaluating rule 'TR_CarCoverage_code_default' on CarCoverage:CarCoverage-1:code.
          -- Evaluating expression ''AA''.
-         -- Evaluated 'DefaultValuePayload'. Before value: 'NULL'. After value: 'AA'.
+         -- Evaluated 'DefaultValuePayload'. Before value: ''. After value: 'AA'.
       <- Evaluated rule 'TR_CarCoverage_code_default' on CarCoverage:CarCoverage-1:code. Evaluation status - APPLIED.
       -> Evaluating rule 'TR_CarCoverage_Reset' on COLLCoverage:CollCoverage-1:limitAmount.
          -- Evaluating expression '15000'.
@@ -97,7 +97,7 @@
       <- Evaluated rule 'TR_CarCoverage_Condition_default' on COLLCoverage:CollCoverage-1:deductibleAmount. Evaluation status - SKIPPED.
       -> Evaluating rule 'TR_CarCoverage_Condition_LimitAmt_error' on COLLCoverage:CollCoverage-1:deductibleAmount with priority 0.
          -- Evaluating expression '(Policy.riskItems[10].model == 'Audi')'. Cross context references: 
-            Policy: [ Policy:Policy-1 ]
+            Policy=Policy:Policy-1
       <- Evaluated rule 'TR_CarCoverage_Condition_LimitAmt_error' on COLLCoverage:CollCoverage-1:deductibleAmount. Evaluation status - IGNORED.
       -> Evaluating rule 'TR_CarCoverage_default' on COLLCoverage:CollCoverage-1:deductibleAmount with priority -2147483648.
          -- Evaluating expression '25000'.
@@ -108,11 +108,11 @@
       <- Evaluated rule 'TR_CarCoverage_Condition_default' on CarCoverage:CarCoverage-1:deductibleAmount. Evaluation status - SKIPPED.
       -> Evaluating rule 'TR_CarCoverage_Condition_LimitAmt_error' on CarCoverage:CarCoverage-1:deductibleAmount with priority 0.
          -- Evaluating expression '(Policy.riskItems[10].model == 'Audi')'. Cross context references: 
-            Policy: [ Policy:Policy-1 ]
+            Policy=Policy:Policy-1
       <- Evaluated rule 'TR_CarCoverage_Condition_LimitAmt_error' on CarCoverage:CarCoverage-1:deductibleAmount. Evaluation status - IGNORED.
       -> Evaluating rule 'TR_CarCoverage_default' on CarCoverage:CarCoverage-1:deductibleAmount with priority -2147483648.
          -- Evaluating expression '25000'.
-         -- Evaluated 'DefaultValuePayload'. Before value: 'NULL'. After value: '25000'.
+         -- Evaluated 'DefaultValuePayload'. Before value: ''. After value: '25000'.
       <- Evaluated rule 'TR_CarCoverage_default' on CarCoverage:CarCoverage-1:deductibleAmount. Evaluation status - APPLIED.
    <- Evaluated default rules.
       'TR_CarCoverage_code_default' on a total of 2 instances.
@@ -126,11 +126,11 @@
          CarCoverage:CarCoverage-1.
       -> Evaluating rule 'TR_CarCoverage_Payload_error' on COLLCoverage:CollCoverage-1:deductibleAmount.
          -- Evaluating expression '(Policy.riskItems[10].model == 'Audi')'. Cross context references: 
-            Policy: [ Policy:Policy-1 ]
+            Policy=Policy:Policy-1
       <- Evaluated rule 'TR_CarCoverage_Payload_error' on COLLCoverage:CollCoverage-1:deductibleAmount. Evaluation status - IGNORED.
       -> Evaluating rule 'TR_CarCoverage_Payload_error' on CarCoverage:CarCoverage-1:deductibleAmount.
          -- Evaluating expression '(Policy.riskItems[10].model == 'Audi')'. Cross context references: 
-            Policy: [ Policy:Policy-1 ]
+            Policy=Policy:Policy-1
       <- Evaluated rule 'TR_CarCoverage_Payload_error' on CarCoverage:CarCoverage-1:deductibleAmount. Evaluation status - IGNORED.
    <- Evaluated rule 'TR_CarCoverage_Payload_error' on a total of 2 instances.
    -> Evaluating rule 'TR_Vehicle_costNew_numberSet'.
@@ -144,7 +144,7 @@
       -- Resolved 1 data context(s) for rule 'TR_Policy_ValueList' target 'Policy':
          Policy:Policy-1.
       -> Evaluating rule 'TR_Policy_ValueList' on Policy:Policy-1:state.
-         -- Evaluated 'ValueListPayload' to 'false'. Field value 'OT' is not one of 'NY, FL'
+         -- Evaluated 'ValueListPayload' to 'false'. Field value 'OT' is not one of [ NY, FL ].
       <- Evaluated rule 'TR_Policy_ValueList' on Policy:Policy-1:state. Evaluation status - APPLIED.
    <- Evaluated rule 'TR_Policy_ValueList' on a total of 1 instances.
    -> Evaluating rule 'TR_CarCoverage_assert_info'.
@@ -191,10 +191,10 @@
          COLLCoverage:CollCoverage-1,
          CarCoverage:CarCoverage-1.
       -> Evaluating rule 'TR_CarCoverage_Usage' on COLLCoverage:CollCoverage-1:deductibleAmount.
-         -- Evaluated 'UsagePayload' to true. Mandatory field has value '25000'.
+         -- Evaluated 'UsagePayload' to true. Field is mandatory and it has value '25000'.
       <- Evaluated rule 'TR_CarCoverage_Usage' on COLLCoverage:CollCoverage-1:deductibleAmount. Evaluation status - APPLIED.
       -> Evaluating rule 'TR_CarCoverage_Usage' on CarCoverage:CarCoverage-1:deductibleAmount.
-         -- Evaluated 'UsagePayload' to true. Mandatory field has value '25000'.
+         -- Evaluated 'UsagePayload' to true. Field is mandatory and it has value '25000'.
       <- Evaluated rule 'TR_CarCoverage_Usage' on CarCoverage:CarCoverage-1:deductibleAmount. Evaluation status - APPLIED.
    <- Evaluated rule 'TR_CarCoverage_Usage' on a total of 2 instances.
    -> Evaluating rule 'TR_CarCoverage_SizeRange'.

@@ -59,7 +59,7 @@ public class SizeRangePayloadEvaluatedOperationTest {
         var sizeRangePayloadOp = new SizeRangePayloadEvaluatedOperation(sizePayload, List.of("val1", "val2"), false);
 
         assertThat(sizeRangePayloadOp.describe(),
-            is("Evaluated 'SizeRangePayload' to false. Expected size withing 0 and 1. Actual size is 2."));
+            is("Evaluated 'SizeRangePayload' to false. Expected size within 0 and 1. Actual size is 2."));
     }
 
 }

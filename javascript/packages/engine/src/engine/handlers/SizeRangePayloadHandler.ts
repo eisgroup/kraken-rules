@@ -21,10 +21,10 @@ import { RulePayloadHandler } from './RulePayloadHandler'
 import { ExpressionEvaluator } from '../runtime/expressions/ExpressionEvaluator'
 import { SizeRangePayloadResult, ExpressionEvaluationResult } from 'kraken-engine-api'
 import { Expressions } from '../runtime/expressions/Expressions'
-import { expressionFactory } from '../runtime/expressions/ExpressionFactory'
 import { ExecutionSession } from '../ExecutionSession'
 import { DataContext } from '../contexts/data/DataContext'
 import { payloadResultCreator } from '../results/PayloadResultCreator'
+import { logger } from '../../utils/DevelopmentLogger'
 
 export class SizeRangePayloadHandler implements RulePayloadHandler {
     constructor(private readonly evaluator: ExpressionEvaluator) {}
@@ -38,25 +38,37 @@ export class SizeRangePayloadHandler implements RulePayloadHandler {
         dataContext: DataContext,
         session: ExecutionSession,
     ): SizeRangePayloadResult {
-        const expression = expressionFactory.fromPath(Expressions.createPathResolver(dataContext)(rule.targetPath))
-        const exResult = this.evaluator.evaluate(expression, dataContext)
-        if (ExpressionEvaluationResult.isError(exResult)) {
-            throw new Error(`Failed to extract attribute ${expression}`)
+        const path = Expressions.createPathResolver(dataContext)(rule.targetPath)
+        const valueResult = this.evaluator.evaluateGet(path, dataContext.dataObject)
+        if (ExpressionEvaluationResult.isError(valueResult)) {
+            throw new Error(`Failed to extract attribute '${path}'`)
         }
-        let target = exResult.success
+        let value = valueResult.success
         const templateVariables = this.evaluator.evaluateTemplateVariables(
             payload.errorMessage,
             dataContext,
             session.expressionContext,
         )
-        const result = (success: boolean) => payloadResultCreator.sizeRange(payload, success, templateVariables)
 
-        if (target == undefined) {
-            target = []
+        if (value == undefined) {
+            value = []
         }
-        if (Array.isArray(target)) {
-            return result(target.length >= payload.min && target.length <= payload.max)
+
+        let result = true
+        if (Array.isArray(value)) {
+            result = value.length >= payload.min && value.length <= payload.max
         }
-        return result(true)
+
+        logger.debug(() => this.describePayloadResult(payload, result, value))
+
+        return payloadResultCreator.sizeRange(payload, result, templateVariables)
+    }
+
+    private describePayloadResult(payload: SizeRangePayload, result: boolean, value: unknown): string {
+        const actualSize = Array.isArray(value) ? value.length : ''
+        const resultDescription = result
+            ? `Collection field size is within expected range.`
+            : `Expected size within ${payload.min} and ${payload.max}. Actual size is ${actualSize}.`
+        return `Evaluated '${payload.type}' to ${result}. ${resultDescription}.`
     }
 }

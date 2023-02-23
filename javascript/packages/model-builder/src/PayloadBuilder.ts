@@ -194,13 +194,13 @@ export class DefaultValuePayloadBuilder {
         return this
     }
 
-    to(value: string): DefaultValuePayload {
+    to(expression: string): DefaultValuePayload {
         return {
             type: PayloadType.DEFAULT,
             defaultingType: this.defaultingType,
             valueExpression: {
                 expressionType: 'COMPLEX',
-                expressionString: value,
+                expressionString: expression,
             },
         }
     }

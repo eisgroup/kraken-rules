@@ -22,11 +22,12 @@ import kraken.model.context.Cardinality;
 import kraken.model.context.ContextDefinition;
 
 /**
- * Represents reference from {@link DataContext} to external {@link DataContext}
+ * Represents a reference from {@link DataContext} to other {@link DataContext} by name.
+ * This could an external data context or a self data context.
  *
  * @author mulevicius
  */
-public class ExternalDataReference {
+public class DataReference {
 
     private String name;
 
@@ -34,7 +35,7 @@ public class ExternalDataReference {
 
     private Cardinality cardinality;
 
-    public ExternalDataReference(String name, Collection<DataContext> dataContexts, Cardinality cardinality) {
+    public DataReference(String name, Collection<DataContext> dataContexts, Cardinality cardinality) {
         this.name = Objects.requireNonNull(name);
         this.dataContexts = Objects.requireNonNull(dataContexts);
         this.cardinality = Objects.requireNonNull(cardinality);

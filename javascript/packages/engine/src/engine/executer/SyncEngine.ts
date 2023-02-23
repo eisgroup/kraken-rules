@@ -161,36 +161,44 @@ export class SyncEngine {
     }
 
     evaluate(data: object, entryPointName: string, config: EvaluationConfig): EntryPointResult {
-        return this.doEvaluate(data, entryPointName, config)
+        return logger.group(
+            () => `Kraken logs: '${entryPointName}'`,
+            () => this.doEvaluate(data, entryPointName, config),
+            result => `Kraken logs: '${entryPointName}'. Timestamp: ${result.evaluationTimestamp.toUTCString()}`,
+        )
     }
 
     evaluateSubTree(data: object, node: object, entryPointName: string, config: EvaluationConfig): EntryPointResult {
-        return this.doEvaluate(data, entryPointName, config, this.requireValidNode(node))
+        return logger.group(
+            () => `Kraken logs: '${entryPointName}'`,
+            () => this.doEvaluate(data, entryPointName, config, this.requireValidNode(node)),
+            result => `Kraken logs: '${entryPointName}'. Timestamp: ${result.evaluationTimestamp.toUTCString()}`,
+        )
     }
 
     private doEvaluate = (data: object, entryPointName: string, evaluationConfig: EvaluationConfig, node?: object) => {
         const start = Date.now()
-        logger.group(`Kraken logs: '${entryPointName}'`)
-        logger.info({ evaluationConfig })
+        logger.info(() => {
+            return { evaluationConfig }
+        })
         if (node) {
             const contextName = this.#dataInfoResolver.resolveName(node)
             const id = this.#dataInfoResolver.resolveId(node)
-            logger.info(`With restriction node: ${contextName}:${id}`)
+            logger.info(() => `With restriction node: ${contextName}:${id}`)
         }
         const bundle = this.#bundleCache.get(entryPointName, evaluationConfig.context.dimensions || {})
 
         const version = this.#engineCompatibilityVersion || ENGINE_VERSION
         if (bundle.engineVersion && this.normalizedVersion(bundle.engineVersion) !== this.normalizedVersion(version)) {
             logger.warning(
-                `UI engine (${version}) and backend engine (${bundle.engineVersion}) versions are different.`,
+                () => `UI engine (${version}) and backend engine (${bundle.engineVersion}) versions are different.`,
             )
         }
 
         const filteredRulesEvaluation = this.filterRules(bundle.evaluation, evaluationConfig.evaluationMode)
 
         if (!filteredRulesEvaluation.rules.length) {
-            logger.info(`Kraken rules evaluation took ${Math.round(Date.now() - start)} ms`)
-            logger.groupEnd('Kraken logs')
+            logger.debug(() => `Kraken rules evaluation took ${Math.round(Date.now() - start)} ms`, true)
             return DefaultEntryPointResult.empty()
         }
 
@@ -204,8 +212,7 @@ export class SyncEngine {
             contextDataExtractor: cachingServices.contextDataExtractor,
             restriction: node,
         }).evaluate(filteredRulesEvaluation, data, session)
-        logger.info(`Kraken rules evaluation took ${Math.round(Date.now() - start)} ms`)
-        logger.groupEnd('Kraken logs')
+        logger.debug(() => `Kraken rules evaluation took ${Math.round(Date.now() - start)} ms`, true)
         return result
     }
 
@@ -247,11 +254,11 @@ export class SyncEngine {
         if (evaluationId) {
             if (this.evaluationId === evaluationId && this.serviceCache) {
                 // present by this evaluation id
-                logger.debug('Using Cached Data Extraction Services from previous execution')
+                logger.debug(() => 'Using Cached Data Extraction Services from previous execution')
                 return this.serviceCache
             } else {
                 // absent by this evaluation id
-                logger.debug('Initializing new Cached Data Extraction Services')
+                logger.debug(() => 'Initializing new Cached Data Extraction Services')
                 this.evaluationId = evaluationId
                 this.serviceCache = { contextDataExtractor: this.getContextDataExtractor() }
                 return this.serviceCache

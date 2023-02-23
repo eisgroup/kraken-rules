@@ -15,8 +15,8 @@
  */
 package kraken.runtime.engine.handlers.trace;
 
-import kraken.runtime.utils.TemplateParameterRenderer;
 import kraken.runtime.model.rule.payload.validation.RegExpPayload;
+import kraken.runtime.utils.TemplateParameterRenderer;
 import kraken.tracer.VoidOperation;
 
 /**
@@ -48,7 +48,7 @@ public final class RegExpPayloadEvaluatedOperation implements VoidOperation {
         return String.format(template,
             regExpPayload.getType().getTypeName(),
             matchResult,
-            value.isEmpty() ? "NULL" : value,
+            value,
             matchResult ? "matches" : "does not match",
             regExpPayload.getRegExp());
     }

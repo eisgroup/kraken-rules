@@ -53,9 +53,10 @@ export class ReferencePathResolverImpl implements ReferencePathResolver {
         const filtered = this.filterPaths(origin, paths)
         if (filtered.length > 1) {
             logger.error(
-                `Failed to resolve reference path. Resolved multiple paths, '${filtered
-                    .map(p => p.path.join('.'))
-                    .join(', ')}' from '${origin.join('.')}'`,
+                () =>
+                    `Failed to resolve reference path. Resolved multiple paths, '${filtered
+                        .map(p => p.path.join('.'))
+                        .join(', ')}' from '${origin.join('.')}'`,
             )
             throw new KrakenRuntimeError(
                 ErrorCode.INCORRECT_MODEL_TREE,

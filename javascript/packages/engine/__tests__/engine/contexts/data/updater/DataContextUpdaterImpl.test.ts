@@ -45,7 +45,7 @@ describe('DataContextUpdaterImpl', () => {
         }
     }
     function countReferences(d: DataContext): number {
-        return Object.keys(d.externalReferenceObjects.references).length
+        return Object.keys(d.objectReferences).length
     }
     it('should update data context', () => {
         const dataContext = mock.data.dataContextEmpty()

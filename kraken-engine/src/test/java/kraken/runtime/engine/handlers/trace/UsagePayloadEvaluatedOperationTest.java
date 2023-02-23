@@ -48,7 +48,7 @@ public class UsagePayloadEvaluatedOperationTest {
         var usagePayloadOp = new UsagePayloadEvaluatedOperation(usagePayload, null, false);
 
         assertThat(usagePayloadOp.describe(),
-            is("Evaluated 'UsagePayload' to false. Mandatory field value is missing."));
+            is("Evaluated 'UsagePayload' to false. Field is mandatory but it has no value."));
     }
 
     @Test
@@ -59,7 +59,7 @@ public class UsagePayloadEvaluatedOperationTest {
         var usagePayloadOp = new UsagePayloadEvaluatedOperation(usagePayload, "stringValue", true);
 
         assertThat(usagePayloadOp.describe(),
-            is("Evaluated 'UsagePayload' to true. Mandatory field has value 'stringValue'."));
+            is("Evaluated 'UsagePayload' to true. Field is mandatory and it has value 'stringValue'."));
     }
 
     @Test
@@ -70,7 +70,7 @@ public class UsagePayloadEvaluatedOperationTest {
         var usagePayloadOp = new UsagePayloadEvaluatedOperation(usagePayload, null, true);
 
         assertThat(usagePayloadOp.describe(),
-            is("Evaluated 'UsagePayload' to true. Empty field has no value set."));
+            is("Evaluated 'UsagePayload' to true. Field must be empty and it has no value."));
     }
 
     @Test
@@ -81,7 +81,7 @@ public class UsagePayloadEvaluatedOperationTest {
         var usagePayloadOp = new UsagePayloadEvaluatedOperation(usagePayload, "stringValue", false);
 
         assertThat(usagePayloadOp.describe(),
-            is("Evaluated 'UsagePayload' to false. Empty field has value 'stringValue'."));
+            is("Evaluated 'UsagePayload' to false. Field must be empty but it has value 'stringValue'."));
     }
 
 

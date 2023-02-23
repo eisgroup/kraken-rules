@@ -15,8 +15,8 @@
  */
 package kraken.runtime.engine.handlers.trace;
 
-import kraken.runtime.utils.TemplateParameterRenderer;
 import kraken.runtime.model.rule.payload.validation.UsagePayload;
+import kraken.runtime.utils.TemplateParameterRenderer;
 import kraken.tracer.VoidOperation;
 
 /**
@@ -48,16 +48,16 @@ public final class UsagePayloadEvaluatedOperation implements VoidOperation {
 
         switch (usagePayload.getUsageType()) {
             case mandatory:
-                var successTemplate = "Mandatory field has value '%s'.";
-                var failureTemplate = "Mandatory field value is missing.";
+                var successTemplate = "Field is mandatory and it has value '%s'.";
+                var failureTemplate = "Field is mandatory but it has no value.";
 
                 return String.format(template,
                     usagePayload.getType().getTypeName(),
                     evaluationState,
                     evaluationState ? String.format(successTemplate, value) : failureTemplate);
             case mustBeEmpty:
-                var successTemplateEmpty = "Empty field has no value set.";
-                var failureTemplateEmpty = "Empty field has value '%s'.";
+                var successTemplateEmpty = "Field must be empty and it has no value.";
+                var failureTemplateEmpty = "Field must be empty but it has value '%s'.";
 
                 return String.format(template,
                     usagePayload.getType().getTypeName(),

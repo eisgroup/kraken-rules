@@ -30,27 +30,28 @@ public final class LengthPayloadEvaluatedOperation implements VoidOperation {
 
     private final LengthPayload lengthPayload;
 
-    private final Object fieldValue;
+    private final int actualLength;
     private final boolean evaluationState;
 
     public LengthPayloadEvaluatedOperation(LengthPayload lengthPayload,
-                                           Object fieldValue,
+                                           int actualLength,
                                            boolean evaluationState) {
         this.lengthPayload = lengthPayload;
-        this.fieldValue = fieldValue;
+        this.actualLength = actualLength;
         this.evaluationState = evaluationState;
     }
 
     @Override
     public String describe() {
         var template = "Evaluated '%s' to %s. Expected length '%s'. Actual length '%s'";
-        var value = TemplateParameterRenderer.render(fieldValue);
 
-        return String.format(template,
+        return String.format(
+            template,
             lengthPayload.getType().getTypeName(),
             evaluationState,
             lengthPayload.getLength(),
-            value.length());
+            actualLength
+        );
     }
 
 }

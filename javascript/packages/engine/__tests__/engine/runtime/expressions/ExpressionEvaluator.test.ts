@@ -18,15 +18,17 @@ import { ExpressionEvaluationResult } from 'kraken-engine-api'
 
 import { ExpressionEvaluator } from '../../../../src/engine/runtime/expressions/ExpressionEvaluator'
 import { dateFunctions } from '../../../../src/engine/runtime/expressions/functionLibrary/DateFunctions'
-import { ComplexExpression } from '../../../../src/engine/runtime/expressions/RuntimeExpression'
 import { mock } from '../../../mock'
+import { Contexts, Expressions } from 'kraken-model'
+import { TestProduct } from 'kraken-test-product'
+import Insured = TestProduct.kraken.testproduct.domain.Insured
 
 const evaluator = ExpressionEvaluator.DEFAULT
 
-function complex(expression: string): ComplexExpression {
+function complex(expressionString: string): Expressions.Expression {
     return {
-        type: 'ComplexExpression',
-        expression,
+        expressionType: 'COMPLEX',
+        expressionString,
     }
 }
 
@@ -46,7 +48,7 @@ describe('ExpressionEvaluator', () => {
     describe('evaluate', () => {
         it('should evaluate get with PropertyExpression', () => {
             const name = evaluator.evaluate(
-                { type: 'PropertyExpression', expression: 'id' },
+                { expressionType: 'PATH', expressionString: 'id' },
                 contextBuilder.buildFromRoot(dataObject),
             )
             expect(unwrap(name)).toBe(dataObject.id)
@@ -54,7 +56,7 @@ describe('ExpressionEvaluator', () => {
         it('should evaluate get with PathExpression', () => {
             dataObject.billingInfo = { accountName: 'name' }
             const name = evaluator.evaluate(
-                { type: 'PathExpression', expression: 'billingInfo.accountName' },
+                { expressionType: 'PATH', expressionString: 'billingInfo.accountName' },
                 contextBuilder.buildFromRoot(dataObject),
             )
             expect(unwrap(name)).toBe(dataObject.billingInfo.accountName)
@@ -62,7 +64,12 @@ describe('ExpressionEvaluator', () => {
         it('should evaluate get with LiteralExpression', () => {
             dataObject.billingInfo = { accountName: 'name' }
             const name = evaluator.evaluate(
-                { type: 'LiteralExpression', value: 3, valueType: 'Number' },
+                {
+                    expressionType: 'LITERAL',
+                    expressionString: '3',
+                    compiledLiteralValue: 3,
+                    compiledLiteralValueType: 'Number',
+                },
                 contextBuilder.buildFromRoot(dataObject),
             )
             expect(unwrap(name)).toBe(3)
@@ -123,6 +130,64 @@ describe('ExpressionEvaluator', () => {
             })
         })
     })
+    describe('evaluateGet', () => {
+        it('should get value by property', () => {
+            dataObject.state = 'AZ'
+            const name = evaluator.evaluateGet('state', dataObject)
+            expect(unwrap(name)).toBe('AZ')
+        })
+        it('should get value by path', () => {
+            dataObject.insured = {
+                name: 'Peter',
+            }
+            const name = evaluator.evaluateGet('insured.name', dataObject)
+            expect(unwrap(name)).toBe('Peter')
+        })
+    })
+    describe('evaluateNavigationExpression', () => {
+        it('should extract context by path', () => {
+            dataObject.insured = {
+                id: '1',
+                cd: 'Insured',
+                name: 'Peter',
+            }
+            const navigationExpression: Contexts.ContextNavigation = {
+                navigationExpression: {
+                    expressionType: 'PATH',
+                    expressionString: 'insured',
+                },
+                cardinality: 'SINGLE',
+                targetName: 'Insured',
+            }
+            const dataContext = contextBuilder.buildFromRoot(dataObject)
+            const result = evaluator.evaluateNavigationExpression(navigationExpression, dataContext)
+            const insured = unwrap(result) as Insured
+            expect(insured.id).toBe('1')
+            expect(insured.cd).toBe('Insured')
+            expect(insured.name).toBe('Peter')
+        })
+        it('should evaluate complex', () => {
+            dataObject.insured = {
+                id: '1',
+                cd: 'Insured',
+                name: 'Peter',
+            }
+            const navigationExpression: Contexts.ContextNavigation = {
+                navigationExpression: {
+                    expressionType: 'COMPLEX',
+                    expressionString: '__dataObject__.insured',
+                },
+                cardinality: 'SINGLE',
+                targetName: 'Insured',
+            }
+            const dataContext = contextBuilder.buildFromRoot(dataObject)
+            const result = evaluator.evaluateNavigationExpression(navigationExpression, dataContext)
+            const insured = unwrap(result) as Insured
+            expect(insured.id).toBe('1')
+            expect(insured.cd).toBe('Insured')
+            expect(insured.name).toBe('Peter')
+        })
+    })
     describe('evaluateSet', () => {
         describe('PropertyExpression', () => {
             it('should set string by provided path and mutate passed object', () => {
@@ -158,35 +223,42 @@ describe('ExpressionEvaluator', () => {
                         templateExpressions: [
                             {
                                 expressionType: 'LITERAL',
+                                expressionString: '"string"',
                                 compiledLiteralValue: 'string',
                                 compiledLiteralValueType: 'String',
                             },
                             {
                                 expressionType: 'LITERAL',
+                                expressionString: '10.123',
                                 compiledLiteralValue: 10.123,
                                 compiledLiteralValueType: 'Number',
                             },
                             {
                                 expressionType: 'LITERAL',
+                                expressionString: 'true',
                                 compiledLiteralValue: true,
                                 compiledLiteralValueType: 'Boolean',
                             },
                             {
                                 expressionType: 'LITERAL',
+                                expressionString: 'false',
                                 compiledLiteralValue: false,
                                 compiledLiteralValueType: 'Boolean',
                             },
                             {
                                 expressionType: 'LITERAL',
+                                expressionString: '',
                                 compiledLiteralValue: null,
                             },
                             {
                                 expressionType: 'LITERAL',
+                                expressionString: '2020-01-01',
                                 compiledLiteralValue: '2020-01-01',
                                 compiledLiteralValueType: 'Date',
                             },
                             {
                                 expressionType: 'LITERAL',
+                                expressionString: '2020-01-01T10:00:00Z',
                                 compiledLiteralValue: '2020-01-01T10:00:00Z',
                                 compiledLiteralValueType: 'DateTime',
                             },

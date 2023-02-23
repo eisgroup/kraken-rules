@@ -23,16 +23,11 @@ export namespace Expressions {
          * Expression type for expressionString
          */
         expressionType: ExpressionType
+        expressionString: string
     }
 
     export interface ComplexExpression extends BaseExpression {
         expressionType: 'COMPLEX'
-
-        /**
-         * Expression in Kraken Expression Language
-         * Translated expression to be executed at target environment.
-         */
-        expressionString: string
 
         expressionVariables?: ExpressionVariable[]
     }
@@ -63,12 +58,6 @@ export namespace Expressions {
 
     export interface PathExpression extends BaseExpression {
         expressionType: 'PATH'
-
-        /**
-         * Expression in Kraken Expression Language
-         * Translated expression to be executed at target environment.
-         */
-        expressionString: string
     }
 
     export type ExpressionType =

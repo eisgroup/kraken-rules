@@ -15,8 +15,8 @@
  */
 package kraken.runtime.engine.handlers.trace;
 
-import kraken.runtime.utils.TemplateParameterRenderer;
 import kraken.runtime.model.rule.payload.derive.DefaultValuePayload;
+import kraken.runtime.utils.TemplateParameterRenderer;
 import kraken.tracer.VoidOperation;
 
 /**
@@ -44,8 +44,8 @@ public final class DefaultValuePayloadEvaluatedOperation implements VoidOperatio
     @Override
     public String describe() {
         var template = "Evaluated '%s'. Before value: '%s'. After value: '%s'.";
-        var before = originalValue == null ? "NULL" : TemplateParameterRenderer.render(originalValue);
-        var after = updatedValue == null ? "NULL" : TemplateParameterRenderer.render(updatedValue);
+        var before = TemplateParameterRenderer.render(originalValue);
+        var after = TemplateParameterRenderer.render(updatedValue);
 
         return String.format(template, defaultValuePayload.getType().getTypeName(), before, after);
     }
