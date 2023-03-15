@@ -16,11 +16,15 @@
 package kraken.model.project.validator.rule;
 
 import static kraken.model.project.validator.Severity.ERROR;
+import static kraken.model.project.validator.Severity.WARNING;
 
 import java.math.BigDecimal;
 
+import kraken.el.ast.builder.Literals;
+import kraken.el.math.Numbers;
 import kraken.model.Rule;
 import kraken.model.ValueList;
+import kraken.model.ValueList.DataType;
 import kraken.model.derive.DefaultValuePayload;
 import kraken.model.project.validator.ValidationMessage;
 import kraken.model.project.validator.ValidationSession;
@@ -60,6 +64,11 @@ public class RuleModelValidator implements RuleValidator {
                 || rule.getCondition().getExpression().getExpressionString() == null) {
                 session.add(errorMessage(rule, "condition exists but condition expression is not defined"));
             }
+        }
+        if(rule.getMetadata() != null) {
+            rule.getMetadata().asMap().entrySet().stream()
+                .filter(e -> e.getValue() instanceof BigDecimal)
+                .forEach(e -> validatePrecision("dimension '" + e.getKey() + "'", (BigDecimal) e.getValue(), rule, session));
         }
         if(rule.getPayload() == null) {
             session.add(errorMessage(rule, "payload is not defined"));
@@ -144,6 +153,9 @@ public class RuleModelValidator implements RuleValidator {
                         session.add(errorMessage(rule, "step must be more than zero"));
                     }
                 }
+                validatePrecision("min", payload.getMin(), rule, session);
+                validatePrecision("max", payload.getMax(), rule, session);
+                validatePrecision("step", payload.getStep(), rule, session);
             }
             if(!(rule.getPayload() instanceof DefaultValuePayload)) {
                 if(rule.getPriority() != null) {
@@ -166,13 +178,38 @@ public class RuleModelValidator implements RuleValidator {
                     if (valueList.getValues() == null || valueList.getValues().isEmpty()) {
                         session.add(errorMessage(rule, "ValueList should contain at least one value"));
                     }
+
+                    if(valueList.getValues() != null) {
+                        valueList.getValues().stream()
+                            .filter(v -> v instanceof BigDecimal)
+                            .map(v -> (BigDecimal) v)
+                            .forEach(bigDecimalValue -> validatePrecision("ValueList", bigDecimalValue, rule, session));
+                    }
                 }
             }
         }
     }
 
+    private void validatePrecision(String fieldName, BigDecimal number, Rule rule, ValidationSession session) {
+        if(number != null && number.stripTrailingZeros().precision() > Numbers.DEFAULT_MATH_CONTEXT.getPrecision()) {
+            session.add(warningMessage(
+                rule,
+                String.format(
+                    "%s value '%s' cannot be encoded as a decimal64 without a loss of precision. Actual number at runtime would be rounded to '%s'",
+                    fieldName,
+                    number.toPlainString(),
+                    Numbers.normalized(number).toPlainString()
+                )
+            ));
+        }
+    }
+
     private ValidationMessage errorMessage(Rule rule, String message) {
         return new ValidationMessage(rule, message, ERROR);
+    }
+
+    private ValidationMessage warningMessage(Rule rule, String message) {
+        return new ValidationMessage(rule, message, WARNING);
     }
 
     @Override

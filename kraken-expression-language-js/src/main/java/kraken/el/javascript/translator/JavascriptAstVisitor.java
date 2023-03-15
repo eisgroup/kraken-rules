@@ -171,8 +171,7 @@ public class JavascriptAstVisitor extends QueuedAstVisitor<String> {
     public String visit(In in) {
         String object = visit(in.getLeft());
         String collection = visit(in.getRight());
-
-        return "((" + collection + " || []).indexOf(" + object + ") > -1)";
+        return "this._in("+ collection +", " + object + ")";
     }
 
     @Override

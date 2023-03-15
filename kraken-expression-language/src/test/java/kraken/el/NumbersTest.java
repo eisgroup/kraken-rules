@@ -16,6 +16,10 @@
 package kraken.el;
 
 import static kraken.el.math.Numbers.isValueInNumberSet;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -23,10 +27,30 @@ import java.math.BigDecimal;
 
 import org.junit.Test;
 
+import kraken.el.math.Numbers;
+
 /**
  * @author Mindaugas Ulevicius
  */
 public class NumbersTest {
+
+    @Test
+    public void shouldNotRoundIfPrecisionIsDecimal64() {
+        var n = new BigDecimal("1234567890.123456");
+        var normalized = Numbers.normalized(n);
+        assertThat(normalized.toPlainString(), equalTo("1234567890.123456"));
+        assertThat(normalized, is(n));
+    }
+
+    @Test
+    public void shouldRoundIfPrecisionLargerThanDecimal64() {
+        var n = new BigDecimal("1234567890.1234567");
+        assertThat(n.toPlainString(), is("1234567890.1234567"));
+
+        var normalized = Numbers.normalized(n);
+        assertThat(normalized.toPlainString(), equalTo("1234567890.123457"));
+        assertThat(normalized, not(is(n)));
+    }
 
     @Test
     public void shouldCalculateIfNumberIsInNumberSet_NegativeMin_PositiveMax_Step() {

@@ -41,7 +41,7 @@ public class NumberSetPayloadEvaluatedOperation implements VoidOperation {
             evaluationState,
             fieldValue,
             evaluationState ? "∈" : "∉",
-            payload.getMin() != null ? payload.getMin() : "∞",
+            payload.getMin() != null ? payload.getMin() : "-∞",
             payload.getMax() != null ? payload.getMax() : "∞",
             payload.getStep() != null ? " with step " + payload.getStep() : ""
         );

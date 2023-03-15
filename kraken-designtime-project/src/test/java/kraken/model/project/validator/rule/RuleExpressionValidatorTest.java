@@ -597,6 +597,31 @@ public class RuleExpressionValidatorTest {
                 + "An empty condition expression is 'true' by default."));
     }
 
+    @Test
+    public void shouldCreateWarningMessageForNumbersThatDoesNotFitInDecimal64() {
+        Rule rule = rule("R1", "PartyContext", "surname");
+        Payload assertionPayload = factory.createAssertionPayload();
+        ((AssertionPayload) assertionPayload).setAssertionExpression(expressionOf("age >= 1234567890.1234567"));
+        rule.setPayload(assertionPayload);
+
+        ContextDefinition contextDefinition = contextDefinition("PartyContext", List.of(
+            field("surname"),
+            field("age", PrimitiveFieldDataType.DECIMAL)
+        ));
+
+        KrakenProject krakenProject = krakenProject(List.of(contextDefinition), entryPoints(), List.of(rule));
+
+        List<ValidationMessage> validationMessages = validate(rule, krakenProject);
+
+        assertThat(validationMessages, hasSize(1));
+        assertThat(validationMessages.get(0).getSeverity(), is(Severity.WARNING));
+        assertThat(validationMessages.get(0).getMessage(),
+            equalTo("Warning about Assertion Expression: "
+                + "warning about '1234567890.1234567' with message: "
+                + "Number '1234567890.1234567' cannot be encoded as a decimal64 without a loss of precision. "
+                + "Actual number at runtime would be rounded to '1234567890.123457'"));
+    }
+
     private List<ValidationMessage> validate(Rule rule, KrakenProject krakenProject) {
         RuleExpressionValidator validator = new RuleExpressionValidator(krakenProject);
         ValidationSession session = new ValidationSession();

@@ -190,9 +190,6 @@ Date(String dateString) : Date
 
 Create a date from ISO String.
 
-> Be aware when creating date-time without explicit time zone, date-time will be created with a working machine time zone shift. For UI engine it is browser timezone, for server it is server timezone. It may cause different behaviour depending on execution runtime.
-It is not recommended to create a date-time without a time zone as `2021-01-01T01:01:01`. It is recommended to create date-time with a time zone as `2021-01-01T01:01:01Z` instead. Using this function with the string containing time zone will have deterministic behaviour.
-
 **parameter** dateString - ISO string  
 **throws error** if string does not match date pattern 'YYYY-MM-DD'  
 **examples**
@@ -228,6 +225,11 @@ DateTime(String dateTimeString) : DateTime
 ```
 
 Create a datetime from ISO String.
+
+> Note, that if the time is specified without the time zone (for example `DateTime("2021-01-01T02:00:00")`), then the time will be created in the time zone of the local machine.
+> It is not recommended to specify time this way, because then the actual time value depends on the time zone of the local machine on where this expression is evaluated.  
+> In case of the Kraken Rule Engine, the same expression is evaluated in UI (in browser time zone) and backend (in server time zone) and therefore may result in a different rule evaluation result if time is specified without the time zone.  
+> Therefore, it is recommended to specify time with explicit time zone (for example `DateTime("2021-01-01T02:00:00Z")`)
 
 **parameter** dateTimeString - ISO string  
 **throws error** if string does not match datetime pattern 'YYYY-MM-DDThh:mm:ssZ'  

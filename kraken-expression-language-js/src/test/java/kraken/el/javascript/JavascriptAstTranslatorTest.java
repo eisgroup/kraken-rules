@@ -143,7 +143,7 @@ public class JavascriptAstTranslatorTest {
             tc("Coverage.coverageCd matches '[a..z]'",
                 "(/[a..z]/.test(this._s(Coverage.coverageCd)))"),
             tc("Coverage.limit in {1, 2, 3}",
-                "(([1,2,3] || []).indexOf(Coverage.limit) > -1)"),
+                "this._in([1,2,3], Coverage.limit)"),
             tc("!true",
                 "!true"),
 

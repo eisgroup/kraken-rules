@@ -78,4 +78,20 @@ describe('Numbers', () => {
             doesNotHaveNumbers(numberSet, 10.0001)
         })
     })
+    describe('normalization', () => {
+        it('should not round if precision is decimal 64', () => {
+            const n = 1234567890.123456
+            const normalized = Numbers.normalized(n)
+            expect(normalized.toString()).toBe('1234567890.123456')
+        })
+        it('should round if precision is larger than decimal 64', () => {
+            // 1234567890.1234567 just barely fits in javascript number because it uses binary64 format,
+            // but will not fit in java's decimal64
+            const n = 1234567890.1234567
+            expect(n.toString()).toBe('1234567890.1234567')
+
+            const normalized = Numbers.normalized(n)
+            expect(normalized.toString()).toBe('1234567890.123457')
+        })
+    })
 })

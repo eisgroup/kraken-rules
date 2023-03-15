@@ -14,6 +14,7 @@ import leven from 'fast-levenshtein'
 import { Scope } from '../../scope/Scope'
 import { VariableSymbol } from '../../symbol/VariableSymbol'
 import { Type } from '../../type/Types'
+import BigNumber from 'bignumber.js'
 
 export class ValidatingNodeVisitor extends BaseNodeVisitor {
     private messages: AstMessage[] = []
@@ -57,7 +58,10 @@ export class ValidatingNodeVisitor extends BaseNodeVisitor {
                 visitChildren(node)
                 addMessages(validator.validateArithmeticOperation(node))
             },
-
+            visit_decimal(node: Node): void {
+                visitChildren(node)
+                addMessages(validator.validateDecimalNumberPrecision(node))
+            },
             // logical
             visit_and(node: Node): void {
                 visitChildren(node)
@@ -514,6 +518,16 @@ const validator = {
         if (p.node.nodeType === 'NULL') {
             const message = `Operand cannot be 'null' literal for operation: '${readable(p.parent.nodeType)}'`
             return [createError(message, p.node)]
+        }
+        return []
+    },
+    validateDecimalNumberPrecision(node: Node): AstMessage[] {
+        const numberLiteral = getText(node)
+        const n = new BigNumber(getText(node))
+        const numberLiteralDecimal64 = n.precision(16, BigNumber.ROUND_HALF_EVEN).toFixed()
+        if (n.toFixed() !== numberLiteralDecimal64) {
+            const message = `Number ${numberLiteral} cannot be encoded as a decimal64 without a loss of precision. Actual number at runtime would be rounded to ${numberLiteralDecimal64}`
+            return [createWarning(message, node)]
         }
         return []
     },

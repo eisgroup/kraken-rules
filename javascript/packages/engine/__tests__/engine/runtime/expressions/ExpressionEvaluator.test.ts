@@ -46,6 +46,18 @@ beforeEach(() => (dataObject = data.empty()))
 
 describe('ExpressionEvaluator', () => {
     describe('evaluate', () => {
+        it('should evaluate the expression with _in native function', () => {
+            function evaluate(expressionString): unknown {
+                return evaluator.evaluate({ expressionString, expressionType: 'COMPLEX' }, mock.dataContextEmpty())
+            }
+            expect(
+                evaluate(
+                    "((_in(this.Join(['A','B'],['C']), 'A') && _in(this.Join(['A','B'],['C']), 'B')) && _in(this.Join(['A','B'],['C']), 'C'))",
+                ),
+            ).toBeTruthy()
+
+            expect(evaluate('_in(["a", "b"], "a")')).toBeTruthy()
+        })
         it('should evaluate get with PropertyExpression', () => {
             const name = evaluator.evaluate(
                 { expressionType: 'PATH', expressionString: 'id' },

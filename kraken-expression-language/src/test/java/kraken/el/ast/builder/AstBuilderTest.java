@@ -735,24 +735,6 @@ public class AstBuilderTest {
     }
 
     @Test
-    public void shouldThrowOnDecimalLossOfPrecisionFloatingOnly() {
-        assertThrows(AstBuildingException.class,
-                () -> ast("0.66666666666666667"));
-    }
-
-    @Test
-    public void shouldThrowOnDecimalLossOfPrecision() {
-        assertThrows(AstBuildingException.class,
-                () -> ast("10.6666666666666667"));
-    }
-
-    @Test
-    public void shouldThrowOnDecimalLossOfPrecisionForLongNumber() {
-        assertThrows(AstBuildingException.class,
-                () -> ast("66666666666666667"));
-    }
-
-    @Test
     public void shouldBuildDecimalLiteralValue() {
         Ast ast = rawAst("0.25");
         Expression expression = ast.getExpression();

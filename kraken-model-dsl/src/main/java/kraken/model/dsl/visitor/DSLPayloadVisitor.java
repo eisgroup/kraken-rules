@@ -15,22 +15,38 @@
  */
 package kraken.model.dsl.visitor;
 
-import kraken.el.ast.builder.Literals;
-import kraken.model.ValueList;
-import kraken.model.dsl.KrakenDSL.ValueListPayloadContext;
-import kraken.model.dsl.KrakenDSL.NumberSetPayloadContext;
-import kraken.model.dsl.KrakenDSLBaseVisitor;
-import kraken.model.dsl.KrakenDSL;
-import kraken.model.dsl.model.*;
-
 import static java.util.Objects.nonNull;
 import static kraken.el.ast.builder.Literals.escape;
-import static kraken.el.ast.builder.Literals.getDecimal;
+import static kraken.el.ast.builder.Literals.getExactDecimal64;
 import static kraken.el.ast.builder.Literals.stripQuotes;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import kraken.el.ast.builder.Literals;
+import kraken.model.ValueList;
+import kraken.model.dsl.KrakenDSL;
+import kraken.model.dsl.KrakenDSL.NumberSetPayloadContext;
+import kraken.model.dsl.KrakenDSL.ValueListPayloadContext;
+import kraken.model.dsl.KrakenDSLBaseVisitor;
+import kraken.model.dsl.model.DSLAccessibilityPayload;
+import kraken.model.dsl.model.DSLAssertionValidationPayload;
+import kraken.model.dsl.model.DSLDefaultValuePayload;
+import kraken.model.dsl.model.DSLDefaultingType;
+import kraken.model.dsl.model.DSLExpression;
+import kraken.model.dsl.model.DSLLengthValidationPayload;
+import kraken.model.dsl.model.DSLNumberSetPayload;
+import kraken.model.dsl.model.DSLPayload;
+import kraken.model.dsl.model.DSLRegExpValidationPayload;
+import kraken.model.dsl.model.DSLSeverity;
+import kraken.model.dsl.model.DSLSizeOrientation;
+import kraken.model.dsl.model.DSLSizePayload;
+import kraken.model.dsl.model.DSLSizeRangePayload;
+import kraken.model.dsl.model.DSLUsageType;
+import kraken.model.dsl.model.DSLUsageValidationPayload;
+import kraken.model.dsl.model.DSLValueListPayload;
+import kraken.model.dsl.model.DSLVisibilityPayload;
 
 /**
  * @author mulevicius
@@ -107,13 +123,13 @@ public class DSLPayloadVisitor extends KrakenDSLBaseVisitor<DSLPayload> {
     @Override
     public DSLPayload visitNumberSetPayload(NumberSetPayloadContext ctx) {
         BigDecimal min = ctx.minNumber() != null
-            ? Literals.getDecimal(ctx.minNumber().decimalLiteral().getText())
+            ? getExactDecimal64(ctx.minNumber().decimalLiteral().getText())
             : null;
         BigDecimal max = ctx.maxNumber() != null
-            ? Literals.getDecimal(ctx.maxNumber().decimalLiteral().getText())
+            ? getExactDecimal64(ctx.maxNumber().decimalLiteral().getText())
             : null;
         BigDecimal step = ctx.stepNumber() != null
-            ? Literals.getDecimal(ctx.stepNumber().positiveDecimalLiteral().getText())
+            ? getExactDecimal64(ctx.stepNumber().positiveDecimalLiteral().getText())
             : null;
         String code = code(ctx.payloadMessage());
         String message = message(ctx.payloadMessage());
@@ -185,7 +201,7 @@ public class DSLPayloadVisitor extends KrakenDSLBaseVisitor<DSLPayload> {
         if (ctx.decimalValues() != null) {
             List<Number> values = ctx.decimalValues().decimalLiteral()
                 .stream()
-                .map(decimalValue -> getDecimal(decimalValue.getText()))
+                .map(decimalValue -> getExactDecimal64(decimalValue.getText()))
                 .collect(Collectors.toUnmodifiableList());
 
             return new DSLValueListPayload(

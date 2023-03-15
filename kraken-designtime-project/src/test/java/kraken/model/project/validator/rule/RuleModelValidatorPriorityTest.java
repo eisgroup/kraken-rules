@@ -16,13 +16,19 @@
 package kraken.model.project.validator.rule;
 
 import static kraken.model.project.KrakenProjectMocks.DEFAULT_NAMESPACE;
+import static kraken.model.project.KrakenProjectMocks.arrayChild;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.hamcrest.core.IsEqual.equalTo;
 
+import org.hamcrest.collection.IsCollectionWithSize;
+import org.hamcrest.collection.IsEmptyCollection;
+import org.hamcrest.core.IsEqual;
 import org.junit.Before;
 import org.junit.Test;
 
+import kraken.model.derive.DefaultingType;
 import kraken.model.factory.RulesModelFactory;
 import kraken.model.project.validator.Severity;
 import kraken.model.project.validator.ValidationSession;
@@ -30,7 +36,7 @@ import kraken.model.project.validator.ValidationSession;
 /**
  * @author mulevicius
  */
-public class RuleModelValidatorTest {
+public class RuleModelValidatorPriorityTest {
 
     private static final RulesModelFactory factory = RulesModelFactory.getInstance();
 
@@ -42,7 +48,7 @@ public class RuleModelValidatorTest {
     }
 
     @Test
-    public void shouldBeValidAssertionWithCondition() {
+    public void shouldValidateThatPriorityIsNotAllowedForUnsupportedPayloadType() {
         var rule = factory.createRule();
         rule.setPhysicalNamespace(DEFAULT_NAMESPACE);
         rule.setName("RL");
@@ -63,4 +69,24 @@ public class RuleModelValidatorTest {
         );
     }
 
+    @Test
+    public void shouldValidateThatPriorityIsAllowedForSupportedPayloadType() {
+        var rule = factory.createRule();
+        rule.setPhysicalNamespace(DEFAULT_NAMESPACE);
+        rule.setName("RL");
+        rule.setContext("Context");
+        rule.setTargetPath("field");
+        var payload = factory.createDefaultValuePayload();
+        payload.setDefaultingType(DefaultingType.defaultValue);
+        var expression = factory.createExpression();
+        expression.setExpressionString("'value'");
+        payload.setValueExpression(expression);
+        rule.setPayload(payload);
+        rule.setPriority(10);
+
+        var session = new ValidationSession();
+        validator.validate(rule, session);
+
+        assertThat(session.getValidationMessages(), empty());
+    }
 }

@@ -71,10 +71,21 @@ public class Literals {
      *
      * @param decimalStr
      * @return
-     * @throws ArithmeticException when decimal literal cannot be exactly parsed due to loss of precision
+     * @throws ArithmeticException when decimal literal cannot be exactly parsed to decimal64 due to loss of precision
+     * @throws NumberFormatException when string is not a number
      */
-    public static BigDecimal getDecimal(String decimalStr) throws ArithmeticException {
+    public static BigDecimal getExactDecimal64(String decimalStr) throws ArithmeticException, NumberFormatException {
         return new BigDecimal(decimalStr, EXACT_DECIMAL64);
+    }
+
+    /**
+     *
+     * @param decimalStr
+     * @return decimal parsed from string
+     * @throws NumberFormatException when string is not a number
+     */
+    public static BigDecimal getDecimal(String decimalStr) throws NumberFormatException {
+        return new BigDecimal(decimalStr);
     }
 
     public static Integer getInteger(String integerString) {
@@ -88,4 +99,5 @@ public class Literals {
     public static LocalDateTime getDateTime(String isoDate) {
         return LocalDateTime.ofInstant(ZonedDateTime.parse(isoDate).toInstant(), ZoneId.systemDefault());
     }
+
 }

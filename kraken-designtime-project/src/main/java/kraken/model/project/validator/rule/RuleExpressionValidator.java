@@ -19,12 +19,9 @@ import static kraken.el.ast.Template.asTemplateExpression;
 
 import java.util.function.Function;
 
-import org.apache.commons.lang3.BooleanUtils;
-
 import kraken.el.Expression;
 import kraken.el.ast.Ast;
 import kraken.el.ast.AstType;
-import kraken.el.ast.Template;
 import kraken.el.ast.builder.AstBuilder;
 import kraken.el.ast.builder.AstBuildingException;
 import kraken.el.ast.validation.AstMessage;
@@ -78,10 +75,10 @@ public final class RuleExpressionValidator implements RuleValidator {
 
         Scope scope = scopeBuilder.buildScope(contextDefinition);
 
-        findErrorsInCondition(rule, scope, session);
-        findErrorsInAssertion(rule, scope, session);
-        findErrorsInDefault(rule, contextDefinition, scope, session);
-        findErrorsInTemplate(rule, scope, session);
+        validateConditionExpression(rule, scope, session);
+        validateAssertionExpression(rule, scope, session);
+        validateDefaultExpression(rule, contextDefinition, scope, session);
+        validateMessageTemplateExpression(rule, scope, session);
     }
 
     @Override
@@ -93,7 +90,7 @@ public final class RuleExpressionValidator implements RuleValidator {
             && krakenProject.getContextProjection(rule.getContext()).getContextFields().containsKey(rule.getTargetPath());
     }
 
-    private void findErrorsInTemplate(Rule rule, Scope scope, ValidationSession session) {
+    private void validateMessageTemplateExpression(Rule rule, Scope scope, ValidationSession session) {
         if (rule.getPayload() instanceof ValidationPayload
             && ((ValidationPayload) rule.getPayload()).getErrorMessage() != null
             && ((ValidationPayload) rule.getPayload()).getErrorMessage().getErrorMessage() != null) {
@@ -131,7 +128,7 @@ public final class RuleExpressionValidator implements RuleValidator {
             || type.unwrapArrayType().isPrimitive() || type.unwrapArrayType().isDynamic();
     }
 
-    private void findErrorsInAssertion(Rule rule, Scope scope, ValidationSession session) {
+    private void validateAssertionExpression(Rule rule, Scope scope, ValidationSession session) {
         if (rule.getPayload() instanceof AssertionPayload && ((AssertionPayload) rule.getPayload()).getAssertionExpression() != null) {
             String assertionExpression = ((AssertionPayload) rule.getPayload()).getAssertionExpression().getExpressionString();
             if(!checkIfParseable(assertionExpression, "Assertion", rule, scope, session)) {
@@ -164,7 +161,7 @@ public final class RuleExpressionValidator implements RuleValidator {
         }
     }
 
-    private void findErrorsInDefault(Rule rule, ContextDefinition contextDefinition, Scope scope, ValidationSession session) {
+    private void validateDefaultExpression(Rule rule, ContextDefinition contextDefinition, Scope scope, ValidationSession session) {
         if (rule.getPayload() instanceof DefaultValuePayload && ((DefaultValuePayload) rule.getPayload()).getValueExpression() != null) {
             String defaultExpression = ((DefaultValuePayload) rule.getPayload()).getValueExpression().getExpressionString();
             if(!checkIfParseable(defaultExpression, "Default", rule, scope, session)) {
@@ -218,7 +215,7 @@ public final class RuleExpressionValidator implements RuleValidator {
         return fieldType;
     }
 
-    private void findErrorsInCondition(Rule rule, Scope scope, ValidationSession session) {
+    private void validateConditionExpression(Rule rule, Scope scope, ValidationSession session) {
         if (rule.getCondition() != null && rule.getCondition().getExpression() != null) {
             String conditionExpression = rule.getCondition().getExpression().getExpressionString();
             if(!checkIfParseable(conditionExpression, "Condition", rule, scope, session)) {

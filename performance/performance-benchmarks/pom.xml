@@ -7,7 +7,7 @@
     <parent>
         <artifactId>performance-pom</artifactId>
         <groupId>kraken.performance</groupId>
-        <version>1.44.1-SNAPSHOT</version>
+        <version>1.45.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>performance-benchmarks</artifactId>

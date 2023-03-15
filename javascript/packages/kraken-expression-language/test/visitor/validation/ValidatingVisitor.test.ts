@@ -226,6 +226,12 @@ Count(false
         tcNotValid('Policy or addressInfo', 'Insured')
         tcNotValid('Policy || addressInfo', 'Insured')
     })
+    it('decimal precision', () => {
+        tcHasNoMessages('1234567890.123456', 'Insured')
+        tcHasNoMessages('1234567890.', 'Insured')
+        tcHasNoMessages('1234567890.000000000000000000000', 'Insured')
+        tcHasWarningMessages('1234567890.1234567', 'Insured')
+    })
     it('dynamic context', () => {
         tcValid('context.externalData.limitAmount > cardCreditLimitAmount', 'CreditCardInfo')
         tcValid('context.externalData.limitAmount > limitAmount', 'COLLCoverage')
@@ -270,6 +276,12 @@ Count(false
         tcNotValid('(<T>) this', 'COLLCoverage')
     })
 })
+
+function tcHasNoMessages(expression: string, contextDefinition: string): void | never {
+    const errors = findMessages(expression, contextDefinition)
+    const actual = `'${expression}' has ${errors.length} validation messages`
+    expect(actual).toBe(`'${expression}' has 0 validation messages`)
+}
 
 function tcValid(expression: string, contextDefinition: string): void | never {
     const errors = findMessages(expression, contextDefinition).filter(err => err.severity === 'ERROR')

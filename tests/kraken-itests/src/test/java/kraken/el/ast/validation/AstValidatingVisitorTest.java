@@ -273,7 +273,13 @@ public class AstValidatingVisitorTest {
             tcNotValid("Min('10', '10')", "COLLCoverage"),
             tcNotValid("Min(2022-01-01, 2022-01-01) > 10", "COLLCoverage"),
             tcValid("Min(Min(10, 20), Min(10, 20)) + 20", "COLLCoverage"),
-            tcNotValid("Min(Min(10, 20), Min(2022-01-01, 2022-01-01)) + 20", "COLLCoverage")
+            tcNotValid("Min(Min(10, 20), Min(2022-01-01, 2022-01-01)) + 20", "COLLCoverage"),
+
+            // number precision
+            tcHasNoMessages("1234567890.123456", "Insured"),
+            tcHasNoMessages("1234567890.", "Insured"),
+            tcHasNoMessages("1234567890.000000000000000000000", "Insured"),
+            tcHasWarningMessages("1234567890.1234567", "Insured")
         );
     }
 
@@ -324,6 +330,10 @@ public class AstValidatingVisitorTest {
 
     private static AstValidationTestCase tcNotValid(String expression, String onContext, int syntaxErrorCount) {
         return new AstValidationTestCase(expression, onContext, hasSize(syntaxErrorCount), errors);
+    }
+
+    private static AstValidationTestCase tcHasNoMessages(String expression, String onContext) {
+        return new AstValidationTestCase(expression, onContext, empty(), err -> true);
     }
 
     public static final class AstValidationTestCase {

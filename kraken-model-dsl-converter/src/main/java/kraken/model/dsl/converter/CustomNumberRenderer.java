@@ -23,6 +23,7 @@ import kraken.el.math.Numbers;
 
 /**
  * Custom number renderer used to format {@link Number} with custom formats.
+ * Normalizes and rounds all numbers to adhere to Decimal64 format when writing to DSL.
  * Format <code>minMaxOrInteger</code> will render {@link Integer#MIN_VALUE} as MIN, {@link Integer#MAX_VALUE} as MAX,
  * or integer number otherwise.
  *
@@ -49,6 +50,9 @@ public class CustomNumberRenderer extends NumberRenderer {
         }
         if(o instanceof Number && formatString == null) {
             return Numbers.toString((Number)o);
+        }
+        if(o instanceof Number) {
+            o = Numbers.normalized((Number)o);
         }
         return super.toString(o, formatString, locale);
     }

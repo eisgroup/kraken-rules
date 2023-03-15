@@ -69,7 +69,7 @@ export class NumberSetPayloadHandler implements RulePayloadHandler {
 
     private describePayloadResult(payload: NumberSetPayload, result: boolean, value: unknown): string {
         const inSet = result ? '∈' : '∉'
-        const min = payload.min !== undefined ? payload.min : '∞'
+        const min = payload.min !== undefined ? payload.min : '-∞'
         const max = payload.max !== undefined ? payload.max : '∞'
         const stepMsg = payload.step !== undefined ? ` with step ${payload.step}` : ''
         return `Evaluated '${payload.type}' to ${result}. ${value} ${inSet} [${min}, ${max}]${stepMsg}.`

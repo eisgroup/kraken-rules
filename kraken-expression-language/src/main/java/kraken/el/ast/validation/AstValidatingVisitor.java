@@ -57,6 +57,7 @@ import kraken.el.ast.Negative;
 import kraken.el.ast.NodeType;
 import kraken.el.ast.NotEquals;
 import kraken.el.ast.Null;
+import kraken.el.ast.NumberLiteral;
 import kraken.el.ast.Or;
 import kraken.el.ast.Path;
 import kraken.el.ast.ReferenceValue;
@@ -64,10 +65,12 @@ import kraken.el.ast.Subtraction;
 import kraken.el.ast.UnaryExpression;
 import kraken.el.ast.ValueBlock;
 import kraken.el.ast.Variable;
+import kraken.el.ast.builder.Literals;
 import kraken.el.ast.validation.details.AstDetails;
 import kraken.el.ast.validation.details.ComparisonTypeDetails;
 import kraken.el.ast.validation.details.FunctionParameterTypeDetails;
 import kraken.el.ast.visitor.AstTraversingVisitor;
+import kraken.el.math.Numbers;
 import kraken.el.scope.ScopeType;
 import kraken.el.scope.symbol.FunctionParameter;
 import kraken.el.scope.symbol.FunctionSymbol;
@@ -476,6 +479,21 @@ public class AstValidatingVisitor extends AstTraversingVisitor {
             }
         }
         return super.visit(cast);
+    }
+
+    @Override
+    public Expression visit(NumberLiteral numberLiteral) {
+        if(numberLiteral.getValue().stripTrailingZeros().precision() > Numbers.DEFAULT_MATH_CONTEXT.getPrecision()) {
+            String template = "Number '%s' cannot be encoded as a decimal64 without a loss of precision. "
+                + "Actual number at runtime would be rounded to '%s'";
+            String message = String.format(
+                template,
+                numberLiteral.getValue().toPlainString(),
+                Numbers.normalized(numberLiteral.getValue()).toPlainString()
+            );
+            messages.add(createWarning(message, numberLiteral));
+        }
+        return super.visit(numberLiteral);
     }
 
     private void validateUnary(UnaryExpression e, Type expectedType) {

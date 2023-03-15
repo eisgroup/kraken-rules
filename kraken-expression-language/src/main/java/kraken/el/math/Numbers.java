@@ -34,7 +34,7 @@ public class Numbers {
 
     // IEEE 754R Decimal64 (decimalPlaces: 16, RoundingMode: HALF_EVEN)
     // cannot use Decimal128 because javascript supports only 64 bit decimals
-    private static final MathContext DEFAULT_MATH_CONTEXT = MathContext.DECIMAL64;
+    public static final MathContext DEFAULT_MATH_CONTEXT = MathContext.DECIMAL64;
 
     public static Number modulus(Number first, Number second) {
         return normalized(first).remainder(normalized(second), DEFAULT_MATH_CONTEXT);
@@ -152,6 +152,9 @@ public class Numbers {
 
     public static BigDecimal normalized(Number number) {
         if(number instanceof BigDecimal) {
+            if(((BigDecimal) number).precision() > DEFAULT_MATH_CONTEXT.getPrecision()) {
+                return new BigDecimal(((BigDecimal) number).toPlainString(), DEFAULT_MATH_CONTEXT);
+            }
             return (BigDecimal) number;
         }
         return new BigDecimal(number.toString(), DEFAULT_MATH_CONTEXT);

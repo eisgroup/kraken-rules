@@ -18,6 +18,7 @@ package kraken.model.dsl.converter;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import java.math.BigDecimal;
 import java.util.Locale;
 
 import org.junit.Before;
@@ -57,5 +58,11 @@ public class CustomNumberRendererTest {
     public void shouldRenderMinIntegerAsMin() {
         String renderedNumber = renderer.toString(Integer.MIN_VALUE, "minMaxOrInteger", Locale.US);
         assertThat(renderedNumber, equalTo("MIN"));
+    }
+
+    @Test
+    public void shouldRoundDecimalIfDoesNotFitInDecimal64() {
+        String renderedNumber = renderer.toString(new BigDecimal("1234567890.1234567"), null, Locale.US);
+        assertThat(renderedNumber, equalTo("1234567890.123457"));
     }
 }
