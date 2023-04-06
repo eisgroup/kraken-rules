@@ -15,9 +15,9 @@
  */
 
 import { Contexts } from 'kraken-model'
-import ContextField = Contexts.ContextField
 import { ContextInstanceInfo } from 'kraken-engine-api'
 import Cardinality = Contexts.Cardinality
+import ContextDefinition = Contexts.ContextDefinition
 
 /**
  * DTO wrapper for data context object instance
@@ -42,18 +42,16 @@ export class DataContext {
      * @param contextName   Context definition name, identifies context type
      * @param dataObject    Underlying data object for context
      * @param info          Information about data object
-     * @param definitionProjection    Holds all fields that are of for this context
+     * @param contextDefinition    context definition of this context
      * @param parent                Parent data context form which this data context was extracted
-     * @param inheritedContextNames   Inherited context definition names by this context
      */
     constructor(
         public readonly contextId: string,
         public readonly contextName: string,
         public readonly dataObject: Record<string, unknown>,
         public readonly info: ContextInstanceInfo,
-        public readonly definitionProjection: Record<string, ContextField> = {},
+        public readonly contextDefinition: ContextDefinition,
         public readonly parent?: DataContext | undefined,
-        public readonly inheritedContextNames: string[] = [],
     ) {
         this.dataContextReferences = {}
         this.objectReferences = {}
@@ -65,7 +63,7 @@ export class DataContext {
         }
         this.objectReferences[contextName] = dataObject
         this.dataContextReferences[contextName] = selfReference
-        for (const inheritedContextName of inheritedContextNames) {
+        for (const inheritedContextName of contextDefinition.inheritedContexts) {
             this.objectReferences[inheritedContextName] = dataObject
             this.dataContextReferences[inheritedContextName] = selfReference
         }

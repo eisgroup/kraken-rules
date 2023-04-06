@@ -15,8 +15,6 @@
  */
 package kraken.runtime.engine.handlers;
 
-import static kraken.runtime.utils.TargetPathUtils.resolveTargetPath;
-
 import java.util.List;
 
 import javax.money.MonetaryAmount;
@@ -27,12 +25,11 @@ import kraken.model.payload.PayloadType;
 import kraken.runtime.EvaluationSession;
 import kraken.runtime.engine.RulePayloadHandler;
 import kraken.runtime.engine.context.data.DataContext;
-import kraken.runtime.engine.handlers.trace.NumberSetPayloadEvaluatedOperation;
+import kraken.runtime.engine.handlers.trace.FieldValueValidationOperation;
 import kraken.runtime.engine.result.NumberSetPayloadResult;
 import kraken.runtime.engine.result.PayloadResult;
 import kraken.runtime.expressions.KrakenExpressionEvaluator;
 import kraken.runtime.model.rule.RuntimeRule;
-import kraken.runtime.model.rule.payload.Payload;
 import kraken.runtime.model.rule.payload.validation.NumberSetPayload;
 import kraken.tracer.Tracer;
 
@@ -52,21 +49,37 @@ public class NumberSetPayloadHandler implements RulePayloadHandler {
     }
 
     @Override
-    public PayloadResult executePayload(Payload p, RuntimeRule rule, DataContext context, EvaluationSession session) {
-        var payload = (NumberSetPayload) p;
-        var value = evaluator.evaluateGetProperty(resolveTargetPath(rule, context), context.getDataObject());
+    public PayloadResult executePayload(RuntimeRule rule, DataContext dataContext, EvaluationSession session) {
+        var payload = (NumberSetPayload) rule.getPayload();
+
+        var value = evaluator.evaluateTargetField(rule.getTargetPath(), dataContext);
         boolean success = true;
         if(value instanceof MonetaryAmount) {
             value = MoneyFunctions.fromMoney((MonetaryAmount) value);
         }
         if(value instanceof Number) {
+            Tracer.doOperation(new FieldValueValidationOperation(value));
             success = Numbers.isValueInNumberSet((Number) value, payload.getMin(), payload.getMax(), payload.getStep());
         }
 
-        List<String> templateVariables = evaluator.evaluateTemplateVariables(payload.getErrorMessage(), context, session);
-
-        Tracer.doOperation(new NumberSetPayloadEvaluatedOperation(payload, value, success));
+        var templateVariables = evaluator.evaluateTemplateVariables(payload.getErrorMessage(), dataContext, session);
         return new NumberSetPayloadResult(success, payload, templateVariables);
     }
 
+    @Override
+    public String describePayloadResult(PayloadResult payloadResult) {
+        var result = (NumberSetPayloadResult) payloadResult;
+        return result.getSuccess()
+            ? String.format("Field is valid. Field value is in %s.", describeExpectedNumberSet(result))
+            : String.format("Field is not valid. Field value is not in %s.", describeExpectedNumberSet(result));
+    }
+
+    private String describeExpectedNumberSet(NumberSetPayloadResult payloadResult) {
+        return String.format(
+            "number set [%s, %s]%s",
+            payloadResult.getMin() != null ? payloadResult.getMin() : "-∞",
+            payloadResult.getMax() != null ? payloadResult.getMax() : "∞",
+            payloadResult.getStep() != null ? " with step " + payloadResult.getStep() : ""
+        );
+    }
 }

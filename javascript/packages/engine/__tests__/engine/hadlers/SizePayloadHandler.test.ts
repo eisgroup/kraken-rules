@@ -22,78 +22,82 @@ import { DataContext } from '../../../src/engine/contexts/data/DataContext'
 
 const sizePayloadHandler = new SizePayloadHandler(mock.evaluator)
 const { session } = mock
+const { Policy } = mock.modelTree.contexts
 
 describe('Size Payload Handler', () => {
     it('should succeed when array size is more than min', () => {
         const payload = PayloadBuilder.size().min(2)
-        const result = sizePayloadHandler.executePayload(payload, rule(payload), dataContext(3), session)
+        const result = sizePayloadHandler.executePayload(rule(payload), dataContext(3), session)
         expect(result.success).toBeTruthy()
     })
     it('should fail when array is undefined and less than min', () => {
         const payload = PayloadBuilder.size().min(2)
-        const result = sizePayloadHandler.executePayload(payload, rule(payload), dataContext(), session)
+        const result = sizePayloadHandler.executePayload(rule(payload), dataContext(), session)
         expect(result.success).toBeFalsy()
     })
     it('should succeed when array size equals min', () => {
         const payload = PayloadBuilder.size().min(2)
-        const result = sizePayloadHandler.executePayload(payload, rule(payload), dataContext(2), session)
+        const result = sizePayloadHandler.executePayload(rule(payload), dataContext(2), session)
         expect(result.success).toBeTruthy()
     })
     it('should fail when array size is less than min', () => {
         const payload = PayloadBuilder.size().min(2)
-        const result = sizePayloadHandler.executePayload(payload, rule(payload), dataContext(1), session)
+        const result = sizePayloadHandler.executePayload(rule(payload), dataContext(1), session)
         expect(result.success).toBeFalsy()
     })
     it('should succeed when array size is less than max', () => {
         const payload = PayloadBuilder.size().max(2)
-        const result = sizePayloadHandler.executePayload(payload, rule(payload), dataContext(1), session)
+        const result = sizePayloadHandler.executePayload(rule(payload), dataContext(1), session)
         expect(result.success).toBeTruthy()
     })
     it('should succeed when array size equals max', () => {
         const payload = PayloadBuilder.size().max(2)
-        const result = sizePayloadHandler.executePayload(payload, rule(payload), dataContext(2), session)
+        const result = sizePayloadHandler.executePayload(rule(payload), dataContext(2), session)
         expect(result.success).toBeTruthy()
     })
     it('should succeed when array is undefined and less than max', () => {
         const payload = PayloadBuilder.size().max(2)
-        const result = sizePayloadHandler.executePayload(payload, rule(payload), dataContext(), session)
+        const result = sizePayloadHandler.executePayload(rule(payload), dataContext(), session)
         expect(result.success).toBeTruthy()
     })
     it('should fail when array size is more than max', () => {
         const payload = PayloadBuilder.size().max(2)
-        const result = sizePayloadHandler.executePayload(payload, rule(payload), dataContext(3), session)
+        const result = sizePayloadHandler.executePayload(rule(payload), dataContext(3), session)
         expect(result.success).toBeFalsy()
     })
     it('should fail when array size is less than equals', () => {
         const payload = PayloadBuilder.size().equals(2)
-        const result = sizePayloadHandler.executePayload(payload, rule(payload), dataContext(1), session)
+        const result = sizePayloadHandler.executePayload(rule(payload), dataContext(1), session)
         expect(result.success).toBeFalsy()
     })
     it('should succeed when array size is equal to equals', () => {
         const payload = PayloadBuilder.size().equals(2)
-        const result = sizePayloadHandler.executePayload(payload, rule(payload), dataContext(2), session)
+        const result = sizePayloadHandler.executePayload(rule(payload), dataContext(2), session)
         expect(result.success).toBeTruthy()
     })
     it('should fail when array size is more equals', () => {
         const payload = PayloadBuilder.size().equals(2)
-        const result = sizePayloadHandler.executePayload(payload, rule(payload), dataContext(3), session)
+        const result = sizePayloadHandler.executePayload(rule(payload), dataContext(3), session)
         expect(result.success).toBeFalsy()
     })
     it('should fail when array is undefined and not equal to equals', () => {
         const payload = PayloadBuilder.size().equals(1)
-        const result = sizePayloadHandler.executePayload(payload, rule(payload), dataContext(), session)
+        const result = sizePayloadHandler.executePayload(rule(payload), dataContext(), session)
         expect(result.success).toBeFalsy()
     })
 })
 
 function rule(payload: Payloads.Validation.SizePayload): Rule {
-    return new RulesBuilder().setName('rule').setContext('Context').setPayload(payload).setTargetPath('path').build()
+    return new RulesBuilder()
+        .setName('rule')
+        .setContext(Policy.name)
+        .setTargetPath(Policy.fields.policies.name)
+        .setPayload(payload)
+        .build()
 }
 
 function dataContext(size?: number): DataContext {
-    const data = {
-        path: size ? Array(size) : undefined,
-    }
-    const dc = new DataContext('id', 'Context', data, mock.contextInstanceInfo, {}, undefined)
-    return dc
+    const policy = mock.data.empty()
+    policy.policies = size ? Array(size) : undefined
+    return new DataContext('1', Policy.name, policy as Record<string, unknown>, mock.contextInstanceInfo, Policy)
 }

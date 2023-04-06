@@ -20,10 +20,8 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 
-import org.apache.commons.lang3.math.NumberUtils;
+import kraken.utils.Dates;
 
 /**
  * Utilities for working with Literals supported by Kraken Expression Language
@@ -93,11 +91,11 @@ public class Literals {
     }
 
     public static LocalDate getDate(String isoDate) {
-        return LocalDate.parse(isoDate);
+        return Dates.convertISOToLocalDate(isoDate);
     }
 
-    public static LocalDateTime getDateTime(String isoDate) {
-        return LocalDateTime.ofInstant(ZonedDateTime.parse(isoDate).toInstant(), ZoneId.systemDefault());
+    public static LocalDateTime getDateTime(String isoDateTime) {
+        return Dates.convertISOToLocalDateTime(isoDateTime);
     }
 
 }

@@ -485,6 +485,14 @@
     {
       "id": "NumberSet",
       "entryPointName": "Policy:NumberSet"
+    },
+    {
+      "id": "ForbiddenField",
+      "entryPointName": "Policy:ForbiddenField"
+    },
+    {
+      "id": "TracerSnapshotTest",
+      "entryPointName": "Policy:TracerSnapshotTest"
     }
   ]
 }

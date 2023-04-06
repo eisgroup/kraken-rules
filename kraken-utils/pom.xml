@@ -8,16 +8,12 @@
     <parent>
         <artifactId>parent-pom</artifactId>
         <groupId>kraken</groupId>
-        <version>1.45.1-SNAPSHOT</version>
+        <version>1.46.0</version>
     </parent>
 
     <artifactId>kraken-utils</artifactId>
 
     <dependencies>
-        <dependency>
-            <groupId>kraken</groupId>
-            <artifactId>kraken-api</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-vfs2</artifactId>
@@ -25,6 +21,14 @@
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.money</groupId>
+            <artifactId>money-api</artifactId>
         </dependency>
 
         <!-- logging -->

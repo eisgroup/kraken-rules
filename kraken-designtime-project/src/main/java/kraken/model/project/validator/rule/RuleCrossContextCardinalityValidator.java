@@ -81,7 +81,7 @@ public class RuleCrossContextCardinalityValidator implements RuleValidator {
         ccrDependencies.forEach(ccr -> {
             Map<Cardinality, List<Pair<String, CrossContextPath>>> grouped =
                     rulePaths.stream()
-                            .filter(isRuleContextSource(rule.getContext(), krakenProject))
+                            .filter(isRuleContextSource(rule.getContext()))
                             .flatMap(contextPath -> crossContextService
                                     .resolvePaths(contextPath, ccr).stream()
                                     .map(crossContextPath -> new Pair<>(contextPath.getPathAsString(), crossContextPath)))
@@ -103,7 +103,7 @@ public class RuleCrossContextCardinalityValidator implements RuleValidator {
             && krakenProject.getContextProjection(rule.getContext()).getContextFields().containsKey(rule.getTargetPath());
     }
 
-    private Predicate<ContextPath> isRuleContextSource(String ruleContext, KrakenProject krakenProject) {
+    private Predicate<ContextPath> isRuleContextSource(String ruleContext) {
         return path -> {
             String last = path.getLastElement();
 

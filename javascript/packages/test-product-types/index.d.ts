@@ -22,6 +22,7 @@ export namespace TestProduct {
             countryCd?: string;
             doNotSolicit?: boolean;
             postalCode?: string;
+            stateCd?: string;
             street?: string;
         }
 

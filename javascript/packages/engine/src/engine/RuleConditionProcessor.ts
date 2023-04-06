@@ -20,6 +20,8 @@ import { ExpressionEvaluator } from './runtime/expressions/ExpressionEvaluator'
 import { ExecutionSession } from './ExecutionSession'
 import { DataContext } from './contexts/data/DataContext'
 import { DefaultConditionEvaluationResult } from '../dto/DefaultConditionEvaluationResult'
+import { logger } from '../utils/DevelopmentLogger'
+import { formatExpressionEvaluationMessage } from '../utils/ExpressionEvaluationMessageFormatter'
 
 export class RuleConditionProcessor {
     constructor(private readonly evaluator: ExpressionEvaluator) {}
@@ -32,7 +34,15 @@ export class RuleConditionProcessor {
         if (!condition) {
             return DefaultConditionEvaluationResult.of(ConditionEvaluation.APPLICABLE)
         }
-        const expressionResult = this.evaluator.evaluate(condition.expression, dataContext, session.expressionContext)
+        const expressionResult = logger.groupDebug(
+            () => formatExpressionEvaluationMessage('condition', condition.expression, dataContext),
+            () => this.evaluator.evaluate(condition.expression, dataContext, session.expressionContext),
+            result =>
+                ExpressionEvaluationResult.isError(result)
+                    ? `Couldn't evaluate condition expression due to error.`
+                    : `Evaluated condition to '${result.success}'.`,
+        )
+
         if (ExpressionEvaluationResult.isError(expressionResult)) {
             return DefaultConditionEvaluationResult.fromError(expressionResult)
         }

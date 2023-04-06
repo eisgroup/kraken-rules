@@ -22,11 +22,16 @@ const { AddressInfo, Policy, COLLCoverage, CreditCardInfo } = mock.modelTreeJson
 import { RuleOverride } from 'kraken-engine-api'
 import OverrideDependencyInfo = RuleOverride.OverrideDependencyInfo
 import { DataContext } from '../../../src/engine/contexts/data/DataContext'
+import ContextDefinition = Contexts.ContextDefinition
 
 describe('RuleOverride', () => {
     it('should find root id', () => {
+        const contextDefinition: ContextDefinition = {
+            name: 'mockName',
+            inheritedContexts: [],
+        }
         const dataContext = (id: string, parent?: DataContext) =>
-            new DataContext(id, 'mockName', {}, mock.contextInstanceInfo, undefined, parent)
+            new DataContext(id, 'mockName', {}, mock.contextInstanceInfo, contextDefinition, parent)
         const root = dataContext('rootId')
         const child1 = dataContext('child1', root)
         const child2 = dataContext('child1', child1)
@@ -198,6 +203,6 @@ function createDataContext(dc: { name: string; field: string; value: unknown }):
         dc.name,
         { [dc.field]: dc.value },
         mock.contextInstanceInfo,
-        mock.modelTree.contexts[dc.name].fields,
+        mock.modelTree.contexts[dc.name],
     )
 }

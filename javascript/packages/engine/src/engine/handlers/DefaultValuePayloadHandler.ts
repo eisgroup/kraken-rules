@@ -21,7 +21,7 @@ import { ExecutionSession } from '../ExecutionSession'
 import { payloadResultCreator } from '../results/PayloadResultCreator'
 import { ValueChangedEvent } from '../results/ValueChangedEvent'
 import { ExpressionEvaluator } from '../runtime/expressions/ExpressionEvaluator'
-import { Expressions } from '../runtime/expressions/Expressions'
+import { TargetPathUtils } from '../runtime/expressions/TargetPathUtils'
 import { Moneys } from '../runtime/expressions/math/Moneys'
 import { RulePayloadHandler } from './RulePayloadHandler'
 import { logger } from '../../utils/DevelopmentLogger'
@@ -30,6 +30,7 @@ import DefaultingType = Payloads.Derive.DefaultingType
 import DefaultValuePayload = Payloads.Derive.DefaultValuePayload
 import PayloadType = Payloads.PayloadType
 import ContextField = Contexts.ContextField
+import { formatExpressionEvaluationMessage } from '../../utils/ExpressionEvaluationMessageFormatter'
 
 function isDefaultType(payload: DefaultValuePayload): boolean {
     return payload.defaultingType === DefaultingType.defaultValue
@@ -58,16 +59,13 @@ export class DefaultValuePayloadHandler implements RulePayloadHandler {
     handlesPayloadType(): Payloads.PayloadType {
         return PayloadType.DEFAULT
     }
-    executePayload(
-        payload: Payloads.Derive.DefaultValuePayload,
-        rule: Rule,
-        dataCtx: DataContext,
-        session: ExecutionSession,
-    ): DefaultValuePayloadResult {
-        const targetPath = Expressions.createPathResolver(dataCtx)(rule.targetPath)
+    executePayload(rule: Rule, dataCtx: DataContext, session: ExecutionSession): DefaultValuePayloadResult {
+        const payload = rule.payload as DefaultValuePayload
+        const value = this.evaluator.evaluateTargetField(rule.targetPath, dataCtx)
 
-        const value = this.resolveCurrentFieldValue(targetPath, dataCtx)
+        const targetPath = TargetPathUtils.resolveTargetPath(rule.targetPath, dataCtx)
 
+        logger.debug(() => formatExpressionEvaluationMessage('default value', payload.valueExpression, dataCtx))
         const expressionResult = this.evaluator.evaluate(payload.valueExpression, dataCtx, session.expressionContext)
         if (ExpressionEvaluationResult.isError(expressionResult)) {
             return payloadResultCreator.defaultFail(expressionResult)
@@ -82,7 +80,7 @@ export class DefaultValuePayloadHandler implements RulePayloadHandler {
         // apply default value on field
 
         let updatedValue = value
-        const isDefault = isDefaultType(payload) && (value == undefined || value === '')
+        const isDefault = isDefaultType(payload) && this.isEmptyValue(value)
         const isReset = isResetType(payload)
         if (isDefault || isReset) {
             const updateValueResult = this.evaluator.evaluateSet(targetPath, dataCtx.dataObject, defaultValue)
@@ -96,25 +94,29 @@ export class DefaultValuePayloadHandler implements RulePayloadHandler {
             return payloadResultCreator.defaultNoEvents()
         }
 
-        logger.debug(
-            () =>
-                `Evaluated '${payload.type}'. Before value: '${ExpressionEvaluator.render(
-                    value,
-                )}'. After value: '${ExpressionEvaluator.render(updatedValue)}'.`,
-        )
-
         return payloadResultCreator.default([
             new ValueChangedEvent(targetPath, dataCtx.contextName, dataCtx.contextId, updatedValue, value),
         ])
     }
 
-    private resolveCurrentFieldValue(targetPath: string, dataContext: DataContext): unknown {
-        const path = Expressions.createPathResolver(dataContext)(targetPath)
-        const result = this.evaluator.evaluateGet(path, dataContext.dataObject)
-        if (ExpressionEvaluationResult.isError(result)) {
-            throw new Error(`Failed to extract attribute '${targetPath}'`)
+    describePayloadResult(payloadResult: DefaultValuePayloadResult): string {
+        if (!payloadResult.events?.length) {
+            return payloadResult.error
+                ? `Field value was not changed. Default value is not applied due to expression error.`
+                : `Field value was not changed.`
         }
-        return result.success
+
+        const defaultValueEvent = payloadResult.events[0] as ValueChangedEvent
+        if (this.isEmptyValue(defaultValueEvent.previousValue)) {
+            return `Field value set to '${ExpressionEvaluator.renderFieldValue(defaultValueEvent.newValue)}'.`
+        }
+        return `Field value reset from '${ExpressionEvaluator.renderFieldValue(
+            defaultValueEvent.previousValue,
+        )}' to '${ExpressionEvaluator.renderFieldValue(defaultValueEvent.newValue)}'.`
+    }
+
+    private isEmptyValue(value: unknown): boolean {
+        return value == undefined || value === ''
     }
 
     private coerce(
@@ -123,7 +125,7 @@ export class DefaultValuePayloadHandler implements RulePayloadHandler {
         dataCtx: DataContext,
         session: ExecutionSession,
     ): ExpressionEvaluationResult.Result {
-        const field = dataCtx.definitionProjection?.[rule.targetPath]
+        const field = dataCtx.contextDefinition.fields?.[rule.targetPath]
         if (!field) {
             return ExpressionEvaluationResult.expressionSuccess(defaultValue)
         }

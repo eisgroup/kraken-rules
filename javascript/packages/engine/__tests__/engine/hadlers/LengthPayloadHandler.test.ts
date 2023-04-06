@@ -40,40 +40,25 @@ describe('lengthPayloadHandler', () => {
         .setPayload(payload.lengthLimit().limit(3, 'Invalid Length'))
         .build()
     it('should return payload payloadResult with type LengthPayloadResult', () => {
-        const payloadResult = handler.executePayload(
-            rule.payload as LengthPayload,
-            rule,
-            dc({ state: 'TooMuchChars' }),
-            session,
-        )
+        const payloadResult = handler.executePayload(rule, dc({ state: 'TooMuchChars' }), session)
         expect(payloadResultTypeChecker.isLength(payloadResult)).toBeTruthy()
     })
     it('should fail on longer that 3 letters validation', () => {
-        const payloadResult = handler.executePayload(
-            rule.payload as LengthPayload,
-            rule,
-            dc({ state: 'TooMuchChars' }),
-            session,
-        )
+        const payloadResult = handler.executePayload(rule, dc({ state: 'TooMuchChars' }), session)
         expect(payloadResult.success).toBeFalsy()
         expect(payloadResult.message).toBeDefined()
         expect(payloadResult.message?.errorMessage).toContain('String contains more characters than 3')
     })
     it('should validate to true', () => {
-        const payloadResult = handler.executePayload(rule.payload as LengthPayload, rule, dc({ state: 'Aa' }), session)
+        const payloadResult = handler.executePayload(rule, dc({ state: 'Aa' }), session)
         expect(payloadResult.success).toBeTruthy()
     })
     it('should validate to true if number of chars is equal to payload length number', () => {
-        const payloadResult = handler.executePayload(rule.payload as LengthPayload, rule, dc({ state: 'AAA' }), session)
+        const payloadResult = handler.executePayload(rule, dc({ state: 'AAA' }), session)
         expect(payloadResult.success).toBeTruthy()
     })
     it('should not use default error message', () => {
-        const payloadResult = handler.executePayload(
-            ruleWithMessage.payload as LengthPayload,
-            ruleWithMessage,
-            dc({ state: 'AAABBB' }),
-            session,
-        )
+        const payloadResult = handler.executePayload(ruleWithMessage, dc({ state: 'AAABBB' }), session)
         expect(payloadResult.success).toBeFalsy()
         const defaultErrMessage = `String 'AAABBB' contains more characters than ${
             (rule.payload as LengthPayload).length

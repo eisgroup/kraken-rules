@@ -15,7 +15,6 @@
  */
 package kraken.engine.sanity.check;
 
-import static kraken.testing.matchers.KrakenMatchers.hasNoIgnoredRules;
 import static kraken.testing.matchers.KrakenMatchers.hasNoValidationFailures;
 import static kraken.testing.matchers.KrakenMatchers.hasValidationFailures;
 import static org.hamcrest.MatcherAssert.assertThat;

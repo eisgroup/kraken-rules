@@ -29,73 +29,73 @@ public class SizePayloadHandlerTest {
     @Test
     public void shouldCheckForMinEquals() {
         final SizePayload payload = payload(SizeOrientation.MIN, 2);
-        final PayloadResult payloadResult = handler().executePayload(payload, rule(payload), dataContext(2), SESSION);
+        final PayloadResult payloadResult = handler().executePayload(rule(payload), dataContext(2), SESSION);
         assertSuccess(payloadResult, true);
     }
     @Test
     public void shouldCheckForMinEqualsWithNullCollection() {
         final SizePayload payload = payload(SizeOrientation.MIN, 2);
-        final PayloadResult payloadResult = handler().executePayload(payload, rule(payload), dataContext(null), SESSION);
+        final PayloadResult payloadResult = handler().executePayload(rule(payload), dataContext(null), SESSION);
         assertSuccess(payloadResult, false);
     }
     @Test
     public void shouldCheckForMinHasLess() {
         final SizePayload payload = payload(SizeOrientation.MIN, 2);
-        final PayloadResult payloadResult = handler().executePayload(payload, rule(payload), dataContext(1), SESSION);
+        final PayloadResult payloadResult = handler().executePayload(rule(payload), dataContext(1), SESSION);
         assertSuccess(payloadResult, false);
     }
     @Test
     public void shouldCheckForMaxHasMore() {
         final SizePayload payload = payload(SizeOrientation.MAX, 2);
-        final PayloadResult payloadResult = handler().executePayload(payload, rule(payload), dataContext(3), SESSION);
+        final PayloadResult payloadResult = handler().executePayload(rule(payload), dataContext(3), SESSION);
         assertSuccess(payloadResult, false);
     }
     @Test
     public void shouldCheckForMaxWhenCollectionNull() {
         final SizePayload payload = payload(SizeOrientation.MAX, 2);
-        final PayloadResult payloadResult = handler().executePayload(payload, rule(payload), dataContext(null), SESSION);
+        final PayloadResult payloadResult = handler().executePayload(rule(payload), dataContext(null), SESSION);
         assertSuccess(payloadResult, true);
     }
     @Test
     public void shouldCheckForMaxEquals() {
         final SizePayload payload = payload(SizeOrientation.MAX, 2);
-        final PayloadResult payloadResult = handler().executePayload(payload, rule(payload), dataContext(2), SESSION);
+        final PayloadResult payloadResult = handler().executePayload(rule(payload), dataContext(2), SESSION);
         assertSuccess(payloadResult, true);
     }
     @Test
     public void shouldCheckForMaxHasLess() {
         final SizePayload payload = payload(SizeOrientation.MAX, 2);
-        final PayloadResult payloadResult = handler().executePayload(payload, rule(payload), dataContext(1), SESSION);
+        final PayloadResult payloadResult = handler().executePayload(rule(payload), dataContext(1), SESSION);
         assertSuccess(payloadResult, true);
     }
     @Test
     public void shouldCheckForMinHasMore() {
         final SizePayload payload = payload(SizeOrientation.MIN, 2);
-        final PayloadResult payloadResult = handler().executePayload(payload, rule(payload), dataContext(3), SESSION);
+        final PayloadResult payloadResult = handler().executePayload(rule(payload), dataContext(3), SESSION);
         assertSuccess(payloadResult, true);
     }
     @Test
     public void shouldCheckForEqualsHasMore() {
         final SizePayload payload = payload(SizeOrientation.EQUALS, 2);
-        final PayloadResult payloadResult = handler().executePayload(payload, rule(payload), dataContext(3), SESSION);
+        final PayloadResult payloadResult = handler().executePayload(rule(payload), dataContext(3), SESSION);
         assertSuccess(payloadResult, false);
     }
     @Test
     public void shouldCheckForEqualsEquals() {
         final SizePayload payload = payload(SizeOrientation.EQUALS, 2);
-        final PayloadResult payloadResult = handler().executePayload(payload, rule(payload), dataContext(2), SESSION);
+        final PayloadResult payloadResult = handler().executePayload(rule(payload), dataContext(2), SESSION);
         assertSuccess(payloadResult, true);
     }
     @Test
     public void shouldCheckForEqualsWhenCollectionNull() {
         final SizePayload payload = payload(SizeOrientation.EQUALS, 1);
-        final PayloadResult payloadResult = handler().executePayload(payload, rule(payload), dataContext(null), SESSION);
+        final PayloadResult payloadResult = handler().executePayload(rule(payload), dataContext(null), SESSION);
         assertSuccess(payloadResult, false);
     }
     @Test
     public void shouldCheckForEqualsHasLess() {
         final SizePayload payload = payload(SizeOrientation.EQUALS, 2);
-        final PayloadResult payloadResult = handler().executePayload(payload, rule(payload), dataContext(1), SESSION);
+        final PayloadResult payloadResult = handler().executePayload(rule(payload), dataContext(1), SESSION);
         assertSuccess(payloadResult, false);
     }
     private void assertSuccess(PayloadResult result, boolean toMatch){

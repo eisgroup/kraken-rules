@@ -2,7 +2,7 @@ context(context) ::= <<
 <strict(context)>
 <if(context.root)>Root <endif>Context <context.name><parentDefinitions(context.parentDefinitions)> {
     <context.contextFields.__keys__: {key | <field(context.contextFields.(key))>}; separator="\n">
-    <context.children.__keys__: {key | <children(context.children.(key))>}; separator="\n">
+    <context.children.__keys__: {key | <child(context.children.(key))>}; separator="\n">
 }
 >>
 
@@ -15,16 +15,22 @@ parentDefinitions(parentDefinitions) ::= <<
 <if(parentDefinitions)> Is <endif><parentDefinitions: {parent | <parent>}; separator=", ">
 >>
 
-children(children) ::= <<
-Child<children.cardinality> <children.targetName><expression(children.navigationExpression)>
+child(child) ::= <<
+<forbidReference(child.forbidReference)>Child<child.cardinality> <child.targetName><expression(child.navigationExpression)>
 >>
 
 field(field) ::= <<
-<external(field.external)><field.fieldType><field.cardinality> <field.name><expression(field.fieldPath)>
+<forbidTarget(field.forbidTarget)><forbidReference(field.forbidReference)><field.fieldType><field.cardinality> <field.name><expression(field.fieldPath)>
 >>
 
-external(external) ::= <<
-<if(external)>External <endif>
+forbidTarget(forbidTarget) ::= <<
+<if(forbidTarget)>@ForbidTarget
+<endif>
+>>
+
+forbidReference(forbidReference) ::= <<
+<if(forbidReference)>@ForbidReference
+<endif>
 >>
 
 expression(expression) ::= <<

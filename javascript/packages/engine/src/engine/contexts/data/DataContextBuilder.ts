@@ -70,12 +70,11 @@ export class DataContextBuilder {
 
         return new DataContext(
             requireDefinedValue(info.getContextInstanceId(), 'Context instance id is null'),
-            info.getContextName(),
+            contextDefinitionName,
             data as Record<string, unknown>,
             info,
-            contextDefinition.fields,
+            contextDefinition,
             parent,
-            contextDefinition.inheritedContexts,
         )
     }
 

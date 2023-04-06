@@ -21,6 +21,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.apache.commons.lang3.BooleanUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kraken.model.payload.PayloadType;
 import kraken.runtime.EvaluationSession;
 import kraken.runtime.engine.RulePayloadHandler;
@@ -34,6 +38,7 @@ import kraken.runtime.engine.dto.OverrideInfo;
 import kraken.runtime.engine.dto.RuleEvaluationResult;
 import kraken.runtime.engine.dto.RuleInfo;
 import kraken.runtime.engine.evaluation.loop.RuleEvaluationInstance;
+import kraken.runtime.engine.handlers.trace.RulePayloadEvaluatedOperation;
 import kraken.runtime.engine.result.PayloadResult;
 import kraken.runtime.engine.result.ValidationPayloadResult;
 import kraken.runtime.engine.result.reducers.validation.OverrideDependencyExtractor;
@@ -41,10 +46,7 @@ import kraken.runtime.expressions.KrakenExpressionEvaluator;
 import kraken.runtime.model.rule.RuntimeRule;
 import kraken.runtime.model.rule.payload.Payload;
 import kraken.runtime.model.rule.payload.validation.ValidationPayload;
-
-import org.apache.commons.lang3.BooleanUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import kraken.tracer.Tracer;
 
 /**
  * Default {@link RulePayloadProcessor} implementation
@@ -89,8 +91,8 @@ public class RulePayloadProcessorImpl implements RulePayloadProcessor {
             RuleEvaluationInstance ruleEvaluationInstance,
             EvaluationSession session
     ) {
-        ConditionEvaluationResult conditionEvaluation =
-                applicabilityEvaluator.evaluateCondition(ruleEvaluationInstance, session);
+        ConditionEvaluationResult conditionEvaluation
+            = applicabilityEvaluator.evaluateCondition(ruleEvaluationInstance, session);
 
         RuleInfo ruleInfo = toRuleInfo(ruleEvaluationInstance);
 
@@ -158,10 +160,9 @@ public class RulePayloadProcessorImpl implements RulePayloadProcessor {
                 ruleEvaluationInstance.getDataContext()
         );
 
-        Object contextAttributeValue = krakenExpressionEvaluator.evaluateGetProperty(
-                ruleEvaluationInstance.getRule().getTargetPath(),
-                ruleEvaluationInstance.getDataContext().getDataObject()
-        );
+        Object contextAttributeValue = krakenExpressionEvaluator.evaluateTargetField(
+            ruleEvaluationInstance.getRule().getTargetPath(),
+            ruleEvaluationInstance.getDataContext());
 
         return new OverridableRuleContextInfo(
                 ruleEvaluationInstance.getNamespace(),
@@ -182,22 +183,24 @@ public class RulePayloadProcessorImpl implements RulePayloadProcessor {
         }
     }
 
-    private PayloadResult evaluatePayload(EvaluationSession session, RuleEvaluationInstance ruleEvaluationInstance) {
+    private PayloadResult evaluatePayload(EvaluationSession session, RuleEvaluationInstance evaluation) {
+        RulePayloadHandler handler = resolvePayloadHandler(evaluation.getRule().getPayload());
+        return Tracer.doOperation(
+            new RulePayloadEvaluatedOperation(evaluation.getRule().getPayload(), handler),
+            () -> doEvaluatePayload(handler, session, evaluation)
+        );
+    }
+
+    private PayloadResult doEvaluatePayload(RulePayloadHandler handler,
+                                            EvaluationSession session, RuleEvaluationInstance evaluation) {
         logger.debug(
             "Evaluating Rule '{}' on field '{}', context instance with id:'{}'",
-            ruleEvaluationInstance.getRule().getName(),
-            ruleEvaluationInstance.getRule().getContext() + "." + ruleEvaluationInstance.getRule().getTargetPath(),
-            ruleEvaluationInstance.getDataContext().getContextId()
+            evaluation.getRule().getName(),
+            evaluation.getRule().getContext() + "." + evaluation.getRule().getTargetPath(),
+            evaluation.getDataContext().getContextId()
         );
-        RuntimeRule rule = ruleEvaluationInstance.getRule();
-        RulePayloadHandler handler = resolvePayloadHandler(rule.getPayload());
 
-        return handler.executePayload(
-            rule.getPayload(),
-            rule,
-            ruleEvaluationInstance.getDataContext(),
-            session
-        );
+        return handler.executePayload(evaluation.getRule(), evaluation.getDataContext(), session);
     }
 
     private void addHandler(RulePayloadHandler handler) {

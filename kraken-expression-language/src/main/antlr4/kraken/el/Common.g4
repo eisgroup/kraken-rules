@@ -74,6 +74,8 @@ PROVIDED : 'provided' | 'Provided' | 'PROVIDED';
 BY : 'by' | 'By' | 'BY';
 CHILD : 'child' | 'Child' | 'CHILD';
 EXTERNAL : 'external' | 'External' | 'EXTERNAL';
+FORBID_TARGET : 'forbidtarget' | 'forbidTarget' | 'ForbidTarget' | 'FORBIDTARGET';
+FORBID_REFERENCE : 'forbidreference' | 'forbidReference' | 'ForbidReference' | 'FORBIDREFERENCE';
 WHEN : 'when' | 'When' | 'WHEN';
 ASSERT : 'assert' | 'Assert' | 'ASSERT';
 LENGTH : 'length' | 'Length' | 'LENGTH';

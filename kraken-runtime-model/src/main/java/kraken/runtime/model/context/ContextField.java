@@ -29,12 +29,14 @@ public class ContextField implements Serializable {
     private final String fieldType;
     private final String fieldPath;
     private final Cardinality cardinality;
+    private final Boolean forbidTarget;
 
-    public ContextField(String name, String fieldType, String fieldPath, Cardinality cardinality) {
+    public ContextField(String name, String fieldType, String fieldPath, Cardinality cardinality, Boolean forbidTarget) {
         this.name = name;
         this.fieldType = fieldType;
         this.fieldPath = fieldPath;
         this.cardinality = cardinality;
+        this.forbidTarget = forbidTarget;
     }
 
     public String getName() {
@@ -51,5 +53,9 @@ public class ContextField implements Serializable {
 
     public Cardinality getCardinality() {
         return cardinality;
+    }
+
+    public Boolean getForbidTarget() {
+        return forbidTarget;
     }
 }

@@ -74,7 +74,7 @@ public class ValueListPayloadHandlerTest {
             .build();
 
         ValueListPayloadResult payloadResult = (ValueListPayloadResult) valueListPayloadHandler
-            .executePayload(rule.getPayload(), rule, dataContext, SESSION);
+            .executePayload(rule, dataContext, SESSION);
 
         assertThat(payloadResult.getSuccess(), is(true));
         assertThat(payloadResult.getValueList(), notNullValue());
@@ -96,7 +96,7 @@ public class ValueListPayloadHandlerTest {
             .build();
 
         ValueListPayloadResult payloadResult = (ValueListPayloadResult) valueListPayloadHandler
-            .executePayload(rule.getPayload(), rule, dataContext, SESSION);
+            .executePayload(rule, dataContext, SESSION);
 
         assertThat(payloadResult.getSuccess(), is(true));
         assertThat(payloadResult.getValueList(), notNullValue());
@@ -118,7 +118,7 @@ public class ValueListPayloadHandlerTest {
             .build();
 
         ValueListPayloadResult payloadResult = (ValueListPayloadResult) valueListPayloadHandler
-            .executePayload(rule.getPayload(), rule, dataContext, SESSION);
+            .executePayload(rule, dataContext, SESSION);
 
         assertThat(payloadResult.getSuccess(), is(false));
         assertThat(payloadResult.getValueList(), notNullValue());
@@ -140,7 +140,7 @@ public class ValueListPayloadHandlerTest {
             .build();
 
         ValueListPayloadResult payloadResult = (ValueListPayloadResult) valueListPayloadHandler
-            .executePayload(rule.getPayload(), rule, dataContext, SESSION);
+            .executePayload(rule, dataContext, SESSION);
 
         assertThat(payloadResult.getSuccess(), is(true));
         assertThat(payloadResult.getValueList(), notNullValue());
@@ -162,7 +162,7 @@ public class ValueListPayloadHandlerTest {
             .build();
 
         ValueListPayloadResult payloadResult = (ValueListPayloadResult) valueListPayloadHandler
-            .executePayload(rule.getPayload(), rule, dataContext, SESSION);
+            .executePayload(rule, dataContext, SESSION);
 
         assertThat(payloadResult.getSuccess(), is(false));
         assertThat(payloadResult.getValueList(), notNullValue());
@@ -187,7 +187,7 @@ public class ValueListPayloadHandlerTest {
             .build();
 
         ValueListPayloadResult payloadResult = (ValueListPayloadResult) valueListPayloadHandler
-            .executePayload(rule.getPayload(), rule, dataContext, SESSION);
+            .executePayload(rule, dataContext, SESSION);
 
         assertThat(payloadResult.getSuccess(), is(true));
         assertThat(payloadResult.getValueList(), notNullValue());
@@ -212,7 +212,7 @@ public class ValueListPayloadHandlerTest {
             .build();
 
         ValueListPayloadResult payloadResult = (ValueListPayloadResult) valueListPayloadHandler
-            .executePayload(rule.getPayload(), rule, dataContext, SESSION);
+            .executePayload(rule, dataContext, SESSION);
 
         assertThat(payloadResult.getSuccess(), is(false));
         assertThat(payloadResult.getValueList(), notNullValue());
@@ -234,7 +234,7 @@ public class ValueListPayloadHandlerTest {
             .build();
 
         ValueListPayloadResult payloadResult = (ValueListPayloadResult) valueListPayloadHandler
-            .executePayload(rule.getPayload(), rule, dataContext, SESSION);
+            .executePayload(rule, dataContext, SESSION);
 
         assertThat(payloadResult.getSuccess(), is(true));
         assertThat(payloadResult.getValueList(), notNullValue());
@@ -256,29 +256,10 @@ public class ValueListPayloadHandlerTest {
             .build();
 
         ValueListPayloadResult payloadResult = (ValueListPayloadResult) valueListPayloadHandler
-            .executePayload(rule.getPayload(), rule, dataContext, SESSION);
+            .executePayload(rule, dataContext, SESSION);
 
         assertThat(payloadResult.getSuccess(), is(false));
         assertThat(payloadResult.getValueList(), notNullValue());
-    }
-
-    @Test
-    public void shouldThrowExceptionIfTypesAreIncompatible() {
-        Policy policy = new Policy("P0000001");
-        policy.setPolicyLimit(BigDecimal.valueOf(50.0));
-
-        DataContext dataContext = new DataContext();
-        dataContext.setDataObject(policy);
-        dataContext.setContextDefinition(createPolicyContext());
-
-        RuntimeRule rule = RULE_BUILDER
-            .targetPath("policyCurrency")
-            .valueListPayload(ValueList.fromNumber(
-                List.of(BigDecimal.valueOf(10.0), BigDecimal.valueOf(200.0), BigDecimal.valueOf(50.5))))
-            .build();
-
-        assertThrows(KrakenRuntimeException.class, () -> valueListPayloadHandler
-            .executePayload(rule.getPayload(), rule, dataContext, SESSION));
     }
 
     private RuntimeContextDefinition createPolicyContext() {
@@ -295,7 +276,7 @@ public class ValueListPayloadHandlerTest {
     }
 
     private ContextField createField(String name, PrimitiveFieldDataType type) {
-        return new ContextField(name, type.toString(), name, Cardinality.SINGLE);
+        return new ContextField(name, type.toString(), name, Cardinality.SINGLE, false);
     }
 
 }

@@ -52,14 +52,16 @@ export interface BuildInfo {
     revision: string
 }
 
-export interface ContextDefinitionInfo {
+export interface ContextField {
     fieldType: string
     cardinality: string
+    forbidTarget?: boolean
+    forbidReference?: boolean
 }
 
 export interface ContextDefinition {
     contextFields: {
-        [keyof: string]: ContextDefinitionInfo
+        [keyof: string]: ContextField
     }
     parentDefinitions: string[]
 }
@@ -102,16 +104,18 @@ export const fetch = {
             .then()
             .then(host => post(`${host}/context`, { name: contextName }))
             .then(response => response.data),
-    contextFieldType: (contextName: string, fieldName: string): Promise<ContextDefinitionInfo> =>
+    contextFieldType: (contextName: string, fieldName: string): Promise<ContextField> =>
         url
             .then(host => post(`${host}/context`, { name: contextName }))
             .then(response => response.data as ContextDefinition)
             .then(cd =>
                 optional(cd.contextFields[fieldName])
                     .map(x =>
-                        Promise.resolve({
+                        Promise.resolve<ContextField>({
                             fieldType: x.fieldType.toLowerCase(),
                             cardinality: x.cardinality.toLowerCase(),
+                            forbidTarget: x.forbidTarget,
+                            forbidReference: x.forbidReference,
                         }),
                     )
                     .orElseGet(() => fetch.contextFieldType(cd.parentDefinitions[0], fieldName)),

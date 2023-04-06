@@ -35,6 +35,7 @@ import kraken.runtime.engine.context.info.ContextInstanceInfoResolver;
 import kraken.runtime.engine.context.type.registry.TypeRegistry;
 import kraken.runtime.expressions.KrakenExpressionEvaluator;
 import kraken.runtime.model.rule.Dependency;
+import kraken.runtime.model.rule.RuntimeRule;
 import kraken.runtime.repository.RuntimeContextRepository;
 import kraken.utils.cache.Memoizer;
 import kraken.utils.dto.Triplet;
@@ -120,17 +121,18 @@ public class StaticContextDataProvider implements ContextDataProvider {
     }
 
     @Override
-    public List<DataContext> resolveContextData(String targetContextName, Collection<Dependency> dependencies) {
-        final List<DataContext> dataContexts = Optional.ofNullable(nodeInstanceInfo)
-                .map(node -> new Triplet<>(targetContextName, rootDataContext, node))
-                .map(getContextsExtractionSubTree)
-                .orElseGet(() -> getExtractedContexts.apply(targetContextName, rootDataContext));
-        final DataContextReferenceUpdater updater =
-                new DataContextReferenceUpdater(crossContextPathsResolver, getReferencedContext, dependencies);
+    public ContextData resolveContextData(RuntimeRule rule) {
+        var targetContextName = rule.getContext();
+        var dataContexts = Optional.ofNullable(nodeInstanceInfo)
+            .map(node -> new Triplet<>(targetContextName, rootDataContext, node))
+            .map(getContextsExtractionSubTree)
+            .orElseGet(() -> getExtractedContexts.apply(targetContextName, rootDataContext));
+        var updater =
+            new DataContextReferenceUpdater(crossContextPathsResolver, getReferencedContext, rule.getDependencies());
         dataContexts.forEach(updater::update);
         log(targetContextName, dataContexts);
 
-        return dataContexts;
+        return new ContextData(dataContexts, rule);
     }
 
     private void log(String targetContextName, List<DataContext> targetContextInstances) {

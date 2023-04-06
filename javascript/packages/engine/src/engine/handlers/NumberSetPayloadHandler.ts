@@ -18,8 +18,7 @@ import { Payloads, Rule } from 'kraken-model'
 import PayloadType = Payloads.PayloadType
 import { RulePayloadHandler } from './RulePayloadHandler'
 import { ExpressionEvaluator } from '../runtime/expressions/ExpressionEvaluator'
-import { NumberSetPayloadResult, ExpressionEvaluationResult } from 'kraken-engine-api'
-import { Expressions } from '../runtime/expressions/Expressions'
+import { NumberSetPayloadResult } from 'kraken-engine-api'
 import { ExecutionSession } from '../ExecutionSession'
 import { DataContext } from '../contexts/data/DataContext'
 import { payloadResultCreator } from '../results/PayloadResultCreator'
@@ -34,26 +33,18 @@ export class NumberSetPayloadHandler implements RulePayloadHandler {
     handlesPayloadType(): PayloadType {
         return PayloadType.NUMBER_SET
     }
-    executePayload(
-        payload: NumberSetPayload,
-        rule: Rule,
-        dataContext: DataContext,
-        session: ExecutionSession,
-    ): NumberSetPayloadResult {
-        const path = Expressions.createPathResolver(dataContext)(rule.targetPath)
-        const valueResult = this.evaluator.evaluateGet(path, dataContext.dataObject)
-        if (ExpressionEvaluationResult.isError(valueResult)) {
-            throw new Error(`Failed to extract attribute '${path}'`)
-        }
+    executePayload(rule: Rule, dataContext: DataContext, session: ExecutionSession): NumberSetPayloadResult {
+        const payload = rule.payload as NumberSetPayload
 
-        let value = valueResult.success
-        let success = true
+        let value = this.evaluator.evaluateTargetField(rule.targetPath, dataContext)
         if (Moneys.isMoney(value)) {
             value = value.amount
         }
+
+        let success = true
         if (typeof value === 'number') {
-            const numberValue = value as number
-            success = Numbers.isValueInNumberSet(numberValue, payload.min, payload.max, payload.step)
+            logger.debug(() => `Validating field which has value: ${ExpressionEvaluator.renderFieldValue(value)}`)
+            success = Numbers.isValueInNumberSet(value, payload.min, payload.max, payload.step)
         }
 
         const templateVariables = this.evaluator.evaluateTemplateVariables(
@@ -62,16 +53,16 @@ export class NumberSetPayloadHandler implements RulePayloadHandler {
             session.expressionContext,
         )
 
-        logger.debug(() => this.describePayloadResult(payload, success, value))
-
         return payloadResultCreator.numberSet(payload, success, templateVariables)
     }
 
-    private describePayloadResult(payload: NumberSetPayload, result: boolean, value: unknown): string {
-        const inSet = result ? '∈' : '∉'
-        const min = payload.min !== undefined ? payload.min : '-∞'
-        const max = payload.max !== undefined ? payload.max : '∞'
-        const stepMsg = payload.step !== undefined ? ` with step ${payload.step}` : ''
-        return `Evaluated '${payload.type}' to ${result}. ${value} ${inSet} [${min}, ${max}]${stepMsg}.`
+    describePayloadResult(payloadResult: NumberSetPayloadResult): string {
+        const min = payloadResult.min !== undefined ? payloadResult.min : '-∞'
+        const max = payloadResult.max !== undefined ? payloadResult.max : '∞'
+        const stepMsg = payloadResult.step !== undefined ? ` with step ${payloadResult.step}` : ''
+        const numberSetDescription = `number set [${min}, ${max}]${stepMsg}`
+        return payloadResult.success
+            ? `Field is valid. Field value is in ${numberSetDescription}.`
+            : `Field is not valid. Field value is not in ${numberSetDescription}.`
     }
 }

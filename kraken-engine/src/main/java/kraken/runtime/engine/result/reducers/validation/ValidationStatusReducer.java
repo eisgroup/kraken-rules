@@ -30,15 +30,7 @@ import kraken.runtime.engine.dto.FieldEvaluationResult;
 import kraken.runtime.engine.dto.RuleEvaluationResult;
 import kraken.runtime.engine.dto.RuleEvaluationStatus;
 import kraken.runtime.engine.dto.RuleInfo;
-import kraken.runtime.engine.result.AssertionPayloadResult;
-import kraken.runtime.engine.result.LengthPayloadResult;
-import kraken.runtime.engine.result.NumberSetPayloadResult;
-import kraken.runtime.engine.result.RegExpPayloadResult;
-import kraken.runtime.engine.result.SizePayloadResult;
-import kraken.runtime.engine.result.SizeRangePayloadResult;
-import kraken.runtime.engine.result.UsagePayloadResult;
 import kraken.runtime.engine.result.ValidationPayloadResult;
-import kraken.runtime.engine.result.ValueListPayloadResult;
 import kraken.runtime.engine.result.reducers.EntryPointResultReducer;
 import kraken.runtime.engine.result.reducers.validation.ValidationMessageProvider.ValidationMessage;
 import kraken.runtime.engine.result.reducers.validation.trace.EntryPointResultReducingOperation;
@@ -58,7 +50,7 @@ import kraken.tracer.Tracer;
 public class ValidationStatusReducer implements EntryPointResultReducer<ValidationStatus> {
 
     private final RuleOverrideStatusResolver overrideStatusResolver;
-    private final PayloadMessageProvider messageProvider;
+
     private final ValidationMessageProvider validationMessageProvider;
 
     public ValidationStatusReducer() {
@@ -76,27 +68,10 @@ public class ValidationStatusReducer implements EntryPointResultReducer<Validati
     /**
      * ValidationStatusReducer that care about overridden rules and those rules should be filtered out as valid.
      * Provided {@link RuleOverrideStatusResolver} should know what rules on current context are overridden.
-     *
-     * @deprecated deprecated because uses {@link PayloadMessageProvider} which does not support localization of
-     * default validation messages.
-     * Use {@link #ValidationStatusReducer(RuleOverrideStatusResolver, ValidationMessageProvider)} instead.
-     */
-    @Deprecated(since = "1.24.0", forRemoval = true)
-    public ValidationStatusReducer(RuleOverrideStatusResolver overrideStatusResolver,
-                                   PayloadMessageProvider messageProvider) {
-        this.overrideStatusResolver = overrideStatusResolver;
-        this.messageProvider = Objects.requireNonNull(messageProvider);
-        this.validationMessageProvider = null;
-    }
-
-    /**
-     * ValidationStatusReducer that care about overridden rules and those rules should be filtered out as valid.
-     * Provided {@link RuleOverrideStatusResolver} should know what rules on current context are overridden.
      */
     public ValidationStatusReducer(RuleOverrideStatusResolver overrideStatusResolver,
                                    ValidationMessageProvider validationMessageProvider) {
         this.overrideStatusResolver = overrideStatusResolver;
-        this.messageProvider = null;
         this.validationMessageProvider = Objects.requireNonNull(validationMessageProvider);
     }
 
@@ -205,37 +180,8 @@ public class ValidationStatusReducer implements EntryPointResultReducer<Validati
     }
 
     private ValidationMessage resolveDefaultMessage(ValidationPayloadResult payloadResult) {
-        if(messageProvider != null) {
-            DefaultMessage message = messageProvider.resolveByPayloadResult(payloadResult);
-            return new ValidationMessage(message.getCode(), message.getMessage());
-        }
-
         if(validationMessageProvider != null) {
-            if (payloadResult instanceof AssertionPayloadResult) {
-                return validationMessageProvider.assertionErrorMessage((AssertionPayloadResult) payloadResult);
-            }
-            if (payloadResult instanceof SizePayloadResult) {
-                return validationMessageProvider.sizeErrorMessage((SizePayloadResult) payloadResult);
-            }
-            if (payloadResult instanceof SizeRangePayloadResult) {
-                return validationMessageProvider.sizeRangeErrorMessage((SizeRangePayloadResult) payloadResult);
-            }
-            if (payloadResult instanceof LengthPayloadResult) {
-                return validationMessageProvider.lengthErrorMessage((LengthPayloadResult) payloadResult);
-            }
-            if (payloadResult instanceof RegExpPayloadResult) {
-                return validationMessageProvider.regExpErrorMessage((RegExpPayloadResult) payloadResult);
-            }
-            if (payloadResult instanceof UsagePayloadResult) {
-                return validationMessageProvider.usageErrorMessage((UsagePayloadResult) payloadResult);
-            }
-            if (payloadResult instanceof NumberSetPayloadResult) {
-                return validationMessageProvider.numberSetErrorMessage((NumberSetPayloadResult) payloadResult);
-            }
-            if (payloadResult instanceof ValueListPayloadResult) {
-                return validationMessageProvider.valueListErrorMessage((ValueListPayloadResult) payloadResult);
-            }
-            throw new IllegalStateException("Unknown payload result type encountered: " + payloadResult.getClass());
+            return validationMessageProvider.resolveErrorMessage(payloadResult);
         }
         throw new IllegalStateException(
             "ValidationStatusReducer is incorrectly initialized. Message provider is not set.");

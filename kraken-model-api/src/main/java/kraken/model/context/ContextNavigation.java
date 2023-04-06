@@ -40,4 +40,12 @@ public interface ContextNavigation {
     Cardinality getCardinality();
 
     void setCardinality(Cardinality cardinality);
+
+    /**
+     *
+     * @return true if references to this context through cross context reference should not be allowed
+     */
+    Boolean getForbidReference();
+
+    void setForbidReference(Boolean forbidReference);
 }

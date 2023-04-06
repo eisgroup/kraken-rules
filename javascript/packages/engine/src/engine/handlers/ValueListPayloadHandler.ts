@@ -14,15 +14,14 @@
  *  limitations under the License.
  */
 
-import { Payloads, Rule, ValueList, ValueListDataType } from 'kraken-model'
+import { Payloads, Rule, ValueListDataType } from 'kraken-model'
 import { RulePayloadHandler } from './RulePayloadHandler'
 import { ExecutionSession } from '../ExecutionSession'
 import { DataContext } from '../contexts/data/DataContext'
-import { ValueListPayloadResult, ExpressionEvaluationResult } from 'kraken-engine-api'
+import { ValueListPayloadResult } from 'kraken-engine-api'
 
 import PayloadType = Payloads.PayloadType
 import { ExpressionEvaluator } from '../runtime/expressions/ExpressionEvaluator'
-import { Expressions } from '../runtime/expressions/Expressions'
 import { Moneys } from '../runtime/expressions/math/Moneys'
 import ValueListPayload = Payloads.Validation.ValueListPayload
 import { payloadResultCreator } from '../results/PayloadResultCreator'
@@ -42,24 +41,26 @@ export class ValueListPayloadHandler implements RulePayloadHandler {
         return PayloadType.VALUE_LIST
     }
 
-    executePayload(
-        payload: Payloads.Validation.ValueListPayload,
-        rule: Rule,
-        dataContext: DataContext,
-        session: ExecutionSession,
-    ): ValueListPayloadResult {
-        const value = this.resolveFieldValue(rule, dataContext)
+    executePayload(rule: Rule, dataContext: DataContext, session: ExecutionSession): ValueListPayloadResult {
+        const payload = rule.payload as ValueListPayload
+
+        const value = this.evaluator.evaluateTargetField(rule.targetPath, dataContext)
+        logger.debug(() => `Validating field which has value: ${ExpressionEvaluator.renderFieldValue(value)}`)
+        const result = this.doExecute(value, payload)
+
         const templateVariables = this.evaluator.evaluateTemplateVariables(
             payload.errorMessage,
             dataContext,
             session.expressionContext,
         )
-
-        const result = this.doExecute(value, payload)
-
-        logger.debug(() => this.describePayloadResult(payload, result, value))
-
         return payloadResultCreator.valueList(payload, result, templateVariables)
+    }
+
+    describePayloadResult(payloadResult: ValueListPayloadResult): string {
+        const values = payloadResult.valueList.values.map(v => v.toString()).join(', ')
+        return payloadResult.success
+            ? `Field is valid. Field value is one of [ ${values} ].`
+            : `Field is not valid. Field value is not one of [ ${values} ].`
     }
 
     private doExecute(fieldValue: unknown, payload: ValueListPayload): boolean {
@@ -70,15 +71,6 @@ export class ValueListPayloadHandler implements RulePayloadHandler {
         const coercedFieldValue = this.coerce(fieldValue, payload.valueList.valueType)
 
         return payload.valueList.values.some(value => value === coercedFieldValue)
-    }
-
-    private resolveFieldValue(rule: Rule, dataContext: DataContext): unknown {
-        const path = Expressions.createPathResolver(dataContext)(rule.targetPath)
-        const valueResult = this.evaluator.evaluateGet(path, dataContext.dataObject)
-        if (ExpressionEvaluationResult.isError(valueResult)) {
-            throw new Error(`Failed to extract attribute '${path}'`)
-        }
-        return valueResult.success
     }
 
     private coerce(value: unknown, dataType: ValueListDataType): unknown {
@@ -107,17 +99,5 @@ export class ValueListPayloadHandler implements RulePayloadHandler {
             return value as number
         }
         throw Error(`Unable to convert ${value} to a number.`)
-    }
-
-    private describePayloadResult(payload: ValueListPayload, result: boolean, value: unknown): string {
-        const payloadResultStatus = result ? `` : `is not one of [ ${this.describeValueList(payload.valueList)} ]`
-
-        return `Evaluated '${payload.type}' to ${result}. Field value '${ExpressionEvaluator.render(
-            value,
-        )}' ${payloadResultStatus}.`
-    }
-
-    private describeValueList(valueList: ValueList): string {
-        return valueList.values.map(v => v.toString()).join(', ')
     }
 }

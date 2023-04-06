@@ -52,7 +52,6 @@ public class LengthPayloadHandlerTest {
                 .build();
 
         PayloadResult payloadResult = lengthPayloadHandler.executePayload(
-                rule.getPayload(),
                 rule,
                 dataContext,
                 SESSION
@@ -78,7 +77,6 @@ public class LengthPayloadHandlerTest {
                 .targetPath("code")
                 .build();
         LengthPayloadResult payloadResult = (LengthPayloadResult) lengthPayloadHandler.executePayload(
-                rule.getPayload(),
                 rule,
                 dataContext,
                 SESSION

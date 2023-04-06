@@ -83,7 +83,7 @@ public class RulePayloadProcessorTest {
         verify(overrideDependencyExtractor, times(0))
                 .extractOverrideDependencies(any(), any());
         verify(krakenExpressionEvaluator, times(0))
-                .evaluateGetProperty(any(), any());
+                .evaluateTargetField(any(), any());
 
         assertTrue(result.getOverrideInfo().isOverridable());
         assertNull(result.getOverrideInfo().getOverridableRuleContextInfo());

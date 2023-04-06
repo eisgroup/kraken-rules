@@ -23,8 +23,6 @@ import org.junit.Test;
 
 import com.google.gson.Gson;
 
-import kraken.el.ast.builder.Literals;
-
 /**
  * @author mulevicius
  */
@@ -39,7 +37,7 @@ public class GsonUtilsTest {
 
     @Test
     public void shouldSerializeLocalDateTime() {
-        String json = gson.toJson(Literals.getDateTime("2020-01-01T10:00:00Z"));
+        String json = gson.toJson(Dates.convertISOToLocalDateTime("2020-01-01T10:00:00Z"));
         assertThat(json, equalTo("\"2020-01-01T10:00:00Z\""));
     }
 }

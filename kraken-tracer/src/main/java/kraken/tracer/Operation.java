@@ -29,7 +29,9 @@ public interface Operation<T> {
      * @return description of operation before it is executed.
      *         Can return empty string in which case the beginning of operation is not traced.
      */
-    String describe();
+    default String describe() {
+        return "";
+    }
 
     /**
      *
@@ -37,6 +39,8 @@ public interface Operation<T> {
      * @return description of operation after it is executed.
      *         Can return empty string in which case the end of operation is not traced.
      */
-    String describeAfter(T result);
+    default String describeAfter(T result) {
+        return "";
+    }
 
 }

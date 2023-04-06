@@ -16,17 +16,31 @@
 
 import { ContextDataProviderImpl } from '../../../src/engine/contexts/data/extraction/ContextDataProvider'
 import { mock } from '../../mock'
+import { Payloads, Rule } from 'kraken-model'
+import PayloadType = Payloads.PayloadType
 
 describe('ContextDataProviderImpl', () => {
-    const policy = mock.modelTreeJson.contexts.Policy
-    it('it should create instance', () => {
-        const dataProviderImpl = new ContextDataProviderImpl(mock.data.dataContextEmpty(), mock.contextDataExtractor)
-        expect(dataProviderImpl).not.toBeNull()
-    })
+    const { Policy } = mock.modelTreeJson.contexts
     it('it should resolve context data', () => {
         const dataProviderImpl = new ContextDataProviderImpl(mock.data.dataContextEmpty(), mock.contextDataExtractor)
-        const resolvedContextData = dataProviderImpl.resolveContextData(policy.name)
-        expect(resolvedContextData).toHaveLength(1)
-        expect(resolvedContextData.map(c => c.contextId).sort()).toMatchObject(['0'])
+
+        const rule: Rule = {
+            name: 'RL01',
+            context: Policy.name,
+            targetPath: Policy.fields.policyNumber.name,
+            payload: {
+                type: PayloadType.ACCESSIBILITY,
+            },
+            dimensionSet: {
+                variability: 'UNKNOWN',
+            },
+        }
+
+        const resolvedContextData = dataProviderImpl.resolveContextData(rule)
+
+        expect(resolvedContextData.contexts).toHaveLength(1)
+        expect(resolvedContextData.forbiddenContexts).toHaveLength(0)
+        expect(resolvedContextData.allowedContexts).toHaveLength(1)
+        expect(resolvedContextData.allowedContexts.map(c => c.contextId).sort()).toMatchObject(['0'])
     })
 })

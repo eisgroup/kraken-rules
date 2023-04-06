@@ -40,13 +40,12 @@ describe('usagePayloadHandler', () => {
     })
     it('should return payload payloadResult with type UsagePayloadResult', () => {
         const payload = PayloadBuilder.usage().is(UsageType.mandatory)
-        const result = handler.executePayload(payload, rule(payload), dataContext({ state: 'AZ' }), session)
+        const result = handler.executePayload(rule(payload), dataContext({ state: 'AZ' }), session)
         expect(payloadResultTypeChecker.isMandatory(result)).toBeTruthy()
     })
     it('should return true on mandatory field', () => {
         const payload = PayloadBuilder.usage().is(UsageType.mandatory)
         const result = handler.executePayload(
-            payload,
             rule(payload),
             dataContext({ state: 'AZ' }),
             session,
@@ -56,7 +55,6 @@ describe('usagePayloadHandler', () => {
     it('should return false on mandatory field', () => {
         const payload = PayloadBuilder.usage().is(UsageType.mandatory)
         const result = handler.executePayload(
-            payload,
             rule(payload),
             dataContext({ state: undefined }),
             session,
@@ -68,7 +66,6 @@ describe('usagePayloadHandler', () => {
     it('should return false on mustBeEmpty field', () => {
         const payload = PayloadBuilder.usage().is(UsageType.mustBeEmpty)
         const result = handler.executePayload(
-            payload,
             rule(payload),
             dataContext({ state: 'AZ' }),
             session,
@@ -80,7 +77,6 @@ describe('usagePayloadHandler', () => {
     it('should return true on mustBeEmpty field', () => {
         const payload = PayloadBuilder.usage().is(UsageType.mustBeEmpty)
         const result = handler.executePayload(
-            payload,
             rule(payload),
             dataContext({ state: undefined }),
             session,

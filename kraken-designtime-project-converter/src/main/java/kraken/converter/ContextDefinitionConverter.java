@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.BooleanUtils;
+
 import kraken.converter.translation.KrakenExpressionTranslator;
 import kraken.model.context.ContextDefinition;
 import kraken.model.project.KrakenProject;
@@ -50,12 +52,13 @@ public class ContextDefinitionConverter {
         ContextDefinition contextProjection = krakenProject.getContextProjection(contextDefinition.getName());
 
         Map<String, ContextField> fields = contextProjection.getContextFields().values().stream()
-                .map(f -> convert(f))
-                .collect(Collectors.toMap(f -> f.getName(), f -> f));
+            .map(f -> convert(f))
+            .collect(Collectors.toMap(f -> f.getName(), f -> f));
 
         Map<String, ContextNavigation> children = contextProjection.getChildren().values().stream()
-                .map(navigation -> convert(navigation))
-                .collect(Collectors.toMap(f -> f.getTargetName(), f -> f));
+            .filter(navigation -> BooleanUtils.isNotTrue(navigation.getForbidReference()))
+            .map(navigation -> convert(navigation))
+            .collect(Collectors.toMap(f -> f.getTargetName(), f -> f));
 
         return new RuntimeContextDefinition(
                 contextProjection.getName(),
@@ -67,10 +70,11 @@ public class ContextDefinitionConverter {
 
     private ContextField convert(kraken.model.context.ContextField contextField) {
         return new ContextField(
-                contextField.getName(),
-                contextField.getFieldType(),
-                contextField.getFieldPath(),
-                contextField.getCardinality()
+            contextField.getName(),
+            contextField.getFieldType(),
+            contextField.getFieldPath(),
+            contextField.getCardinality(),
+            contextField.getForbidTarget()
         );
     }
 

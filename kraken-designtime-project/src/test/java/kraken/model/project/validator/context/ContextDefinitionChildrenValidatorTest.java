@@ -79,7 +79,7 @@ public class ContextDefinitionChildrenValidatorTest {
         assertThat(message.getSeverity(), is(Severity.ERROR));
         assertThat(message.getMessage(),
             containsString("child 'SystemContextDef' is not valid because it is a system context."
-                + " System context cannot be used a child in another context"));
+                + " System context cannot be used as a child in another context"));
     }
 
     @Test

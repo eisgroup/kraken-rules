@@ -17,6 +17,8 @@ package kraken.model.context;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang3.BooleanUtils;
+
 /**
  * Implementation of {@link ContextField}
  *
@@ -33,7 +35,9 @@ public class ContextFieldImpl implements ContextField, Serializable {
 
     private String fieldType;
 
-    private boolean external;
+    private Boolean forbidTarget;
+
+    private Boolean forbidReference;
 
     @Override
     public String getName() {
@@ -82,11 +86,31 @@ public class ContextFieldImpl implements ContextField, Serializable {
 
     @Override
     public boolean isExternal() {
-        return external;
+        return BooleanUtils.isTrue(forbidTarget);
+    }
+
+    @Override
+    public Boolean getForbidTarget() {
+        return forbidTarget;
+    }
+
+    @Override
+    public Boolean getForbidReference() {
+        return forbidReference;
     }
 
     @Override
     public void setExternal(boolean external) {
-        this.external = external;
+        this.forbidTarget = external ? true : null;
+    }
+
+    @Override
+    public void setForbidTarget(Boolean forbidTarget) {
+        this.forbidTarget = forbidTarget;
+    }
+
+    @Override
+    public void setForbidReference(Boolean forbidReference) {
+        this.forbidReference = forbidReference;
     }
 }

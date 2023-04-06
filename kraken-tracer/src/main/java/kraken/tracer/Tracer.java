@@ -251,8 +251,8 @@ public class Tracer {
         }
     }
 
-    protected static boolean isTracingDisabled() {
-        return !TRACE_ENABLED;
+    public static boolean isTracingEnabled() {
+        return TRACE_ENABLED;
     }
 
     /*

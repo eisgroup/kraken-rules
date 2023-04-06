@@ -15,11 +15,9 @@
  */
 
 import { mock } from '../../mock'
-import { Payloads } from 'kraken-model'
 import { RulesBuilder, PayloadBuilder } from 'kraken-model-builder'
 import { payloadResultTypeChecker } from '../../../src/engine/results/PayloadResultTypeChecker'
 import { NumberSetPayloadHandler } from '../../../src/engine/handlers/NumberSetPayloadHandler'
-import NumberSetPayload = Payloads.Validation.NumberSetPayload
 
 const handler = new NumberSetPayloadHandler(mock.evaluator)
 const { Policy } = mock.modelTreeJson.contexts
@@ -39,7 +37,7 @@ describe('NumberSetPayloadHandler', () => {
                 termNo: 0,
             },
         })
-        const result = handler.executePayload(rule.payload as NumberSetPayload, rule, policy, mock.session)
+        const result = handler.executePayload(rule, policy, mock.session)
 
         expect(payloadResultTypeChecker.isNumberSet(result)).toBeTruthy()
         expect(result.success).toBeFalsy()
@@ -62,7 +60,7 @@ describe('NumberSetPayloadHandler', () => {
                 termNo: undefined,
             },
         })
-        const result = handler.executePayload(rule.payload as NumberSetPayload, rule, policy, mock.session)
+        const result = handler.executePayload(rule, policy, mock.session)
 
         expect(result.success).toBeTruthy()
     })
@@ -80,7 +78,7 @@ describe('NumberSetPayloadHandler', () => {
                 termNo: 100,
             },
         })
-        const result = handler.executePayload(rule.payload as NumberSetPayload, rule, policy, mock.session)
+        const result = handler.executePayload(rule, policy, mock.session)
 
         expect(result.success).toBeTruthy()
     })

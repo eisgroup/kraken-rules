@@ -19,8 +19,7 @@ import PayloadType = Payloads.PayloadType
 import SizeRangePayload = Payloads.Validation.SizeRangePayload
 import { RulePayloadHandler } from './RulePayloadHandler'
 import { ExpressionEvaluator } from '../runtime/expressions/ExpressionEvaluator'
-import { SizeRangePayloadResult, ExpressionEvaluationResult } from 'kraken-engine-api'
-import { Expressions } from '../runtime/expressions/Expressions'
+import { SizeRangePayloadResult } from 'kraken-engine-api'
 import { ExecutionSession } from '../ExecutionSession'
 import { DataContext } from '../contexts/data/DataContext'
 import { payloadResultCreator } from '../results/PayloadResultCreator'
@@ -32,43 +31,32 @@ export class SizeRangePayloadHandler implements RulePayloadHandler {
     handlesPayloadType(): PayloadType {
         return PayloadType.SIZE_RANGE
     }
-    executePayload(
-        payload: SizeRangePayload,
-        rule: Rule,
-        dataContext: DataContext,
-        session: ExecutionSession,
-    ): SizeRangePayloadResult {
-        const path = Expressions.createPathResolver(dataContext)(rule.targetPath)
-        const valueResult = this.evaluator.evaluateGet(path, dataContext.dataObject)
-        if (ExpressionEvaluationResult.isError(valueResult)) {
-            throw new Error(`Failed to extract attribute '${path}'`)
-        }
-        let value = valueResult.success
-        const templateVariables = this.evaluator.evaluateTemplateVariables(
-            payload.errorMessage,
-            dataContext,
-            session.expressionContext,
-        )
+    executePayload(rule: Rule, dataContext: DataContext, session: ExecutionSession): SizeRangePayloadResult {
+        const payload = rule.payload as SizeRangePayload
 
+        let value = this.evaluator.evaluateTargetField(rule.targetPath, dataContext)
         if (value == undefined) {
             value = []
         }
 
         let result = true
         if (Array.isArray(value)) {
-            result = value.length >= payload.min && value.length <= payload.max
+            const size = value.length
+            logger.debug(() => `Validating collection field which has ${size} element(s).`)
+            result = size >= payload.min && value.length <= payload.max
         }
 
-        logger.debug(() => this.describePayloadResult(payload, result, value))
-
+        const templateVariables = this.evaluator.evaluateTemplateVariables(
+            payload.errorMessage,
+            dataContext,
+            session.expressionContext,
+        )
         return payloadResultCreator.sizeRange(payload, result, templateVariables)
     }
 
-    private describePayloadResult(payload: SizeRangePayload, result: boolean, value: unknown): string {
-        const actualSize = Array.isArray(value) ? value.length : ''
-        const resultDescription = result
-            ? `Collection field size is within expected range.`
-            : `Expected size within ${payload.min} and ${payload.max}. Actual size is ${actualSize}.`
-        return `Evaluated '${payload.type}' to ${result}. ${resultDescription}.`
+    describePayloadResult(payloadResult: SizeRangePayloadResult): string {
+        return payloadResult.success
+            ? `Field is valid. Collection size is in interval [${payloadResult.min}, ${payloadResult.max}].`
+            : `Field is not valid. Collection size is not in interval [${payloadResult.min}, ${payloadResult.max}].`
     }
 }

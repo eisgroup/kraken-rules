@@ -19,7 +19,7 @@ package kraken.facade;
 import kraken.TestApp;
 import kraken.config.*;
 import kraken.model.EntryPointName;
-import kraken.utils.Namespaces;
+import kraken.namespace.Namespaces;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

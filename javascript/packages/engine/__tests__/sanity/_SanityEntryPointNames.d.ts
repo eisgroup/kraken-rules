@@ -89,4 +89,6 @@ export type EntryPointName = "ForRestrictionCache"
 	| "DefaultRuleByPriority" 
 	| "EvaluateWithoutDuplicatedResults" 
 	| "ValueListPayload" 
-	| "NumberSet";
+	| "NumberSet" 
+	| "ForbiddenField" 
+	| "TracerSnapshotTest";

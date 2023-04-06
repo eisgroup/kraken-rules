@@ -16,7 +16,7 @@
 
 package kraken.testproduct;
 
-import kraken.utils.Namespaces;
+import kraken.namespace.Namespaces;
 
 /**
  * @author psurinin@eisgroup.com

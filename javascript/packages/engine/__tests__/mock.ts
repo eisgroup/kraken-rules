@@ -178,7 +178,7 @@ const dataContextEmpty: () => DataContext = () => {
         Policy.name,
         emptyPolicy as Record<string, unknown>,
         info,
-        modelTree.contexts[Policy.name].fields,
+        modelTree.contexts[Policy.name],
     )
 }
 const dataContextEmptyExtended: () => DataContext = () => {
@@ -193,7 +193,7 @@ const dataContextEmptyExtended: () => DataContext = () => {
         PolicyExtended.name,
         emptyPolicy as Record<string, unknown>,
         info,
-        extendedModelTree.contexts[PolicyExtended.name].fields,
+        extendedModelTree.contexts[PolicyExtended.name],
         undefined,
     )
 }
@@ -217,7 +217,7 @@ const dataContextExplicit = (policy: Partial<TestProduct.kraken.testproduct.doma
             getContextInstanceId: () => policy.id!,
             getContextName: () => policy.cd!,
         },
-        modelTree.contexts[Policy.name].fields,
+        modelTree.contexts[Policy.name],
     )
 }
 

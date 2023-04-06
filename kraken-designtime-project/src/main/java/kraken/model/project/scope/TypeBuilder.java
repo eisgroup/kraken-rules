@@ -30,6 +30,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.BooleanUtils;
+
 /**
  * @author mulevicius
  */
@@ -53,13 +55,16 @@ final class TypeBuilder {
             return Type.ANY;
         }
         Map<String, VariableSymbol> properties = new HashMap<>();
-        for (ContextField contextField : krakenProject.getContextProjection(contextDefinition.getName()).getContextFields().values()) {
-            Type type = toTypeFromDefinitionType(contextField.getFieldType(), typeRefResolver);
-            Type symbolType = Cardinality.MULTIPLE == contextField.getCardinality()
+        for (var field : krakenProject.getContextProjection(contextDefinition.getName()).getContextFields().values()) {
+            if(BooleanUtils.isTrue(field.getForbidReference())) {
+                continue;
+            }
+            Type type = toTypeFromDefinitionType(field.getFieldType(), typeRefResolver);
+            Type symbolType = Cardinality.MULTIPLE == field.getCardinality()
                     ? ArrayType.of(type)
                     : type;
-            VariableSymbol variableSymbol = new VariableSymbol(contextField.getName(), symbolType);
-            properties.put(contextField.getName(), variableSymbol);
+            VariableSymbol variableSymbol = new VariableSymbol(field.getName(), symbolType);
+            properties.put(field.getName(), variableSymbol);
         }
         return new Type(
                 contextDefinition.getName(),

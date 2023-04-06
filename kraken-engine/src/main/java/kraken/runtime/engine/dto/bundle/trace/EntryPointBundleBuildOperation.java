@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 
 import kraken.dimensions.DimensionSet;
 import kraken.runtime.engine.dto.bundle.EntryPointBundle;
+import kraken.runtime.model.rule.RuntimeRule;
 import kraken.tracer.Operation;
 
 /**
@@ -62,8 +63,8 @@ public class EntryPointBundleBuildOperation implements Operation<EntryPointBundl
         if (bundle.getEvaluation().getRules().size() > 0) {
             return System.lineSeparator() + bundle.getEvaluation().getRules()
                 .stream()
-                .map(runtimeRule -> "'" + runtimeRule.getName() + "'")
-                .collect(Collectors.joining("," + System.lineSeparator()));
+                .map(RuntimeRule::getName)
+                .collect(Collectors.joining(System.lineSeparator()));
         }
 
         return "";

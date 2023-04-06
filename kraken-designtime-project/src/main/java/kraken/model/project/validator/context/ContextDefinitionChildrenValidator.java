@@ -51,7 +51,7 @@ public final class ContextDefinitionChildrenValidator {
                         );
                     } else if (childContext.isSystem()) {
                         String messageTemplate = "child '%s' is not valid because it is a system context."
-                            + " System context cannot be used a child in another context";
+                            + " System context cannot be used as a child in another context";
 
                         session.add(new ValidationMessage(
                             contextDefinition,

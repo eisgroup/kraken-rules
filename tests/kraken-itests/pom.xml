@@ -8,7 +8,7 @@
     <parent>
         <artifactId>tests</artifactId>
         <groupId>kraken</groupId>
-        <version>1.45.1-SNAPSHOT</version>
+        <version>1.46.0</version>
     </parent>
     <packaging>jar</packaging>
     <artifactId>kraken-itests</artifactId>

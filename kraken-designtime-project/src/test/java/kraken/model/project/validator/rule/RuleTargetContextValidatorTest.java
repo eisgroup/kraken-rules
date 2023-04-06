@@ -107,7 +107,7 @@ public class RuleTargetContextValidatorTest {
         Rule rule = KrakenProjectMocks.rule("ruleName", "ContextDefTwo", "targetAttr");
         KrakenProject krakenProject = createProject(
             rule,
-            createStrictDefinition("ContextDefTwo", createExternalField("targetAttr"))
+            createStrictDefinition("ContextDefTwo", createFieldForbiddenAsTarget("targetAttr"))
         );
 
         doValidate(rule, krakenProject);
@@ -118,7 +118,8 @@ public class RuleTargetContextValidatorTest {
 
         assertThat(message.getItem().getName(), is(rule.getName()));
         assertThat(message.getSeverity(), is(Severity.ERROR));
-        assertThat(message.getMessage(), containsString("cannot be applied on external field - 'targetAttr'"));
+        assertThat(message.getMessage(),
+            containsString("cannot be applied on field because it is forbidden to be a rule target - 'targetAttr'"));
     }
 
     private KrakenProject createProject(Rule rule, ContextDefinition... contextDefinitions) {
@@ -135,8 +136,8 @@ public class RuleTargetContextValidatorTest {
         return KrakenProjectMocks.field(name);
     }
 
-    private ContextField createExternalField(String name) {
-        return KrakenProjectMocks.externalField(name);
+    private ContextField createFieldForbiddenAsTarget(String name) {
+        return KrakenProjectMocks.fieldForbiddenAsTarget(name);
     }
 
     private ContextDefinition createStrictDefinition(String name, ContextField... fields) {

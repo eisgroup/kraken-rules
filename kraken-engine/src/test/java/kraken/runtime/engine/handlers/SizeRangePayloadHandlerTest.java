@@ -29,27 +29,27 @@ public class SizeRangePayloadHandlerTest {
     public void shouldFailOnLessThanRanges() {
         final SizeRangePayload payload = payload(2, 3);
         final DataContext dataContext = dataContext(1);
-        final PayloadResult payloadResult = handler().executePayload(payload, rule(payload), dataContext, SESSION);
+        final PayloadResult payloadResult = handler().executePayload(rule(payload), dataContext, SESSION);
         assertSuccess(payloadResult, false);
     }
     @Test
     public void shouldFailOnLesThanRangesWithCollectionNull() {
         final SizeRangePayload payload = payload(2, 3);
-        final PayloadResult payloadResult = handler().executePayload(payload, rule(payload), dataContext(null), SESSION);
+        final PayloadResult payloadResult = handler().executePayload(rule(payload), dataContext(null), SESSION);
         assertSuccess(payloadResult, false);
     }
     @Test
     public void shouldSuccessOnMinRanges() {
         final SizeRangePayload payload = payload(2, 3);
         final DataContext dataContext = dataContext(2);
-        final PayloadResult payloadResult = handler().executePayload(payload, rule(payload), dataContext, SESSION);
+        final PayloadResult payloadResult = handler().executePayload(rule(payload), dataContext, SESSION);
         assertSuccess(payloadResult, true);
     }
     @Test
     public void shouldSuccessOnMaxRanges() {
         final SizeRangePayload payload = payload(2, 3);
         final DataContext dataContext = dataContext(3);
-        final PayloadResult payloadResult = handler().executePayload(payload, rule(payload), dataContext, SESSION);
+        final PayloadResult payloadResult = handler().executePayload(rule(payload), dataContext, SESSION);
         assertSuccess(payloadResult, true);
     }
 
@@ -57,14 +57,14 @@ public class SizeRangePayloadHandlerTest {
     public void shouldFailOnMoreThanRanges() {
         final SizeRangePayload payload = payload(2, 3);
         final DataContext dataContext = dataContext(4);
-        final PayloadResult payloadResult = handler().executePayload(payload, rule(payload), dataContext, SESSION);
+        final PayloadResult payloadResult = handler().executePayload(rule(payload), dataContext, SESSION);
         assertSuccess(payloadResult, false);
     }
 
     @Test
     public void shouldSuccessWhenCollectionNullAndInRange() {
         final SizeRangePayload payload = payload(0, 3);
-        final PayloadResult payloadResult = handler().executePayload(payload, rule(payload), dataContext(null), SESSION);
+        final PayloadResult payloadResult = handler().executePayload(rule(payload), dataContext(null), SESSION);
         assertSuccess(payloadResult, true);
     }
 

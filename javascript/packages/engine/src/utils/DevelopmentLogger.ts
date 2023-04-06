@@ -147,7 +147,7 @@ export class DevelopmentLogger {
         }
 
         const beforeMessage = describeBefore()
-        this.addEntry(beforeMessage, this.currentGroupDepth, '-> ')
+        this.addEntry(beforeMessage, this.currentGroupDepth, '->')
         this.logger.group(beforeMessage)
 
         this.currentGroupDepth++
@@ -174,7 +174,7 @@ export class DevelopmentLogger {
                 afterMessage = describeAfter(result!)
                 logAfterToConsole(afterMessage)
             }
-            this.addEntry(afterMessage ?? '', this.currentGroupDepth, '<- ')
+            this.addEntry(afterMessage ?? '', this.currentGroupDepth, '<-')
             this.logger.groupEnd()
         }
     }
@@ -188,7 +188,7 @@ export class DevelopmentLogger {
         if (this.isLoggerEnabled && isLoggingLevelEnabled) {
             const message = getLogMessage()
             if (!consoleOnly) {
-                this.addEntry(message, this.currentGroupDepth, '-- ')
+                this.addEntry(message, this.currentGroupDepth, '--')
             }
             if (Array.isArray(message)) {
                 doLog(...message)
@@ -203,7 +203,7 @@ export class DevelopmentLogger {
             const logLines = this.render(message).split('\n')
             const logs = this.prepareAndGetKrakenLogs()
             const alignmentPadding = '   '.repeat(depth)
-            const firstLogLinePrefix = `${alignmentPadding}${prefix}`
+            const firstLogLinePrefix = `${alignmentPadding}${prefix} `
             const firstLogLine = `${firstLogLinePrefix}${logLines[0]}`
             logs.push(firstLogLine)
             for (let i = 1; i < logLines.length; i++) {

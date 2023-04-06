@@ -15,22 +15,19 @@
  */
 package kraken.runtime.engine.handlers;
 
+import java.util.List;
+
 import kraken.model.payload.PayloadType;
 import kraken.runtime.EvaluationSession;
 import kraken.runtime.engine.RulePayloadHandler;
 import kraken.runtime.engine.context.data.DataContext;
-import kraken.runtime.engine.handlers.trace.LengthPayloadEvaluatedOperation;
+import kraken.runtime.engine.handlers.trace.FieldValueValidationOperation;
 import kraken.runtime.engine.result.LengthPayloadResult;
 import kraken.runtime.engine.result.PayloadResult;
 import kraken.runtime.expressions.KrakenExpressionEvaluator;
 import kraken.runtime.model.rule.RuntimeRule;
-import kraken.runtime.model.rule.payload.Payload;
 import kraken.runtime.model.rule.payload.validation.LengthPayload;
 import kraken.tracer.Tracer;
-
-import static kraken.runtime.utils.TargetPathUtils.resolveTargetPath;
-
-import java.util.List;
 
 /**
  * Payload handler implementation to process {@link LengthPayload}s
@@ -52,17 +49,24 @@ public class LengthPayloadHandler implements RulePayloadHandler {
     }
 
     @Override
-    public PayloadResult executePayload(Payload payload, RuntimeRule rule, DataContext dataContext, EvaluationSession session) {
-        final LengthPayload lengthPayload = (LengthPayload) payload;
+    public PayloadResult executePayload(RuntimeRule rule, DataContext dataContext, EvaluationSession session) {
+        var payload = (LengthPayload) rule.getPayload();
 
-        String path = resolveTargetPath(rule, dataContext);
-        Object target = evaluator.evaluateGetProperty(path, dataContext.getDataObject());
-        int targetLength = target instanceof String ? ((String) target).length() : 0;
-        boolean success = targetLength <= lengthPayload.getLength();
-        List<String> templateVariables = evaluator.evaluateTemplateVariables(lengthPayload.getErrorMessage(), dataContext, session);
+        var value = evaluator.evaluateTargetField(rule.getTargetPath(), dataContext);
+        Tracer.doOperation(new FieldValueValidationOperation(value));
+        int targetLength = value instanceof String ? ((String) value).length() : 0;
+        boolean success = targetLength <= payload.getLength();
 
-        Tracer.doOperation(new LengthPayloadEvaluatedOperation(lengthPayload, targetLength, success));
-        return new LengthPayloadResult(success, lengthPayload, templateVariables);
+        var templateVariables = evaluator.evaluateTemplateVariables(payload.getErrorMessage(), dataContext, session);
+        return new LengthPayloadResult(success, payload, templateVariables);
     }
 
+    @Override
+    public String describePayloadResult(PayloadResult payloadResult) {
+        var result = (LengthPayloadResult) payloadResult;
+
+        return result.getSuccess()
+            ? String.format("Field is valid. String length is not more than %s.", result.getLength())
+            : String.format("Field is not valid. String length is more than %s.", result.getLength());
+    }
 }

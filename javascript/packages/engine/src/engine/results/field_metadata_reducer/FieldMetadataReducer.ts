@@ -39,15 +39,12 @@ export class FieldMetadataReducer implements EntryPointReducer<Record<string, Fi
 
     constructor(
         isRuleOverridden?: RuleOverride.IsRuleOverridden,
-        errorMessages?: Localization.MessageProvider,
         validationMessageProvider?: Localization.ValidationMessageProvider,
     ) {
         this.#isRuleOverridden = isRuleOverridden ? isRuleOverridden : () => false
 
         if (validationMessageProvider) {
             this.#errorMessageFrom = rer => Localization.resolveMessage(rer.payloadResult, validationMessageProvider)
-        } else if (errorMessages) {
-            this.#errorMessageFrom = Localization.errorMessage(errorMessages)
         } else {
             this.#errorMessageFrom = rer =>
                 Localization.resolveMessage(rer.payloadResult, Localization.defaultValidationMessages)

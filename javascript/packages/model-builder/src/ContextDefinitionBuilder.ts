@@ -49,6 +49,7 @@ export class ContextDefinitionBuilder {
             cardinality: field.cardinality,
             fieldType: field.fieldType,
             fieldPath: field.fieldPath,
+            forbidTarget: field.forbidTarget,
         }
 
         return this

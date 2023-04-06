@@ -35,7 +35,7 @@ describe('regExpPayloadHandler', () => {
             .setTargetPath(Policy.fields.state.name)
             .setPayload(pb.regExp().match('[a-zA-Z]*'))
             .build()
-        const result = handler.executePayload(rule.payload as RegExpPayload, rule, dc({ state: 'AZ' }), session)
+        const result = handler.executePayload(rule, dc({ state: 'AZ' }), session)
         expect(payloadResultTypeChecker.isRegExp(result)).toBeTruthy()
     })
     it('should validate undefined and return true', () => {
@@ -45,7 +45,7 @@ describe('regExpPayloadHandler', () => {
             .setTargetPath(Policy.fields.state.name)
             .setPayload(pb.regExp().match('[a-zA-Z]*'))
             .build()
-        const result = handler.executePayload(rule.payload as RegExpPayload, rule, dc({ state: 'AZ' }), session)
+        const result = handler.executePayload(rule, dc({ state: 'AZ' }), session)
         expect(result.success).toBeTruthy()
     })
     it('should validate string and return false', () => {
@@ -55,7 +55,7 @@ describe('regExpPayloadHandler', () => {
             .setTargetPath(Policy.fields.state.name)
             .setPayload(pb.regExp().match('^[0-9]*$'))
             .build()
-        const result = handler.executePayload(rule.payload as RegExpPayload, rule, dc({ state: 'AZ' }), session)
+        const result = handler.executePayload(rule, dc({ state: 'AZ' }), session)
         expect(result.success).toBeFalsy()
     })
     it('should validate string and return false with default error message', () => {
@@ -66,7 +66,7 @@ describe('regExpPayloadHandler', () => {
             .setPayload(pb.regExp().match('^[0-9]*$'))
             .build()
         ;(rule.payload as RegExpPayload).errorMessage = undefined
-        const result = handler.executePayload(rule.payload as RegExpPayload, rule, dc({ state: 'AZ' }), session)
+        const result = handler.executePayload(rule, dc({ state: 'AZ' }), session)
         expect(result.success).toBeFalsy()
         expect(result.message).not.toBeDefined()
     })

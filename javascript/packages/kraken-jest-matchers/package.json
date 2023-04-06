@@ -1,6 +1,6 @@
 {
     "name": "kraken-jest-matchers",
-    "version": "1.45.1-stage.0",
+    "version": "1.46.1-stage.0",
     "description": "Additional Jest matchers to use in Kraken Tests",
     "main": "target/dist/js/src/index.js",
     "types": "target/dist/definitions/src/index.d.ts",
@@ -12,8 +12,8 @@
     "typedocMain": "src/index.ts",
     "dependencies": {
         "declarative-js": "3.8.15",
-        "kraken-engine-api": "1.45.1-stage.0",
-        "kraken-model": "1.45.1-stage.0"
+        "kraken-engine-api": "1.46.1-stage.0",
+        "kraken-model": "1.46.1-stage.0"
     },
     "devDependencies": {
         "@types/jest": "26.0.22",
@@ -50,5 +50,5 @@
         "target/dist/definitions",
         "target/dist/js"
     ],
-    "gitHead": "1e3b5b8cc8a381822cfb85c500a4bdb57ce6523e"
+    "gitHead": "ab4fe3c776519ef43e6625c8dc596a9ad3bcdaf5"
 }

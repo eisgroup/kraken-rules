@@ -23,16 +23,13 @@ import kraken.model.payload.PayloadType;
 import kraken.runtime.EvaluationSession;
 import kraken.runtime.engine.RulePayloadHandler;
 import kraken.runtime.engine.context.data.DataContext;
-import kraken.runtime.engine.handlers.trace.SizeRangePayloadEvaluatedOperation;
+import kraken.runtime.engine.handlers.trace.FieldValueCollectionSizeValidationOperation;
 import kraken.runtime.engine.result.PayloadResult;
 import kraken.runtime.engine.result.SizeRangePayloadResult;
 import kraken.runtime.expressions.KrakenExpressionEvaluator;
 import kraken.runtime.model.rule.RuntimeRule;
-import kraken.runtime.model.rule.payload.Payload;
 import kraken.runtime.model.rule.payload.validation.SizeRangePayload;
 import kraken.tracer.Tracer;
-
-import static kraken.runtime.utils.TargetPathUtils.resolveTargetPath;
 
 /**
  * @author psurinin
@@ -51,26 +48,30 @@ public class SizeRangePayloadHandler implements RulePayloadHandler {
     }
 
     @Override
-    public PayloadResult executePayload(Payload payload, RuntimeRule rule, DataContext dataContext,
-                                        EvaluationSession session) {
-        final SizeRangePayload rangePayload = (SizeRangePayload) payload;
-        Object value = evaluator.evaluateGetProperty(resolveTargetPath(rule, dataContext), dataContext.getDataObject());
-        List<String> templateVariables = evaluator.evaluateTemplateVariables(rangePayload.getErrorMessage(),
-            dataContext, session);
+    public PayloadResult executePayload(RuntimeRule rule, DataContext dataContext, EvaluationSession session) {
+        var payload = (SizeRangePayload) rule.getPayload();
 
-        boolean success = true;
-
+        Object value = evaluator.evaluateTargetField(rule.getTargetPath(), dataContext);
         if (value == null) {
             value = Collections.emptyList();
         }
 
+        boolean success = true;
         if (value instanceof Collection) {
-            final int size = ((Collection<?>) value).size();
-            success = size >= rangePayload.getMin() && size <= rangePayload.getMax();
+            Tracer.doOperation(new FieldValueCollectionSizeValidationOperation((Collection<?>) value));
+            int size = ((Collection<?>) value).size();
+            success = size >= payload.getMin() && size <= payload.getMax();
         }
 
-        Tracer.doOperation(new SizeRangePayloadEvaluatedOperation(rangePayload, value, success));
-        return new SizeRangePayloadResult(success, rangePayload, templateVariables);
+        var templateVariables = evaluator.evaluateTemplateVariables(payload.getErrorMessage(), dataContext, session);
+        return new SizeRangePayloadResult(success, payload, templateVariables);
     }
 
+    @Override
+    public String describePayloadResult(PayloadResult payloadResult) {
+        var result = (SizeRangePayloadResult) payloadResult;
+        return result.getSuccess()
+            ? String.format("Field is valid. Collection size is in interval [%s, %s].", result.getMin(), result.getMax())
+            : String.format("Field is not valid. Collection size is not in interval [%s, %s].", result.getMin(), result.getMax());
+    }
 }

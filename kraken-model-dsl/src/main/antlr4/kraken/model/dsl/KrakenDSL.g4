@@ -30,19 +30,23 @@ model : contexts
 contexts : CONTEXTS L_CURLY_BRACKETS (context | contexts)* R_CURLY_BRACKETS;
 context : modeledContext | systemContext;
 modeledContext: (ETA NOTSTRICT)? ROOT? CONTEXT contextName inheritedContexts? L_CURLY_BRACKETS (child | field)* R_CURLY_BRACKETS;
+inheritedContexts : IS contextName (COMMA contextName)*;
 systemContext: SYSTEM CONTEXT contextName L_CURLY_BRACKETS field* R_CURLY_BRACKETS;
 externalContext : EXTERNALCONTEXT L_CURLY_BRACKETS externalContextItems? R_CURLY_BRACKETS;
-externalContextItem : extContextNodeItem | extContextEntityItem;
-extContextNodeItem : key=identifier COLON L_CURLY_BRACKETS externalContextItems R_CURLY_BRACKETS;
-extContextEntityItem : key=identifier COLON externalContextDefinitionName=identifier;
 externalContextItems : externalContextItem (COMMA externalContextItem)*;
+externalContextItem : externalContextNodeItem | externalContextEntityItem;
+externalContextEntityItem : key=modelIdentifier COLON externalContextDefinitionName=contextName;
+externalContextNodeItem : key=modelIdentifier COLON L_CURLY_BRACKETS externalContextItems R_CURLY_BRACKETS;
 externalContextDefinition : EXTERNALENTITY contextName L_CURLY_BRACKETS (externalContextField)* R_CURLY_BRACKETS;
-inheritedContexts : IS contextName (COMMA contextName)*;
 contextName : modelIdentifier;
 externalContextField : fieldType OP_MULT? fieldName=modelIdentifier;
-field : EXTERNAL? fieldType OP_MULT? fieldName=modelIdentifier (COLON pathExpression)?;
+field : fieldModifiers? EXTERNAL? fieldType OP_MULT? fieldName=modelIdentifier (COLON pathExpression)?;
+fieldModifiers : (ETA fieldModifier)+;
+fieldModifier : FORBID_TARGET | FORBID_REFERENCE;
 
-child : CHILD OP_MULT? contextName (COLON inlineExpression)?;
+child : childModifiers? CHILD OP_MULT? contextName (COLON inlineExpression)?;
+childModifiers : (ETA childModifier)+;
+childModifier : FORBID_REFERENCE;
 
 rules : annotations? RULES L_CURLY_BRACKETS (aRule | rules)* R_CURLY_BRACKETS;
 aRule : annotations?
@@ -114,7 +118,7 @@ functionSignatureParameter : type;
 functionDoc : DOCS_COMMENT;
 
 genericBounds : OP_LESS genericBound (COMMA genericBound)* OP_MORE;
-genericBound : generic=identifier IS bound=type;
+genericBound : generic=modelIdentifier IS bound=type;
 
 annotations: annotationEntry+;
 annotationEntry : metadataEntry | serverSideOnlyEntry;
@@ -127,9 +131,9 @@ pathExpression : modelIdentifier (DOT modelIdentifier)*;
 
 inlineExpression : valueBlock;
 
-modelIdentifier : IDENTIFIER | krakenModelReservedWordNoChild | kelReservedWord;
+modelIdentifier : IDENTIFIER | krakenModelReservedWord | kelReservedWord;
 
-fieldType : IDENTIFIER | krakenModelReservedWordNoChild;
+fieldType : IDENTIFIER | krakenModelReservedWordNoChild | kelReservedWord;
 
 integerLiteral : OP_MINUS? positiveIntegerLiteral;
 decimalLiteral : OP_MINUS? positiveDecimalLiteral;

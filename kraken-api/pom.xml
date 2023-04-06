@@ -5,7 +5,7 @@
     <parent>
         <artifactId>parent-pom</artifactId>
         <groupId>kraken</groupId>
-        <version>1.45.1-SNAPSHOT</version>
+        <version>1.46.0</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -21,6 +21,17 @@
         <dependency>
             <groupId>kraken</groupId>
             <artifactId>kraken-expression-language</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-all</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

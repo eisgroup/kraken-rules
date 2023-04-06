@@ -20,8 +20,7 @@ import SizePayload = Payloads.Validation.SizePayload
 import Orientation = Payloads.Validation.SizeOrientation
 import { RulePayloadHandler } from './RulePayloadHandler'
 import { ExpressionEvaluator } from '../runtime/expressions/ExpressionEvaluator'
-import { SizePayloadResult, ExpressionEvaluationResult } from 'kraken-engine-api'
-import { Expressions } from '../runtime/expressions/Expressions'
+import { SizePayloadResult } from 'kraken-engine-api'
 import { ExecutionSession } from '../ExecutionSession'
 import { DataContext } from '../contexts/data/DataContext'
 import { payloadResultCreator } from '../results/PayloadResultCreator'
@@ -33,64 +32,57 @@ export class SizePayloadHandler implements RulePayloadHandler {
     handlesPayloadType(): PayloadType {
         return PayloadType.SIZE
     }
-    executePayload(
-        payload: SizePayload,
-        rule: Rule,
-        dataContext: DataContext,
-        session: ExecutionSession,
-    ): SizePayloadResult {
-        const path = Expressions.createPathResolver(dataContext)(rule.targetPath)
-        const valueResult = this.evaluator.evaluateGet(path, dataContext.dataObject)
-        if (ExpressionEvaluationResult.isError(valueResult)) {
-            throw new Error(`Failed to extract attribute '${path}'`)
-        }
-        let value = valueResult.success
-        const templateVariables = this.evaluator.evaluateTemplateVariables(
-            payload.errorMessage,
-            dataContext,
-            session.expressionContext,
-        )
+    executePayload(rule: Rule, dataContext: DataContext, session: ExecutionSession): SizePayloadResult {
+        const payload = rule.payload as SizePayload
 
+        let value = this.evaluator.evaluateTargetField(rule.targetPath, dataContext)
         if (value == undefined) {
             value = []
         }
 
         let result = true
         if (Array.isArray(value)) {
+            const size = value.length
+            logger.debug(() => `Validating collection field which has ${size} element(s).`)
             switch (payload.orientation) {
                 case Orientation.MIN:
-                    result = value.length >= payload.size
+                    result = size >= payload.size
                     break
                 case Orientation.MAX:
-                    result = value.length <= payload.size
+                    result = size <= payload.size
                     break
                 case Orientation.EQUALS:
-                    result = value.length === payload.size
+                    result = size === payload.size
                     break
                 default:
                     throw new Error('Failed to find size payload orientation with value ' + payload.orientation)
             }
         }
 
-        logger.debug(() => this.describePayloadResult(payload, result, value))
-
+        const templateVariables = this.evaluator.evaluateTemplateVariables(
+            payload.errorMessage,
+            dataContext,
+            session.expressionContext,
+        )
         return payloadResultCreator.size(payload, result, templateVariables)
     }
 
-    private describePayloadResult(payload: SizePayload, result: boolean, value: unknown): string {
-        const expectedSize = this.describeExpectedSize(payload)
-        const actualSize = Array.isArray(value) ? value.length : ''
-        return `Evaluated '${payload.type}' to ${result}. Expected size ${expectedSize} - actual size is ${actualSize}.`
+    describePayloadResult(payloadResult: SizePayloadResult): string {
+        const size = this.describeExpectedSize(payloadResult)
+
+        return payloadResult.success
+            ? `Field is valid. Collection size is ${size}.`
+            : `Field is not valid. Collection size is not ${size}.`
     }
 
-    private describeExpectedSize(payload: SizePayload) {
-        switch (payload.orientation) {
+    private describeExpectedSize(payloadResult: SizePayloadResult) {
+        switch (payloadResult.sizeOrientation) {
             case Orientation.MIN:
-                return `no less than ${payload.size}`
+                return `no less than ${payloadResult.min}`
             case Orientation.MAX:
-                return `no more than ${payload.size}`
+                return `no more than ${payloadResult.min}`
             case Orientation.EQUALS:
-                return `equal to ${payload.size}`
+                return `equal to ${payloadResult.min}`
             default:
                 return 'unknown'
         }

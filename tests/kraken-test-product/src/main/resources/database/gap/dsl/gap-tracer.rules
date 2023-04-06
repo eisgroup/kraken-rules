@@ -4,13 +4,21 @@ EntryPoint "TracerSnapshotTest" {
    "TR_CarCoverage_assert_info",
    "TR_CarCoverage_assert_warn",
    "TR_CarCoverage_assert_error",
-   "TR_Vehicle_costNew_numberSet",
+   "TR_Vehicle_costNew_numberSet_min_max_step",
+   "TR_Vehicle_costNew_numberSet_min_step",
+   "TR_Vehicle_costNew_numberSet_min",
+   "TR_Vehicle_costNew_numberSet_max_step",
+   "TR_Vehicle_costNew_numberSet_max",
    "TR_CarCoverage_Condition_LimitAmt_error",
    "TR_CarCoverage_Payload_error",
    "TR_CarCoverage_SizeRange",
+   "TR_CarCoverage_SizeRange_negative",
    "TR_CarCoverage_Size",
+   "TR_CarCoverage_Size_negative",
    "TR_CarCoverage_length",
+   "TR_CarCoverage_length_negative",
    "TR_CarCoverage_regexp",
+   "TR_CarCoverage_regexp_negative",
    "TR_CarCoverage_code_assert",
    "TR_CarCoverage_code_default",
    "TR_CarCoverage_default",
@@ -19,7 +27,11 @@ EntryPoint "TracerSnapshotTest" {
    "TR_CarCoverage_Accessibility",
    "TR_CarCoverage_Reset",
    "TR_CarCoverage_Condition_default",
-   "TR_Policy_ValueList"
+   "TR_Policy_ValueList_strings",
+   "TR_Policy_ValueList_numbers",
+   "TR_Policy_EffectiveDate_default",
+   "TR_Policy_TxEffectiveDate_default",
+   "TR_CarCoverage_assert_ccr"
 }
 
 Rule "TR_CarCoverage_Condition_default" On CarCoverage.deductibleAmount {
@@ -55,22 +67,39 @@ Rule "TR_CarCoverage_code_default" On CarCoverage.code {
 
 Rule "TR_CarCoverage_code_assert" On CarCoverage.code {
     Assert code == "AA"
+    Overridable
 }
 
 Rule "TR_CarCoverage_regexp" On CarCoverage.code {
     Assert Matches "[A-Z]+"
 }
 
+Rule "TR_CarCoverage_regexp_negative" On CarCoverage.code {
+    Assert Matches "[0-9]+"
+}
+
 Rule "TR_CarCoverage_length" On CarCoverage.code {
     Assert Length 2
+}
+
+Rule "TR_CarCoverage_length_negative" On CarCoverage.code {
+    Assert Length 3
 }
 
 Rule "TR_CarCoverage_Size" On Policy.riskItems {
     Assert Size Min 0
 }
 
+Rule "TR_CarCoverage_Size_negative" On Policy.riskItems {
+    Assert Size Min 10
+}
+
 Rule "TR_CarCoverage_SizeRange" On Policy.riskItems {
     Assert Size Min 0 Max 1
+}
+
+Rule "TR_CarCoverage_SizeRange_negative" On Policy.riskItems {
+    Assert Size Min 10 Max 20
 }
 
 Rule "TR_CarCoverage_assert_info" On CarCoverage.code {
@@ -97,10 +126,43 @@ Rule "TR_CarCoverage_Payload_error" On CarCoverage.deductibleAmount {
     Assert Policy.riskItems[10].model = "Audi"
 }
 
-Rule "TR_Vehicle_costNew_numberSet" On Vehicle.costNew {
+Rule "TR_Vehicle_costNew_numberSet_min_max_step" On Vehicle.costNew {
     Assert Number Min 10000 Max 50000 Step 50
 }
 
-Rule "TR_Policy_ValueList" on Policy.state {
-    Assert in "NY", "FL"
+Rule "TR_Vehicle_costNew_numberSet_min" On Vehicle.costNew {
+    Assert Number Min 10000
 }
+
+Rule "TR_Vehicle_costNew_numberSet_min_step" On Vehicle.costNew {
+    Assert Number Min 10000 Step 50
+}
+
+Rule "TR_Vehicle_costNew_numberSet_max" On Vehicle.costNew {
+    Assert Number Max 50000
+}
+
+Rule "TR_Vehicle_costNew_numberSet_max_step" On Vehicle.costNew {
+    Assert Number Max 50000 Step 50
+}
+
+Rule "TR_Policy_ValueList_strings" on Policy.state {
+    Assert In "NY", "FL"
+}
+
+Rule "TR_Policy_ValueList_numbers" on Vehicle.costNew {
+    Assert In 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000
+}
+
+Rule "TR_CarCoverage_assert_ccr" On COLLCoverage.code {
+    Assert Policy.state = "AZ" and Vehicle.costNew > 10000 and COLLCoverage.limitAmount > 10
+}
+
+Rule "TR_Policy_EffectiveDate_default" On Policy.effectiveDate {
+    Reset To 2022-01-01
+}
+
+Rule "TR_Policy_TxEffectiveDate_default" On Policy.txEffectiveDate {
+    Default To 2022-01-01T22:00:00Z
+}
+

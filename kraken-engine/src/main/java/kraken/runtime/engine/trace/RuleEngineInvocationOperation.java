@@ -21,6 +21,8 @@ import kraken.model.dimensions.DimensionSetResolverHolder;
 import kraken.runtime.EvaluationConfig;
 import kraken.runtime.engine.EntryPointResult;
 import kraken.tracer.Operation;
+import kraken.tracer.Tracer;
+import kraken.utils.Dates;
 import kraken.utils.GsonUtils;
 
 /**
@@ -32,20 +34,21 @@ import kraken.utils.GsonUtils;
  */
 public final class RuleEngineInvocationOperation implements Operation<EntryPointResult> {
 
-    private final Gson gson = GsonUtils.prettyGson();
+    private static final Gson gson = GsonUtils.prettyGson();
 
     private final String entryPointName;
 
-    private final Object rootNode;
-    private final Object node;
+    private final String rootNodeJson;
+    private final String nodeJson;
     private final EvaluationConfig evaluationConfig;
 
     public RuleEngineInvocationOperation(String entryPointName,
                                          Object rootNode,
                                          EvaluationConfig evaluationConfig) {
         this.entryPointName = entryPointName;
-        this.rootNode = rootNode;
-        this.node = null;
+        // performance optimization to avoid creating json when tracing is not enabled in application
+        this.rootNodeJson = Tracer.isTracingEnabled() ? gson.toJson(rootNode) : "";
+        this.nodeJson = "";
         this.evaluationConfig = evaluationConfig;
     }
 
@@ -54,45 +57,44 @@ public final class RuleEngineInvocationOperation implements Operation<EntryPoint
                                          Object node,
                                          EvaluationConfig evaluationConfig) {
         this.entryPointName = entryPointName;
-        this.rootNode = rootNode;
-        this.node = node;
+        // performance optimization to avoid creating json when tracing is not enabled in application
+        this.rootNodeJson = Tracer.isTracingEnabled() ? gson.toJson(rootNode) : "";
+        this.nodeJson = Tracer.isTracingEnabled() ? gson.toJson(node) : "";
         this.evaluationConfig = evaluationConfig;
     }
 
     @Override
     public String describe() {
-        var template = "Rule engine called to evaluate entry point '%s'. DimensionSetResolver: %s. Data and configuration: %s";
-        return String.format(
-            template,
-            entryPointName,
-            DimensionSetResolverHolder.getInstance().getClass().getName(),
-            formatParameters()
-        );
+        var dimensionSetResolverName = DimensionSetResolverHolder.getInstance().getClass().getName();
+        return String.format("Rule engine called to evaluate entry point '%s'", entryPointName) + System.lineSeparator()
+            + "DimensionSetResolver: " + dimensionSetResolverName + System.lineSeparator()
+            + formatInputDataAndConfiguration();
     }
 
     @Override
     public String describeAfter(EntryPointResult result) {
-        var template = "Rule engine call completed. Entry point evaluation timestamp '%s'";
-
-        return String.format(template, result.getEvaluationTimeStamp());
+        return "Rule engine call completed. Entry point evaluation timestamp "
+            + Dates.convertLocalDateTimeToISO(result.getEvaluationTimeStamp());
     }
 
-    private String formatParameters() {
+    private String formatInputDataAndConfiguration() {
         var builder = new StringBuilder()
+            .append("Entity:")
             .append(System.lineSeparator())
-            .append("Root data: ")
-            .append(gson.toJson(rootNode));
+            .append(rootNodeJson);
 
-        if (node != null) {
+        if (!nodeJson.isEmpty()) {
             builder
                 .append(System.lineSeparator())
-                .append("Node data: ")
-                .append(gson.toJson(node));
+                .append("Restriction entity node:")
+                .append(System.lineSeparator())
+                .append(gson.toJson(nodeJson));
         }
 
         return builder
             .append(System.lineSeparator())
-            .append("Evaluation configuration: ")
+            .append("Configuration:")
+            .append(System.lineSeparator())
             .append(gson.toJson(evaluationConfig))
             .toString();
     }

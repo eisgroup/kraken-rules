@@ -97,7 +97,8 @@ class KrakenDSLModelContextConverter {
         contextField.setFieldPath(fieldPath(dslContextField));
         contextField.setCardinality(convert(dslContextField.getCardinality()));
         contextField.setFieldType(dslContextField.getType());
-        contextField.setExternal(dslContextField.isExternal());
+        contextField.setForbidReference(dslContextField.getForbidReference());
+        contextField.setForbidTarget(dslContextField.getForbidTarget());
         return contextField;
     }
 
@@ -106,6 +107,7 @@ class KrakenDSLModelContextConverter {
         contextNavigation.setTargetName(child.getName());
         contextNavigation.setCardinality(convert(child.getCardinality()));
         contextNavigation.setNavigationExpression(navigationExpression(child));
+        contextNavigation.setForbidReference(child.getForbidReference());
         return contextNavigation;
     }
 

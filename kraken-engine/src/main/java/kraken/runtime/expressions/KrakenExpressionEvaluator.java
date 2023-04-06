@@ -33,15 +33,14 @@ import kraken.el.ast.builder.AstBuilder;
 import kraken.el.functionregistry.FunctionInvoker;
 import kraken.el.interpreter.evaluator.InterpretingExpressionEvaluator;
 import kraken.el.scope.Scope;
+import kraken.runtime.utils.TargetPathUtils;
 import kraken.runtime.utils.TemplateParameterRenderer;
 import kraken.runtime.EvaluationSession;
 import kraken.runtime.engine.context.data.DataContext;
-import kraken.runtime.expressions.trace.ExpressionEvaluationOperation;
 import kraken.runtime.model.context.ContextNavigation;
 import kraken.runtime.model.expression.CompiledExpression;
 import kraken.runtime.model.expression.ExpressionType;
 import kraken.runtime.model.rule.payload.validation.ErrorMessage;
-import kraken.tracer.Tracer;
 import kraken.utils.Assertions;
 
 /**
@@ -68,8 +67,6 @@ public class KrakenExpressionEvaluator {
         Assertions.assertNotNull(expression, "Expression");
         Assertions.assertNotEmpty(expression.getExpressionString(), "Expression");
         Assertions.assertNotNull(dataContext.getDataObject(), "Data");
-
-        Tracer.doOperation(new ExpressionEvaluationOperation(expression, dataContext));
 
         if (expression.getExpressionType() == ExpressionType.LITERAL) {
             return expression.getCompiledLiteralValue();
@@ -130,6 +127,11 @@ public class KrakenExpressionEvaluator {
     public Object evaluateGetProperty(String path, Object dataObject) {
         Ast ast = AstBuilder.from(path, Scope.dynamic());
         return evaluateGetProperty(path, ast, dataObject);
+    }
+
+    public Object evaluateTargetField(String targetPath, DataContext dataContext) {
+        String path = TargetPathUtils.resolveTargetPath(targetPath, dataContext);
+        return this.evaluateGetProperty(path, dataContext.getDataObject());
     }
 
     private Object evaluateGetProperty(String path, Ast ast, Object dataObject) {

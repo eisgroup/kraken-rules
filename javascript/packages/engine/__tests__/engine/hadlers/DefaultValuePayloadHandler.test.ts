@@ -20,10 +20,10 @@ import { RulesBuilder, PayloadBuilder } from 'kraken-model-builder'
 import { mock } from '../../mock'
 import { DefaultValuePayloadHandler } from '../../../src/engine/handlers/DefaultValuePayloadHandler'
 import DefaultingType = Payloads.Derive.DefaultingType
-import DefaultValuePayload = Payloads.Derive.DefaultValuePayload
 import { ValueChangedEvent } from '../../../src/engine/results/ValueChangedEvent'
 import { payloadResultTypeChecker } from '../../../src/engine/results/PayloadResultTypeChecker'
 import { DataContext } from '../../../src/engine/contexts/data/DataContext'
+import ContextDefinition = Contexts.ContextDefinition
 
 const handler = new DefaultValuePayloadHandler(mock.evaluator)
 const { session } = mock
@@ -38,7 +38,11 @@ type Data = {
 
 beforeEach(() => {
     const data = { cat: { name: 'Tom' } }
-    dataContext = new DataContext('1', 'PersonContext', data, mock.contextInstanceInfo, {}, undefined)
+    const contextDefinition: ContextDefinition = {
+        name: 'PersonContext',
+        inheritedContexts: [],
+    }
+    dataContext = new DataContext('1', 'PersonContext', data, mock.contextInstanceInfo, contextDefinition)
 })
 
 describe('defaultValuePayloadHandler', () => {
@@ -53,7 +57,7 @@ describe('defaultValuePayloadHandler', () => {
                 .setPayload(PayloadBuilder.default().to("'Murzik'"))
                 .setName('mock')
                 .build()
-            const result = handler.executePayload(rule.payload as DefaultValuePayload, rule, dataContext, mock.session)
+            const result = handler.executePayload(rule, dataContext, mock.session)
             expect(payloadResultTypeChecker.isDefault(result)).toBeTruthy()
         })
         it('should not change value', () => {
@@ -63,12 +67,7 @@ describe('defaultValuePayloadHandler', () => {
                 .setPayload(PayloadBuilder.default().to("'Murzik'"))
                 .setName('mock')
                 .build()
-            const result = handler.executePayload(
-                rule.payload as DefaultValuePayload,
-                rule,
-                dataContext,
-                mock.session,
-            ) as DefaultValuePayloadResult
+            const result = handler.executePayload(rule, dataContext, mock.session) as DefaultValuePayloadResult
             expect(result.events).toHaveLength(0)
         })
         it('should create not existing key and set value', () => {
@@ -78,12 +77,7 @@ describe('defaultValuePayloadHandler', () => {
                 .setPayload(PayloadBuilder.default().to("'Thomas'"))
                 .setName('mock')
                 .build()
-            const result = handler.executePayload(
-                rule.payload as DefaultValuePayload,
-                rule,
-                dataContext,
-                session,
-            ) as DefaultValuePayloadResult
+            const result = handler.executePayload(rule, dataContext, session) as DefaultValuePayloadResult
             expect(result.events).toHaveLength(1)
             expect((result.events?.[0] as ValueChangedEvent).newValue).toBe(
                 (dataContext.dataObject as Data).cat.lastName,
@@ -98,12 +92,7 @@ describe('defaultValuePayloadHandler', () => {
                 .setPayload(PayloadBuilder.default().apply(DefaultingType.resetValue).to("'Jerry'"))
                 .setName('mock')
                 .build()
-            const result = handler.executePayload(
-                rule.payload as DefaultValuePayload,
-                rule,
-                dataContext,
-                session,
-            ) as DefaultValuePayloadResult
+            const result = handler.executePayload(rule, dataContext, session) as DefaultValuePayloadResult
             expect(result.events).toHaveLength(1)
             expect((result.events?.[0] as ValueChangedEvent).newValue).toBe('Jerry')
             expect((result.events?.[0] as ValueChangedEvent).newValue).toBe(
@@ -118,12 +107,7 @@ describe('defaultValuePayloadHandler', () => {
                 .setPayload(PayloadBuilder.default().apply(DefaultingType.resetValue).to("'Tom'"))
                 .setName('mock')
                 .build()
-            const result = handler.executePayload(
-                rule.payload as DefaultValuePayload,
-                rule,
-                dataContext,
-                session,
-            ) as DefaultValuePayloadResult
+            const result = handler.executePayload(rule, dataContext, session) as DefaultValuePayloadResult
             expect(result.events).toHaveLength(0)
         })
         it('should change value from undefined to Thomas', () => {
@@ -133,12 +117,7 @@ describe('defaultValuePayloadHandler', () => {
                 .setPayload(PayloadBuilder.default().apply(DefaultingType.resetValue).to("'Thomas'"))
                 .setName('mock')
                 .build()
-            const result = handler.executePayload(
-                rule.payload as DefaultValuePayload,
-                rule,
-                dataContext,
-                session,
-            ) as DefaultValuePayloadResult
+            const result = handler.executePayload(rule, dataContext, session) as DefaultValuePayloadResult
             expect(result.events).toHaveLength(1)
             expect((result.events?.[0] as ValueChangedEvent).newValue).toBe('Thomas')
             expect((result.events?.[0] as ValueChangedEvent).newValue).toBe(
@@ -203,7 +182,12 @@ describe('defaultValuePayloadHandler', () => {
                 labels: [],
                 address: {},
             }
-            context = new DataContext('1', 'Coverage', instance, mock.contextInstanceInfo, fields, undefined)
+            const contextDefinition: ContextDefinition = {
+                name: 'Coverage',
+                fields,
+                inheritedContexts: [],
+            }
+            context = new DataContext('1', 'Coverage', instance, mock.contextInstanceInfo, contextDefinition)
         })
 
         function createResetRule(field: string, defaultExpression: string): Rule {
@@ -218,17 +202,17 @@ describe('defaultValuePayloadHandler', () => {
 
         it('should coerce number to Money', () => {
             const rule = createResetRule('moneyLimit', '10')
-            handler.executePayload(rule.payload as DefaultValuePayload, rule, context, session)
+            handler.executePayload(rule, context, session)
             expect(instance.moneyLimit).toStrictEqual({ amount: 10, currency: 'USD' })
         })
         it('should coerce Money to number', () => {
             const rule = createResetRule('decimalLimit', '__dataObject__.moneyLimit')
-            handler.executePayload(rule.payload as DefaultValuePayload, rule, context, session)
+            handler.executePayload(rule, context, session)
             expect(instance.decimalLimit).toStrictEqual(11)
         })
         it('should return error if incompatible type', () => {
             const rule = createResetRule('code', '10')
-            const result = handler.executePayload(rule.payload as DefaultValuePayload, rule, context, session)
+            const result = handler.executePayload(rule, context, session)
             expect(result.error).toBeDefined()
             expect(result.error?.error.message).toStrictEqual(
                 `Cannot apply value '10 (typeof number)' on 'Coverage.code' because value type is not assignable to field type 'STRING'. Rule will be silently ignored.`,
@@ -236,20 +220,16 @@ describe('defaultValuePayloadHandler', () => {
         })
         it('should reset to null', () => {
             const rule = createResetRule('moneyLimit', 'undefined')
-            handler.executePayload(rule.payload as DefaultValuePayload, rule, context, session)
+            handler.executePayload(rule, context, session)
             expect(instance.moneyLimit).toBeUndefined()
         })
         it('should throw if defaulting array of primitives', () => {
             const rule = createResetRule('labels', 'undefined')
-            expect(() =>
-                handler.executePayload(rule.payload as DefaultValuePayload, rule, context, session),
-            ).toThrowError()
+            expect(() => handler.executePayload(rule, context, session)).toThrowError()
         })
         it('should throw if defaulting context', () => {
             const rule = createResetRule('address', 'undefined')
-            expect(() =>
-                handler.executePayload(rule.payload as DefaultValuePayload, rule, context, session),
-            ).toThrowError()
+            expect(() => handler.executePayload(rule, context, session)).toThrowError()
         })
     })
 })

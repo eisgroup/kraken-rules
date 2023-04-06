@@ -28,10 +28,16 @@ public class DSLContextChild {
 
     private DSLExpression navigationExpression;
 
-    public DSLContextChild(String name, DSLCardinality cardinality, DSLExpression navigationExpression) {
+    private Boolean forbidReference;
+
+    public DSLContextChild(String name,
+                           DSLCardinality cardinality,
+                           DSLExpression navigationExpression,
+                           Boolean forbidReference) {
         this.name = Objects.requireNonNull(name);
         this.cardinality = Objects.requireNonNull(cardinality);
         this.navigationExpression = navigationExpression;
+        this.forbidReference = forbidReference;
     }
 
     public String getName() {
@@ -44,5 +50,9 @@ public class DSLContextChild {
 
     public DSLExpression getNavigationExpression() {
         return navigationExpression;
+    }
+
+    public Boolean getForbidReference() {
+        return forbidReference;
     }
 }

@@ -43,7 +43,7 @@ public final class RuleDimensionFilteringOperation implements Operation<RuntimeR
 
     @Override
     public String describe() {
-        var template = "Will apply dimension filters for rule '%s' which has %s version(s): %s";
+        var template = "Applying dimension filters on rule '%s' which has %s version(s): %s";
 
         return String.format(template,
             ruleVersions.iterator().next().getName(),
@@ -55,20 +55,20 @@ public final class RuleDimensionFilteringOperation implements Operation<RuntimeR
 
     @Override
     public String describeAfter(RuntimeRule result) {
-        var template = "Rule dimension filtering completed. %s";
-        var noVersionsTemplate = "All version were filtered out.";
-        var filteredVersionTemplate = "Filtered version metadata: %s";
+        var template = "Dimension filters applied. %s";
+        var noVersionsTemplate = "All version have been filtered out.";
+        var filteredVersionTemplate = "Remaining version: %s";
 
         return String.format(template,
             result == null
                 ? noVersionsTemplate
-                : String.format(filteredVersionTemplate, gson.toJson(result.getMetadata().getProperties())));
+                : String.format(filteredVersionTemplate, describeRuleVersion(result)));
     }
 
     private String describeRuleVersion(RuntimeRule runtimeRule) {
-        return runtimeRule.getDimensionSet().isDimensional()
-            ? gson.toJson(runtimeRule.getMetadata().getProperties())
-            : "";
+        return runtimeRule.getMetadata() == null
+            ? "{}"
+            : gson.toJson(runtimeRule.getMetadata().getProperties());
     }
 
 }

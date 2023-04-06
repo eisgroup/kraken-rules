@@ -40,6 +40,7 @@ export namespace Contexts {
         cardinality: Cardinality
         fieldType: string
         fieldPath: string
+        forbidTarget?: boolean
     }
 
     export interface ContextNavigation {

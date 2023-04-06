@@ -16,8 +16,7 @@
 
 import { RulePayloadHandler } from './RulePayloadHandler'
 import { ExpressionEvaluator } from '../runtime/expressions/ExpressionEvaluator'
-import { LengthPayloadResult, ExpressionEvaluationResult } from 'kraken-engine-api'
-import { Expressions } from '../runtime/expressions/Expressions'
+import { LengthPayloadResult } from 'kraken-engine-api'
 import { Payloads, Rule } from 'kraken-model'
 import LengthPayload = Payloads.Validation.LengthPayload
 import PayloadType = Payloads.PayloadType
@@ -32,18 +31,11 @@ export class LengthPayloadHandler implements RulePayloadHandler {
     handlesPayloadType(): PayloadType {
         return PayloadType.LENGTH
     }
-    executePayload(
-        payload: LengthPayload,
-        rule: Rule,
-        dataContext: DataContext,
-        session: ExecutionSession,
-    ): LengthPayloadResult {
-        const path = Expressions.createPathResolver(dataContext)(rule.targetPath)
-        const valueResult = this.evaluator.evaluateGet(path, dataContext.dataObject)
-        if (ExpressionEvaluationResult.isError(valueResult)) {
-            throw new Error(`Failed to extract attribute '${path}'`)
-        }
-        const value = valueResult.success
+    executePayload(rule: Rule, dataContext: DataContext, session: ExecutionSession): LengthPayloadResult {
+        const payload = rule.payload as LengthPayload
+
+        const value = this.evaluator.evaluateTargetField(rule.targetPath, dataContext)
+        logger.debug(() => `Validating field which has value: ${ExpressionEvaluator.renderFieldValue(value)}`)
         const valueLength = typeof value === 'string' ? (value as string).length : 0
         const success = valueLength <= payload.length
 
@@ -53,10 +45,12 @@ export class LengthPayloadHandler implements RulePayloadHandler {
             session.expressionContext,
         )
 
-        logger.debug(
-            () =>
-                `Evaluated '${payload.type}' to ${success}. Expected length '${payload.length}'. Actual length '${valueLength}'`,
-        )
         return payloadResultCreator.length(payload, success, templateVariables)
+    }
+
+    describePayloadResult(payloadResult: LengthPayloadResult): string {
+        return payloadResult.success
+            ? `Field is valid. String length is not more than ${payloadResult.length}.`
+            : `Field is not valid. String length is more than ${payloadResult.length}.`
     }
 }

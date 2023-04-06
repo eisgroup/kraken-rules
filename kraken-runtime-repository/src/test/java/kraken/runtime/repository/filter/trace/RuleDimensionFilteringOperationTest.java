@@ -22,7 +22,6 @@ import static org.mockito.Mockito.when;
 import java.util.HashMap;
 import java.util.List;
 
-import kraken.dimensions.DimensionSet;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -52,23 +51,27 @@ public class RuleDimensionFilteringOperationTest {
         dimensions.put("dimKey", "dimValue");
 
         when(ruleVersion.getName()).thenReturn("Versioned rule");
-        when(ruleVersion.getDimensionSet()).thenReturn(DimensionSet.createForUnknownDimensions());
         when(metadata.getProperties()).thenReturn(dimensions);
         when(ruleVersion.getMetadata()).thenReturn(metadata);
 
         var dimFilterOp = new RuleDimensionFilteringOperation(List.of(ruleVersion));
 
-        assertThat(dimFilterOp.describe(),
-            is("Will apply dimension filters for rule 'Versioned rule' which has 1 version(s): "
-                + System.lineSeparator() + "{\"dimKey\":\"dimValue\"}"));
+        assertThat(
+            dimFilterOp.describe(),
+            is("Applying dimension filters on rule 'Versioned rule' which has 1 version(s): "
+                + System.lineSeparator() + "{\"dimKey\":\"dimValue\"}"
+            )
+        );
     }
 
     @Test
     public void shouldCreateCorrectDescriptionForCompletedFilteringNoResults() {
         var dimFilterOp = new RuleDimensionFilteringOperation(null);
 
-        assertThat(dimFilterOp.describeAfter(null),
-            is("Rule dimension filtering completed. All version were filtered out."));
+        assertThat(
+            dimFilterOp.describeAfter(null),
+            is("Dimension filters applied. All version have been filtered out.")
+        );
     }
 
     @Test
@@ -81,8 +84,10 @@ public class RuleDimensionFilteringOperationTest {
 
         var dimFilterOp = new RuleDimensionFilteringOperation(null);
 
-        assertThat(dimFilterOp.describeAfter(ruleVersion),
-            is("Rule dimension filtering completed. Filtered version metadata: {\"dimKey\":\"dimValue\"}"));
+        assertThat(
+            dimFilterOp.describeAfter(ruleVersion),
+            is("Dimension filters applied. Remaining version: {\"dimKey\":\"dimValue\"}")
+        );
     }
 
 }

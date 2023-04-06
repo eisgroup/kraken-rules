@@ -48,7 +48,6 @@ public class AssertionPayloadHandlerTest {
 
         final RuntimeRule rule = TestRuleBuilder.getInstance().assertionPayload("level > 5", List.of("Level: ", ""), List.of("level")).build();
         AssertionPayloadResult payloadResult = (AssertionPayloadResult) assertionPayloadHandler.executePayload(
-                rule.getPayload(),
                 rule,
                 dataContext,
                 SESSION
@@ -66,7 +65,6 @@ public class AssertionPayloadHandlerTest {
         dataContext.setDataObject(coverage);
         final RuntimeRule rule = TestRuleBuilder.getInstance().assertionPayload("level > 5", List.of("Level: ", ""), List.of("level")).build();
         AssertionPayloadResult payloadResult = (AssertionPayloadResult) assertionPayloadHandler.executePayload(
-                rule.getPayload(),
                 rule,
                 dataContext,
                 SESSION

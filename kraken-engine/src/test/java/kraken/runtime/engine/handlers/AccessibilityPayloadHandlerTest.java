@@ -15,46 +15,28 @@
  */
 package kraken.runtime.engine.handlers;
 
-import kraken.TestRuleBuilder;
-import kraken.runtime.engine.context.data.DataContext;
-import kraken.runtime.engine.result.AccessibilityPayloadResult;
-import kraken.runtime.engine.result.PayloadResult;
-import kraken.runtime.model.rule.payload.ui.AccessibilityPayload;
-import org.junit.Test;
-
 import static kraken.runtime.engine.handlers.PayloadHandlerTestConstants.SESSION;
-import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
+import org.junit.Test;
+
+import kraken.TestRuleBuilder;
+import kraken.runtime.engine.context.data.DataContext;
+import kraken.runtime.engine.result.AccessibilityPayloadResult;
+import kraken.runtime.model.rule.payload.ui.AccessibilityPayload;
+
 public class AccessibilityPayloadHandlerTest {
-    @Test
-    public void executePayloadShouldReturnAccessibilityPayloadResult() {
-        AccessibilityPayloadHandler accessibilityPayloadHandler = new AccessibilityPayloadHandler();
-
-        AccessibilityPayload accessibilityPayload = new AccessibilityPayload(true);
-
-        PayloadResult payloadResult = accessibilityPayloadHandler.executePayload(
-                accessibilityPayload,
-                TestRuleBuilder.getInstance().build(),
-                new DataContext(),
-                SESSION
-        );
-        assertThat(payloadResult, is(instanceOf(AccessibilityPayloadResult.class)));
-    }
 
     @Test
     public void executePayloadShouldSuccessfullyExecuteProvidedPayload() {
         AccessibilityPayloadHandler accessibilityPayloadHandler = new AccessibilityPayloadHandler();
 
         AccessibilityPayload presentationPayload = new AccessibilityPayload(true);
+        var rule = TestRuleBuilder.getInstance().payload(presentationPayload).build();
 
-        AccessibilityPayloadResult payloadResult = (AccessibilityPayloadResult) accessibilityPayloadHandler.executePayload(
-                presentationPayload,
-                TestRuleBuilder.getInstance().build(),
-                new DataContext(),
-                SESSION
-        );
+        AccessibilityPayloadResult payloadResult = (AccessibilityPayloadResult)
+            accessibilityPayloadHandler.executePayload(rule, new DataContext(), SESSION);
 
         assertThat(payloadResult.getAccessible(), is(true));
     }

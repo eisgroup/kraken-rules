@@ -153,7 +153,7 @@ public class OverrideDependencyExtractorTest {
     }
 
     private ContextField field(String name, Cardinality cardinality, String type) {
-        return new ContextField(name, type, name, cardinality);
+        return new ContextField(name, type, name, cardinality, false);
     }
 
     private DataContext context(

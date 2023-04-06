@@ -239,7 +239,6 @@ public class RulePayloadCompatibilityValidatorTest {
             contextField.setName("field");
             contextField.setFieldPath("field");
             contextField.setCardinality(cardinality);
-            contextField.setExternal(false);
             contextField.setFieldType(type);
 
             ContextDefinition contextDefinition = factory.createContextDefinition();

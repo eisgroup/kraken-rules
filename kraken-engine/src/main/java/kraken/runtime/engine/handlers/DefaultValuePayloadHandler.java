@@ -15,13 +15,19 @@
  */
 package kraken.runtime.engine.handlers;
 
+import static kraken.runtime.utils.TargetPathUtils.resolveTargetPath;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
 import javax.money.Monetary;
 import javax.money.MonetaryAmount;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import kraken.el.functionregistry.functions.MoneyFunctions;
 import kraken.model.context.Cardinality;
@@ -34,20 +40,15 @@ import kraken.runtime.engine.RulePayloadHandler;
 import kraken.runtime.engine.context.data.DataContext;
 import kraken.runtime.engine.events.RuleEvent;
 import kraken.runtime.engine.events.ValueChangedEvent;
-import kraken.runtime.engine.handlers.trace.DefaultValuePayloadEvaluatedOperation;
+import kraken.runtime.engine.handlers.trace.DefaultValueExpressionEvaluationOperation;
+import kraken.runtime.engine.handlers.trace.FieldValueRenderer;
 import kraken.runtime.engine.result.DefaultValuePayloadResult;
 import kraken.runtime.engine.result.PayloadResult;
 import kraken.runtime.expressions.KrakenExpressionEvaluator;
 import kraken.runtime.model.context.ContextField;
 import kraken.runtime.model.rule.RuntimeRule;
-import kraken.runtime.model.rule.payload.Payload;
 import kraken.runtime.model.rule.payload.derive.DefaultValuePayload;
 import kraken.tracer.Tracer;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import static kraken.runtime.utils.TargetPathUtils.resolveTargetPath;
 
 /**
  * Payload handler implementation to process {@link DefaultValuePayload}s
@@ -71,14 +72,14 @@ public class DefaultValuePayloadHandler implements RulePayloadHandler {
     }
 
     @Override
-    public PayloadResult executePayload(Payload payload, RuntimeRule rule, DataContext dataContext, EvaluationSession session) {
-        DefaultValuePayload defaultValuePayload = (DefaultValuePayload) payload;
+    public PayloadResult executePayload(RuntimeRule rule, DataContext dataContext, EvaluationSession session) {
+        DefaultValuePayload defaultValuePayload = (DefaultValuePayload) rule.getPayload();
 
-        String path = resolveTargetPath(rule, dataContext);
 
-        Object value = evaluator.evaluateGetProperty(path, dataContext.getDataObject());
+        Object value = evaluator.evaluateTargetField(rule.getTargetPath(), dataContext);
         Object updatedValue = value;
 
+        String path = resolveTargetPath(rule, dataContext);
         try {
             if (DefaultingType.defaultValue == defaultValuePayload.getDefaultingType()) {
                 if (PayloadHandlerUtils.isEmptyValue(value)) {
@@ -96,10 +97,10 @@ public class DefaultValuePayloadHandler implements RulePayloadHandler {
             }
         } catch (KrakenRuntimeException ex) {
             logger.debug(
-                    "Default value expression '{}' in rule '{}' failed with exception: \n {}",
-                    ((DefaultValuePayload) payload).getValueExpression().getExpressionString(),
-                    rule.getName(),
-                    ex
+                "Default value expression '{}' in rule '{}' failed with exception: \n {}",
+                defaultValuePayload.getValueExpression().getExpressionString(),
+                rule.getName(),
+                ex
             );
 
             return new DefaultValuePayloadResult(ex);
@@ -110,8 +111,32 @@ public class DefaultValuePayloadHandler implements RulePayloadHandler {
             events.add(new ValueChangedEvent(dataContext, path, value, updatedValue));
         }
 
-        Tracer.doOperation(new DefaultValuePayloadEvaluatedOperation(defaultValuePayload, value, updatedValue));
         return new DefaultValuePayloadResult(events);
+    }
+
+    @Override
+    public String describePayloadResult(PayloadResult payloadResult) {
+        var result = (DefaultValuePayloadResult) payloadResult;
+
+        if(result.getEvents().isEmpty()) {
+            if(result.getException().isPresent()) {
+                return "Field value was not changed. Default value is not applied due to expression error.";
+            }
+            return "Field value was not changed.";
+        }
+
+        var defaultValueEvent = (ValueChangedEvent) result.getEvents().get(0);
+        if(PayloadHandlerUtils.isEmptyValue(defaultValueEvent.getPreviousValue())) {
+            return String.format(
+                "Field value set to '%s'.",
+                FieldValueRenderer.render(defaultValueEvent.getNewValue())
+            );
+        }
+        return String.format(
+            "Field value reset from '%s' to '%s'.",
+            FieldValueRenderer.render(defaultValueEvent.getPreviousValue()),
+            FieldValueRenderer.render(defaultValueEvent.getNewValue())
+        );
     }
 
     private Object evaluateValueToSet(
@@ -120,6 +145,9 @@ public class DefaultValuePayloadHandler implements RulePayloadHandler {
             EvaluationSession session,
             DefaultValuePayload defaultValuePayload
     ) {
+        Tracer.doOperation(
+            new DefaultValueExpressionEvaluationOperation(defaultValuePayload.getValueExpression(), dataContext)
+        );
         Object rawValueToSet = evaluator.evaluate(defaultValuePayload.getValueExpression(), dataContext, session);
         return coerce(rawValueToSet, rule, dataContext, session);
     }

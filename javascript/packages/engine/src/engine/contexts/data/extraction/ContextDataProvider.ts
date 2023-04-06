@@ -17,21 +17,19 @@
 import { requireDefinedValue } from '../../../../utils/Utils'
 import { ContextDataExtractor } from './ContextDataExtractor.types'
 import { DataContext } from '../DataContext'
+import { Rule } from 'kraken-model'
 
 /**
  * Resolves context data instance for rule in given root context
  */
 export interface ContextDataProvider {
     /**
-     * Extracts context instances by provided context name and adds dependencies to already
-     * extracted context instance. Dependencies are also context instances. If extracted
-     * context instance already has dependencies, it will be updated.
+     * Extracts contexts for a rule
      *
-     * @param {string} contextName          context definition name to extract
-     * @param {Dependency[]} dependencies   dependencies, that will be extracted and added to context instance
-     * @returns {DataContext[]}             context definition instances, that were extracted
+     * @param rule a rule to extract contexts for
+     * @returns context data that were extracted
      */
-    resolveContextData: (contextName: string) => DataContext[]
+    resolveContextData: (rule: Rule) => ContextData
 }
 
 export class ContextDataProviderImpl implements ContextDataProvider {
@@ -47,7 +45,22 @@ export class ContextDataProviderImpl implements ContextDataProvider {
     /**
      * @override
      */
-    public resolveContextData(contextName: string): DataContext[] {
-        return this.dataExtractor.extractByName(contextName, this.root, this.restriction)
+    public resolveContextData(rule: Rule): ContextData {
+        const contexts = this.dataExtractor.extractByName(rule.context, this.root, this.restriction)
+        return {
+            contexts,
+            allowedContexts: contexts.filter(d => !this.isForbidden(d, rule.targetPath)),
+            forbiddenContexts: contexts.filter(d => this.isForbidden(d, rule.targetPath)),
+        }
     }
+
+    private isForbidden(context: DataContext, fieldName: string): boolean {
+        return context.contextDefinition.fields?.[fieldName]?.forbidTarget ?? false
+    }
+}
+
+export type ContextData = {
+    contexts: DataContext[]
+    allowedContexts: DataContext[]
+    forbiddenContexts: DataContext[]
 }

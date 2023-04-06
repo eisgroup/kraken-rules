@@ -16,21 +16,24 @@
 
 import { RulePayloadHandler } from './RulePayloadHandler'
 import { VisibilityPayloadResult, PayloadResultType } from 'kraken-engine-api'
-import { Payloads } from 'kraken-model'
+import { Payloads, Rule } from 'kraken-model'
 import PayloadType = Payloads.PayloadType
-import { logger } from '../../utils/DevelopmentLogger'
+import VisibilityPayload = Payloads.UI.VisibilityPayload
 
 class VisibilityPayloadHandler implements RulePayloadHandler {
     handlesPayloadType(): Payloads.PayloadType {
         return PayloadType.VISIBILITY
     }
-    executePayload(payload: Payloads.UI.VisibilityPayload): VisibilityPayloadResult {
-        logger.debug(() => `Evaluated '${payload.type}'. The field is set to be hidden.`)
-
+    executePayload(rule: Rule): VisibilityPayloadResult {
+        const payload = rule.payload as VisibilityPayload
         return {
             type: PayloadResultType.VISIBILITY,
             visible: payload.visible,
         }
+    }
+
+    describePayloadResult(payloadResult: VisibilityPayloadResult): string {
+        return payloadResult.visible ? `The field is not set to be hidden.` : `The field is set to be hidden.`
     }
 }
 

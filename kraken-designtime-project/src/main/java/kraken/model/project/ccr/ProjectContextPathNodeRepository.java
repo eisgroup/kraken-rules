@@ -25,6 +25,8 @@ import kraken.model.project.KrakenProject;
 
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.BooleanUtils;
+
 /**
  * @author psurinin@eisgroup.com
  * @since 1.1.0
@@ -52,14 +54,16 @@ public class ProjectContextPathNodeRepository implements ContextPathNodeReposito
     }
 
     private ContextPathNode createNode(ContextDefinition contextDefinition) {
-        var children = contextDefinition.getChildren().values().stream().collect(Collectors.toMap(
+        var referencableChildren = contextDefinition.getChildren().values().stream()
+            .filter(contextNavigation -> BooleanUtils.isNotTrue(contextNavigation.getForbidReference()))
+            .collect(Collectors.toMap(
                 ContextNavigation::getTargetName,
                 x -> new ContextPathNode.ChildNode(x.getTargetName(), x.getCardinality())
         ));
         return new ContextPathNode(
-                contextDefinition.getName(),
-                contextDefinition.getParentDefinitions(),
-                children
+            contextDefinition.getName(),
+            contextDefinition.getParentDefinitions(),
+            referencableChildren
         );
     }
 }

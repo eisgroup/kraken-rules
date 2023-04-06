@@ -15,11 +15,7 @@
  */
 package kraken.runtime.engine.context;
 
-import java.util.Collection;
-import java.util.List;
-
-import kraken.runtime.engine.context.data.DataContext;
-import kraken.runtime.model.rule.Dependency;
+import kraken.runtime.model.rule.RuntimeRule;
 
 /**
  * Resolves context data instance for rule in given root context
@@ -29,6 +25,6 @@ import kraken.runtime.model.rule.Dependency;
  */
 public interface ContextDataProvider {
 
-    List<DataContext> resolveContextData(String contextName, Collection<Dependency> dependencies);
+    ContextData resolveContextData(RuntimeRule rule);
 
 }

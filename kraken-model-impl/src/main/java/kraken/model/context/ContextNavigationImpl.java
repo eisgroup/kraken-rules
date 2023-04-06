@@ -25,6 +25,8 @@ public class ContextNavigationImpl implements ContextNavigation, Serializable {
 
     private Cardinality cardinality;
 
+    private Boolean forbidReference;
+
     @Override public String getTargetName() {
         return targetName;
     }
@@ -49,5 +51,15 @@ public class ContextNavigationImpl implements ContextNavigation, Serializable {
     @Override
     public void setCardinality(Cardinality cardinality) {
         this.cardinality = cardinality;
+    }
+
+    @Override
+    public Boolean getForbidReference() {
+        return forbidReference;
+    }
+
+    @Override
+    public void setForbidReference(Boolean forbidReference) {
+        this.forbidReference = forbidReference;
     }
 }

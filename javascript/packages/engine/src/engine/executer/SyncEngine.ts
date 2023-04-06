@@ -164,7 +164,7 @@ export class SyncEngine {
         return logger.group(
             () => `Kraken logs: '${entryPointName}'`,
             () => this.doEvaluate(data, entryPointName, config),
-            result => `Kraken logs: '${entryPointName}'. Timestamp: ${result.evaluationTimestamp.toUTCString()}`,
+            result => `Kraken logs: '${entryPointName}'. Timestamp: ${result.evaluationTimestamp.toISOString()}`,
         )
     }
 
@@ -172,20 +172,14 @@ export class SyncEngine {
         return logger.group(
             () => `Kraken logs: '${entryPointName}'`,
             () => this.doEvaluate(data, entryPointName, config, this.requireValidNode(node)),
-            result => `Kraken logs: '${entryPointName}'. Timestamp: ${result.evaluationTimestamp.toUTCString()}`,
+            result => `Kraken logs: '${entryPointName}'. Timestamp: ${result.evaluationTimestamp.toISOString()}`,
         )
     }
 
     private doEvaluate = (data: object, entryPointName: string, evaluationConfig: EvaluationConfig, node?: object) => {
         const start = Date.now()
-        logger.info(() => {
-            return { evaluationConfig }
-        })
-        if (node) {
-            const contextName = this.#dataInfoResolver.resolveName(node)
-            const id = this.#dataInfoResolver.resolveId(node)
-            logger.info(() => `With restriction node: ${contextName}:${id}`)
-        }
+
+        this.logEngineInputData(data, evaluationConfig, node)
         const bundle = this.#bundleCache.get(entryPointName, evaluationConfig.context.dimensions || {})
 
         const version = this.#engineCompatibilityVersion || ENGINE_VERSION
@@ -214,6 +208,16 @@ export class SyncEngine {
         }).evaluate(filteredRulesEvaluation, data, session)
         logger.debug(() => `Kraken rules evaluation took ${Math.round(Date.now() - start)} ms`, true)
         return result
+    }
+
+    private logEngineInputData(data: object, evaluationConfig: EvaluationConfig, node?: object) {
+        logger.debug(() => [`Entity:`, data])
+        if (node) {
+            const contextName = this.#dataInfoResolver.resolveName(node)
+            const id = this.#dataInfoResolver.resolveId(node)
+            logger.info(() => `Restriction entity node: ${contextName}:${id}`)
+        }
+        logger.info(() => [`Configuration:`, evaluationConfig])
     }
 
     private filterRules(

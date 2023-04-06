@@ -24,6 +24,7 @@ import AssertionPayload = Payloads.Validation.AssertionPayload
 import { DataContext } from '../contexts/data/DataContext'
 import { payloadResultCreator } from '../results/PayloadResultCreator'
 import { logger } from '../../utils/DevelopmentLogger'
+import { formatExpressionEvaluationMessage } from '../../utils/ExpressionEvaluationMessageFormatter'
 
 /**
  * Payload handler implementation to process {@link AssertionPayload}s.
@@ -33,12 +34,11 @@ export class AssertionPayloadHandler implements RulePayloadHandler {
     handlesPayloadType(): Payloads.PayloadType {
         return PayloadType.ASSERTION
     }
-    executePayload(
-        payload: AssertionPayload,
-        _rule: Rule,
-        dataContext: DataContext,
-        session: ExecutionSession,
-    ): AssertionPayloadResult {
+    executePayload(rule: Rule, dataContext: DataContext, session: ExecutionSession): AssertionPayloadResult {
+        const payload = rule.payload as AssertionPayload
+
+        logger.debug(() => formatExpressionEvaluationMessage('assertion', payload.assertionExpression, dataContext))
+
         const expressionResult = this.evaluator.evaluate(
             payload.assertionExpression,
             dataContext,
@@ -50,12 +50,17 @@ export class AssertionPayloadHandler implements RulePayloadHandler {
             session.expressionContext,
         )
         if (ExpressionEvaluationResult.isSuccess(expressionResult)) {
-            logger.debug(
-                () =>
-                    `Evaluated '${payload.type}' expression '${payload.assertionExpression.expressionString}' to ${expressionResult.success}.`,
-            )
             return payloadResultCreator.assertion(payload, Boolean(expressionResult.success), templateVariables)
         }
         return payloadResultCreator.assertionFail(expressionResult)
+    }
+
+    describePayloadResult(payloadResult: AssertionPayloadResult): string {
+        if (payloadResult.error) {
+            return 'Field is valid. Assertion is not evaluated due to expression error.'
+        }
+        return payloadResult.success
+            ? 'Field is valid. Assertion evaluated to true.'
+            : 'Field is not valid. Assertion evaluated to false.'
     }
 }

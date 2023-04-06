@@ -94,6 +94,7 @@ Context BillingAddress Is AddressInfo {
     Child AddressLine1 : addressLine1
     Child AddressLine2 : addressLine2
     String billingNote
+    @ForbidTarget @ForbidReference String stateCd
 }
 
 Context Vehicle {
@@ -135,6 +136,7 @@ Context PersonInfo Is PersonNameInfo, Info {
     Integer age
     String occupation
     Boolean sameHomeAddress
+
     Child AddressInfo : addressInfo
 }
 
@@ -149,6 +151,7 @@ Context AddressInfo {
     String postalCode
     String city
     String street
+    String stateCd
     AddressLine* addressLines
     Child AddressLine1 : addressLine1
     Child AddressLine2 : addressLine2

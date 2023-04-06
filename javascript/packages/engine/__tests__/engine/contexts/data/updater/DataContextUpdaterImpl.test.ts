@@ -75,12 +75,12 @@ describe('DataContextUpdaterImpl', () => {
             CreditCardInfo.name,
             { test: 'data' },
             { getContextInstanceId: () => '1', getContextName: () => CreditCardInfo.name },
-            mock.modelTree.contexts[CreditCardInfo.name].fields,
+            mock.modelTree.contexts[CreditCardInfo.name],
             mock.data.dataContextEmpty(),
         )
-        expect(countReferences(dataContext)).toBe(1)
-        update(dataContext, createDependency(BillingAddress.name))
         expect(countReferences(dataContext)).toBe(2)
+        update(dataContext, createDependency(BillingAddress.name))
+        expect(countReferences(dataContext)).toBe(3)
     })
     it('should fail extracting reference with no path available', () => {
         const dataContext = mock.data.dataContextEmpty()

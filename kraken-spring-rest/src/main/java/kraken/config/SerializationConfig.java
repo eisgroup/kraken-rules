@@ -18,10 +18,6 @@ package kraken.config;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import javax.money.MonetaryAmount;
 
@@ -46,6 +42,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+
+import kraken.utils.Dates;
 
 /**
  * @author psurinin@eisgroup.com
@@ -82,18 +80,14 @@ public class SerializationConfig {
         @Override
         public LocalDateTime deserialize(JsonParser parser, DeserializationContext context) throws IOException {
             String isoDateTime = parser.getText().trim();
-            return LocalDateTime.ofInstant(ZonedDateTime.parse(isoDateTime).toInstant(), ZoneId.systemDefault());
+            return Dates.convertISOToLocalDateTime(isoDateTime);
         }
     }
 
     public static class LocalDateTimeSerializer extends JsonSerializer<LocalDateTime> {
         @Override
         public void serialize(LocalDateTime localDateTime, JsonGenerator g, SerializerProvider p) throws IOException {
-
-            String isoDateTime = ZonedDateTime.of(localDateTime, ZoneId.systemDefault())
-                    .truncatedTo(ChronoUnit.MILLIS)
-                    .format(DateTimeFormatter.ISO_INSTANT);
-            g.writeString(isoDateTime);
+            g.writeString(Dates.convertLocalDateTimeToISO(localDateTime));
         }
     }
 

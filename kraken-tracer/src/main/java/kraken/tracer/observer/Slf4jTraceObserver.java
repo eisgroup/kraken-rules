@@ -69,14 +69,19 @@ public final class Slf4jTraceObserver implements TraceObserver {
             .map(result -> operationNode.getOperation().describeAfter(result))
             .orElse("");
 
-        String beforeSymbol = after.isEmpty() ? "--" : "->";
-        appendDescription(builder, before, depth, beforeSymbol);
+        if(!before.isEmpty()) {
+            String beforeSymbol = after.isEmpty() ? "--" : "->";
+            appendDescription(builder, before, depth, beforeSymbol);
+        }
 
+        int nestedDepth = before.isEmpty() || after.isEmpty() ? depth : depth + 1;
         operationNode.getChildOperations()
-            .forEach(child -> traverseAndAppend(builder, child, depth + 1));
+            .forEach(child -> traverseAndAppend(builder, child, nestedDepth));
 
-        String afterSymbol = before.isEmpty() ? "--" : "<-";
-        appendDescription(builder, after, depth, afterSymbol);
+        if(!after.isEmpty()) {
+            String afterSymbol = before.isEmpty() ? "--" : "<-";
+            appendDescription(builder, after, depth, afterSymbol);
+        }
     }
 
     private void appendDescription(StringBuilder builder, String description, int depth, String symbol) {

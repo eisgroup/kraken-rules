@@ -52,7 +52,6 @@ public class UsagePayloadHandlerTest {
                 .build();
 
         PayloadResult payloadResult = usagePayloadHandler.executePayload(
-                rule.getPayload(),
                 rule,
                 dataContext,
                 SESSION
@@ -75,7 +74,6 @@ public class UsagePayloadHandlerTest {
                 .build();
 
         UsagePayloadResult payloadResult = (UsagePayloadResult) usagePayloadHandler.executePayload(
-                rule.getPayload(),
                 rule,
                 dataContext,
                 SESSION
@@ -96,7 +94,6 @@ public class UsagePayloadHandlerTest {
                 .build();
 
         UsagePayloadResult payloadResult = (UsagePayloadResult) usagePayloadHandler.executePayload(
-                rule.getPayload(),
                 rule,
                 dataContext,
                 SESSION
@@ -118,7 +115,6 @@ public class UsagePayloadHandlerTest {
                 .build();
 
         UsagePayloadResult payloadResult = (UsagePayloadResult) usagePayloadHandler.executePayload(
-                rule.getPayload(),
                 rule,
                 dataContext,
                 SESSION

@@ -71,7 +71,6 @@ public class DefaultValuePayloadHandlerTest {
                 .targetPath("code")
                 .build();
         PayloadResult payloadResult = defaultValuePayloadHandler.executePayload(
-                rule.getPayload(),
                 rule,
                 dataContext,
                 SESSION
@@ -91,7 +90,6 @@ public class DefaultValuePayloadHandlerTest {
                 .build();
 
         DefaultValuePayloadResult payloadResult = (DefaultValuePayloadResult) defaultValuePayloadHandler.executePayload(
-                rule.getPayload(),
                 rule,
                 dataContext,
                 SESSION
@@ -114,7 +112,6 @@ public class DefaultValuePayloadHandlerTest {
                 .build();
 
         DefaultValuePayloadResult payloadResult = (DefaultValuePayloadResult) defaultValuePayloadHandler.executePayload(
-                rule.getPayload(),
                 rule,
                 dataContext,
                 SESSION
@@ -137,7 +134,7 @@ public class DefaultValuePayloadHandlerTest {
             .targetPath("moneyLimit")
             .build();
 
-        defaultValuePayloadHandler.executePayload(rule.getPayload(), rule, dataContext, SESSION);
+        defaultValuePayloadHandler.executePayload(rule, dataContext, SESSION);
 
         assertThat(coverage.getMoneyLimit(), is(equalTo(Money.of(10, "USD"))));
     }
@@ -154,7 +151,7 @@ public class DefaultValuePayloadHandlerTest {
             .targetPath("decimalLimit")
             .build();
 
-        defaultValuePayloadHandler.executePayload(rule.getPayload(), rule, dataContext, SESSION);
+        defaultValuePayloadHandler.executePayload(rule, dataContext, SESSION);
 
         assertThat(coverage.getDecimalLimit(), is(equalTo(new BigDecimal("10"))));
     }
@@ -171,7 +168,7 @@ public class DefaultValuePayloadHandlerTest {
             .targetPath("localDateTime")
             .build();
 
-        defaultValuePayloadHandler.executePayload(rule.getPayload(), rule, dataContext, SESSION);
+        defaultValuePayloadHandler.executePayload(rule, dataContext, SESSION);
 
         assertThat(coverage.getLocalDateTime(), is(equalTo(LocalDateTime.of(2022, 1, 1, 0, 0, 0))));
     }
@@ -188,7 +185,7 @@ public class DefaultValuePayloadHandlerTest {
             .targetPath("localDate")
             .build();
 
-        defaultValuePayloadHandler.executePayload(rule.getPayload(), rule, dataContext, SESSION);
+        defaultValuePayloadHandler.executePayload(rule, dataContext, SESSION);
 
         assertThat(coverage.getLocalDate(), is(equalTo(LocalDate.of(2022, 1, 1))));
     }
@@ -205,7 +202,6 @@ public class DefaultValuePayloadHandlerTest {
             .build();
 
         DefaultValuePayloadResult payloadResult = (DefaultValuePayloadResult) defaultValuePayloadHandler.executePayload(
-            rule.getPayload(),
             rule,
             dataContext,
             SESSION
@@ -227,7 +223,6 @@ public class DefaultValuePayloadHandlerTest {
             .build();
 
         DefaultValuePayloadResult payloadResult = (DefaultValuePayloadResult) defaultValuePayloadHandler.executePayload(
-            rule.getPayload(),
             rule,
             dataContext,
             SESSION
@@ -251,7 +246,6 @@ public class DefaultValuePayloadHandlerTest {
         assertThrows(
             UnsupportedOperationException.class,
             () -> defaultValuePayloadHandler.executePayload(
-                rule.getPayload(),
                 rule,
                 dataContext,
                 SESSION
@@ -273,7 +267,6 @@ public class DefaultValuePayloadHandlerTest {
         assertThrows(
             UnsupportedOperationException.class,
             () -> defaultValuePayloadHandler.executePayload(
-                rule.getPayload(),
                 rule,
                 dataContext,
                 SESSION
@@ -287,19 +280,23 @@ public class DefaultValuePayloadHandlerTest {
             Map.of(),
             Map.of(
                 "decimalLimit",
-                new ContextField("decimalLimit", DECIMAL.toString(), "decimalLimit", Cardinality.SINGLE),
+                field("decimalLimit", DECIMAL.toString(), Cardinality.SINGLE),
                 "moneyLimit",
-                new ContextField("moneyLimit", MONEY.toString(), "moneyLimit", Cardinality.SINGLE),
+                field("moneyLimit", MONEY.toString(), Cardinality.SINGLE),
                 "localDate",
-                new ContextField("localDate", DATE.toString(), "localDate", Cardinality.SINGLE),
+                field("localDate", DATE.toString(), Cardinality.SINGLE),
                 "localDateTime",
-                new ContextField("localDateTime", DATETIME.toString(), "localDateTime", Cardinality.SINGLE),
+                field("localDateTime", DATETIME.toString(), Cardinality.SINGLE),
                 "labels",
-                new ContextField("labels", STRING.toString(), "labels", Cardinality.MULTIPLE),
+                field("labels", STRING.toString(), Cardinality.MULTIPLE),
                 "address",
-                new ContextField("address", "Address", "address", Cardinality.SINGLE)
+                field("address", "Address", Cardinality.SINGLE)
             ),
             List.of()
         );
+    }
+
+    private ContextField field(String name, String type, Cardinality cardinality) {
+        return new ContextField(name, type, name, cardinality, false);
     }
 }

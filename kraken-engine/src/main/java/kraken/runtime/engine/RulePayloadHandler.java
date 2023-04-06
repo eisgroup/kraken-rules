@@ -40,14 +40,20 @@ public interface RulePayloadHandler {
     PayloadType handlesPayloadType();
 
     /**
-     * Executes rule logic specified in payload instance on provided data context instance
+     * Executes rule logic specified in rule payload on provided data context instance
      * and produced payload result instance for this particular execution.
      *
-     * @param payload
      * @param rule
      * @param dataContext
      * @return
      */
-    PayloadResult executePayload(Payload payload, RuntimeRule rule, DataContext dataContext, EvaluationSession session);
+    PayloadResult executePayload(RuntimeRule rule, DataContext dataContext, EvaluationSession session);
 
+    /**
+     *
+     * @param payloadResult
+     * @return payload evaluation result description that will be included in the logs.
+     * Description must be one or more full sentences with proper punctuation.
+     */
+    String describePayloadResult(PayloadResult payloadResult);
 }

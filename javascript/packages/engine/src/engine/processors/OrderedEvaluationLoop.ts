@@ -29,7 +29,7 @@ import { DataContext } from '../contexts/data/DataContext'
 import { ErrorCode, KrakenRuntimeError } from '../../error/KrakenRuntimeError'
 import { payloadResultTypeChecker } from '../results/PayloadResultTypeChecker'
 import { conditionEvaluationTypeChecker } from '../../dto/DefaultConditionEvaluationResult'
-import { ContextDataProvider } from '../contexts/data/extraction/ContextDataProvider'
+import { ContextData, ContextDataProvider } from '../contexts/data/extraction/ContextDataProvider'
 import { DefaultEntryPointResult } from '../../dto/DefaultEntryPointResult'
 import { DefaultContextFieldInfo } from '../../dto/DefaultContextFieldInfo'
 import { ErrorAwarePayloadResult } from 'kraken-engine-api/src'
@@ -154,7 +154,7 @@ export class OrderedEvaluationLoop {
     ): Record<string, FieldEvaluation> {
         const defaultRuleEvaluations: Record<string, FieldEvaluation> = {}
         for (const rule of defaultRules) {
-            for (const dataContext of this.resolveContexts(rule, provider)) {
+            for (const dataContext of this.resolveContextData(rule, provider).allowedContexts) {
                 const field = `${dataContext.contextName}.${rule.targetPath}`
                 if (!defaultRuleEvaluations[field]) {
                     defaultRuleEvaluations[field] = { field, evaluations: {} }
@@ -229,8 +229,8 @@ export class OrderedEvaluationLoop {
         provider: ContextDataProvider,
         session: ExecutionSession,
     ): RuleOnInstanceEvaluationResult[] {
-        return this.resolveContexts(rule, provider)
-            .map(dataContext => <RuleEvaluation>{ rule, dataContext })
+        return this.resolveContextData(rule, provider)
+            .allowedContexts.map(dataContext => <RuleEvaluation>{ rule, dataContext })
             .map(evaluation => this.evaluateRulePayload(evaluation, session, false))
     }
 
@@ -288,19 +288,28 @@ export class OrderedEvaluationLoop {
         return 'APPLIED'
     }
 
-    private resolveContexts(rule: Rule, provider: ContextDataProvider): DataContext[] {
-        const contexts = provider.resolveContextData(rule.context)
-        logger.debug(() => this.describeResolvedContexts(contexts, rule))
-        return contexts
+    private resolveContextData(rule: Rule, provider: ContextDataProvider): ContextData {
+        const contextData = provider.resolveContextData(rule)
+        logger.debug(() => this.describeResolvedContextData(contextData, rule))
+        return contextData
     }
 
-    private describeResolvedContexts(contexts: DataContext[], rule: Rule): string {
-        if (contexts.length === 0) {
-            return `Resolved 0 data context(s) for rule '${rule.name}' target '${rule.context}'.`
-        } else {
-            const contextString = contexts.map(c => `${c.contextName}:${c.contextId}`).join('\n')
-            return `Resolved ${contexts.length} data context(s) for rule '${rule.name}' target '${rule.context}':\n${contextString}`
+    private describeResolvedContextData(contextData: ContextData, rule: Rule): string {
+        const describe = (contexts: DataContext[]): string => {
+            return `${contexts.map(c => `${c.contextName}:${c.contextId}`).join('\n')}`
         }
+        let message = `Resolved ${contextData.allowedContexts.length} data context(s) for rule '${rule.name}' target '${rule.context}'`
+        if (contextData.allowedContexts.length > 0) {
+            message += `:\n${describe(contextData.allowedContexts)}`
+        }
+        if (contextData.forbiddenContexts.length > 0) {
+            message += `\nFound ${
+                contextData.forbiddenContexts.length
+            } forbidden contexts. Rule will not be executed on these contexts:\n${describe(
+                contextData.forbiddenContexts,
+            )}`
+        }
+        return message
     }
 
     private addResult(result: RuleOnInstanceEvaluationResult, results: Record<string, FieldEvaluationResult>): void {

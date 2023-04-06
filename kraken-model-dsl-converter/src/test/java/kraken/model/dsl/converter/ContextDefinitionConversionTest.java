@@ -78,7 +78,7 @@ public class ContextDefinitionConversionTest {
         contextDefinition.setPhysicalNamespace("PhysicalName");
         ContextField contextField1 = createContextField("contextField1", "INTEGER", "contextField1", Cardinality.SINGLE);
         ContextField contextField2 = createContextField("contextField2", "String", "contextField1", Cardinality.MULTIPLE);
-        ContextField contextField3 = createContextField(true, "contextField3", "DECIMAL", "contextField3", Cardinality.MULTIPLE);
+        ContextField contextField3 = createContextField("contextField3", "DECIMAL", "contextField3", Cardinality.MULTIPLE, true, true);
         ContextField contextField4 = createContextField("contextField4", "ReplacementCostEndorsement", "contextField4", Cardinality.MULTIPLE);
         contextDefinition.setContextFields(toLinkedMap(ContextField::getName, contextField1, contextField2, contextField3, contextField4));
 
@@ -88,23 +88,27 @@ public class ContextDefinitionConversionTest {
 
         String convertedContext = convert(contextDefinition);
         assertEquals(
-                        "Context ContextDefinitionName Is ContextDefinitionNameParent {" +
-                        System.lineSeparator() +
-                        "    Integer contextField1" +
-                        System.lineSeparator() +
-                        "    String* contextField2 : contextField1" +
-                        System.lineSeparator() +
-                        "    External Decimal* contextField3" +
-                        System.lineSeparator() +
-                        "    ReplacementCostEndorsement* contextField4" +
-                        System.lineSeparator() +
-                        "    Child contextNavigation1 : expression" +
-                        System.lineSeparator() +
-                        "    Child* contextNavigation2 : expression" +
-                        System.lineSeparator() +
-                        "}" +
-                        System.lineSeparator(),
-                        convertedContext
+            "Context ContextDefinitionName Is ContextDefinitionNameParent {" +
+            System.lineSeparator() +
+            "    Integer contextField1" +
+            System.lineSeparator() +
+            "    String* contextField2 : contextField1" +
+            System.lineSeparator() +
+            "    @ForbidTarget" +
+            System.lineSeparator() +
+            "    @ForbidReference" +
+            System.lineSeparator() +
+            "    Decimal* contextField3" +
+            System.lineSeparator() +
+            "    ReplacementCostEndorsement* contextField4" +
+            System.lineSeparator() +
+            "    Child contextNavigation1 : expression" +
+            System.lineSeparator() +
+            "    Child* contextNavigation2 : expression" +
+            System.lineSeparator() +
+            "}" +
+            System.lineSeparator(),
+            convertedContext
         );
     }
 
@@ -315,8 +319,7 @@ public class ContextDefinitionConversionTest {
 
     @Test
     public void shouldConvertContextWithUnknownFieldWithParentAndChild() {
-        ContextDefinition contextDefinition = RULES_MODEL_FACTORY.createContextDefinition();
-        contextDefinition.setName("ContextWithFields");
+        ContextDefinition contextDefinition = context("ContextWithFields");
         contextDefinition.setStrict(false);
         contextDefinition.setParentDefinitions(Collections.singleton("Parent"));
         ContextNavigation contextNavigation = createContextNavigation("child", "child_expression02", Cardinality.MULTIPLE);
@@ -341,26 +344,36 @@ public class ContextDefinitionConversionTest {
     }
 
     @Test
-    public void shouldConvertStrictRootContextWithExternalFields() {
-        ContextDefinition contextDefinition = RULES_MODEL_FACTORY.createContextDefinition();
-        contextDefinition.setName("ContextWithFields");
-        contextDefinition.setStrict(true);
-        contextDefinition.setRoot(true);
-        ContextField contextField1 = createContextField(true, "field1", "Unknown", "notMatchingPath", Cardinality.SINGLE);
-        ContextField contextField2 = createContextField(true, "field2", "CostEndorsement", "field2", Cardinality.SINGLE);
+    public void shouldConvertContextWithForbiddenFieldsAndChildren() {
+        ContextDefinition contextDefinition = context("ContextWithFields");
+        ContextField contextField1 = createContextField("field1", "Unknown", "notMatchingPath", Cardinality.SINGLE, true, true);
+        ContextField contextField2 = createContextField("field2", "CostEndorsement", "field2", Cardinality.SINGLE, false, true);
         contextDefinition.setContextFields(toLinkedMap(ContextField::getName, contextField1, contextField2));
+        ContextNavigation contextNavigation = createContextNavigation("MyChild", "my.child", Cardinality.SINGLE);
+        contextNavigation.setForbidReference(true);
+        contextDefinition.setChildren(Map.of(contextNavigation.getTargetName(), contextNavigation));
 
         String convertedContext = convert(contextDefinition);
         assertEquals(
-                "Root Context ContextWithFields {" +
-                        System.lineSeparator() +
-                        "    External Unknown field1 : notMatchingPath" +
-                        System.lineSeparator() +
-                        "    External CostEndorsement field2" +
-                        System.lineSeparator() +
-                        "}" +
-                        System.lineSeparator(),
-                convertedContext
+            "Context ContextWithFields {" +
+                System.lineSeparator() +
+                "    @ForbidTarget" +
+                System.lineSeparator() +
+                "    @ForbidReference" +
+                System.lineSeparator() +
+                "    Unknown field1 : notMatchingPath" +
+                System.lineSeparator() +
+                "    @ForbidReference" +
+                System.lineSeparator() +
+                "    CostEndorsement field2" +
+                System.lineSeparator() +
+                "    @ForbidReference" +
+                System.lineSeparator() +
+                "    Child MyChild : my.child" +
+                System.lineSeparator() +
+                "}" +
+                System.lineSeparator(),
+            convertedContext
         );
     }
 
@@ -379,16 +392,17 @@ public class ContextDefinitionConversionTest {
     }
 
     private ContextField createContextField(String name, String fieldType, String fieldPath, Cardinality cardinality) {
-        return createContextField(false, name, fieldType, fieldPath, cardinality);
+        return createContextField(name, fieldType, fieldPath, cardinality, false, false);
     }
 
-    private ContextField createContextField(boolean external, String name, String fieldType, String fieldPath, Cardinality cardinality) {
+    private ContextField createContextField(String name, String fieldType, String fieldPath, Cardinality cardinality, boolean forbidTarget, boolean forbidReference) {
         ContextField contextField = RULES_MODEL_FACTORY.createContextField();
         contextField.setName(name);
         contextField.setFieldType(fieldType);
         contextField.setFieldPath(fieldPath);
         contextField.setCardinality(cardinality);
-        contextField.setExternal(external);
+        contextField.setForbidTarget(forbidTarget);
+        contextField.setForbidReference(forbidReference);
         return contextField;
     }
 

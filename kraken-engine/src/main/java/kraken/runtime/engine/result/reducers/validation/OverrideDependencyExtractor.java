@@ -56,9 +56,9 @@ public class OverrideDependencyExtractor {
                 if(isReferenceSingular(reference)) {
                     ContextField contextField = reference.getDataContext().getContextDefinition().getFields().get(dependency.getFieldName());
                     if (isFieldSimplePrimitive(contextField)) {
-                        Object value = krakenExpressionEvaluator.evaluateGetProperty(
-                                contextField.getFieldPath(),
-                                reference.getDataContext().getDataObject()
+                        Object value = krakenExpressionEvaluator.evaluateTargetField(
+                            contextField.getFieldPath(),
+                            reference.getDataContext()
                         );
                         String name = reference.getDataContext().getContextName() + "." + contextField.getName();
                         PrimitiveFieldDataType type = PrimitiveFieldDataType.valueOf(contextField.getFieldType());

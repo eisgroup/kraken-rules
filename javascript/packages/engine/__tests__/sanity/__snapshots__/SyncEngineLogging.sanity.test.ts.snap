@@ -1,0 +1,410 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SyncEngine Should debug log in development environment 1`] = `
+"-> Kraken logs: 'Policy:TracerSnapshotTest'
+   -- Entity:
+      {
+        \\"id\\": \\"Policy-1\\",
+        \\"cd\\": \\"Policy\\",
+        \\"state\\": \\"OT\\",
+        \\"termDetails\\": {
+          \\"id\\": \\"TermDetails-1\\",
+          \\"cd\\": \\"TermDetails\\",
+          \\"termEffectiveDate\\": \\"1999-01-01T00:00:00.000Z\\"
+        },
+        \\"accessTrackInfo\\": {
+          \\"id\\": \\"AccessTrackInfo-1\\",
+          \\"cd\\": \\"AccessTrackInfo\\"
+        },
+        \\"transactionDetails\\": {
+          \\"id\\": \\"TransactionDetails-1\\",
+          \\"cd\\": \\"TransactionDetails\\"
+        },
+        \\"billingInfo\\": {
+          \\"id\\": \\"BillingInfo-1\\",
+          \\"cd\\": \\"BillingInfo\\",
+          \\"creditCardInfo\\": {
+            \\"id\\": \\"CreditCardInfo-1\\",
+            \\"cd\\": \\"CreditCardInfo\\",
+            \\"cardCreditLimitAmount\\": {
+              \\"amount\\": 505,
+              \\"currency\\": \\"USD\\"
+            }
+          }
+        },
+        \\"riskItems\\": [
+          {
+            \\"id\\": \\"Vehicle-1\\",
+            \\"cd\\": \\"Vehicle\\",
+            \\"costNew\\": 30000,
+            \\"collCoverages\\": [
+              {
+                \\"id\\": \\"COLLCoverage-1\\",
+                \\"cd\\": \\"COLLCoverage\\",
+                \\"code\\": \\"123\\",
+                \\"limitAmount\\": 15,
+                \\"deductibleAmount\\": 25
+              }
+            ]
+          }
+        ],
+        \\"coverage\\": {
+          \\"id\\": \\"CarCoverage-1\\",
+          \\"cd\\": \\"CarCoverage\\",
+          \\"limitAmount\\": 10000
+        }
+      }
+   -- Configuration:
+      {
+        \\"currencyCd\\": \\"USD\\",
+        \\"context\\": {
+          \\"dimensions\\": {}
+        }
+      }
+   -> Evaluating default rules
+      -> Context extraction
+         -- Resolved 2 data context(s) for rule 'TR_CarCoverage_code_default' target 'CarCoverage':
+            COLLCoverage:COLLCoverage-1
+            CarCoverage:CarCoverage-1
+         -- Resolved 1 data context(s) for rule 'TR_Policy_TxEffectiveDate_default' target 'Policy':
+            Policy:Policy-1
+         -- Resolved 2 data context(s) for rule 'TR_CarCoverage_default' target 'CarCoverage':
+            COLLCoverage:COLLCoverage-1
+            CarCoverage:CarCoverage-1
+         -- Resolved 1 data context(s) for rule 'TR_Policy_EffectiveDate_default' target 'Policy':
+            Policy:Policy-1
+         -- Resolved 2 data context(s) for rule 'TR_CarCoverage_Condition_default' target 'CarCoverage':
+            COLLCoverage:COLLCoverage-1
+            CarCoverage:CarCoverage-1
+         -- Resolved 2 data context(s) for rule 'TR_CarCoverage_Reset' target 'CarCoverage':
+            COLLCoverage:COLLCoverage-1
+            CarCoverage:CarCoverage-1
+         -- Resolved 2 data context(s) for rule 'TR_CarCoverage_Condition_LimitAmt_error' target 'CarCoverage':
+            COLLCoverage:COLLCoverage-1
+            CarCoverage:CarCoverage-1
+      <- Context extraction
+      -> Evaluating rule 'TR_CarCoverage_code_default' on COLLCoverage:COLLCoverage-1:code
+         -- Evaluating default value expression: 'AA'
+         -- Evaluated DEFAULT. Field value was not changed.
+      <- Evaluated rule 'TR_CarCoverage_code_default' on COLLCoverage:COLLCoverage-1:code. Evaluation status - APPLIED.
+      -> Evaluating rule 'TR_CarCoverage_code_default' on CarCoverage:CarCoverage-1:code
+         -- Evaluating default value expression: 'AA'
+         -- Evaluated DEFAULT. Field value set to 'AA'.
+      <- Evaluated rule 'TR_CarCoverage_code_default' on CarCoverage:CarCoverage-1:code. Evaluation status - APPLIED.
+      -> Evaluating rule 'TR_Policy_TxEffectiveDate_default' on Policy:Policy-1:txEffectiveDate
+         -- Evaluating default value expression: this.DateTime('2022-01-01T22:00:00Z')
+         -- Evaluated DEFAULT. Field value set to '2022-01-01T22:00:00.000Z'.
+      <- Evaluated rule 'TR_Policy_TxEffectiveDate_default' on Policy:Policy-1:txEffectiveDate. Evaluation status - APPLIED.
+      -> Evaluating rule 'TR_Policy_EffectiveDate_default' on Policy:Policy-1:effectiveDate
+         -- Evaluating default value expression: this.Date('2022-01-01')
+         -- Evaluated DEFAULT. Field value reset from '1999-01-01T00:00:00.000Z' to '2022-01-01T00:00:00.000Z'.
+      <- Evaluated rule 'TR_Policy_EffectiveDate_default' on Policy:Policy-1:effectiveDate. Evaluation status - APPLIED.
+      -> Evaluating rule 'TR_CarCoverage_Reset' on COLLCoverage:COLLCoverage-1:limitAmount
+         -- Evaluating default value expression: 15000
+         -- Evaluated DEFAULT. Field value reset from '15' to '15000'.
+      <- Evaluated rule 'TR_CarCoverage_Reset' on COLLCoverage:COLLCoverage-1:limitAmount. Evaluation status - APPLIED.
+      -> Evaluating rule 'TR_CarCoverage_Reset' on CarCoverage:CarCoverage-1:limitAmount
+         -- Evaluating default value expression: 15000
+         -- Evaluated DEFAULT. Field value reset from '10000' to '15000'.
+      <- Evaluated rule 'TR_CarCoverage_Reset' on CarCoverage:CarCoverage-1:limitAmount. Evaluation status - APPLIED.
+      -> Evaluating rule 'TR_CarCoverage_Condition_default' on COLLCoverage:COLLCoverage-1:deductibleAmount with priority 100
+         -> Evaluating condition expression: ((this._nd(__dataObject__.limitAmount) > 10) && (this._nd(__dataObject__.limitAmount) < 50))
+         <- Evaluated condition to 'false'.
+      <- Evaluated rule 'TR_CarCoverage_Condition_default' on COLLCoverage:COLLCoverage-1:deductibleAmount. Evaluation status - SKIPPED.
+      -> Evaluating rule 'TR_CarCoverage_Condition_LimitAmt_error' on COLLCoverage:COLLCoverage-1:deductibleAmount with priority 0
+         -> Evaluating condition expression: this._eq(__references__.Policy.riskItems[10].model, 'Audi')
+            Cross context references:
+            Policy=Policy:Policy-1
+            -- Expression evaluation failed: 'this._eq(__references__.Policy.riskItems[10].model, 'Audi')'
+               Error message: Cannot read property 'model' of undefined
+         <- Couldn't evaluate condition expression due to error.
+      <- Evaluated rule 'TR_CarCoverage_Condition_LimitAmt_error' on COLLCoverage:COLLCoverage-1:deductibleAmount. Evaluation status - IGNORED.
+      -> Evaluating rule 'TR_CarCoverage_default' on COLLCoverage:COLLCoverage-1:deductibleAmount with priority -2147483648
+         -- Evaluating default value expression: 25000
+         -- Evaluated DEFAULT. Field value reset from '25' to '25000'.
+      <- Evaluated rule 'TR_CarCoverage_default' on COLLCoverage:COLLCoverage-1:deductibleAmount. Evaluation status - APPLIED.
+      -> Evaluating rule 'TR_CarCoverage_Condition_default' on CarCoverage:CarCoverage-1:deductibleAmount with priority 100
+         -> Evaluating condition expression: ((this._nd(__dataObject__.limitAmount) > 10) && (this._nd(__dataObject__.limitAmount) < 50))
+         <- Evaluated condition to 'false'.
+      <- Evaluated rule 'TR_CarCoverage_Condition_default' on CarCoverage:CarCoverage-1:deductibleAmount. Evaluation status - SKIPPED.
+      -> Evaluating rule 'TR_CarCoverage_Condition_LimitAmt_error' on CarCoverage:CarCoverage-1:deductibleAmount with priority 0
+         -> Evaluating condition expression: this._eq(__references__.Policy.riskItems[10].model, 'Audi')
+            Cross context references:
+            Policy=Policy:Policy-1
+            -- Expression evaluation failed: 'this._eq(__references__.Policy.riskItems[10].model, 'Audi')'
+               Error message: Cannot read property 'model' of undefined
+         <- Couldn't evaluate condition expression due to error.
+      <- Evaluated rule 'TR_CarCoverage_Condition_LimitAmt_error' on CarCoverage:CarCoverage-1:deductibleAmount. Evaluation status - IGNORED.
+      -> Evaluating rule 'TR_CarCoverage_default' on CarCoverage:CarCoverage-1:deductibleAmount with priority -2147483648
+         -- Evaluating default value expression: 25000
+         -- Evaluated DEFAULT. Field value set to '25000'.
+      <- Evaluated rule 'TR_CarCoverage_default' on CarCoverage:CarCoverage-1:deductibleAmount. Evaluation status - APPLIED.
+   <- Evaluated default rules.
+      Evaluated rule 'TR_CarCoverage_code_default' on a total of 2 instances.
+      Evaluated rule 'TR_Policy_TxEffectiveDate_default' on a total of 1 instances.
+      Evaluated rule 'TR_CarCoverage_default' on a total of 2 instances.
+      Evaluated rule 'TR_Policy_EffectiveDate_default' on a total of 1 instances.
+      Evaluated rule 'TR_CarCoverage_Condition_default' on a total of 2 instances.
+      Evaluated rule 'TR_CarCoverage_Reset' on a total of 2 instances.
+      Evaluated rule 'TR_CarCoverage_Condition_LimitAmt_error' on a total of 2 instances.
+   -> Evaluating rule 'TR_CarCoverage_SizeRange_negative'
+      -- Resolved 1 data context(s) for rule 'TR_CarCoverage_SizeRange_negative' target 'Policy':
+         Policy:Policy-1
+      -> Evaluating rule 'TR_CarCoverage_SizeRange_negative' on Policy:Policy-1:riskItems
+         -- Validating collection field which has 1 element(s).
+         -- Evaluated SIZE_RANGE. Field is not valid. Collection size is not in interval [10, 20].
+      <- Evaluated rule 'TR_CarCoverage_SizeRange_negative' on Policy:Policy-1:riskItems. Evaluation status - APPLIED.
+   <- Evaluated rule 'TR_CarCoverage_SizeRange_negative' on a total of 1 instances.
+   -> Evaluating rule 'TR_CarCoverage_regexp_negative'
+      -- Resolved 2 data context(s) for rule 'TR_CarCoverage_regexp_negative' target 'CarCoverage':
+         COLLCoverage:COLLCoverage-1
+         CarCoverage:CarCoverage-1
+      -> Evaluating rule 'TR_CarCoverage_regexp_negative' on COLLCoverage:COLLCoverage-1:code
+         -- Validating field which has value: 123
+         -- Evaluated REGEX. Field is valid. String value matches regular expression [0-9]+.
+      <- Evaluated rule 'TR_CarCoverage_regexp_negative' on COLLCoverage:COLLCoverage-1:code. Evaluation status - APPLIED.
+      -> Evaluating rule 'TR_CarCoverage_regexp_negative' on CarCoverage:CarCoverage-1:code
+         -- Validating field which has value: AA
+         -- Evaluated REGEX. Field is not valid. String value does not match regular expression [0-9]+.
+      <- Evaluated rule 'TR_CarCoverage_regexp_negative' on CarCoverage:CarCoverage-1:code. Evaluation status - APPLIED.
+   <- Evaluated rule 'TR_CarCoverage_regexp_negative' on a total of 2 instances.
+   -> Evaluating rule 'TR_CarCoverage_Payload_error'
+      -- Resolved 2 data context(s) for rule 'TR_CarCoverage_Payload_error' target 'CarCoverage':
+         COLLCoverage:COLLCoverage-1
+         CarCoverage:CarCoverage-1
+      -> Evaluating rule 'TR_CarCoverage_Payload_error' on COLLCoverage:COLLCoverage-1:deductibleAmount
+         -- Evaluating assertion expression: this._eq(__references__.Policy.riskItems[10].model, 'Audi')
+            Cross context references:
+            Policy=Policy:Policy-1
+         -- Expression evaluation failed: 'this._eq(__references__.Policy.riskItems[10].model, 'Audi')'
+            Error message: Cannot read property 'model' of undefined
+         -- Evaluated ASSERTION. Field is valid. Assertion is not evaluated due to expression error.
+      <- Evaluated rule 'TR_CarCoverage_Payload_error' on COLLCoverage:COLLCoverage-1:deductibleAmount. Evaluation status - IGNORED.
+      -> Evaluating rule 'TR_CarCoverage_Payload_error' on CarCoverage:CarCoverage-1:deductibleAmount
+         -- Evaluating assertion expression: this._eq(__references__.Policy.riskItems[10].model, 'Audi')
+            Cross context references:
+            Policy=Policy:Policy-1
+         -- Expression evaluation failed: 'this._eq(__references__.Policy.riskItems[10].model, 'Audi')'
+            Error message: Cannot read property 'model' of undefined
+         -- Evaluated ASSERTION. Field is valid. Assertion is not evaluated due to expression error.
+      <- Evaluated rule 'TR_CarCoverage_Payload_error' on CarCoverage:CarCoverage-1:deductibleAmount. Evaluation status - IGNORED.
+   <- Evaluated rule 'TR_CarCoverage_Payload_error' on a total of 2 instances.
+   -> Evaluating rule 'TR_Vehicle_costNew_numberSet_min_max_step'
+      -- Resolved 1 data context(s) for rule 'TR_Vehicle_costNew_numberSet_min_max_step' target 'Vehicle':
+         Vehicle:Vehicle-1
+      -> Evaluating rule 'TR_Vehicle_costNew_numberSet_min_max_step' on Vehicle:Vehicle-1:costNew
+         -- Validating field which has value: 30000
+         -- Evaluated NUMBER_SET. Field is valid. Field value is in number set [10000, 50000] with step 50.
+      <- Evaluated rule 'TR_Vehicle_costNew_numberSet_min_max_step' on Vehicle:Vehicle-1:costNew. Evaluation status - APPLIED.
+   <- Evaluated rule 'TR_Vehicle_costNew_numberSet_min_max_step' on a total of 1 instances.
+   -> Evaluating rule 'TR_Vehicle_costNew_numberSet_min_step'
+      -- Resolved 1 data context(s) for rule 'TR_Vehicle_costNew_numberSet_min_step' target 'Vehicle':
+         Vehicle:Vehicle-1
+      -> Evaluating rule 'TR_Vehicle_costNew_numberSet_min_step' on Vehicle:Vehicle-1:costNew
+         -- Validating field which has value: 30000
+         -- Evaluated NUMBER_SET. Field is valid. Field value is in number set [10000, ∞] with step 50.
+      <- Evaluated rule 'TR_Vehicle_costNew_numberSet_min_step' on Vehicle:Vehicle-1:costNew. Evaluation status - APPLIED.
+   <- Evaluated rule 'TR_Vehicle_costNew_numberSet_min_step' on a total of 1 instances.
+   -> Evaluating rule 'TR_Vehicle_costNew_numberSet_min'
+      -- Resolved 1 data context(s) for rule 'TR_Vehicle_costNew_numberSet_min' target 'Vehicle':
+         Vehicle:Vehicle-1
+      -> Evaluating rule 'TR_Vehicle_costNew_numberSet_min' on Vehicle:Vehicle-1:costNew
+         -- Validating field which has value: 30000
+         -- Evaluated NUMBER_SET. Field is valid. Field value is in number set [10000, ∞].
+      <- Evaluated rule 'TR_Vehicle_costNew_numberSet_min' on Vehicle:Vehicle-1:costNew. Evaluation status - APPLIED.
+   <- Evaluated rule 'TR_Vehicle_costNew_numberSet_min' on a total of 1 instances.
+   -> Evaluating rule 'TR_CarCoverage_assert_error'
+      -- Resolved 2 data context(s) for rule 'TR_CarCoverage_assert_error' target 'CarCoverage':
+         COLLCoverage:COLLCoverage-1
+         CarCoverage:CarCoverage-1
+      -> Evaluating rule 'TR_CarCoverage_assert_error' on COLLCoverage:COLLCoverage-1:code
+         -- Evaluating assertion expression: this._eq(__dataObject__.code, 'AA')
+         -- Evaluated ASSERTION. Field is not valid. Assertion evaluated to false.
+      <- Evaluated rule 'TR_CarCoverage_assert_error' on COLLCoverage:COLLCoverage-1:code. Evaluation status - APPLIED.
+      -> Evaluating rule 'TR_CarCoverage_assert_error' on CarCoverage:CarCoverage-1:code
+         -- Evaluating assertion expression: this._eq(__dataObject__.code, 'AA')
+         -- Evaluated ASSERTION. Field is valid. Assertion evaluated to true.
+      <- Evaluated rule 'TR_CarCoverage_assert_error' on CarCoverage:CarCoverage-1:code. Evaluation status - APPLIED.
+   <- Evaluated rule 'TR_CarCoverage_assert_error' on a total of 2 instances.
+   -> Evaluating rule 'TR_CarCoverage_assert_ccr'
+      -- Resolved 1 data context(s) for rule 'TR_CarCoverage_assert_ccr' target 'COLLCoverage':
+         COLLCoverage:COLLCoverage-1
+      -> Evaluating rule 'TR_CarCoverage_assert_ccr' on COLLCoverage:COLLCoverage-1:code
+         -- Evaluating assertion expression: ((this._eq(__references__.Policy.state, 'AZ') && (this._nd(__references__.Vehicle.costNew) > 10000)) && (this._nd(__references__.COLLCoverage.limitAmount) > 10))
+            Cross context references:
+            Policy=Policy:Policy-1
+            Vehicle=Vehicle:Vehicle-1
+         -- Evaluated ASSERTION. Field is not valid. Assertion evaluated to false.
+      <- Evaluated rule 'TR_CarCoverage_assert_ccr' on COLLCoverage:COLLCoverage-1:code. Evaluation status - APPLIED.
+   <- Evaluated rule 'TR_CarCoverage_assert_ccr' on a total of 1 instances.
+   -> Evaluating rule 'TR_Policy_ValueList_numbers'
+      -- Resolved 1 data context(s) for rule 'TR_Policy_ValueList_numbers' target 'Vehicle':
+         Vehicle:Vehicle-1
+      -> Evaluating rule 'TR_Policy_ValueList_numbers' on Vehicle:Vehicle-1:costNew
+         -- Validating field which has value: 30000
+         -- Evaluated VALUE_LIST. Field is not valid. Field value is not one of [ 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000 ].
+      <- Evaluated rule 'TR_Policy_ValueList_numbers' on Vehicle:Vehicle-1:costNew. Evaluation status - APPLIED.
+   <- Evaluated rule 'TR_Policy_ValueList_numbers' on a total of 1 instances.
+   -> Evaluating rule 'TR_CarCoverage_SizeRange'
+      -- Resolved 1 data context(s) for rule 'TR_CarCoverage_SizeRange' target 'Policy':
+         Policy:Policy-1
+      -> Evaluating rule 'TR_CarCoverage_SizeRange' on Policy:Policy-1:riskItems
+         -- Validating collection field which has 1 element(s).
+         -- Evaluated SIZE_RANGE. Field is valid. Collection size is in interval [0, 1].
+      <- Evaluated rule 'TR_CarCoverage_SizeRange' on Policy:Policy-1:riskItems. Evaluation status - APPLIED.
+   <- Evaluated rule 'TR_CarCoverage_SizeRange' on a total of 1 instances.
+   -> Evaluating rule 'TR_CarCoverage_regexp'
+      -- Resolved 2 data context(s) for rule 'TR_CarCoverage_regexp' target 'CarCoverage':
+         COLLCoverage:COLLCoverage-1
+         CarCoverage:CarCoverage-1
+      -> Evaluating rule 'TR_CarCoverage_regexp' on COLLCoverage:COLLCoverage-1:code
+         -- Validating field which has value: 123
+         -- Evaluated REGEX. Field is not valid. String value does not match regular expression [A-Z]+.
+      <- Evaluated rule 'TR_CarCoverage_regexp' on COLLCoverage:COLLCoverage-1:code. Evaluation status - APPLIED.
+      -> Evaluating rule 'TR_CarCoverage_regexp' on CarCoverage:CarCoverage-1:code
+         -- Validating field which has value: AA
+         -- Evaluated REGEX. Field is valid. String value matches regular expression [A-Z]+.
+      <- Evaluated rule 'TR_CarCoverage_regexp' on CarCoverage:CarCoverage-1:code. Evaluation status - APPLIED.
+   <- Evaluated rule 'TR_CarCoverage_regexp' on a total of 2 instances.
+   -> Evaluating rule 'TR_CarCoverage_Accessibility'
+      -- Resolved 2 data context(s) for rule 'TR_CarCoverage_Accessibility' target 'CarCoverage':
+         COLLCoverage:COLLCoverage-1
+         CarCoverage:CarCoverage-1
+      -> Evaluating rule 'TR_CarCoverage_Accessibility' on COLLCoverage:COLLCoverage-1:deductibleAmount
+         -- Evaluated ACCESSIBILITY. The field is set to be disabled.
+      <- Evaluated rule 'TR_CarCoverage_Accessibility' on COLLCoverage:COLLCoverage-1:deductibleAmount. Evaluation status - APPLIED.
+      -> Evaluating rule 'TR_CarCoverage_Accessibility' on CarCoverage:CarCoverage-1:deductibleAmount
+         -- Evaluated ACCESSIBILITY. The field is set to be disabled.
+      <- Evaluated rule 'TR_CarCoverage_Accessibility' on CarCoverage:CarCoverage-1:deductibleAmount. Evaluation status - APPLIED.
+   <- Evaluated rule 'TR_CarCoverage_Accessibility' on a total of 2 instances.
+   -> Evaluating rule 'TR_CarCoverage_Visibility'
+      -- Resolved 2 data context(s) for rule 'TR_CarCoverage_Visibility' target 'CarCoverage':
+         COLLCoverage:COLLCoverage-1
+         CarCoverage:CarCoverage-1
+      -> Evaluating rule 'TR_CarCoverage_Visibility' on COLLCoverage:COLLCoverage-1:deductibleAmount
+         -- Evaluated VISIBILITY. The field is set to be hidden.
+      <- Evaluated rule 'TR_CarCoverage_Visibility' on COLLCoverage:COLLCoverage-1:deductibleAmount. Evaluation status - APPLIED.
+      -> Evaluating rule 'TR_CarCoverage_Visibility' on CarCoverage:CarCoverage-1:deductibleAmount
+         -- Evaluated VISIBILITY. The field is set to be hidden.
+      <- Evaluated rule 'TR_CarCoverage_Visibility' on CarCoverage:CarCoverage-1:deductibleAmount. Evaluation status - APPLIED.
+   <- Evaluated rule 'TR_CarCoverage_Visibility' on a total of 2 instances.
+   -> Evaluating rule 'TR_Vehicle_costNew_numberSet_max'
+      -- Resolved 1 data context(s) for rule 'TR_Vehicle_costNew_numberSet_max' target 'Vehicle':
+         Vehicle:Vehicle-1
+      -> Evaluating rule 'TR_Vehicle_costNew_numberSet_max' on Vehicle:Vehicle-1:costNew
+         -- Validating field which has value: 30000
+         -- Evaluated NUMBER_SET. Field is valid. Field value is in number set [-∞, 50000].
+      <- Evaluated rule 'TR_Vehicle_costNew_numberSet_max' on Vehicle:Vehicle-1:costNew. Evaluation status - APPLIED.
+   <- Evaluated rule 'TR_Vehicle_costNew_numberSet_max' on a total of 1 instances.
+   -> Evaluating rule 'TR_CarCoverage_Size_negative'
+      -- Resolved 1 data context(s) for rule 'TR_CarCoverage_Size_negative' target 'Policy':
+         Policy:Policy-1
+      -> Evaluating rule 'TR_CarCoverage_Size_negative' on Policy:Policy-1:riskItems
+         -- Validating collection field which has 1 element(s).
+         -- Evaluated SIZE. Field is not valid. Collection size is not no less than 10.
+      <- Evaluated rule 'TR_CarCoverage_Size_negative' on Policy:Policy-1:riskItems. Evaluation status - APPLIED.
+   <- Evaluated rule 'TR_CarCoverage_Size_negative' on a total of 1 instances.
+   -> Evaluating rule 'TR_Policy_ValueList_strings'
+      -- Resolved 1 data context(s) for rule 'TR_Policy_ValueList_strings' target 'Policy':
+         Policy:Policy-1
+      -> Evaluating rule 'TR_Policy_ValueList_strings' on Policy:Policy-1:state
+         -- Validating field which has value: OT
+         -- Evaluated VALUE_LIST. Field is not valid. Field value is not one of [ NY, FL ].
+      <- Evaluated rule 'TR_Policy_ValueList_strings' on Policy:Policy-1:state. Evaluation status - APPLIED.
+   <- Evaluated rule 'TR_Policy_ValueList_strings' on a total of 1 instances.
+   -> Evaluating rule 'TR_CarCoverage_assert_info'
+      -- Resolved 2 data context(s) for rule 'TR_CarCoverage_assert_info' target 'CarCoverage':
+         COLLCoverage:COLLCoverage-1
+         CarCoverage:CarCoverage-1
+      -> Evaluating rule 'TR_CarCoverage_assert_info' on COLLCoverage:COLLCoverage-1:code
+         -- Evaluating assertion expression: this._eq(__dataObject__.code, 'AA')
+         -- Evaluated ASSERTION. Field is not valid. Assertion evaluated to false.
+      <- Evaluated rule 'TR_CarCoverage_assert_info' on COLLCoverage:COLLCoverage-1:code. Evaluation status - APPLIED.
+      -> Evaluating rule 'TR_CarCoverage_assert_info' on CarCoverage:CarCoverage-1:code
+         -- Evaluating assertion expression: this._eq(__dataObject__.code, 'AA')
+         -- Evaluated ASSERTION. Field is valid. Assertion evaluated to true.
+      <- Evaluated rule 'TR_CarCoverage_assert_info' on CarCoverage:CarCoverage-1:code. Evaluation status - APPLIED.
+   <- Evaluated rule 'TR_CarCoverage_assert_info' on a total of 2 instances.
+   -> Evaluating rule 'TR_CarCoverage_assert_warn'
+      -- Resolved 2 data context(s) for rule 'TR_CarCoverage_assert_warn' target 'CarCoverage':
+         COLLCoverage:COLLCoverage-1
+         CarCoverage:CarCoverage-1
+      -> Evaluating rule 'TR_CarCoverage_assert_warn' on COLLCoverage:COLLCoverage-1:code
+         -- Evaluating assertion expression: this._eq(__dataObject__.code, 'AA')
+         -- Evaluated ASSERTION. Field is not valid. Assertion evaluated to false.
+      <- Evaluated rule 'TR_CarCoverage_assert_warn' on COLLCoverage:COLLCoverage-1:code. Evaluation status - APPLIED.
+      -> Evaluating rule 'TR_CarCoverage_assert_warn' on CarCoverage:CarCoverage-1:code
+         -- Evaluating assertion expression: this._eq(__dataObject__.code, 'AA')
+         -- Evaluated ASSERTION. Field is valid. Assertion evaluated to true.
+      <- Evaluated rule 'TR_CarCoverage_assert_warn' on CarCoverage:CarCoverage-1:code. Evaluation status - APPLIED.
+   <- Evaluated rule 'TR_CarCoverage_assert_warn' on a total of 2 instances.
+   -> Evaluating rule 'TR_CarCoverage_Usage'
+      -- Resolved 2 data context(s) for rule 'TR_CarCoverage_Usage' target 'CarCoverage':
+         COLLCoverage:COLLCoverage-1
+         CarCoverage:CarCoverage-1
+      -> Evaluating rule 'TR_CarCoverage_Usage' on COLLCoverage:COLLCoverage-1:deductibleAmount
+         -- Validating field which has value: 25000
+         -- Evaluated USAGE. Field is valid. Field is mandatory and it has a value.
+      <- Evaluated rule 'TR_CarCoverage_Usage' on COLLCoverage:COLLCoverage-1:deductibleAmount. Evaluation status - APPLIED.
+      -> Evaluating rule 'TR_CarCoverage_Usage' on CarCoverage:CarCoverage-1:deductibleAmount
+         -- Validating field which has value: 25000
+         -- Evaluated USAGE. Field is valid. Field is mandatory and it has a value.
+      <- Evaluated rule 'TR_CarCoverage_Usage' on CarCoverage:CarCoverage-1:deductibleAmount. Evaluation status - APPLIED.
+   <- Evaluated rule 'TR_CarCoverage_Usage' on a total of 2 instances.
+   -> Evaluating rule 'TR_CarCoverage_length'
+      -- Resolved 2 data context(s) for rule 'TR_CarCoverage_length' target 'CarCoverage':
+         COLLCoverage:COLLCoverage-1
+         CarCoverage:CarCoverage-1
+      -> Evaluating rule 'TR_CarCoverage_length' on COLLCoverage:COLLCoverage-1:code
+         -- Validating field which has value: 123
+         -- Evaluated LENGTH. Field is not valid. String length is more than 2.
+      <- Evaluated rule 'TR_CarCoverage_length' on COLLCoverage:COLLCoverage-1:code. Evaluation status - APPLIED.
+      -> Evaluating rule 'TR_CarCoverage_length' on CarCoverage:CarCoverage-1:code
+         -- Validating field which has value: AA
+         -- Evaluated LENGTH. Field is valid. String length is not more than 2.
+      <- Evaluated rule 'TR_CarCoverage_length' on CarCoverage:CarCoverage-1:code. Evaluation status - APPLIED.
+   <- Evaluated rule 'TR_CarCoverage_length' on a total of 2 instances.
+   -> Evaluating rule 'TR_CarCoverage_length_negative'
+      -- Resolved 2 data context(s) for rule 'TR_CarCoverage_length_negative' target 'CarCoverage':
+         COLLCoverage:COLLCoverage-1
+         CarCoverage:CarCoverage-1
+      -> Evaluating rule 'TR_CarCoverage_length_negative' on COLLCoverage:COLLCoverage-1:code
+         -- Validating field which has value: 123
+         -- Evaluated LENGTH. Field is valid. String length is not more than 3.
+      <- Evaluated rule 'TR_CarCoverage_length_negative' on COLLCoverage:COLLCoverage-1:code. Evaluation status - APPLIED.
+      -> Evaluating rule 'TR_CarCoverage_length_negative' on CarCoverage:CarCoverage-1:code
+         -- Validating field which has value: AA
+         -- Evaluated LENGTH. Field is valid. String length is not more than 3.
+      <- Evaluated rule 'TR_CarCoverage_length_negative' on CarCoverage:CarCoverage-1:code. Evaluation status - APPLIED.
+   <- Evaluated rule 'TR_CarCoverage_length_negative' on a total of 2 instances.
+   -> Evaluating rule 'TR_CarCoverage_code_assert'
+      -- Resolved 2 data context(s) for rule 'TR_CarCoverage_code_assert' target 'CarCoverage':
+         COLLCoverage:COLLCoverage-1
+         CarCoverage:CarCoverage-1
+      -> Evaluating rule 'TR_CarCoverage_code_assert' on COLLCoverage:COLLCoverage-1:code
+         -- Evaluating assertion expression: this._eq(__dataObject__.code, 'AA')
+         -- Evaluated ASSERTION. Field is not valid. Assertion evaluated to false.
+      <- Evaluated rule 'TR_CarCoverage_code_assert' on COLLCoverage:COLLCoverage-1:code. Evaluation status - APPLIED.
+      -> Evaluating rule 'TR_CarCoverage_code_assert' on CarCoverage:CarCoverage-1:code
+         -- Evaluating assertion expression: this._eq(__dataObject__.code, 'AA')
+         -- Evaluated ASSERTION. Field is valid. Assertion evaluated to true.
+      <- Evaluated rule 'TR_CarCoverage_code_assert' on CarCoverage:CarCoverage-1:code. Evaluation status - APPLIED.
+   <- Evaluated rule 'TR_CarCoverage_code_assert' on a total of 2 instances.
+   -> Evaluating rule 'TR_CarCoverage_Size'
+      -- Resolved 1 data context(s) for rule 'TR_CarCoverage_Size' target 'Policy':
+         Policy:Policy-1
+      -> Evaluating rule 'TR_CarCoverage_Size' on Policy:Policy-1:riskItems
+         -- Validating collection field which has 1 element(s).
+         -- Evaluated SIZE. Field is valid. Collection size is no less than 0.
+      <- Evaluated rule 'TR_CarCoverage_Size' on Policy:Policy-1:riskItems. Evaluation status - APPLIED.
+   <- Evaluated rule 'TR_CarCoverage_Size' on a total of 1 instances.
+   -> Evaluating rule 'TR_Vehicle_costNew_numberSet_max_step'
+      -- Resolved 1 data context(s) for rule 'TR_Vehicle_costNew_numberSet_max_step' target 'Vehicle':
+         Vehicle:Vehicle-1
+      -> Evaluating rule 'TR_Vehicle_costNew_numberSet_max_step' on Vehicle:Vehicle-1:costNew
+         -- Validating field which has value: 30000
+         -- Evaluated NUMBER_SET. Field is valid. Field value is in number set [-∞, 50000] with step 50.
+      <- Evaluated rule 'TR_Vehicle_costNew_numberSet_max_step' on Vehicle:Vehicle-1:costNew. Evaluation status - APPLIED.
+   <- Evaluated rule 'TR_Vehicle_costNew_numberSet_max_step' on a total of 1 instances.
+<- Kraken logs: 'Policy:TracerSnapshotTest'. Timestamp: 2023-01-01T00:00:00.000Z"
+`;

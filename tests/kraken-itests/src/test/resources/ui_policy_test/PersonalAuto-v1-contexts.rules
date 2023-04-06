@@ -522,7 +522,7 @@ Contexts {
         String plateNumber
         String pipMedSymbol
         Boolean businessUseInd
-        External Money marketValueOriginal
+        @ForbidTarget Money marketValueOriginal
         String offerStatus
         Money costNew
         Boolean farmOrRanchDisc

@@ -24,9 +24,9 @@ import ErrorMessage = Payloads.Validation.ErrorMessage
 import { Numbers } from './math/Numbers'
 import { dateFunctions } from './functionLibrary/DateFunctions'
 import { Moneys } from './math/Moneys'
-import { DataContext, DataReference } from '../../contexts/data/DataContext'
+import { DataContext } from '../../contexts/data/DataContext'
 import { ErrorCode, KrakenRuntimeError } from '../../../error/KrakenRuntimeError'
-import { logger } from '../../../utils/DevelopmentLogger'
+import { TargetPathUtils } from './TargetPathUtils'
 
 /**
  * Global expression functions registry.
@@ -109,7 +109,7 @@ export class ExpressionEvaluator {
     }
 
     /**
-     * Evaluates {@Link Expressions.Expression} on {@Link DataContext} and context object.
+     * Evaluates {@Link TargetPathUtils.Expression} on {@Link DataContext} and context object.
      *
      * @param expression    to evaluate
      * @param dataContext   contains data object and external references, that can
@@ -118,7 +118,7 @@ export class ExpressionEvaluator {
      * @param context       optional parameter, that provides external context. Can be
      *                      Accessed from ComplexExpressions.
      * @returns result of expression.
-     * @throws  if expression is not {@Link Expressions.Expression}
+     * @throws  if expression is not {@Link TargetPathUtils.Expression}
      * @throws  error on invalid complex expression. The cause can be invalid expression context,
      *          invalid complex expression or invalid complex expression result for {@code NaN},
      *          {@code -Infinity} or {@code +Infinity}
@@ -128,8 +128,6 @@ export class ExpressionEvaluator {
         dataContext: DataContext,
         context?: Record<string, unknown>,
     ): Expression.Result {
-        logger.debug(() => this.describeExpressionEvaluation(expression, dataContext))
-
         switch (expression.expressionType) {
             case 'PATH':
                 return this.evaluateGet(expression.expressionString, dataContext.dataObject)
@@ -239,7 +237,7 @@ export class ExpressionEvaluator {
             ? message.templateExpressions
                   .map(p => this.evaluate(p, dataContext, context))
                   .map(result => (ExpressionEvaluationResult.isError(result) ? undefined : result.success))
-                  .map(ExpressionEvaluator.render)
+                  .map(ExpressionEvaluator.renderTemplateParameter)
             : []
     }
 
@@ -250,32 +248,23 @@ export class ExpressionEvaluator {
         this.#evaluator.rebuildFunctionInvokerIfNeeded()
     }
 
-    private describeExpressionEvaluation(expression: Expressions.Expression, dataContext: DataContext): string {
-        let ccrDescription = ''
-        if (expression.expressionType === 'COMPLEX') {
-            const ccrVariables = expression.expressionVariables?.filter(ref => ref.type === 'CROSS_CONTEXT')
-            if (ccrVariables?.length) {
-                const ccrString = ccrVariables
-                    .map(ref => `${ref.name}=${this.describeReference(dataContext.dataContextReferences[ref.name])}`)
-                    .join('\n')
-                ccrDescription = `Cross context references:\n${ccrString}.`
-            }
+    /**
+     * Evaluates value of a rule target by attribute name. Resolves actual target field path.
+     *
+     * @param targetPath
+     * @param dataContext
+     */
+    evaluateTargetField(targetPath: string, dataContext: DataContext): unknown {
+        const path = TargetPathUtils.resolveTargetPath(targetPath, dataContext)
+        const valueResult = this.evaluateGet(path, dataContext.dataObject)
+        if (ExpressionEvaluationResult.isError(valueResult)) {
+            throw new Error(`Failed to resolve field value from '${path}'`)
         }
-        return `Evaluating expression '${expression.expressionString}'. ${ccrDescription}`
+        const value = valueResult.success
+        return value
     }
 
-    private describeReference(reference: DataReference | undefined): string {
-        if (!reference) {
-            return 'null'
-        }
-        if (reference.cardinality === 'SINGLE') {
-            return reference.dataContexts[0]?.id ?? 'null'
-        }
-        return `[${reference.dataContexts.map(c => c.id).join(',')}]`
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    static render(value: any | undefined): string {
+    static renderTemplateParameter(value: unknown): string {
         if (value == undefined) {
             return ''
         }
@@ -286,11 +275,32 @@ export class ExpressionEvaluator {
             return dateFunctions.Format(value, 'YYYY-MM-DD hh:mm:ss')
         }
         if (Moneys.isMoney(value)) {
-            return ExpressionEvaluator.render(value.amount)
+            return ExpressionEvaluator.renderTemplateParameter(value.amount)
         }
         if (Array.isArray(value)) {
-            return '[' + value.map(ExpressionEvaluator.render).join(', ') + ']'
+            return '[' + value.map(ExpressionEvaluator.renderTemplateParameter).join(', ') + ']'
         }
-        return value.toString()
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return (value as any).toString()
+    }
+
+    static renderFieldValue(value: unknown): string {
+        if (value == undefined) {
+            return 'undefined'
+        }
+        if (typeof value === 'number') {
+            return Numbers.toString(value)
+        }
+        if (value instanceof Date) {
+            return value.toISOString()
+        }
+        if (Moneys.isMoney(value)) {
+            return ExpressionEvaluator.renderFieldValue(value.amount)
+        }
+        if (Array.isArray(value)) {
+            return '[' + value.map(ExpressionEvaluator.renderFieldValue).join(', ') + ']'
+        }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return (value as any).toString()
     }
 }

@@ -50,7 +50,6 @@ public class RegExpPayloadHandlerTest {
                 .build();
 
         PayloadResult payloadResult = regExpPayloadHandler.executePayload(
-                rule.getPayload(),
                 rule,
                 dataContext,
                 SESSION
@@ -74,7 +73,6 @@ public class RegExpPayloadHandlerTest {
                 .build();
 
         RegExpPayloadResult payloadResult = (RegExpPayloadResult) regExpPayloadHandler.executePayload(
-                rule.getPayload(),
                 rule,
                 dataContext,
                 SESSION
@@ -98,7 +96,6 @@ public class RegExpPayloadHandlerTest {
                 .build();
 
         RegExpPayloadResult payloadResult = (RegExpPayloadResult) regExpPayloadHandler.executePayload(
-                rule.getPayload(),
                 rule,
                 dataContext,
                 SESSION

@@ -122,7 +122,7 @@ public class OrderResolverTest {
     private Map<String, ContextField> fields(String ...fieldNames) {
         return Arrays.stream(fieldNames).collect(Collectors.toMap(
             f -> f,
-            f -> new ContextField(f, PrimitiveFieldDataType.STRING.toString(), f, Cardinality.SINGLE)
+            f -> new ContextField(f, PrimitiveFieldDataType.STRING.toString(), f, Cardinality.SINGLE, false)
         ));
     }
 

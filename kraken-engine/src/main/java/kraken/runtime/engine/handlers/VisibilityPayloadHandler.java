@@ -19,13 +19,10 @@ import kraken.model.payload.PayloadType;
 import kraken.runtime.EvaluationSession;
 import kraken.runtime.engine.RulePayloadHandler;
 import kraken.runtime.engine.context.data.DataContext;
-import kraken.runtime.engine.handlers.trace.VisibilityPayloadEvaluatedOperation;
 import kraken.runtime.engine.result.PayloadResult;
 import kraken.runtime.engine.result.VisibilityPayloadResult;
 import kraken.runtime.model.rule.RuntimeRule;
-import kraken.runtime.model.rule.payload.Payload;
 import kraken.runtime.model.rule.payload.ui.VisibilityPayload;
-import kraken.tracer.Tracer;
 
 /**
  * Payload handler implementation to process {@link VisibilityPayload}s
@@ -41,11 +38,16 @@ public class VisibilityPayloadHandler implements RulePayloadHandler {
     }
 
     @Override
-    public PayloadResult executePayload(Payload payload, RuntimeRule rule, DataContext dataContext, EvaluationSession session) {
-        VisibilityPayload vp = (VisibilityPayload) payload;
-
-        Tracer.doOperation(new VisibilityPayloadEvaluatedOperation(vp));
+    public PayloadResult executePayload(RuntimeRule rule, DataContext dataContext, EvaluationSession session) {
+        VisibilityPayload vp = (VisibilityPayload) rule.getPayload();
         return new VisibilityPayloadResult(vp.getVisible());
+    }
+
+    @Override
+    public String describePayloadResult(PayloadResult payloadResult) {
+        return ((VisibilityPayloadResult) payloadResult).getVisible()
+            ? "The field is not set to be hidden."
+            : "The field is set to be hidden.";
     }
 
 }

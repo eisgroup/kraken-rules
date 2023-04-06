@@ -29,6 +29,7 @@ import kraken.runtime.engine.result.RegExpPayloadResult;
 import kraken.runtime.engine.result.SizePayloadResult;
 import kraken.runtime.engine.result.SizeRangePayloadResult;
 import kraken.runtime.engine.result.UsagePayloadResult;
+import kraken.runtime.engine.result.ValidationPayloadResult;
 import kraken.runtime.engine.result.ValueListPayloadResult;
 
 /**
@@ -97,6 +98,40 @@ public interface ValidationMessageProvider {
      *     when validation severity is ERROR.
      */
     @Nonnull ValidationMessage valueListErrorMessage(@Nonnull ValueListPayloadResult payloadResult);
+
+    /**
+     *
+     * @param payloadResult
+     * @return Default error message resolved by generic payload result.
+     * Will delegate to appropriate method based on actual payload result type.
+     */
+    @Nonnull default ValidationMessage resolveErrorMessage(ValidationPayloadResult payloadResult) {
+        if (payloadResult instanceof AssertionPayloadResult) {
+            return this.assertionErrorMessage((AssertionPayloadResult) payloadResult);
+        }
+        if (payloadResult instanceof SizePayloadResult) {
+            return this.sizeErrorMessage((SizePayloadResult) payloadResult);
+        }
+        if (payloadResult instanceof SizeRangePayloadResult) {
+            return this.sizeRangeErrorMessage((SizeRangePayloadResult) payloadResult);
+        }
+        if (payloadResult instanceof LengthPayloadResult) {
+            return this.lengthErrorMessage((LengthPayloadResult) payloadResult);
+        }
+        if (payloadResult instanceof RegExpPayloadResult) {
+            return this.regExpErrorMessage((RegExpPayloadResult) payloadResult);
+        }
+        if (payloadResult instanceof UsagePayloadResult) {
+            return this.usageErrorMessage((UsagePayloadResult) payloadResult);
+        }
+        if (payloadResult instanceof NumberSetPayloadResult) {
+            return this.numberSetErrorMessage((NumberSetPayloadResult) payloadResult);
+        }
+        if (payloadResult instanceof ValueListPayloadResult) {
+            return this.valueListErrorMessage((ValueListPayloadResult) payloadResult);
+        }
+        throw new IllegalArgumentException("Unknown validation payload result: " + payloadResult.getClass());
+    }
 
     /**
      * Represents default message that will be set in rule validation result when rule itself do not have specific

@@ -27,9 +27,9 @@ export class DefaultContextFieldInfo implements ContextFieldInfo {
     readonly fieldType: string
 
     constructor(dataContext: DataContext, fieldName: string) {
-        let projection: Contexts.ContextField
-        if (dataContext.definitionProjection && dataContext.definitionProjection[fieldName]) {
-            projection = dataContext.definitionProjection[fieldName]
+        let contextField: Contexts.ContextField
+        if (dataContext.contextDefinition.fields?.[fieldName]) {
+            contextField = dataContext.contextDefinition.fields[fieldName]
         } else {
             throw new KrakenRuntimeError(
                 ErrorCode.INCORRECT_MODEL_TREE,
@@ -39,7 +39,7 @@ export class DefaultContextFieldInfo implements ContextFieldInfo {
         this.contextId = dataContext.contextId
         this.contextName = dataContext.contextName
         this.fieldName = fieldName
-        this.fieldPath = projection.fieldPath
-        this.fieldType = projection.fieldType
+        this.fieldPath = contextField.fieldPath
+        this.fieldType = contextField.fieldType
     }
 }

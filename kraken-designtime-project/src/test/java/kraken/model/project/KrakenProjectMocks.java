@@ -544,6 +544,12 @@ public class KrakenProjectMocks {
         return child(name, Cardinality.MULTIPLE);
     }
 
+    public static ContextNavigation childForbiddenAsReference(String name) {
+        var child = child(name);
+        child.setForbidReference(true);
+        return child;
+    }
+
     public static ContextNavigation child(String name) {
         return child(name, Cardinality.SINGLE);
     }
@@ -619,14 +625,19 @@ public class KrakenProjectMocks {
         contextField.setName(name);
         contextField.setFieldPath(path);
         contextField.setCardinality(cardinality);
-        contextField.setExternal(false);
         contextField.setFieldType(type);
         return contextField;
     }
 
-    public static ContextField externalField(String name) {
+    public static ContextField fieldForbiddenAsReference(String name) {
         ContextField contextField = field(name);
-        contextField.setExternal(true);
+        contextField.setForbidReference(true);
+        return contextField;
+    }
+
+    public static ContextField fieldForbiddenAsTarget(String name) {
+        ContextField contextField = field(name);
+        contextField.setForbidTarget(true);
         return contextField;
     }
 

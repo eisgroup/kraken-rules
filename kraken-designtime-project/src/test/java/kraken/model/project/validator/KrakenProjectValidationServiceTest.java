@@ -15,7 +15,37 @@
  */
 package kraken.model.project.validator;
 
+import static kraken.model.context.PrimitiveFieldDataType.BOOLEAN;
+import static kraken.model.context.PrimitiveFieldDataType.STRING;
+import static kraken.model.context.SystemDataTypes.UNKNOWN;
+import static kraken.model.project.KrakenProjectMocks.child;
+import static kraken.model.project.KrakenProjectMocks.childForbiddenAsReference;
+import static kraken.model.project.KrakenProjectMocks.contextDefinition;
+import static kraken.model.project.KrakenProjectMocks.contextDefinitions;
+import static kraken.model.project.KrakenProjectMocks.dynamicContextDefinition;
+import static kraken.model.project.KrakenProjectMocks.entryPoint;
+import static kraken.model.project.KrakenProjectMocks.entryPoints;
+import static kraken.model.project.KrakenProjectMocks.field;
+import static kraken.model.project.KrakenProjectMocks.fieldForbiddenAsReference;
+import static kraken.model.project.KrakenProjectMocks.fieldForbiddenAsTarget;
+import static kraken.model.project.KrakenProjectMocks.krakenProject;
+import static kraken.model.project.KrakenProjectMocks.rootContextDefinition;
+import static kraken.model.project.KrakenProjectMocks.rule;
+import static kraken.model.project.KrakenProjectMocks.rules;
+import static kraken.model.project.KrakenProjectMocks.serverSideOnlyEntryPoint;
+import static kraken.model.project.KrakenProjectMocks.toContextDefinition;
+import static kraken.model.project.KrakenProjectMocks.toSystemContextDefinition;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.collection.IsEmptyCollection.empty;
+import static org.hamcrest.core.IsEqual.equalTo;
+
 import java.util.List;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import kraken.model.Expression;
 import kraken.model.Rule;
@@ -25,20 +55,8 @@ import kraken.model.derive.DefaultingType;
 import kraken.model.entrypoint.EntryPoint;
 import kraken.model.factory.RulesModelFactory;
 import kraken.model.project.KrakenProject;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import static kraken.model.context.PrimitiveFieldDataType.BOOLEAN;
-import static kraken.model.context.PrimitiveFieldDataType.STRING;
-import static kraken.model.context.SystemDataTypes.UNKNOWN;
-import static kraken.model.project.KrakenProjectMocks.*;
-import static kraken.model.project.KrakenProjectMocks.rootContextDefinition;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.hamcrest.collection.IsEmptyCollection.empty;
-import static org.hamcrest.MatcherAssert.assertThat;
+import kraken.model.validation.AssertionPayload;
+import kraken.model.validation.ValidationSeverity;
 
 /**
  * @author mulevicius
@@ -110,23 +128,53 @@ public class KrakenProjectValidationServiceTest {
     }
 
     @Test
-    public void shouldReturnErrorIfRuleIsAppliedOnFieldThatDoesNotExistInContext() {
+    public void shouldReturnErrorIfRuleIsAppliedOnFieldThatIsForbiddenToBeTarget() {
         EntryPoint entryPoint = entryPoint("Validate", List.of("R01"));
-        Rule rule = rule("R01", "Policy", "missing");
-        ContextDefinition contextDefinition = rootContextDefinition("Policy", List.of(field("policyCd")));
+        Rule rule = rule("R01", "Policy", "policyCdForbidden");
+        ContextDefinition contextDefinition = rootContextDefinition("Policy", List.of(fieldForbiddenAsTarget("policyCdForbidden")));
 
         KrakenProject krakenProject = krakenProject(List.of(contextDefinition), List.of(entryPoint), List.of(rule));
 
         ValidationResult result = krakenProjectValidationService.validate(krakenProject);
 
         assertThat(result.getErrors(), hasSize(1));
+        assertThat(result.getErrors().get(0).getMessage(),
+            equalTo("cannot be applied on field because it is forbidden to be a rule target - 'policyCdForbidden'"));
     }
 
     @Test
-    public void shouldReturnErrorIfRuleIsAppliedOnExternalField() {
+    public void shouldReturnErrorIfRuleRefersFieldThatIsForbiddenToBeReference() {
+        ContextDefinition contextDefinition = rootContextDefinition("Policy", List.of(
+            fieldForbiddenAsReference("policyCdForbidden"),
+            field("policyCd")
+        ));
+
+        Rule rule = rule("R01", "Policy", "policyCd");
+        AssertionPayload payload = factory.createAssertionPayload();
+        Expression expression = factory.createExpression();
+        expression.setExpressionString("Policy.policyCdForbidden = null");
+        payload.setAssertionExpression(expression);
+        payload.setSeverity(ValidationSeverity.critical);
+        rule.setPayload(payload);
+
         EntryPoint entryPoint = entryPoint("Validate", List.of("R01"));
-        Rule rule = rule("R01", "Policy", "policyCdExternal");
-        ContextDefinition contextDefinition = rootContextDefinition("Policy", List.of(externalField("policyCdExternal")));
+
+        KrakenProject krakenProject = krakenProject(List.of(contextDefinition), List.of(entryPoint), List.of(rule));
+
+        ValidationResult result = krakenProjectValidationService.validate(krakenProject);
+
+        assertThat(result.getErrors(), hasSize(1));
+        assertThat(result.getErrors().get(0).getMessage(),
+            equalTo("Error found in Assertion Expression: "
+                + "error in 'Policy.policyCdForbidden' with message: "
+                + "Attribute 'policyCdForbidden' not found in 'Policy'."));
+    }
+
+    @Test
+    public void shouldReturnErrorIfRuleIsAppliedOnFieldThatDoesNotExistInContext() {
+        EntryPoint entryPoint = entryPoint("Validate", List.of("R01"));
+        Rule rule = rule("R01", "Policy", "missing");
+        ContextDefinition contextDefinition = rootContextDefinition("Policy", List.of(field("policyCd")));
 
         KrakenProject krakenProject = krakenProject(List.of(contextDefinition), List.of(entryPoint), List.of(rule));
 
@@ -334,6 +382,59 @@ public class KrakenProjectValidationServiceTest {
     }
 
     @Test
+    public void shouldReturnErrorIfRuleIsAppliedOnContextWhichIsForbidden() {
+        EntryPoint entryPoint = entryPoint("Validate", List.of("R01"));
+        Rule rule = rule("R01", "RiskItem", "itemName");
+        var payload = factory.createAccessibilityPayload();
+        rule.setPayload(payload);
+
+        ContextDefinition policy = rootContextDefinition("Policy",
+            List.of(field("policyCd")),
+            List.of(),
+            List.of(childForbiddenAsReference("RiskItem"))
+        );
+        ContextDefinition riskItem = contextDefinition("RiskItem",
+            List.of(field("itemName"))
+        );
+
+        KrakenProject krakenProject = krakenProject(List.of(policy, riskItem), List.of(entryPoint), List.of(rule));
+
+        ValidationResult result = krakenProjectValidationService.validate(krakenProject);
+
+        assertThat(result.getErrors(), hasSize(1));
+    }
+
+    @Test
+    public void shouldReturnErrorIfRuleRefersContextWhichIsForbidden() {
+        EntryPoint entryPoint = entryPoint("Validate", List.of("R01"));
+        Rule rule = rule("R01", "RiskItem", "itemName");
+        var payload = factory.createAssertionPayload();
+        payload.setSeverity(ValidationSeverity.critical);
+        Expression expression = factory.createExpression();
+        expression.setExpressionString("Coverage.coverageCd != null");
+        payload.setAssertionExpression(expression);
+        rule.setPayload(payload);
+
+        ContextDefinition policy = rootContextDefinition("Policy",
+            List.of(field("policyCd")),
+            List.of(),
+            List.of(child("RiskItem"))
+        );
+        ContextDefinition riskItem = contextDefinition("RiskItem",
+            List.of(field("itemName")),
+            List.of(),
+            List.of(childForbiddenAsReference("Coverage"))
+        );
+        ContextDefinition coverage = contextDefinition("Coverage", List.of(field("coverageCd")));
+
+        KrakenProject krakenProject = krakenProject(List.of(policy, riskItem, coverage), List.of(entryPoint), List.of(rule));
+
+        ValidationResult result = krakenProjectValidationService.validate(krakenProject);
+
+        assertThat(result.getErrors(), hasSize(1));
+    }
+
+    @Test
     public void shouldReturnErrorsIfContextIsNotRelatedToRootAndThatExpressionIsInvalidAndReturnTypeIncompatible() {
         EntryPoint entryPoint = entryPoint("Validate", List.of("R01"));
         Rule rule = rule("R01", "RiskItem", "itemName");
@@ -376,10 +477,11 @@ public class KrakenProjectValidationServiceTest {
     
     @Test
     public void shouldReturnErrorIfSystemContextHasParentContextDefined() {
+        ContextDefinition parentContext = toContextDefinition("ParentContext");
         ContextDefinition systemContext = toSystemContextDefinition("SystemContext");
         systemContext.setParentDefinitions(List.of("ParentContext"));
 
-        KrakenProject krakenProject = krakenProject(List.of(systemContext), List.of(), rules());
+        KrakenProject krakenProject = krakenProject(List.of(systemContext, parentContext), List.of(), rules());
 
         ValidationResult result = krakenProjectValidationService.validate(krakenProject);
 

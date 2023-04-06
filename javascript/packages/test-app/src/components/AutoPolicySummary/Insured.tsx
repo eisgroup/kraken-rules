@@ -20,7 +20,7 @@ import { Row } from 'antd'
 import { InnerInputsComponentProps, SingleField, ManyFields } from '../core/field/SingleField'
 import { renderers } from '../core/RenderInputFunctions'
 
-import { BillingAddress } from './BillingAddres'
+import { BillingAddress } from './BillingAddress'
 
 import { TestProduct } from 'kraken-test-product'
 import domain = TestProduct.kraken.testproduct.domain

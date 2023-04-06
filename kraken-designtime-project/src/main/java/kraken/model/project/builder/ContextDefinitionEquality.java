@@ -36,26 +36,14 @@ public class ContextDefinitionEquality {
      * @return true if {@link ContextDefinition}s are equal, false otherwise
      */
     static boolean areEqual(ContextDefinition contextDefinition1, ContextDefinition contextDefinition2) {
-        return  contextDefinitionsAreEqual(contextDefinition1, contextDefinition2)
-                && contextDefinitionsChildrenAreEqual(contextDefinition1, contextDefinition2)
-                && contextDefinitionsContextFieldsAreEqual(contextDefinition1, contextDefinition2);
-    }
-
-    /**
-     * Checks if {@link ContextDefinition}s are equal by names, parent definitions and if both are strict ar not
-     *
-     * @param contextDefinition1 the first {@link ContextDefinition} used for comparison
-     * @param contextDefinition2 the second {@link ContextDefinition} used for comparison
-     * @return true if {@link ContextDefinition}s are equal, false otherwise
-     */
-    private static boolean contextDefinitionsAreEqual(ContextDefinition contextDefinition1,
-                                                      ContextDefinition contextDefinition2) {
         return Objects.equals(contextDefinition1.getName(), contextDefinition2.getName())
             && Objects.equals(contextDefinition1.isSystem(), contextDefinition2.isSystem())
             && Objects.equals(contextDefinition1.getPhysicalNamespace(), contextDefinition2.getPhysicalNamespace())
             && Objects.equals(contextDefinition1.getParentDefinitions(), contextDefinition2.getParentDefinitions())
             && Objects.equals(contextDefinition1.isRoot(), contextDefinition2.isRoot())
-            && Objects.equals(contextDefinition1.isStrict(), contextDefinition2.isStrict());
+            && Objects.equals(contextDefinition1.isStrict(), contextDefinition2.isStrict())
+            && contextDefinitionsChildrenAreEqual(contextDefinition1, contextDefinition2)
+            && contextDefinitionsContextFieldsAreEqual(contextDefinition1, contextDefinition2);
     }
 
     /**
@@ -73,6 +61,8 @@ public class ContextDefinitionEquality {
                 && contextChildren2.keySet().stream()
                 .filter(contextNavigationExpressionsAreEqual(contextChildren1, contextChildren2))
                 .filter(contextNavigationTargetNamesAreEqual(contextChildren1, contextChildren2))
+                .filter(contextNavigationCardinalitiesAreEqual(contextChildren1, contextChildren2))
+                .filter(contextNavigationAreEqualByForbidReference(contextChildren1, contextChildren2))
                 .count() == contextChildren2.keySet().size();
     }
 
@@ -87,13 +77,15 @@ public class ContextDefinitionEquality {
         Map<String, ContextField> contextFields1 = contextDefinition1.getContextFields();
         Map<String, ContextField> contextFields2 = contextDefinition2.getContextFields();
         return contextFields2.keySet().containsAll(contextFields1.keySet())
-                && contextFields1.keySet().containsAll(contextFields2.keySet())
-                && contextFields2.keySet().stream()
-                .filter(contextFieldsAreEqualByCardinality(contextFields1, contextFields2))
-                .filter(contextFieldsAreEqualByFieldPath(contextFields1, contextFields2))
-                .filter(contextFieldsAreEqualByFieldType(contextFields1, contextFields2))
-                .filter(contextFieldsAreEqualByName(contextFields1, contextFields2))
-                .count() == contextFields2.keySet().size();
+            && contextFields1.keySet().containsAll(contextFields2.keySet())
+            && contextFields2.keySet().stream()
+            .filter(contextFieldsAreEqualByCardinality(contextFields1, contextFields2))
+            .filter(contextFieldsAreEqualByFieldPath(contextFields1, contextFields2))
+            .filter(contextFieldsAreEqualByFieldType(contextFields1, contextFields2))
+            .filter(contextFieldsAreEqualByName(contextFields1, contextFields2))
+            .filter(contextFieldsAreEqualByForbidTarget(contextFields1, contextFields2))
+            .filter(contextFieldsAreEqualByForbidReference(contextFields1, contextFields2))
+            .count() == contextFields2.keySet().size();
     }
 
     private static Predicate<String> contextNavigationTargetNamesAreEqual(Map<String, ContextNavigation> contextChildren1,
@@ -101,9 +93,24 @@ public class ContextDefinitionEquality {
         return key -> Objects.equals(contextChildren1.get(key).getTargetName(), contextChildren2.get(key).getTargetName());
     }
 
+    private static Predicate<String> contextNavigationCardinalitiesAreEqual(Map<String, ContextNavigation> contextChildren1,
+                                                                            Map<String, ContextNavigation> contextChildren2){
+        return key -> Objects.equals(contextChildren1.get(key).getCardinality(), contextChildren2.get(key).getCardinality());
+    }
+
     private static Predicate<String> contextNavigationExpressionsAreEqual(Map<String, ContextNavigation> contextChildren1,
                                                                    Map<String, ContextNavigation> contextChildren2){
         return key -> Objects.equals(contextChildren1.get(key).getNavigationExpression(), contextChildren2.get(key).getNavigationExpression());
+    }
+
+    private static Predicate<String> contextNavigationAreEqualByForbidReference(
+        Map<String, ContextNavigation> contextChildren1,
+        Map<String, ContextNavigation> contextChildren2
+    ) {
+        return key -> Objects.equals(
+            contextChildren1.get(key).getForbidReference(),
+            contextChildren2.get(key).getForbidReference()
+        );
     }
 
     private static Predicate<String> contextFieldsAreEqualByCardinality(Map<String, ContextField> contextFields1,
@@ -126,4 +133,15 @@ public class ContextDefinitionEquality {
         return key -> Objects.equals(contextFields1.get(key).getName(), contextFields2.get(key).getName());
     }
 
+    private static Predicate<String> contextFieldsAreEqualByForbidTarget(Map<String, ContextField> contextFields1,
+                                                                         Map<String, ContextField> contextFields2){
+        return key ->
+            Objects.equals(contextFields1.get(key).getForbidTarget(), contextFields2.get(key).getForbidTarget());
+    }
+
+    private static Predicate<String> contextFieldsAreEqualByForbidReference(Map<String, ContextField> contextFields1,
+                                                                            Map<String, ContextField> contextFields2){
+        return key ->
+            Objects.equals(contextFields1.get(key).getForbidReference(), contextFields2.get(key).getForbidReference());
+    }
 }

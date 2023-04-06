@@ -1,0 +1,14 @@
+Namespace Policy
+
+/*
+ BillingAddress.stateCd is marked with @ForbidTarget and @ForbidReference
+ */
+
+EntryPoint "ForbiddenField" {
+    "ForbiddenFieldAsTarget"
+}
+
+Rule "ForbiddenFieldAsTarget" On AddressInfo.stateCd {
+    Set Mandatory
+}
+

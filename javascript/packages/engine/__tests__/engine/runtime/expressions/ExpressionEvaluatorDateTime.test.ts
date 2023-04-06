@@ -42,8 +42,9 @@ function complex(expression: string): Expressions.Expression {
 
 let dataContext: DataContext
 beforeEach(() => {
+    const { Policy } = mock.modelTree.contexts
     const dataObject = { creationTime: new Date() }
-    dataContext = new DataContext('1', 'dummyCtx', dataObject, mock.contextInstanceInfo, {}, undefined)
+    dataContext = new DataContext('1', Policy.name, dataObject, mock.contextInstanceInfo, Policy, undefined)
 })
 
 describe('DateTime in ExpressionEvaluator', () => {

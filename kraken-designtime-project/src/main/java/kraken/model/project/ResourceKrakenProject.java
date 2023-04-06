@@ -33,6 +33,8 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang3.BooleanUtils;
+
 import kraken.model.Function;
 import kraken.model.FunctionSignature;
 import kraken.model.Rule;
@@ -91,7 +93,7 @@ public class ResourceKrakenProject implements KrakenProject, ScopeBuilderSupplie
 
     private final List<Function> functions;
 
-    private final Set<String> accessibleContextsFromRoot = new HashSet<>();
+    private final Set<String> connectedContextDefinitions = new HashSet<>();
 
     public ResourceKrakenProject(@Nonnull String namespace,
                                  @Nonnull String rootContextName,
@@ -128,8 +130,8 @@ public class ResourceKrakenProject implements KrakenProject, ScopeBuilderSupplie
         this.functionSignatures = Objects.requireNonNull(functionSignatures);
         this.functions = Objects.requireNonNull(functions);
 
-        ContextDefinition root = this.getContextDefinitions().get(this.getRootContextName());
-        this.collectAccessibleContextDefinitions(root);
+        ContextDefinition root = this.contextDefinitions.get(rootContextName);
+        this.collectConnectedContextDefinitions(root);
     }
 
     @Override
@@ -237,45 +239,55 @@ public class ResourceKrakenProject implements KrakenProject, ScopeBuilderSupplie
         });
     }
 
+    /**
+     * @return a collection of all context definition names that are connected to root as a child.
+     * Only connected context definitions can be accessed by cross context reference.
+     * Context is not connected if it is only available as a field (not as a child)
+     * or if child is {@link ContextNavigation#getForbidReference()}
+     */
     @Override
     public Collection<String> getConnectedContextDefinitions() {
-        return  accessibleContextsFromRoot;
+        return connectedContextDefinitions;
     }
 
-    private void collectAccessibleContextDefinitions(ContextDefinition contextDefinition) {
-        if(contextDefinition == null || accessibleContextsFromRoot.contains(contextDefinition.getName())) {
+    private void collectConnectedContextDefinitions(ContextDefinition contextDefinition) {
+        if(contextDefinition == null || connectedContextDefinitions.contains(contextDefinition.getName())) {
             return;
         }
 
-        accessibleContextsFromRoot.add(contextDefinition.getName());
+        connectedContextDefinitions.add(contextDefinition.getName());
 
-        contextDefinition.getParentDefinitions().stream()
-            .map(inherited -> this.getContextDefinitions().get(inherited))
-            .forEach(this::collectAccessibleContextDefinitions);
+        var contextProjection = getContextProjection(contextDefinition.getName());
+        connectedContextDefinitions.addAll(contextProjection.getParentDefinitions());
 
-        contextDefinition.getChildren().values().stream()
-            .map(child -> this.getContextDefinitions().get(child.getTargetName()))
-            .forEach(contextDefinition1 -> collectAccessibleContextDefinitions(contextDefinition1));
+        contextProjection.getChildren().values().stream()
+            .filter(child -> BooleanUtils.isNotTrue(child.getForbidReference()))
+            .map(child -> contextDefinitions.get(child.getTargetName()))
+            .forEach(this::collectConnectedContextDefinitions);
     }
 
     private Set<String> getInheritedContextDefinitions(String contextName) {
+        if(!contextDefinitions.containsKey(contextName)) {
+            return Set.of();
+        }
         ContextDefinition contextDefinition = contextDefinitions.get(contextName);
         Set<String> inheritedContextDefinitions = new LinkedHashSet<>(contextDefinition.getParentDefinitions());
         for(String p : contextDefinition.getParentDefinitions()) {
-            if(!contextDefinitions.containsKey(p)) {
-                String format = "ContextDefinition '%s' does not exist in Kraken Project '%s' but it is inherited by '%s'";
-                String message = String.format(format, p, namespace, contextName);
-                throw new IllegalKrakenProjectStateException(message);
-            }
             inheritedContextDefinitions.addAll(getInheritedContextDefinitions(p));
         }
         return inheritedContextDefinitions;
     }
 
     private Map<String, ContextField> getContextFieldProjection(String contextName, Collection<String> inheritedContextDefinitions) {
+        if(!contextDefinitions.containsKey(contextName)) {
+            return Map.of();
+        }
         ContextDefinition contextDefinition = contextDefinitions.get(contextName);
         Map<String, ContextField> fields = new LinkedHashMap<>(contextDefinition.getContextFields());
         for(String inheritedContextName : inheritedContextDefinitions) {
+            if(!contextDefinitions.containsKey(inheritedContextName)) {
+                continue;
+            }
             ContextDefinition inheritedContextDefinition = contextDefinitions.get(inheritedContextName);
             for(ContextField contextField : inheritedContextDefinition.getContextFields().values()) {
                 fields.putIfAbsent(contextField.getName(), contextField);
@@ -286,17 +298,22 @@ public class ResourceKrakenProject implements KrakenProject, ScopeBuilderSupplie
     }
 
     private Map<String, ContextNavigation> getChildrenProjection(String contextName, Collection<String> inheritedContextDefinitions) {
+        if(!contextDefinitions.containsKey(contextName)) {
+            return Map.of();
+        }
         ContextDefinition contextDefinition = contextDefinitions.get(contextName);
         Map<String, ContextNavigation> children = new LinkedHashMap<>(contextDefinition.getChildren());
-        inheritedContextDefinitions.stream()
-                .map(inheritedContextName -> contextDefinitions.get(inheritedContextName))
-                .flatMap(context -> context.getChildren().values().stream())
-                .forEach(child -> {
-                    if (child != null && !alreadyExists(children, child)) {
-                        children.put(child.getTargetName(), child);
-                    }
-                });
-
+        for(String inheritedContextName : inheritedContextDefinitions) {
+            if(!contextDefinitions.containsKey(inheritedContextName)) {
+                continue;
+            }
+            ContextDefinition inheritedContextDefinition = contextDefinitions.get(inheritedContextName);
+            for(ContextNavigation child : inheritedContextDefinition.getChildren().values()) {
+                if (child != null && !alreadyExists(children, child)) {
+                    children.put(child.getTargetName(), child);
+                }
+            }
+        }
         return children;
     }
 
@@ -408,7 +425,7 @@ public class ResourceKrakenProject implements KrakenProject, ScopeBuilderSupplie
         this.scopeBuilder = scopeBuilder;
         this.crossContextService = crossContextService;
 
-        ContextDefinition root = this.getContextDefinitions().get(this.getRootContextName());
-        this.collectAccessibleContextDefinitions(root);
+        ContextDefinition root = this.contextDefinitions.get(this.rootContextName);
+        this.collectConnectedContextDefinitions(root);
     }
 }

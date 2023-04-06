@@ -18,7 +18,6 @@ package kraken.runtime.engine.result.reducers.validation.trace;
 import com.google.gson.Gson;
 
 import kraken.runtime.engine.dto.RuleEvaluationResult;
-import kraken.tracer.Operation;
 import kraken.tracer.VoidOperation;
 import kraken.utils.GsonUtils;
 
@@ -31,10 +30,7 @@ import kraken.utils.GsonUtils;
  */
 public final class RuleResultOverriddenOperation implements VoidOperation {
 
-    private static final String TEMPLATE = "Rule '%s' validation result is overridden. "
-        + "Original validation result will be ignored. Override info: %s";
-
-    private final Gson gson = GsonUtils.gson();
+    private static final Gson gson = GsonUtils.prettyGson();
     private final RuleEvaluationResult ruleEvaluationResult;
 
     public RuleResultOverriddenOperation(RuleEvaluationResult ruleEvaluationResult) {
@@ -43,9 +39,12 @@ public final class RuleResultOverriddenOperation implements VoidOperation {
 
     @Override
     public String describe() {
-        return String.format(TEMPLATE,
+        var contextInfo = ruleEvaluationResult.getOverrideInfo().getOverridableRuleContextInfo();
+        return String.format("Rule '%s' validation result applied on '%s' is overridden and will be ignored. Override info: %s",
             ruleEvaluationResult.getRuleInfo().getRuleName(),
-            gson.toJson(ruleEvaluationResult.getOverrideInfo()));
+            contextInfo.getContextName() + ":" + contextInfo.getContextId(),
+            System.lineSeparator() + gson.toJson(ruleEvaluationResult.getOverrideInfo())
+        );
     }
 
 }

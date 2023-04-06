@@ -197,6 +197,7 @@ public class RulesModelFactoryImpl implements RulesModelFactory {
         cloned.setCardinality(contextNavigation.getCardinality());
         cloned.setNavigationExpression(contextNavigation.getNavigationExpression());
         cloned.setTargetName(contextNavigation.getTargetName());
+        cloned.setForbidReference(contextNavigation.getForbidReference());
         return cloned;
     }
 
@@ -212,7 +213,8 @@ public class RulesModelFactoryImpl implements RulesModelFactory {
         cloned.setCardinality(contextField.getCardinality());
         cloned.setFieldPath(contextField.getFieldPath());
         cloned.setFieldType(contextField.getFieldType());
-        cloned.setExternal(contextField.isExternal());
+        cloned.setForbidTarget(contextField.getForbidTarget());
+        cloned.setForbidReference(contextField.getForbidReference());
         return cloned;
     }
 

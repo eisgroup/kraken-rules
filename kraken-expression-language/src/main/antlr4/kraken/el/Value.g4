@@ -130,6 +130,8 @@ krakenModelReservedWordNoChild : DESCRIPTION
                                | CONTEXT
                                | CONTEXTS
                                | EXTERNAL
+                               | FORBID_TARGET
+                               | FORBID_REFERENCE
                                | SERVERSIDEONLY
                                | NOTSTRICT
                                | ROOT

@@ -33,6 +33,8 @@ public class AddressInfo extends Identifiable {
     private String city;
 
     private String street;
+
+    private String stateCd;
     
     private AddressLine1 addressLine1;
     
@@ -108,5 +110,13 @@ public class AddressInfo extends Identifiable {
         return Stream.of(addressLine1, addressLine2)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
+    }
+
+    public String getStateCd() {
+        return stateCd;
+    }
+
+    public void setStateCd(String stateCd) {
+        this.stateCd = stateCd;
     }
 }

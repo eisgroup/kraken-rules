@@ -19,13 +19,10 @@ import kraken.model.payload.PayloadType;
 import kraken.runtime.EvaluationSession;
 import kraken.runtime.engine.RulePayloadHandler;
 import kraken.runtime.engine.context.data.DataContext;
-import kraken.runtime.engine.handlers.trace.AccessibilityPayloadEvaluatedOperation;
 import kraken.runtime.engine.result.AccessibilityPayloadResult;
 import kraken.runtime.engine.result.PayloadResult;
 import kraken.runtime.model.rule.RuntimeRule;
-import kraken.runtime.model.rule.payload.Payload;
 import kraken.runtime.model.rule.payload.ui.AccessibilityPayload;
-import kraken.tracer.Tracer;
 
 /**
  * Payload handler implementation to process {@link AccessibilityPayload}s
@@ -41,10 +38,15 @@ public class AccessibilityPayloadHandler implements RulePayloadHandler {
     }
 
     @Override
-    public PayloadResult executePayload(Payload payload, RuntimeRule rule, DataContext dataContext, EvaluationSession session) {
-        AccessibilityPayload ap = (AccessibilityPayload) payload;
-
-        Tracer.doOperation(new AccessibilityPayloadEvaluatedOperation(ap));
+    public PayloadResult executePayload(RuntimeRule rule, DataContext dataContext, EvaluationSession session) {
+        AccessibilityPayload ap = (AccessibilityPayload) rule.getPayload();
         return new AccessibilityPayloadResult(ap.getAccessible());
+    }
+
+    @Override
+    public String describePayloadResult(PayloadResult payloadResult) {
+        return ((AccessibilityPayloadResult) payloadResult).getAccessible()
+            ? "The field is not set to be disabled."
+            : "The field is set to be disabled.";
     }
 }

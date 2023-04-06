@@ -15,29 +15,22 @@
  */
 package kraken.runtime.engine.handlers;
 
-import static kraken.runtime.utils.TargetPathUtils.resolveTargetPath;
-
 import java.util.List;
-import java.util.Optional;
 
 import javax.money.MonetaryAmount;
 
 import kraken.el.math.Numbers;
 import kraken.model.ValueList;
-import kraken.model.ValueList.DataType;
-import kraken.model.context.PrimitiveFieldDataType;
 import kraken.model.payload.PayloadType;
 import kraken.runtime.EvaluationSession;
 import kraken.runtime.KrakenRuntimeException;
 import kraken.runtime.engine.RulePayloadHandler;
 import kraken.runtime.engine.context.data.DataContext;
-import kraken.runtime.engine.handlers.trace.ValueListPayloadEvaluatedOperation;
+import kraken.runtime.engine.handlers.trace.FieldValueValidationOperation;
 import kraken.runtime.engine.result.PayloadResult;
 import kraken.runtime.engine.result.ValueListPayloadResult;
 import kraken.runtime.expressions.KrakenExpressionEvaluator;
-import kraken.runtime.model.context.ContextField;
 import kraken.runtime.model.rule.RuntimeRule;
-import kraken.runtime.model.rule.payload.Payload;
 import kraken.runtime.model.rule.payload.validation.ValueListPayload;
 import kraken.tracer.Tracer;
 
@@ -62,30 +55,23 @@ public final class ValueListPayloadHandler implements RulePayloadHandler {
     }
 
     @Override
-    public PayloadResult executePayload(Payload payload,
-                                        RuntimeRule rule,
-                                        DataContext dataContext,
-                                        EvaluationSession session) {
-        ContextField contextField = resolveField(rule, dataContext);
-        ValueListPayload valueListPayload = (ValueListPayload) payload;
+    public PayloadResult executePayload(RuntimeRule rule, DataContext dataContext, EvaluationSession session) {
+        var payload = (ValueListPayload) rule.getPayload();
 
-        validateDataTypeCompatibility(rule, contextField, valueListPayload.getValueList().getValueType());
+        var value = evaluator.evaluateTargetField(rule.getTargetPath(), dataContext);
+        Tracer.doOperation(new FieldValueValidationOperation(value));
+        boolean success = doExecute(value, payload);
 
-        Object value = evaluator.evaluateGetProperty(
-            resolveTargetPath(rule, dataContext),
-            dataContext.getDataObject()
-        );
+        var templateVariables = evaluator.evaluateTemplateVariables(payload.getErrorMessage(), dataContext, session);
+        return new ValueListPayloadResult(success, payload, templateVariables);
+    }
 
-        List<String> templateVariables = evaluator
-            .evaluateTemplateVariables(valueListPayload.getErrorMessage(), dataContext, session);
-        boolean success = doExecute(value, valueListPayload);
-
-        Tracer.doOperation(new ValueListPayloadEvaluatedOperation(valueListPayload, value, success));
-
-        return new ValueListPayloadResult(
-            success,
-            valueListPayload,
-            templateVariables);
+    @Override
+    public String describePayloadResult(PayloadResult payloadResult) {
+        var result = (ValueListPayloadResult) payloadResult;
+        return result.getSuccess()
+            ? String.format("Field is valid. Field value is one of [ %s ].", result.getValueList().valuesAsString())
+            : String.format("Field is not valid. Field value is not one of [ %s ].", result.getValueList().valuesAsString());
     }
 
     private boolean doExecute(Object fieldValue, ValueListPayload valueListPayload) {
@@ -100,7 +86,7 @@ public final class ValueListPayloadHandler implements RulePayloadHandler {
                 return valueListPayload.getValueList().has(asNumber(fieldValue));
             default:
                 throw new KrakenRuntimeException(
-                    "Not support value list data type" + valueListPayload.getValueList().getValueType());
+                    "Not supported value list data type" + valueListPayload.getValueList().getValueType());
         }
     }
 
@@ -122,39 +108,6 @@ public final class ValueListPayloadHandler implements RulePayloadHandler {
         }
 
         throw new KrakenRuntimeException("Unable to convert value " + value + " to a string.");
-    }
-
-    private ContextField resolveField(RuntimeRule rule, DataContext dataContext) {
-        return Optional.ofNullable(dataContext.getContextDefinition())
-            .map(contextDefinition -> contextDefinition.getFields().get(rule.getTargetPath()))
-            .orElseThrow(() -> {
-                String template = "Cannot resolve context field for path '%s' in context '%s')";
-
-                return new KrakenRuntimeException(
-                    String.format(
-                        template,
-                        rule.getTargetPath(),
-                        dataContext.getContextDefinition().getName()
-                    )
-                );
-            });
-    }
-
-    private void validateDataTypeCompatibility(RuntimeRule rule, ContextField contextField, DataType valueListDataType) {
-        PrimitiveFieldDataType fieldDataType = PrimitiveFieldDataType.valueOf(contextField.getFieldType());
-        boolean isCompatible = valueListDataType.getFieldTypes().contains(fieldDataType);
-
-        if (!isCompatible) {
-            String template = "Unable to execute payload of Rule '%s'. "
-                + "Field data type '%s' is not compatible with '%s' value list data type.";
-
-            throw new KrakenRuntimeException(
-                String.format(
-                    template,
-                    rule.getName(),
-                    fieldDataType,
-                    valueListDataType));
-        }
     }
 
 }

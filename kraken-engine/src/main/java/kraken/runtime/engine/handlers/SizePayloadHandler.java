@@ -23,16 +23,13 @@ import kraken.model.payload.PayloadType;
 import kraken.runtime.EvaluationSession;
 import kraken.runtime.engine.RulePayloadHandler;
 import kraken.runtime.engine.context.data.DataContext;
-import kraken.runtime.engine.handlers.trace.SizePayloadEvaluatedOperation;
+import kraken.runtime.engine.handlers.trace.FieldValueCollectionSizeValidationOperation;
 import kraken.runtime.engine.result.PayloadResult;
 import kraken.runtime.engine.result.SizePayloadResult;
 import kraken.runtime.expressions.KrakenExpressionEvaluator;
 import kraken.runtime.model.rule.RuntimeRule;
-import kraken.runtime.model.rule.payload.Payload;
 import kraken.runtime.model.rule.payload.validation.SizePayload;
 import kraken.tracer.Tracer;
-
-import static kraken.runtime.utils.TargetPathUtils.resolveTargetPath;
 
 /**
  * @author psurinin
@@ -51,23 +48,26 @@ public class SizePayloadHandler implements RulePayloadHandler {
     }
 
     @Override
-    public PayloadResult executePayload(Payload payload, RuntimeRule rule, DataContext dataContext, EvaluationSession session) {
-        final SizePayload sizePayload = (SizePayload) payload;
-        Object value = evaluator.evaluateGetProperty(resolveTargetPath(rule, dataContext), dataContext.getDataObject());
-        List<String> templateVariables = evaluator.evaluateTemplateVariables(sizePayload.getErrorMessage(), dataContext, session);
-
-        boolean success = true;
-
+    public PayloadResult executePayload(RuntimeRule rule, DataContext dataContext, EvaluationSession session) {
+        Object value = evaluator.evaluateTargetField(rule.getTargetPath(), dataContext);
         if (value == null) {
             value = Collections.emptyList();
         }
 
+        var payload = (SizePayload) rule.getPayload();
+        List<String> templateVariables = evaluator.evaluateTemplateVariables(
+            payload.getErrorMessage(),
+            dataContext,
+            session
+        );
+
+        boolean success = true;
         if (value instanceof Collection) {
-            success = evaluateCollection((Collection<?>) value, sizePayload);
+            Tracer.doOperation(new FieldValueCollectionSizeValidationOperation((Collection<?>) value));
+            success = evaluateCollection((Collection<?>) value, payload);
         }
 
-        Tracer.doOperation(new SizePayloadEvaluatedOperation(sizePayload, value, success));
-        return new SizePayloadResult(success, sizePayload, templateVariables);
+        return new SizePayloadResult(success, payload, templateVariables);
     }
 
     private boolean evaluateCollection(Collection<?> fieldValues, SizePayload payload) {
@@ -84,4 +84,24 @@ public class SizePayloadHandler implements RulePayloadHandler {
         }
     }
 
+    @Override
+    public String describePayloadResult(PayloadResult payloadResult) {
+        var result = (SizePayloadResult) payloadResult;
+        return result.getSuccess()
+            ? String.format("Field is valid. Collection size is %s.", describeExpectedSize(result))
+            : String.format("Field is not valid. Collection size is not %s.", describeExpectedSize(result));
+    }
+
+    private String describeExpectedSize(SizePayloadResult payloadResult) {
+        switch (payloadResult.getSizeOrientation()) {
+            case MIN:
+                return "equal to or more than " + payloadResult.getSize();
+            case MAX:
+                return "equal to or less than " + payloadResult.getSize();
+            case EQUALS:
+                return "equal to " + payloadResult.getSize();
+            default:
+                throw new IllegalArgumentException("Unknown size orientation: " + payloadResult.getSizeOrientation());
+        }
+    }
 }

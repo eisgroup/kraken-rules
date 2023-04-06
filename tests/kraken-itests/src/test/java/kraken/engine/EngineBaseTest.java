@@ -30,7 +30,7 @@ import kraken.runtime.engine.context.type.ContextTypeAdapter;
 import kraken.runtime.engine.context.type.IterableContextTypeAdapter;
 import kraken.runtime.engine.result.reducers.validation.ValidationStatusReducer;
 import kraken.test.TestResources;
-import kraken.utils.Namespaces;
+import kraken.namespace.Namespaces;
 import org.junit.Before;
 
 /**

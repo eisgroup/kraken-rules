@@ -14,23 +14,14 @@
  *  limitations under the License.
  */
 
-import { PayloadBuilder } from 'kraken-model-builder'
+import { PayloadBuilder, RulesBuilder } from 'kraken-model-builder'
 import { visibilityPayloadHandler } from '../../../src/engine/handlers/VisibilityPayloadHandler'
-import { Payloads } from 'kraken-model'
-import { payloadResultTypeChecker } from '../../../src/engine/results/PayloadResultTypeChecker'
 
 describe('visibilityPayloadHandler', () => {
-    it('should create instance', () => {
-        expect(visibilityPayloadHandler.handlesPayloadType()).toBe(Payloads.PayloadType.VISIBILITY)
-    })
-    it('should return payload payloadResult with type VisibilityPayloadResult', () => {
-        const payload = PayloadBuilder.visibility().notVisible()
-        const result = visibilityPayloadHandler.executePayload(payload)
-        expect(payloadResultTypeChecker.isVisibility(result)).toBeTruthy()
-    })
     it('should execute payload', () => {
         const payload = PayloadBuilder.visibility().notVisible()
-        const result = visibilityPayloadHandler.executePayload(payload)
+        const rule = new RulesBuilder().setName('rule').setPayload(payload).build()
+        const result = visibilityPayloadHandler.executePayload(rule)
         expect(result.visible).toBeFalsy()
     })
 })

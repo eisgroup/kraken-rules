@@ -19,10 +19,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
@@ -61,24 +57,21 @@ public class GsonUtils {
     private static GsonBuilder builder() {
         return new GsonBuilder()
             .registerTypeAdapter(LocalDate.class, (JsonSerializer<LocalDate>) (date, type, ctx) ->
-                new JsonPrimitive(date.format(DateTimeFormatter.ISO_LOCAL_DATE)))
+                new JsonPrimitive(Dates.convertLocalDateToISO(date)))
             .registerTypeAdapter(LocalDate.class, (JsonDeserializer<LocalDate>) (elem, type, ctx) -> {
                 if(elem.isJsonNull() || StringUtils.isEmpty(elem.getAsString())) {
                     return null;
                 }
-                return LocalDate.parse(elem.getAsString(), DateTimeFormatter.ISO_LOCAL_DATE);
+                return Dates.convertISOToLocalDate(elem.getAsString());
             })
             .registerTypeAdapter(LocalDateTime.class, (JsonSerializer<LocalDateTime>) (date, type, ctx) -> {
-                String dateTime = ZonedDateTime.of(date, ZoneId.systemDefault())
-                    .truncatedTo(ChronoUnit.MILLIS)
-                    .format(DateTimeFormatter.ISO_INSTANT);
-                return new JsonPrimitive(dateTime);
+                return new JsonPrimitive(Dates.convertLocalDateTimeToISO(date));
             })
             .registerTypeAdapter(LocalDateTime.class, (JsonDeserializer<LocalDateTime>) (elem, type, ctx) -> {
                 if(elem.isJsonNull() || StringUtils.isEmpty(elem.getAsString())) {
                     return null;
                 }
-                return LocalDateTime.ofInstant(ZonedDateTime.parse(elem.getAsString()).toInstant(), ZoneId.systemDefault());
+                return Dates.convertISOToLocalDateTime(elem.getAsString());
             })
             .registerTypeAdapterFactory(new MoneyTypeAdapterFactory())
             .disableHtmlEscaping();

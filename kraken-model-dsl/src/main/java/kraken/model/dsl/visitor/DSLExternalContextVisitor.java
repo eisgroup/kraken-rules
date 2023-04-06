@@ -16,7 +16,6 @@
 package kraken.model.dsl.visitor;
 
 import kraken.model.dsl.KrakenDSL;
-import kraken.model.dsl.KrakenDSL.ExternalContextItemContext;
 import kraken.model.dsl.KrakenDSLBaseVisitor;
 import kraken.model.dsl.model.DSLExternalContext;
 
@@ -36,37 +35,34 @@ public class DSLExternalContextVisitor extends KrakenDSLBaseVisitor<DSLExternalC
         DSLExternalContext rootExternalContext = new DSLExternalContext(new HashMap<>(), new HashMap<>());
 
         if(ctx.externalContextItems() != null) {
-            for(ExternalContextItemContext extItem : ctx.externalContextItems().externalContextItem()) {
-                if(extItem.extContextNodeItem() != null) {
+            for(var c : ctx.externalContextItems().externalContextItem()) {
+                if(c.externalContextNodeItem() != null) {
                     rootExternalContext.getContexts()
-                        .put(extItem.extContextNodeItem().key.getText(), createContext(extItem.extContextNodeItem()));
+                        .put(c.externalContextNodeItem().key.getText(), createContext(c.externalContextNodeItem()));
                 }
-                if(extItem.extContextEntityItem() != null) {
+                if(c.externalContextEntityItem() != null) {
                     rootExternalContext.getBoundedContextDefinitions()
-                        .put(extItem.extContextEntityItem().key.getText(),
-                            extItem.extContextEntityItem().externalContextDefinitionName.getText());
+                        .put(c.externalContextEntityItem().key.getText(),
+                            c.externalContextEntityItem().externalContextDefinitionName.getText());
                 }
             }
         }
         return rootExternalContext;
     }
 
-    private DSLExternalContext createContext(KrakenDSL.ExtContextNodeItemContext ctx) {
+    private DSLExternalContext createContext(KrakenDSL.ExternalContextNodeItemContext ctx) {
         DSLExternalContext externalContext = new DSLExternalContext(new HashMap<>(), new HashMap<>());
 
         ctx.externalContextItems().externalContextItem().stream()
-                .map(KrakenDSL.ExternalContextItemContext::extContextEntityItem)
-                .filter(Objects::nonNull)
-                .forEach(extContextEntityItemContext ->
-                        externalContext.getBoundedContextDefinitions()
-                                .put(extContextEntityItemContext.key.getText(),
-                                        extContextEntityItemContext.externalContextDefinitionName.getText()));
+            .map(KrakenDSL.ExternalContextItemContext::externalContextEntityItem)
+            .filter(Objects::nonNull)
+            .forEach(c -> externalContext.getBoundedContextDefinitions().put(c.key.getText(),
+                c.externalContextDefinitionName.getText()));
 
         ctx.externalContextItems().externalContextItem().stream()
-                .map(KrakenDSL.ExternalContextItemContext::extContextNodeItem)
-                .filter(Objects::nonNull)
-                .forEach(extContextNodeItemContext -> externalContext.getContexts()
-                        .put(extContextNodeItemContext.key.getText(), createContext(extContextNodeItemContext)));
+            .map(KrakenDSL.ExternalContextItemContext::externalContextNodeItem)
+            .filter(Objects::nonNull)
+            .forEach(c -> externalContext.getContexts().put(c.key.getText(), createContext(c)));
 
         return externalContext;
     }

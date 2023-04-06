@@ -43,7 +43,7 @@ public final class EntryPointDimensionFilteringOperation implements Operation<Ru
 
     @Override
     public String describe() {
-        var template = "Will apply dimension filters for entry point '%s' which has %s version(s): %s";
+        var template = "Applying dimension filters on entry point '%s' which has %s version(s): %s";
 
         return String.format(template,
             entryPointVersion.iterator().next().getName(),
@@ -55,19 +55,19 @@ public final class EntryPointDimensionFilteringOperation implements Operation<Ru
 
     @Override
     public String describeAfter(RuntimeEntryPoint result) {
-        var template = "Entry point dimension filtering completed. %s";
+        var template = "Dimension filters applied. %s";
         var noVersionsTemplate = "All version were filtered out.";
-        var filteredVersionTemplate = "Filtered version metadata: %s";
+        var filteredVersionTemplate = "Remaining version: %s";
 
         return String.format(template,
             result == null
                 ? noVersionsTemplate
-                : String.format(filteredVersionTemplate, gson.toJson(result.getMetadata().getProperties())));
+                : String.format(filteredVersionTemplate, describeEntryPoint(result)));
     }
 
     private String describeEntryPoint(RuntimeEntryPoint runtimeEntryPoint) {
         return runtimeEntryPoint.getMetadata() == null
-            ? ""
+            ? "{}"
             : gson.toJson(runtimeEntryPoint.getMetadata().getProperties());
     }
 

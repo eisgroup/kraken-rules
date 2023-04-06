@@ -62,10 +62,8 @@ describe('Date functions in expression evaluator', () => {
         expect(unwrapAsDate(result)).k_toBeDateEqualTo(new Date('2011-11-11'))
     })
     it('should add to 1 year to current date', () => {
-        const result = evaluator.evaluate(complex('this.PlusYears(this.Today(), 1)'), dataContext)
-        const date = new Date()
-        const dateToCompare = new Date(date.getFullYear() + 1, date.getMonth(), date.getDate())
-        expect(unwrapAsDate(result)).k_toBeDateEqualTo(dateToCompare)
+        const result = evaluator.evaluate(complex("this.PlusYears(this.Date('2011-11-11'), 1)"), dataContext)
+        expect(unwrapAsDate(result)).k_toBeDateEqualTo(new Date('2012-11-11'))
     })
     it('should add to 1 month to current date', () => {
         const result = evaluator.evaluate(complex("this.PlusMonths(this.Date('2011-11-11'), 3)"), dataContext)

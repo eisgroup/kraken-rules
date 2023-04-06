@@ -35,6 +35,8 @@ interface State {
 interface Field {
     fieldType: string
     cardinality: string
+    forbidTarget?: boolean
+    forbidReference?: boolean
 }
 
 function resolveFieldId(contextName: string, id: string, modelFieldName: string): string {
@@ -55,7 +57,14 @@ export function withValidation(Node: React.ComponentType<FieldProps>) {
 
         componentDidMount(): void {
             const field = KRAKEN_MODEL_TREE_POLICY.contexts[this.props.contextName].fields[this.props.modelFieldName]
-            this.setState({ field: { cardinality: field.cardinality, fieldType: field.fieldType } })
+            this.setState({
+                field: {
+                    cardinality: field.cardinality,
+                    fieldType: field.fieldType,
+                    forbidTarget: field.forbidTarget,
+                    forbidReference: field.forbidReference,
+                },
+            })
         }
 
         isApplicable = (): boolean => {

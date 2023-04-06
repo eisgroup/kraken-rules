@@ -15,18 +15,17 @@
  */
 package kraken.runtime.engine.conditions;
 
-import kraken.runtime.EvaluationSession;
-import kraken.runtime.engine.evaluation.loop.RuleEvaluationInstance;
-import kraken.runtime.expressions.KrakenExpressionEvaluationException;
-import kraken.runtime.expressions.KrakenExpressionEvaluator;
-import kraken.runtime.model.expression.CompiledExpression;
-import kraken.runtime.model.rule.Condition;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Optional;
-import java.util.function.Function;
+import kraken.runtime.EvaluationSession;
+import kraken.runtime.engine.context.data.DataContext;
+import kraken.runtime.engine.evaluation.loop.RuleEvaluationInstance;
+import kraken.runtime.engine.handlers.trace.ConditionEvaluationOperation;
+import kraken.runtime.expressions.KrakenExpressionEvaluationException;
+import kraken.runtime.expressions.KrakenExpressionEvaluator;
+import kraken.runtime.model.rule.Condition;
+import kraken.tracer.Tracer;
 
 /**
  * Default implementation for {@link RuleApplicabilityEvaluator}. Evaluates rule condition expression to
@@ -37,9 +36,9 @@ import java.util.function.Function;
  */
 public class RuleApplicabilityEvaluatorImpl implements RuleApplicabilityEvaluator {
 
-    private Logger logger = LoggerFactory.getLogger(RuleApplicabilityEvaluatorImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(RuleApplicabilityEvaluatorImpl.class);
 
-    private KrakenExpressionEvaluator evaluator;
+    private final KrakenExpressionEvaluator evaluator;
 
     public RuleApplicabilityEvaluatorImpl(KrakenExpressionEvaluator evaluator) {
         this.evaluator = evaluator;
@@ -47,36 +46,33 @@ public class RuleApplicabilityEvaluatorImpl implements RuleApplicabilityEvaluato
 
     @Override
     public ConditionEvaluationResult evaluateCondition(RuleEvaluationInstance evaluation, EvaluationSession session) {
-        return Optional.ofNullable(evaluation.getRule().getCondition())
-                .map(Condition::getExpression)
-                .map(toConditionEvaluationResult(evaluation, session))
-                .orElse(new ConditionEvaluationResult(ConditionEvaluation.APPLICABLE));
+        var condition = evaluation.getRule().getCondition();
+        if(condition == null) {
+            return new ConditionEvaluationResult(ConditionEvaluation.APPLICABLE);
+        }
+        return Tracer.doOperation(
+            new ConditionEvaluationOperation(condition, evaluation.getDataContext()),
+            () -> evaluateCondition(condition, evaluation.getDataContext(), session)
+        );
     }
 
-    private Function<CompiledExpression, ConditionEvaluationResult> toConditionEvaluationResult(
-        RuleEvaluationInstance evaluation,
-        EvaluationSession session
-    ) {
-        return expression -> {
-            ConditionEvaluationResult conditionEvaluationResult;
-
-            try {
-                Object result = evaluator.evaluate(expression, evaluation.getDataContext(), session);
-                conditionEvaluationResult = new ConditionEvaluationResult(Boolean.TRUE.equals(result)
-                    ? ConditionEvaluation.APPLICABLE
-                    : ConditionEvaluation.NOT_APPLICABLE
-                );
-            } catch (KrakenExpressionEvaluationException e) {
-                logger.debug(
-                    "Condition expression '{}' failed with exception, \n{}",
-                    expression.getExpressionString(),
-                    e);
-
-                conditionEvaluationResult = new ConditionEvaluationResult(e);
-            }
-
-            return conditionEvaluationResult;
-        };
+    private ConditionEvaluationResult evaluateCondition(Condition condition,
+                                                        DataContext dataContext,
+                                                        EvaluationSession session) {
+        try {
+            Object result = evaluator.evaluate(condition.getExpression(), dataContext, session);
+            var conditionResult = Boolean.TRUE.equals(result)
+                ? ConditionEvaluation.APPLICABLE
+                : ConditionEvaluation.NOT_APPLICABLE;
+            return new ConditionEvaluationResult(conditionResult);
+        } catch (KrakenExpressionEvaluationException e) {
+            logger.debug(
+                "Condition expression '{}' failed with exception, \n{}",
+                condition.getExpression().getExpressionString(),
+                e
+            );
+            return new ConditionEvaluationResult(e);
+        }
     }
 
 }

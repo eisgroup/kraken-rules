@@ -19,7 +19,8 @@ import { DataContext } from '../../../src/engine/contexts/data/DataContext'
 
 describe('DataContext', () => {
     it('should return construct id from attributes', () => {
-        const dataCtx: DataContext = new DataContext('P001', 'Person', {}, mock.contextInstanceInfo, {}, undefined)
-        expect(dataCtx.getId()).toBe('Person:P001')
+        const { Policy } = mock.modelTree.contexts
+        const dataCtx: DataContext = new DataContext('1', Policy.name, {}, mock.contextInstanceInfo, Policy)
+        expect(dataCtx.getId()).toBe('Policy:1')
     })
 })

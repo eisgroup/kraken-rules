@@ -34,7 +34,7 @@ import kraken.runtime.model.rule.RuntimeRule;
 import kraken.runtime.repository.RuntimeProjectRepository;
 import kraken.runtime.repository.factory.RuntimeProjectRepositoryFactory;
 import kraken.tracer.Tracer;
-import kraken.utils.Namespaces;
+import kraken.namespace.Namespaces;
 
 /**
  * @author psurinin

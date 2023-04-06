@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.BooleanUtils;
+
 import kraken.model.Rule;
 import kraken.model.context.ContextDefinition;
 import kraken.model.context.ContextField;
@@ -56,8 +58,8 @@ public final class RuleTargetContextValidator implements RuleValidator {
                 String messageFormat = "ContextDefinition '%s' doesn't have field '%s'";
                 String message = String.format(messageFormat, rule.getContext(), rule.getTargetPath());
                 session.add(new ValidationMessage(rule, message, Severity.ERROR));
-            } else if (contextField.isExternal()) {
-                String messageFormat = "cannot be applied on external field - '%s'";
+            } else if (BooleanUtils.isTrue(contextField.getForbidTarget())) {
+                String messageFormat = "cannot be applied on field because it is forbidden to be a rule target - '%s'";
                 String message = String.format(messageFormat, rule.getTargetPath());
                 session.add(new ValidationMessage(rule, message, Severity.ERROR));
             }

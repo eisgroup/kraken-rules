@@ -15,23 +15,20 @@
  */
 package kraken.runtime.engine.handlers;
 
+import java.util.List;
+
 import kraken.model.payload.PayloadType;
 import kraken.model.validation.UsageType;
 import kraken.runtime.EvaluationSession;
 import kraken.runtime.engine.RulePayloadHandler;
 import kraken.runtime.engine.context.data.DataContext;
-import kraken.runtime.engine.handlers.trace.UsagePayloadEvaluatedOperation;
+import kraken.runtime.engine.handlers.trace.FieldValueValidationOperation;
 import kraken.runtime.engine.result.PayloadResult;
 import kraken.runtime.engine.result.UsagePayloadResult;
 import kraken.runtime.expressions.KrakenExpressionEvaluator;
 import kraken.runtime.model.rule.RuntimeRule;
-import kraken.runtime.model.rule.payload.Payload;
 import kraken.runtime.model.rule.payload.validation.UsagePayload;
 import kraken.tracer.Tracer;
-
-import static kraken.runtime.utils.TargetPathUtils.resolveTargetPath;
-
-import java.util.List;
 
 /**
  * Payload handler implementation for {@link UsagePayload}s
@@ -49,16 +46,15 @@ public class UsagePayloadHandler implements RulePayloadHandler {
     }
 
     @Override
-    public PayloadResult executePayload(Payload payload, RuntimeRule rule, DataContext dataContext, EvaluationSession session) {
-        UsagePayload usagePayload = (UsagePayload) payload;
+    public PayloadResult executePayload(RuntimeRule rule, DataContext dataContext, EvaluationSession session) {
+        var payload = (UsagePayload) rule.getPayload();
 
-        String path = resolveTargetPath(rule, dataContext);
-        Object value = evaluator.evaluateGetProperty(path, dataContext.getDataObject());
-        boolean valid = isMandatoryAndNotNull(value, usagePayload) || isEmptyAndNull(value, usagePayload);
-        List<String> templateVariables = evaluator.evaluateTemplateVariables(usagePayload.getErrorMessage(), dataContext, session);
+        var value = evaluator.evaluateTargetField(rule.getTargetPath(), dataContext);
+        Tracer.doOperation(new FieldValueValidationOperation(value));
+        boolean valid = isMandatoryAndNotNull(value, payload) || isEmptyAndNull(value, payload);
 
-        Tracer.doOperation(new UsagePayloadEvaluatedOperation(usagePayload, value, valid));
-        return new UsagePayloadResult(valid, usagePayload, templateVariables);
+        var templateVariables = evaluator.evaluateTemplateVariables(payload.getErrorMessage(), dataContext, session);
+        return new UsagePayloadResult(valid, payload, templateVariables);
     }
 
     @Override
@@ -74,5 +70,22 @@ public class UsagePayloadHandler implements RulePayloadHandler {
     private boolean isEmptyAndNull(Object value, UsagePayload payload) {
         return UsageType.mustBeEmpty.equals(payload.getUsageType())
                 && PayloadHandlerUtils.isEmptyValue(value);
+    }
+
+    @Override
+    public String describePayloadResult(PayloadResult payloadResult) {
+        var result = (UsagePayloadResult) payloadResult;
+        switch (result.getUsageType()) {
+            case mandatory:
+                return result.getSuccess()
+                    ? "Field is valid. Field is mandatory and it has a value."
+                    : "Field is not valid. Field is mandatory but it has no value.";
+            case mustBeEmpty:
+                return result.getSuccess()
+                    ? "Field is valid. Field must be empty and it has no value."
+                    : "Field is not valid. Field must be empty but it has a value.";
+            default:
+                throw new IllegalArgumentException("Unsupported usage type: " + result.getUsageType());
+        }
     }
 }

@@ -43,7 +43,7 @@ describe('valueListPayloadHandler', () => {
             values: ['AZ'],
             valueType: 'STRING',
         })
-        const result = handler.executePayload(payload, rule(payload, 'state'), dataContext({ state: 'AZ' }), session)
+        const result = handler.executePayload(rule(payload, 'state'), dataContext({ state: 'AZ' }), session)
         expect(payloadResultTypeChecker.isValueList(result)).toBeTruthy()
     })
     it('should return true on string field having no value', () => {
@@ -51,12 +51,7 @@ describe('valueListPayloadHandler', () => {
             values: ['AZ', 'NY'],
             valueType: 'STRING',
         })
-        const result = handler.executePayload(
-            payload,
-            rule(payload, 'state'),
-            dataContext({ state: undefined }),
-            session,
-        )
+        const result = handler.executePayload(rule(payload, 'state'), dataContext({ state: undefined }), session)
         expect(result.success).toBeTruthy()
     })
     it('should return true on string field having value in value list', () => {
@@ -64,7 +59,7 @@ describe('valueListPayloadHandler', () => {
             values: ['AZ', 'NY'],
             valueType: 'STRING',
         })
-        const result = handler.executePayload(payload, rule(payload, 'state'), dataContext({ state: 'AZ' }), session)
+        const result = handler.executePayload(rule(payload, 'state'), dataContext({ state: 'AZ' }), session)
         expect(result.success).toBeTruthy()
     })
     it('should return false on string field not having value in value list', () => {
@@ -72,7 +67,7 @@ describe('valueListPayloadHandler', () => {
             values: ['AZ'],
             valueType: 'STRING',
         })
-        const result = handler.executePayload(payload, rule(payload, 'state'), dataContext({ state: 'NY' }), session)
+        const result = handler.executePayload(rule(payload, 'state'), dataContext({ state: 'NY' }), session)
         expect(result.success).toBeFalsy()
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         expect(result.message!.errorMessage).toBe('Value list does not contain provided value')
@@ -83,7 +78,6 @@ describe('valueListPayloadHandler', () => {
             valueType: 'DECIMAL',
         })
         const result = handler.executePayload(
-            payload,
             rule(payload, 'policyValue'),
             dataContext({ policyValue: { currency: 'USD', amount: 50 } }),
             session,
@@ -96,7 +90,6 @@ describe('valueListPayloadHandler', () => {
             valueType: 'DECIMAL',
         })
         const result = handler.executePayload(
-            payload,
             rule(payload, 'policyValue'),
             dataContext({ policyValue: { currency: 'USD', amount: 500 } }),
             session,
@@ -108,8 +101,6 @@ describe('valueListPayloadHandler', () => {
             values: [20, 50, 45.5],
             valueType: 'DECIMAL',
         })
-        expect(() =>
-            handler.executePayload(payload, rule(payload, 'state'), dataContext({ state: 'AZ' }), session),
-        ).toThrow()
+        expect(() => handler.executePayload(rule(payload, 'state'), dataContext({ state: 'AZ' }), session)).toThrow()
     })
 })

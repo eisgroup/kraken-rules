@@ -45,6 +45,10 @@ export class Component extends React.Component<InnerInputsComponentProps<domain.
         this.props.onChange(Object.assign({}, this.props.value, { street: event.currentTarget.value }))
     }
 
+    onStateCdChange = (event: React.FormEvent<HTMLInputElement>) => {
+        this.props.onChange(Object.assign({}, this.props.value, { stateCd: event.currentTarget.value }))
+    }
+
     render(): JSX.Element {
         return (
             <Row>
@@ -86,6 +90,14 @@ export class Component extends React.Component<InnerInputsComponentProps<domain.
                     contextName='AddressInfo'
                     modelFieldName='street'
                     onChange={this.onStreetChange}
+                    renderInput={renderers.input}
+                />
+                <SingleField
+                    id={this.props.id}
+                    value={this.props.value.street}
+                    contextName='AddressInfo'
+                    modelFieldName='stateCd'
+                    onChange={this.onStateCdChange}
                     renderInput={renderers.input}
                 />
             </Row>

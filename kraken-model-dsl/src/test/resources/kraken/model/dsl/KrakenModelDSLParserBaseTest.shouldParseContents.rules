@@ -5,7 +5,8 @@ Contexts {
     Contexts {
         Context RiskItem {
             String itemName
-            External String externalField
+            @ForbidTarget String forbiddenAsTarget
+            @ForbidReference String forbiddenAsReference
         }
     }
 }

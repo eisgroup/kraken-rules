@@ -58,11 +58,22 @@ public interface ContextField {
     String getFieldPath();
 
     /**
-     * Declares that field can only be used in rule expression or condition but not as a rule target
+     * Declares that the field cannot be used as a rule target
+     *
+     * @deprecated attribute was renamed - use {@link #getForbidTarget()} because it is exactly the same
      */
+    @Deprecated(since = "1.45.0", forRemoval = true)
     boolean isExternal();
 
-    void setExternal(boolean external);
+    /**
+     * @return true if the field cannot be used as a rule target
+     */
+    Boolean getForbidTarget();
+
+    /**
+     * @return true if the field cannot be used as a reference in rule expression
+     */
+    Boolean getForbidReference();
 
     void setFieldType(String fieldType);
 
@@ -71,4 +82,15 @@ public interface ContextField {
     void setName(String name);
 
     void setFieldPath(String fieldPath);
+
+    /**
+     * @deprecated attribute was renamed - use {@link #setForbidTarget(Boolean)} because it is exactly the same
+     */
+    @Deprecated(since = "1.45.0", forRemoval = true)
+    void setExternal(boolean external);
+
+    void setForbidTarget(Boolean forbidTarget);
+
+    void setForbidReference(Boolean forbidReference);
+
 }

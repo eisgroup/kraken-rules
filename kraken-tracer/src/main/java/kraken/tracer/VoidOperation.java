@@ -25,9 +25,4 @@ package kraken.tracer;
  */
 public interface VoidOperation extends Operation<Void> {
 
-    @Override
-    default String describeAfter(Void result) {
-        throw new IllegalStateException("Void operation has no result to describe!");
-    }
-
 }

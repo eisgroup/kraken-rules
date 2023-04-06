@@ -22,11 +22,11 @@ import 'antd/lib/popover/style'
 import 'antd/lib/tooltip/style'
 import 'antd/lib/tag/style'
 import 'antd/lib/icon/style'
-import { ContextDefinitionInfo } from '../../../rule-engine/api'
+import { ContextField } from '../../../rule-engine/api'
 import { RuleCreator } from './RuleCreator'
 
 export interface FieldModelInfoProps {
-    fieldInfo: ContextDefinitionInfo
+    fieldInfo: ContextField
     contextName: string
     fieldName: string
     id: string
@@ -76,6 +76,18 @@ export class FieldModelInfo extends React.PureComponent<FieldModelInfoProps> {
                 <Tag color={typeColor(this.props)} style={tagStyle}>
                     {this.props.fieldInfo.cardinality}
                 </Tag>
+
+                {this.props.fieldInfo.forbidTarget && (
+                    <Tag color='blue' style={tagStyle}>
+                        {'FORBID_TARGET'}
+                    </Tag>
+                )}
+
+                {this.props.fieldInfo.forbidReference && (
+                    <Tag color='blue' style={tagStyle}>
+                        {'FORBID_REFERENCE'}
+                    </Tag>
+                )}
             </div>
         )
     }

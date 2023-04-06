@@ -24,6 +24,7 @@ import kraken.runtime.engine.EntryPointResult;
 import kraken.runtime.engine.result.reducers.validation.ValidationResult;
 import kraken.runtime.engine.result.reducers.validation.ValidationStatus;
 import kraken.tracer.Operation;
+import kraken.utils.Dates;
 
 /**
  * Operation to be added to trace before entry point result reduction.
@@ -43,7 +44,7 @@ public final class EntryPointResultReducingOperation implements Operation<Valida
     public String describe() {
         var template = "Reducing results of entry point evaluated at %s.";
 
-        return String.format(template, entryPointResult.getEvaluationTimeStamp().toString());
+        return String.format(template, Dates.convertLocalDateTimeToISO(entryPointResult.getEvaluationTimeStamp()));
     }
 
     @Override
@@ -70,7 +71,7 @@ public final class EntryPointResultReducingOperation implements Operation<Valida
 
     private String describeResults(List<ValidationResult> results) {
         return results.stream()
-            .map(validationResult -> "Rule '" + validationResult.getRuleName() + "' with severity - "
+            .map(validationResult -> "  Rule '" + validationResult.getRuleName() + "' with severity - "
                 + getSeverity(validationResult.getSeverity()))
             .collect(Collectors.joining(System.lineSeparator()));
     }

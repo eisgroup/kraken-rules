@@ -30,14 +30,18 @@ export interface RulePayloadHandler {
      * @return  supported class type, must extend {@link Payloads.Payload}
      */
     handlesPayloadType(): Payloads.PayloadType
+
     /**
      * Executes rule logic specified in payload instance on provided data context instance
      * and produced payload result instance for this particular execution.
      */
-    executePayload(
-        payload: Payloads.Payload,
-        rule: Rule,
-        dataContext: DataContext,
-        session?: ExecutionSession,
-    ): PayloadResult
+    executePayload(rule: Rule, dataContext: DataContext, session: ExecutionSession): PayloadResult
+
+    /**
+     *
+     * @param payloadResult
+     * @return payload evaluation result description that will be included in the logs.
+     * Description must be one or more full sentences with proper punctuation.
+     */
+    describePayloadResult(payloadResult: PayloadResult): string
 }

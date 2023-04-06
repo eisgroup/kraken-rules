@@ -20,7 +20,7 @@ import java.util.Map;
 import kraken.runtime.EvaluationConfig;
 import kraken.runtime.RuleEngine;
 import kraken.runtime.engine.EntryPointResult;
-import kraken.utils.Namespaces;
+import kraken.namespace.Namespaces;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;

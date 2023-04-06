@@ -1,6 +1,6 @@
 {
     "name": "kraken-test-product-model-tree",
-    "version": "1.45.1-stage.0",
+    "version": "1.46.1-stage.0",
     "description": "",
     "main": "target/index.js",
     "types": "target/index.d.ts",

@@ -30,18 +30,23 @@ public class DSLContextField {
 
     private String path;
 
-    private boolean external;
+    private Boolean forbidTarget;
 
-    public DSLContextField(String name, String type, DSLCardinality cardinality, String path, boolean external) {
+    private Boolean forbidReference;
+
+    public DSLContextField(String name,
+                           String type,
+                           DSLCardinality cardinality,
+                           String path,
+                           Boolean forbidTarget,
+                           Boolean forbidReference
+    ) {
         this.name = Objects.requireNonNull(name);
         this.type = Objects.requireNonNull(type);
         this.cardinality = Objects.requireNonNull(cardinality);
         this.path = path;
-        this.external = external;
-    }
-
-    public boolean isExternal() {
-        return external;
+        this.forbidTarget = forbidTarget;
+        this.forbidReference = forbidReference;
     }
 
     public String getName() {
@@ -58,5 +63,13 @@ public class DSLContextField {
 
     public String getPath() {
         return path;
+    }
+
+    public Boolean getForbidTarget() {
+        return forbidTarget;
+    }
+
+    public Boolean getForbidReference() {
+        return forbidReference;
     }
 }

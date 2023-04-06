@@ -41,12 +41,7 @@ describe('assertionPayloadHandler', () => {
             .setTargetPath(Policy.fields.state.name)
             .setPayload(PayloadBuilder.asserts().that('false'))
             .build()
-        const result = handler.executePayload(
-            rule.payload as Payloads.Validation.AssertionPayload,
-            rule,
-            dataContext,
-            session,
-        )
+        const result = handler.executePayload(rule, dataContext, session)
         expect(payloadResultTypeChecker.isAssertion(result)).toBeTruthy()
     })
     it('should execute payload', () => {
@@ -56,12 +51,7 @@ describe('assertionPayloadHandler', () => {
             .setTargetPath(Policy.fields.state.name)
             .setPayload(PayloadBuilder.asserts().that('__dataObject__.state != null', 'assertion failed'))
             .build()
-        const result = handler.executePayload(
-            rule.payload as Payloads.Validation.AssertionPayload,
-            rule,
-            dataContext,
-            session,
-        ) as AssertionPayloadResult
+        const result = handler.executePayload(rule, dataContext, session) as AssertionPayloadResult
         expect(result.message?.errorMessage).toBe('assertion failed')
         expect(result.success).toBeFalsy()
     })
@@ -72,12 +62,7 @@ describe('assertionPayloadHandler', () => {
             .setTargetPath(Policy.fields.state.name)
             .setPayload(PayloadBuilder.asserts().that('false', 'message'))
             .build()
-        const result = handler.executePayload(
-            ruleNoError.payload as Payloads.Validation.AssertionPayload,
-            ruleNoError,
-            dataContext,
-            session,
-        ) as AssertionPayloadResult
+        const result = handler.executePayload(ruleNoError, dataContext, session) as AssertionPayloadResult
         expect(result.message?.errorMessage).toBe('message')
         expect(result.success).toBeFalsy()
     })

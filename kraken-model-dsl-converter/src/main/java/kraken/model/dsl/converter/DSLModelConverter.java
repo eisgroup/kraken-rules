@@ -18,13 +18,8 @@ package kraken.model.dsl.converter;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
 
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
@@ -48,6 +43,7 @@ import kraken.model.validation.SizePayload;
 import kraken.model.validation.SizeRangePayload;
 import kraken.model.validation.UsagePayload;
 import kraken.model.validation.ValueListPayload;
+import kraken.utils.Dates;
 
 /**
  * Converts Rules model to Rules DSL model as a <code>string<code/>.
@@ -88,12 +84,9 @@ public class DSLModelConverter {
 
                     props.put(entry.getKey(), "\"" + Literals.deescape((String)value) + "\"");
                 } else if (value instanceof LocalDate) {
-                    props.put(entry.getKey(), ((LocalDate) value).format(DateTimeFormatter.ISO_LOCAL_DATE));
+                    props.put(entry.getKey(), Dates.convertLocalDateToISO((LocalDate) value));
                 } else if (value instanceof LocalDateTime) {
-                    String dateTime = ZonedDateTime.of((LocalDateTime) value, ZoneId.systemDefault())
-                            .truncatedTo(ChronoUnit.MILLIS)
-                            .format(DateTimeFormatter.ISO_INSTANT);
-                    props.put(entry.getKey(), dateTime);
+                    props.put(entry.getKey(), Dates.convertLocalDateTimeToISO((LocalDateTime) value));
                 } else {
                     props.put(entry.getKey(), value);
                 }

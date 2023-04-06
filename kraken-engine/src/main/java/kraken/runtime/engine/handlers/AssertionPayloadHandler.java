@@ -17,22 +17,21 @@ package kraken.runtime.engine.handlers;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kraken.model.payload.PayloadType;
 import kraken.runtime.EvaluationSession;
 import kraken.runtime.engine.RulePayloadHandler;
 import kraken.runtime.engine.context.data.DataContext;
-import kraken.runtime.engine.handlers.trace.AssertionPayloadEvaluatedOperation;
+import kraken.runtime.engine.handlers.trace.AssertionExpressionEvaluationOperation;
 import kraken.runtime.engine.result.AssertionPayloadResult;
 import kraken.runtime.engine.result.PayloadResult;
 import kraken.runtime.expressions.KrakenExpressionEvaluationException;
 import kraken.runtime.expressions.KrakenExpressionEvaluator;
 import kraken.runtime.model.rule.RuntimeRule;
-import kraken.runtime.model.rule.payload.Payload;
 import kraken.runtime.model.rule.payload.validation.AssertionPayload;
 import kraken.tracer.Tracer;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Payload handler implementation to process {@link AssertionPayload}s
@@ -51,21 +50,23 @@ public class AssertionPayloadHandler implements RulePayloadHandler {
     }
 
     @Override
-    public PayloadResult executePayload(Payload payload, RuntimeRule rule, DataContext dataContext, EvaluationSession session) {
-        AssertionPayload assertionPayload = (AssertionPayload) payload;
+    public PayloadResult executePayload(RuntimeRule rule, DataContext dataContext, EvaluationSession session) {
+        AssertionPayload assertionPayload = (AssertionPayload) rule.getPayload();
         try {
+            Tracer.doOperation(
+                new AssertionExpressionEvaluationOperation(assertionPayload.getAssertionExpression(), dataContext)
+            );
             Object result = evaluator.evaluate(assertionPayload.getAssertionExpression(), dataContext, session);
             List<String> templateVariables
                 = evaluator.evaluateTemplateVariables(assertionPayload.getErrorMessage(), dataContext, session);
 
-            Tracer.doOperation(new AssertionPayloadEvaluatedOperation(assertionPayload, result));
             return new AssertionPayloadResult(Boolean.TRUE.equals(result), assertionPayload, templateVariables);
         } catch (KrakenExpressionEvaluationException e) {
             logger.debug(
-                    "Assertion expression '{}' in rule '{}' failed with exception: \n {}",
-                    ((AssertionPayload) payload).getAssertionExpression().getExpressionString(),
-                    rule.getName(),
-                    e
+                "Assertion expression '{}' in rule '{}' failed with exception: \n {}",
+                assertionPayload.getAssertionExpression().getExpressionString(),
+                rule.getName(),
+                e
             );
 
             return new AssertionPayloadResult(e, assertionPayload);
@@ -77,4 +78,15 @@ public class AssertionPayloadHandler implements RulePayloadHandler {
         return PayloadType.ASSERTION;
     }
 
+    @Override
+    public String describePayloadResult(PayloadResult payloadResult) {
+        var result = (AssertionPayloadResult) payloadResult;
+
+        if(result.getException().isPresent()) {
+            return "Field is valid. Assertion is not evaluated due to expression error.";
+        }
+        return result.getSuccess()
+            ? "Field is valid. Assertion evaluated to true."
+            : "Field is not valid. Assertion evaluated to false.";
+    }
 }

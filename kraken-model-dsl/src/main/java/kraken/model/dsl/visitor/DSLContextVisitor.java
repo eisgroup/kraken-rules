@@ -93,9 +93,20 @@ public class DSLContextVisitor extends KrakenDSLBaseVisitor<DSLContext> {
 
         DSLCardinality cardinality = ctx.OP_MULT() != null ? DSLCardinality.MULTIPLE : DSLCardinality.SINGLE;
         String path = ctx.pathExpression() != null ? ctx.pathExpression().getText() : null;
-        boolean external = ctx.EXTERNAL() != null;
 
-        return new DSLContextField(name, type, cardinality, path, external);
+        Boolean forbidTarget = null;
+        if(ctx.EXTERNAL() != null || ctx.fieldModifiers() != null
+            && ctx.fieldModifiers().fieldModifier().stream().anyMatch(m -> m.FORBID_TARGET() != null)) {
+            forbidTarget = true;
+        }
+
+        Boolean forbidReference = null;
+        if(ctx.fieldModifiers() != null
+            && ctx.fieldModifiers().fieldModifier().stream().anyMatch(m -> m.FORBID_REFERENCE() != null)) {
+            forbidReference = true;
+        }
+
+        return new DSLContextField(name, type, cardinality, path, forbidTarget, forbidReference);
     }
 
     private DSLContextChild toContextChild(KrakenDSL.ChildContext ctx) {
@@ -104,7 +115,12 @@ public class DSLContextVisitor extends KrakenDSLBaseVisitor<DSLContext> {
         DSLExpression navigationExpression = ctx.inlineExpression() != null
                 ? ExpressionReader.read(ctx.inlineExpression())
                 : null;
-        return new DSLContextChild(name, cardinality, navigationExpression);
+        Boolean forbidReference = null;
+        if(ctx.childModifiers() != null
+            && ctx.childModifiers().childModifier().stream().anyMatch(m -> m.FORBID_REFERENCE() != null)) {
+            forbidReference = true;
+        }
+        return new DSLContextChild(name, cardinality, navigationExpression, forbidReference);
     }
 
 }

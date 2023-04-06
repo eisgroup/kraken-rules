@@ -14,17 +14,11 @@
  *  limitations under the License.
  */
 
-import { Reducer, optional, MethodMap } from 'declarative-js'
+import { Reducer, MethodMap } from 'declarative-js'
 import toMap = Reducer.toMap
 import Map = Reducer.Map
 
-import {
-    RuleEvaluationResults,
-    ConditionEvaluation,
-    ValidationPayloadResult,
-    RuleInfo,
-    PayloadResult,
-} from 'kraken-engine-api'
+import { RuleEvaluationResults, ConditionEvaluation, ValidationPayloadResult, RuleInfo } from 'kraken-engine-api'
 import RuleEvaluationResult = RuleEvaluationResults.RuleEvaluationResult
 import { ExecutionSession } from './ExecutionSession'
 import { RulePayloadHandler } from './handlers/RulePayloadHandler'
@@ -52,6 +46,7 @@ import { DataContextDependency, DataContextUpdater } from './contexts/data/updat
 import { RuleConditionProcessor } from './RuleConditionProcessor'
 import ExpressionVariable = Expressions.ExpressionVariable
 import { ValueListPayloadHandler } from './handlers/ValueListPayloadHandler'
+import { logger } from '../utils/DevelopmentLogger'
 
 export type RuleEvaluation = {
     rule: Rule
@@ -105,7 +100,14 @@ export class RulePayloadProcessor {
             extractPayloadDependencies(rule.payload).forEach(dependency =>
                 this.dataContextUpdater.update(dataContext, dependency),
             )
-            const payloadResult = this.evaluatePayload(ruleEvaluation, session)
+
+            const payloadHandler = this.payloadHandlers.get(rule.payload.type)
+            if (!payloadHandler) {
+                throw new Error(`Not supported payload type: ${rule.payload.type}`)
+            }
+            const payloadResult = payloadHandler.executePayload(rule, dataContext, session)
+
+            logger.debug(() => `Evaluated ${rule.payload.type}. ${payloadHandler.describePayloadResult(payloadResult)}`)
 
             if (payloadResultTypeChecker.isValidation(payloadResult) && Payloads.isValidationPayload(rule.payload)) {
                 // results for failed validation with rule
@@ -132,13 +134,6 @@ export class RulePayloadProcessor {
                 conditionEvaluationResult: conditionResult,
             }
         }
-    }
-
-    private evaluatePayload(ruleEvaluation: RuleEvaluation, session: ExecutionSession): PayloadResult {
-        const { rule, dataContext } = ruleEvaluation
-        return optional(this.payloadHandlers.get(rule.payload.type))
-            .orElseThrow(`Not supported payload type: ${rule.payload.type}`)
-            .executePayload(rule.payload, rule, dataContext, session)
     }
 
     private resolveValidationResult(

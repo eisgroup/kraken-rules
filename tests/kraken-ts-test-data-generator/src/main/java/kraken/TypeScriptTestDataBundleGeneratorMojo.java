@@ -37,8 +37,6 @@ import org.apache.maven.plugins.annotations.Parameter;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
-import kraken.documentation.FunctionDocumentationResolver;
-import kraken.el.functionregistry.documentation.LibraryDoc;
 import kraken.el.scope.Scope;
 import kraken.el.serialization.ScopeSerialization;
 import kraken.el.serialization.TypeRegistry;
@@ -55,7 +53,7 @@ import kraken.runtime.repository.RuntimeProjectRepositoryConfig;
 import kraken.runtime.repository.factory.RuntimeProjectRepositoryFactory;
 import kraken.testproduct.dimension.filter.StateDimensionFilter;
 import kraken.utils.GsonUtils;
-import kraken.utils.Namespaces;
+import kraken.namespace.Namespaces;
 
 /**
  * Goal build bundles from entry point names and write then into project directory
@@ -269,8 +267,7 @@ public class TypeScriptTestDataBundleGeneratorMojo extends AbstractMojo {
             IOUtils.write(
                 resolveBundleAsJsonString(
                     evaluation.entryPointName,
-                    evaluation.context,
-                    evaluation.delta
+                    evaluation.context
                 ),
                 stream
             );
@@ -285,7 +282,7 @@ public class TypeScriptTestDataBundleGeneratorMojo extends AbstractMojo {
         }
     }
 
-    private String resolveBundleAsJsonString(String entryPointName, Map<String, Object> context, boolean delta) {
+    private String resolveBundleAsJsonString(String entryPointName, Map<String, Object> context) {
         var defaultDimensions = new HashMap<String, Object>();
         EntryPointBundle bundle = entryPointBundleFactory.build(
             entryPointName,
@@ -293,6 +290,8 @@ public class TypeScriptTestDataBundleGeneratorMojo extends AbstractMojo {
             Set.of(),
             EvaluationMode.ALL
         );
+        // strip engine version to avoid version incompatibility warnings in local testing environments and snapshots
+        bundle = new EntryPointBundle(bundle.getEvaluation(), bundle.getExpressionContext(), null);
         return gson.toJson(sortJson(gson.toJsonTree(bundle)));
     }
 
@@ -326,7 +325,6 @@ public class TypeScriptTestDataBundleGeneratorMojo extends AbstractMojo {
         String id;
         String entryPointName;
         Map<String, Object> context;
-        boolean delta;
 
         public Evaluation(String s) {
             this.entryPointName = s;

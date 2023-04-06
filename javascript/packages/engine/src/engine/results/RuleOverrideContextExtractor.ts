@@ -14,13 +14,10 @@
  *  limitations under the License.
  */
 import { Reducer } from 'declarative-js'
-import { ExpressionEvaluationResult, RuleInfo, RuleOverride } from 'kraken-engine-api'
+import { RuleInfo, RuleOverride } from 'kraken-engine-api'
 import { Contexts } from 'kraken-model'
-
-import { ErrorCode, KrakenRuntimeError } from '../../error/KrakenRuntimeError'
 import { DataContext } from '../contexts/data/DataContext'
 import { ExpressionEvaluator } from '../runtime/expressions/ExpressionEvaluator'
-import { Expressions } from '../runtime/expressions/Expressions'
 
 export interface RuleOverrideContextExtractor {
     extract(
@@ -70,8 +67,8 @@ export function extractOverrideDependencies(
             continue
         }
         const ref = dataReference.dataContexts[0]
-        const type = ref.definitionProjection[dependency.contextFieldName].fieldType as Contexts.PrimitiveDataType
-        if (!Contexts.fieldTypeChecker.isPrimitive(type)) {
+        const type = ref.contextDefinition.fields?.[dependency.contextFieldName]?.fieldType
+        if (!type || !Contexts.fieldTypeChecker.isPrimitive(type)) {
             continue
         }
         const name = RuleOverride.resolveOverrideDependencyName(ref.contextName, dependency.contextFieldName)
@@ -100,12 +97,8 @@ export function extractAttributeValue(
     dataContext: DataContext,
     targetPath: string,
 ): Contexts.KrakenPrimitive | undefined {
-    const path = Expressions.createPathResolver(dataContext)(targetPath)
-    const result = ExpressionEvaluator.DEFAULT.evaluateGet(path, dataContext.dataObject)
-    if (ExpressionEvaluationResult.isError(result)) {
-        throw new KrakenRuntimeError(ErrorCode.EXTRACT_EXPRESSION_FAILED, `Failed to extract attribute ${path}`)
-    }
-    return result.success as Contexts.KrakenPrimitive | undefined
+    const value = ExpressionEvaluator.DEFAULT.evaluateTargetField(targetPath, dataContext)
+    return value as Contexts.KrakenPrimitive | undefined
 }
 
 /**

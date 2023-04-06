@@ -15,35 +15,16 @@
  */
 
 import { mock } from '../../../mock'
-import { Expressions } from '../../../../src/engine/runtime/expressions/Expressions'
+import { TargetPathUtils } from '../../../../src/engine/runtime/expressions/TargetPathUtils'
 import { DataContext } from '../../../../src/engine/contexts/data/DataContext'
 
 describe('Expressions', () => {
-    it('should change field name to path once', () => {
-        const expression = 'aaa'
-        const resolved = Expressions.createPathResolver(
-            new DataContext(
-                'id',
-                'name',
-                {},
-                mock.contextInstanceInfo,
-                {
-                    aaa: {
-                        name: 'aaa',
-                        fieldType: 'string',
-                        cardinality: 'SINGLE',
-                        fieldPath: 'bbb',
-                    },
-                    bbb: {
-                        name: 'bbb',
-                        fieldType: 'string',
-                        cardinality: 'SINGLE',
-                        fieldPath: 'ccc',
-                    },
-                },
-                undefined,
-            ),
-        )(expression)
-        expect(resolved).toBe('bbb')
+    it('should change field name to path', () => {
+        const { Policy } = mock.modelTree.contexts
+        const resolved = TargetPathUtils.resolveTargetPath(
+            Policy.fields.createdOn.name,
+            new DataContext('1', 'Policy', {}, mock.contextInstanceInfo, Policy, undefined),
+        )
+        expect(resolved).toBe('accessTrackInfo.createdOn')
     })
 })

@@ -55,7 +55,7 @@ public class NumberSetPayloadHandlerTest {
             .numberSetPayload(0, 4, 2)
             .build();
 
-        var result = payloadHandler.executePayload(rule.getPayload(), rule, dataContext, SESSION);
+        var result = payloadHandler.executePayload(rule, dataContext, SESSION);
         assertThat(result, instanceOf(NumberSetPayloadResult.class));
         assertThat(((NumberSetPayloadResult) result).getSuccess(), is(true));
         assertThat(((NumberSetPayloadResult) result).getMin(), is(new BigDecimal("0")));
@@ -75,7 +75,7 @@ public class NumberSetPayloadHandlerTest {
             .numberSetPayload(0, 4, 2)
             .build();
 
-        var result = payloadHandler.executePayload(rule.getPayload(), rule, dataContext, SESSION);
+        var result = payloadHandler.executePayload(rule, dataContext, SESSION);
         assertThat(((NumberSetPayloadResult) result).getSuccess(), is(true));
     }
 
@@ -90,7 +90,7 @@ public class NumberSetPayloadHandlerTest {
             .numberSetPayload(0, 4, new BigDecimal("2"))
             .build();
 
-        var result = payloadHandler.executePayload(rule.getPayload(), rule, dataContext, SESSION);
+        var result = payloadHandler.executePayload(rule, dataContext, SESSION);
         assertThat(((NumberSetPayloadResult) result).getSuccess(), is(false));
     }
 }

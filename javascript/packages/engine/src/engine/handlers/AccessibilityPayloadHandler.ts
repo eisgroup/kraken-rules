@@ -16,22 +16,25 @@
 
 import { RulePayloadHandler } from './RulePayloadHandler'
 import { AccessibilityPayloadResult, PayloadResultType } from 'kraken-engine-api'
-import { Payloads } from 'kraken-model'
+import { Payloads, Rule } from 'kraken-model'
 import PayloadType = Payloads.PayloadType
 import AccessibilityPayload = Payloads.UI.AccessibilityPayload
-import { logger } from '../../utils/DevelopmentLogger'
 
 class AccessibilityPayloadHandler implements RulePayloadHandler {
     handlesPayloadType(): PayloadType {
         return PayloadType.ACCESSIBILITY
     }
-    executePayload(payload: AccessibilityPayload): AccessibilityPayloadResult {
-        logger.debug(() => `Evaluated '${payload.type}'. The field is set to be disabled.`)
+    executePayload(rule: Rule): AccessibilityPayloadResult {
+        const payload = rule.payload as AccessibilityPayload
 
         return {
             type: PayloadResultType.ACCESSIBILITY,
             accessible: payload.accessible,
         }
+    }
+
+    describePayloadResult(payloadResult: AccessibilityPayloadResult): string {
+        return payloadResult.accessible ? 'The field is not set to be disabled.' : 'The field is set to be disabled.'
     }
 }
 

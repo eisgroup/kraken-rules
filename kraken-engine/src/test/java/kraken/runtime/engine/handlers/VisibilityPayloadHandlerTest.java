@@ -36,7 +36,6 @@ public class VisibilityPayloadHandlerTest {
                 .notVisible()
                 .build();
         VisibilityPayloadResult payloadResult = (VisibilityPayloadResult) visibilityPayloadHandler.executePayload(
-                rule.getPayload(),
                 rule,
                 new DataContext(),
                 SESSION

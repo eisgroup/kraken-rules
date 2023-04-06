@@ -27,6 +27,7 @@ import org.junit.Test;
 import static kraken.model.dsl.KrakenDSLModelParser.parseResource;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.hamcrest.core.IsCollectionContaining.hasItems;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -229,9 +230,27 @@ public class KrakenModelDSLParserContextTest {
                 "Integer notExternalPrimitive" +
                 "}}");
         ContextDefinition contextDefinition = model.getContextDefinitions().get(0);
-        assertThat(contextDefinition.getContextFields().get("externalPrimitive").isExternal(), is(true));
-        assertThat(contextDefinition.getContextFields().get("externalComplex").isExternal(), is(true));
-        assertThat(contextDefinition.getContextFields().get("notExternalComplex").isExternal(), is(false));
-        assertThat(contextDefinition.getContextFields().get("notExternalPrimitive").isExternal(), is(false));
+        assertThat(contextDefinition.getContextFields().get("externalPrimitive").getForbidTarget(), is(true));
+        assertThat(contextDefinition.getContextFields().get("externalComplex").getForbidTarget(), is(true));
+        assertThat(contextDefinition.getContextFields().get("notExternalComplex").getForbidTarget(), nullValue());
+        assertThat(contextDefinition.getContextFields().get("notExternalPrimitive").getForbidTarget(), nullValue());
+    }
+
+    @Test
+    public void shouldParseForbiddenAsTargetContextField() {
+        Resource model = parseResource("Contexts{" +
+            "Context Policy {" +
+            "@ForbidTarget @ForbidReference String field " +
+            "@ForbidReference Child Coverage : coverage " +
+            "Child AnotherCoverage : anotherCoverage " +
+            "String regularField " +
+            "}}");
+        ContextDefinition contextDefinition = model.getContextDefinitions().get(0);
+        assertThat(contextDefinition.getContextFields().get("field").getForbidTarget(), is(true));
+        assertThat(contextDefinition.getContextFields().get("field").getForbidReference(), is(true));
+        assertThat(contextDefinition.getContextFields().get("regularField").getForbidTarget(), nullValue());
+        assertThat(contextDefinition.getContextFields().get("regularField").getForbidReference(), nullValue());
+        assertThat(contextDefinition.getChildren().get("Coverage").getForbidReference(), is(true));
+        assertThat(contextDefinition.getChildren().get("AnotherCoverage").getForbidReference(), nullValue());
     }
 }

@@ -15,6 +15,9 @@
  */
 package kraken.runtime.engine.handlers;
 
+import static kraken.runtime.engine.handlers.PayloadHandlerUtils.convertToString;
+import static kraken.runtime.engine.handlers.PayloadHandlerUtils.isEmptyValue;
+
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -22,18 +25,13 @@ import kraken.model.payload.PayloadType;
 import kraken.runtime.EvaluationSession;
 import kraken.runtime.engine.RulePayloadHandler;
 import kraken.runtime.engine.context.data.DataContext;
-import kraken.runtime.engine.handlers.trace.RegExpPayloadEvaluatedOperation;
+import kraken.runtime.engine.handlers.trace.FieldValueValidationOperation;
 import kraken.runtime.engine.result.PayloadResult;
 import kraken.runtime.engine.result.RegExpPayloadResult;
 import kraken.runtime.expressions.KrakenExpressionEvaluator;
 import kraken.runtime.model.rule.RuntimeRule;
-import kraken.runtime.model.rule.payload.Payload;
 import kraken.runtime.model.rule.payload.validation.RegExpPayload;
 import kraken.tracer.Tracer;
-
-import static kraken.runtime.engine.handlers.PayloadHandlerUtils.convertToString;
-import static kraken.runtime.engine.handlers.PayloadHandlerUtils.isEmptyValue;
-import static kraken.runtime.utils.TargetPathUtils.resolveTargetPath;
 
 /**
  * Payload handler implementation to process {@link RegExpPayload}s
@@ -50,17 +48,15 @@ public class RegExpPayloadHandler implements RulePayloadHandler {
     }
 
     @Override
-    public PayloadResult executePayload(Payload payload, RuntimeRule rule, DataContext dataContext, EvaluationSession session) {
-        RegExpPayload regExpPayload = (RegExpPayload) payload;
+    public PayloadResult executePayload(RuntimeRule rule, DataContext dataContext, EvaluationSession session) {
+        var payload = (RegExpPayload) rule.getPayload();
 
-        String path = resolveTargetPath(rule, dataContext);
-        Object value = evaluator.evaluateGetProperty(path, dataContext.getDataObject());
+        var value = evaluator.evaluateTargetField(rule.getTargetPath(), dataContext);
+        Tracer.doOperation(new FieldValueValidationOperation(value));
+        boolean valid = isEmptyValue(value) || Pattern.matches(payload.getRegExp(), convertToString(value));
 
-        boolean valid = isEmptyValue(value) || Pattern.matches(regExpPayload.getRegExp(), convertToString(value));
-        List<String> templateVariables = evaluator.evaluateTemplateVariables(regExpPayload.getErrorMessage(), dataContext, session);
-
-        Tracer.doOperation(new RegExpPayloadEvaluatedOperation(regExpPayload, value, valid));
-        return new RegExpPayloadResult(valid, regExpPayload, templateVariables);
+        List<String> templateVariables = evaluator.evaluateTemplateVariables(payload.getErrorMessage(), dataContext, session);
+        return new RegExpPayloadResult(valid, payload, templateVariables);
     }
 
     @Override
@@ -68,4 +64,11 @@ public class RegExpPayloadHandler implements RulePayloadHandler {
         return PayloadType.REGEX;
     }
 
+    @Override
+    public String describePayloadResult(PayloadResult payloadResult) {
+        var result = (RegExpPayloadResult) payloadResult;
+        return result.getSuccess()
+            ? String.format("Field is valid. String value matches regular expression %s.", result.getRegExp())
+            : String.format("Field is not valid. String value does not match regular expression %s.", result.getRegExp());
+    }
 }

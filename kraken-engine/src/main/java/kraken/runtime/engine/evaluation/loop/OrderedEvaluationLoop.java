@@ -29,6 +29,7 @@ import kraken.runtime.EvaluationSession;
 import kraken.runtime.KrakenRuntimeException;
 import kraken.runtime.engine.EntryPointResult;
 import kraken.runtime.engine.RulePayloadProcessor;
+import kraken.runtime.engine.context.ContextData;
 import kraken.runtime.engine.context.ContextDataProvider;
 import kraken.runtime.engine.context.data.DataContext;
 import kraken.runtime.engine.core.EntryPointEvaluation;
@@ -104,7 +105,7 @@ public class OrderedEvaluationLoop implements EvaluationLoop {
                                                                 ContextDataProvider contextDataProvider,
                                                                 EvaluationSession session) {
         List<RuleOnInstanceEvaluationResult> allResults = new ArrayList<>();
-        for(var context : resolveContexts(rule, contextDataProvider)) {
+        for(var context : resolveContextData(rule, contextDataProvider).getAllowedContexts()) {
             var evaluation = new RuleEvaluationInstance(session.getNamespace(), rule, context);
             var result = evaluateRulePayload(evaluation, session, false);
             allResults.add(result);
@@ -156,7 +157,7 @@ public class OrderedEvaluationLoop implements EvaluationLoop {
                                                                          EvaluationSession session) {
         var defaultRuleEvaluations = new HashMap<String, FieldEvaluation>();
         for(var rule : defaultRules) {
-            for(var context : resolveContexts(rule, contextDataProvider)) {
+            for(var context : resolveContextData(rule, contextDataProvider).getAllowedContexts()) {
                 var field = context.getContextName() + "." + rule.getTargetPath();
                 var instance = new RuleEvaluationInstance(session.getNamespace(), rule, context);
                 defaultRuleEvaluations.computeIfAbsent(field, FieldEvaluation::new);
@@ -188,10 +189,10 @@ public class OrderedEvaluationLoop implements EvaluationLoop {
         return results;
     }
 
-    private List<DataContext> resolveContexts(RuntimeRule rule, ContextDataProvider contextDataProvider) {
+    private ContextData resolveContextData(RuntimeRule rule, ContextDataProvider contextDataProvider) {
         return Tracer.doOperation(
             new ContextResolutionOperation(rule),
-            () -> contextDataProvider.resolveContextData(rule.getContext(), rule.getDependencies())
+            () -> contextDataProvider.resolveContextData(rule)
         );
     }
 
@@ -419,7 +420,7 @@ public class OrderedEvaluationLoop implements EvaluationLoop {
         }
     }
 
-    public static class ContextResolutionOperation implements Operation<List<DataContext>> {
+    public static class ContextResolutionOperation implements Operation<ContextData> {
 
         private final RuntimeRule rule;
 
@@ -428,25 +429,35 @@ public class OrderedEvaluationLoop implements EvaluationLoop {
         }
 
         @Override
-        public String describe() {
-            return "";
-        }
+        public String describeAfter(ContextData contextData) {
+            var allowedContexts = contextData.getAllowedContexts();
+            var message = String.format(
+                "Resolved %s data context(s) for rule '%s' target '%s'",
+                allowedContexts.size(),
+                rule.getName(),
+                rule.getContext()
+            );
+            if(!allowedContexts.isEmpty()) {
+                message += ":" + System.lineSeparator() + describe(allowedContexts);
+            }
 
-        @Override
-        public String describeAfter(List<DataContext> contexts) {
-            var template = "Resolved %s data context(s) for rule '%s' target '%s':"
-                + System.lineSeparator() + "%s.";
-            var templateNoContexts = "Resolved 0 data context(s) for rule '%s' target '%s'. ";
+            var forbiddenContexts = contextData.getForbiddenContexts();
+            if(!forbiddenContexts.isEmpty()) {
+                message += System.lineSeparator()
+                    + String.format(
+                    "Found %s forbidden context(s). Rule will not be executed on those contexts:",
+                    forbiddenContexts.size())
+                    + System.lineSeparator()
+                    + describe(forbiddenContexts);
+            }
 
-            return contexts.isEmpty()
-                ? String.format(templateNoContexts, rule.getName(), rule.getContext())
-                : String.format(template, contexts.size(), rule.getName(), rule.getContext(), describe(contexts));
+            return message;
         }
 
         private String describe(List<DataContext> contexts) {
             return contexts.stream()
                 .map(dataContext -> dataContext.getContextName() + ":" + dataContext.getContextId())
-                .collect(Collectors.joining("," + System.lineSeparator()));
+                .collect(Collectors.joining(System.lineSeparator()));
         }
 
     }

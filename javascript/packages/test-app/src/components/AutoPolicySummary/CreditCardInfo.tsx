@@ -23,7 +23,7 @@ import { InnerInputsComponentProps, SingleField, ManyFields } from '../core/fiel
 import { trans } from '../core/DateUtils'
 import { renderers } from '../core/RenderInputFunctions'
 
-import { BillingAddress } from './BillingAddres'
+import { BillingAddress } from './BillingAddress'
 
 import { TestProduct } from 'kraken-test-product'
 import domain = TestProduct.kraken.testproduct.domain
