@@ -1,3 +1,75 @@
+kraken.engine.sanity.check.EngineSanityFunctionsTest.shouldExecuteFromMoneyFunctionAndFailAssertions=[
+  {
+    "CreditCardInfo:-1:cardCreditLimitAmount": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "CreditCardInfo",
+        "fieldName": "cardCreditLimitAmount",
+        "fieldPath": "cardCreditLimitAmount"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "f-fromMoney-explicit-usage",
+            "context": "CreditCardInfo",
+            "targetPath": "cardCreditLimitAmount",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": false,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          },
+          "ruleEvaluationStatus": "APPLIED"
+        }
+      ]
+    }
+  }
+]
+
+
+kraken.engine.sanity.check.EngineSanityFunctionsTest.shouldExecuteFromMoneyFunctionAndPassAssertions=[
+  {
+    "CreditCardInfo:-1:cardCreditLimitAmount": {
+      "contextFieldInfo": {
+        "contextId": "-1",
+        "contextName": "CreditCardInfo",
+        "fieldName": "cardCreditLimitAmount",
+        "fieldPath": "cardCreditLimitAmount"
+      },
+      "ruleResults": [
+        {
+          "ruleInfo": {
+            "ruleName": "f-fromMoney-explicit-usage",
+            "context": "CreditCardInfo",
+            "targetPath": "cardCreditLimitAmount",
+            "payloadType": "ASSERTION"
+          },
+          "payloadResult": {
+            "success": true,
+            "templateVariables": [],
+            "validationSeverity": "critical"
+          },
+          "conditionEvaluationResult": {
+            "conditionEvaluation": "APPLICABLE"
+          },
+          "overrideInfo": {
+            "isOverridable": false
+          },
+          "ruleEvaluationStatus": "APPLIED"
+        }
+      ]
+    }
+  }
+]
+
+
 kraken.engine.sanity.check.EngineSanityFunctionsTest.shouldExecuteFunctionAssertsOnPolicy=[
   {
     "Policy:-1:policyNumber": {

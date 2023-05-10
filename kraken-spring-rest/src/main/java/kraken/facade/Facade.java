@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,7 +43,6 @@ import kraken.model.project.KrakenProject;
 import kraken.model.project.repository.KrakenProjectRepository;
 import kraken.model.project.scope.ScopeBuilder;
 import kraken.model.project.scope.ScopeBuilderProvider;
-import kraken.runtime.engine.dto.bundle.EntryPointBundle;
 import kraken.runtime.engine.dto.bundle.EntryPointBundleFactory;
 import kraken.testproduct.TestProduct;
 import kraken.utils.GsonUtils;
@@ -74,17 +72,19 @@ public class Facade {
             @RequestBody BundleRequest request,
             @PathVariable("entrypoint") String entrypoint
     ) {
-        final EntryPointBundle bundle = entryPointBundleFactory.build(
+        var bundle = entryPointBundleFactory.build(
                 TestProduct.toEntryPointName(entrypoint),
                 Optional.ofNullable(request.getDimensions()).orElse(new HashMap<>()),
-                Optional.ofNullable(request.getExcludes())
-                    .map(excludes -> excludes.stream()
-                        .map(DimensionSet::createForDimensions)
-                        .collect(Collectors.toSet()))
-                    .orElse(Set.of()),
                 EvaluationMode.ALL
         );
-        return GsonUtils.prettyGson().toJson(bundle);
+
+        var dimensionSets = Optional.ofNullable(request.getExcludes())
+            .map(excludes -> excludes.stream()
+                .map(DimensionSet::createForDimensions)
+                .collect(Collectors.toSet()))
+            .orElse(Set.of());
+
+        return GsonUtils.prettyGson().toJson(bundle.withoutRulesExcludedBy(dimensionSets));
     }
 
     @Operation(summary = "Get EntryPoint by name")

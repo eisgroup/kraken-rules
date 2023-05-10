@@ -15,11 +15,8 @@
  */
 package kraken.runtime.engine.dto.bundle.trace;
 
-import java.util.Collections;
-import java.util.Set;
 import java.util.stream.Collectors;
 
-import kraken.dimensions.DimensionSet;
 import kraken.runtime.engine.dto.bundle.EntryPointBundle;
 import kraken.runtime.model.rule.RuntimeRule;
 import kraken.tracer.Operation;
@@ -30,26 +27,14 @@ import kraken.tracer.Operation;
 public class EntryPointBundleBuildOperation implements Operation<EntryPointBundle> {
 
     private final String entryPointName;
-    private final Set<DimensionSet> excludes;
 
-    public EntryPointBundleBuildOperation(String entryPointName, Set<DimensionSet> excludes) {
+    public EntryPointBundleBuildOperation(String entryPointName) {
         this.entryPointName = entryPointName;
-        this.excludes = excludes;
     }
 
     @Override
     public String describe() {
-        StringBuilder message = new StringBuilder("Collecting rules for entry point '" + entryPointName + "'");
-
-        if (!excludes.isEmpty()) {
-            message.append(". Rules that vary by these dimension sets will be excluded from entry point bundle: ");
-
-            for (DimensionSet set : excludes) {
-                message.append(set.toString());
-            }
-        }
-
-        return message.toString();
+        return "Collecting rules for entry point '" + entryPointName + "'";
     }
 
     @Override

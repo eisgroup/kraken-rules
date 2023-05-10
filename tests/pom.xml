@@ -8,7 +8,7 @@
     <parent>
         <groupId>kraken</groupId>
         <artifactId>parent-pom</artifactId>
-        <version>1.47.0-SNAPSHOT</version>
+        <version>1.47.1</version>
     </parent>
 
     <artifactId>tests</artifactId>

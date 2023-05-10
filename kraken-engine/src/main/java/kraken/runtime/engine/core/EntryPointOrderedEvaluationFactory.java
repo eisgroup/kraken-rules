@@ -15,6 +15,7 @@
  */
 package kraken.runtime.engine.core;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -45,17 +46,13 @@ public class EntryPointOrderedEvaluationFactory {
     }
 
     /**
-     * Creates {@link EntryPointEvaluation} with rules filtered by excludes and field evaluation order for default rules
+     * Creates {@link EntryPointEvaluation} with rules and field evaluation order for default rules
      *
      * @param entryPointData with rules
-     * @param excludes indicates rules to exclude by dimension set.
-     *                 If rule varies by at least one of the exclusion then such rule is not included in the bundle
      * @return entry point evaluation with rules and field order
      */
-    public EntryPointEvaluation create(EntryPointData entryPointData, Set<DimensionSet> excludes) {
-        List<RuntimeRule> rules = entryPointData.getIncludedRules().values().stream()
-            .filter(rule -> !excludes.contains(rule.getDimensionSet()))
-            .collect(Collectors.toList());
+    public EntryPointEvaluation create(EntryPointData entryPointData) {
+        List<RuntimeRule> rules = new ArrayList<>(entryPointData.getIncludedRules().values());
         List<String> fieldOrder = calculateFieldOrder(entryPointData);
         return new EntryPointEvaluation(entryPointData.getEntryPoint(), rules, fieldOrder);
     }

@@ -197,4 +197,32 @@ describe('Engine Functions Sanity Test', () => {
         expect(results).k_toHaveExpressionsFailures(0)
         expect(policy.transactionDetails!.totalLimit).toBe(200)
     })
+    it('should execute from money and pass assertions', () => {
+        const policy = empty()
+        policy.billingInfo!.creditCardInfo!.cardCreditLimitAmount = {
+            amount: 100,
+            currency: 'USD',
+        }
+
+        const results = sanityEngine.evaluate(policy, 'FunctionCheck-FromMoney')
+        const fieldResults = new FieldMetadataReducer().reduce(results)
+
+        expect(results).k_toMatchResultsStats({ total: 1, critical: 0, warning: 0, info: 0 })
+        expect(results).k_toHaveExpressionsFailures(0)
+        expect({ entryPointResults: results, fieldResults }).k_toMatchResultsSnapshots()
+    })
+    it('should execute from money and fail assertions', () => {
+        const policy = empty()
+        policy.billingInfo!.creditCardInfo!.cardCreditLimitAmount = {
+            amount: 101,
+            currency: 'USD',
+        }
+
+        const results = sanityEngine.evaluate(policy, 'FunctionCheck-FromMoney')
+        const fieldResults = new FieldMetadataReducer().reduce(results)
+
+        expect(results).k_toMatchResultsStats({ total: 1, critical: 1, warning: 0, info: 0 })
+        expect(results).k_toHaveExpressionsFailures(0)
+        expect({ entryPointResults: results, fieldResults }).k_toMatchResultsSnapshots()
+    })
 })

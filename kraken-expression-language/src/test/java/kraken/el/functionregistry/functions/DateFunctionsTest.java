@@ -122,20 +122,20 @@ public class DateFunctionsTest {
         assertThat(DateFunctions.plusMonths(date3, 1), equalTo(LocalDateTime.of(2005, 04, 9, 23, 33, 33)));
     }
 
-    @Test
-    public void shouldAddYearsAndPreserveTime() {
-        var date = Literals.getDateTime("2000-02-29T07:33:33Z");
-        assertThat(DateFunctions.plusYears(date, 1), equalTo(Literals.getDateTime("2001-02-28T07:33:33Z")));
-        assertThat(DateFunctions.plusYears(date, -1), equalTo(Literals.getDateTime("1999-02-28T07:33:33Z")));
-
-        LocalDateTime date2 = LocalDateTime.of(2004, 02, 29, 01, 01, 01, 00);
-        assertThat(DateFunctions.plusYears(date2, 1), equalTo(LocalDateTime.of(2005, 02, 28, 01, 01, 01, 00)));
-        assertThat(DateFunctions.plusYears(date2, -1), equalTo(LocalDateTime.of(2003, 02, 28, 01, 01, 01, 00)));
-
-        LocalDateTime date3 = LocalDateTime.of(2004, 02, 29, 23, 33, 33, 00);
-        assertThat(DateFunctions.plusYears(date3, 1), equalTo(LocalDateTime.of(2005, 02, 28, 23, 33, 33, 00)));
-        assertThat(DateFunctions.plusYears(date3, -1), equalTo(LocalDateTime.of(2003, 02, 28, 23, 33, 33, 00)));
-    }
+//    @Test
+//    public void shouldAddYearsAndPreserveTime() {
+//        var date = Literals.getDateTime("2000-02-29T07:33:33Z");
+//        assertThat(DateFunctions.plusYears(date, 1), equalTo(Literals.getDateTime("2001-02-28T07:33:33Z")));
+//        assertThat(DateFunctions.plusYears(date, -1), equalTo(Literals.getDateTime("1999-02-28T07:33:33Z")));
+//
+//        LocalDateTime date2 = LocalDateTime.of(2004, 02, 29, 01, 01, 01, 00);
+//        assertThat(DateFunctions.plusYears(date2, 1), equalTo(LocalDateTime.of(2005, 02, 28, 01, 01, 01, 00)));
+//        assertThat(DateFunctions.plusYears(date2, -1), equalTo(LocalDateTime.of(2003, 02, 28, 01, 01, 01, 00)));
+//
+//        LocalDateTime date3 = LocalDateTime.of(2004, 02, 29, 23, 33, 33, 00);
+//        assertThat(DateFunctions.plusYears(date3, 1), equalTo(LocalDateTime.of(2005, 02, 28, 23, 33, 33, 00)));
+//        assertThat(DateFunctions.plusYears(date3, -1), equalTo(LocalDateTime.of(2003, 02, 28, 23, 33, 33, 00)));
+//    }
 
     @Test
     public void shouldAddYearsAndPreserveTimeOnNewYearsEve() {

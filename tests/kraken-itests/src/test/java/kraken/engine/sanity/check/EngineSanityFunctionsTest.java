@@ -210,4 +210,35 @@ public class EngineSanityFunctionsTest extends SanityEngineBaseTest {
         assertThat(result, hasRuleResults(2));
         assertThat(policy.getTransactionDetails().getTotalLimit(), equalTo(new BigDecimal(200)));
     }
+
+    @Test
+    public void shouldExecuteFromMoneyFunctionAndPassAssertions() {
+        Policy policy = new Policy();
+        CreditCardInfo creditCardInfo = new CreditCardInfo();
+        creditCardInfo.setCardCreditLimitAmount(Money.of(100, "USD"));
+        policy.setBillingInfo(new BillingInfo("ACC", creditCardInfo));
+
+        EntryPointResult result = engine.evaluate(policy, "FunctionCheck-FromMoney");
+
+        assertThat(result, hasNoIgnoredRules());
+        assertThat(result, hasNoValidationFailures());
+        assertThat(result, hasRuleResults(1));
+        assertThat(result, matchesSnapshot());
+    }
+
+    @Test
+    public void shouldExecuteFromMoneyFunctionAndFailAssertions() {
+        Policy policy = new Policy();
+        CreditCardInfo creditCardInfo = new CreditCardInfo();
+        creditCardInfo.setCardCreditLimitAmount(Money.of(99, "USD"));
+        policy.setBillingInfo(new BillingInfo("ACC", creditCardInfo));
+
+        EntryPointResult result = engine.evaluate(policy, "FunctionCheck-FromMoney");
+
+        assertThat(result, hasNoIgnoredRules());
+        assertThat(result, hasRuleResults(1));
+        assertThat(result, hasValidationFailures(1));
+        assertThat(result, matchesSnapshot());
+    }
+
 }
