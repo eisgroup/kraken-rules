@@ -1,6 +1,6 @@
 {
     "name": "kraken-expression-language",
-    "version": "1.46.0",
+    "version": "1.47.2-stage.0",
     "main": "./target/dist/js/src/index.js",
     "types": "./target/dist/definitions/src/index.d.ts",
     "publishConfig": {
@@ -8,9 +8,9 @@
     },
     "typedocMain": "src/index.ts",
     "dependencies": {
+        "bignumber.js": "9.0.1",
         "fast-levenshtein": "3.0.0",
-        "kraken-expression-language-visitor": "1.46.0",
-        "bignumber.js": "9.0.1"
+        "kraken-expression-language-visitor": "1.47.2-stage.0"
     },
     "devDependencies": {
         "@types/fast-levenshtein": "0.0.2",
@@ -41,5 +41,6 @@
     "files": [
         "target/dist/definitions",
         "target/dist/js"
-    ]
+    ],
+    "gitHead": "e0a70c3ae821b768a1706c1afff4e77bfa5886e5"
 }

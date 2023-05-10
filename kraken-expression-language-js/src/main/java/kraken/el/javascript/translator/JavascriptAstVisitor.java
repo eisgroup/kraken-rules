@@ -18,6 +18,7 @@ package kraken.el.javascript.translator;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -429,13 +430,6 @@ public class JavascriptAstVisitor extends QueuedAstVisitor<String> {
         return "__dataObject__";
     }
 
-    private String wrapIfMoney(String string, Expression expression) {
-        if(expression.getEvaluationType() == Type.MONEY) {
-            return f("FromMoney(" + string + ")");
-        }
-        return string;
-    }
-
     @Override
     public String visit(If anIf) {
         String conditionString = coerceBoolean(anIf.getCondition());
@@ -509,6 +503,27 @@ public class JavascriptAstVisitor extends QueuedAstVisitor<String> {
 
     private boolean isReference(Expression expression) {
         return expression instanceof ReferenceValue;
+    }
+
+    private String wrapIfMoney(String string, Expression expression) {
+        if (expression.getEvaluationType() == Type.MONEY) {
+            Iterator<Expression> nodeIterator = astNodeQueue.iterator();
+            nodeIterator.next(); // last is expression in the parameters
+            Expression previousNode = null;
+
+            if (nodeIterator.hasNext()) {
+                previousNode = nodeIterator.next();
+            }
+
+            boolean alreadyWrapped = previousNode instanceof Function
+                && ((Function) previousNode).getFunctionName().equals("FromMoney");
+
+            if (!alreadyWrapped) {
+                return f("FromMoney(" + string + ")");
+            }
+        }
+
+        return string;
     }
 
     private String f(String functionCall) {

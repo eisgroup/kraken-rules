@@ -15,9 +15,12 @@
  */
 package kraken.runtime.engine.dto.bundle;
 
+import kraken.dimensions.DimensionSet;
 import kraken.runtime.engine.core.EntryPointEvaluation;
 
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * DTO for expressionContext definitions, that need to be accessed in process of
@@ -63,5 +66,28 @@ public class EntryPointBundle {
 
     public String getEngineVersion() {
         return engineVersion;
+    }
+
+    /**
+     * Rebuilds and returns a new instance of {@link EntryPointBundle} without rules that are excluded by dimension sets.
+     * This allows to reduce the size of the bundle and return only those rules that are missing in the target
+     * environment.
+     *
+     * @param dimensionSets dimension sets that indicate rules that are already present in the target environment
+     *                      and therefore should not be in the bundle.
+     * @return a new instance of {@link EntryPointBundle}
+     */
+    public EntryPointBundle withoutRulesExcludedBy(Set<DimensionSet> dimensionSets) {
+        return new EntryPointBundle(
+            new EntryPointEvaluation(
+                evaluation.getEntryPointName(),
+                evaluation.getRules().stream()
+                    .filter(r -> !dimensionSets.contains(r.getDimensionSet()))
+                    .collect(Collectors.toList()),
+                evaluation.getFieldOrder()
+            ),
+            expressionContext,
+            engineVersion
+        );
     }
 }

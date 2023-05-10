@@ -1,6 +1,6 @@
 {
     "name": "kraken-model",
-    "version": "1.46.0",
+    "version": "1.47.2-stage.0",
     "description": "Kraken model types",
     "main": "./target/dist/js/src/index.js",
     "types": "./target/dist/definitions/src/index.d.ts",
@@ -32,5 +32,5 @@
         "target/dist/definitions",
         "target/dist/js"
     ],
-    "gitHead": "062c5a631397863ca184c6a9bd65a50f279433e5"
+    "gitHead": "e0a70c3ae821b768a1706c1afff4e77bfa5886e5"
 }
