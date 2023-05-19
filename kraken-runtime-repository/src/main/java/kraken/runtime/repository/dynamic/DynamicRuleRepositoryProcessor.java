@@ -15,7 +15,6 @@
  */
 package kraken.runtime.repository.dynamic;
 
-import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -31,9 +30,11 @@ import org.slf4j.LoggerFactory;
 
 import kraken.converter.RuleConverter;
 import kraken.model.Rule;
+import kraken.model.entrypoint.EntryPoint;
 import kraken.model.project.KrakenProject;
 import kraken.model.project.exception.KrakenProjectValidationException;
 import kraken.model.project.validator.KrakenProjectValidationService;
+import kraken.model.project.validator.ValidationMessage;
 import kraken.model.project.validator.ValidationResult;
 import kraken.namespace.Namespaced;
 import kraken.runtime.model.rule.RuntimeRule;
@@ -93,7 +94,7 @@ public class DynamicRuleRepositoryProcessor {
         return Tracer.doOperation(
                 new QueryingDynamicRulesOperation(dynamicRuleRepository.getClass().getSimpleName()),
                 () -> dynamicRuleRepository.resolveDynamicRules(krakenProject.getNamespace(), entryPoint, context)
-                    .map(this::convertOrReadFromCache)
+                    .map(dynamicRuleHolder -> convertOrReadFromCache(dynamicRuleHolder, entryPoint))
                     .collect(Collectors.groupingBy(RuntimeRule::getName))
             )
             .values()
@@ -112,8 +113,10 @@ public class DynamicRuleRepositoryProcessor {
             : dimensionFilteringService.filterRules(krakenProject.getNamespace(), rules, context).orElse(null);
     }
 
-    private RuntimeRule convertOrReadFromCache(DynamicRuleHolder dynamicRuleHolder) {
+    private RuntimeRule convertOrReadFromCache(DynamicRuleHolder dynamicRuleHolder, String entryPointName) {
         var rule = dynamicRuleHolder.getRule();
+        validateServerSideOnly(rule, entryPointName);
+
         if(rule.getRuleVariationId() == null) {
             logger.warn("Dynamic Rule '{}' does not have ruleVariationId defined. " +
                     "Validation and caching will be skipped for this rule.", rule.getName());
@@ -137,13 +140,46 @@ public class DynamicRuleRepositoryProcessor {
         ValidationResult validationResult = krakenProjectValidationService.validateDynamicRule(rule, krakenProject);
         validationResult.logMessages(logger);
         if(!validationResult.getErrors().isEmpty()) {
-            String namespaceName = krakenProject.getNamespace().equals(Namespaced.GLOBAL) ? "GLOBAL" : krakenProject.getNamespace();
-            String pattern = "Dynamic Rule ''{0}'' is not valid for KrakenProject in namespace ''{1}''. Validation errors:\n{2}";
-            String validationErrors = validationResult.getErrors().stream()
-                    .map(error -> error.toString())
-                    .collect(Collectors.joining(System.lineSeparator()));
-            String message = MessageFormat.format(pattern, rule.getName(), namespaceName, validationErrors);
-            throw new KrakenProjectValidationException(message);
+            throw new KrakenProjectValidationException(createMessage(
+                rule,
+                validationResult.getErrors().stream()
+                    .map(ValidationMessage::toString)
+                    .collect(Collectors.joining(System.lineSeparator()))
+            ));
         }
     }
+
+    private void validateServerSideOnly(Rule rule, String entryPointName) {
+        if (rule.isServerSideOnly() && !isEveryEntryPointVersionServerSideOnly(entryPointName)) {
+            throw new KrakenProjectValidationException(
+                createMessage(rule,
+                    String.format(
+                        "Rule marked as @ServerSideOnly included into an entry point '%s' not annotated as @ServerSideOnly",
+                        entryPointName)
+                )
+            );
+
+        }
+    }
+
+    private boolean isEveryEntryPointVersionServerSideOnly(String entryPointName) {
+        List<EntryPoint> definedEntryPointVersions = krakenProject.getEntryPointVersions().get(entryPointName);
+
+        return definedEntryPointVersions != null
+            && definedEntryPointVersions.stream().allMatch(EntryPoint::isServerSideOnly);
+    }
+
+    private String createMessage(Rule rule, String validationErrors) {
+        String namespaceName = krakenProject.getNamespace().equals(Namespaced.GLOBAL)
+            ? "GLOBAL"
+            : krakenProject.getNamespace();
+
+        return String.format(
+            "Dynamic Rule ''%s'' is not valid for KrakenProject in namespace ''%s''. Validation errors:\n%s",
+            rule.getName(),
+            namespaceName,
+            validationErrors
+        );
+    }
+
 }

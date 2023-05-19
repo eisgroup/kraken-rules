@@ -92,4 +92,5 @@ export type EntryPointName = "ForRestrictionCache"
 	| "ValueListPayload" 
 	| "NumberSet" 
 	| "ForbiddenField" 
-	| "TracerSnapshotTest";
+	| "TracerSnapshotTest" 
+	| "DefaultCollectionOfPrimitives";

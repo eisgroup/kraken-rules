@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import kraken.model.Condition;
+import kraken.model.Dimension;
 import kraken.model.ErrorMessage;
 import kraken.model.Expression;
 import kraken.model.Function;
@@ -92,7 +93,8 @@ public class RulesModelFactoryTest {
         FunctionDocumentation.class,
         FunctionExample.class,
         ParameterDocumentation.class,
-        ValueListPayload.class
+        ValueListPayload.class,
+        Dimension.class
     );
 
     @Test

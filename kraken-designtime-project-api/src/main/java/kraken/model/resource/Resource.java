@@ -17,7 +17,6 @@ package kraken.model.resource;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -26,6 +25,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import kraken.annotations.API;
+import kraken.model.Dimension;
 import kraken.model.Function;
 import kraken.model.FunctionSignature;
 import kraken.model.Rule;
@@ -35,7 +35,6 @@ import kraken.model.context.external.ExternalContextDefinition;
 import kraken.model.entrypoint.EntryPoint;
 import kraken.model.factory.RulesModelFactory;
 import kraken.namespace.Namespaced;
-import kraken.utils.ResourceUtils;
 
 /**
  * Represents a bunch of {@link Rule}, {@link EntryPoint}, {@link ContextDefinition}, {@link ExternalContext}
@@ -66,7 +65,51 @@ public final class Resource {
 
     private final List<Function> functions;
 
+    private final List<Dimension> dimensions;
+
     private final URI uri;
+
+    /**
+     * Creates a new instance of {@code Resource} with given arguments.
+     *
+     * @param namespace                  Namespace which uniquely identifies this resource.
+     * @param contextDefinitions         Context definitions applicable for this resource.
+     * @param entryPoints                Entry points applicable fot this resource.
+     * @param rules                      Rules applicable for this resource.
+     * @param includes                   Includes applicable for this resource.
+     * @param ruleImports                Rule import applicable for this resource.
+     * @param externalContext            External context bound to this resource.
+     * @param externalContextDefinitions ContextDefinition for external context.
+     * @param functionSignatures         A list of function signatures that the rules can use from this namespace.
+     * @param functions                  A list of functions implemented in this resource.
+     * @param dimensions                 A list of dimensions implemented in this resource.
+     * @param uri                        Identifies a resource.
+     */
+    public Resource(String namespace,
+                    @Nonnull List<ContextDefinition> contextDefinitions,
+                    @Nonnull List<EntryPoint> entryPoints,
+                    @Nonnull List<Rule> rules,
+                    @Nonnull List<String> includes,
+                    @Nonnull List<RuleImport> ruleImports,
+                    ExternalContext externalContext,
+                    @Nonnull List<ExternalContextDefinition> externalContextDefinitions,
+                    @Nonnull List<FunctionSignature> functionSignatures,
+                    @Nonnull List<Function> functions,
+                    @Nonnull List<Dimension> dimensions,
+                    @Nonnull URI uri) {
+        this.namespace = namespace == null ? Namespaced.GLOBAL : namespace;
+        this.externalContext = externalContext;
+        this.externalContextDefinitions = Objects.requireNonNull(externalContextDefinitions);
+        this.contextDefinitions = Objects.requireNonNull(contextDefinitions);
+        this.entryPoints = Objects.requireNonNull(entryPoints);
+        this.rules = Objects.requireNonNull(rules);
+        this.includes = Objects.requireNonNull(includes);
+        this.ruleImports = Objects.requireNonNull(ruleImports);
+        this.functionSignatures = Objects.requireNonNull(functionSignatures);
+        this.functions = Objects.requireNonNull(functions);
+        this.dimensions = Objects.requireNonNull(dimensions);
+        this.uri = Objects.requireNonNull(uri);
+    }
 
     /**
      * Creates a new instance of {@code Resource} with given arguments.
@@ -83,6 +126,7 @@ public final class Resource {
      * @param functions                  A list of functions implemented in this resource
      * @param uri                        Identifies a resource.
      */
+    @Deprecated(since = "1.48.0", forRemoval = true)
     public Resource(String namespace,
                     @Nonnull List<ContextDefinition> contextDefinitions,
                     @Nonnull List<EntryPoint> entryPoints,
@@ -94,17 +138,20 @@ public final class Resource {
                     @Nonnull List<FunctionSignature> functionSignatures,
                     @Nonnull List<Function> functions,
                     @Nonnull URI uri) {
-        this.namespace = namespace == null ? Namespaced.GLOBAL : namespace;
-        this.externalContext = externalContext;
-        this.externalContextDefinitions = Objects.requireNonNull(externalContextDefinitions);
-        this.contextDefinitions = Objects.requireNonNull(contextDefinitions);
-        this.entryPoints = Objects.requireNonNull(entryPoints);
-        this.rules = Objects.requireNonNull(rules);
-        this.includes = Objects.requireNonNull(includes);
-        this.ruleImports = Objects.requireNonNull(ruleImports);
-        this.functionSignatures = Objects.requireNonNull(functionSignatures);
-        this.functions = Objects.requireNonNull(functions);
-        this.uri = Objects.requireNonNull(uri);
+        this(
+            namespace,
+            contextDefinitions,
+            entryPoints,
+            rules,
+            includes,
+            ruleImports,
+            externalContext,
+            externalContextDefinitions,
+            functionSignatures,
+            functions,
+            List.of(),
+            uri
+        );
     }
 
     /**
@@ -189,6 +236,10 @@ public final class Resource {
         return functions;
     }
 
+    public List<Dimension> getDimensions() {
+        return dimensions;
+    }
+
     public URI getUri() {
         return uri;
     }
@@ -213,6 +264,7 @@ public final class Resource {
             resource.externalContextDefinitions.stream().map(factory::cloneExternalContextDefinition).collect(Collectors.toList()),
             resource.functionSignatures.stream().map(factory::cloneFunctionSignature).collect(Collectors.toList()),
             resource.functions.stream().map(factory::cloneFunction).collect(Collectors.toList()),
+            resource.dimensions.stream().map(factory::cloneDimension).collect(Collectors.toList()),
             resource.uri
         );
     }

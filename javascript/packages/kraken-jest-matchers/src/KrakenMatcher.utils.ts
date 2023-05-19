@@ -14,8 +14,8 @@
  *  limitations under the License.
  */
 
-import { getLabelPrinter, matcherHint, printExpected, printReceived } from 'jest-matcher-utils'
-import MatcherHintOptions = jest.MatcherHintOptions
+import { getLabelPrinter, matcherHint, printExpected, printReceived, MatcherHintOptions } from 'jest-matcher-utils'
+
 import CustomMatcherResult = jest.CustomMatcherResult
 
 export namespace kraken {

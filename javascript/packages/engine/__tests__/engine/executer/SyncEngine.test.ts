@@ -20,11 +20,11 @@ import { registry } from '../../../src/engine/runtime/expressions/ExpressionEval
 import { PayloadBuilder, RulesBuilder } from 'kraken-model-builder'
 import { AssertionPayloadResult, RuleEvaluationResults } from 'kraken-engine-api'
 import { Payloads } from 'kraken-model'
-import UsageType = Payloads.Validation.UsageType
-import PayloadType = Payloads.PayloadType
 import { EvaluationMode } from '../../../src/engine/runtime/EvaluationMode'
 import { DimensionSetBundleCache } from '../../../src/bundle-cache/dimension-set-cache/DimensionSetBundleCache'
 import { EntryPointBundle, ExpressionContextManagerImpl } from '../../../src'
+import UsageType = Payloads.Validation.UsageType
+import PayloadType = Payloads.PayloadType
 
 let engine: SyncEngine
 
@@ -329,13 +329,15 @@ describe('SyncEngine', () => {
 
         const resultTypes = epResult.getApplicableResults().map(ruleResult => ruleResult.ruleInfo.payloadtype)
 
-        expect(resultTypes).toHaveLength(4)
+        expect(resultTypes).toHaveLength(6)
         expect(resultTypes).toEqual(
             expect.arrayContaining([
                 PayloadType.ACCESSIBILITY,
                 PayloadType.VISIBILITY,
                 PayloadType.DEFAULT,
                 PayloadType.USAGE,
+                PayloadType.SIZE,
+                PayloadType.SIZE_RANGE,
             ]),
         )
     })

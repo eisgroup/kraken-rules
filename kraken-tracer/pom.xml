@@ -7,7 +7,7 @@
     <parent>
         <artifactId>parent-pom</artifactId>
         <groupId>kraken</groupId>
-        <version>1.47.1</version>
+        <version>1.48.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>kraken-tracer</artifactId>

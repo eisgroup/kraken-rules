@@ -81,25 +81,34 @@ class KrakenDSLModelRuleConverter {
     }
 
     static List<Rule> convertRules(DSLModel dsl, URI resourceUri) {
-        List<Rule> rules = convertRuleBlocks(dsl.getNamespace(), dsl.getRuleBlocks(), resourceUri, null);
-        rules.addAll(convertRules(dsl.getNamespace(), dsl.getRules(), resourceUri, null));
+        List<Rule> rules = convertRuleBlocks(dsl.getNamespace(), dsl.getRuleBlocks(), resourceUri, null, false);
+        rules.addAll(convertRules(dsl.getNamespace(), dsl.getRules(), resourceUri, null, false));
 
         return Collections.unmodifiableList(rules);
     }
 
     private static List<Rule> convertRuleBlocks(String namespace,
                                                 Collection<DSLRules> ruleBlocks,
-                                                URI resourceUri, Metadata parentMetadata) {
+                                                URI resourceUri,
+                                                Metadata parentMetadata,
+                                                boolean serverSideOnly) {
         return ruleBlocks.stream()
-                .flatMap(ruleBlock -> convertRuleBlock(namespace, ruleBlock, resourceUri, parentMetadata).stream())
+                .flatMap(ruleBlock ->
+                    convertRuleBlock(namespace, ruleBlock, resourceUri, parentMetadata, serverSideOnly)
+                        .stream())
                 .collect(Collectors.toList());
     }
 
-    private static List<Rule> convertRuleBlock(String namespace, DSLRules dsl, URI resourceURi, Metadata parentMetadata) {
+    private static List<Rule> convertRuleBlock(String namespace,
+                                               DSLRules dsl,
+                                               URI resourceURi,
+                                               Metadata parentMetadata,
+                                               boolean serverSideOnly) {
         parentMetadata = merge(parentMetadata, convertMetadata(dsl.getMetadata(), resourceURi));
+        serverSideOnly = serverSideOnly || dsl.isServerSideOnly();
 
-        List<Rule> rules = convertRuleBlocks(namespace, dsl.getRuleBlocks(), resourceURi, parentMetadata);
-        rules.addAll(convertRules(namespace, dsl.getRules(), resourceURi, parentMetadata));
+        List<Rule> rules = convertRuleBlocks(namespace, dsl.getRuleBlocks(), resourceURi, parentMetadata, serverSideOnly);
+        rules.addAll(convertRules(namespace, dsl.getRules(), resourceURi, parentMetadata, serverSideOnly));
 
         return Collections.unmodifiableList(rules);
     }
@@ -107,14 +116,15 @@ class KrakenDSLModelRuleConverter {
     private static List<Rule> convertRules(String namespace,
                                            Collection<DSLRule> rules,
                                            URI resourceUri,
-                                           Metadata parentMetadata) {
+                                           Metadata parentMetadata,
+                                           boolean serverSideOnly) {
         return rules.stream()
-                .map(rule -> convert(namespace, rule, resourceUri))
+                .map(rule -> convert(namespace, rule, resourceUri, serverSideOnly))
                 .map(rule -> withParentMetadata(rule, parentMetadata))
                 .collect(Collectors.toList());
     }
 
-    private static Rule convert(String namespace, DSLRule dslRule, URI resourceUri) {
+    private static Rule convert(String namespace, DSLRule dslRule, URI resourceUri, boolean serverSideOnly) {
         Rule rule = factory.createRule();
         rule.setName(dslRule.getName());
         rule.setDescription(dslRule.getDescription());
@@ -132,6 +142,8 @@ class KrakenDSLModelRuleConverter {
         rule.setMetadata(convertMetadata(dslRule.getMetadata(), resourceUri));
         rule.setPayload(convert(dslRule.getPayload()));
         rule.setPriority(dslRule.getPriority());
+        rule.setServerSideOnly(serverSideOnly || dslRule.isServerSideOnly());
+
         return rule;
     }
 

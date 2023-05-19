@@ -20,6 +20,7 @@ import static kraken.runtime.utils.TargetPathUtils.resolveTargetPath;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import kraken.el.functionregistry.functions.MoneyFunctions;
+import kraken.el.math.Numbers;
 import kraken.model.context.Cardinality;
 import kraken.model.context.PrimitiveFieldDataType;
 import kraken.model.derive.DefaultingType;
@@ -156,38 +158,52 @@ public class DefaultValuePayloadHandler implements RulePayloadHandler {
         if(dataContext.getContextDefinition() != null) {
             ContextField contextField = dataContext.getContextDefinition().getFields().get(rule.getTargetPath());
             if (contextField != null) {
-                return coerce(value, rule, dataContext, contextField, session);
+                if(!PrimitiveFieldDataType.isPrimitiveType(contextField.getFieldType())) {
+                    String template = "Unsupported operation. "
+                        + "Default value rule '%s' is being applied on attribute '%s.%s' whose type type is '%s'. "
+                        + "Default value rule can only be applied on attribute which is primitive or a collection of primitives.";
+                    String type = toTypeSymbol(contextField);
+                    String message = String.format(
+                        template,
+                        rule.getName(),
+                        dataContext.getContextDefinition().getName(),
+                        contextField.getName(),
+                        type
+                    );
+                    throw new UnsupportedOperationException(message);
+                }
+                return coerce(value, dataContext, contextField, session);
             }
         }
         return value;
     }
 
-    private Object coerce(Object value,
-                          RuntimeRule rule,
-                          DataContext dataContext,
-                          ContextField field,
+    private Object coerce(Object value, DataContext dataContext, ContextField field, EvaluationSession session) {
+        var type = PrimitiveFieldDataType.valueOf(field.getFieldType());
+        if(Cardinality.MULTIPLE == field.getCardinality()) {
+            if(value == null) {
+                return null;
+            }
+            if(value instanceof Collection) {
+                var coercedCollectionValue = new ArrayList<>();
+                for (var v : (Collection<?>) value) {
+                    var coercedValue = coerce(v, dataContext, type, field, session);
+                    coercedCollectionValue.add(coercedValue);
+                }
+                return coercedCollectionValue;
+            }
+            throwAndLogIncompatibleValueType(value, dataContext, field);
+        }
+
+        return coerce(value, dataContext, type, field, session);
+    }
+
+    private Object coerce(Object value, DataContext dataContext, PrimitiveFieldDataType type, ContextField field,
                           EvaluationSession session) {
-        if(!PrimitiveFieldDataType.isPrimitiveType(field.getFieldType())
-            || field.getCardinality() != Cardinality.SINGLE) {
-            String template = "Unsupported operation. Default value rule '%s' is being applied on attribute '%s.%s' "
-                + "which is not a primitive attribute, but a '%s'.";
-            String type = toTypeSymbol(field);
-            String message = String.format(
-                template,
-                rule.getName(),
-                dataContext.getContextDefinition().getName(),
-                field.getName(),
-                type
-            );
-            throw new UnsupportedOperationException(message);
-        }
-
-        // null can be assigned to any primitive type
         if(value == null) {
-            return value;
+            return null;
         }
-
-        switch (PrimitiveFieldDataType.valueOf(field.getFieldType())) {
+        switch (type) {
             case MONEY:
                 if(value instanceof MonetaryAmount) {
                     return value;
@@ -206,7 +222,7 @@ public class DefaultValuePayloadHandler implements RulePayloadHandler {
                     return value;
                 }
                 if(value instanceof MonetaryAmount) {
-                    return MoneyFunctions.fromMoney((MonetaryAmount) value);
+                    return Numbers.fromMoney((MonetaryAmount) value);
                 }
                 throwAndLogIncompatibleValueType(value, dataContext, field);
                 break;
@@ -250,7 +266,7 @@ public class DefaultValuePayloadHandler implements RulePayloadHandler {
         String type = toTypeSymbol(field);
         String message = String.format(
             template,
-            value,
+            FieldValueRenderer.render(value),
             value.getClass().getName(),
             dataContext.getContextDefinition().getName(),
             field.getName(),

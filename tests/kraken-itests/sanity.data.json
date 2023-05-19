@@ -497,6 +497,10 @@
     {
       "id": "TracerSnapshotTest",
       "entryPointName": "Policy:TracerSnapshotTest"
+    },
+    {
+      "id": "DefaultCollectionOfPrimitives",
+      "entryPointName": "Policy:DefaultCollectionOfPrimitives"
     }
   ]
 }

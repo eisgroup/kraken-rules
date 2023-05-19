@@ -3,6 +3,7 @@ package kraken.model.project.builder;
 import static java.util.List.of;
 import static kraken.model.project.KrakenProjectMocks.contextDefinitions;
 import static kraken.model.project.KrakenProjectMocks.contextDefinitionsWithRoot;
+import static kraken.model.project.KrakenProjectMocks.dimension;
 import static kraken.model.project.KrakenProjectMocks.entryPoint;
 import static kraken.model.project.KrakenProjectMocks.entryPoints;
 import static kraken.model.project.KrakenProjectMocks.externalContext;
@@ -12,6 +13,7 @@ import static kraken.model.project.KrakenProjectMocks.functionSignature;
 import static kraken.model.project.KrakenProjectMocks.imports;
 import static kraken.model.project.KrakenProjectMocks.includes;
 import static kraken.model.project.KrakenProjectMocks.resource;
+import static kraken.model.project.KrakenProjectMocks.resourceWithDimensions;
 import static kraken.model.project.KrakenProjectMocks.resourceWithFunctions;
 import static kraken.model.project.KrakenProjectMocks.ri;
 import static kraken.model.project.KrakenProjectMocks.rules;
@@ -29,6 +31,7 @@ import java.util.stream.Collectors;
 
 import org.junit.Test;
 
+import kraken.model.DimensionDataType;
 import kraken.model.Rule;
 import kraken.model.context.ContextDefinition;
 import kraken.model.entrypoint.EntryPoint;
@@ -106,23 +109,30 @@ public class ResourceKrakenProjectBuilderTest {
     @Test
     public void shouldBuildKrakenProjectFromMultipleResourcesInTheSameNamespaceAndMergeRulesAndNamespacesWithSameName() {
         ResourceKrakenProjectBuilder krakenProjectBuilder = new ResourceKrakenProjectBuilder(of(
-                resource("PersonalAutoPolicy",
-                        contextDefinitionsWithRoot("Policy", "RiskItem"),
-                        externalContext(List.of("context")),
-                        externalContextDefinitions("PreviousProjection", "Security"),
-                        of(entryPoint("Validate", of("R01", "R02"))),
-                        rules("R01", "R01", "R02")
+            resource("PersonalAutoPolicy",
+                contextDefinitionsWithRoot("Policy", "RiskItem"),
+                externalContext(List.of("context")),
+                externalContextDefinitions("PreviousProjection", "Security"),
+                of(entryPoint("Validate", of("R01", "R02"))),
+                rules("R01", "R01", "R02")
+            ),
+            resource("PersonalAutoPolicy",
+                contextDefinitions("Coverage"),
+                null,
+                externalContextDefinitions("Other", "PreviousProjection"),
+                of(
+                    entryPoint("Default", of("R03")),
+                    entryPoint("Validate", of("R01"))
                 ),
-                resource("PersonalAutoPolicy",
-                        contextDefinitions("Coverage"),
-                        null,
-                        externalContextDefinitions("Other", "PreviousProjection"),
-                        of(
-                                entryPoint("Default", of("R03")),
-                                entryPoint("Validate", of("R01"))
-                        ),
-                        rules("R01", "R03")
-                )
+                rules("R01", "R03")
+            ),
+            resourceWithDimensions("PersonalAutoPolicy",
+                of(
+                    dimension("firstDimension", DimensionDataType.STRING),
+                    dimension("secondDimension", DimensionDataType.DATE)
+                ),
+                of()
+            )
         ));
 
         KrakenProject krakenProject = krakenProjectBuilder.buildKrakenProject("PersonalAutoPolicy");
@@ -132,6 +142,7 @@ public class ResourceKrakenProjectBuilderTest {
         assertThat(krakenProject.getExternalContextDefinitions().values(), hasSize(3));
         assertThat(krakenProject.getEntryPoints(), hasSize(3));
         assertThat(krakenProject.getRules(), hasSize(5));
+        assertThat(krakenProject.getDimensions(), hasSize(2));
     }
 
     @Test
@@ -780,8 +791,85 @@ public class ResourceKrakenProjectBuilderTest {
                     function("USD", "'USD'"),
                     function("USD", "'USD'")
                 ),
-                List.of("Base")
+                List.of()
             )
         )));
     }
+
+    @Test
+    public void shouldAddDimensionToKrakenProject() {
+        ResourceKrakenProjectBuilder krakenProjectBuilder = new ResourceKrakenProjectBuilder(of(
+            resourceWithDimensions(
+                "PersonalAutoPolicy",
+                List.of(
+                    dimension("planCd", DimensionDataType.STRING)
+                ),
+                List.of("Base")
+            ),
+            resourceWithDimensions(
+                "Base",
+                List.of(
+                    dimension("effective", DimensionDataType.DATETIME)
+                ),
+                List.of()
+            )
+        ));
+
+        KrakenProject krakenProject = krakenProjectBuilder.buildKrakenProject("PersonalAutoPolicy");
+
+        assertThat(krakenProject.getDimensions(), hasSize(2));
+    }
+
+    @Test
+    public void shouldOverrideDimensionFromIncludedNamespace() {
+        ResourceKrakenProjectBuilder krakenProjectBuilder = new ResourceKrakenProjectBuilder(of(
+            resourceWithDimensions(
+                "PersonalAutoPolicy",
+                List.of(
+                    dimension("effective", DimensionDataType.DATE)
+                ),
+                List.of("Base")
+            ),
+            resourceWithDimensions(
+                "Base",
+                List.of(
+                    dimension("effective", DimensionDataType.DATETIME)
+                ),
+                List.of()
+            )
+        ));
+
+        KrakenProject krakenProject = krakenProjectBuilder.buildKrakenProject("PersonalAutoPolicy");
+
+        assertThat(krakenProject.getDimensions(), hasSize(1));
+        assertThat(krakenProject.getDimensions().get(0).getDataType(), is(DimensionDataType.DATE));
+    }
+
+    @Test
+    public void shouldThrowIfNamespaceHasDuplicateDimensions() {
+         assertThrows(IllegalKrakenProjectStateException.class, () -> new ResourceKrakenProjectBuilder(of(
+            resourceWithDimensions(
+                "PersonalAutoPolicy",
+                List.of(
+                    dimension("planCd", DimensionDataType.STRING),
+                    dimension("planCd", DimensionDataType.STRING)
+                ),
+                List.of("base")
+            )
+        )));
+    }
+
+    @Test
+    public void shouldThrowWhenIncludeHasDimensionAmbiguities() {
+        ResourceKrakenProjectBuilder krakenProjectBuilder = new ResourceKrakenProjectBuilder(of(
+            resourceWithDimensions("PersonalAutoPolicy", of(dimension("planCd", DimensionDataType.STRING)),
+                includes("Base", "Root")),
+            resourceWithDimensions("Base", of(dimension("packageCd", DimensionDataType.STRING)), of()),
+            resourceWithDimensions("Root", of(dimension("packageCd", DimensionDataType.STRING)), of())
+        ));
+
+        assertThrows(IllegalKrakenProjectStateException.class,
+            () -> krakenProjectBuilder.buildKrakenProject("PersonalAutoPolicy"));
+    }
+
 }

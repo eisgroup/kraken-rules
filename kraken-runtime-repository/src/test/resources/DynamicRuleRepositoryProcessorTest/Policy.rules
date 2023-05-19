@@ -1,0 +1,18 @@
+Namespace Policy
+
+Root Context Policy {
+  String policyCd
+}
+
+EntryPoint "ValidationNonSSO" {
+  "R01-Policy"
+}
+
+@ServerSideOnly
+EntryPoint "ValidationSSO" {
+  "R01-Policy"
+}
+
+Rule "R01-Policy" On Policy.policyCd {
+  Assert this.policyCd = 'NY'
+}

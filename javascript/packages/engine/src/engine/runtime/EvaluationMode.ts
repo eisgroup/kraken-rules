@@ -32,8 +32,9 @@ export enum EvaluationMode {
     INQUIRY = 'INQUIRY',
     /**
      * Indicates that only rules having {@link PayloadType.VISIBILITY},
-     * {@link PayloadType.ACCESSIBILITY}, {@link PayloadType.DEFAULT}
-     * and {@link PayloadType.USAGE} are supported.
+     * {@link PayloadType.ACCESSIBILITY}, {@link PayloadType.DEFAULT},
+     * {@link PayloadType.USAGE}, {@link PayloadType.SIZE},
+     * and {@link PayloadType.SIZE_RANGE} are supported.
      */
     PRESENTATIONAL = 'PRESENTATIONAL',
 }
@@ -63,5 +64,7 @@ const modeMasks: { [key in EvaluationMode]: number } = {
         payloadTypes[PayloadType.VISIBILITY] |
         payloadTypes[PayloadType.ACCESSIBILITY] |
         payloadTypes[PayloadType.DEFAULT] |
-        payloadTypes[PayloadType.USAGE],
+        payloadTypes[PayloadType.USAGE] |
+        payloadTypes[PayloadType.SIZE] |
+        payloadTypes[PayloadType.SIZE_RANGE],
 }

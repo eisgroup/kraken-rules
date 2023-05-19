@@ -46,7 +46,7 @@ public class DSLRulesVisitor extends KrakenDSLBaseVisitor<DSLRules> {
                 .map(this::visitRules)
                 .collect(Collectors.toList());
 
-        return new DSLRules(rules, annotation.getMetadata(), ruleBlocks);
+        return new DSLRules(rules, annotation.getMetadata(), ruleBlocks, annotation.isServerSideOnly());
     }
 
 }

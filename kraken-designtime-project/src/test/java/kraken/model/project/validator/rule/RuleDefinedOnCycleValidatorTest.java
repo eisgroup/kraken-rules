@@ -109,6 +109,7 @@ public class RuleDefinedOnCycleValidatorTest {
             Map.of(),
             null,
             List.of(),
+            List.of(),
             List.of()
         );
     }

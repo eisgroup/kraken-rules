@@ -22,12 +22,14 @@ import static kraken.model.dsl.KrakenDSLModelExternalContextDefinitionConverter.
 import static kraken.model.dsl.KrakenDSLModelFunctionConverter.convertFunctions;
 import static kraken.model.dsl.KrakenDSLModelFunctionSignatureConverter.convertFunctionSignatures;
 import static kraken.model.dsl.KrakenDSLModelRuleConverter.convertRules;
+import static kraken.model.dsl.KrakenDslModelDimensionConverter.convertDimensions;
 
 import java.net.URI;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import kraken.model.Dimension;
 import kraken.model.Function;
 import kraken.model.FunctionSignature;
 import kraken.model.Rule;
@@ -61,6 +63,7 @@ public class KrakenDSLModelConverter {
         ExternalContext externalContext = convertExternalContext(dsl, externalContextDefinition);
         List<FunctionSignature> functionSignatures = convertFunctionSignatures(dsl);
         List<Function> functions = convertFunctions(dsl);
+        List<Dimension> dimensions = convertDimensions(dsl);
 
         return new Resource(
             dsl.getNamespace(),
@@ -73,6 +76,7 @@ public class KrakenDSLModelConverter {
             externalContextDefinition,
             functionSignatures,
             functions,
+            dimensions,
             uri
         );
     }

@@ -1010,6 +1010,30 @@ public class RuleConversionTest {
         );
     }
 
+    @Test
+    public void shouldConvertRuleMarkedAsServerSideOnly() {
+        Rule rule = factory.createRule();
+        rule.setPayload(createAssertionPayload("limitAmount.state = \"CA\""));
+        rule.setContext("Driver");
+        rule.setTargetPath("limitAmount");
+        rule.setName("Driver_limitAmount_rule");
+        rule.setServerSideOnly(true);
+
+        String convertedRule = convert(rule);
+
+        assertEquals(
+            "@ServerSideOnly" +
+                System.lineSeparator() +
+                "Rule \"Driver_limitAmount_rule\" On Driver.limitAmount {" +
+                System.lineSeparator() +
+                "    Assert limitAmount.state = \"CA\"" +
+                System.lineSeparator() +
+                "}" + System.lineSeparator() +
+                System.lineSeparator(),
+            convertedRule
+        );
+    }
+
     private Rule createFullNumberSetRule(BigDecimal min, BigDecimal max, BigDecimal step) {
         Rule rule = factory.createRule();
         var payload = factory.createNumberSetPayload();

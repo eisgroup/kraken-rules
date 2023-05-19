@@ -55,7 +55,7 @@ public class NumberSetPayloadHandler implements RulePayloadHandler {
         var value = evaluator.evaluateTargetField(rule.getTargetPath(), dataContext);
         boolean success = true;
         if(value instanceof MonetaryAmount) {
-            value = MoneyFunctions.fromMoney((MonetaryAmount) value);
+            value = Numbers.fromMoney((MonetaryAmount) value);
         }
         if(value instanceof Number) {
             Tracer.doOperation(new FieldValueValidationOperation(value));

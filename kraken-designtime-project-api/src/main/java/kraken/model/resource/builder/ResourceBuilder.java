@@ -24,6 +24,7 @@ import java.util.Map;
 
 import kraken.annotations.API;
 import kraken.el.functionregistry.FunctionHeader;
+import kraken.model.Dimension;
 import kraken.model.Function;
 import kraken.model.FunctionSignature;
 import kraken.model.Rule;
@@ -45,15 +46,16 @@ import kraken.utils.ResourceUtils;
 public class ResourceBuilder {
 
     private String namespace;
-    private List<String> includes;
-    private List<RuleImport> imports;
-    private List<EntryPoint> entryPoints;
-    private List<Rule> rules;
-    private List<ContextDefinition> contextDefinitions;
+    private final List<String> includes;
+    private final List<RuleImport> imports;
+    private final List<EntryPoint> entryPoints;
+    private final List<Rule> rules;
+    private final List<ContextDefinition> contextDefinitions;
     private ExternalContext externalContext;
-    private List<ExternalContextDefinition> externalContextDefinitions;
-    private Map<FunctionHeader, FunctionSignature> functionSignatures;
-    private Map<String, Function> functions;
+    private final List<ExternalContextDefinition> externalContextDefinitions;
+    private final Map<FunctionHeader, FunctionSignature> functionSignatures;
+    private final Map<String, Function> functions;
+    private final List<Dimension> dimensions;
     private URI uri;
 
     private ResourceBuilder() {
@@ -65,6 +67,7 @@ public class ResourceBuilder {
         this.externalContextDefinitions = new ArrayList<>();
         this.functionSignatures = new LinkedHashMap<>();
         this.functions = new LinkedHashMap<>();
+        this.dimensions = new ArrayList<>();
     }
 
     public static ResourceBuilder getInstance(){
@@ -83,6 +86,7 @@ public class ResourceBuilder {
             externalContextDefinitions,
             new ArrayList<>(functionSignatures.values()),
             new ArrayList<>(functions.values()),
+            dimensions,
             uri == null ? ResourceUtils.randomResourceUri() : uri
         );
     }
@@ -186,6 +190,16 @@ public class ResourceBuilder {
 
     public ResourceBuilder addFunctions(Collection<Function> functions) {
         functions.forEach(this::addFunction);
+        return this;
+    }
+
+    public ResourceBuilder addDimension(Dimension dimension) {
+        this.dimensions.add(dimension);
+        return this;
+    }
+
+    public ResourceBuilder addDimensions(Collection<Dimension> dimensions) {
+        this.dimensions.addAll(dimensions);
         return this;
     }
 

@@ -16,14 +16,14 @@
 
 import { Contexts, Payloads, Rule } from 'kraken-model'
 import { DefaultValuePayloadResult } from 'kraken-engine-api'
-import { RulesBuilder, PayloadBuilder } from 'kraken-model-builder'
+import { PayloadBuilder, RulesBuilder } from 'kraken-model-builder'
 import { mock } from '../../mock'
 import { DefaultValuePayloadHandler } from '../../../src/engine/handlers/DefaultValuePayloadHandler'
-import DefaultingType = Payloads.Derive.DefaultingType
 import { ValueChangedEvent } from '../../../src/engine/results/ValueChangedEvent'
 import { payloadResultTypeChecker } from '../../../src/engine/results/PayloadResultTypeChecker'
 import { DataContext } from '../../../src/engine/contexts/data/DataContext'
 import ContextDefinition = Contexts.ContextDefinition
+import DefaultingType = Payloads.Derive.DefaultingType
 
 const handler = new DefaultValuePayloadHandler(mock.evaluator)
 const { session } = mock
@@ -129,15 +129,17 @@ describe('defaultValuePayloadHandler', () => {
 
     describe('Value coercion', () => {
         type Coverage = {
-            moneyLimit: Contexts.MoneyType | undefined
-            decimalLimit: number | undefined
-            code: string | undefined
-            labels: string[]
-            address: object
+            moneyLimit?: Contexts.MoneyType | undefined
+            moneys?: Contexts.MoneyType[] | undefined
+            decimalLimit?: number | undefined
+            code?: string | undefined
+            labels?: string[] | undefined
+            address?: object | undefined
         }
 
         let instance: Coverage
         let context: DataContext
+        let contextDefinition: ContextDefinition
 
         beforeEach(() => {
             const fields: Record<string, Contexts.ContextField> = {
@@ -171,6 +173,12 @@ describe('defaultValuePayloadHandler', () => {
                     cardinality: 'SINGLE',
                     fieldPath: 'address',
                 },
+                moneys: {
+                    name: 'moneys',
+                    fieldType: 'MONEY',
+                    cardinality: 'MULTIPLE',
+                    fieldPath: 'moneys',
+                },
             }
             instance = {
                 moneyLimit: {
@@ -180,9 +188,10 @@ describe('defaultValuePayloadHandler', () => {
                 decimalLimit: 22,
                 code: 'cd',
                 labels: [],
+                moneys: [],
                 address: {},
             }
-            const contextDefinition: ContextDefinition = {
+            contextDefinition = {
                 name: 'Coverage',
                 fields,
                 inheritedContexts: [],
@@ -191,7 +200,10 @@ describe('defaultValuePayloadHandler', () => {
         })
 
         function createResetRule(field: string, defaultExpression: string): Rule {
-            const payload = PayloadBuilder.default().apply(DefaultingType.resetValue).to(defaultExpression)
+            return createRule(field, defaultExpression, DefaultingType.resetValue)
+        }
+        function createRule(field: string, defaultExpression: string, t: DefaultingType): Rule {
+            const payload = PayloadBuilder.default().apply(t).to(defaultExpression)
             return RulesBuilder.create()
                 .setName('RL01')
                 .setContext('Coverage')
@@ -210,6 +222,41 @@ describe('defaultValuePayloadHandler', () => {
             handler.executePayload(rule, context, session)
             expect(instance.decimalLimit).toStrictEqual(11)
         })
+        it('should reset array of primitives', () => {
+            const rule = createResetRule('labels', "['label']")
+            const i: Coverage = {
+                labels: ['A'],
+            }
+            const c = new DataContext('1', 'Coverage', i, mock.contextInstanceInfo, contextDefinition)
+            handler.executePayload(rule, c, session)
+            expect(i.labels).toStrictEqual(['label'])
+        })
+        it('should default empty array of primitives', () => {
+            const rule = createRule('labels', "['label']", DefaultingType.defaultValue)
+            const i: Coverage = {
+                labels: [],
+            }
+            const c = new DataContext('1', 'Coverage', i, mock.contextInstanceInfo, contextDefinition)
+            handler.executePayload(rule, c, session)
+            expect(i.labels).toStrictEqual(['label'])
+        })
+        it('should default undefined array of primitives', () => {
+            const rule = createRule('labels', "['label']", DefaultingType.defaultValue)
+            const i: Coverage = {
+                labels: undefined,
+            }
+            const c = new DataContext('1', 'Coverage', i, mock.contextInstanceInfo, contextDefinition)
+            handler.executePayload(rule, c, session)
+            expect(i.labels).toStrictEqual(['label'])
+        })
+        it('should default to array with coerced number to Money', () => {
+            const rule = createResetRule('moneys', '[10, 20]')
+            handler.executePayload(rule, context, session)
+            expect(instance.moneys).toStrictEqual([
+                { amount: 10, currency: 'USD' },
+                { amount: 20, currency: 'USD' },
+            ])
+        })
         it('should return error if incompatible type', () => {
             const rule = createResetRule('code', '10')
             const result = handler.executePayload(rule, context, session)
@@ -222,10 +269,6 @@ describe('defaultValuePayloadHandler', () => {
             const rule = createResetRule('moneyLimit', 'undefined')
             handler.executePayload(rule, context, session)
             expect(instance.moneyLimit).toBeUndefined()
-        })
-        it('should throw if defaulting array of primitives', () => {
-            const rule = createResetRule('labels', 'undefined')
-            expect(() => handler.executePayload(rule, context, session)).toThrowError()
         })
         it('should throw if defaulting context', () => {
             const rule = createResetRule('address', 'undefined')

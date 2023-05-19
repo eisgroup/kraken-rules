@@ -33,7 +33,7 @@ export enum ErrorCode {
 
 export class KrakenRuntimeError extends Error {
     constructor(errorCode: ErrorCode, message: string) {
-        super(`${errorCode} ${message}`)
+        super(`[${errorCode}] ${message}`)
         Object.setPrototypeOf(this, new.target.prototype)
     }
 }

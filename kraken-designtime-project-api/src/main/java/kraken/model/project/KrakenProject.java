@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import kraken.annotations.API;
+import kraken.model.Dimension;
 import kraken.model.Function;
 import kraken.model.FunctionSignature;
 import kraken.model.Rule;
@@ -116,6 +117,12 @@ public interface KrakenProject {
      * @return a list of function implementations to be used in rules defined in this KrakenProject
      */
     List<Function> getFunctions();
+
+    /**
+     * @return A list of available dimensions to be used for variation of model elements in this
+     * KrakenProject.
+     */
+    List<Dimension> getDimensions();
 
     /**
      * Connected context definitions, are connected via

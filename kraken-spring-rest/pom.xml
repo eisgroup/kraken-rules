@@ -6,10 +6,10 @@
     <parent>
         <groupId>kraken</groupId>
         <artifactId>parent-pom</artifactId>
-        <version>1.47.1</version>
+        <version>1.48.1-SNAPSHOT</version>
     </parent>
     <artifactId>kraken-spring-rest</artifactId>
-    <version>1.47.1</version>
+    <version>1.48.1-SNAPSHOT</version>
     <name>kraken-spring-rest</name>
 
     <properties>
