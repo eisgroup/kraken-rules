@@ -28,6 +28,7 @@ import kraken.model.dsl.KrakenDSL.RuleImportContext;
 import kraken.model.dsl.KrakenDSLBaseVisitor;
 import kraken.model.dsl.model.DSLContext;
 import kraken.model.dsl.model.DSLContexts;
+import kraken.model.dsl.model.DSLDimension;
 import kraken.model.dsl.model.DSLEntryPoint;
 import kraken.model.dsl.model.DSLEntryPoints;
 import kraken.model.dsl.model.DSLExternalContext;
@@ -67,6 +68,8 @@ public class DSLModelVisitor extends KrakenDSLBaseVisitor<DSLModel> {
 
     private final DSLFunctionVisitor functionVisitor = new DSLFunctionVisitor();
 
+    private final DSLDimensionVisitor dimensionVisitor = new DSLDimensionVisitor();
+
     @Override
     public DSLModel visitKraken(KrakenDSL.KrakenContext ctx) {
         if (ctx.model() == null) {
@@ -81,6 +84,7 @@ public class DSLModelVisitor extends KrakenDSLBaseVisitor<DSLModel> {
                 List.of(),
                 List.of(),
                 null,
+                List.of(),
                 List.of(),
                 List.of(),
                 List.of()
@@ -175,6 +179,12 @@ public class DSLModelVisitor extends KrakenDSLBaseVisitor<DSLModel> {
             .map(functionVisitor::visit)
             .collect(Collectors.toList());
 
+        List<DSLDimension> dimensions = ctx.model().stream()
+            .map(ModelContext::dimension)
+            .filter(Objects::nonNull)
+            .map(dimensionVisitor::visit)
+            .collect(Collectors.toList());
+
         return new DSLModel(
             contexts,
             entryPoints,
@@ -188,7 +198,8 @@ public class DSLModelVisitor extends KrakenDSLBaseVisitor<DSLModel> {
             dslExternalContext,
             dslExternalContextDefinitions,
             functionSignatures,
-            functions
+            functions,
+            dimensions
         );
     }
 

@@ -13,15 +13,10 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+const baseConfig = require('../../jest.config.base')
+
 module.exports = {
-    moduleFileExtensions: ['ts', 'tsx', 'js'],
-    transform: {
-        '^.+\\.ts$': ['@swc/jest'],
-    },
-    testMatch: ['**/?(*.)test.ts'],
-    verbose: true,
-    cacheDirectory: './target/tmp/',
-    coverageDirectory: './target/coverage',
+    ...baseConfig,
     coverageThreshold: {
         global: {
             branches: 60,
@@ -30,7 +25,5 @@ module.exports = {
             statements: 80,
         },
     },
-    collectCoverageFrom: ['**/*[^d\\.].ts', '!**/node_modules/**', '!**/target/**', '!**/__tests__/**', '!**/index.ts'],
-    testEnvironment: 'node',
     setupFilesAfterEnv: [],
 }

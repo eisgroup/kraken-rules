@@ -24,6 +24,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import kraken.el.scope.type.Type;
+import kraken.model.Dimension;
+import kraken.model.DimensionDataType;
 import kraken.model.Expression;
 import kraken.model.Function;
 import kraken.model.FunctionDocumentation;
@@ -251,6 +253,7 @@ public class KrakenProjectMocks {
             includes,
             ruleImports,
             functionSignatures,
+            List.of(),
             List.of()
         );
     }
@@ -264,12 +267,14 @@ public class KrakenProjectMocks {
                                     List<String> includes,
                                     List<RuleImport> ruleImports,
                                     List<FunctionSignature> functionSignatures,
-                                    List<Function> functions) {
+                                    List<Function> functions,
+                                    List<Dimension> dimensions) {
         applyPhysicalNamespace(ns, externalContextDefinitions);
         applyPhysicalNamespace(ns, contextDefinitions);
         applyPhysicalNamespace(ns, entryPoints);
         applyPhysicalNamespace(ns, rules);
         applyPhysicalNamespace(ns, functionSignatures);
+        applyPhysicalNamespace(ns, dimensions);
 
         return new Resource(
             ns,
@@ -282,6 +287,7 @@ public class KrakenProjectMocks {
             externalContextDefinitions,
             functionSignatures,
             functions,
+            dimensions,
             ResourceUtils.randomResourceUri()
         );
     }
@@ -292,6 +298,24 @@ public class KrakenProjectMocks {
                                     List<ExternalContextDefinition> externalContextDefinitions) {
         return resource(ns, contextDefinitions, externalContext, externalContextDefinitions,
             List.of(), List.of(), List.of(), List.of());
+    }
+
+    public static Resource resourceWithDimensions(String ns, List<Dimension> dimensions, List<String> includes) {
+        applyPhysicalNamespace(ns, dimensions);
+
+        return resource(
+            ns,
+            contextDefinitionsWithRoot("Policy"),
+            null,
+            List.of(),
+            List.of(),
+            List.of(),
+            includes,
+            List.of(),
+            List.of(),
+            List.of(),
+            dimensions
+        );
     }
 
     public static Resource resourceWithFunctions(String ns, List<Function> functions, List<String> includes) {
@@ -307,7 +331,8 @@ public class KrakenProjectMocks {
             includes,
             List.of(),
             List.of(),
-            functions
+            functions,
+            List.of()
         );
     }
 
@@ -412,6 +437,26 @@ public class KrakenProjectMocks {
                                               List<Rule> rules,
                                               List<FunctionSignature> functionSignatures,
                                               List<Function> functions) {
+        return krakenProject(
+            contextDefinitions,
+            externalContext,
+            externalContextDefinitions,
+            entryPoints,
+            rules,
+            functionSignatures,
+            functions,
+            List.of()
+        );
+    }
+
+    public static KrakenProject krakenProject(List<ContextDefinition> contextDefinitions,
+                                              ExternalContext externalContext,
+                                              List<ExternalContextDefinition> externalContextDefinitions,
+                                              List<EntryPoint> entryPoints,
+                                              List<Rule> rules,
+                                              List<FunctionSignature> functionSignatures,
+                                              List<Function> functions,
+                                              List<Dimension> dimensions) {
         List<ContextDefinition> allContextDefinitions = new ArrayList<>(contextDefinitions);
         if(allContextDefinitions.isEmpty()) {
             ContextDefinition contextDefinition = factory.createContextDefinition();
@@ -431,8 +476,9 @@ public class KrakenProjectMocks {
             externalContextDefinitions.stream().collect(Collectors.toMap(ExternalContextDefinition::getName, c -> c)),
             null,
             functionSignatures,
-            functions
-        );
+            functions,
+            dimensions
+            );
     }
 
     public static ContextDefinition contextDefinition(String name, List<ContextField> fields) {
@@ -732,5 +778,13 @@ public class KrakenProjectMocks {
         function.setBody(functionBody);
         function.setDocumentation(documentation);
         return function;
+    }
+
+    public static Dimension dimension(String name, DimensionDataType dataType) {
+        Dimension dimension = factory.createDimension();
+        dimension.setName(name);
+        dimension.setDataType(dataType);
+
+        return dimension;
     }
 }

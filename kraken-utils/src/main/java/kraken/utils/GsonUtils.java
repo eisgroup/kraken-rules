@@ -54,7 +54,7 @@ public class GsonUtils {
         return builder().create();
     }
 
-    private static GsonBuilder builder() {
+    public static GsonBuilder builder() {
         return new GsonBuilder()
             .registerTypeAdapter(LocalDate.class, (JsonSerializer<LocalDate>) (date, type, ctx) ->
                 new JsonPrimitive(Dates.convertLocalDateToISO(date)))

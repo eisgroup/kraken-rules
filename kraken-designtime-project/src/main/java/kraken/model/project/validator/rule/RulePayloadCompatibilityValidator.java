@@ -53,73 +53,13 @@ import kraken.model.validation.UsagePayload;
 import kraken.model.validation.ValueListPayload;
 
 /**
- * <p>
- * Validates {@link Rule}s {@link Payload} to be compatible with
- * {@link ContextField#getCardinality()} and {@link ContextField#getFieldType()}.
- * </p>
- * <br/>
- * <h1>Compatibility List</h1>
- * <br/>
- * {@link PrimitiveFieldDataType} {@link Cardinality#SINGLE}:
- * <ul>
- * <li>{@link UsagePayload}</li>
- * <li>{@link RegExpPayload}</li>
- * <li>{@link DefaultValuePayload}</li>
- * <li>{@link VisibilityPayload}</li>
- * <li>{@link AccessibilityPayload}</li>
- * <li>{@link AssertionPayload}</li>
- * <li>{@link LengthPayload}</li>
- * </ul>
- * <p>
- * {@link PrimitiveFieldDataType} {@link Cardinality#MULTIPLE}:
- * <ul>
- * <li>{@link VisibilityPayload}</li>
- * <li>{@link AccessibilityPayload}</li>
- * <li>{@link AssertionPayload}</li>
- * <li>{@link SizePayload}</li>
- * <li>{@link SizeRangePayload}</li>
- * </ul>
- * <p>
- * FieldType as a {@link ContextDefinition} {@link Cardinality#SINGLE}:
- * <ul>
- * <li>{@link UsagePayload}</li>
- * <li>{@link VisibilityPayload}</li>
- * <li>{@link AccessibilityPayload}</li>
- * <li>{@link AssertionPayload}</li>
- * </ul>
- * <p>
- * FieldType as a {@link ContextDefinition} {@link Cardinality#MULTIPLE}:
- * <ul>
- * <li>{@link SizePayload}</li>
- * <li>{@link SizeRangePayload}</li>
- * <li>{@link VisibilityPayload}</li>
- * <li>{@link AccessibilityPayload}</li>
- * <li>{@link AssertionPayload}</li>
- * </ul>
- * <p>
- * {@link SystemDataTypes} {@link Cardinality#SINGLE}:
- * <ul>
- * <li>{@link UsagePayload}</li>
- * <li>{@link AssertionPayload}</li>
- * </ul>
- * <p>
- * {@link SystemDataTypes} {@link Cardinality#MULTIPLE}:
- * <ul>
- * <li>{@link SizePayload}</li>
- * <li>{@link SizeRangePayload}</li>
- * <li>{@link AssertionPayload}</li>
- * </ul>
- * {@link PrimitiveFieldDataType} supported in {@link DataType} and {@link Cardinality#SINGLE}:
- * <ul>
- * <li>{@link ValueListPayload}</li>
- * </ul>
  *
  * @author mulevicius
  */
 public class RulePayloadCompatibilityValidator implements RuleValidator {
 
     private static final List<PayloadCompatibility> payloadCompatibility = List.of(
-        forPayload(DefaultValuePayload.class, f -> isPrimitiveType(f.getFieldType()) && f.getCardinality() == SINGLE),
+        forPayload(DefaultValuePayload.class, f -> isPrimitiveType(f.getFieldType())),
         forPayload(AccessibilityPayload.class, f -> !isSystemDataType(f.getFieldType())),
         forPayload(VisibilityPayload.class, f -> !isSystemDataType(f.getFieldType())),
         forPayload(SizePayload.class, f -> f.getCardinality() == MULTIPLE),

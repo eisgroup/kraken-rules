@@ -15,25 +15,24 @@
  */
 package kraken.el.functionregistry;
 
-import kraken.el.EvaluationContext;
-import kraken.el.ExpressionEvaluationException;
-import kraken.el.TypeProvider;
-import kraken.el.interpreter.evaluator.InterpretingExpressionEvaluator;
-
-import org.apache.commons.lang3.ClassUtils;
-import org.apache.commons.lang3.StringUtils;
-
-import javax.money.MonetaryAmount;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Parameter;
-import java.math.BigDecimal;
+import java.lang.reflect.Type;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
+
+import org.apache.commons.lang3.StringUtils;
+
+import kraken.el.EvaluationContext;
+import kraken.el.ExpressionEvaluationException;
+import kraken.el.TypeProvider;
+import kraken.el.coercer.KelCoercer;
+import kraken.el.coercer.KelCoercionException;
+import kraken.el.interpreter.evaluator.InterpretingExpressionEvaluator;
 
 /**
  *
@@ -156,30 +155,25 @@ public class FunctionInvoker {
 
     private Object[] validateAndCoerceParameters(JavaFunction function, Object[] parameters) {
         for(int i = 0; i < parameters.length; i++) {
-            NotNull notNull = function.getMethod().getParameters()[i].getAnnotation(NotNull.class);
+            var parameter = function.getMethod().getParameters()[i];
+            NotNull notNull = parameter.getAnnotation(NotNull.class);
             if(notNull != null && parameters[i] == null) {
                 String message = MessageFormat.format(INVALID_PARAMETER_NULL, function.getFunctionName(), i);
                 throw new ExpressionEvaluationException(message);
             }
-            Class<?> functionParameterType = function.getMethod().getParameterTypes()[i];
-            parameters[i] = coerced(parameters[i], functionParameterType, function, i);
+            parameters[i] = coerced(parameters[i], parameter.getParameterizedType(), function, i);
         }
         return parameters;
     }
 
-    private Object coerced(Object parameter, Class<?> toType, JavaFunction function, int i) {
-        if(parameter == null) {
-            return null;
+    private Object coerced(Object parameter, Type toType, JavaFunction function, int i) {
+        try {
+            return KelCoercer.coerce(parameter, toType);
+        } catch (KelCoercionException e) {
+            String message = MessageFormat.format(INVALID_PARAMETER_TYPE, function.getFunctionName(), i, toType,
+                parameter.getClass());
+            throw new ExpressionEvaluationException(message, e);
         }
-        Class<?> providedParameterType = parameter.getClass();
-        if(ClassUtils.isAssignable(providedParameterType, toType)) {
-            return parameter;
-        }
-        if(MonetaryAmount.class.isAssignableFrom(providedParameterType) && Number.class.isAssignableFrom(toType)) {
-            return ((MonetaryAmount) parameter).getNumber().numberValue(BigDecimal.class);
-        }
-        String message = MessageFormat.format(INVALID_PARAMETER_TYPE, function.getFunctionName(), i, toType, providedParameterType);
-        throw new ExpressionEvaluationException(message);
     }
 
     private Object invokeJavaFunctionWithIteration(JavaFunction function, FunctionContext functionContext, int iterableParameter) {

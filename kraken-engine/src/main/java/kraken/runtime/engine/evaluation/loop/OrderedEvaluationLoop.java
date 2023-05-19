@@ -239,7 +239,7 @@ public class OrderedEvaluationLoop implements EvaluationLoop {
                     fieldEvaluationResult.getContextFieldInfo(),
                     rulesAppliedOnField.size(),
                     rulesAppliedOnField.stream()
-                        .map(x -> x.getRuleInfo().getRuleName())
+                        .map(x -> "'" + x.getRuleInfo().getRuleName() + "'")
                         .collect(Collectors.joining(", "))
                 ));
             }
@@ -318,7 +318,9 @@ public class OrderedEvaluationLoop implements EvaluationLoop {
                     : String.format(ruleTemplate, defaultRule.getName(), resultSize);
             }).collect(Collectors.joining(System.lineSeparator()));
 
-            return "Evaluated default rules." + System.lineSeparator() + ruleListString;
+            return ruleListString.isEmpty()
+                ? "Evaluated default rules."
+                : "Evaluated default rules." + System.lineSeparator() + ruleListString;
         }
     }
 

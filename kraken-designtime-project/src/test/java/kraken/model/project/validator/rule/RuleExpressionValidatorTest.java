@@ -15,9 +15,11 @@
  */
 package kraken.model.project.validator.rule;
 
+import static kraken.model.context.Cardinality.MULTIPLE;
 import static kraken.model.context.PrimitiveFieldDataType.BOOLEAN;
 import static kraken.model.context.PrimitiveFieldDataType.DATETIME;
 import static kraken.model.context.PrimitiveFieldDataType.INTEGER;
+import static kraken.model.context.PrimitiveFieldDataType.MONEY;
 import static kraken.model.context.PrimitiveFieldDataType.STRING;
 import static kraken.model.project.KrakenProjectMocks.attribute;
 import static kraken.model.project.KrakenProjectMocks.contextDefinition;
@@ -215,7 +217,7 @@ public class RuleExpressionValidatorTest {
         rule.setPayload(payload);
 
         ContextField field = field("stringArray", STRING);
-        field.setCardinality(Cardinality.MULTIPLE);
+        field.setCardinality(MULTIPLE);
         ContextDefinition contextDefinition = contextDefinition("PartyContext", List.of(field("name"), field));
 
         KrakenProject krakenProject = krakenProject(List.of(contextDefinition), entryPoints(), List.of(rule));
@@ -234,7 +236,7 @@ public class RuleExpressionValidatorTest {
         rule.setPayload(payload);
 
         ContextField field = field("stringArray", STRING);
-        field.setCardinality(Cardinality.MULTIPLE);
+        field.setCardinality(MULTIPLE);
         ContextDefinition contextDefinition = contextDefinition("PartyContext", List.of(field("age", INTEGER), field));
 
         KrakenProject krakenProject = krakenProject(List.of(contextDefinition), entryPoints(), List.of(rule));
@@ -327,6 +329,23 @@ public class RuleExpressionValidatorTest {
                 equalTo("Return type of default expression must be compatible with field type which is String, " +
                         "but expression return type is Boolean")
         );
+    }
+
+    @Test
+    public void shouldNotFailValidationWhenDefaultReturnTypeIsArrayAndCompatibleWithField() {
+        Rule rule = rule("R", "Policy", "moneys");
+        DefaultValuePayload payload = factory.createDefaultValuePayload();
+        payload.setDefaultingType(DefaultingType.defaultValue);
+        payload.setValueExpression(expressionOf("{10.00, 20.00}"));
+        rule.setPayload(payload);
+
+        ContextDefinition contextDefinition = contextDefinition("Policy",
+            List.of(field("moneys", "moneys", MONEY.toString(), MULTIPLE)));
+        KrakenProject krakenProject = krakenProject(List.of(contextDefinition), entryPoints(), List.of(rule));
+
+        List<ValidationMessage> validationMessages = validate(rule, krakenProject);
+
+        assertThat(validationMessages, empty());
     }
 
     @Test

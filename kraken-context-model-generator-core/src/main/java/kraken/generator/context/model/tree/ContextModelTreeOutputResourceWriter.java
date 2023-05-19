@@ -15,10 +15,10 @@
  */
 package kraken.generator.context.model.tree;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +26,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.apache.commons.io.IOUtils;
+import org.apache.commons.vfs2.FileObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,6 +46,8 @@ import kraken.utils.GsonUtils;
 
 public class ContextModelTreeOutputResourceWriter {
 
+    private static final String TS_FILE_EXTENSION = "ts";
+
     private static final Logger logger = LoggerFactory.getLogger(ContextModelTreeOutputResourceWriter.class);
     private static final Function<String, String> fileName = ns -> "kraken_model_tree_" + ns;
     private static String namespace(String ns) {
@@ -53,11 +55,11 @@ public class ContextModelTreeOutputResourceWriter {
     }
 
     private final Collection<String> baseDirs;
-    private final String targetDir;
+    private final FileObject targetDir;
     private final Collection<String> namespaces;
     private final TargetEnvironment environment;
     private final List<String> excludePatterns;
-    private Gson gson;
+    private final Gson gson;
 
     /**
      * Creates resource writer.
@@ -72,12 +74,12 @@ public class ContextModelTreeOutputResourceWriter {
      * @since 1.0.29
      */
     public ContextModelTreeOutputResourceWriter(
-            Collection<String> baseDirs,
-            String outputDir,
-            Collection<String> namespace,
-            TargetEnvironment environment,
-            boolean isPretty,
-            List<String> excludePatterns
+        Collection<String> baseDirs,
+        FileObject outputDir,
+        Collection<String> namespace,
+        TargetEnvironment environment,
+        boolean isPretty,
+        List<String> excludePatterns
     ) {
         this.baseDirs = baseDirs;
         this.targetDir = outputDir;
@@ -103,20 +105,20 @@ public class ContextModelTreeOutputResourceWriter {
         logger.info("Requested to generate model tree: {}", namespaces);
 
         return namespaces.stream()
-                .filter(requestedNamespace -> availableNs.contains(requestedNamespace))
-                .distinct()
-                .collect(Collectors.toMap(
-                        fileName,
-                        ns -> ContextModelTrees.create(
-                                ContextRepository.from(
-                                        new KrakenProjectConverter(
-                                                krakenProjectBuilder.buildKrakenProject(namespace(ns)),
-                                                environment
-                                        ).convert()
-                                ),
-                                namespace(ns),
-                                environment
-                        )));
+            .filter(availableNs::contains)
+            .distinct()
+            .collect(Collectors.toMap(
+                fileName,
+                ns -> ContextModelTrees.create(
+                    ContextRepository.from(
+                        new KrakenProjectConverter(
+                            krakenProjectBuilder.buildKrakenProject(namespace(ns)),
+                            environment
+                        ).convert()
+                    ),
+                    namespace(ns),
+                    environment
+                )));
     }
 
     private BiConsumer<String, ContextModelTree> write() {
@@ -126,37 +128,51 @@ public class ContextModelTreeOutputResourceWriter {
         return this::writeJson;
     }
 
-    private String getJavaScriptFilePath(String fileName) {
-        return getFilePath(fileName, "ts");
-    }
-
     private void writeJson(String fileName, ContextModelTree modelTree) {
-        String json = gson.toJson(modelTree);
         String prefix = "// tslint:disable\nexport const " + fileName.toUpperCase() + " = ";
-        String file = prefix.concat(json);
-        final String filePath = getJavaScriptFilePath(fileName);
-        final boolean mkdirs = new File(filePath).getParentFile().mkdirs();
-        try (FileOutputStream stream = new FileOutputStream(filePath)) {
-            IOUtils.write(file, stream);
-            logger.info(String.format("ContextModelTree by name: %s was written to location: %s", fileName, filePath));
-        } catch (IOException exception) {
-            logger.error("Failed to write ContextModelTree.", exception);
+        String jsonModelTree = prefix.concat(gson.toJson(modelTree));
+        String fileNameWithExtension = withExtension(fileName, TS_FILE_EXTENSION);
+
+        try (FileObject file = targetDir.resolveFile(fileNameWithExtension)) {
+            OutputStream os = file.getContent().getOutputStream();
+            os.write((jsonModelTree).getBytes(StandardCharsets.UTF_8));
+
+            logSuccess(fileNameWithExtension);
+        } catch (IOException e) {
+            logFailure(fileNameWithExtension, e);
         }
     }
 
-    private void writeBinary(String fileName, ContextModelTree t) {
-        final String filePath = getFilePath(fileName, StaticContextModelTreeRepository.EXTENSION);
-        final boolean mkdirs = new File(filePath).getParentFile().mkdirs();
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath))) {
-            oos.writeObject(t);
-            logger.info(String.format("ContextModelTree by name: %s was written to location: %s", fileName, filePath));
-        } catch (Exception ex) {
-            logger.error("Failed to write ContextModelTree.", ex);
+    private void writeBinary(String fileName, ContextModelTree modelTree) {
+        String fileNameWithExtension = withExtension(fileName, StaticContextModelTreeRepository.EXTENSION);
+
+        try (FileObject file = targetDir.resolveFile(fileNameWithExtension)) {
+            ObjectOutputStream oos = new ObjectOutputStream(file.getContent().getOutputStream());
+            oos.writeObject(modelTree);
+
+            logSuccess(fileNameWithExtension);
+        } catch (IOException e) {
+            logFailure(fileNameWithExtension, e);
         }
     }
 
-    private String getFilePath(String fileName, String extension) {
-        return targetDir + "/" + fileName + "." + extension;
+    private void logSuccess(String fileName) {
+        logger.info(String.format("ContextModelTree '%s' was written to location: %s",
+            fileName,
+            targetDir.getName().getPath()));
+    }
+
+    private void logFailure(String fileName, Exception e) {
+        logger.error(
+            String.format(
+                "Failed to write ContextModelTree '%s' to location: %s",
+                fileName,
+                targetDir.getName().getPath()),
+            e);
+    }
+
+    private String withExtension(String fileName, String extension) {
+        return fileName + "." + extension;
     }
 
 }

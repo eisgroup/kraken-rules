@@ -493,7 +493,7 @@ public class MathFunctions implements FunctionLibrary {
 
     private static Number asNumber(Object value) {
         if (value instanceof MonetaryAmount) {
-            return MoneyFunctions.fromMoney((MonetaryAmount) value);
+            return Numbers.fromMoney((MonetaryAmount) value);
         }
         if (value instanceof Number) {
             return (Number) value;

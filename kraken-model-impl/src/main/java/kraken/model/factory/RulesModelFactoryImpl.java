@@ -74,6 +74,7 @@ public class RulesModelFactoryImpl implements RulesModelFactory {
         classNameHolders.add(new ClassHolder(FunctionExample.class, FunctionExampleImpl.class));
         classNameHolders.add(new ClassHolder(NumberSetPayload.class, NumberSetPayloadImpl.class));
         classNameHolders.add(new ClassHolder(ValueListPayload.class, ValueListPayloadImpl.class));
+        classNameHolders.add(new ClassHolder(Dimension.class, DimensionImpl.class));
     }
 
     @Override
@@ -438,6 +439,7 @@ public class RulesModelFactoryImpl implements RulesModelFactory {
         cloned.setPayload(clonePayload(rule.getPayload()));
         cloned.setMetadata(rule.getMetadata() != null ? cloneMetadata(rule.getMetadata()) : null);
         cloned.setPriority(rule.getPriority());
+        cloned.setServerSideOnly(rule.isServerSideOnly());
         return cloned;
     }
 
@@ -610,6 +612,21 @@ public class RulesModelFactoryImpl implements RulesModelFactory {
         cloned.setExample(functionExample.getExample());
         cloned.setResult(functionExample.getResult());
         cloned.setValid(functionExample.isValid());
+        return cloned;
+    }
+
+    @Override
+    public Dimension createDimension() {
+        return new DimensionImpl();
+    }
+
+    @Override
+    public Dimension cloneDimension(Dimension dimension) {
+        Dimension cloned = new DimensionImpl();
+        cloned.setName(dimension.getName());
+        cloned.setDataType(dimension.getDataType());
+        cloned.setPhysicalNamespace(dimension.getPhysicalNamespace());
+
         return cloned;
     }
 

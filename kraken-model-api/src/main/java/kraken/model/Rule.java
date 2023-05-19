@@ -140,4 +140,20 @@ public interface Rule extends KrakenModelItem, MetadataAware {
      * @param priority of this rule variation.
      */
     void setPriority(Integer priority);
+
+    /**
+     * A flag that affects rule execution environment. If set to {@code true}, then
+     * a rule should only be executed on backend, otherwise, if set to {@code false},
+     * then rule is applicable for all environments.
+     *
+     * @return Indication whether a rule is server side only.
+     */
+    boolean isServerSideOnly();
+
+    /**
+     * @see #isServerSideOnly()
+     * @param serverSideOnly value indicating whether a rule is server side only.
+     */
+    void setServerSideOnly(boolean serverSideOnly);
+
 }

@@ -34,9 +34,19 @@ public enum EvaluationMode {
 
     ALL(PayloadType.values()),
 
-    INQUIRY(PayloadType.VISIBILITY, PayloadType.ACCESSIBILITY),
+    INQUIRY(
+        PayloadType.VISIBILITY,
+        PayloadType.ACCESSIBILITY
+    ),
 
-    PRESENTATIONAL(PayloadType.VISIBILITY, PayloadType.ACCESSIBILITY, PayloadType.DEFAULT, PayloadType.USAGE);
+    PRESENTATIONAL(
+        PayloadType.VISIBILITY,
+        PayloadType.ACCESSIBILITY,
+        PayloadType.DEFAULT,
+        PayloadType.USAGE,
+        PayloadType.SIZE,
+        PayloadType.SIZE_RANGE
+    );
 
     private final Set<PayloadType> supportedTypes;
 

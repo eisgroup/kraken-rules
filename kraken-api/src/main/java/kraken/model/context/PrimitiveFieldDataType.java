@@ -35,7 +35,7 @@ public enum PrimitiveFieldDataType {
             .map(PrimitiveFieldDataType::toString)
             .collect(Collectors.toSet());
 
-    public static final boolean isPrimitiveType(String type) {
+    public static boolean isPrimitiveType(String type) {
         return primitiveFieldDataTypes.contains(type);
     }
 

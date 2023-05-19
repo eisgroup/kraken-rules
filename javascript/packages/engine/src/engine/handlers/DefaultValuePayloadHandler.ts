@@ -116,72 +116,105 @@ export class DefaultValuePayloadHandler implements RulePayloadHandler {
     }
 
     private isEmptyValue(value: unknown): boolean {
-        return value == undefined || value === ''
+        return value == undefined || value === '' || (Array.isArray(value) && value.length === 0)
     }
 
     private coerce(
-        defaultValue: unknown,
+        value: unknown,
         rule: Rule,
         dataCtx: DataContext,
         session: ExecutionSession,
     ): ExpressionEvaluationResult.Result {
         const field = dataCtx.contextDefinition.fields?.[rule.targetPath]
         if (!field) {
-            return ExpressionEvaluationResult.expressionSuccess(defaultValue)
+            return ExpressionEvaluationResult.expressionSuccess(value)
         }
-        if (!Contexts.fieldTypeChecker.isPrimitive(field.fieldType) || field.cardinality !== 'SINGLE') {
+        if (!Contexts.fieldTypeChecker.isPrimitive(field.fieldType)) {
             throw Error(
                 `Unsupported operation. Default value rule '${rule.name}' is being applied on attribute '${
                     dataCtx.contextName
-                }.${field.name}' which is not a primitive attribute, but a '${this.toTypeSymbol(field)}'.`,
+                }.${field.name}' whose type is '${this.toTypeSymbol(
+                    field,
+                )}'. Default value rule can only be applied on attribute which is primitive or a collection of primitives.`,
             )
         }
+        return this.coerceValue(value, field, dataCtx, session)
+    }
 
-        if (defaultValue == undefined) {
-            return ExpressionEvaluationResult.expressionSuccess(defaultValue)
+    private coerceValue(
+        value: unknown,
+        field: ContextField,
+        dataCtx: DataContext,
+        session: ExecutionSession,
+    ): ExpressionEvaluationResult.Result {
+        if (field.cardinality === 'MULTIPLE') {
+            if (value == undefined) {
+                return ExpressionEvaluationResult.expressionSuccess(value)
+            }
+            if (Array.isArray(value)) {
+                const arrayValue = []
+                for (const v of value) {
+                    try {
+                        arrayValue.push(this.coercePrimitiveValue(v, field, session))
+                    } catch (e) {
+                        return this.logWarningAndReturnErrorResult(value, dataCtx, field)
+                    }
+                }
+                return ExpressionEvaluationResult.expressionSuccess(arrayValue)
+            }
+            return this.logWarningAndReturnErrorResult(value, dataCtx, field)
         }
 
+        try {
+            const coercedValue = this.coercePrimitiveValue(value, field, session)
+            return ExpressionEvaluationResult.expressionSuccess(coercedValue)
+        } catch (e) {
+            return this.logWarningAndReturnErrorResult(value, dataCtx, field)
+        }
+    }
+
+    private coercePrimitiveValue(value: unknown, field: ContextField, session: ExecutionSession): unknown {
+        if (value == undefined) {
+            return value
+        }
         switch (field.fieldType) {
             case 'MONEY':
-                if (Moneys.isMoney(defaultValue)) {
-                    return ExpressionEvaluationResult.expressionSuccess(defaultValue)
+                if (Moneys.isMoney(value)) {
+                    return value
                 }
-                if (typeof defaultValue === 'number') {
-                    return ExpressionEvaluationResult.expressionSuccess(toMoney(session.currencyCd, defaultValue))
+                if (typeof value === 'number') {
+                    return toMoney(session.currencyCd, value)
                 }
-                return this.logWarningAndReturnErrorResult(defaultValue, dataCtx, field)
+                throw new Error(`Cannot convert to: ${field.fieldType}`)
             case 'INTEGER':
             case 'DECIMAL':
-                if (typeof defaultValue === 'number') {
-                    return ExpressionEvaluationResult.expressionSuccess(defaultValue)
+                if (typeof value === 'number') {
+                    return value
                 }
-                if (Moneys.isMoney(defaultValue)) {
-                    return ExpressionEvaluationResult.expressionSuccess(defaultValue.amount)
+                if (Moneys.isMoney(value)) {
+                    return value.amount
                 }
-                return this.logWarningAndReturnErrorResult(defaultValue, dataCtx, field)
+                throw new Error(`Cannot convert to: ${field.fieldType}`)
             case 'DATE':
             case 'DATETIME':
-                if (defaultValue instanceof Date) {
-                    return ExpressionEvaluationResult.expressionSuccess(defaultValue)
+                if (value instanceof Date) {
+                    return value
                 }
-                return this.logWarningAndReturnErrorResult(defaultValue, dataCtx, field)
+                throw new Error(`Cannot convert to: ${field.fieldType}`)
             case 'BOOLEAN':
-                if (typeof defaultValue === 'boolean') {
-                    return ExpressionEvaluationResult.expressionSuccess(defaultValue)
+                if (typeof value === 'boolean') {
+                    return value
                 }
-                return this.logWarningAndReturnErrorResult(defaultValue, dataCtx, field)
+                throw new Error(`Cannot convert to: ${field.fieldType}`)
             case 'STRING':
-                if (typeof defaultValue === 'string') {
-                    return ExpressionEvaluationResult.expressionSuccess(defaultValue)
+                if (typeof value === 'string') {
+                    return value
                 }
-                return this.logWarningAndReturnErrorResult(defaultValue, dataCtx, field)
+                throw new Error(`Cannot convert to: ${field.fieldType}`)
             case 'UUID':
-                return ExpressionEvaluationResult.expressionSuccess(defaultValue)
+                return value
         }
-        return ExpressionEvaluationResult.expressionError({
-            message: `Unknown primitive field type: ${field.fieldType}`,
-            severity: 'critical',
-        })
+        throw new Error(`Unknown primitive field type: ${field.fieldType}`)
     }
 
     private logWarningAndReturnErrorResult(
@@ -189,7 +222,9 @@ export class DefaultValuePayloadHandler implements RulePayloadHandler {
         dataContext: DataContext,
         field: ContextField,
     ): ExpressionEvaluationResult.Result {
-        const message = `Cannot apply value '${value} (typeof ${typeof value})' on '${dataContext.contextName}.${
+        const message = `Cannot apply value '${ExpressionEvaluator.renderFieldValue(
+            value,
+        )} (typeof ${typeof value})' on '${dataContext.contextName}.${
             field.name
         }' because value type is not assignable to field type '${this.toTypeSymbol(
             field,

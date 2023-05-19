@@ -79,11 +79,11 @@ public class KrakenModelDSLParserBaseTest {
         assertThat(model.getContextDefinitions(), hasSize(2));
         assertThat(model.getEntryPoints(), hasSize(2));
         assertThat(model.getRules(), hasSize(2));
+        assertThat(model.getDimensions(), hasSize(2));
 
         assertThat(model.getRules().get(0).getMetadata().getProperty("packageCd"), equalTo("Barber"));
         assertThat(model.getRules().get(1).getMetadata().getProperty("packageCd"), equalTo("Pizza"));
         assertThat(model.getRules().get(1).getMetadata().getProperty("planCd"), equalTo("Premium"));
-
     }
 
 }

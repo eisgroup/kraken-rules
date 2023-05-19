@@ -93,6 +93,8 @@ public class DSLModel {
      */
     private final List<DSLFunction> functions;
 
+    private final List<DSLDimension> dimensions;
+
     public DSLModel(List<DSLContext> contexts,
                     List<DSLEntryPoint> entryPoints,
                     List<DSLRule> rules,
@@ -105,7 +107,8 @@ public class DSLModel {
                     DSLExternalContext externalContext,
                     List<DSLExternalContextDefinition> externalContextDefinitions,
                     List<DSLFunctionSignature> functionSignatures,
-                    List<DSLFunction> functions) {
+                    List<DSLFunction> functions,
+                    List<DSLDimension> dimensions) {
         this.externalContext = externalContext;
         this.externalContextDefinitions = externalContextDefinitions;
         this.contexts = Objects.requireNonNull(contexts);
@@ -120,6 +123,7 @@ public class DSLModel {
         this.ruleImports = Objects.requireNonNull(ruleImports);
         this.functionSignatures = Objects.requireNonNull(functionSignatures);
         this.functions = Objects.requireNonNull(functions);
+        this.dimensions = Objects.requireNonNull(dimensions);
     }
 
     public List<DSLEntryPoints> getEntryPointBlocks() {
@@ -173,4 +177,9 @@ public class DSLModel {
     public List<DSLFunction> getFunctions() {
         return Collections.unmodifiableList(functions);
     }
+
+    public List<DSLDimension> getDimensions() {
+        return Collections.unmodifiableList(dimensions);
+    }
+
 }

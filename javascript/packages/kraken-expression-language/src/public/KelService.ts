@@ -130,9 +130,6 @@ export class KelService {
     validateReturnType(expression: string, expectedTypeName: string): ReturnTypeError | undefined {
         const { node } = this.parserCache.getOrCompute(expression, e => this.compute(e))
         const expectedType = this.scope.resolveTypeOf(expectedTypeName)
-        if (!expectedType.isKnown()) {
-            throw new Error(`Expected type ${expectedTypeName} is unknown`)
-        }
         const assignable = expectedType.isAssignableFrom(node.evaluationType)
         if (!assignable) {
             return {

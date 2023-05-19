@@ -29,6 +29,7 @@ import kraken.runtime.model.context.ContextField;
 import kraken.runtime.model.context.RuntimeContextDefinition;
 import kraken.runtime.model.rule.RuntimeRule;
 
+import org.hamcrest.core.IsCollectionContaining;
 import org.javamoney.moneta.Money;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,6 +45,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.core.IsCollectionContaining.hasItems;
 import static org.junit.Assert.assertThrows;
 
 import java.math.BigDecimal;
@@ -233,24 +235,73 @@ public class DefaultValuePayloadHandlerTest {
     }
 
     @Test
-    public void shouldThrowIfDefaultingArrayOfPrimitives() {
+    public void shouldDefaultNullCollectionOfPrimitives() {
         Coverage coverage = new Coverage();
         DataContext dataContext = new DataContext();
         dataContext.setDataObject(coverage);
         dataContext.setContextDefinition(coverageDefinition());
         RuntimeRule rule = TestRuleBuilder.getInstance()
-            .defaultPayload("null", DefaultingType.resetValue)
+            .defaultPayload("{'A', 'B', 'C'}", DefaultingType.defaultValue)
             .targetPath("labels")
             .build();
 
-        assertThrows(
-            UnsupportedOperationException.class,
-            () -> defaultValuePayloadHandler.executePayload(
-                rule,
-                dataContext,
-                SESSION
-            )
-        );
+        var result = (DefaultValuePayloadResult) defaultValuePayloadHandler.executePayload(rule, dataContext, SESSION);
+
+        assertThat(result.getException().isEmpty(), is(true));
+        assertThat(coverage.getLabels(), hasItems("A", "B", "C"));
+    }
+
+    @Test
+    public void shouldDefaultEmptyCollectionOfPrimitives() {
+        Coverage coverage = new Coverage();
+        coverage.setLabels(List.of());
+        DataContext dataContext = new DataContext();
+        dataContext.setDataObject(coverage);
+        dataContext.setContextDefinition(coverageDefinition());
+        RuntimeRule rule = TestRuleBuilder.getInstance()
+            .defaultPayload("{'A', 'B', 'C'}", DefaultingType.defaultValue)
+            .targetPath("labels")
+            .build();
+
+        var result = (DefaultValuePayloadResult) defaultValuePayloadHandler.executePayload(rule, dataContext, SESSION);
+
+        assertThat(result.getException().isEmpty(), is(true));
+        assertThat(coverage.getLabels(), hasItems("A", "B", "C"));
+    }
+
+    @Test
+    public void shouldResetCollectionOfPrimitives() {
+        Coverage coverage = new Coverage();
+        coverage.setLabels(List.of("A"));
+        DataContext dataContext = new DataContext();
+        dataContext.setDataObject(coverage);
+        dataContext.setContextDefinition(coverageDefinition());
+        RuntimeRule rule = TestRuleBuilder.getInstance()
+            .defaultPayload("{'A', 'B', 'C'}", DefaultingType.resetValue)
+            .targetPath("labels")
+            .build();
+
+        var result = (DefaultValuePayloadResult) defaultValuePayloadHandler.executePayload(rule, dataContext, SESSION);
+
+        assertThat(result.getException().isEmpty(), is(true));
+        assertThat(coverage.getLabels(), hasItems("A", "B", "C"));
+    }
+
+    @Test
+    public void shouldDefaultCoercedCollectionOfPrimitives() {
+        Coverage coverage = new Coverage();
+        DataContext dataContext = new DataContext();
+        dataContext.setDataObject(coverage);
+        dataContext.setContextDefinition(coverageDefinition());
+        RuntimeRule rule = TestRuleBuilder.getInstance()
+            .defaultPayload("{10, 20}", DefaultingType.resetValue)
+            .targetPath("moneys")
+            .build();
+
+        var result = (DefaultValuePayloadResult) defaultValuePayloadHandler.executePayload(rule, dataContext, SESSION);
+
+        assertThat(result.getException().isEmpty(), is(true));
+        assertThat(coverage.getMoneys(), hasItems(Money.of(10, "USD"), Money.of(20, "USD")));
     }
 
     @Test
@@ -289,6 +340,8 @@ public class DefaultValuePayloadHandlerTest {
                 field("localDateTime", DATETIME.toString(), Cardinality.SINGLE),
                 "labels",
                 field("labels", STRING.toString(), Cardinality.MULTIPLE),
+                "moneys",
+                field("moneys", MONEY.toString(), Cardinality.MULTIPLE),
                 "address",
                 field("address", "Address", Cardinality.SINGLE)
             ),

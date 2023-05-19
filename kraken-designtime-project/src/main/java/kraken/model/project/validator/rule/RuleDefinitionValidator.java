@@ -39,7 +39,9 @@ public class RuleDefinitionValidator {
             new RuleDefinedOnCycleValidator(krakenProject),
             new RuleCrossContextCardinalityValidator(krakenProject),
             new RuleCrossContextDependencyValidator(krakenProject),
-            new RuleExpressionValidator(krakenProject)
+            new RuleExpressionValidator(krakenProject),
+            new RuleServerSideOnlyValidator(krakenProject),
+            new RuleDimensionsValidator(krakenProject)
         );
 
         this.dynamicRuleValidators = List.of(

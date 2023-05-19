@@ -31,6 +31,7 @@ public class Coverage {
     private LocalDate localDate;
     private LocalDateTime localDateTime;
     private List<String> labels;
+    private List<MonetaryAmount> moneys;
     private Collection<Object> conditions;
     private Object address;
 
@@ -95,6 +96,14 @@ public class Coverage {
 
     public void setLabels(List<String> labels) {
         this.labels = labels;
+    }
+
+    public List<MonetaryAmount> getMoneys() {
+        return moneys;
+    }
+
+    public void setMoneys(List<MonetaryAmount> moneys) {
+        this.moneys = moneys;
     }
 
     public Object getAddress() {

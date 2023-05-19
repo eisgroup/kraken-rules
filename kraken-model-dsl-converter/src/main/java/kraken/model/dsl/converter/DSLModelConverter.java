@@ -27,6 +27,7 @@ import org.stringtemplate.v4.STGroupFile;
 
 import kraken.annotations.API;
 import kraken.el.ast.builder.Literals;
+import kraken.model.Dimension;
 import kraken.model.Metadata;
 import kraken.model.context.Cardinality;
 import kraken.model.context.ContextField;
@@ -109,6 +110,7 @@ public class DSLModelConverter {
         template.registerRenderer(Number.class, new CustomNumberRenderer());
         template.registerModelAdaptor(ContextNavigation.class, new ContextDefinitionRenderer.ContextNavigationAdapter());
         template.registerModelAdaptor(ContextField.class, new ContextDefinitionRenderer.ContextFieldAdapter());
+        template.registerModelAdaptor(Dimension.class, new DimensionAdapter());
 
         errorListener = new DefaultErrorListener();
         template.setListener(errorListener);
