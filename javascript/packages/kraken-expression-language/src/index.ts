@@ -12,3 +12,5 @@ export * from './visitor/type-at-location/LocationInfo'
 export * from './public/Cache'
 export * from './public/KelService'
 export * from './public/ScopeDeserializer'
+
+export { Type } from './type/Types'

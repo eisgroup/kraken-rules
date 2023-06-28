@@ -164,7 +164,7 @@ public final class RuleExpressionValidator implements RuleValidator {
     private void validateDefaultExpression(Rule rule, ContextDefinition contextDefinition, Scope scope, ValidationSession session) {
         if (rule.getPayload() instanceof DefaultValuePayload && ((DefaultValuePayload) rule.getPayload()).getValueExpression() != null) {
             String defaultExpression = ((DefaultValuePayload) rule.getPayload()).getValueExpression().getExpressionString();
-            if(!checkIfParseable(defaultExpression, "Default", rule, scope, session)) {
+            if (!checkIfParseable(defaultExpression, "Default", rule, scope, session)) {
                 return;
             }
             Ast ast = AstBuilder.from(defaultExpression, scope);
@@ -176,25 +176,44 @@ public final class RuleExpressionValidator implements RuleValidator {
                 ? determineFieldType(rule, scope)
                 : Type.ANY;
 
-            if (!typesAreCompatible(fieldType, ast.getExpression().getEvaluationType())) {
-                session.add(new ValidationMessage(
+            Type evaluationType = ast.getExpression().getEvaluationType();
+            String targetPath = rule.getTargetPath();
+
+            if (!fieldType.isAssignableFrom(evaluationType)) {
+                String commonMessage = "Return type of default expression must be compatible with field type which is %1$s, " +
+                    "but expression return type is %2$s. " +
+                    "%2$s value will be automatically converted to %1$s value as a %3$s. " +
+                    "Automatic conversion should be avoided because it is a lossy operation " +
+                    "and the converted value depends on the local locale " +
+                    "which may produce inconsistent rule evaluation results.";
+
+                if (Type.DATE.isAssignableFrom(fieldType) && Type.DATETIME.isAssignableFrom(evaluationType)) {
+                    String dateFieldSpecificMessage = "date in local locale at that moment in time";
+                    session.add(
+                        new ValidationMessage(
+                            rule,
+                            String.format(commonMessage, fieldType, evaluationType, dateFieldSpecificMessage),
+                            Severity.WARNING
+                        ));
+                } else if (Type.DATETIME.isAssignableFrom(fieldType) && Type.DATE.isAssignableFrom(evaluationType)) {
+                    String dateTimeFieldSpecificMessage = "moment in time at the start of the day in local locale";
+                    session.add(
+                        new ValidationMessage(
+                            rule,
+                            String.format(commonMessage, fieldType, evaluationType, dateTimeFieldSpecificMessage),
+                            Severity.WARNING
+                        ));
+                } else {
+                    session.add(new ValidationMessage(
                         rule,
                         String.format("Return type of default expression must be compatible with field type which is %s, " +
-                                "but expression return type is %s", fieldType, ast.getExpression().getEvaluationType()),
+                            "but expression return type is %s", fieldType, ast.getExpression().getEvaluationType()),
                         Severity.ERROR
-                ));
+                    ));
+                }
             }
             checkIfNotEmpty(rule, "Default", ast.getExpression(), session);
         }
-    }
-
-    private boolean typesAreCompatible(Type fieldType, Type evaluationType) {
-        return fieldType.isAssignableFrom(evaluationType) || canBeCoerced(fieldType, evaluationType);
-    }
-
-    private boolean canBeCoerced(Type fieldType, Type evaluationType) {
-        return Type.DATE.isAssignableFrom(fieldType) && Type.DATETIME.isAssignableFrom(evaluationType)
-                || Type.DATETIME.isAssignableFrom(fieldType) && Type.DATE.isAssignableFrom(evaluationType);
     }
 
     private Type determineFieldType(Rule rule, Scope scope) {

@@ -16,8 +16,11 @@
 package kraken.model.project.validator.rule;
 
 import static kraken.model.context.Cardinality.MULTIPLE;
+import static kraken.model.context.Cardinality.SINGLE;
 import static kraken.model.context.PrimitiveFieldDataType.BOOLEAN;
 import static kraken.model.context.PrimitiveFieldDataType.DATETIME;
+import static kraken.model.context.PrimitiveFieldDataType.DATE;
+import static kraken.model.context.PrimitiveFieldDataType.DECIMAL;
 import static kraken.model.context.PrimitiveFieldDataType.INTEGER;
 import static kraken.model.context.PrimitiveFieldDataType.MONEY;
 import static kraken.model.context.PrimitiveFieldDataType.STRING;
@@ -49,10 +52,8 @@ import kraken.model.Expression;
 import kraken.model.FunctionSignature;
 import kraken.model.Payload;
 import kraken.model.Rule;
-import kraken.model.context.Cardinality;
 import kraken.model.context.ContextDefinition;
 import kraken.model.context.ContextField;
-import kraken.model.context.PrimitiveFieldDataType;
 import kraken.model.context.external.ExternalContext;
 import kraken.model.context.external.ExternalContextDefinition;
 import kraken.model.derive.DefaultValuePayload;
@@ -80,7 +81,7 @@ public class RuleExpressionValidatorTest {
         ContextDefinition contextDefinition = contextDefinition("PartyContext", List.of(
             field("surname"),
             field("name"),
-            field("age", PrimitiveFieldDataType.DECIMAL)
+            field("age", DECIMAL)
         ));
 
         KrakenProject krakenProject = krakenProject(List.of(contextDefinition), entryPoints(), List.of(rule));
@@ -98,7 +99,7 @@ public class RuleExpressionValidatorTest {
         rule.setPayload(defaultValuePayload);
 
         ContextDefinition contextDefinition = contextDefinition("PartyContext", List.of(
-            field("age", PrimitiveFieldDataType.DECIMAL)
+            field("age", DECIMAL)
         ));
 
         KrakenProject krakenProject = krakenProject(List.of(contextDefinition), entryPoints(), List.of(rule));
@@ -349,7 +350,7 @@ public class RuleExpressionValidatorTest {
     }
 
     @Test
-    public void shouldNotFailValidationWhenDefaultReturnTypeIsDateButExpressionEvaluationTypeIsDateTime() {
+    public void shouldThrowWarningWhenDefaultReturnTypeIsDateTimeButExpressionEvaluationTypeIsDate() {
         Rule rule = rule("R", "Policy", "expirationDate");
         DefaultValuePayload payload = factory.createDefaultValuePayload();
         payload.setDefaultingType(DefaultingType.defaultValue);
@@ -361,7 +362,39 @@ public class RuleExpressionValidatorTest {
 
         List<ValidationMessage> validationMessages = validate(rule, krakenProject);
 
-        assertThat(validationMessages, empty());
+        assertThat(validationMessages, hasSize(1));
+        assertThat(validationMessages.get(0).getSeverity(), is(Severity.WARNING));
+        assertThat(validationMessages.get(0).getMessage(),
+            equalTo("Return type of default expression must be compatible with field type which is DateTime, " +
+                "but expression return type is Date. " +
+                "Date value will be automatically converted to DateTime value as a moment in time at the start of the day in local locale. " +
+                "Automatic conversion should be avoided because it is a lossy operation " +
+                "and the converted value depends on the local locale " +
+                "which may produce inconsistent rule evaluation results."));
+    }
+
+    @Test
+    public void shouldThrowWarningWhenDefaultReturnTypeIsDateButExpressionEvaluationTypeIsDateTime() {
+        Rule rule = rule("R", "Policy", "txEffectiveDate");
+        DefaultValuePayload payload = factory.createDefaultValuePayload();
+        payload.setDefaultingType(DefaultingType.defaultValue);
+        payload.setValueExpression(expressionOf("DateTime('2018-1-1T00:00:00')"));
+        rule.setPayload(payload);
+
+        ContextDefinition contextDefinition = contextDefinition("Policy", List.of(field("txEffectiveDate", DATE)));
+        KrakenProject krakenProject = krakenProject(List.of(contextDefinition), entryPoints(), List.of(rule));
+
+        List<ValidationMessage> validationMessages = validate(rule, krakenProject);
+
+        assertThat(validationMessages, hasSize(1));
+        assertThat(validationMessages.get(0).getSeverity(), is(Severity.WARNING));
+        assertThat(validationMessages.get(0).getMessage(),
+            equalTo("Return type of default expression must be compatible with field type which is Date, " +
+                "but expression return type is DateTime. " +
+                "DateTime value will be automatically converted to Date value as a date in local locale at that moment in time. " +
+                "Automatic conversion should be avoided because it is a lossy operation " +
+                "and the converted value depends on the local locale " +
+                "which may produce inconsistent rule evaluation results."));
     }
 
     @Test
@@ -375,7 +408,7 @@ public class RuleExpressionValidatorTest {
         ContextDefinition contextDefinition = contextDefinition("Policy", List.of(field("policyNumber", STRING)));
 
         ExternalContextDefinition externalContextDefinition = KrakenProjectMocks.externalContextDefinition("PreviousPolicy",
-                List.of(attribute("previousNumber", type(STRING.name(), Cardinality.SINGLE, true))));
+                List.of(attribute("previousNumber", type(STRING.name(), SINGLE, true))));
         ExternalContext externalContext = KrakenProjectMocks.externalContext("ExternalContext_root",
                 Map.of(),
                 Map.of("prev",
@@ -403,7 +436,7 @@ public class RuleExpressionValidatorTest {
         ContextDefinition contextDefinition = contextDefinition("Policy", List.of(field("policyField", STRING)));
 
         ExternalContextDefinition externalContextDefinition = KrakenProjectMocks.externalContextDefinition("PreviousPolicy",
-                List.of(attribute("previousField", type(BOOLEAN.name(), Cardinality.SINGLE, true))));
+                List.of(attribute("previousField", type(BOOLEAN.name(), SINGLE, true))));
         ExternalContext externalContext = KrakenProjectMocks.externalContext("ExternalContext_context",
                 Map.of(),
                 Map.of("prev", KrakenProjectMocks.createExternalContextDefinitionReference(externalContextDefinition.getName())));
@@ -434,7 +467,7 @@ public class RuleExpressionValidatorTest {
         ContextDefinition contextDefinition = contextDefinition("Policy", List.of(field("someField", STRING)));
 
         ExternalContextDefinition externalContextDefinition = KrakenProjectMocks.externalContextDefinition("PreviousPolicy",
-                List.of(attribute("nextField", type(BOOLEAN.name(), Cardinality.SINGLE, true))));
+                List.of(attribute("nextField", type(BOOLEAN.name(), SINGLE, true))));
         ExternalContext externalContext = KrakenProjectMocks.externalContext("ExternalContext_context",
                 Map.of(),
                 Map.of("oth", KrakenProjectMocks.createExternalContextDefinitionReference(externalContextDefinition.getName())));
@@ -470,7 +503,7 @@ public class RuleExpressionValidatorTest {
         ContextDefinition contextDefinition = contextDefinition("Policy", List.of(field("stringField", STRING)));
 
         ExternalContextDefinition externalContextDefinition = KrakenProjectMocks.externalContextDefinition("PreviousPolicy",
-                List.of(attribute("previousStringField", type(STRING.name(), Cardinality.SINGLE, true))));
+                List.of(attribute("previousStringField", type(STRING.name(), SINGLE, true))));
         ExternalContext externalContext = KrakenProjectMocks.externalContext("ExternalContext_context",
                 Map.of(),
                 Map.of("prev", KrakenProjectMocks.createExternalContextDefinitionReference(externalContextDefinition.getName())));
@@ -602,7 +635,7 @@ public class RuleExpressionValidatorTest {
         ContextDefinition contextDefinition = contextDefinition("PartyContext", List.of(
             field("surname"),
             field("name"),
-            field("age", PrimitiveFieldDataType.DECIMAL)
+            field("age", DECIMAL)
         ));
 
         KrakenProject krakenProject = krakenProject(List.of(contextDefinition), entryPoints(), List.of(rule));
@@ -625,7 +658,7 @@ public class RuleExpressionValidatorTest {
 
         ContextDefinition contextDefinition = contextDefinition("PartyContext", List.of(
             field("surname"),
-            field("age", PrimitiveFieldDataType.DECIMAL)
+            field("age", DECIMAL)
         ));
 
         KrakenProject krakenProject = krakenProject(List.of(contextDefinition), entryPoints(), List.of(rule));

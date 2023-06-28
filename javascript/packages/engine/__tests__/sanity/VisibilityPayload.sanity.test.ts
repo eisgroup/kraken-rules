@@ -14,9 +14,9 @@
  *  limitations under the License.
  */
 
+import { FieldMetadataReducer } from '../../src/engine/results/field_metadata_reducer/FieldMetadataReducer'
 import { sanityMocks } from './_AutoPolicyObject.mocks'
 import { sanityEngine } from './_SanityEngine'
-import { FieldMetadataReducer } from '../../src'
 
 describe('Engine Sanity Visibility Payload Test', () => {
     const { empty } = sanityMocks
