@@ -20,11 +20,10 @@ import static java.util.Objects.requireNonNull;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import kraken.Kraken;
-import kraken.dimensions.DimensionSet;
+import kraken.namespace.Namespaces;
 import kraken.runtime.EvaluationMode;
 import kraken.runtime.engine.core.EntryPointData;
 import kraken.runtime.engine.core.EntryPointEvaluation;
@@ -34,7 +33,6 @@ import kraken.runtime.model.rule.RuntimeRule;
 import kraken.runtime.repository.RuntimeProjectRepository;
 import kraken.runtime.repository.factory.RuntimeProjectRepositoryFactory;
 import kraken.tracer.Tracer;
-import kraken.namespace.Namespaces;
 
 /**
  * @author psurinin
@@ -56,25 +54,13 @@ public final class EntryPointBundleFactory {
      * @param entryPointName full entry point name with namespace prefixed
      * @param context        to resolve {@link RuntimeRule}s.
      */
-    public EntryPointBundle build(
-            String entryPointName,
-            Map<String, Object> context,
-            Set<DimensionSet> excludes,
-            EvaluationMode evaluationMode
-    ) {
-        return doBuild(entryPointName, context, evaluationMode, excludes);
-    }
-
-    private EntryPointBundle doBuild(String entryPointName,
-                                     Map<String, Object> context,
-                                     EvaluationMode evaluationMode,
-                                     Set<DimensionSet> excludes) {
+    public EntryPointBundle build(String entryPointName, Map<String, Object> context, EvaluationMode evaluationMode) {
         Objects.requireNonNull(entryPointName);
         Objects.requireNonNull(context);
         Objects.requireNonNull(evaluationMode);
 
         return Tracer.doOperation(
-            new EntryPointBundleBuildOperation(entryPointName, excludes),
+            new EntryPointBundleBuildOperation(entryPointName),
             () -> {
                 String namespace = Namespaces.toNamespaceName(entryPointName);
                 RuntimeProjectRepository repository = runtimeProjectRepositoryFactory.resolveRepository(namespace);
@@ -90,7 +76,7 @@ public final class EntryPointBundleFactory {
                 EntryPointOrderedEvaluationFactory evaluationFactory
                     = createEvaluationFactory(repository);
                 EntryPointEvaluation entryPointEvaluation
-                    = evaluationFactory.create(entryPointData, excludes);
+                    = evaluationFactory.create(entryPointData);
 
                 return new EntryPointBundle(entryPointEvaluation, context, Kraken.VERSION);
             }

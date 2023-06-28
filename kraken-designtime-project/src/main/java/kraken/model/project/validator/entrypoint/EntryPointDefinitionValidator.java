@@ -17,9 +17,6 @@ package kraken.model.project.validator.entrypoint;
 
 import static kraken.model.project.validator.Severity.ERROR;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import kraken.model.entrypoint.EntryPoint;
 import kraken.model.project.KrakenProject;
 import kraken.model.project.validator.ValidationMessage;
@@ -34,11 +31,13 @@ public class EntryPointDefinitionValidator {
     private final EntryPointIncludesValidator entryPointIncludesValidator;
     private final EntryPointRuleExistenceValidator entryPointRuleExistenceValidator;
     private final EntryPointServerSideOnlyValidator entryPointServerSideOnlyValidator;
+    private final EntryPointDimensionsValidator entryPointDimensionsValidator;
 
     public EntryPointDefinitionValidator(KrakenProject krakenProject) {
         this.entryPointIncludesValidator = new EntryPointIncludesValidator(krakenProject);
         this.entryPointRuleExistenceValidator = new EntryPointRuleExistenceValidator(krakenProject);
         this.entryPointServerSideOnlyValidator = new EntryPointServerSideOnlyValidator(krakenProject);
+        this.entryPointDimensionsValidator = new EntryPointDimensionsValidator(krakenProject);
     }
 
     public void validate(EntryPoint entryPoint, ValidationSession session) {
@@ -51,6 +50,7 @@ public class EntryPointDefinitionValidator {
             entryPointIncludesValidator.validate(entryPoint, epValidationSession);
             entryPointRuleExistenceValidator.validate(entryPoint, epValidationSession);
             entryPointServerSideOnlyValidator.validate(entryPoint, epValidationSession);
+            entryPointDimensionsValidator.validate(entryPoint, epValidationSession);
         }
 
         session.addAll(epValidationSession.getValidationMessages());

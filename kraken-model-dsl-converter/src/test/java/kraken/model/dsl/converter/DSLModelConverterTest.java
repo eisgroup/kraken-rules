@@ -6,9 +6,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import kraken.model.Dimension;
+import kraken.model.DimensionDataType;
 import kraken.model.Expression;
 import kraken.model.Rule;
 import kraken.model.context.ContextDefinition;
+import kraken.model.context.PrimitiveFieldDataType;
 import kraken.model.entrypoint.EntryPoint;
 import kraken.model.factory.RulesModelFactory;
 import kraken.model.resource.Resource;
@@ -19,6 +22,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 
 /**
  * @author psurinin
@@ -236,6 +240,47 @@ public class DSLModelConverterTest {
                         "    \"A3\"" + System.lineSeparator() +
                         "}" + System.lineSeparator() + System.lineSeparator(),
                 convert);
+    }
+
+    @Test
+    public void shouldConvertModelDimensions() {
+        Dimension firstDimension = factory.createDimension();
+        firstDimension.setDataType(DimensionDataType.DATE);
+        firstDimension.setName("dateDimension");
+
+        Dimension secondDimension = factory.createDimension();
+        secondDimension.setDataType(DimensionDataType.STRING);
+        secondDimension.setName("stringDimension");
+
+        Resource resource = ResourceBuilder.getInstance()
+            .addDimensions(List.of(firstDimension, secondDimension))
+            .setNamespace("some_namespace")
+            .build();
+
+        String convert = converter.convert(resource);
+
+        assertEquals(
+            "Namespace some_namespace" + System.lineSeparator() +
+                System.lineSeparator() +
+                "Dimension \"dateDimension\" : Date" +
+                System.lineSeparator() +
+                "Dimension \"stringDimension\" : String" +
+                System.lineSeparator() + System.lineSeparator(),
+            convert);
+    }
+
+    @Test
+    public void shouldThrowExceptionForUnsupportedDimensionDataType() {
+        Dimension firstDimension = factory.createDimension();
+        firstDimension.setDataType(null);
+        firstDimension.setName("dateDimension");
+
+        Resource resource = ResourceBuilder.getInstance()
+            .addDimension(firstDimension)
+            .setNamespace("some_namespace")
+            .build();
+
+        assertThrows(IllegalStateException.class, () -> converter.convert(resource));
     }
 
     private List<RuleImport> reference(String namespaceName, String... importNames) {

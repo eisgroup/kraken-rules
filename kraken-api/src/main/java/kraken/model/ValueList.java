@@ -18,11 +18,15 @@ package kraken.model;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 import kraken.annotations.API;
 import kraken.el.math.Numbers;
@@ -103,22 +107,33 @@ public final class ValueList {
         );
 
         private static final Set<String> supportedFieldDataTypes = Arrays.stream(values())
-            .flatMap(dataType -> dataType.getFieldTypes().stream())
-            .map(PrimitiveFieldDataType::toString)
+            .flatMap(dataType -> dataType.getPrimitiveFieldTypes().stream())
+            .map(PrimitiveFieldDataType::name)
             .collect(Collectors.toSet());
 
-        private final Set<PrimitiveFieldDataType> fieldTypes;
+        private static final Map<String, DataType> primitiveFieldTypeToDataType = Arrays.stream(values())
+            .flatMap(dataType -> dataType.getPrimitiveFieldTypes()
+                .stream()
+                .map(primitiveFieldDataType -> Pair.of(primitiveFieldDataType.name(), dataType)))
+            .collect(Collectors.toMap(Pair::getKey, Pair::getValue));
 
-        DataType(Set<PrimitiveFieldDataType> fieldTypes) {
-            this.fieldTypes = fieldTypes;
+        private final Set<PrimitiveFieldDataType> primitiveFieldDataTypes;
+
+        DataType(Set<PrimitiveFieldDataType> primitiveFieldDataTypes) {
+            this.primitiveFieldDataTypes = primitiveFieldDataTypes;
         }
 
-        public Set<PrimitiveFieldDataType> getFieldTypes() {
-            return fieldTypes;
+        private Set<PrimitiveFieldDataType> getPrimitiveFieldTypes() {
+            return primitiveFieldDataTypes;
         }
 
         public static boolean isSupportedFieldDataType(String fieldDataType) {
             return supportedFieldDataTypes.contains(fieldDataType);
+        }
+
+        @Nullable
+        public static DataType getDataType(String primitiveFieldDataType) {
+            return primitiveFieldTypeToDataType.get(primitiveFieldDataType);
         }
 
     }

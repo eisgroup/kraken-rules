@@ -15,8 +15,6 @@
  */
 package kraken.el.functionregistry.functions;
 
-import java.math.BigDecimal;
-
 import javax.money.MonetaryAmount;
 
 import kraken.el.functionregistry.Example;
@@ -26,6 +24,7 @@ import kraken.el.functionregistry.FunctionLibrary;
 import kraken.el.functionregistry.LibraryDocumentation;
 import kraken.el.functionregistry.Native;
 import kraken.el.functionregistry.ParameterDocumentation;
+import kraken.el.functionregistry.ParameterType;
 import kraken.el.math.Numbers;
 
 /**
@@ -49,9 +48,13 @@ public class MoneyFunctions implements FunctionLibrary {
         }
     )
     @ExpressionFunction("FromMoney")
-    public static BigDecimal fromMoney(
-        @ParameterDocumentation(name = "monetaryAmount") MonetaryAmount monetaryAmount
+    public static Number fromMoney(
+        @ParameterDocumentation(name = "monetaryAmount") @ParameterType("Money") Object monetaryAmount
     ) {
-        return Numbers.fromMoney(monetaryAmount);
+        if (monetaryAmount instanceof MonetaryAmount) {
+            return Numbers.fromMoney(((MonetaryAmount) monetaryAmount));
+        }
+
+        return (Number) monetaryAmount;
     }
 }

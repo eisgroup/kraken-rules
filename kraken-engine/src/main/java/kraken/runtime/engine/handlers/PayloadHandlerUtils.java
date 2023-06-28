@@ -15,6 +15,7 @@
  */
 package kraken.runtime.engine.handlers;
 
+import java.util.Collection;
 import java.util.Objects;
 
 import kraken.runtime.engine.RulePayloadHandler;
@@ -37,7 +38,9 @@ public class PayloadHandlerUtils {
      * @return          true if value is null or empty, false otherwise
      */
     public static boolean isEmptyValue(Object value) {
-        return value == null || "".equals(value);
+        return value == null
+            || "".equals(value)
+            || value instanceof Collection && ((Collection<?>) value).isEmpty();
     }
 
     /**

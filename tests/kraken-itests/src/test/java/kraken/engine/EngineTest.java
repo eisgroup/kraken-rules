@@ -113,12 +113,12 @@ public final class EngineTest extends EngineBaseTest {
         EntryPointResult result = engine.evaluate(policy, "EvalModeTestRules",
             new EvaluationConfig(Map.of(), "USD", EvaluationMode.PRESENTATIONAL));
 
-        assertThat(result.getAllRuleResults(), hasSize(4));
+        assertThat(result.getAllRuleResults(), hasSize(6));
         assertThat(result.getAllRuleResults().stream()
             .map(ruleEvaluationResult -> ruleEvaluationResult.getRuleInfo().getPayloadType())
             .collect(Collectors.toList()), containsInAnyOrder(
                 is(PayloadType.ACCESSIBILITY), is(PayloadType.VISIBILITY),
-                is(PayloadType.DEFAULT), is(PayloadType.USAGE)));
+                is(PayloadType.DEFAULT), is(PayloadType.USAGE), is(PayloadType.SIZE), is(PayloadType.SIZE_RANGE)));
     }
 
     @Test

@@ -1,12 +1,7 @@
+const baseConfig = require('../../jest.config.base')
+
 module.exports = {
-    moduleFileExtensions: ['ts', 'tsx', 'js'],
-    transform: {
-        '^.+\\.ts$': ['@swc/jest'],
-    },
-    testMatch: ['**/?(*.)test.ts'],
-    verbose: true,
-    cacheDirectory: './target/tmp/',
-    coverageDirectory: './target/coverage',
+    ...baseConfig,
     coverageThreshold: {
         global: {
             branches: 85,
@@ -15,6 +10,4 @@ module.exports = {
             statements: 90,
         },
     },
-    collectCoverageFrom: ['**/*[^d\\.].ts', '!**/node_modules/**', '!**/target/**', '!**/test/**', '!**/index.ts'],
-    testEnvironment: 'node',
 }

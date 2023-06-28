@@ -69,6 +69,11 @@ export class OrderedEvaluationLoop {
     ) {}
 
     evaluate(evaluation: EntryPointEvaluation, data: object, session: ExecutionSession): EntryPointResult {
+        if (session.shouldBreakOnEntryPoint()) {
+            // eslint-disable-next-line no-debugger
+            debugger
+        }
+
         const dataProvider = this.contextDataProviderFactory.createContextProvider(data)
 
         const defaultResults = this.evaluateDefaultRules(evaluation, dataProvider, session)
@@ -94,13 +99,16 @@ export class OrderedEvaluationLoop {
         const defaultRules = entryPointEvaluation.rules.filter(r => r.payload.type === PayloadType.DEFAULT)
 
         return logger.groupDebug(
-            () => 'Evaluating default rules',
+            () => 'Evaluating default rules.',
             () => this.doEvaluateDefaultRules(defaultRules, entryPointEvaluation.fieldOrder, provider, session),
             results => this.describeDefaultRuleResults(defaultRules, results),
         )
     }
 
     private describeDefaultRuleResults(defaultRules: Rule[], results: RuleOnInstanceEvaluationResult[]): string {
+        if (!defaultRules.length) {
+            return 'Evaluated default rules.'
+        }
         return (
             'Evaluated default rules.\n' +
             defaultRules
@@ -345,9 +353,9 @@ export class OrderedEvaluationLoop {
                         key +
                         "' applied '" +
                         rulesOnOneField.length +
-                        "' default rules: '" +
-                        rulesOnOneField.map(rr => rr.ruleInfo.ruleName).join(', ') +
-                        "'. Only one default rule can be applied on the same field.",
+                        "' default rules: " +
+                        rulesOnOneField.map(rr => `'${rr.ruleInfo.ruleName}'`).join(', ') +
+                        '. Only one default rule can be applied on the same field.',
                 )
             }
         })

@@ -1,0 +1,3 @@
+dimension(dimension) ::= <<
+Dimension "<dimension.name; format="deescapeString">" : <dimension.dataType>
+>>

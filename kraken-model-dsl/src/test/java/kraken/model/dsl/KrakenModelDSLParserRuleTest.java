@@ -47,8 +47,10 @@ import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Rule parsing test for {@link KrakenDSLModelParser} that verifies if {@link Rule} are parsed correctly
@@ -72,6 +74,49 @@ public class KrakenModelDSLParserRuleTest {
         assertThat(rule.getRuleVariationId(), notNullValue());
         assertThat(rule.getPriority(), nullValue());
         assertThat(rule.getMetadata().getUri(), equalTo(model.getUri()));
+        assertFalse(rule.isServerSideOnly());
+    }
+
+    @Test
+    public void shouldParseRuleMarkedAsServerSideOnly() {
+        Resource model = parseResource(
+            "@ServerSideOnly Rule 'SSORule' On Coverage.limitAmount { Default To 100 }"
+        );
+
+        assertThat(model.getRules(), hasSize(1));
+        Rule rule = model.getRules().get(0);
+
+        assertTrue(rule.isServerSideOnly());
+    }
+
+    @Test
+    public void shouldParseRuleGroupMarkedAsServerSideOnly() {
+        Resource model = parseResource(
+            "@ServerSideOnly Rules { Rule 'SSORule' On Coverage.limitAmount { Default To 100 }}"
+        );
+
+        assertThat(model.getRules(), hasSize(1));
+        Rule rule = model.getRules().get(0);
+
+        assertTrue(rule.isServerSideOnly());
+    }
+
+    @Test
+    public void shouldParseNestedRuleGroupMarkedAsServerSideOnly() {
+        Resource model = parseResource(
+            "@ServerSideOnly Rules { "
+                + "Rule 'firstSSORule' On Coverage.code { Default To \"MED\" }"
+                + "Rules { "
+                + "Rule 'secondSSORule' On Coverage.limitAmount { Default To 100 }"
+                + "}"
+                + "}"
+        );
+
+        assertThat(model.getRules(), hasSize(2));
+
+        model.getRules().forEach(
+            rule -> assertTrue(rule.isServerSideOnly())
+        );
     }
 
     @Test

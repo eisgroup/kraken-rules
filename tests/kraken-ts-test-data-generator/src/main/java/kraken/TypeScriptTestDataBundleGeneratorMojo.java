@@ -287,7 +287,6 @@ public class TypeScriptTestDataBundleGeneratorMojo extends AbstractMojo {
         EntryPointBundle bundle = entryPointBundleFactory.build(
             entryPointName,
             context == null ? defaultDimensions : context,
-            Set.of(),
             EvaluationMode.ALL
         );
         // strip engine version to avoid version incompatibility warnings in local testing environments and snapshots

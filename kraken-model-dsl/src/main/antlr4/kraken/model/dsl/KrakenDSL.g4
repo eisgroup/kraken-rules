@@ -25,6 +25,7 @@ model : contexts
       | entryPoint
       | functionSignature
       | functionImplementation
+      | dimension
       ;
 
 contexts : CONTEXTS L_CURLY_BRACKETS (context | contexts)* R_CURLY_BRACKETS;
@@ -100,6 +101,8 @@ entryPointItem : ruleName | ENTRYPOINT entryPointName=STRING;
 ruleNames : ruleName (COMMA ruleName)*;
 decimalValues : decimalLiteral (COMMA decimalLiteral)*;
 stringValues : STRING (COMMA STRING)*;
+dimensionName: STRING;
+dimension: DIMENSION dimensionName COLON dimensionType=modelIdentifier;
 
 functionImplementation : functionDoc?
                          FUNCTION genericBounds? functionName=modelIdentifier

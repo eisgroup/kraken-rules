@@ -14,20 +14,16 @@
  *  limitations under the License.
  */
 
-import { KrakenConfig } from '../../src/config'
+import { KrakenConfig, WithKraken } from '../../src/config'
 import { DevelopmentLogger } from '../../src/utils/DevelopmentLogger'
+
+const g = globalThis as unknown as WithKraken
 
 type ThisWithKraken = typeof global & { Kraken: KrakenConfig }
 
-let previousEnvironment
 beforeEach(() => {
     ;(global as ThisWithKraken).Kraken.logger.clear()
     ;(global as ThisWithKraken).Kraken.logger.debug = true
-    previousEnvironment = process.env.NODE_ENV
-})
-afterEach(() => {
-    ;(global as ThisWithKraken).Kraken.logger.clear()
-    process.env.NODE_ENV = previousEnvironment
 })
 
 describe('DevelopmentLogger', () => {
@@ -65,7 +61,7 @@ describe('DevelopmentLogger', () => {
         expect(mock.warning).toHaveBeenCalledWith('w')
     })
     it('should not log in production environment', () => {
-        process.env.NODE_ENV = 'production'
+        g.Kraken.logger.enabled = false
 
         const f = jest.fn()
         const mock = {
@@ -97,7 +93,7 @@ describe('DevelopmentLogger', () => {
         expect(mock.warning).not.toHaveBeenCalled()
     })
     it('should catch and log exceptions', () => {
-        process.env.NODE_ENV = 'development'
+        g.Kraken.logger.enabled = true
 
         const f = () => {
             throw new Error('custom message')
@@ -124,7 +120,7 @@ describe('DevelopmentLogger', () => {
         expect(mock.groupEnd).toHaveBeenCalled()
     })
     it('should log description', () => {
-        process.env.NODE_ENV = 'development'
+        g.Kraken.logger.enabled = true
 
         const f = jest.fn()
         const mock = {

@@ -184,7 +184,6 @@ public class RuleEngineImpl implements RuleEngine {
         return entryPointBundleFactory.build(
             entryPointName,
             bundleContext(evaluationConfig.getContext()),
-            Set.of(),
             evaluationConfig.getEvaluationMode()
         );
     }

@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Set;
 
 import kraken.el.functionregistry.FunctionHeader;
+import kraken.model.Dimension;
 import kraken.model.Function;
 import kraken.model.FunctionSignature;
 import kraken.model.Rule;
@@ -52,6 +53,7 @@ class NamespacedResource {
     private final Set<String> includes = new HashSet<>();
     private final Map<FunctionHeader, FunctionSignature> functionSignatures = new HashMap<>();
     private final Map<String, Function> functions = new HashMap<>();
+    private final Map<String, Dimension> dimensions = new HashMap<>();
 
     NamespacedResource(String namespace) {
         this.namespace = namespace;
@@ -95,6 +97,10 @@ class NamespacedResource {
         functions.putIfAbsent(function.getName(), function);
     }
 
+    void addDimension(Dimension dimension) {
+        dimensions.putIfAbsent(dimension.getName(), dimension);
+    }
+
     String getNamespace() {
         return namespace;
     }
@@ -133,5 +139,9 @@ class NamespacedResource {
 
     Map<String, Function> getFunctions() {
         return functions;
+    }
+
+    public Map<String, Dimension> getDimensions() {
+        return dimensions;
     }
 }

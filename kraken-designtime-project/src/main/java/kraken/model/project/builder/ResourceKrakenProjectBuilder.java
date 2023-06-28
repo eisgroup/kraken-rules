@@ -31,6 +31,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import kraken.model.Dimension;
 import kraken.model.Function;
 import kraken.model.FunctionSignature;
 import kraken.model.Rule;
@@ -67,6 +68,7 @@ public class ResourceKrakenProjectBuilder implements KrakenProjectBuilder {
                             ensureUniqueContextDefinitionNames(namespaceName, resources);
                             ensureUniqueCustomFunctionSignatures(namespaceName, resources);
                             ensureUniqueCustomFunctions(namespaceName, resources);
+                            ensureUniqueDimensions(namespaceName, resources);
 
                             NamespacedResource namespacedResource = new NamespacedResource(namespaceName);
                             for(Resource resource : resources) {
@@ -78,6 +80,7 @@ public class ResourceKrakenProjectBuilder implements KrakenProjectBuilder {
                                 resource.getIncludes().forEach(namespacedResource::addInclude);
                                 resource.getFunctionSignatures().forEach(namespacedResource::addFunctionSignature);
                                 resource.getFunctions().forEach(namespacedResource::addFunction);
+                                resource.getDimensions().forEach(namespacedResource::addDimension);
                                 setExternalContext(namespacedResource, resource.getExternalContext());
                             }
                             return namespacedResource;
@@ -154,6 +157,7 @@ public class ResourceKrakenProjectBuilder implements KrakenProjectBuilder {
 
         List<FunctionSignature> functionSignatures = new ArrayList<>(namespaceProjection.getFunctionSignatures().values());
         List<Function> functions = new ArrayList<>(namespaceProjection.getFunctions().values());
+        List<Dimension> dimensions = new ArrayList<>(namespaceProjection.getDimensions());
 
         return new ResourceKrakenProject(
             namespace,
@@ -165,7 +169,8 @@ public class ResourceKrakenProjectBuilder implements KrakenProjectBuilder {
             externalContextDefinitions,
             convertTree(namespaceTree),
             functionSignatures,
-            functions
+            functions,
+            dimensions
         );
     }
 
@@ -256,6 +261,32 @@ public class ResourceKrakenProjectBuilder implements KrakenProjectBuilder {
                     namespaceName, duplicateNames);
             throw new IllegalKrakenProjectStateException(msg);
         }
+    }
+
+    private static void ensureUniqueDimensions(String namespaceName, List<Resource> namespaceResources) {
+        Duplicates.findAndDo(
+            namespaceResources.stream().flatMap(resource -> resource.getDimensions().stream()),
+            duplicates -> {
+                String resourceUris = namespaceResources.stream()
+                    .map(Resource::getUri)
+                    .map(URI::toString)
+                    .collect(Collectors.joining(System.lineSeparator()));
+
+                String msg = String.format(
+                    "Dimensions defined in DSL must be unique by dimension name, "
+                        + "but duplicate dimensions are defined in namespace '%s':"
+                        + System.lineSeparator()
+                        + "%s"
+                        + System.lineSeparator()
+                        + "Please review affected DSL resources and remove duplicated dimensions:"
+                        + System.lineSeparator()
+                        + "%s",
+                    namespaceName,
+                    duplicates.stream().map(Dimension::getName).collect(Collectors.joining(System.lineSeparator())),
+                    resourceUris
+                );
+                throw new IllegalKrakenProjectStateException(msg);
+            });
     }
 
     private static boolean sameContextDefinitions(List<ContextDefinition> contextDefinitions) {

@@ -61,7 +61,7 @@ exports[`SyncEngine Should debug log in development environment 1`] = `
           \\"dimensions\\": {}
         }
       }
-   -> Evaluating default rules
+   -> Evaluating default rules.
       -> Context extraction
          -- Resolved 2 data context(s) for rule 'TR_CarCoverage_code_default' target 'CarCoverage':
             COLLCoverage:COLLCoverage-1

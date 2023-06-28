@@ -1,0 +1,14 @@
+Namespace Policy
+
+EntryPoint "DefaultCollectionOfPrimitives" {
+  "default-Policy.policies-coerce-set-to-list",
+  "default-Insured.childrenAges-coerce-numbers"
+}
+
+Rule "default-Policy.policies-coerce-set-to-list" On Policy.policies {
+  Default To Union({Policy.state}, {"A", "B"})
+}
+
+Rule "default-Insured.childrenAges-coerce-numbers" On Insured.childrenAges {
+  Default To {1, 10.5, Policy.policyValue}
+}

@@ -19,8 +19,11 @@ import static kraken.model.project.validator.Severity.ERROR;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import kraken.model.Rule;
 import kraken.model.entrypoint.EntryPoint;
 import kraken.model.project.KrakenProject;
 import kraken.model.project.validator.ValidationMessage;
@@ -40,6 +43,7 @@ public class EntryPointServerSideOnlyValidator {
     public void validate(EntryPoint entryPoint, ValidationSession session) {
         validateServerSideOnlyVariations(entryPoint, session);
         validateServerSideOnlyIncludes(entryPoint, session);
+        validateAssignedServerSideRules(entryPoint, session);
     }
 
     private void validateServerSideOnlyVariations(EntryPoint entryPoint, ValidationSession session) {
@@ -54,14 +58,44 @@ public class EntryPointServerSideOnlyValidator {
         if(!serverSideOnlyVariations.isEmpty() && serverSideOnlyVariations.size() != allVariations.size()) {
             session.add(new ValidationMessage(
                 entryPoint,
-                String.format(
-                    "variation is misconfigured, because it is not marked as @ServerSideOnly, "
-                        + "but there are another EntryPoint variation that is marked as @ServerSideOnly."
-                        + "All variations of the same EntryPoint must be consistently marked as @ServerSideOnly."
-                ),
+                "variation is misconfigured, because it is not marked as @ServerSideOnly, "
+                    + "but there are another EntryPoint variation that is marked as @ServerSideOnly."
+                    + "All variations of the same EntryPoint must be consistently marked as @ServerSideOnly.",
                 ERROR
             ));
         }
+    }
+
+    private void validateAssignedServerSideRules(EntryPoint entryPoint, ValidationSession session) {
+        Map<String, List<Rule>> ruleVersions = krakenProject.getRuleVersions();
+
+        if (!entryPoint.isServerSideOnly()) {
+            Set<String> serverSideOnlyRuleNames = collectAllRuleNames(entryPoint.getName())
+                .distinct()
+                .filter(ruleName -> ruleVersions.getOrDefault(ruleName, List.of())
+                    .stream()
+                    .anyMatch(Rule::isServerSideOnly))
+                .collect(Collectors.toSet());
+
+            if (!serverSideOnlyRuleNames.isEmpty()) {
+                session.add(new ValidationMessage(
+                    entryPoint,
+                    String.format("not annotated as @ServerSideOnly includes rule(s): '%s' marked as @ServerSideOnly",
+                        String.join(", ", serverSideOnlyRuleNames)),
+                    ERROR));
+            }
+        }
+    }
+
+    private Stream<String> collectAllRuleNames(String entryPointName) {
+        List<EntryPoint> allVersions = krakenProject.getEntryPointVersions().getOrDefault(entryPointName, List.of());
+
+        return allVersions.stream()
+            .flatMap(entryPoint -> Stream.concat(
+                entryPoint.getRuleNames().stream(),
+                entryPoint.getIncludedEntryPointNames().stream()
+                    .filter(included -> !included.equalsIgnoreCase(entryPoint.getName()))
+                    .flatMap(this::collectAllRuleNames)));
     }
 
     private void validateServerSideOnlyIncludes(EntryPoint entryPoint, ValidationSession session) {

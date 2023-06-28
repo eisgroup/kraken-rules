@@ -16,15 +16,17 @@
 package kraken.generator.context.model.tree;
 
 import kraken.el.TargetEnvironment;
+
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.FileSystemException;
+import org.apache.commons.vfs2.VFS;
 import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @Mojo(name = "generate", defaultPhase = LifecyclePhase.COMPILE)
@@ -52,16 +54,22 @@ public class ContextModelTreeGenerator extends AbstractMojo {
     private String[] excludes;
 
     @Override
-    public void execute() throws MojoFailureException {
+    public void execute() {
         List<String> excludePatterns = excludes != null ? Arrays.asList(excludes) : new ArrayList<>();
         List<String> baseDirectories = baseDirs.length > 0 ? Arrays.asList(baseDirs) : List.of(baseDir);
-        new ContextModelTreeOutputResourceWriter(
+
+        try (FileObject outputDirectory = VFS.getManager().resolveFile(outputDir)) {
+            new ContextModelTreeOutputResourceWriter(
                 baseDirectories,
-                outputDir,
+                outputDirectory,
                 Arrays.asList(namespace),
                 environment,
                 isPretty,
                 excludePatterns
-        ).execute();
+            ).execute();
+        } catch (FileSystemException e) {
+            throw new RuntimeException(e);
+        }
     }
+
 }

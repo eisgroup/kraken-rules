@@ -35,10 +35,16 @@ public class DSLRules {
 
     private Collection<DSLRules> ruleBlocks;
 
-    public DSLRules(Collection<DSLRule> rules, DSLMetadata metadata, Collection<DSLRules> ruleBlocks) {
+    private boolean serverSideOnly;
+
+    public DSLRules(Collection<DSLRule> rules,
+                    DSLMetadata metadata,
+                    Collection<DSLRules> ruleBlocks,
+                    boolean serverSideOnly) {
         this.rules = Objects.requireNonNull(rules);
         this.metadata = metadata;
         this.ruleBlocks = Objects.requireNonNull(ruleBlocks);
+        this.serverSideOnly = serverSideOnly;
     }
 
     public Collection<DSLRule> getRules() {
@@ -52,4 +58,9 @@ public class DSLRules {
     public Collection<DSLRules> getRuleBlocks() {
         return Collections.unmodifiableCollection(ruleBlocks);
     }
+
+    public boolean isServerSideOnly() {
+        return serverSideOnly;
+    }
+
 }

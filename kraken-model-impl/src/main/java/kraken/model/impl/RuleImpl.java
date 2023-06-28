@@ -44,6 +44,8 @@ public class RuleImpl implements Rule {
 
     private Integer priority;
 
+    private boolean serverSideOnly;
+
     @Override
     public String getRuleVariationId() {
         return ruleVariationId;
@@ -157,4 +159,15 @@ public class RuleImpl implements Rule {
     public void setPriority(Integer priority) {
         this.priority = priority;
     }
+
+    @Override
+    public boolean isServerSideOnly() {
+        return serverSideOnly;
+    }
+
+    @Override
+    public void setServerSideOnly(boolean serverSideOnly) {
+        this.serverSideOnly = serverSideOnly;
+    }
+
 }

@@ -183,6 +183,8 @@ public class JavascriptAstTranslatorTest {
                 "(this._flatMap(this._flatMap(context,_x_=>_x_.additional),_x_=>_x_.policies)"
                     + " || []).filter(_x_=>this._eq(this.Distinct(([this._flatMap(_x_,_y_=>_y_.policyNumber)] || []).map(p=>p)"
                     + ".reduce((p, n) => p.concat(n), []))[0], _x_.policyNumber))"),
+            tc("FromMoney(Coverage.money) > 100", "(this._nd(this.FromMoney(Coverage.money)) > 100)"),
+            tc("Coverage.money > 100", "(this._nd(this.FromMoney(Coverage.money)) > 100)"),
 
             // INLINE ARRAY AND MAP
             tc("{Coverage.limit, RiskItem.limit}",

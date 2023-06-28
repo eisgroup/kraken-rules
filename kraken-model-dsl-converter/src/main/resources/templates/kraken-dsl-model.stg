@@ -5,6 +5,7 @@ import "external-context-definition-model.stg"
 import "external-context-model.stg"
 import "function-signature-model.stg"
 import "function-model.stg"
+import "dimension-model.stg"
 
 krakenResource(krakenResource) ::= <<
 <namespace(krakenResource)>
@@ -12,6 +13,7 @@ krakenResource(krakenResource) ::= <<
 <ruleImports(krakenResource)>
 <functionSignatures(krakenResource)>
 <functions(krakenResource)>
+<dimensions(krakenResource)>
 <entryPoints(krakenResource)>
 <rules(krakenResource)>
 <externalContextDefinitions(krakenResource)>
@@ -86,5 +88,11 @@ entryPoints(krakenResource) ::= <<
 rules(krakenResource) ::= <<
 <if(strip(krakenResource.rules))>
 <krakenResource.rules: {rule | <rule(rule)>}; separator="\n">
+<endif>
+>>
+
+dimensions(krakenResource) ::= <<
+<if(strip(krakenResource.dimensions))>
+<krakenResource.dimensions: {dimension | <dimension(dimension)>}; separator="\n">
 <endif>
 >>

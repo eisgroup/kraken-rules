@@ -10,6 +10,7 @@ import { InfoAtLocationNodeVisitor } from '../visitor/type-at-location/NodeAtLoc
 import { ValidatingNodeVisitor } from '../visitor/validation/ValidatingVisitor'
 import { Cache } from './Cache'
 import { AstMessage } from '../visitor/validation/AstMessage'
+import { Type } from '../type/Types'
 
 export interface Validation {
     messages: ValidationMessage[]
@@ -39,7 +40,7 @@ export interface ReturnTypeError {
 
 /**
  * Service that provides completion items and validation errors from a string expression.
- * It is constructed with the deserialized scope instance. This instance can created with
+ * It is constructed with the deserialized scope instance. This instance can be created with
  * {@link ScopeDeserializer}. Json that is passed to the {@link ScopeDeserializer} is provided
  * by a Kraken backend deserializer and shouldn't be mocked or constructed manually.
  * ```
@@ -120,29 +121,6 @@ export class KelService {
     }
 
     /**
-     * Validates expression type against provided type name
-     *
-     * @param {string} expression                   KEL expression
-     * @param {string} expectedTypeName             expected type
-     * @returns {(ReturnTypeError | undefined)}     if types matches, `undefined` will be returned.
-     *                                              Otherwise error will be returned
-     */
-    validateReturnType(expression: string, expectedTypeName: string): ReturnTypeError | undefined {
-        const { node } = this.parserCache.getOrCompute(expression, e => this.compute(e))
-        const expectedType = this.scope.resolveTypeOf(expectedTypeName)
-        if (!expectedType.isKnown()) {
-            throw new Error(`Expected type ${expectedTypeName} is unknown`)
-        }
-        const assignable = expectedType.isAssignableFrom(node.evaluationType)
-        if (!assignable) {
-            return {
-                error: `Expected return type is '${expectedTypeName}', actual is '${node.evaluationType.stringify()}'`,
-            }
-        }
-        return
-    }
-
-    /**
      * Returns true if expression is semantically empty.
      * Semantically empty expression is when it does not have any logic.
      * Semantically empty expression can be when expression consists only of symbols that does not express logic,
@@ -154,6 +132,14 @@ export class KelService {
     isEmpty(expression: string): boolean {
         const { node } = this.parserCache.getOrCompute(expression, e => this.compute(e))
         return isEmptyKelNode(node)
+    }
+
+    resolveType(typeName: string): Type | undefined {
+        return this.scope.resolveTypeOf(typeName)
+    }
+
+    resolveExpressionEvaluationType(expression: string): Type {
+        return this.parserCache.getOrCompute(expression, e => this.compute(e)).node.evaluationType
     }
 
     private compute(expression: string): { node: Node; parser: KelParser } {

@@ -33,3 +33,6 @@ EntryPoints {
         EntryPoint 'ep2' {'rule1', 'rule2'}
     }
 }
+
+Dimension 'packageCd' : String
+Dimension 'planCd': String

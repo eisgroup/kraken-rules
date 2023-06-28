@@ -219,3 +219,12 @@ Rule "f-symmetricDifference-assert-policyNumber" On Policy.policyNumber {
 Rule "f-numberSequence-assert-policyNumber" On Policy.policyNumber {
     Assert 15 in NumberSequence(0, 30, 5)
 }
+
+EntryPoint "FunctionCheck-FromMoney" {
+    "f-fromMoney-explicit-usage"
+}
+
+Rule "f-fromMoney-explicit-usage" on CreditCardInfo.cardCreditLimitAmount {
+    Assert (FromMoney(cardCreditLimitAmount) = FromMoney(this.cardCreditLimitAmount))
+    and (FromMoney(CreditCardInfo.cardCreditLimitAmount) = 100)
+}

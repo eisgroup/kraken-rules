@@ -14,6 +14,8 @@
  *  limitations under the License.
  */
 
+import { debug } from './debugger/Debugger'
+
 /**
  * Configures Kraken evaluation. It can be configured from the console.
  * Open the console and  modify the config options
@@ -26,6 +28,7 @@
  */
 export interface KrakenConfig {
     logger: {
+        enabled: boolean
         debug: boolean
         info: boolean
         error: boolean
@@ -35,13 +38,15 @@ export interface KrakenConfig {
         getLogs(): void
         clear(): void
     }
+    debugger: debug.api.Debugger
 }
-type WithKraken = {
+export type WithKraken = {
     Kraken: KrakenConfig
 }
 
 function init(): void {
     const logger: KrakenConfig['logger'] = {
+        enabled: process.env.NODE_ENV !== 'production',
         debug: false,
         info: true,
         error: true,
@@ -74,6 +79,7 @@ function init(): void {
     if (global) {
         ;(global as unknown as WithKraken).Kraken = {
             logger,
+            debugger: new debug.impl.DevToolsDebugger(),
         }
         return
     }

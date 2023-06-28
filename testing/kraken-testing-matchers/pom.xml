@@ -8,7 +8,7 @@
     <parent>
         <artifactId>testing-pom</artifactId>
         <groupId>kraken.testing</groupId>
-        <version>1.46.0</version>
+        <version>1.49.0</version>
     </parent>
 
     <artifactId>kraken-testing-matchers</artifactId>

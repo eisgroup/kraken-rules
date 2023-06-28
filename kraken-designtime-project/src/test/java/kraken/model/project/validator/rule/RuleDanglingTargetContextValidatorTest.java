@@ -87,6 +87,7 @@ public class RuleDanglingTargetContextValidatorTest {
             Map.of(),
             null,
             List.of(),
+            List.of(),
             List.of()
         );
     }

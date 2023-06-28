@@ -168,6 +168,158 @@ Object {
 }
 `;
 
+exports[`Engine Functions Sanity Test should execute from money and fail assertions 1`] = `
+Object {
+  "entryPointResults": Object {
+    "evaluationTimestamp": Any<Date>,
+    "results": Object {
+      "CreditCardInfo:2:cardCreditLimitAmount": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "2",
+          "contextName": "CreditCardInfo",
+          "fieldName": "cardCreditLimitAmount",
+          "fieldPath": "cardCreditLimitAmount",
+          "fieldType": "MONEY",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": false,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "CreditCardInfo",
+              "payloadtype": "ASSERTION",
+              "ruleName": "f-fromMoney-explicit-usage",
+              "targetPath": "cardCreditLimitAmount",
+            },
+          },
+        ],
+      },
+    },
+  },
+  "fieldResults": Object {
+    "CreditCardInfo:2:cardCreditLimitAmount": Object {
+      "fieldType": "MONEY",
+      "id": "CreditCardInfo:2:cardCreditLimitAmount",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "cardCreditLimitAmount",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "rule-assertion-error",
+          "errorMessage": "Assertion failed",
+          "isFailed": true,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "message": undefined,
+            "success": false,
+            "type": 1,
+            "validationSeverity": "critical",
+          },
+          "ruleName": "f-fromMoney-explicit-usage",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`Engine Functions Sanity Test should execute from money and pass assertions 1`] = `
+Object {
+  "entryPointResults": Object {
+    "evaluationTimestamp": Any<Date>,
+    "results": Object {
+      "CreditCardInfo:2:cardCreditLimitAmount": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "2",
+          "contextName": "CreditCardInfo",
+          "fieldName": "cardCreditLimitAmount",
+          "fieldPath": "cardCreditLimitAmount",
+          "fieldType": "MONEY",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 2,
+            "overrideInfo": Object {
+              "overridable": false,
+              "overrideApplicable": false,
+              "overrideGroup": undefined,
+            },
+            "payloadResult": Object {
+              "message": undefined,
+              "success": true,
+              "type": 1,
+              "validationSeverity": "critical",
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "CreditCardInfo",
+              "payloadtype": "ASSERTION",
+              "ruleName": "f-fromMoney-explicit-usage",
+              "targetPath": "cardCreditLimitAmount",
+            },
+          },
+        ],
+      },
+    },
+  },
+  "fieldResults": Object {
+    "CreditCardInfo:2:cardCreditLimitAmount": Object {
+      "fieldType": "MONEY",
+      "id": "CreditCardInfo:2:cardCreditLimitAmount",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "cardCreditLimitAmount",
+      "ruleResults": Array [
+        Object {
+          "errorCode": "rule-assertion-error",
+          "errorMessage": "Assertion failed",
+          "isFailed": false,
+          "isOverridable": false,
+          "isOverridden": false,
+          "payloadResult": Object {
+            "message": undefined,
+            "success": true,
+            "type": 1,
+            "validationSeverity": "critical",
+          },
+          "ruleName": "f-fromMoney-explicit-usage",
+          "severity": "critical",
+          "templateVariables": Array [],
+        },
+      ],
+    },
+  },
+}
+`;
+
 exports[`Engine Functions Sanity Test should flat and fail, assert to have 7 items (3 of them serviceHistories) 1`] = `
 Object {
   "entryPointResults": Object {

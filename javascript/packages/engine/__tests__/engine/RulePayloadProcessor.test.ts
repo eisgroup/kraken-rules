@@ -37,7 +37,7 @@ const payloadProcessor = new RulePayloadProcessor(mock.evaluator, new RuleOverri
 
 function execute(rule: Rule): RuleEvaluationResult {
     function config(): ExecutionSession {
-        return { currencyCd: 'USD', expressionContext: {}, timestamp: new Date() }
+        return new ExecutionSession({ currencyCd: 'USD', context: {} }, {}, 'test')
     }
     return payloadProcessor.processRule(
         {

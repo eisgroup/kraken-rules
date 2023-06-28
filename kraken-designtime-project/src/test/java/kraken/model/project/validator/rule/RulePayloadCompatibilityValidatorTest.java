@@ -170,7 +170,7 @@ public class RulePayloadCompatibilityValidatorTest {
         DefaultValuePayload payload = factory.createDefaultValuePayload();
 
         assertThat(payload, compatibleWithSinglePrimitive());
-        assertThat(payload, not(compatibleWithMultiplePrimitive()));
+        assertThat(payload, compatibleWithMultiplePrimitive());
         assertThat(payload, not(compatibleWithSingleSystem()));
         assertThat(payload, not(compatibleWithMultipleSystem()));
         assertThat(payload, not(compatibleWithSingleComplex()));

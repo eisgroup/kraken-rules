@@ -2,6 +2,9 @@ rule(rule) ::= <<
 <if(rule.metadata)>
 <rule.metadata.properties.__keys__:{k | @Dimension("<k>", <rule.metadata.properties.(k)>)}; separator="\n">
 <endif>
+<if(rule.serverSideOnly)>
+@ServerSideOnly
+<endif>
 Rule "<rule.name; format="deescapeString">" On <rule.context>.<rule.targetPath> {
     <if(rule.description)>
     Description "<rule.description; format="deescapeString">"

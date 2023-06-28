@@ -38,7 +38,17 @@ public class DSLRule {
 
     private Integer priority;
 
-    public DSLRule(DSLMetadata metadata, String name, String description, String contextName, String fieldName, DSLExpression condition, DSLPayload payload, Integer priority) {
+    private boolean serverSideOnly;
+
+    public DSLRule(DSLMetadata metadata,
+                   String name,
+                   String description,
+                   String contextName,
+                   String fieldName,
+                   DSLExpression condition,
+                   DSLPayload payload,
+                   Integer priority,
+                   boolean serverSideOnly) {
         this.metadata = metadata;
         this.name = Objects.requireNonNull(name);
         this.description = description;
@@ -47,6 +57,7 @@ public class DSLRule {
         this.condition = condition;
         this.payload = Objects.requireNonNull(payload);
         this.priority = priority;
+        this.serverSideOnly = serverSideOnly;
     }
 
     public String getName() {
@@ -79,5 +90,9 @@ public class DSLRule {
 
     public Integer getPriority() {
         return priority;
+    }
+
+    public boolean isServerSideOnly() {
+        return serverSideOnly;
     }
 }

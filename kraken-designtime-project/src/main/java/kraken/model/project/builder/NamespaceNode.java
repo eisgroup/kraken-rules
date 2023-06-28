@@ -25,6 +25,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import kraken.el.functionregistry.FunctionHeader;
+import kraken.model.Dimension;
 import kraken.model.Function;
 import kraken.model.FunctionSignature;
 import kraken.model.Rule;
@@ -117,6 +118,9 @@ public final class NamespaceNode {
             childNamespaceProjection.getFunctions().entrySet().stream()
                     .filter(e -> !namespacedResource.getFunctions().containsKey(e.getKey()))
                     .forEach(e -> namespaceProjection.getFunctions().put(e.getKey(), e.getValue()));
+            childNamespaceProjection.getDimensions().stream()
+                .filter(dimension -> !namespacedResource.getDimensions().containsKey(dimension.getName()))
+                .forEach(dimension -> namespaceProjection.getDimensions().add(dimension));
 
             if (hasNoExternalContext) {
                 namespaceProjection.getExternalContexts().addAll(childNamespaceProjection.getExternalContexts());
@@ -143,6 +147,9 @@ public final class NamespaceNode {
         namespaceProjection.getFunctions().putAll(
             namespacedResource.getFunctions()
         );
+        namespacedResource.getDimensions()
+            .forEach((key, value) -> namespaceProjection.getDimensions().add(value));
+
         if (namespacedResource.getExternalContext() != null) {
             namespaceProjection.getExternalContexts().add(namespacedResource.getExternalContext());
         }
@@ -156,6 +163,7 @@ public final class NamespaceNode {
         collectAmbiguousIncludes(namespaceProjection.getRules(), ambiguousIncludes);
         collectAmbiguousIncludes(namespaceProjection.getEntryPoints(), ambiguousIncludes);
         collectAmbiguousIncludes(namespaceProjection.getExternalContexts(), ambiguousIncludes);
+        collectAmbiguousIncludes(namespaceProjection.getDimensions(), ambiguousIncludes);
 
         if (!ambiguousIncludes.isEmpty()) {
             Set<String> errors = ambiguousIncludes.values().stream()
@@ -251,6 +259,7 @@ public final class NamespaceNode {
         private final Set<Rule> rules = new HashSet<>();
         private final Map<FunctionHeader, FunctionSignature> functionSignatures = new HashMap<>();
         private final Map<String, Function> functions = new HashMap<>();
+        private final Set<Dimension> dimensions = new HashSet<>();
 
         NamespaceProjection(String namespace) {
             this.namespace = namespace;
@@ -292,6 +301,10 @@ public final class NamespaceNode {
 
         Map<String, Function> getFunctions() {
             return functions;
+        }
+
+        public Set<Dimension> getDimensions() {
+            return dimensions;
         }
     }
 

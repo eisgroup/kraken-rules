@@ -125,16 +125,17 @@ public class RuleCrossContextCardinalityValidatorTest {
                 .orElse(null);
 
         return new ResourceKrakenProject(
-                namespace,
-                rootContextDefinition,
-                contextDefinitions.stream().collect(Collectors.toMap(ContextDefinition::getName, c -> c)),
-                List.of(entryPoint("Validate", ruleNames)),
-                rules,
-                null,
-                Map.of(),
-                null,
-                List.of(),
-                List.of()
+            namespace,
+            rootContextDefinition,
+            contextDefinitions.stream().collect(Collectors.toMap(ContextDefinition::getName, c -> c)),
+            List.of(entryPoint("Validate", ruleNames)),
+            rules,
+            null,
+            Map.of(),
+            null,
+            List.of(),
+            List.of(),
+            List.of()
         );
     }
 

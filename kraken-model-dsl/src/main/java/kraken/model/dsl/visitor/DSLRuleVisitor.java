@@ -52,8 +52,16 @@ public class DSLRuleVisitor extends KrakenDSLBaseVisitor<DSLRule> {
 
         Integer priority = parsePriority(ctx);
 
-        return new DSLRule(annotation.getMetadata(), name, description, contextName, fieldName, condition, payload,
-            priority);
+        return new DSLRule(
+            annotation.getMetadata(),
+            name,
+            description,
+            contextName,
+            fieldName,
+            condition,
+            payload,
+            priority,
+            annotation.isServerSideOnly());
     }
 
     private Integer parsePriority(KrakenDSL.ARuleContext ctx) {

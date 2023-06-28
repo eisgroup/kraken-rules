@@ -35,6 +35,9 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.BooleanUtils;
 
+import com.google.gson.Gson;
+
+import kraken.model.Dimension;
 import kraken.model.Function;
 import kraken.model.FunctionSignature;
 import kraken.model.Rule;
@@ -47,9 +50,10 @@ import kraken.model.entrypoint.EntryPoint;
 import kraken.model.factory.RulesModelFactory;
 import kraken.model.project.ccr.CrossContextService;
 import kraken.model.project.ccr.CrossContextServiceSupplier;
-import kraken.model.project.exception.IllegalKrakenProjectStateException;
+import kraken.model.project.gson.KrakenGsonSupplier;
 import kraken.model.project.scope.ScopeBuilder;
 import kraken.model.project.scope.ScopeBuilderSupplier;
+import kraken.model.project.gson.KrakenGsonAdapter;
 
 /**
  * Represents a self-contained projection of {@link Rule}, {@link EntryPoint} and {@link ContextDefinition} for a namespace.
@@ -57,7 +61,8 @@ import kraken.model.project.scope.ScopeBuilderSupplier;
  *
  * @author mulevicius
  */
-public class ResourceKrakenProject implements KrakenProject, ScopeBuilderSupplier, CrossContextServiceSupplier {
+public class ResourceKrakenProject implements KrakenProject, ScopeBuilderSupplier, CrossContextServiceSupplier,
+    KrakenGsonSupplier {
 
     private static final RulesModelFactory factory = RulesModelFactory.getInstance();
 
@@ -87,11 +92,15 @@ public class ResourceKrakenProject implements KrakenProject, ScopeBuilderSupplie
 
     private final Supplier<CrossContextService> crossContextService;
 
+    private final Supplier<Gson> krakenGson;
+
     private final NamespaceTree namespaceTree;
 
     private final List<FunctionSignature> functionSignatures;
 
     private final List<Function> functions;
+
+    private final List<Dimension> dimensions;
 
     private final Set<String> connectedContextDefinitions = new HashSet<>();
 
@@ -104,7 +113,8 @@ public class ResourceKrakenProject implements KrakenProject, ScopeBuilderSupplie
                                  @Nonnull Map<String, ExternalContextDefinition> externalContextDefinitions,
                                  NamespaceTree namespaceTree,
                                  @Nonnull List<FunctionSignature> functionSignatures,
-                                 @Nonnull List<Function> functions) {
+                                 @Nonnull List<Function> functions,
+                                 @Nonnull List<Dimension> dimensions) {
         this.identifier = UUID.randomUUID();
         this.namespace = Objects.requireNonNull(namespace);
         this.rootContextName = Objects.requireNonNull(rootContextName);
@@ -126,9 +136,11 @@ public class ResourceKrakenProject implements KrakenProject, ScopeBuilderSupplie
 
         this.scopeBuilder = memoize(() -> new ScopeBuilder(this));
         this.crossContextService = memoize(() -> new CrossContextService(this));
+        this.krakenGson = memoize(() -> new KrakenGsonAdapter.Builder(this).create());
         this.namespaceTree = namespaceTree;
         this.functionSignatures = Objects.requireNonNull(functionSignatures);
         this.functions = Objects.requireNonNull(functions);
+        this.dimensions = Objects.requireNonNull(dimensions);
 
         ContextDefinition root = this.contextDefinitions.get(rootContextName);
         this.collectConnectedContextDefinitions(root);
@@ -191,6 +203,11 @@ public class ResourceKrakenProject implements KrakenProject, ScopeBuilderSupplie
     }
 
     @Override
+    public Gson getKrakenGson() {
+        return krakenGson.get();
+    }
+
+    @Override
     public CrossContextService getCrossContextService() {
         return crossContextService.get();
     }
@@ -209,6 +226,11 @@ public class ResourceKrakenProject implements KrakenProject, ScopeBuilderSupplie
     @Override
     public List<Function> getFunctions() {
         return functions;
+    }
+
+    @Override
+    public List<Dimension> getDimensions() {
+        return dimensions;
     }
 
     /**
@@ -367,8 +389,10 @@ public class ResourceKrakenProject implements KrakenProject, ScopeBuilderSupplie
             namespaceTree,
             functionSignatures,
             functions,
+            dimensions,
             scopeBuilder,
-            crossContextService
+            crossContextService,
+            krakenGson
         );
     }
 
@@ -399,8 +423,10 @@ public class ResourceKrakenProject implements KrakenProject, ScopeBuilderSupplie
                           NamespaceTree namespaceTree,
                           @Nonnull List<FunctionSignature> functionSignatures,
                           @Nonnull List<Function> functions,
+                          @Nonnull List<Dimension> dimensions,
                           @Nonnull Supplier<ScopeBuilder> scopeBuilder,
-                          @Nonnull Supplier<CrossContextService> crossContextService) {
+                          @Nonnull Supplier<CrossContextService> crossContextService,
+                          @Nonnull Supplier<Gson> krakenGsonSupplier) {
         this.identifier = UUID.randomUUID();
         this.namespace = Objects.requireNonNull(namespace);
         this.rootContextName = Objects.requireNonNull(rootContextName);
@@ -422,8 +448,10 @@ public class ResourceKrakenProject implements KrakenProject, ScopeBuilderSupplie
         this.namespaceTree = namespaceTree;
         this.functionSignatures = Objects.requireNonNull(functionSignatures);
         this.functions = Objects.requireNonNull(functions);
+        this.dimensions = Objects.requireNonNull(dimensions);
         this.scopeBuilder = scopeBuilder;
         this.crossContextService = crossContextService;
+        this.krakenGson = krakenGsonSupplier;
 
         ContextDefinition root = this.contextDefinitions.get(this.rootContextName);
         this.collectConnectedContextDefinitions(root);

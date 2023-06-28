@@ -17,19 +17,16 @@ package kraken.el.interpreter.evaluator;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.math.BigDecimal;
 import java.util.Map;
-
-import javax.money.MonetaryAmount;
 
 import kraken.el.EvaluationContext;
 import kraken.el.ExpressionEvaluationException;
 import kraken.el.ExpressionLanguageConfiguration;
+import kraken.el.coercer.KelCoercer;
 import kraken.el.accelerated.ReflectionsCache;
 import kraken.el.ast.Ast;
 import kraken.el.ast.builder.AstBuilder;
 import kraken.el.scope.Scope;
-import kraken.el.math.Numbers;
 
 /**
  * @author mulevicius
@@ -78,39 +75,8 @@ public class InterpretingExpressionEvaluator {
             String message = String.format(template, property, dataObject.getClass());
             throw new IllegalStateException(message);
         }
-        Object coercedValue = coerce(valueToSet, setter.getParameterTypes()[0]);
+        Object coercedValue = KelCoercer.coerce(valueToSet, setter.getParameters()[0].getParameterizedType());
         setter.invoke(dataObject, coercedValue);
     }
 
-    private <T> T coerce(Object value, Class<T> expectedType) {
-        if(value == null) {
-            return null;
-        }
-        if(expectedType.isInstance(value)) {
-            return expectedType.cast(value);
-        }
-        if(Number.class.isAssignableFrom(expectedType)) {
-            if(value instanceof MonetaryAmount) {
-                Number number = ((MonetaryAmount) value).getNumber().numberValue(BigDecimal.class);
-                return coerceNumber(number, expectedType);
-            }
-            if(value instanceof Number) {
-                return coerceNumber((Number) value, expectedType);
-            }
-        }
-        throw new IllegalArgumentException("Cannot convert value of type " + value.getClass() + " to type " + expectedType);
-    }
-
-    private <T> T coerceNumber(Number value, Class<T> expectedType) {
-        if (BigDecimal.class == expectedType) {
-            return (T) Numbers.normalized(value);
-        }
-        if (Long.class == expectedType) {
-            return (T) Long.valueOf((value).longValue());
-        }
-        if (Integer.class == expectedType) {
-            return (T) Integer.valueOf((value).intValue());
-        }
-        throw new IllegalArgumentException("Cannot convert number of type " + value.getClass() + " to type " + expectedType);
-    }
 }

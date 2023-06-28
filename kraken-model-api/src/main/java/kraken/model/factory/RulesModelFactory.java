@@ -17,6 +17,7 @@ package kraken.model.factory;
 
 import kraken.annotations.API;
 import kraken.model.Condition;
+import kraken.model.Dimension;
 import kraken.model.ErrorMessage;
 import kraken.model.Expression;
 import kraken.model.Function;
@@ -173,4 +174,8 @@ public interface RulesModelFactory {
     ParameterDocumentation cloneParameterDocumentation(ParameterDocumentation parameterDocumentation);
     FunctionExample createFunctionExample();
     FunctionExample cloneFunctionExample(FunctionExample functionExample);
+
+    Dimension createDimension();
+    Dimension cloneDimension(Dimension dimension);
+
 }

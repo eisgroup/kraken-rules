@@ -231,6 +231,10 @@
       "entryPointName": "Policy:FunctionCheck-Flat"
     },
     {
+      "id": "FunctionCheck-FromMoney",
+      "entryPointName": "Policy:FunctionCheck-FromMoney"
+    },
+    {
       "id": "Expressions_Date_Nested_Functions",
       "entryPointName": "Policy:Expressions_Date_Nested_Functions"
     },
@@ -493,6 +497,10 @@
     {
       "id": "TracerSnapshotTest",
       "entryPointName": "Policy:TracerSnapshotTest"
+    },
+    {
+      "id": "DefaultCollectionOfPrimitives",
+      "entryPointName": "Policy:DefaultCollectionOfPrimitives"
     }
   ]
 }
