@@ -1,6 +1,7 @@
 import { KelService } from '../../src/public/KelService'
 import { instance } from '../test-data/test-data'
 import { ReferenceLocationInfo } from '../../src/visitor/type-at-location/LocationInfo'
+import { Type } from '../../src/type/Types'
 
 describe('KelService', () => {
     it('should provide hover info on cursor', () => {
@@ -74,24 +75,6 @@ describe('KelService', () => {
         const validation = service.provideValidation('"""')
         expect(validation.messages).toHaveLength(1)
     })
-    it('should check expression type', () => {
-        const service = new KelService(instance.policy)
-        const validation = service.validateReturnType('Policy', 'Boolean')
-        expect(validation).toBeDefined()
-        expect(validation?.error).toBe("Expected return type is 'Boolean', actual is 'Policy'")
-    })
-    it('should check all types of expressions', () => {
-        function hasNoError(e: string, typeName: string): void {
-            const service = new KelService(instance.creditCardInfo)
-            const validation = service.validateReturnType(e, typeName)
-            expect(validation?.error).toBeUndefined()
-        }
-        hasNoError('cardType', 'String')
-        hasNoError('cardCreditLimitAmount', 'Money')
-        hasNoError('cardCreditLimitAmount', 'Number')
-        hasNoError('cvv', 'Number')
-        hasNoError('expirationDate', 'Date')
-    })
     it('should return if expression is empty', () => {
         function isEmpty(e: string): boolean {
             const service = new KelService(instance.creditCardInfo)
@@ -136,5 +119,25 @@ describe('KelService', () => {
 
         expect(validations.messages).toHaveLength(1)
         expect(validations.messages[0].message).toBe("Redundant literal value 'true'. Expression is 'true' by default.")
+    })
+    it('should resolve type from type name string', () => {
+        const kel = new KelService(instance.policy)
+        const date = kel.resolveType('Date')
+        const datetime = kel.resolveType('DateTime')
+        const any = kel.resolveType('Any')
+
+        expect(date).toBe(Type.DATE)
+        expect(datetime).toBe(Type.DATETIME)
+        expect(any).toBe(Type.ANY)
+    })
+    it('should resolve type from expression', () => {
+        const kel = new KelService(instance.policy)
+        const date = kel.resolveExpressionEvaluationType('expirationDate')
+        const datetime = kel.resolveExpressionEvaluationType('txEffectiveDate')
+
+        expect(date.name).toBe('Date')
+        expect(datetime.name).toBe('DateTime')
+        expect(Type.DATE.isAssignableFrom(date)).toBeTruthy()
+        expect(Type.DATETIME.isAssignableFrom(datetime)).toBeTruthy()
     })
 })

@@ -27,7 +27,7 @@ import { ExtractedChildDataContextBuilder } from '../contexts/data/ExtractedChil
 import { ContextDataExtractorImpl } from '../contexts/data/extraction/ContextDataExtractorImpl'
 import { FunctionRegistry } from '../runtime/expressions/functionLibrary/Registry'
 import { RuleOverrideContextExtractorImpl } from '../results/RuleOverrideContextExtractor'
-import { logger } from '../../utils/DevelopmentLogger'
+import { logger, restartLogger } from '../../utils/DevelopmentLogger'
 import { DataContextUpdaterImpl } from '../contexts/data/updater/DataContextUpdaterImpl'
 import { ContextDataExtractor } from '../contexts/data/extraction/ContextDataExtractor.types'
 import { CachingContextDataExtractor } from '../contexts/data/extraction/CachingContextDataExtractor'
@@ -161,6 +161,7 @@ export class SyncEngine {
     }
 
     evaluate(data: object, entryPointName: string, config: EvaluationConfig): EntryPointResult {
+        restartLogger()
         return logger.group(
             () => `Kraken logs: '${entryPointName}'`,
             () => this.doEvaluate(data, entryPointName, config),
@@ -169,6 +170,7 @@ export class SyncEngine {
     }
 
     evaluateSubTree(data: object, node: object, entryPointName: string, config: EvaluationConfig): EntryPointResult {
+        restartLogger()
         return logger.group(
             () => `Kraken logs: '${entryPointName}'`,
             () => this.doEvaluate(data, entryPointName, config, this.requireValidNode(node)),
@@ -198,7 +200,11 @@ export class SyncEngine {
 
         this.#expressionEvaluator.rebuildFunctions() //
         requireDefinedValue(evaluationConfig.currencyCd, 'Currency code cannot be absent')
-        const session = new ExecutionSession(evaluationConfig, bundle.expressionContext)
+        const session = new ExecutionSession(
+            evaluationConfig,
+            bundle.expressionContext,
+            bundle.evaluation.entryPointName,
+        )
         const cachingServices = this.getCachingServices(evaluationConfig.evaluationId)
         const result = OrderedEvaluationLoop.getInstance({
             rulePayloadProcessor: this.#rulePayloadProcessor,

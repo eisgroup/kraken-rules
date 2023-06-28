@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-import { krakenConfig as config, KrakenConfig } from '../config'
+import { krakenConfig as config, KrakenConfig, WithKraken } from '../config'
 
 /**
  * Kraken logger is configured via environment variable `process.env.NODE_ENV`.
@@ -52,7 +52,14 @@ export class DevelopmentLogger {
 
     constructor(l: Logger) {
         this.logger = l
-        this.isLoggerEnabled = process.env.NODE_ENV !== 'production'
+
+        const g = globalThis as unknown as WithKraken
+        if (g.Kraken) {
+            this.isLoggerEnabled = g.Kraken.logger.enabled
+        } else {
+            this.isLoggerEnabled = false
+        }
+
         this.currentGroupDepth = 0
     }
 
@@ -247,4 +254,5 @@ export class DevelopmentLogger {
 /**
  * This logger will log result to the console API
  */
-export const logger = new DevelopmentLogger(CONSOLE_LOGGER)
+export let logger = new DevelopmentLogger(CONSOLE_LOGGER)
+export const restartLogger = () => (logger = new DevelopmentLogger(CONSOLE_LOGGER))

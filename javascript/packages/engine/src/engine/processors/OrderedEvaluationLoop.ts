@@ -69,6 +69,11 @@ export class OrderedEvaluationLoop {
     ) {}
 
     evaluate(evaluation: EntryPointEvaluation, data: object, session: ExecutionSession): EntryPointResult {
+        if (session.shouldBreakOnEntryPoint()) {
+            // eslint-disable-next-line no-debugger
+            debugger
+        }
+
         const dataProvider = this.contextDataProviderFactory.createContextProvider(data)
 
         const defaultResults = this.evaluateDefaultRules(evaluation, dataProvider, session)
