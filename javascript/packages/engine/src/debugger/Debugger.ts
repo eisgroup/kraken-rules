@@ -95,8 +95,8 @@ Kraken.debugger.help()
 Kraken.debugger.debugEntryPoint({entryPointName: 'Policy:DataGather'}) // entryPoint-1
 Kraken.debugger.debugRule({ruleName: 'Validate code'}) // rule-2
 Kraken.debugger.debugRule({ruleName: 'Required zip code', contextName: 'BillingAddress'}) // rule-3
-Kraken.debugger.breakpoints.delete('rule-2') // delete breakpoint by id 'rule-2'
-Kraken.debugger.breakpoints.clear() // delete all breakpoints
+Kraken.debugger.breakPoints.delete('rule-2') // delete breakpoint by id 'rule-2'
+Kraken.debugger.breakPoints.clear() // delete all breakpoints
 Kraken.debugger.log = true // enable logging on matching breakpoints. Now you can  search for breakpoint ids in the logs 
 Kraken.debugger.break = false // disable stopping on all breakpoints
 `)

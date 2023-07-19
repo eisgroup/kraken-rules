@@ -1,6 +1,6 @@
 {
     "name": "kraken-typescript-engine",
-    "version": "1.49.1-stage.0",
+    "version": "1.49.3-stage.0",
     "description": "",
     "main": "target/dist/js/src/index.js",
     "types": "target/dist/definitions/src/index.d.ts",
@@ -14,8 +14,8 @@
         "bignumber.js": "9.0.1",
         "declarative-js": "3.8.15",
         "fast-deep-equal": "2.0.1",
-        "kraken-engine-api": "1.49.1-stage.0",
-        "kraken-model": "1.49.1-stage.0",
+        "kraken-engine-api": "1.49.3-stage.0",
+        "kraken-model": "1.49.3-stage.0",
         "moment": "2.29.4"
     },
     "devDependencies": {
@@ -27,10 +27,10 @@
         "jest": "27.5.1",
         "jsdom": "11.3.0",
         "jsdom-global": "3.0.2",
-        "kraken-jest-matchers": "1.49.1-stage.0",
-        "kraken-model-builder": "1.49.1-stage.0",
-        "kraken-test-product": "1.49.1-stage.0",
-        "kraken-test-product-model-tree": "1.49.1-stage.0",
+        "kraken-jest-matchers": "1.49.3-stage.0",
+        "kraken-model-builder": "1.49.3-stage.0",
+        "kraken-test-product": "1.49.3-stage.0",
+        "kraken-test-product-model-tree": "1.49.3-stage.0",
         "prettier": "1.14.3",
         "rimraf": "3.0.2",
         "ts-node": "4.1.0",
@@ -53,5 +53,5 @@
         "target/dist/definitions",
         "target/dist/js"
     ],
-    "gitHead": "4b08764f04d55cfa2a430d6734754ed483ae201a"
+    "gitHead": "2dd2fe7acb8ceccf406bbc75b5ab9154548be031"
 }

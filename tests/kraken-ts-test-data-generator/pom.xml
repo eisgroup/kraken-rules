@@ -6,11 +6,11 @@
     <parent>
         <artifactId>tests</artifactId>
         <groupId>kraken</groupId>
-        <version>1.49.0</version>
+        <version>1.49.2</version>
     </parent>
 
     <artifactId>kraken-ts-test-data-generator</artifactId>
-    <version>1.49.0</version>
+    <version>1.49.2</version>
     <packaging>maven-plugin</packaging>
 
     <properties>

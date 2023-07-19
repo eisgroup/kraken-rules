@@ -92,8 +92,7 @@ export class RulePayloadProcessor {
         const ruleInfo = new DefaultRuleInfo(rule)
 
         if (session.shouldBreak(rule, dataContext)) {
-            // eslint-disable-next-line no-debugger
-            debugger
+            eval('debugger')
         }
 
         extractConditionDependencies(rule.condition).forEach(dependency =>
