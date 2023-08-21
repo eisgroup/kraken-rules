@@ -31,9 +31,12 @@ public class RuntimeContextDefinition implements Serializable {
     private static final long serialVersionUID = -7180954738541025942L;
 
     private final String name;
+
     private final Map<String, ContextNavigation> children;
     private final Map<String, ContextField> fields;
     private final Collection<String> inheritedContexts;
+
+    private final boolean system;
 
     /**
      * Creates a new instance of {@code RuntimeContextDefinition} with given arguments.
@@ -47,11 +50,14 @@ public class RuntimeContextDefinition implements Serializable {
             String name,
             Map<String, ContextNavigation> children,
             Map<String, ContextField> fields,
-            Collection<String> inheritedContexts) {
+            Collection<String> inheritedContexts,
+            boolean system
+    ) {
         this.name = name;
         this.children = children;
         this.fields = fields;
         this.inheritedContexts = inheritedContexts;
+        this.system = system;
     }
 
     public String getName() {
@@ -70,4 +76,7 @@ public class RuntimeContextDefinition implements Serializable {
         return inheritedContexts;
     }
 
+    public boolean isSystem() {
+        return system;
+    }
 }

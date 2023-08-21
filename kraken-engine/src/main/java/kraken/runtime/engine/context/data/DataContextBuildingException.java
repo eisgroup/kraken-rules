@@ -15,6 +15,7 @@
  */
 package kraken.runtime.engine.context.data;
 
+import kraken.message.SystemMessage;
 import kraken.runtime.KrakenRuntimeException;
 
 /**
@@ -23,15 +24,16 @@ import kraken.runtime.KrakenRuntimeException;
  * @author rimas
  * @since 1.0
  */
-@SuppressWarnings("WeakerAccess")
 public class DataContextBuildingException extends KrakenRuntimeException {
+
+    private static final long serialVersionUID = 6809328671826957607L;
 
     /**
      * Constructor to build exception with message
      *
      * @param message   message text
      */
-    public DataContextBuildingException(String message) {
+    public DataContextBuildingException(SystemMessage message) {
         super(message);
     }
 
@@ -41,7 +43,7 @@ public class DataContextBuildingException extends KrakenRuntimeException {
      * @param message   message text
      * @param cause     cause exception
      */
-    public DataContextBuildingException(String message, Throwable cause) {
+    public DataContextBuildingException(SystemMessage message, Throwable cause) {
         super(message, cause);
     }
 }

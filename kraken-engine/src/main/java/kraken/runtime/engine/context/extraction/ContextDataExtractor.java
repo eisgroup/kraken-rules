@@ -15,8 +15,11 @@
  */
 package kraken.runtime.engine.context.extraction;
 
+import static kraken.message.SystemMessageBuilder.Message.CONTEXT_EXTRACTION_MISSING_EXTRACTION_PATH;
+
 import kraken.context.model.tree.ContextModelTree;
 import kraken.context.path.ContextPath;
+import kraken.message.SystemMessageBuilder;
 import kraken.runtime.engine.context.data.DataContext;
 import kraken.runtime.engine.context.data.ExtractedChildDataContextBuilder;
 import kraken.runtime.engine.context.data.NodeInstanceInfo;
@@ -176,9 +179,10 @@ public class ContextDataExtractor {
                 .collect(Collectors.toList());
 
         if (extractionPaths.isEmpty()) {
-            throw new ContextExtractionException(String.format(
-                    "Could not find any extraction paths from %s to %s.",
-                    root.getContextName(), childContextName));
+            var m = SystemMessageBuilder.create(CONTEXT_EXTRACTION_MISSING_EXTRACTION_PATH)
+                .parameters(root.getContextName(), childContextName)
+                .build();
+            throw new ContextExtractionException(m);
         }
         return extractionPaths;
     }

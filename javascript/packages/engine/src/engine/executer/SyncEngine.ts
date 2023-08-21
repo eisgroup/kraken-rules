@@ -37,7 +37,11 @@ import { CommonPathResolver } from '../contexts/ccr/CommonPathResolver'
 import { CachingReferencePathResolver } from '../contexts/ccr/CachingReferencePathResolver'
 import { ENGINE_VERSION } from '../generated/engineVersion'
 import { DefaultEntryPointResult } from '../../dto/DefaultEntryPointResult'
-import { ErrorCode, KrakenRuntimeError } from '../../error/KrakenRuntimeError'
+import {
+    KrakenRuntimeError,
+    RESTRICTION_NODE_NOT_VALID_CONTEXT,
+    SystemMessageBuilder,
+} from '../../error/KrakenRuntimeError'
 import { EntryPointBundle } from '../../models/EntryPointBundle'
 import EntryPointEvaluation = EntryPointBundle.EntryPointEvaluation
 import { EvaluationMode, isSupportedPayloadType } from '../runtime/EvaluationMode'
@@ -154,6 +158,7 @@ export class SyncEngine {
             this.#expressionEvaluator,
             new RuleOverrideContextExtractorImpl(),
             dataContextUpdater,
+            config.modelTree,
         )
         this.#bundleCache = config.cache
         this.#dataInfoResolver = config.dataInfoResolver
@@ -287,11 +292,11 @@ export class SyncEngine {
     private requireValidNode = (node: object): object => {
         requireDefinedValue(node, 'Restriction node cannot be absent')
         const validationErrors = this.#dataInfoResolver.validate(node)
+
         if (validationErrors.length) {
-            throw new KrakenRuntimeError(
-                ErrorCode.INCORRECT_CONTEXT_INSTANCE,
-                'Restriction node is invalid Context instance:\n\t' + validationErrors.map(x => x.message).join('\n\t'),
-            )
+            const errors = validationErrors.map(x => `  ${x.message}`).join('\n')
+            const m = new SystemMessageBuilder(RESTRICTION_NODE_NOT_VALID_CONTEXT).parameters('\n' + errors).build()
+            throw new KrakenRuntimeError(m)
         }
         return node
     }

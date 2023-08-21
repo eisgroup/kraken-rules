@@ -15,8 +15,13 @@
  */
 package kraken.model.project.validator.rule;
 
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_INCONSISTENT_VERSION_TARGET;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_TARGET_CONTEXT_FIELD_FORBIDDEN;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_TARGET_CONTEXT_FIELD_UNKNOWN;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_TARGET_CONTEXT_SYSTEM;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_TARGET_CONTEXT_UNKNOWN;
+
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.BooleanUtils;
@@ -24,9 +29,9 @@ import org.apache.commons.lang3.BooleanUtils;
 import kraken.model.Rule;
 import kraken.model.context.ContextDefinition;
 import kraken.model.context.ContextField;
+import kraken.model.derive.DefaultValuePayload;
 import kraken.model.project.KrakenProject;
-import kraken.model.project.validator.Severity;
-import kraken.model.project.validator.ValidationMessage;
+import kraken.model.project.validator.ValidationMessageBuilder;
 import kraken.model.project.validator.ValidationSession;
 
 /**
@@ -44,24 +49,28 @@ public final class RuleTargetContextValidator implements RuleValidator {
     public void validate(Rule rule, ValidationSession session) {
         ContextDefinition contextDefinition = krakenProject.getContextDefinitions().get(rule.getContext());
         if (contextDefinition == null) {
-            String message = String.format("missing ContextDefinition with name '%s'", rule.getContext());
-            session.add(new ValidationMessage(rule, message, Severity.ERROR));
-        } else if (contextDefinition.isSystem()) {
-            String message = String.format(
-                "cannot be applied on system ContextDefinition '%s'.",
-                rule.getContext());
-            session.add(new ValidationMessage(rule, message, Severity.ERROR));
+            var m = ValidationMessageBuilder.create(RULE_TARGET_CONTEXT_UNKNOWN, rule)
+                .parameters(rule.getContext())
+                .build();
+            session.add(m);
+        } else if (contextDefinition.isSystem() && !(rule.getPayload() instanceof DefaultValuePayload)) {
+            var m = ValidationMessageBuilder.create(RULE_TARGET_CONTEXT_SYSTEM, rule)
+                .parameters(rule.getContext())
+                .build();
+            session.add(m);
         } else if (contextDefinition.isStrict()) {
             ContextField contextField = krakenProject.getContextProjection(contextDefinition.getName())
                 .getContextFields().get(rule.getTargetPath());
             if (contextField == null) {
-                String messageFormat = "ContextDefinition '%s' doesn't have field '%s'";
-                String message = String.format(messageFormat, rule.getContext(), rule.getTargetPath());
-                session.add(new ValidationMessage(rule, message, Severity.ERROR));
+                var m = ValidationMessageBuilder.create(RULE_TARGET_CONTEXT_FIELD_UNKNOWN, rule)
+                    .parameters(rule.getContext(), rule.getTargetPath())
+                    .build();
+                session.add(m);
             } else if (BooleanUtils.isTrue(contextField.getForbidTarget())) {
-                String messageFormat = "cannot be applied on field because it is forbidden to be a rule target - '%s'";
-                String message = String.format(messageFormat, rule.getTargetPath());
-                session.add(new ValidationMessage(rule, message, Severity.ERROR));
+                var m = ValidationMessageBuilder.create(RULE_TARGET_CONTEXT_FIELD_FORBIDDEN, rule)
+                    .parameters(rule.getTargetPath())
+                    .build();
+                session.add(m);
             }
         }
 
@@ -74,11 +83,13 @@ public final class RuleTargetContextValidator implements RuleValidator {
                 .collect(Collectors.toList());
 
             if (!rulesAppliedOnDifferentAttribute.isEmpty()) {
-                Set<String> appliedOn = rulesAppliedOnDifferentAttribute.stream()
+                var appliedOnString = rulesAppliedOnDifferentAttribute.stream()
                     .map(r -> r.getContext() + "." + r.getTargetPath())
-                    .collect(Collectors.toSet());
-                String msg = "has version applied on different context or attribute: " + appliedOn;
-                session.add(new ValidationMessage(rule, msg, Severity.ERROR));
+                    .collect(Collectors.joining(", "));
+                var m = ValidationMessageBuilder.create(RULE_INCONSISTENT_VERSION_TARGET, rule)
+                    .parameters(appliedOnString)
+                    .build();
+                session.add(m);
             }
         }
     }

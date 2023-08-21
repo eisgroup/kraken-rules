@@ -15,11 +15,11 @@
  */
 package kraken.runtime.engine.handlers;
 
+import static kraken.message.SystemMessageBuilder.Message.RULE_ASSERTION_EXPRESSION_EVALUATION_FAILURE;
+
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import kraken.message.SystemMessageLogger;
 import kraken.model.payload.PayloadType;
 import kraken.runtime.EvaluationSession;
 import kraken.runtime.engine.RulePayloadHandler;
@@ -41,7 +41,7 @@ import kraken.tracer.Tracer;
  */
 public class AssertionPayloadHandler implements RulePayloadHandler {
 
-    private static final Logger logger = LoggerFactory.getLogger(AssertionPayloadHandler.class);
+    private static final SystemMessageLogger logger = SystemMessageLogger.getLogger(AssertionPayloadHandler.class);
 
     private final KrakenExpressionEvaluator evaluator;
 
@@ -63,7 +63,7 @@ public class AssertionPayloadHandler implements RulePayloadHandler {
             return new AssertionPayloadResult(Boolean.TRUE.equals(result), assertionPayload, templateVariables);
         } catch (KrakenExpressionEvaluationException e) {
             logger.debug(
-                "Assertion expression '{}' in rule '{}' failed with exception: \n {}",
+                RULE_ASSERTION_EXPRESSION_EVALUATION_FAILURE,
                 assertionPayload.getAssertionExpression().getExpressionString(),
                 rule.getName(),
                 e

@@ -15,15 +15,17 @@
  */
 package kraken.runtime.repository.factory;
 
-import java.text.MessageFormat;
+import static kraken.message.SystemMessageBuilder.Message.KRAKEN_PROJECT_UNKNOWN_NAMESPACE;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import kraken.model.dimensions.DimensionSetService;
 import kraken.converter.KrakenProjectConverter;
 import kraken.converter.RuleConverter;
 import kraken.converter.translation.KrakenExpressionTranslator;
 import kraken.el.TargetEnvironment;
+import kraken.message.SystemMessageBuilder;
+import kraken.model.dimensions.DimensionSetService;
 import kraken.model.project.KrakenProject;
 import kraken.model.project.dependencies.RuleDependencyExtractor;
 import kraken.model.project.repository.KrakenProjectRepository;
@@ -42,17 +44,17 @@ import kraken.runtime.repository.filter.DimensionFilteringService;
  */
 public class RuntimeProjectRepositoryFactory implements RuntimeRepositoryFactory {
 
-    private DimensionFilteringService dimensionFilteringService;
+    private final DimensionFilteringService dimensionFilteringService;
 
-    private KrakenProjectRepository krakenProjectRepository;
+    private final KrakenProjectRepository krakenProjectRepository;
 
-    private Map<String, RuntimeProjectRepository> repositories = new ConcurrentHashMap<>();
+    private final Map<String, RuntimeProjectRepository> repositories = new ConcurrentHashMap<>();
 
-    private TargetEnvironment targetEnvironment;
+    private final TargetEnvironment targetEnvironment;
 
-    private RuntimeProjectRepositoryConfig config;
+    private final RuntimeProjectRepositoryConfig config;
 
-    private KrakenProjectValidationService krakenProjectValidationService;
+    private final KrakenProjectValidationService krakenProjectValidationService;
 
     public RuntimeProjectRepositoryFactory(KrakenProjectRepository krakenProjectRepository,
                                            RuntimeProjectRepositoryConfig config,
@@ -119,9 +121,7 @@ public class RuntimeProjectRepositoryFactory implements RuntimeRepositoryFactory
 
     private void throwIfKrakenProjectIsMissing(String namespace, KrakenProject krakenProject) {
         if (krakenProject == null) {
-            String format = "Unknown namespace: ''{0}''. This indicates a Kraken Rule deployment gone wrong " +
-                    "or Kraken Engine is executed with namespace that does not exist";
-            String message = MessageFormat.format(format, namespace);
+            var message = SystemMessageBuilder.create(KRAKEN_PROJECT_UNKNOWN_NAMESPACE).parameters(namespace).build();
             throw new KrakenRepositoryException(message);
         }
     }

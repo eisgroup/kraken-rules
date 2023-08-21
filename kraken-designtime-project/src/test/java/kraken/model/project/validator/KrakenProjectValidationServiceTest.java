@@ -78,7 +78,7 @@ public class KrakenProjectValidationServiceTest {
 
         ValidationResult result = krakenProjectValidationService.validate(krakenProject);
 
-        assertThat(result.getValidationMessages(), empty());
+        assertThat(result.getAllMessages(), empty());
     }
 
     @Test
@@ -88,7 +88,7 @@ public class KrakenProjectValidationServiceTest {
 
         ValidationResult result = krakenProjectValidationService.validate(krakenProject);
 
-        assertThat(result.getErrors(), hasSize(4));
+        assertThat(result.getErrorMessages(), hasSize(4));
     }
 
     @Test
@@ -98,7 +98,7 @@ public class KrakenProjectValidationServiceTest {
 
         ValidationResult result = krakenProjectValidationService.validate(krakenProject);
 
-        assertThat(result.getErrors(), hasSize(1));
+        assertThat(result.getErrorMessages(), hasSize(1));
     }
 
     @Test
@@ -111,7 +111,7 @@ public class KrakenProjectValidationServiceTest {
 
         ValidationResult result = krakenProjectValidationService.validate(krakenProject);
 
-        assertThat(result.getErrors(), hasSize(1));
+        assertThat(result.getErrorMessages(), hasSize(1));
     }
 
     @Test
@@ -124,7 +124,7 @@ public class KrakenProjectValidationServiceTest {
 
         ValidationResult result = krakenProjectValidationService.validate(krakenProject);
 
-        assertThat(result.getErrors(), hasSize(1));
+        assertThat(result.getErrorMessages(), hasSize(1));
     }
 
     @Test
@@ -137,9 +137,9 @@ public class KrakenProjectValidationServiceTest {
 
         ValidationResult result = krakenProjectValidationService.validate(krakenProject);
 
-        assertThat(result.getErrors(), hasSize(1));
-        assertThat(result.getErrors().get(0).getMessage(),
-            equalTo("cannot be applied on field because it is forbidden to be a rule target - 'policyCdForbidden'"));
+        assertThat(result.getErrorMessages(), hasSize(1));
+        assertThat(result.getErrorMessages().get(0).getMessage(),
+            equalTo("Cannot be applied on a field 'policyCdForbidden' because it is forbidden to be a rule target."));
     }
 
     @Test
@@ -163,10 +163,9 @@ public class KrakenProjectValidationServiceTest {
 
         ValidationResult result = krakenProjectValidationService.validate(krakenProject);
 
-        assertThat(result.getErrors(), hasSize(1));
-        assertThat(result.getErrors().get(0).getMessage(),
-            equalTo("Error found in Assertion Expression: "
-                + "error in 'Policy.policyCdForbidden' with message: "
+        assertThat(result.getErrorMessages(), hasSize(1));
+        assertThat(result.getErrorMessages().get(0).getMessage(),
+            equalTo("Assertion expression has error in 'Policy.policyCdForbidden'. "
                 + "Attribute 'policyCdForbidden' not found in 'Policy'."));
     }
 
@@ -180,7 +179,7 @@ public class KrakenProjectValidationServiceTest {
 
         ValidationResult result = krakenProjectValidationService.validate(krakenProject);
 
-        assertThat(result.getErrors(), hasSize(1));
+        assertThat(result.getErrorMessages(), hasSize(1));
     }
 
     @Test
@@ -195,7 +194,7 @@ public class KrakenProjectValidationServiceTest {
 
         ValidationResult result = krakenProjectValidationService.validate(krakenProject);
 
-        assertThat(result.getErrors(), hasSize(3));
+        assertThat(result.getErrorMessages(), hasSize(3));
     }
 
     @Test
@@ -209,7 +208,7 @@ public class KrakenProjectValidationServiceTest {
 
         ValidationResult result = krakenProjectValidationService.validate(krakenProject);
 
-        assertThat(result.getErrors(), hasSize(2));
+        assertThat(result.getErrorMessages(), hasSize(2));
     }
 
     @Test
@@ -229,7 +228,7 @@ public class KrakenProjectValidationServiceTest {
 
         ValidationResult result = krakenProjectValidationService.validate(krakenProject);
 
-        assertThat(result.getErrors(), hasSize(2));
+        assertThat(result.getErrorMessages(), hasSize(2));
     }
 
     @Test
@@ -240,7 +239,7 @@ public class KrakenProjectValidationServiceTest {
 
         ValidationResult result = krakenProjectValidationService.validate(krakenProject);
 
-        assertThat(result.getErrors(), hasSize(1));
+        assertThat(result.getErrorMessages(), hasSize(1));
     }
 
     @Test
@@ -253,7 +252,7 @@ public class KrakenProjectValidationServiceTest {
 
         ValidationResult result = krakenProjectValidationService.validate(krakenProject);
 
-        assertThat(result.getErrors(), hasSize(1));
+        assertThat(result.getErrorMessages(), hasSize(1));
     }
 
     @Test
@@ -264,7 +263,7 @@ public class KrakenProjectValidationServiceTest {
 
         ValidationResult result = krakenProjectValidationService.validate(krakenProject);
 
-        assertThat(result.getErrors(), hasSize(1));
+        assertThat(result.getErrorMessages(), hasSize(1));
     }
 
     @Test
@@ -275,7 +274,7 @@ public class KrakenProjectValidationServiceTest {
 
         ValidationResult result = krakenProjectValidationService.validate(krakenProject);
 
-        assertThat(result.getErrors(), hasSize(1));
+        assertThat(result.getErrorMessages(), hasSize(1));
     }
 
     @Test
@@ -287,7 +286,7 @@ public class KrakenProjectValidationServiceTest {
 
         ValidationResult result = krakenProjectValidationService.validate(krakenProject);
 
-        assertThat(result.getErrors(), hasSize(1));
+        assertThat(result.getErrorMessages(), hasSize(1));
     }
 
     @Test
@@ -299,7 +298,7 @@ public class KrakenProjectValidationServiceTest {
 
         ValidationResult result = krakenProjectValidationService.validate(krakenProject);
 
-        assertThat(result.getErrors(), hasSize(1));
+        assertThat(result.getErrorMessages(), hasSize(1));
     }
 
     @Test
@@ -310,7 +309,7 @@ public class KrakenProjectValidationServiceTest {
 
         ValidationResult result = krakenProjectValidationService.validate(krakenProject);
 
-        assertThat(result.getErrors(), hasSize(1));
+        assertThat(result.getErrorMessages(), hasSize(1));
     }
 
     @Test
@@ -321,7 +320,7 @@ public class KrakenProjectValidationServiceTest {
 
         ValidationResult result = krakenProjectValidationService.validate(krakenProject);
 
-        assertThat(result.getErrors(), hasSize(1));
+        assertThat(result.getErrorMessages(), hasSize(1));
     }
 
     @Test
@@ -333,7 +332,7 @@ public class KrakenProjectValidationServiceTest {
 
         ValidationResult result = krakenProjectValidationService.validate(krakenProject);
 
-        assertThat(result.getErrors(), hasSize(1));
+        assertThat(result.getErrorMessages(), hasSize(1));
     }
 
     @Test
@@ -352,7 +351,7 @@ public class KrakenProjectValidationServiceTest {
 
         ValidationResult result = krakenProjectValidationService.validate(krakenProject);
 
-        assertThat(result.getErrors(), hasSize(1));
+        assertThat(result.getErrorMessages(), hasSize(1));
     }
 
     @Test
@@ -378,7 +377,7 @@ public class KrakenProjectValidationServiceTest {
 
         ValidationResult result = krakenProjectValidationService.validate(krakenProject);
 
-        assertThat(result.getErrors(), hasSize(1));
+        assertThat(result.getErrorMessages(), hasSize(1));
     }
 
     @Test
@@ -401,7 +400,7 @@ public class KrakenProjectValidationServiceTest {
 
         ValidationResult result = krakenProjectValidationService.validate(krakenProject);
 
-        assertThat(result.getErrors(), hasSize(1));
+        assertThat(result.getErrorMessages(), hasSize(1));
     }
 
     @Test
@@ -431,7 +430,7 @@ public class KrakenProjectValidationServiceTest {
 
         ValidationResult result = krakenProjectValidationService.validate(krakenProject);
 
-        assertThat(result.getErrors(), hasSize(1));
+        assertThat(result.getErrorMessages(), hasSize(1));
     }
 
     @Test
@@ -457,7 +456,7 @@ public class KrakenProjectValidationServiceTest {
 
         ValidationResult result = krakenProjectValidationService.validate(krakenProject);
 
-        assertThat(result.getErrors(), hasSize(3));
+        assertThat(result.getErrorMessages(), hasSize(3));
     }
 
     @Test
@@ -468,10 +467,10 @@ public class KrakenProjectValidationServiceTest {
 
         ValidationResult result = krakenProjectValidationService.validate(krakenProject);
 
-        assertThat(result.getErrors(), hasSize(1));
+        assertThat(result.getErrorMessages(), hasSize(1));
         assertThat(
-            result.getErrors().get(0).getMessage(),
-            is("parent 'BasePolicy' is specified twice - please remove duplicated context")
+            result.getErrorMessages().get(0).getMessage(),
+            is("Inherited context definition 'BasePolicy' is specified twice - please remove duplicate.")
         );
     }
     
@@ -485,14 +484,14 @@ public class KrakenProjectValidationServiceTest {
 
         ValidationResult result = krakenProjectValidationService.validate(krakenProject);
 
-        assertThat(result.getErrors(), hasSize(1));
+        assertThat(result.getErrorMessages(), hasSize(1));
 
-        ValidationMessage message = result.getValidationMessages().get(0);
+        ValidationMessage message = result.getAllMessages().get(0);
 
         assertThat(message.getItem().getName(), is("SystemContext"));
         assertThat(message.getSeverity(), is(Severity.ERROR));
         assertThat(message.getMessage(), containsString(
-            "Parent contexts are not allowed for system context definitions."));
+            "Inherited context definition is not allowed for system context definition."));
     }
 
 }

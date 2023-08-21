@@ -25,8 +25,8 @@ import { Numbers } from './math/Numbers'
 import { dateFunctions } from './functionLibrary/DateFunctions'
 import { Moneys } from './math/Moneys'
 import { DataContext } from '../../contexts/data/DataContext'
-import { ErrorCode, KrakenRuntimeError } from '../../../error/KrakenRuntimeError'
 import { TargetPathUtils } from './TargetPathUtils'
+import { KrakenRuntimeError, SystemMessageBuilder, UNKNOWN_EXPRESSION_TYPE } from '../../../error/KrakenRuntimeError'
 
 /**
  * Global expression functions registry.
@@ -150,8 +150,7 @@ export class ExpressionEvaluator {
                 })
             default:
                 throw new KrakenRuntimeError(
-                    ErrorCode.UNKNOWN_EXPRESSION_TYPE,
-                    `Evaluation of expression ${JSON.stringify(expression)} is not supported`,
+                    new SystemMessageBuilder(UNKNOWN_EXPRESSION_TYPE).parameters(expression).build(),
                 )
         }
     }
@@ -180,8 +179,7 @@ export class ExpressionEvaluator {
                 })
             default:
                 throw new KrakenRuntimeError(
-                    ErrorCode.UNKNOWN_EXPRESSION_TYPE,
-                    `Evaluation of navigation expression ${JSON.stringify(expression)} is not supported`,
+                    new SystemMessageBuilder(UNKNOWN_EXPRESSION_TYPE).parameters(expression).build(),
                 )
         }
     }

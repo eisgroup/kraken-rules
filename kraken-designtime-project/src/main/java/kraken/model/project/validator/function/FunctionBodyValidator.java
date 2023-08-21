@@ -15,11 +15,16 @@
  */
 package kraken.model.project.validator.function;
 
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.FUNCTION_BODY_EXPRESSION_SYNTAX_ERROR;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.FUNCTION_BODY_EXPRESSION_SYNTAX_INFO;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.FUNCTION_BODY_EXPRESSION_SYNTAX_WARNING;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.FUNCTION_BODY_IS_LOGICALLY_EMPTY;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.FUNCTION_BODY_NOT_PARSEABLE;
+
 import kraken.el.ast.Ast;
 import kraken.el.ast.builder.AstBuilder;
 import kraken.el.ast.builder.AstBuildingException;
 import kraken.el.ast.validation.AstMessage;
-import kraken.el.ast.validation.AstMessageSeverity;
 import kraken.el.scope.Scope;
 import kraken.el.scope.symbol.FunctionSymbol;
 import kraken.el.scope.type.Type;
@@ -27,8 +32,9 @@ import kraken.model.Function;
 import kraken.model.project.KrakenProject;
 import kraken.model.project.scope.ScopeBuilder;
 import kraken.model.project.scope.ScopeBuilderProvider;
-import kraken.model.project.validator.Severity;
 import kraken.model.project.validator.ValidationMessage;
+import kraken.model.project.validator.ValidationMessageBuilder;
+import kraken.model.project.validator.ValidationMessageBuilder.Message;
 import kraken.model.project.validator.ValidationSession;
 
 /**
@@ -59,7 +65,8 @@ public class FunctionBodyValidator {
             ast = parseFunctionBody(function);
         } catch (AstBuildingException e) {
             // stop validation if function body expression cannot be parsed
-            session.add(functionBodyIsNotParseableError(function));
+            var m = ValidationMessageBuilder.create(FUNCTION_BODY_NOT_PARSEABLE, function).build();
+            session.add(m);
             return;
         }
 
@@ -71,21 +78,36 @@ public class FunctionBodyValidator {
             FunctionSymbol symbol = scopeBuilder.buildFunctionSymbol(function);
             Type returnType = symbol.getType();
             if (!returnType.isAssignableFrom(ast.getExpression().getEvaluationType())) {
-                session.add(new ValidationMessage(
-                    function,
-                    String.format(
-                        "Evaluation type of function body expression is '%s' and it is not assignable to "
-                            + "function return type '%s'",
-                        ast.getExpression().getEvaluationType(),
-                        function.getReturnType()
-                    ),
-                    Severity.ERROR
-                ));
+                var m = ValidationMessageBuilder.create(Message.FUNCTION_BODY_WRONG_RETURN_TYPE, function)
+                    .parameters(ast.getExpression().getEvaluationType(), function.getReturnType())
+                    .build();
+                session.add(m);
             }
         }
 
         if(ast.getExpression().isEmpty()) {
-            session.add(functionBodyIsLogicallyEmptyError(function));
+            var m = ValidationMessageBuilder.create(FUNCTION_BODY_IS_LOGICALLY_EMPTY, function).build();
+            session.add(m);
+        }
+    }
+
+    private ValidationMessage toValidationMessage(AstMessage astMessage, Function function) {
+        var message = astMessage.getMessage();
+        switch (astMessage.getSeverity()) {
+            case ERROR:
+                return ValidationMessageBuilder.create(FUNCTION_BODY_EXPRESSION_SYNTAX_ERROR, function)
+                    .parameters(astMessage.getNode().getToken(), message)
+                    .build();
+            case WARNING:
+                return ValidationMessageBuilder.create(FUNCTION_BODY_EXPRESSION_SYNTAX_WARNING, function)
+                    .parameters(astMessage.getNode().getToken(), message)
+                    .build();
+            case INFO:
+                return ValidationMessageBuilder.create(FUNCTION_BODY_EXPRESSION_SYNTAX_INFO, function)
+                    .parameters(astMessage.getNode().getToken(), message)
+                    .build();
+            default:
+                throw new IllegalArgumentException("Unknown AstSeverity encountered: " + astMessage.getSeverity());
         }
     }
 
@@ -93,40 +115,6 @@ public class FunctionBodyValidator {
         String bodyExpression = function.getBody().getExpressionString();
         Scope scope = scopeBuilder.buildFunctionScope(function);
         return AstBuilder.from(bodyExpression, scope);
-    }
-
-    private ValidationMessage functionBodyIsNotParseableError(Function function) {
-        return new ValidationMessage(
-            function,
-            "Function body expression cannot be parsed, because there is an error in expression syntax",
-            Severity.ERROR
-        );
-    }
-
-    private ValidationMessage functionBodyIsLogicallyEmptyError(Function function) {
-        return new ValidationMessage(
-            function,
-            "Function body expression is logically empty. "
-                + "Please check if there are unintentional spaces, new lines or comments remaining.",
-            Severity.ERROR
-        );
-    }
-
-    private ValidationMessage toValidationMessage(AstMessage message, Function function) {
-        return new ValidationMessage(function, message.getMessage(), toSeverity(message.getSeverity()));
-    }
-
-    private Severity toSeverity(AstMessageSeverity severity) {
-        switch (severity) {
-            case ERROR:
-                return Severity.ERROR;
-            case WARNING:
-                return Severity.WARNING;
-            case INFO:
-                return Severity.INFO;
-            default:
-                throw new IllegalArgumentException("Unknown AstMessageSeverity encountered: " + severity);
-        }
     }
 
 }

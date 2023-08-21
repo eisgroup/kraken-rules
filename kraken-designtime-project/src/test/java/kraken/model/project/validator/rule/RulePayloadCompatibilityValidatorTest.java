@@ -59,6 +59,7 @@ import static kraken.model.project.validator.rule.RulePayloadCompatibilityValida
 import static kraken.model.project.validator.rule.RulePayloadCompatibilityValidatorTest.IsPayloadCompatibleWith.compatibleWithSingleComplex;
 import static kraken.model.project.validator.rule.RulePayloadCompatibilityValidatorTest.IsPayloadCompatibleWith.compatibleWithSinglePrimitive;
 import static kraken.model.project.validator.rule.RulePayloadCompatibilityValidatorTest.IsPayloadCompatibleWith.compatibleWithSingleSystem;
+import static kraken.model.project.validator.rule.RulePayloadCompatibilityValidatorTest.IsPayloadCompatibleWith.compatibleWithSystemContext;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -115,6 +116,12 @@ public class RulePayloadCompatibilityValidatorTest {
         assertThat(payload, not(compatibleWithMultipleSystem()));
         assertThat(payload, not(compatibleWithSingleComplex()));
         assertThat(payload, not(compatibleWithMultipleComplex()));
+    }
+
+    @Test
+    public void shouldValidateDefaultPayloadOnSystemContext() {
+        var payload = factory.createDefaultValuePayload();
+        assertThat(payload, compatibleWithSystemContext());
     }
 
     @Test
@@ -225,12 +232,22 @@ public class RulePayloadCompatibilityValidatorTest {
 
     static class IsPayloadCompatibleWith extends TypeSafeMatcher<Payload> {
 
+        static String CONTEXT_NAME = "Context";
+
         private String type;
         private Cardinality cardinality;
+        private boolean isContextSystem;
 
         public IsPayloadCompatibleWith(String type, Cardinality cardinality) {
             this.type = type;
             this.cardinality = cardinality;
+            this.isContextSystem = false;
+        }
+
+        public IsPayloadCompatibleWith(String type, Cardinality cardinality, boolean isContextSystem) {
+            this.type = type;
+            this.cardinality = cardinality;
+            this.isContextSystem = isContextSystem;
         }
 
         @Override
@@ -242,10 +259,11 @@ public class RulePayloadCompatibilityValidatorTest {
             contextField.setFieldType(type);
 
             ContextDefinition contextDefinition = factory.createContextDefinition();
-            contextDefinition.setName("Context");
+            contextDefinition.setName(CONTEXT_NAME);
             contextDefinition.setStrict(true);
             contextDefinition.setContextFields(Map.of(contextField.getName(), contextField));
             contextDefinition.setPhysicalNamespace("Base");
+            contextDefinition.setSystem(this.isContextSystem);
 
             Rule rule = factory.createRule();
             rule.setContext("Context");
@@ -270,6 +288,10 @@ public class RulePayloadCompatibilityValidatorTest {
             description.appendText("Payload which is compatible with " + type + " " + cardinality);
         }
 
+        static IsPayloadCompatibleWith compatibleWithSystemContext() {
+            return new IsPayloadCompatibleWith(CONTEXT_NAME, SINGLE, true);
+        }
+
         static IsPayloadCompatibleWith compatibleWithSinglePrimitive() {
             return compatibleWithSinglePrimitive(STRING);
         }
@@ -291,11 +313,11 @@ public class RulePayloadCompatibilityValidatorTest {
         }
 
         static IsPayloadCompatibleWith compatibleWithSingleComplex() {
-            return new IsPayloadCompatibleWith("Context", SINGLE);
+            return new IsPayloadCompatibleWith(CONTEXT_NAME, SINGLE);
         }
 
         static IsPayloadCompatibleWith compatibleWithMultipleComplex() {
-            return new IsPayloadCompatibleWith("Context", MULTIPLE);
+            return new IsPayloadCompatibleWith(CONTEXT_NAME, MULTIPLE);
         }
     }
 }

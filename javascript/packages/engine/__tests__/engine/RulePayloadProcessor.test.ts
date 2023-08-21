@@ -30,10 +30,15 @@ import { RuleOverrideContextExtractorImpl } from '../../src/engine/results/RuleO
 import ApplicableRuleEvaluationResult = RuleEvaluationResults.ApplicableRuleEvaluationResult
 import RuleEvaluationResult = RuleEvaluationResults.RuleEvaluationResult
 
-const payloadProcessor = new RulePayloadProcessor(mock.evaluator, new RuleOverrideContextExtractorImpl(), {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    update: () => {},
-})
+const payloadProcessor = new RulePayloadProcessor(
+    mock.evaluator,
+    new RuleOverrideContextExtractorImpl(),
+    {
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        update: () => {},
+    },
+    mock.modelTree,
+)
 
 function execute(rule: Rule): RuleEvaluationResult {
     function config(): ExecutionSession {

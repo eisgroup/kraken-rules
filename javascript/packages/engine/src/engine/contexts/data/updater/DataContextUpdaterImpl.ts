@@ -18,7 +18,11 @@ import { ReferenceExtractionInfo } from '../extraction/ReferenceExtractionInfo'
 import { DataContextUpdater, DataContextDependency } from './DataContextUpdater'
 import { ReferencePathResolver } from '../../ccr/ReferencePathResolver'
 import { DataContext } from '../DataContext'
-import { ErrorCode, KrakenRuntimeError } from '../../../../error/KrakenRuntimeError'
+import {
+    CONTEXT_MODEL_TREE_MISSING_EXTRACTION_ROOT,
+    KrakenRuntimeError,
+    SystemMessageBuilder,
+} from '../../../../error/KrakenRuntimeError'
 
 export class DataContextUpdaterImpl implements DataContextUpdater {
     constructor(
@@ -46,13 +50,11 @@ export class DataContextUpdaterImpl implements DataContextUpdater {
         const extractionRoot = path[0]
         const parent = parents.find(x => x.contextName === extractionRoot)
         if (!parent) {
-            throw new KrakenRuntimeError(
-                ErrorCode.INCORRECT_MODEL_TREE,
-
-                `Failed to find extraction root from ${parents.map(x => x.contextName).join(', ')} in path ${path.join(
-                    '.',
-                )}`,
-            )
+            const joinedParents = parents.map(x => x.contextName).join(', ')
+            const m = new SystemMessageBuilder(CONTEXT_MODEL_TREE_MISSING_EXTRACTION_ROOT)
+                .parameters(joinedParents, path.join('.'))
+                .build()
+            throw new KrakenRuntimeError(m)
         }
         return parent
     }

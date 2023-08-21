@@ -15,11 +15,13 @@
  */
 package kraken.runtime.engine.handlers;
 
-import java.util.List;
+import static kraken.message.SystemMessageBuilder.Message.VALUE_LIST_PAYLOAD_CANNOT_CONVERT_TO_NUMBER;
+import static kraken.message.SystemMessageBuilder.Message.VALUE_LIST_PAYLOAD_CANNOT_CONVERT_TO_STRING;
 
 import javax.money.MonetaryAmount;
 
 import kraken.el.math.Numbers;
+import kraken.message.SystemMessageBuilder;
 import kraken.model.ValueList;
 import kraken.model.payload.PayloadType;
 import kraken.runtime.EvaluationSession;
@@ -85,8 +87,8 @@ public final class ValueListPayloadHandler implements RulePayloadHandler {
             case DECIMAL:
                 return valueListPayload.getValueList().has(asNumber(fieldValue));
             default:
-                throw new KrakenRuntimeException(
-                    "Not supported value list data type" + valueListPayload.getValueList().getValueType());
+                throw new IllegalArgumentException(
+                    "Unknown value list data type " + valueListPayload.getValueList().getValueType());
         }
     }
 
@@ -99,7 +101,11 @@ public final class ValueListPayloadHandler implements RulePayloadHandler {
             return Numbers.fromMoney((MonetaryAmount) value);
         }
 
-        throw new KrakenRuntimeException("Unable to convert value " + value + " to a decimal.");
+        var m = SystemMessageBuilder.create(VALUE_LIST_PAYLOAD_CANNOT_CONVERT_TO_NUMBER)
+            .parameters(value)
+            .build();
+
+        throw new KrakenRuntimeException(m);
     }
 
     private String asString(Object value) {
@@ -107,7 +113,11 @@ public final class ValueListPayloadHandler implements RulePayloadHandler {
             return (String) value;
         }
 
-        throw new KrakenRuntimeException("Unable to convert value " + value + " to a string.");
+        var m = SystemMessageBuilder.create(VALUE_LIST_PAYLOAD_CANNOT_CONVERT_TO_STRING)
+            .parameters(value)
+            .build();
+
+        throw new KrakenRuntimeException(m);
     }
 
 }

@@ -15,6 +15,8 @@
  */
 package kraken.runtime.engine.evaluation.loop;
 
+import static kraken.message.SystemMessageBuilder.Message.DEFAULT_RULE_MULTIPLE_ON_SAME_FIELD;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -24,6 +26,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import kraken.message.SystemMessageBuilder;
 import kraken.model.payload.PayloadType;
 import kraken.runtime.EvaluationSession;
 import kraken.runtime.KrakenRuntimeException;
@@ -233,15 +236,15 @@ public class OrderedEvaluationLoop implements EvaluationLoop {
                 .filter(rr -> rr.getPayloadResult() instanceof DefaultValuePayloadResult)
                 .collect(Collectors.toList());
             if (rulesAppliedOnField.size() > 1) {
-                throw new KrakenRuntimeException(String.format(
-                    "On field '%s' applied '%s' default rules: %s. "
-                        + "Only one default rule can be applied on the same field.",
-                    fieldEvaluationResult.getContextFieldInfo(),
-                    rulesAppliedOnField.size(),
-                    rulesAppliedOnField.stream()
-                        .map(x -> "'" + x.getRuleInfo().getRuleName() + "'")
-                        .collect(Collectors.joining(", "))
-                ));
+                var appliedDefaultRules = rulesAppliedOnField.stream()
+                    .map(x -> "'" + x.getRuleInfo().getRuleName() + "'")
+                    .collect(Collectors.joining(", "));
+                var m = SystemMessageBuilder.create(DEFAULT_RULE_MULTIPLE_ON_SAME_FIELD)
+                    .parameters(
+                        fieldEvaluationResult.getContextFieldInfo().toString(),
+                        appliedDefaultRules)
+                    .build();
+                throw new KrakenRuntimeException(m);
             }
         }
     }

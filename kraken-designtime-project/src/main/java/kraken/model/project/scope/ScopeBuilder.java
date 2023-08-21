@@ -16,8 +16,8 @@
 package kraken.model.project.scope;
 
 import static kraken.el.scope.type.Type.toType;
+import static kraken.message.SystemMessageBuilder.Message.KRAKEN_PROJECT_APPROXIMATE_CONTEXT_SCOPE;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,9 +25,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import kraken.context.path.ContextPath;
 import kraken.cross.context.path.CrossContextPath;
@@ -44,6 +41,7 @@ import kraken.el.scope.symbol.VariableSymbol;
 import kraken.el.scope.type.ArrayType;
 import kraken.el.scope.type.Type;
 import kraken.el.scope.type.UnionType;
+import kraken.message.SystemMessageLogger;
 import kraken.model.Function;
 import kraken.model.FunctionSignature;
 import kraken.model.GenericTypeBound;
@@ -60,7 +58,7 @@ import kraken.model.project.ccr.CrossContextServiceProvider;
  */
 public class ScopeBuilder {
 
-    private static final Logger logger = LoggerFactory.getLogger(ScopeBuilder.class);
+    private static final SystemMessageLogger logger = SystemMessageLogger.getLogger(ScopeBuilder.class);
 
     private static final String CONTEXT = "context";
 
@@ -236,15 +234,12 @@ public class ScopeBuilder {
     }
 
     private void logFallBackToApproximateScope(ContextDefinition contextDefinition) {
-        String template = "Cannot build exact Scope of {0} in KrakenProject for namespace {1}, " +
-                "because such context is not accessible from root {2}. An approximate Scope will be used.";
-        String message = MessageFormat.format(
-                template,
-                contextDefinition.getName(),
-                krakenProject.getNamespace(),
-                krakenProject.getRootContextName()
+        logger.warn(
+            KRAKEN_PROJECT_APPROXIMATE_CONTEXT_SCOPE,
+            contextDefinition.getName(),
+            krakenProject.getNamespace(),
+            krakenProject.getRootContextName()
         );
-        logger.warn(message);
     }
 
     private SymbolTable buildSymbolTable(ContextDefinition contextDefinition) {

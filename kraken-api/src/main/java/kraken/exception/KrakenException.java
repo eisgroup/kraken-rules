@@ -15,18 +15,22 @@
  */
 package kraken.exception;
 
+import kraken.message.SystemMessage;
+
 /**
  * A generic exception which is common parent for all Kraken exceptions
  *
  */
 public abstract class KrakenException extends RuntimeException {
 
-    public KrakenException(String message) {
-        super(message);
+    private static final long serialVersionUID = 5432635944422254148L;
+
+    public KrakenException(SystemMessage message) {
+        super(message.formatMessageWithCode());
     }
 
-    public KrakenException(String message, Throwable cause) {
-        super(message, cause);
+    public KrakenException(SystemMessage message, Throwable cause) {
+        super(message.formatMessageWithCode(), cause);
     }
 
 }

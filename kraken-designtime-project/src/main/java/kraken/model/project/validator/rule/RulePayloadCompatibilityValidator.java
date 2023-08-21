@@ -23,23 +23,24 @@ import static kraken.model.context.PrimitiveFieldDataType.MONEY;
 import static kraken.model.context.PrimitiveFieldDataType.STRING;
 import static kraken.model.context.PrimitiveFieldDataType.isPrimitiveType;
 import static kraken.model.context.SystemDataTypes.isSystemDataType;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_PAYLOAD_NOT_COMPATIBLE;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_PAYLOAD_NOT_COMPATIBLE_WARNING;
 import static kraken.model.project.validator.rule.RulePayloadCompatibilityValidator.PayloadCompatibility.forPayload;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 import kraken.model.Payload;
 import kraken.model.Rule;
 import kraken.model.ValueList.DataType;
-import kraken.model.context.Cardinality;
 import kraken.model.context.ContextDefinition;
 import kraken.model.context.ContextField;
 import kraken.model.context.PrimitiveFieldDataType;
-import kraken.model.context.SystemDataTypes;
 import kraken.model.derive.DefaultValuePayload;
 import kraken.model.project.KrakenProject;
-import kraken.model.project.validator.Severity;
-import kraken.model.project.validator.ValidationMessage;
+import kraken.model.project.validator.ValidationMessageBuilder;
 import kraken.model.project.validator.ValidationSession;
 import kraken.model.state.AccessibilityPayload;
 import kraken.model.state.VisibilityPayload;
@@ -59,7 +60,14 @@ import kraken.model.validation.ValueListPayload;
 public class RulePayloadCompatibilityValidator implements RuleValidator {
 
     private static final List<PayloadCompatibility> payloadCompatibility = List.of(
-        forPayload(DefaultValuePayload.class, f -> isPrimitiveType(f.getFieldType())),
+        forPayload(
+            DefaultValuePayload.class,
+            (f, kp) -> isPrimitiveType(f.getFieldType())
+                || !isSystemDataType(f.getFieldType())
+                && Optional.ofNullable(kp.getContextProjection(f.getFieldType()))
+                    .map(ContextDefinition::isSystem)
+                    .orElse(false)
+        ),
         forPayload(AccessibilityPayload.class, f -> !isSystemDataType(f.getFieldType())),
         forPayload(VisibilityPayload.class, f -> !isSystemDataType(f.getFieldType())),
         forPayload(SizePayload.class, f -> f.getCardinality() == MULTIPLE),
@@ -108,36 +116,32 @@ public class RulePayloadCompatibilityValidator implements RuleValidator {
 
         boolean isCompatible = payloadCompatibility.stream()
                 .filter(p -> p.isApplicable(rule.getPayload()))
-                .allMatch(p -> p.isCompatible(contextField));
+                .allMatch(p -> p.isCompatible(contextField, krakenProject));
         if(!isCompatible) {
-            String messageFormat = "%s cannot be applied on %s.%s because type '%s' and cardinality '%s' " +
-                    "is incompatible with the payload type.";
-            String message = String.format(
-                    messageFormat,
+            var m = ValidationMessageBuilder.create(RULE_PAYLOAD_NOT_COMPATIBLE, rule)
+                .parameters(
                     rule.getPayload().getPayloadType().getTypeName(),
                     rule.getContext(),
                     rule.getTargetPath(),
                     contextField.getFieldType(),
-                    contextField.getCardinality().name()
-            );
-            session.add(new ValidationMessage(rule, message, Severity.ERROR));
+                    contextField.getCardinality().name())
+                .build();
+            session.add(m);
         }
 
         boolean isWarningCompatible = payloadCompatibility.stream()
             .filter(p -> p.isApplicable(rule.getPayload()))
             .allMatch(p -> p.isWarningCompatible(contextField));
         if(!isWarningCompatible) {
-            String messageFormat = "%s cannot be applied on %s.%s because type '%s' and cardinality '%s' " +
-                "is incompatible with the payload type. In the future, such configuration will not be supported.";
-            String message = String.format(
-                messageFormat,
-                rule.getPayload().getPayloadType().getTypeName(),
-                rule.getContext(),
-                rule.getTargetPath(),
-                contextField.getFieldType(),
-                contextField.getCardinality().name()
-            );
-            session.add(new ValidationMessage(rule, message, Severity.WARNING));
+            var m = ValidationMessageBuilder.create(RULE_PAYLOAD_NOT_COMPATIBLE_WARNING, rule)
+                .parameters(
+                    rule.getPayload().getPayloadType().getTypeName(),
+                    rule.getContext(),
+                    rule.getTargetPath(),
+                    contextField.getFieldType(),
+                    contextField.getCardinality().name())
+                .build();
+            session.add(m);
         }
     }
 
@@ -155,19 +159,27 @@ public class RulePayloadCompatibilityValidator implements RuleValidator {
 
         private Class<?> payloadClass;
 
-        private Predicate<ContextField> payloadIsCompatible;
+        private BiPredicate<ContextField, KrakenProject> payloadIsCompatible;
 
         private Predicate<ContextField> payloadIsWarningCompatible;
 
-        PayloadCompatibility(Class<?> payloadClass, Predicate<ContextField> payloadIsCompatible,
+        PayloadCompatibility(Class<?> payloadClass,
+                             Predicate<ContextField> payloadIsCompatible,
                              Predicate<ContextField> payloadIsWarningCompatible) {
             this.payloadClass = payloadClass;
-            this.payloadIsCompatible = payloadIsCompatible;
+            this.payloadIsCompatible = (f, p) -> payloadIsCompatible.test(f);
             this.payloadIsWarningCompatible = payloadIsWarningCompatible;
         }
 
-        boolean isCompatible(ContextField contextField) {
-            return payloadIsCompatible.test(contextField);
+        PayloadCompatibility(Class<?> payloadClass,
+                             BiPredicate<ContextField, KrakenProject> payloadIsCompatible) {
+            this.payloadClass = payloadClass;
+            this.payloadIsCompatible = payloadIsCompatible;
+            this.payloadIsWarningCompatible = f -> true;
+        }
+
+        boolean isCompatible(ContextField contextField, KrakenProject krakenProject) {
+            return payloadIsCompatible.test(contextField, krakenProject);
         }
 
         boolean isWarningCompatible(ContextField contextField) {
@@ -176,6 +188,11 @@ public class RulePayloadCompatibilityValidator implements RuleValidator {
 
         boolean isApplicable(Payload payload) {
             return payloadClass.isAssignableFrom(payload.getClass());
+        }
+
+        static PayloadCompatibility forPayload(Class<?> payloadClass,
+                                               BiPredicate<ContextField, KrakenProject> payloadIsCompatible) {
+            return new PayloadCompatibility(payloadClass, payloadIsCompatible);
         }
 
         static PayloadCompatibility forPayload(Class<?> payloadClass,

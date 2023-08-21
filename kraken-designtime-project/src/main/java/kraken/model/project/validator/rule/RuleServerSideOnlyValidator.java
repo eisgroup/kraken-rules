@@ -15,12 +15,13 @@
  */
 package kraken.model.project.validator.rule;
 
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_INCONSISTENT_VERSION_SERVER_SIDE_ONLY;
+
 import java.util.List;
 
 import kraken.model.Rule;
 import kraken.model.project.KrakenProject;
-import kraken.model.project.validator.Severity;
-import kraken.model.project.validator.ValidationMessage;
+import kraken.model.project.validator.ValidationMessageBuilder;
 import kraken.model.project.validator.ValidationSession;
 
 /**
@@ -44,15 +45,9 @@ public final class RuleServerSideOnlyValidator implements RuleValidator {
                 .getOrDefault(rule.getName(), List.of())
                 .stream()
                 .anyMatch(Rule::isServerSideOnly);
-
             if (hasServerSideOnlyVariations) {
-                session.add(new ValidationMessage(
-                    rule,
-                    "variation is misconfigured, because it is not marked as @ServerSideOnly, "
-                        + "but there are another Rule variation that is marked as @ServerSideOnly. "
-                        + "All variations of the same Rule must be consistently marked as @ServerSideOnly",
-                    Severity.ERROR)
-                );
+                var m = ValidationMessageBuilder.create(RULE_INCONSISTENT_VERSION_SERVER_SIDE_ONLY, rule).build();
+                session.add(m);
             }
         }
     }

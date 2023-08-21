@@ -15,12 +15,11 @@
  */
 package kraken.model.project.validator.rule;
 
-import java.text.MessageFormat;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_TARGET_CONTEXT_DANGLING;
 
 import kraken.model.Rule;
 import kraken.model.project.KrakenProject;
-import kraken.model.project.validator.Severity;
-import kraken.model.project.validator.ValidationMessage;
+import kraken.model.project.validator.ValidationMessageBuilder;
 import kraken.model.project.validator.ValidationSession;
 
 /**
@@ -37,9 +36,10 @@ public class RuleDanglingTargetContextValidator implements RuleValidator {
     @Override
     public void validate(Rule rule, ValidationSession session) {
         if(!krakenProject.getConnectedContextDefinitions().contains(rule.getContext())) {
-            String template = "applied on ContextDefinition ''{0}'' which is not related to Root Context ''{1}''";
-            String message = MessageFormat.format(template, rule.getContext(), krakenProject.getRootContextName());
-            session.add(new ValidationMessage(rule, message, Severity.ERROR));
+            var m = ValidationMessageBuilder.create(RULE_TARGET_CONTEXT_DANGLING, rule)
+                .parameters(rule.getContext(), krakenProject.getRootContextName())
+                .build();
+            session.add(m);
         }
     }
 

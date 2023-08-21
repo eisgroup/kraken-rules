@@ -100,12 +100,16 @@ public class ContextModelTreeOutputResourceWriter {
         Collection<Resource> resources = dslReader.read(baseDirs);
         ResourceKrakenProjectBuilder krakenProjectBuilder = new ResourceKrakenProjectBuilder(resources);
 
-        final List<String> availableNs = resources.stream().map(Resource::getNamespace).distinct().collect(Collectors.toList());
-        logger.info("Available namespaces to generate model tree: {}", availableNs);
-        logger.info("Requested to generate model tree: {}", namespaces);
+        var availableNamespaces = resources.stream()
+            .map(Resource::getNamespace)
+            .distinct()
+            .collect(Collectors.toList());
+
+        logger.info("Model tree can be generated for these namespaces: {}", availableNamespaces);
+        logger.info("Requested to generate model tree for these namespaces: {}", namespaces);
 
         return namespaces.stream()
-            .filter(availableNs::contains)
+            .filter(availableNamespaces::contains)
             .distinct()
             .collect(Collectors.toMap(
                 fileName,

@@ -61,7 +61,7 @@ public class ContextDefinitionInheritanceValidatorTest {
         assertThat(message.getItem().getName(), is("BaseContext"));
         assertThat(message.getSeverity(), is(Severity.ERROR));
         assertThat(message.getMessage(), containsString(
-            "parent 'AnotherContext' is not valid because such ContextDefinition does not exist"));
+            "Inherited context definition 'AnotherContext' is not valid because such context definition does not exist."));
     }
 
     @Test
@@ -79,7 +79,7 @@ public class ContextDefinitionInheritanceValidatorTest {
         assertThat(message.getItem().getName(), is("BaseContext"));
         assertThat(message.getSeverity(), is(Severity.ERROR));
         assertThat(message.getMessage(), containsString(
-            "parent 'SystemContext' is not valid because such system ContextDefinition cannot be inherited"));
+            "Inherited context definition 'SystemContext' is not valid because it is a system context definition."));
     }
 
     private void doValidate(KrakenProject krakenProject) {

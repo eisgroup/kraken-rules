@@ -15,10 +15,24 @@
  */
 package kraken.model.project.builder;
 
+import static kraken.message.SystemMessageBuilder.Message.KRAKEN_PROJECT_BUILD_CONTEXT_DEFINITIONS_NOT_UNIQUE;
+import static kraken.message.SystemMessageBuilder.Message.KRAKEN_PROJECT_BUILD_DIMENSIONS_NOT_UNIQUE;
+import static kraken.message.SystemMessageBuilder.Message.KRAKEN_PROJECT_BUILD_EXTERNAL_CONTEXT_DUPLICATE;
+import static kraken.message.SystemMessageBuilder.Message.KRAKEN_PROJECT_BUILD_FUNCTION_NOT_UNIQUE;
+import static kraken.message.SystemMessageBuilder.Message.KRAKEN_PROJECT_BUILD_FUNCTION_SIGNATURE_NOT_UNIQUE;
+import static kraken.message.SystemMessageBuilder.Message.KRAKEN_PROJECT_BUILD_NAMESPACE_INCLUDE_UNKNOWN;
+import static kraken.message.SystemMessageBuilder.Message.KRAKEN_PROJECT_BUILD_NAMESPACE_STRUCTURE_INVALID;
+import static kraken.message.SystemMessageBuilder.Message.KRAKEN_PROJECT_BUILD_NAMESPACE_UNKNOWN;
+import static kraken.message.SystemMessageBuilder.Message.KRAKEN_PROJECT_BUILD_NO_CONTEXT_DEFINITIONS;
+import static kraken.message.SystemMessageBuilder.Message.KRAKEN_PROJECT_BUILD_NO_ROOT_CONTEXT_DEFINITION;
+import static kraken.message.SystemMessageBuilder.Message.KRAKEN_PROJECT_BUILD_RULE_IMPORT_DUPLICATE;
+import static kraken.message.SystemMessageBuilder.Message.KRAKEN_PROJECT_BUILD_RULE_IMPORT_NAMESPACE_UNKNOWN;
+import static kraken.message.SystemMessageBuilder.Message.KRAKEN_PROJECT_BUILD_RULE_IMPORT_UNKNOWN;
+import static kraken.message.SystemMessageBuilder.Message.KRAKEN_PROJECT_BUILD_RULE_NOT_IN_ENTRYPOINT;
 import static kraken.model.project.builder.ContextDefinitionEquality.areEqual;
+import static kraken.utils.MessageUtils.withSpaceBeforeEachLine;
 
 import java.net.URI;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -28,9 +42,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import kraken.message.SystemMessage;
+import kraken.message.SystemMessageBuilder;
+import kraken.message.SystemMessageLogger;
 import kraken.model.Dimension;
 import kraken.model.Function;
 import kraken.model.FunctionSignature;
@@ -55,7 +69,7 @@ import kraken.model.resource.RuleImport;
  */
 public class ResourceKrakenProjectBuilder implements KrakenProjectBuilder {
 
-    private static final Logger logger = LoggerFactory.getLogger(ResourceKrakenProjectBuilder.class);
+    private static final SystemMessageLogger logger = SystemMessageLogger.getLogger(ResourceKrakenProjectBuilder.class);
 
     private final Map<String, NamespacedResource> resources;
 
@@ -91,8 +105,10 @@ public class ResourceKrakenProjectBuilder implements KrakenProjectBuilder {
 
     public KrakenProject buildKrakenProject(String namespace) {
         if(!resources.containsKey(namespace)) {
-            throw new IllegalKrakenProjectStateException("Trying to create KrakenProject for namespace " +
-                    "that does not exist: " + namespace);
+            var m = SystemMessageBuilder.create(KRAKEN_PROJECT_BUILD_NAMESPACE_UNKNOWN)
+                .parameters(namespace)
+                .build();
+            throw new IllegalKrakenProjectStateException(m);
         }
 
         NamespaceTree namespaceTree = NamespaceTree.create(namespace, resources);
@@ -102,28 +118,29 @@ public class ResourceKrakenProjectBuilder implements KrakenProjectBuilder {
 
     private ResourceKrakenProject build(String namespace, NamespaceProjection namespaceProjection, NamespaceTree namespaceTree) {
         if (namespaceProjection.getContextDefinitions() == null || namespaceProjection.getContextDefinitions().isEmpty()) {
-            String template = "KrakenProject for namespace {0} does not have any context definition defined. " +
-                    "At least one context definition is expected.";
-            String message = MessageFormat.format(template, namespace);
-
-            throw new IllegalKrakenProjectStateException(message);
+            var m = SystemMessageBuilder.create(KRAKEN_PROJECT_BUILD_NO_CONTEXT_DEFINITIONS)
+                .parameters(namespace)
+                .build();
+            throw new IllegalKrakenProjectStateException(m);
         }
 
-        final List<String> roots = namespaceProjection.getContextDefinitions().stream()
+        var roots = namespaceProjection.getContextDefinitions().stream()
                 .filter(c -> c.getPhysicalNamespace().equals(namespace))
                 .filter(ContextDefinition::isRoot)
                 .map(ContextDefinition::getName)
                 .collect(Collectors.toList());
 
         if (roots.isEmpty()) {
-            String template = "KrakenProject for namespace {0} does not have a Root Context defined.";
-            String message = MessageFormat.format(template, namespace);
-            throw new IllegalKrakenProjectStateException(message);
+            var m = SystemMessageBuilder.create(KRAKEN_PROJECT_BUILD_NO_ROOT_CONTEXT_DEFINITION)
+                .parameters(namespace)
+                .build();
+            throw new IllegalKrakenProjectStateException(m);
         }
         if (roots.size() > 1) {
-            String template = "KrakenProject must have exactly one Root Context, but multiple Root Context found in KrakenProject for namespace {0}: {1}";
-            String message = MessageFormat.format(template, namespace, roots);
-            throw new IllegalKrakenProjectStateException(message);
+            var m = SystemMessageBuilder.create(KRAKEN_PROJECT_BUILD_NO_ROOT_CONTEXT_DEFINITION)
+                .parameters(namespace, roots)
+                .build();
+            throw new IllegalKrakenProjectStateException(m);
         }
 
         String rootContextName = roots.get(0);
@@ -145,11 +162,7 @@ public class ResourceKrakenProjectBuilder implements KrakenProjectBuilder {
             .filter(r -> {
                 boolean ruleIsIncludedInEntryPoint = includedRules.contains(r.getName());
                 if(!ruleIsIncludedInEntryPoint) {
-                    String template = "Rule ''{0}'' is not included into any EntryPoint and is unused in KrakenProject for namespace {1}. " +
-                        "This Rule will be removed from KrakenProject and excluded from any further calculations. " +
-                        "Such KrakenProject configurations may not be supported in the future.";
-                    String message = MessageFormat.format(template, r.getName(), namespace);
-                    logger.warn(message);
+                    logger.warn(KRAKEN_PROJECT_BUILD_RULE_NOT_IN_ENTRYPOINT, r.getName(), namespace);
                 }
                 return ruleIsIncludedInEntryPoint;
             })
@@ -194,21 +207,18 @@ public class ResourceKrakenProjectBuilder implements KrakenProjectBuilder {
                     .map(Resource::getUri)
                     .map(URI::toString)
                     .collect(Collectors.joining(System.lineSeparator()));
+                String functionNames = duplicates.stream()
+                    .map(Function::getName)
+                    .collect(Collectors.joining(System.lineSeparator()));
 
-                String msg = String.format(
-                    "Functions defined in DSL must be unique by function name, "
-                        + "but duplicate functions are defined in namespace '%s':"
-                        + System.lineSeparator()
-                        + "%s"
-                        + System.lineSeparator()
-                        + "Please review affected DSL resources and remove duplicated functions:"
-                        + System.lineSeparator()
-                        + "%s",
-                    namespaceName,
-                    duplicates.stream().map(Function::getName).collect(Collectors.joining(System.lineSeparator())),
-                    resourceUris
-                );
-                throw new IllegalKrakenProjectStateException(msg);
+                var m = SystemMessageBuilder.create(KRAKEN_PROJECT_BUILD_FUNCTION_NOT_UNIQUE)
+                    .parameters(
+                        namespaceName,
+                        System.lineSeparator() + functionNames + System.lineSeparator(),
+                        System.lineSeparator() + resourceUris)
+                    .build();
+
+                throw new IllegalKrakenProjectStateException(m);
             });
     }
 
@@ -221,21 +231,17 @@ public class ResourceKrakenProjectBuilder implements KrakenProjectBuilder {
                     .map(Resource::getUri)
                     .map(URI::toString)
                     .collect(Collectors.joining(System.lineSeparator()));
-                String msg = String.format(
-                    "Function signatures defined in DSL must be unique by function name and parameter "
-                        + "count, but duplicate function signatures are defined in namespace '%s':"
-                        + System.lineSeparator()
-                        + "%s"
-                        + System.lineSeparator()
-                        + "Please review affected DSL resources and remove duplicated function signatures:"
-                        + System.lineSeparator()
-                        + "%s",
-                    namespaceName,
-                    duplicates.stream().map(FunctionSignature::format)
-                        .collect(Collectors.joining(System.lineSeparator())),
-                    resourceUris
-                );
-                throw new IllegalKrakenProjectStateException(msg);
+                String functionSignatures = duplicates.stream().map(FunctionSignature::format)
+                    .collect(Collectors.joining(System.lineSeparator()));
+
+                var m = SystemMessageBuilder.create(KRAKEN_PROJECT_BUILD_FUNCTION_SIGNATURE_NOT_UNIQUE)
+                    .parameters(
+                        namespaceName,
+                        System.lineSeparator() + functionSignatures + System.lineSeparator(),
+                        System.lineSeparator() + resourceUris)
+                    .build();
+
+                throw new IllegalKrakenProjectStateException(m);
             }
         );
     }
@@ -257,9 +263,11 @@ public class ResourceKrakenProjectBuilder implements KrakenProjectBuilder {
                     .map(ContextDefinition::getName)
                     .collect(Collectors.joining(", "));
 
-            String msg = String.format("Duplicate ContextDefinition definitions found in namespace '%s': %s",
-                    namespaceName, duplicateNames);
-            throw new IllegalKrakenProjectStateException(msg);
+            var m = SystemMessageBuilder.create(KRAKEN_PROJECT_BUILD_CONTEXT_DEFINITIONS_NOT_UNIQUE)
+                .parameters(namespaceName, duplicateNames)
+                .build();
+
+            throw new IllegalKrakenProjectStateException(m);
         }
     }
 
@@ -271,21 +279,18 @@ public class ResourceKrakenProjectBuilder implements KrakenProjectBuilder {
                     .map(Resource::getUri)
                     .map(URI::toString)
                     .collect(Collectors.joining(System.lineSeparator()));
+                String dimensions = duplicates.stream()
+                    .map(Dimension::getName)
+                    .collect(Collectors.joining(System.lineSeparator()));
 
-                String msg = String.format(
-                    "Dimensions defined in DSL must be unique by dimension name, "
-                        + "but duplicate dimensions are defined in namespace '%s':"
-                        + System.lineSeparator()
-                        + "%s"
-                        + System.lineSeparator()
-                        + "Please review affected DSL resources and remove duplicated dimensions:"
-                        + System.lineSeparator()
-                        + "%s",
-                    namespaceName,
-                    duplicates.stream().map(Dimension::getName).collect(Collectors.joining(System.lineSeparator())),
-                    resourceUris
-                );
-                throw new IllegalKrakenProjectStateException(msg);
+                var m = SystemMessageBuilder.create(KRAKEN_PROJECT_BUILD_DIMENSIONS_NOT_UNIQUE)
+                    .parameters(
+                        namespaceName,
+                        System.lineSeparator() + dimensions + System.lineSeparator(),
+                        System.lineSeparator() + resourceUris)
+                    .build();
+
+                throw new IllegalKrakenProjectStateException(m);
             });
     }
 
@@ -309,7 +314,7 @@ public class ResourceKrakenProjectBuilder implements KrakenProjectBuilder {
     }
 
     private static void validateNamespacedResources(Map<String, NamespacedResource> namespacedResources) {
-        List<String> errorMessages = new ArrayList<>();
+        List<SystemMessage> errorMessages = new ArrayList<>();
         for(NamespacedResource namespacedResource : namespacedResources.values()) {
             for(String include : namespacedResource.getIncludes()) {
                 validateIncludeNamespaceExistence(include, namespacedResource, namespacedResources, errorMessages);
@@ -318,28 +323,32 @@ public class ResourceKrakenProjectBuilder implements KrakenProjectBuilder {
         }
 
         if(!errorMessages.isEmpty()) {
-            String msg = String.format("Namespace structure is invalid. Errors: %s",
-                    String.join(System.lineSeparator(), errorMessages));
+            var formattedMessages = errorMessages.stream()
+                .map(SystemMessage::formatMessageWithCode)
+                .collect(Collectors.joining(System.lineSeparator()));
+            var msg = SystemMessageBuilder.create(KRAKEN_PROJECT_BUILD_NAMESPACE_STRUCTURE_INVALID)
+                .parameters(System.lineSeparator() + withSpaceBeforeEachLine(formattedMessages))
+                .build();
+
             throw new IllegalKrakenProjectStateException(msg);
         }
     }
 
     private static void validateIncludeNamespaceExistence(String include,
-                                                             NamespacedResource namespacedResource,
-                                                             Map<String, NamespacedResource> namespacedResources,
-                                                             List<String> errorMessages) {
+                                                          NamespacedResource namespacedResource,
+                                                          Map<String, NamespacedResource> namespacedResources,
+                                                          List<SystemMessage> errorMessages) {
         if(!namespacedResources.containsKey(include)) {
-            String msg = String.format("Cannot include namespace '%s' to '%s', because namespace does not exist.",
-                    include,
-                    namespacedResource.getNamespace());
-
-            errorMessages.add(msg);
+            var m = SystemMessageBuilder.create(KRAKEN_PROJECT_BUILD_NAMESPACE_INCLUDE_UNKNOWN)
+                .parameters(include, namespacedResource.getNamespace())
+                .build();
+            errorMessages.add(m);
         }
     }
 
     private static void validateRuleImports(NamespacedResource namespacedResource,
                                             Map<String, NamespacedResource> namespacedResources,
-                                            List<String> errorMessages) {
+                                            List<SystemMessage> errorMessages) {
         validateRuleImportAmbiguity(errorMessages, namespacedResource);
         for(RuleImport ruleImport : namespacedResource.getRuleImports()) {
             validateRuleImportDuplicates(namespacedResource, errorMessages, ruleImport);
@@ -350,19 +359,16 @@ public class ResourceKrakenProjectBuilder implements KrakenProjectBuilder {
 
     private static void validateRuleImportExistence(NamespacedResource namespacedResource,
                                                     Map<String, NamespacedResource> namespacedResources,
-                                                    List<String> errorMessages,
+                                                    List<SystemMessage> errorMessages,
                                                     RuleImport ruleImport) {
         if(namespacedResources.containsKey(ruleImport.getNamespace())) {
             String importedRuleName = ruleImport.getRuleName();
             List<Rule> rules = namespacedResources.get(ruleImport.getNamespace()).getRules().get(importedRuleName);
             if (rules == null || rules.isEmpty()) {
-                String msg = String.format("Cannot import rule '%s' from namespace '%s' to '%s', " +
-                                "because rule does not exist.",
-                        ruleImport.getRuleName(),
-                        ruleImport.getNamespace(),
-                        namespacedResource.getNamespace());
-
-                errorMessages.add(msg);
+                var m = SystemMessageBuilder.create(KRAKEN_PROJECT_BUILD_RULE_IMPORT_UNKNOWN)
+                    .parameters(ruleImport.getRuleName(), ruleImport.getNamespace(), namespacedResource.getNamespace())
+                    .build();
+                errorMessages.add(m);
             }
         }
     }
@@ -370,43 +376,38 @@ public class ResourceKrakenProjectBuilder implements KrakenProjectBuilder {
     private static void validateRuleImportNamespaceExistence(RuleImport ruleImport,
                                                              NamespacedResource namespacedResource,
                                                              Map<String, NamespacedResource> namespacedResources,
-                                                             List<String> errorMessages) {
+                                                             List<SystemMessage> errorMessages) {
         if(!namespacedResources.containsKey(ruleImport.getNamespace())) {
-            String msg = String.format("Cannot import rule '%s' from namespace '%s' to '%s', " +
-                            "because namespace does not exist.",
-                    ruleImport.getRuleName(),
-                    ruleImport.getNamespace(),
-                    namespacedResource.getNamespace());
-
-            errorMessages.add(msg);
+            var m = SystemMessageBuilder.create(KRAKEN_PROJECT_BUILD_RULE_IMPORT_NAMESPACE_UNKNOWN)
+                .parameters(ruleImport.getRuleName(), ruleImport.getNamespace(), namespacedResource.getNamespace())
+                .build();
+            errorMessages.add(m);
         }
     }
 
     private static void validateRuleImportDuplicates(NamespacedResource namespacedResource,
-                                                     List<String> errorMessages,
+                                                     List<SystemMessage> errorMessages,
                                                      RuleImport ruleImport) {
         if(namespacedResource.getRules().containsKey(ruleImport.getRuleName())) {
-            String msg = String.format("Cannot import rule '%s' from namespace '%s' to '%s', " +
-                            "because rule is already defined.",
-                    ruleImport.getRuleName(),
-                    ruleImport.getNamespace(),
-                    namespacedResource.getNamespace());
-
-            errorMessages.add(msg);
+            var m = SystemMessageBuilder.create(KRAKEN_PROJECT_BUILD_RULE_IMPORT_DUPLICATE)
+                .parameters(ruleImport.getRuleName(), ruleImport.getNamespace(), namespacedResource.getNamespace())
+                .build();
+            errorMessages.add(m);
         }
     }
 
-    private static void validateRuleImportAmbiguity(List<String> errorMessages, NamespacedResource namespacedResource) {
+    private static void validateRuleImportAmbiguity(List<SystemMessage> errorMessages, NamespacedResource namespacedResource) {
         Map<String, List<RuleImport>> groupedImports = namespacedResource.getRuleImports().stream()
                 .collect(Collectors.groupingBy(RuleImport::getRuleName));
         for(Map.Entry<String, List<RuleImport>> entry : groupedImports.entrySet()) {
             if(entry.getValue().size() > 1) {
-                String msg = String.format("Ambiguous import found in namespace '%s' for rule '%s', " +
-                                "because it is imported from multiple namespaces: %s.",
-                        namespacedResource.getNamespace(),
-                        entry.getKey(),
-                        entry.getValue().stream().map(RuleImport::getNamespace).collect(Collectors.joining(", ")));
-                errorMessages.add(msg);
+                var namespaceImports = entry.getValue().stream()
+                    .map(RuleImport::getNamespace)
+                    .collect(Collectors.joining(", "));
+                var m = SystemMessageBuilder.create(KRAKEN_PROJECT_BUILD_RULE_IMPORT_DUPLICATE)
+                    .parameters(namespacedResource.getNamespace(), entry.getKey(), namespaceImports)
+                    .build();
+                errorMessages.add(m);
             }
         }
     }
@@ -415,10 +416,10 @@ public class ResourceKrakenProjectBuilder implements KrakenProjectBuilder {
         if (externalContext != null) {
             if (namespacedResource.getExternalContext() != null
                 && !externalContext.equals(namespacedResource.getExternalContext())) {
-                String template = "Multiple conflicting External Contexts defined in namespace %s. "
-                    + "Only one External Context can be configured per namespace.";
-                throw new IllegalKrakenProjectStateException(
-                    String.format(template, namespacedResource.getNamespace()));
+                var m = SystemMessageBuilder.create(KRAKEN_PROJECT_BUILD_EXTERNAL_CONTEXT_DUPLICATE)
+                    .parameters(namespacedResource.getNamespace())
+                    .build();
+                throw new IllegalKrakenProjectStateException(m);
             }
 
             namespacedResource.setExternalContext(externalContext);

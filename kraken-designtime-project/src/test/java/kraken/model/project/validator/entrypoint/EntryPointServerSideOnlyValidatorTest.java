@@ -98,7 +98,8 @@ public class EntryPointServerSideOnlyValidatorTest {
         assertThat(validationSession.getValidationMessages(), hasSize(1));
         assertThat(validationSession.getValidationMessages().get(0).getSeverity(), is(Severity.ERROR));
         assertThat(validationSession.getValidationMessages().get(0).getMessage(), containsString(
-            "not annotated as @ServerSideOnly includes rule(s): 'ssoRule' marked as @ServerSideOnly"
+            "Entry point is not annotated as @ServerSideOnly, "
+                + "but includes one or more rule annotated as @ServerSideOnly: ssoRule."
         ));
     }
 
@@ -126,7 +127,7 @@ public class EntryPointServerSideOnlyValidatorTest {
         assertThat(validationSession.getValidationMessages(), hasSize(1));
         assertThat(validationSession.getValidationMessages().get(0).getSeverity(), is(Severity.ERROR));
         assertThat(validationSession.getValidationMessages().get(0).getMessage(), containsString(
-            "not annotated as @ServerSideOnly includes rule(s): 'nestedSSORule, otherNestedSSORule, yetAnotherSSORule' marked as @ServerSideOnly"
+            "Entry point is not annotated as @ServerSideOnly, but includes one or more rule annotated as @ServerSideOnly: nestedSSORule, otherNestedSSORule, yetAnotherSSORule."
         ));
 
     }

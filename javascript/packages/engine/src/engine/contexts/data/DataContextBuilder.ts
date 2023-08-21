@@ -16,10 +16,15 @@
 
 import { ContextInstanceInfoResolver } from '../info/ContextInstanceInfoResolver'
 import { requireDefinedValue } from '../../../utils/Utils'
-import { DataContextBuilderError } from '../Errors'
 import { ContextModelTree } from '../../../models/ContextModelTree'
 import { DataContext } from './DataContext'
-import { ErrorCode, KrakenRuntimeError } from '../../../error/KrakenRuntimeError'
+import {
+    CONTEXT_BUILD_INVALID_DATA,
+    CONTEXT_BUILD_UNDEFINED_DATA,
+    KrakenRuntimeError,
+    SystemMessageBuilder,
+    UNKNOWN_CONTEXT_DEFINITION,
+} from '../../../error/KrakenRuntimeError'
 import { ContextInstanceInfo } from 'kraken-engine-api'
 
 export class DataContextBuilder {
@@ -62,10 +67,8 @@ export class DataContextBuilder {
         const contextDefinition = this.modelTree.contexts[contextDefinitionName]
 
         if (!contextDefinition) {
-            throw new KrakenRuntimeError(
-                ErrorCode.UNKNOWN_CONTEXT_DEFINITION,
-                `Context Definition with name ${contextDefinitionName} does not exist in the Kraken model tree`,
-            )
+            const m = new SystemMessageBuilder(UNKNOWN_CONTEXT_DEFINITION).parameters(contextDefinitionName).build()
+            throw new KrakenRuntimeError(m)
         }
 
         return new DataContext(
@@ -80,13 +83,15 @@ export class DataContextBuilder {
 
     private requireValid: (data: object) => object = (data: object) => {
         if (data == undefined) {
-            throw new DataContextBuilderError('Context data object is null.')
+            const m = new SystemMessageBuilder(CONTEXT_BUILD_UNDEFINED_DATA).build()
+            throw new KrakenRuntimeError(m)
         }
         const errors = this.resolver.validateContextDataObject(data)
         if (errors.length) {
-            throw new DataContextBuilderError(
-                'Context data is not valid:\n\t' + errors.map(error => error.message).join('\n\t'),
-            )
+            const reasons = errors.map(error => `  ${error.message}`).join('\n')
+            const m = new SystemMessageBuilder(CONTEXT_BUILD_INVALID_DATA).parameters('\n' + reasons).build()
+
+            throw new KrakenRuntimeError(m)
         }
         return data
     }

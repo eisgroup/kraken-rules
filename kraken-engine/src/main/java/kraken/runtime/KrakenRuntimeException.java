@@ -16,6 +16,7 @@
 package kraken.runtime;
 
 import kraken.exception.KrakenException;
+import kraken.message.SystemMessage;
 
 /**
  * Superclass for all runtime execution exceptions
@@ -25,12 +26,14 @@ import kraken.exception.KrakenException;
  */
 public class KrakenRuntimeException extends KrakenException {
 
+    private static final long serialVersionUID = -7921177886566471653L;
+
     /**
      * Constructor to build exception with message
      *
      * @param message   message text
      */
-    public KrakenRuntimeException(String message) {
+    public KrakenRuntimeException(SystemMessage message) {
         super(message);
     }
 
@@ -40,7 +43,7 @@ public class KrakenRuntimeException extends KrakenException {
      * @param message   message text
      * @param cause     cause exception
      */
-    public KrakenRuntimeException(String message, Throwable cause) {
+    public KrakenRuntimeException(SystemMessage message, Throwable cause) {
         super(message, cause);
     }
 

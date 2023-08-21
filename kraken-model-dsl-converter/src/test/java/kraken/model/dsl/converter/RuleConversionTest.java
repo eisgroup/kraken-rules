@@ -1,7 +1,21 @@
 package kraken.model.dsl.converter;
 
-import kraken.el.ast.builder.Literals;
-import kraken.model.*;
+import static junit.framework.TestCase.assertEquals;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
+
+import org.junit.Test;
+
+import kraken.model.Condition;
+import kraken.model.ErrorMessage;
+import kraken.model.Expression;
+import kraken.model.Metadata;
+import kraken.model.Payload;
+import kraken.model.Rule;
+import kraken.model.ValueList;
 import kraken.model.derive.DefaultValuePayload;
 import kraken.model.derive.DefaultingType;
 import kraken.model.entrypoint.EntryPoint;
@@ -20,15 +34,7 @@ import kraken.model.validation.UsagePayload;
 import kraken.model.validation.UsageType;
 import kraken.model.validation.ValidationSeverity;
 import kraken.model.validation.ValueListPayload;
-
-import org.junit.Test;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
-
-import static junit.framework.TestCase.assertEquals;
+import kraken.utils.Dates;
 
 public class RuleConversionTest {
 
@@ -164,7 +170,7 @@ public class RuleConversionTest {
     public void shouldConvertDimension_datetime(){
         final Rule simpleAssertionRule = createSimpleAssertionRule();
         final Metadata metadata = RulesModelFactory.getInstance().createMetadata();
-        metadata.setProperty("datetime", Literals.getDateTime("2020-02-02T01:01:01Z"));
+        metadata.setProperty("datetime", Dates.convertISOToLocalDateTime("2020-02-02T01:01:01Z"));
         simpleAssertionRule.setMetadata(metadata);
         String convertedRule = convert(simpleAssertionRule);
         assertEquals(

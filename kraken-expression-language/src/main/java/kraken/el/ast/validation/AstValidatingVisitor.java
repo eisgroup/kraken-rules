@@ -22,7 +22,6 @@ import java.util.Deque;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -65,7 +64,6 @@ import kraken.el.ast.Subtraction;
 import kraken.el.ast.UnaryExpression;
 import kraken.el.ast.ValueBlock;
 import kraken.el.ast.Variable;
-import kraken.el.ast.builder.Literals;
 import kraken.el.ast.validation.details.AstDetails;
 import kraken.el.ast.validation.details.ComparisonTypeDetails;
 import kraken.el.ast.validation.details.FunctionParameterTypeDetails;
@@ -91,7 +89,7 @@ public class AstValidatingVisitor extends AstTraversingVisitor {
     public Expression visit(If anIf) {
         checkNotNullLiteral(anIf.getCondition(), anIf.getNodeType());
 
-        String conditionTemplate = "Condition in {0} operation must be of type ''{1}'' but is ''{2}''";
+        String conditionTemplate = "Condition in {0} operation must be of type ''{1}'' but is ''{2}''.";
         if(!Type.BOOLEAN.isAssignableFrom(anIf.getCondition().getEvaluationType())) {
             messages.add(createError(MessageFormat.format(conditionTemplate, anIf.getNodeType(), Type.BOOLEAN, anIf.getCondition().getEvaluationType()), anIf));
         }
@@ -102,7 +100,7 @@ public class AstValidatingVisitor extends AstTraversingVisitor {
     @Override
     public Expression visit(In in) {
         if(!in.getRight().getEvaluationType().isAssignableToArray()) {
-            String template = "Right side of {0} operation must be array but was of type ''{1}''";
+            String template = "Right side of {0} operation must be array but was of type ''{1}''.";
             messages.add(
                 createError(MessageFormat.format(template, in.getNodeType(), in.getRight().getEvaluationType()), in));
         } else {
@@ -152,7 +150,7 @@ public class AstValidatingVisitor extends AstTraversingVisitor {
         checkNotNullLiteral(matchesRegExp.getLeft(), matchesRegExp.getNodeType());
 
         if(!Type.STRING.isAssignableFrom(matchesRegExp.getLeft().getEvaluationType())) {
-            String template = "RegExp value must be of type 'STRING' but was ''{2}''";
+            String template = "RegExp value must be of type 'STRING' but was ''{2}''.";
             messages.add(
                 createError(MessageFormat.format(template, matchesRegExp.getLeft().getEvaluationType()), matchesRegExp));
         }
@@ -311,7 +309,7 @@ public class AstValidatingVisitor extends AstTraversingVisitor {
             messages.add(createError(message, path));
         } else if(!(path.getProperty() instanceof Identifier) && !(path.getProperty() instanceof AccessByIndex)) {
             String messageTemplate = "Unsupported path expression ''{0}''. "
-                + "Property expression shall be identifier or access by index, but found: ''{1}''";
+                + "Property expression shall be identifier or access by index, but found: ''{1}''.";
             String message = MessageFormat.format(messageTemplate, path.getToken(), path.getProperty().getNodeType());
             messages.add(createError(message, path));
         }
@@ -384,7 +382,7 @@ public class AstValidatingVisitor extends AstTraversingVisitor {
 
     private void validateUniqueVariableNameInScope(String variable, Expression expression) {
         if(expression.getScope().isReferenceStrictlyInScope(variable)) {
-            String variableNameClashTemplate = "Variable ''{0}'' defined in {1} operation is already defined in scope: {2}";
+            String variableNameClashTemplate = "Variable ''{0}'' defined in {1} operation is already defined in scope: {2}.";
             messages.add(
                     createError(
                             MessageFormat.format(variableNameClashTemplate,
@@ -400,7 +398,7 @@ public class AstValidatingVisitor extends AstTraversingVisitor {
 
     private void validateBooleanReturnType(Expression expression, Expression returnExpression) {
         if(!Type.BOOLEAN.isAssignableFrom(returnExpression.getEvaluationType())) {
-            String returnTypeErrorTemplate = "Return type of {0} operation must be of type ''{1}'' but is ''{2}''";
+            String returnTypeErrorTemplate = "Return type of {0} operation must be of type ''{1}'' but is ''{2}''.";
             messages.add(
                     createError(
                             MessageFormat.format(returnTypeErrorTemplate,
@@ -415,7 +413,7 @@ public class AstValidatingVisitor extends AstTraversingVisitor {
     }
 
     private void validateCollectionOperation(Expression expression, Type evaluationType) {
-        String template = "Operation {0} can only be performed on array, but was performed on type ''{1}''";
+        String template = "Operation {0} can only be performed on array, but was performed on type ''{1}''.";
         if(!evaluationType.isAssignableToArray()) {
             messages.add(
                 createError(MessageFormat.format(template, expression.getNodeType(), evaluationType), expression));
@@ -454,26 +452,26 @@ public class AstValidatingVisitor extends AstTraversingVisitor {
         if (referenceType.isKnown() && !referenceType.isDynamic()) {
             Type castType = cast.getScope().resolveTypeOf(cast.getTypeLiteral().getValue());
             if(!castType.isKnown()) {
-                String template = "Unknown type: '%s'";
+                String template = "Unknown type: '%s'.";
                 String message = String.format(template, cast.getTypeLiteral().getValue());
                 messages.add(createError(message, cast.getTypeLiteral()));
             } else if(castType.isGeneric()) {
-                String message = "Casting to generic type is not allowed";
+                String message = "Casting to generic type is not allowed.";
                 messages.add(createError(message, cast.getTypeLiteral()));
             } else if(castType.isUnion()) {
-                String message = "Casting to union type is not allowed";
+                String message = "Casting to union type is not allowed.";
                 messages.add(createError(message, cast.getTypeLiteral()));
             } else if(castType.equals(referenceType)) {
-                String template = "Cast is redundant because type of object is already '%s'";
+                String template = "Cast is redundant because type of object is already '%s'.";
                 String message = String.format(template, referenceType);
                 messages.add(createInfo(message, cast.getTypeLiteral()));
             } else if(castType.isAssignableFrom(referenceType)) {
-                String template = "Cast to '%s' is redundant because object type is '%s' and it extends '%1$s'";
+                String template = "Cast to '%s' is redundant because object type is '%s' and it extends '%1$s'.";
                 String message = String.format(template, castType, referenceType);
                 messages.add(createInfo(message, cast.getTypeLiteral()));
             } else if(!referenceType.isAssignableFrom(castType)) {
                 String template = "Cast to '%s' could be an error because object type is '%s' and it is not "
-                    + "a supertype of '%1$s'";
+                    + "a supertype of '%1$s'.";
                 String message = String.format(template, castType, referenceType);
                 messages.add(createWarning(message, cast.getTypeLiteral()));
             }
@@ -485,7 +483,7 @@ public class AstValidatingVisitor extends AstTraversingVisitor {
     public Expression visit(NumberLiteral numberLiteral) {
         if(numberLiteral.getValue().stripTrailingZeros().precision() > Numbers.DEFAULT_MATH_CONTEXT.getPrecision()) {
             String template = "Number '%s' cannot be encoded as a decimal64 without a loss of precision. "
-                + "Actual number at runtime would be rounded to '%s'";
+                + "Actual number at runtime would be rounded to '%s'.";
             String message = String.format(
                 template,
                 numberLiteral.getValue().toPlainString(),
@@ -499,7 +497,7 @@ public class AstValidatingVisitor extends AstTraversingVisitor {
     private void validateUnary(UnaryExpression e, Type expectedType) {
         checkNotNullLiteral(e, e.getNodeType());
 
-        String template = "Operation {0} can only be performed on type ''{1}'' but was performed on ''{2}''";
+        String template = "Operation {0} can only be performed on type ''{1}'' but was performed on ''{2}''.";
         if(!expectedType.isAssignableFrom(e.getEvaluationType())) {
             messages.add(
                 createError(MessageFormat.format(template, e.getNodeType(), expectedType, e.getEvaluationType()), e));
@@ -511,7 +509,7 @@ public class AstValidatingVisitor extends AstTraversingVisitor {
         checkNotNullLiteral(e.getRight(), e.getNodeType());
 
         if(!e.getLeft().getEvaluationType().isComparableWith(e.getRight().getEvaluationType())) {
-            String template = "Operation {0} can only be performed on comparable types, but was performed on ''{1}'' and ''{2}''";
+            String template = "Operation {0} can only be performed on comparable types, but was performed on ''{1}'' and ''{2}''.";
             messages.add(createError(MessageFormat.format(template, e.getNodeType(), e.getLeft().getEvaluationType(), e.getRight().getEvaluationType()), e));
         }
     }
@@ -532,7 +530,7 @@ public class AstValidatingVisitor extends AstTraversingVisitor {
     private void validateRightBinary(BinaryExpression e, Type expectedType) {
         checkNotNullLiteral(e, e.getNodeType());
 
-        String template = "Right side of {0} operation must be of type ''{1}'' but was ''{2}''";
+        String template = "Right side of {0} operation must be of type ''{1}'' but was ''{2}''.";
         if(!expectedType.isAssignableFrom(e.getRight().getEvaluationType())) {
             messages.add(createError(MessageFormat.format(template, e.getNodeType(), expectedType, e.getRight().getEvaluationType()), e));
         }
@@ -541,7 +539,7 @@ public class AstValidatingVisitor extends AstTraversingVisitor {
     private void validateLeftBinary(BinaryExpression e, Type expectedType) {
         checkNotNullLiteral(e, e.getNodeType());
 
-        String template = "Left side of {0} operation must be of type ''{1}'' but was ''{2}''";
+        String template = "Left side of {0} operation must be of type ''{1}'' but was ''{2}''.";
         if(!expectedType.isAssignableFrom(e.getLeft().getEvaluationType())) {
             messages.add(createError(MessageFormat.format(template, e.getNodeType(), expectedType, e.getLeft().getEvaluationType()), e));
         }
@@ -549,7 +547,7 @@ public class AstValidatingVisitor extends AstTraversingVisitor {
 
     private void checkNotNullLiteral(Expression e, NodeType nodeType) {
         if(e instanceof Null) {
-            String template = "Operand cannot be 'null' literal for operation: {0}";
+            String template = "Operand cannot be 'null' literal for operation: {0}.";
             messages.add(createError(MessageFormat.format(template, nodeType), e));
         }
     }
@@ -564,7 +562,7 @@ public class AstValidatingVisitor extends AstTraversingVisitor {
 
         if(nestedLoops.size() > 3) {
             String message = "Cyclomatic complexity level is too high for expression. " +
-                    "Maximum allowed cyclomatic complexity is 3";
+                    "Maximum allowed cyclomatic complexity is 3.";
             Expression firstLoopExpression = nestedLoops.get(nestedLoops.size() - 1);
             messages.add(createError(message, firstLoopExpression));
         }
@@ -583,25 +581,21 @@ public class AstValidatingVisitor extends AstTraversingVisitor {
     }
 
     private AstMessage createError(String message, Expression expression, AstDetails details) {
-        String template = "error in ''{0}'' with message: {1}";
-        return createAstMessage(message, template, expression, AstMessageSeverity.ERROR, details);
+        return createAstMessage(message, expression, AstMessageSeverity.ERROR, details);
     }
 
     private AstMessage createWarning(String message, Expression expression) {
-        String template = "warning about ''{0}'' with message: {1}";
-        return createAstMessage(message, template, expression, AstMessageSeverity.WARNING, null);
+        return createAstMessage(message, expression, AstMessageSeverity.WARNING, null);
     }
 
     private AstMessage createInfo(String message, Expression expression) {
-        String template = "info about ''{0}'' with message: {1}";
-        return createAstMessage(message, template, expression, AstMessageSeverity.INFO, null);
+        return createAstMessage(message, expression, AstMessageSeverity.INFO, null);
     }
 
-    private AstMessage createAstMessage(String message, String template, Expression expression,
+    private AstMessage createAstMessage(String message, Expression expression,
                                         AstMessageSeverity severity, AstDetails details) {
         Expression failedExpression = currentReferenceValue.peek() != null ? currentReferenceValue.peek() : expression;
-        String formattedMessage = MessageFormat.format(template, failedExpression.getToken(), message);
-        return new AstMessage(formattedMessage, currentReferenceValue.peek(), expression, severity, details);
+        return new AstMessage(message, currentReferenceValue.peek(), failedExpression, severity, details);
     }
 
 }

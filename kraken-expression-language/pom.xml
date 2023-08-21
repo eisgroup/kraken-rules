@@ -8,13 +8,28 @@
     <parent>
         <artifactId>parent-pom</artifactId>
         <groupId>kraken</groupId>
-        <version>1.49.2</version>
+        <version>1.50.0</version>
     </parent>
 
     <artifactId>kraken-expression-language</artifactId>
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>${project.basedir}</directory>
+                            <includes>
+                                <include>dependency-reduced-pom.xml</include>
+                            </includes>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.antlr</groupId>
                 <artifactId>antlr4-maven-plugin</artifactId>

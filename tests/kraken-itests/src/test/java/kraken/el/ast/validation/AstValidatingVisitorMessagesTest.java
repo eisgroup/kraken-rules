@@ -51,7 +51,7 @@ public class AstValidatingVisitorMessagesTest {
     public void shouldTestNoAttributeFindMessage() {
         var expression = "Policy.riskItens";
         var scope = "Policy";
-        var errorMessage = "error in 'Policy.riskItens' with message: Attribute 'riskItens' not found in 'Policy'.";
+        var errorMessage = "Attribute 'riskItens' not found in 'Policy'.";
 
         Collection<AstMessage> errors = validate(scope, expression);
         assertThat(errors, hasSize(1));
@@ -64,7 +64,7 @@ public class AstValidatingVisitorMessagesTest {
     public void shouldTestNoReferenceFindMessage() {
         var expression = "Policu";
         var scope = "Policy";
-        var errorMessage = "error in 'Policu' with message: Reference 'Policu' not found.";
+        var errorMessage = "Reference 'Policu' not found.";
 
         Collection<AstMessage> errors = validate(scope, expression);
         assertThat(errors, hasSize(1));

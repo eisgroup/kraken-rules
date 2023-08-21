@@ -15,10 +15,15 @@
  */
 package kraken.model.dsl.visitor;
 
+import static kraken.message.SystemMessageBuilder.Message.KRAKEN_DSL_GLOBAL_NAMESPACE_IMPORTS_RULE;
+import static kraken.message.SystemMessageBuilder.Message.KRAKEN_DSL_GLOBAL_NAMESPACE_INCLUDES_NAMESPACE;
+import static kraken.message.SystemMessageBuilder.Message.KRAKEN_DSL_GLOBAL_NAMESPACE_MULTIPLE_EXTERNAL_CONTEXT;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import kraken.message.SystemMessageBuilder;
 import kraken.model.dsl.DSLParsingException;
 import kraken.model.dsl.KrakenDSL;
 import kraken.model.dsl.KrakenDSL.ModelContext;
@@ -103,10 +108,12 @@ public class DSLModelVisitor extends KrakenDSLBaseVisitor<DSLModel> {
 
         NamespaceContext namespaceContext = ctx.namespace();
         if(namespaceContext == null && !namespaceImports.isEmpty()) {
-            throw new DSLParsingException("Global namespace cannot include other namespaces");
+            var m = SystemMessageBuilder.create(KRAKEN_DSL_GLOBAL_NAMESPACE_INCLUDES_NAMESPACE).build();
+            throw new DSLParsingException(m);
         }
         if(namespaceContext == null && !ruleImports.isEmpty()) {
-            throw new DSLParsingException("Global namespace cannot import rules from other namespaces");
+            var m = SystemMessageBuilder.create(KRAKEN_DSL_GLOBAL_NAMESPACE_IMPORTS_RULE).build();
+            throw new DSLParsingException(m);
         }
 
         String namespace = namespaceContext != null
@@ -119,7 +126,8 @@ public class DSLModelVisitor extends KrakenDSLBaseVisitor<DSLModel> {
                 .collect(Collectors.toList());
 
         if (externalContext.size() > 1) {
-            throw new DSLParsingException("Only one Root External Context is allowed per namespace.");
+            var m = SystemMessageBuilder.create(KRAKEN_DSL_GLOBAL_NAMESPACE_MULTIPLE_EXTERNAL_CONTEXT).build();
+            throw new DSLParsingException(m);
         }
 
         DSLExternalContext dslExternalContext = externalContext.size() == 1

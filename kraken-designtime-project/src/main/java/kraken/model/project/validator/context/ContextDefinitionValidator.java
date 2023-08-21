@@ -15,13 +15,24 @@
  */
 package kraken.model.project.validator.context;
 
-import static kraken.model.project.validator.Severity.ERROR;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.CONTEXT_FIELD_CARDINALITY_IS_NULL;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.CONTEXT_FIELD_NAME_IS_NULL;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.CONTEXT_FIELD_PATH_IS_NULL;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.CONTEXT_FIELD_TYPE_IS_NULL;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.CONTEXT_FIELD_WRONG_MAP_KEY;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.CONTEXT_NAME_IS_NULL;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.CONTEXT_NAVIGATION_CARDINALITY_IS_NULL;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.CONTEXT_NAVIGATION_EXPRESSION_IS_NULL;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.CONTEXT_NAVIGATION_TARGET_IS_NULL;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.CONTEXT_NAVIGATION_WRONG_MAP_KEY;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.CONTEXT_NAVIGATION_IN_SYSTEM_CONTEXT;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.CONTEXT_PARENT_IN_SYSTEM_CONTEXT;
 
 import kraken.model.context.ContextDefinition;
 import kraken.model.context.ContextField;
 import kraken.model.context.ContextNavigation;
 import kraken.model.project.KrakenProject;
-import kraken.model.project.validator.ValidationMessage;
+import kraken.model.project.validator.ValidationMessageBuilder;
 import kraken.model.project.validator.ValidationSession;
 import kraken.model.project.validator.namespaced.NamespacedValidator;
 
@@ -55,7 +66,8 @@ public class ContextDefinitionValidator {
 
     private void validate(ContextDefinition contextDefinition, ValidationSession session) {
         if(contextDefinition.getName() == null) {
-            session.add(new ValidationMessage(contextDefinition, "name is not defined", ERROR));
+            var m = ValidationMessageBuilder.create(CONTEXT_NAME_IS_NULL, contextDefinition).build();
+            session.add(m);
         }
         session.addAll(NamespacedValidator.validate(contextDefinition));
 
@@ -75,34 +87,35 @@ public class ContextDefinitionValidator {
         validateContextFields(contextDefinition, session);
 
         if (contextDefinition.getParentDefinitions() != null && contextDefinition.getParentDefinitions().size() > 0) {
-            String message = "Parent contexts are not allowed for system context definitions.";
-            session.add(new ValidationMessage(contextDefinition, message, ERROR));
+            var m = ValidationMessageBuilder.create(CONTEXT_PARENT_IN_SYSTEM_CONTEXT, contextDefinition).build();
+            session.add(m);
         }
 
         if (contextDefinition.getChildren() != null && contextDefinition.getChildren().size() > 0) {
-            String message = "Child contexts are not allowed for system context definitions.";
-            session.add(new ValidationMessage(contextDefinition, message, ERROR));
+            var m = ValidationMessageBuilder.create(CONTEXT_NAVIGATION_IN_SYSTEM_CONTEXT, contextDefinition).build();
+            session.add(m);
         }
     }
 
     private void validateContextChildren(ContextDefinition contextDefinition, ValidationSession session) {
         contextDefinition.getChildren().entrySet().stream()
             .filter(e -> !e.getKey().equals(e.getValue().getTargetName()))
-            .forEach(e -> session.add(new ValidationMessage(contextDefinition,
-                "children map has key that is different from ContextNavigation.targetName", ERROR)));
+            .forEach(e -> session.add(
+                ValidationMessageBuilder.create(CONTEXT_NAVIGATION_WRONG_MAP_KEY, contextDefinition).build()
+            ));
 
         for(ContextNavigation contextNavigation : contextDefinition.getChildren().values()) {
             if(contextNavigation.getTargetName() == null) {
-                session.add(new ValidationMessage(contextDefinition,
-                    "ContextNavigation.targetName is missing", ERROR));
+                var m = ValidationMessageBuilder.create(CONTEXT_NAVIGATION_TARGET_IS_NULL, contextDefinition).build();
+                session.add(m);
             }
             if(contextNavigation.getCardinality() == null) {
-                session.add(new ValidationMessage(contextDefinition,
-                    "ContextNavigation.cardinality is missing", ERROR));
+                var m = ValidationMessageBuilder.create(CONTEXT_NAVIGATION_CARDINALITY_IS_NULL, contextDefinition).build();
+                session.add(m);
             }
             if(contextNavigation.getNavigationExpression() == null) {
-                session.add(new ValidationMessage(contextDefinition,
-                    "ContextNavigation.navigationExpression is missing", ERROR));
+                var m = ValidationMessageBuilder.create(CONTEXT_NAVIGATION_EXPRESSION_IS_NULL, contextDefinition).build();
+                session.add(m);
             }
         }
     }
@@ -110,25 +123,26 @@ public class ContextDefinitionValidator {
     private void validateContextFields(ContextDefinition contextDefinition, ValidationSession session) {
         contextDefinition.getContextFields().entrySet().stream()
             .filter(e -> !e.getKey().equals(e.getValue().getName()))
-            .forEach(e -> session.add(new ValidationMessage(contextDefinition,
-                "ContextFields map has has key that is different from ContextField.name", ERROR)));
+            .forEach(e -> session.add(
+                ValidationMessageBuilder.create(CONTEXT_FIELD_WRONG_MAP_KEY, contextDefinition).build()
+            ));
 
         for (ContextField contextField : contextDefinition.getContextFields().values()) {
             if (contextField.getName() == null) {
-                session.add(new ValidationMessage(contextDefinition,
-                    "ContextField.name is missing", ERROR));
+                var m = ValidationMessageBuilder.create(CONTEXT_FIELD_NAME_IS_NULL, contextDefinition).build();
+                session.add(m);
             }
             if (contextField.getFieldType() == null) {
-                session.add(new ValidationMessage(contextDefinition,
-                    "ContextField.fieldType is missing", ERROR));
+                var m = ValidationMessageBuilder.create(CONTEXT_FIELD_TYPE_IS_NULL, contextDefinition).build();
+                session.add(m);
             }
             if (contextField.getCardinality() == null) {
-                session.add(new ValidationMessage(contextDefinition,
-                    "ContextField.cardinality is missing", ERROR));
+                var m = ValidationMessageBuilder.create(CONTEXT_FIELD_CARDINALITY_IS_NULL, contextDefinition).build();
+                session.add(m);
             }
             if (contextField.getFieldPath() == null) {
-                session.add(new ValidationMessage(contextDefinition,
-                    "ContextField.fieldPath is missing", ERROR));
+                var m = ValidationMessageBuilder.create(CONTEXT_FIELD_PATH_IS_NULL, contextDefinition).build();
+                session.add(m);
             }
         }
     }

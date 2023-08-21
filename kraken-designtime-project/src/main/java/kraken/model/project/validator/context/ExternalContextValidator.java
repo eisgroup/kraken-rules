@@ -15,21 +15,23 @@
  */
 package kraken.model.project.validator.context;
 
-import static kraken.model.project.validator.Severity.ERROR;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.EXTERNAL_CONTEXT_CHILD_CLASH;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.EXTERNAL_CONTEXT_REFERENCE_MISSING;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.EXTERNAL_CONTEXT_ROOT_MISSING;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.EXTERNAL_CONTEXT_UNKNOWN_FIELD_TYPE;
 
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import kraken.model.KrakenModelItem;
 import kraken.model.context.PrimitiveFieldDataType;
 import kraken.model.context.SystemDataTypes;
 import kraken.model.context.external.ExternalContext;
 import kraken.model.context.external.ExternalContextDefinition;
 import kraken.model.context.external.ExternalContextDefinitionReference;
 import kraken.model.project.KrakenProject;
-import kraken.model.project.validator.ValidationMessage;
+import kraken.model.project.validator.ValidationMessageBuilder;
 import kraken.model.project.validator.ValidationSession;
 
 /**
@@ -56,12 +58,10 @@ public class ExternalContextValidator {
     private void validateRootExternalContext(ExternalContext rootExternalContext, ValidationSession session) {
         if(!rootExternalContext.getContexts().isEmpty()) {
             if(rootExternalContext.getContexts().size() > 1 || rootExternalContext.getContexts().get("context") == null) {
-                String msg = String.format(
-                    "Root ExternalContext definition should be empty or have ONE element named 'context', but found: %s",
-                    String.join(", ", rootExternalContext.getContexts().keySet())
-                );
-
-                session.add(new ValidationMessage(rootExternalContext, msg, ERROR));
+                var m = ValidationMessageBuilder.create(EXTERNAL_CONTEXT_ROOT_MISSING, rootExternalContext)
+                    .parameters(String.join(", ", rootExternalContext.getContexts().keySet()))
+                    .build();
+                session.add(m);
             }
         }
         validateChildrenContexts(rootExternalContext.getContexts(), session);
@@ -78,10 +78,10 @@ public class ExternalContextValidator {
     private void validateReferencedExternalContexts(ExternalContext externalContext, ValidationSession session) {
         Set<String> nonExistingRefs = getNonExistingReferences(externalContext);
         if(nonExistingRefs.size() > 0) {
-            session.add(error(externalContext, String.format(
-                "External context definitions referenced in External Context definition " +
-                    "should be available in kraken project, but following referenced values are not found: %s",
-                String.join(System.lineSeparator(), nonExistingRefs))));
+            var m = ValidationMessageBuilder.create(EXTERNAL_CONTEXT_REFERENCE_MISSING, externalContext)
+                .parameters(String.join(System.lineSeparator(), nonExistingRefs))
+                .build();
+            session.add(m);
         }
     }
 
@@ -89,10 +89,10 @@ public class ExternalContextValidator {
         Set<String> clashingNames = getClashingNames(externalContext);
 
         if(clashingNames.size() > 0) {
-            session.add(error(externalContext, String.format(
-                "Naming clash between external context definitions and child external context " +
-                    "found, clashing values: %s",
-                String.join(System.lineSeparator(), clashingNames))));
+            var m = ValidationMessageBuilder.create(EXTERNAL_CONTEXT_CHILD_CLASH, externalContext)
+                .parameters(String.join(System.lineSeparator(), clashingNames))
+                .build();
+            session.add(m);
         }
     }
 
@@ -126,14 +126,11 @@ public class ExternalContextValidator {
                     return !PrimitiveFieldDataType.isPrimitiveType(type)
                         && !SystemDataTypes.isSystemDataType(type)
                         && !externalContextDefinitions.containsKey(type);})
-                .map(attribute -> error(ecd,
-                    String.format("type '%s' of field '%s' is unknown or not supported",
-                        attribute.getType().getType(),
-                        attribute.getName()))))
+                .map(attribute ->
+                    ValidationMessageBuilder.create(EXTERNAL_CONTEXT_UNKNOWN_FIELD_TYPE, ecd)
+                    .parameters(attribute.getType().getType(), attribute.getName())
+                    .build()))
             .forEach(validationMessage -> session.add(validationMessage));
     }
 
-    private ValidationMessage error(KrakenModelItem krakenModelItem, String message) {
-        return new ValidationMessage(krakenModelItem, message, ERROR);
-    }
 }

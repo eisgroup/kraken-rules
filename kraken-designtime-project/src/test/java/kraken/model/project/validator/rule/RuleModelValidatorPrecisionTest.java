@@ -66,22 +66,22 @@ public class RuleModelValidatorPrecisionTest {
 
         assertThat(session.getValidationMessages(), hasSize(3));
         assertThat(session.getValidationMessages().get(0).getSeverity(), equalTo(Severity.WARNING));
-        assertThat(session.getValidationMessages().get(0).toString(),
-            equalTo("[WARNING] Rule - 'RL': min value '1234567890.1234567' "
+        assertThat(session.getValidationMessages().get(0).getMessage(),
+            equalTo("Min value '1234567890.1234567' "
                 + "cannot be encoded as a decimal64 without a loss of precision. "
-                + "Actual number at runtime would be rounded to '1234567890.123457'")
+                + "Actual number at runtime would be rounded to '1234567890.123457'.")
         );
         assertThat(session.getValidationMessages().get(1).getSeverity(), equalTo(Severity.WARNING));
-        assertThat(session.getValidationMessages().get(1).toString(),
-            equalTo("[WARNING] Rule - 'RL': max value '1234567891.1234567' "
+        assertThat(session.getValidationMessages().get(1).getMessage(),
+            equalTo("Max value '1234567891.1234567' "
                 + "cannot be encoded as a decimal64 without a loss of precision. "
-                + "Actual number at runtime would be rounded to '1234567891.123457'")
+                + "Actual number at runtime would be rounded to '1234567891.123457'.")
         );
         assertThat(session.getValidationMessages().get(2).getSeverity(), equalTo(Severity.WARNING));
-        assertThat(session.getValidationMessages().get(2).toString(),
-            equalTo("[WARNING] Rule - 'RL': step value '0.12345678901234567890123456789' "
+        assertThat(session.getValidationMessages().get(2).getMessage(),
+            equalTo("Step value '0.12345678901234567890123456789' "
                 + "cannot be encoded as a decimal64 without a loss of precision. "
-                + "Actual number at runtime would be rounded to '0.1234567890123457'")
+                + "Actual number at runtime would be rounded to '0.1234567890123457'.")
         );
     }
 
@@ -107,16 +107,15 @@ public class RuleModelValidatorPrecisionTest {
 
         assertThat(session.getValidationMessages(), hasSize(2));
         assertThat(session.getValidationMessages().get(0).getSeverity(), equalTo(Severity.WARNING));
-        assertThat(session.getValidationMessages().get(0).toString(),
-            equalTo("[WARNING] Rule - 'RL': ValueList value '0.12345678901234567890123456789' "
-                + "cannot be encoded as a decimal64 without a loss of precision. "
-                + "Actual number at runtime would be rounded to '0.1234567890123457'")
+        assertThat(session.getValidationMessages().get(0).getMessage(),
+            equalTo("Value list value '0.12345678901234567890123456789' cannot be encoded as a decimal64 "
+                + "without a loss of precision. Actual number at runtime would be rounded to '0.1234567890123457'.")
         );
         assertThat(session.getValidationMessages().get(1).getSeverity(), equalTo(Severity.WARNING));
-        assertThat(session.getValidationMessages().get(1).toString(),
-            equalTo("[WARNING] Rule - 'RL': ValueList value '1234567890.1234567' "
+        assertThat(session.getValidationMessages().get(1).getMessage(),
+            equalTo("Value list value '1234567890.1234567' "
                 + "cannot be encoded as a decimal64 without a loss of precision. "
-                + "Actual number at runtime would be rounded to '1234567890.123457'")
+                + "Actual number at runtime would be rounded to '1234567890.123457'.")
         );
     }
 
@@ -136,10 +135,10 @@ public class RuleModelValidatorPrecisionTest {
 
         assertThat(session.getValidationMessages(), hasSize(1));
         assertThat(session.getValidationMessages().get(0).getSeverity(), equalTo(Severity.WARNING));
-        assertThat(session.getValidationMessages().get(0).toString(),
-            equalTo("[WARNING] Rule - 'RL': dimension 'Limit' value '0.12345678901234567890123456789' "
-                + "cannot be encoded as a decimal64 without a loss of precision. "
-                + "Actual number at runtime would be rounded to '0.1234567890123457'")
+        assertThat(session.getValidationMessages().get(0).getMessage(),
+            equalTo("Dimension 'Limit' value '0.12345678901234567890123456789' cannot be encoded as a "
+                + "decimal64 without a loss of precision. "
+                + "Actual number at runtime would be rounded to '0.1234567890123457'.")
         );
     }
 

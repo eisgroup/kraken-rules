@@ -1,0 +1,63 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Engine Sanity Accessibility Payload Test should execute 'on system context' entrypoint 1`] = `
+Object {
+  "entryPointResults": Object {
+    "evaluationTimestamp": Any<Date>,
+    "results": Object {
+      "Policy:0:systemDate": Object {
+        "contextFieldInfo": DefaultContextFieldInfo {
+          "contextId": "0",
+          "contextName": "Policy",
+          "fieldName": "systemDate",
+          "fieldPath": "systemDate",
+          "fieldType": "SysDate",
+        },
+        "ruleResults": Array [
+          Object {
+            "conditionEvaluationResult": DefaultConditionEvaluationResult {
+              "conditionEvaluation": "APPLICABLE",
+              "error": undefined,
+            },
+            "kind": 1,
+            "payloadResult": Object {
+              "events": Array [
+                ValueChangedEvent {
+                  "attributeTarget": "systemDate",
+                  "contextId": "0",
+                  "contextName": "Policy",
+                  "newValue": Object {
+                    "date": "2020-02-02T02:02:02",
+                  },
+                  "previousValue": undefined,
+                },
+              ],
+              "type": 8,
+            },
+            "ruleInfo": DefaultRuleInfo {
+              "context": "Policy",
+              "payloadtype": "DEFAULT",
+              "ruleName": "on system context",
+              "targetPath": "systemDate",
+            },
+          },
+        ],
+      },
+    },
+  },
+  "fieldResults": Object {
+    "Policy:0:systemDate": Object {
+      "fieldType": "SysDate",
+      "id": "Policy:0:systemDate",
+      "info": Object {
+        "getContextInstanceId": [Function],
+        "getContextName": [Function],
+      },
+      "isDisabled": undefined,
+      "isHidden": undefined,
+      "resolvedTargetPath": "systemDate",
+      "ruleResults": Array [],
+    },
+  },
+}
+`;

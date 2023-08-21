@@ -26,7 +26,11 @@ import { RuleEvaluation, RulePayloadProcessor } from '../RulePayloadProcessor'
 import { ContextDataExtractor } from '../contexts/data/extraction/ContextDataExtractor.types'
 import { logger } from '../../utils/DevelopmentLogger'
 import { DataContext } from '../contexts/data/DataContext'
-import { ErrorCode, KrakenRuntimeError } from '../../error/KrakenRuntimeError'
+import {
+    DEFAULT_RULE_MULTIPLE_ON_SAME_FIELD,
+    KrakenRuntimeError,
+    SystemMessageBuilder,
+} from '../../error/KrakenRuntimeError'
 import { payloadResultTypeChecker } from '../results/PayloadResultTypeChecker'
 import { conditionEvaluationTypeChecker } from '../../dto/DefaultConditionEvaluationResult'
 import { ContextData, ContextDataProvider } from '../contexts/data/extraction/ContextDataProvider'
@@ -346,16 +350,9 @@ export class OrderedEvaluationLoop {
                     rr.payloadResult.error === undefined,
             )
             if (rulesOnOneField.length > 1) {
-                throw new KrakenRuntimeError(
-                    ErrorCode.MULTIPLE_DEFAULT,
-                    "On field '" +
-                        key +
-                        "' applied '" +
-                        rulesOnOneField.length +
-                        "' default rules: " +
-                        rulesOnOneField.map(rr => `'${rr.ruleInfo.ruleName}'`).join(', ') +
-                        '. Only one default rule can be applied on the same field.',
-                )
+                const rules = rulesOnOneField.map(rr => `'${rr.ruleInfo.ruleName}'`).join(', ')
+                const m = new SystemMessageBuilder(DEFAULT_RULE_MULTIPLE_ON_SAME_FIELD).parameters(key, rules).build()
+                throw new KrakenRuntimeError(m)
             }
         })
     }

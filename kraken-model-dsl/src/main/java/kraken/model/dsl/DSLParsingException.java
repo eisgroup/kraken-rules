@@ -17,6 +17,7 @@ package kraken.model.dsl;
 
 import kraken.annotations.API;
 import kraken.exception.KrakenException;
+import kraken.message.SystemMessage;
 
 /**
  * @author mulevicius
@@ -24,11 +25,13 @@ import kraken.exception.KrakenException;
 @API
 public class DSLParsingException extends KrakenException {
 
-    public DSLParsingException(String message) {
+    private static final long serialVersionUID = 957690299923795667L;
+
+    public DSLParsingException(SystemMessage message) {
         super(message);
     }
 
-    public DSLParsingException(String message, Throwable cause) {
+    public DSLParsingException(SystemMessage message, Throwable cause) {
         super(message, cause);
     }
 }

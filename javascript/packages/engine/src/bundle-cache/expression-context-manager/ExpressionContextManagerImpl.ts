@@ -1,4 +1,4 @@
-import { ErrorCode, KrakenRuntimeError } from '../../error/KrakenRuntimeError'
+import { KrakenRuntimeError, NO_EXPRESSION_CONTEXT, SystemMessageBuilder } from '../../error/KrakenRuntimeError'
 import { ExpressionContext, ExpressionContextManager } from './ExpressionContextManager'
 
 export class ExpressionContextManagerImpl implements ExpressionContextManager {
@@ -6,7 +6,8 @@ export class ExpressionContextManagerImpl implements ExpressionContextManager {
 
     getExpressionContext(): ExpressionContext {
         if (!this.#expressionContext) {
-            throw new KrakenRuntimeError(ErrorCode.NO_EXPRESSION_CONTEXT, `Expression context is missing`)
+            const m = new SystemMessageBuilder(NO_EXPRESSION_CONTEXT).build()
+            throw new KrakenRuntimeError(m)
         }
         return this.#expressionContext
     }

@@ -15,14 +15,17 @@
  */
 package kraken.runtime.engine.context;
 
-import kraken.context.model.tree.ContextModelTree;
-import kraken.cross.context.path.ContextCardinalityResolver;
-import kraken.cross.context.path.CrossContextNavigationException;
-import kraken.model.context.Cardinality;
-import kraken.runtime.model.context.RuntimeContextDefinition;
+import static kraken.message.SystemMessageBuilder.Message.CCR_NAVIGATION_NOT_FOUND;
 
 import java.util.Map;
 import java.util.Optional;
+
+import kraken.context.model.tree.ContextModelTree;
+import kraken.cross.context.path.ContextCardinalityResolver;
+import kraken.cross.context.path.CrossContextNavigationException;
+import kraken.message.SystemMessageBuilder;
+import kraken.model.context.Cardinality;
+import kraken.runtime.model.context.RuntimeContextDefinition;
 
 /**
  * Implementation of {@code ContextCardinalityResolver} which is backed by a map of context definitions.
@@ -46,10 +49,11 @@ public class RuntimeContextCardinalityResolver implements ContextCardinalityReso
     @Override
     public Cardinality getCardinality(String parent, String child) {
         return Optional.ofNullable(contextDefinitions.get(parent))
-                .map(RuntimeContextDefinition::getChildren)
-                .map(stringContextNavigationMap -> stringContextNavigationMap.get(child))
-                .orElseThrow(() -> new CrossContextNavigationException(String.format(
-                        "Couldn't find navigation from '%s' to '%s'", parent, child))).getCardinality();
+            .map(RuntimeContextDefinition::getChildren)
+            .map(stringContextNavigationMap -> stringContextNavigationMap.get(child))
+            .orElseThrow(() -> new CrossContextNavigationException(
+                SystemMessageBuilder.create(CCR_NAVIGATION_NOT_FOUND).parameters(parent, child).build()))
+            .getCardinality();
     }
 
 }

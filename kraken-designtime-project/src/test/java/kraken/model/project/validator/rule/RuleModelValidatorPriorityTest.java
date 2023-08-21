@@ -16,15 +16,11 @@
 package kraken.model.project.validator.rule;
 
 import static kraken.model.project.KrakenProjectMocks.DEFAULT_NAMESPACE;
-import static kraken.model.project.KrakenProjectMocks.arrayChild;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.hamcrest.core.IsEqual.equalTo;
 
-import org.hamcrest.collection.IsCollectionWithSize;
-import org.hamcrest.collection.IsEmptyCollection;
-import org.hamcrest.core.IsEqual;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -63,8 +59,8 @@ public class RuleModelValidatorPriorityTest {
         assertThat(session.getValidationMessages(), hasSize(1));
         assertThat(session.getValidationMessages().get(0).getSeverity(), equalTo(Severity.ERROR));
         assertThat(
-            session.getValidationMessages().get(0).toString(),
-            equalTo("[ERROR] Rule - 'RL': priority cannot be set because rule payload type is AccessibilityPayload "
+            session.getValidationMessages().get(0).getMessage(),
+            equalTo("Priority cannot be set because rule payload type is AccessibilityPayload "
                 + "- priority is supported only for defaulting rules.")
         );
     }

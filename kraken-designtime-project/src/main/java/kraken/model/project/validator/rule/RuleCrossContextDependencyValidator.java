@@ -15,6 +15,8 @@
  */
 package kraken.model.project.validator.rule;
 
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_CCR_IS_AMBIGUOUS;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,8 +28,7 @@ import kraken.model.project.ccr.CrossContextService;
 import kraken.model.project.ccr.CrossContextServiceProvider;
 import kraken.model.project.dependencies.FieldDependency;
 import kraken.model.project.dependencies.RuleDependencyExtractor;
-import kraken.model.project.validator.Severity;
-import kraken.model.project.validator.ValidationMessage;
+import kraken.model.project.validator.ValidationMessageBuilder;
 import kraken.model.project.validator.ValidationSession;
 
 /**
@@ -53,7 +54,7 @@ public class RuleCrossContextDependencyValidator implements RuleValidator {
 
     @Override
     public void validate(Rule rule, ValidationSession session) {
-        List<ContextPath> paths = crossContextService.getPathsFor(rule.getContext());
+        List<ContextPath> pathsToRuleTarget = crossContextService.getPathsFor(rule.getContext());
         List<String> ccrDependencies = dependencyExtractor.extractDependencies(rule).stream()
                 .filter(FieldDependency::isCcrDependency)
                 .map(FieldDependency::getContextName)
@@ -61,13 +62,18 @@ public class RuleCrossContextDependencyValidator implements RuleValidator {
                 .collect(Collectors.toList());
 
         for(String ccrDependency : ccrDependencies) {
-            for(ContextPath path : paths) {
-                List<CrossContextPath> crossContextPaths = crossContextService.resolvePaths(path, ccrDependency);
-
-                if (crossContextPaths.size() > 1) {
-                    String template = "Found ambiguities for cross-context component:'%s'.\nCannot distinguish between cross-context references: %s";
-                    String message = String.format(template, ccrDependency, formatContextPaths(path, crossContextPaths));
-                    session.add(new ValidationMessage(rule, message, Severity.ERROR));
+            for(ContextPath pathToRuleTarget : pathsToRuleTarget) {
+                var ccrDependencyPaths = crossContextService.resolvePaths(pathToRuleTarget, ccrDependency);
+                if (ccrDependencyPaths.size() > 1) {
+                    var m = ValidationMessageBuilder.create(RULE_CCR_IS_AMBIGUOUS, rule)
+                        .parameters(
+                            ccrDependency,
+                            pathToRuleTarget.getPathAsString(),
+                            ccrDependencyPaths.stream()
+                                .map(CrossContextPath::toString)
+                                .collect(Collectors.joining(", ")))
+                        .build();
+                    session.add(m);
                 }
             }
         }
@@ -80,12 +86,6 @@ public class RuleCrossContextDependencyValidator implements RuleValidator {
             && krakenProject.getContextDefinitions().containsKey(rule.getContext())
             && rule.getTargetPath() != null
             && krakenProject.getContextProjection(rule.getContext()).getContextFields().containsKey(rule.getTargetPath());
-    }
-
-    private String formatContextPaths(ContextPath from, List<CrossContextPath> paths) {
-        return paths.stream()
-                .map(pathTo -> "From: " + from.getPathAsString() + " to " + pathTo.toString())
-                .collect(Collectors.joining(",\n\t", "[\n\t", "\n]"));
     }
 
 }

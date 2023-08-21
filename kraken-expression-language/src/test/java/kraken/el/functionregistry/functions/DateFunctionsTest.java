@@ -34,6 +34,7 @@ import org.junit.Ignore;
 
 import kraken.el.ExpressionEvaluationException;
 import kraken.el.ast.builder.Literals;
+import kraken.utils.Dates;
 
 /**
  * @author psurinin
@@ -96,9 +97,9 @@ public class DateFunctionsTest {
 
     @Test
     public void shouldAddDaysAndPreserveTime() {
-        var date = Literals.getDateTime("2000-01-01T07:33:33Z");
-        assertThat(DateFunctions.plusDays(date, 1), equalTo(Literals.getDateTime("2000-01-02T07:33:33Z")));
-        assertThat(DateFunctions.plusDays(date, 32), equalTo(Literals.getDateTime("2000-02-02T07:33:33Z")));
+        var date = LocalDateTime.parse("2000-01-01T07:33:33");
+        assertThat(DateFunctions.plusDays(date, 1), equalTo(LocalDateTime.parse("2000-01-02T07:33:33")));
+        assertThat(DateFunctions.plusDays(date, 32), equalTo(LocalDateTime.parse("2000-02-02T07:33:33")));
 
         LocalDateTime date2 = LocalDateTime.of(2005, 03, 9, 01, 01, 01);
         assertThat(DateFunctions.plusDays(date2, 30), equalTo(LocalDateTime.of(2005, 04, 8, 01, 01, 01)));
@@ -109,9 +110,9 @@ public class DateFunctionsTest {
 
     @Test
     public void shouldAddMonthsAndPreserveTime() {
-        var date = Literals.getDateTime("2000-01-30T07:33:33Z");
-        assertThat(DateFunctions.plusMonths(date, 1), equalTo(Literals.getDateTime("2000-02-29T07:33:33Z")));
-        assertThat(DateFunctions.plusMonths(date, 13), equalTo(Literals.getDateTime("2001-02-28T07:33:33Z")));
+        var date = LocalDateTime.parse("2000-01-30T07:33:33");
+        assertThat(DateFunctions.plusMonths(date, 1), equalTo(LocalDateTime.parse("2000-02-29T07:33:33")));
+        assertThat(DateFunctions.plusMonths(date, 13), equalTo(LocalDateTime.parse("2001-02-28T07:33:33")));
 
         LocalDateTime date2 = LocalDateTime.of(2005, 03, 9, 01, 01, 01);
         assertThat(DateFunctions.plusMonths(date2, -12), equalTo(LocalDateTime.of(2004, 03, 9, 01, 01, 01)));
@@ -121,21 +122,6 @@ public class DateFunctionsTest {
         assertThat(DateFunctions.plusMonths(date3, -12), equalTo(LocalDateTime.of(2004, 03, 9, 23, 33, 33)));
         assertThat(DateFunctions.plusMonths(date3, 1), equalTo(LocalDateTime.of(2005, 04, 9, 23, 33, 33)));
     }
-
-//    @Test
-//    public void shouldAddYearsAndPreserveTime() {
-//        var date = Literals.getDateTime("2000-02-29T07:33:33Z");
-//        assertThat(DateFunctions.plusYears(date, 1), equalTo(Literals.getDateTime("2001-02-28T07:33:33Z")));
-//        assertThat(DateFunctions.plusYears(date, -1), equalTo(Literals.getDateTime("1999-02-28T07:33:33Z")));
-//
-//        LocalDateTime date2 = LocalDateTime.of(2004, 02, 29, 01, 01, 01, 00);
-//        assertThat(DateFunctions.plusYears(date2, 1), equalTo(LocalDateTime.of(2005, 02, 28, 01, 01, 01, 00)));
-//        assertThat(DateFunctions.plusYears(date2, -1), equalTo(LocalDateTime.of(2003, 02, 28, 01, 01, 01, 00)));
-//
-//        LocalDateTime date3 = LocalDateTime.of(2004, 02, 29, 23, 33, 33, 00);
-//        assertThat(DateFunctions.plusYears(date3, 1), equalTo(LocalDateTime.of(2005, 02, 28, 23, 33, 33, 00)));
-//        assertThat(DateFunctions.plusYears(date3, -1), equalTo(LocalDateTime.of(2003, 02, 28, 23, 33, 33, 00)));
-//    }
 
     @Test
     public void shouldAddYearsAndPreserveTimeOnNewYearsEve() {
@@ -385,8 +371,8 @@ public class DateFunctionsTest {
         );
 
         assertThat(
-            DateFunctions.withYear(dateTime("2011-11-11T10:00:00Z"), 2020),
-            equalTo(dateTime("2020-11-11T10:00:00Z"))
+            DateFunctions.withYear(dateTime("2011-11-11T10:00:00"), 2020),
+            equalTo(dateTime("2020-11-11T10:00:00"))
         );
 
         assertThat(
@@ -413,8 +399,8 @@ public class DateFunctionsTest {
         );
 
         assertThat(
-            DateFunctions.withMonth(dateTime("2011-11-11T10:00:00Z"), 2),
-            equalTo(dateTime("2011-02-11T10:00:00Z"))
+            DateFunctions.withMonth(dateTime("2011-11-11T10:00:00"), 2),
+            equalTo(dateTime("2011-02-11T10:00:00"))
         );
 
         assertThat(
@@ -441,8 +427,8 @@ public class DateFunctionsTest {
         );
 
         assertThat(
-            DateFunctions.withDay(dateTime("2011-11-11T10:00:00Z"), 2),
-            equalTo(dateTime("2011-11-02T10:00:00Z"))
+            DateFunctions.withDay(dateTime("2011-11-11T10:00:00"), 2),
+            equalTo(dateTime("2011-11-02T10:00:00"))
         );
 
         assertThrows(ExpressionEvaluationException.class, () -> DateFunctions.withDay(date("2011-11-11"), 0));

@@ -15,11 +15,15 @@
  */
 package kraken.model.project.validator;
 
+import static kraken.message.SystemMessageBuilder.Message.KRAKEN_PROJECT_FIELD_IS_NULL;
+import static kraken.message.SystemMessageBuilder.Message.KRAKEN_PROJECT_ROOT_CONTEXT_DEFINITION_UNKNOWN;
+
 import java.util.List;
 import java.util.ServiceLoader;
 import java.util.ServiceLoader.Provider;
 import java.util.stream.Collectors;
 
+import kraken.message.SystemMessageBuilder;
 import kraken.model.Rule;
 import kraken.model.entrypoint.EntryPoint;
 import kraken.model.project.KrakenProject;
@@ -109,7 +113,7 @@ public final class KrakenProjectValidationService {
         }
 
         ValidationResult result = validateRulesAndEntryPoints(krakenProject);
-        validationSession.addAll(result.getValidationMessages());
+        validationSession.addAll(result.getAllMessages());
 
         return validationSession.result();
     }
@@ -163,32 +167,64 @@ public final class KrakenProjectValidationService {
 
     private static void ensureKrakenProjectConsistency(KrakenProject krakenProject) {
         if(krakenProject.getNamespace() == null) {
-            throw new IllegalKrakenProjectStateException("Namespace in KrakenProject must not be null");
+            var m = SystemMessageBuilder.create(KRAKEN_PROJECT_FIELD_IS_NULL)
+                .parameters("Namespace", krakenProject.getNamespace())
+                .build();
+            throw new IllegalKrakenProjectStateException(m);
         }
         if(krakenProject.getRootContextName() == null) {
-            throw new IllegalKrakenProjectStateException("RootContextName in KrakenProject must not be null");
+            var m = SystemMessageBuilder.create(KRAKEN_PROJECT_FIELD_IS_NULL)
+                .parameters("Root context name", krakenProject.getNamespace())
+                .build();
+            throw new IllegalKrakenProjectStateException(m);
         }
         if(krakenProject.getRules() == null) {
-            throw new IllegalKrakenProjectStateException("Rules in KrakenProject must not be null");
+            var m = SystemMessageBuilder.create(KRAKEN_PROJECT_FIELD_IS_NULL)
+                .parameters("Rules", krakenProject.getNamespace())
+                .build();
+            throw new IllegalKrakenProjectStateException(m);
         }
         if(krakenProject.getContextDefinitions() == null) {
-            throw new IllegalKrakenProjectStateException("ContextDefinitions in KrakenProject must not be null");
+            var m = SystemMessageBuilder.create(KRAKEN_PROJECT_FIELD_IS_NULL)
+                .parameters("Context definitions", krakenProject.getNamespace())
+                .build();
+            throw new IllegalKrakenProjectStateException(m);
         }
         if(krakenProject.getEntryPoints() == null) {
-            throw new IllegalKrakenProjectStateException("EntryPoints in KrakenProject must not be null");
+            var m = SystemMessageBuilder.create(KRAKEN_PROJECT_FIELD_IS_NULL)
+                .parameters("Entry points", krakenProject.getNamespace())
+                .build();
+            throw new IllegalKrakenProjectStateException(m);
         }
         if(krakenProject.getExternalContextDefinitions() == null) {
-            throw new IllegalKrakenProjectStateException("ExternalContextDefinitions in KrakenProject must not be null");
+            var m = SystemMessageBuilder.create(KRAKEN_PROJECT_FIELD_IS_NULL)
+                .parameters("External context definitions", krakenProject.getNamespace())
+                .build();
+            throw new IllegalKrakenProjectStateException(m);
         }
         if(krakenProject.getFunctionSignatures() == null) {
-            throw new IllegalKrakenProjectStateException("FunctionSignatures in KrakenProject must not be null");
+            var m = SystemMessageBuilder.create(KRAKEN_PROJECT_FIELD_IS_NULL)
+                .parameters("Function signatures", krakenProject.getNamespace())
+                .build();
+            throw new IllegalKrakenProjectStateException(m);
         }
         if(krakenProject.getFunctions() == null) {
-            throw new IllegalKrakenProjectStateException("Functions in KrakenProject must not be null");
+            var m = SystemMessageBuilder.create(KRAKEN_PROJECT_FIELD_IS_NULL)
+                .parameters("Functions", krakenProject.getNamespace())
+                .build();
+            throw new IllegalKrakenProjectStateException(m);
+        }
+        if(krakenProject.getDimensions() == null) {
+            var m = SystemMessageBuilder.create(KRAKEN_PROJECT_FIELD_IS_NULL)
+                .parameters("Dimensions", krakenProject.getNamespace())
+                .build();
+            throw new IllegalKrakenProjectStateException(m);
         }
         if(!krakenProject.getContextDefinitions().containsKey(krakenProject.getRootContextName())) {
-            throw new IllegalKrakenProjectStateException("Root Context is " + krakenProject.getRootContextName() +
-                    " but such ContextDefinition does not exist in KrakenProject: " + krakenProject.getNamespace());
+            var m = SystemMessageBuilder.create(KRAKEN_PROJECT_ROOT_CONTEXT_DEFINITION_UNKNOWN)
+                .parameters(krakenProject.getRootContextName(), krakenProject.getNamespace())
+                .build();
+            throw new IllegalKrakenProjectStateException(m);
         }
     }
 

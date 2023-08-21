@@ -1,5 +1,10 @@
 import { Rule } from 'kraken-model'
-import { ErrorCode, KrakenRuntimeError } from '../../error/KrakenRuntimeError'
+import {
+    SystemMessageBuilder,
+    KrakenRuntimeError,
+    NO_BUNDLE_CACHE_BY_ENTRYPOINT_AND_DIMENSIONS,
+    NO_BUNDLE_CACHE_BY_ENTRYPOINT,
+} from '../../error/KrakenRuntimeError'
 import { EntryPointBundle } from '../../models/EntryPointBundle'
 import { DimensionSetCache } from './DimensionSetCache'
 import { ExpressionContext, ExpressionContextManager } from '../expression-context-manager/ExpressionContextManager'
@@ -36,19 +41,15 @@ export class DimensionSetBundleCache implements EntryPointBundleCache, Expressio
     get(entryPointName: string, dimensions: Dimensions): EntryPointBundle.EntryPointBundle {
         const entryPointCache = this.#rulesCache.get(entryPointName)
         if (!entryPointCache) {
-            throw new KrakenRuntimeError(
-                ErrorCode.NO_BUNDLE_BY_ENTRYPOINT,
-                `Cannot find rules for entrypoint '${entryPointName}' in cache.`,
-            )
+            const m = new SystemMessageBuilder(NO_BUNDLE_CACHE_BY_ENTRYPOINT).parameters(entryPointName).build()
+            throw new KrakenRuntimeError(m)
         }
 
         if (!entryPointCache.isCached(dimensions)) {
-            throw new KrakenRuntimeError(
-                ErrorCode.NO_BUNDLE_BY_DIMENSIONS,
-                `Cannot find rules for entrypoint '${entryPointName}' with dimensions ${JSON.stringify(
-                    dimensions,
-                )} in cache.`,
-            )
+            const m = new SystemMessageBuilder(NO_BUNDLE_CACHE_BY_ENTRYPOINT_AND_DIMENSIONS)
+                .parameters(entryPointName, dimensions)
+                .build()
+            throw new KrakenRuntimeError(m)
         }
 
         const rules = entryPointCache.get(dimensions)

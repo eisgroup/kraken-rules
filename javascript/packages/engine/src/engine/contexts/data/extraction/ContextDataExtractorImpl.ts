@@ -25,7 +25,12 @@ import { ContextModelTree } from '../../../../models/ContextModelTree'
 import { ContextDataExtractor } from './ContextDataExtractor.types'
 import { logger } from '../../../../utils/DevelopmentLogger'
 import { DataContext } from '../DataContext'
-import { ErrorCode, KrakenRuntimeError } from '../../../../error/KrakenRuntimeError'
+import {
+    CONTEXT_MODEL_TREE_MISSING_EXTRACTION_PATH,
+    CONTEXT_MODEL_TREE_UNDEFINED_CHILD,
+    KrakenRuntimeError,
+    SystemMessageBuilder,
+} from '../../../../error/KrakenRuntimeError'
 
 interface ModelTree {
     context(name: string): ContextDefinition
@@ -66,7 +71,8 @@ export class ContextDataExtractorImpl implements ContextDataExtractor {
     extractByName(childContextName: string, root: DataContext, restriction?: DataContext): DataContext[] {
         logger.debug(() => `Extracting context definition '${childContextName}' instance`, true)
         if (!childContextName) {
-            throw new KrakenRuntimeError(ErrorCode.INCORRECT_MODEL_TREE, 'childContextName must be defined')
+            const m = new SystemMessageBuilder(CONTEXT_MODEL_TREE_UNDEFINED_CHILD).build()
+            throw new KrakenRuntimeError(m)
         }
 
         if (root == null) {
@@ -74,10 +80,10 @@ export class ContextDataExtractorImpl implements ContextDataExtractor {
         }
         const paths = this.modelTree.pathsToNodes[childContextName]
         if (!paths || !paths.length) {
-            throw new KrakenRuntimeError(
-                ErrorCode.INCORRECT_MODEL_TREE,
-                `Could not find any extraction paths from ${root.contextName} to ${childContextName}.`,
-            )
+            const m = new SystemMessageBuilder(CONTEXT_MODEL_TREE_MISSING_EXTRACTION_PATH)
+                .parameters(root.contextName, childContextName)
+                .build()
+            throw new KrakenRuntimeError(m)
         }
         function extractFromPath(this: ContextDataExtractorImpl, path: ContextModelTree.ContextPath): DataContext[] {
             return this.extractContexts(path.path.map(Tree(this.modelTree).context), root, restriction)

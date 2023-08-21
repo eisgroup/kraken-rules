@@ -27,7 +27,6 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import kraken.el.ast.builder.Literals;
 import kraken.el.functionregistry.functions.DateFunctions;
 import kraken.runtime.EvaluationConfig;
 import kraken.runtime.engine.EntryPointResult;
@@ -35,6 +34,7 @@ import kraken.runtime.engine.result.AssertionPayloadResult;
 import kraken.testproduct.domain.Policy;
 import kraken.testproduct.domain.TransactionDetails;
 import kraken.testproduct.domain.Vehicle;
+import kraken.utils.Dates;
 
 /**
  * Snapshot matching is disabled because date templates depends on server locale
@@ -46,7 +46,7 @@ public class EngineSanityMessageTemplateTest extends SanityEngineBaseTest {
     @Test
     public void shouldEvaluateMessageTemplate() {
         TransactionDetails transactionDetails = new TransactionDetails();
-        transactionDetails.setTxEffectiveDate(Literals.getDateTime("2021-01-01T11:00:00Z"));
+        transactionDetails.setTxEffectiveDate(Dates.convertISOToLocalDateTime("2021-01-01T11:00:00Z"));
 
         Policy policy = new Policy();
         policy.setTransactionDetails(transactionDetails);

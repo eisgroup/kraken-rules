@@ -61,8 +61,8 @@ describe('Engine Sanity DefaultValue Payload Test', () => {
         const data = empty()
         data.policyNumber = '666'
         expect(() => sanityEngine.evaluate(data, 'InitAutoPolicy')).toThrow(
-            "[K010] On field 'Policy:0:state' " +
-                "applied '2' default rules: 'R0005a', 'R0005'. Only one default rule can be applied on the same field.",
+            "[kus011] Field 'Policy:0:state' has more than one applicable default rule: 'R0005a', 'R0005'. " +
+                'Only one default rule can be applied on the same field.',
         )
     })
 })

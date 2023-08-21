@@ -17,15 +17,15 @@ package kraken.model.project.validator;
 
 import java.text.MessageFormat;
 import java.util.Objects;
+import java.util.UUID;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import kraken.annotations.API;
-import kraken.model.Function;
-import kraken.model.FunctionSignature;
 import kraken.model.KrakenModelItem;
 import kraken.model.Rule;
 import kraken.model.context.ContextDefinition;
-import kraken.model.context.external.ExternalContextDefinition;
-import kraken.model.context.external.ExternalContextDefinitionReference;
 import kraken.model.entrypoint.EntryPoint;
 
 /**
@@ -39,7 +39,13 @@ public final class ValidationMessage {
 
     private final KrakenModelItem item;
 
+    private final String code;
+
     private final String message;
+
+    private final String messageTemplate;
+
+    private final Object[] messageTemplateParameters;
 
     private final Severity severity;
 
@@ -48,21 +54,60 @@ public final class ValidationMessage {
      * @param item is an instance of {@link Rule}, {@link EntryPoint} or {@link ContextDefinition} that is validated
      * @param message is a human readable text that informs the user about validation result
      * @param severity of a validation result
+     * @deprecated since 1.50.0, use {@link #ValidationMessage(KrakenModelItem, String, String, String, Object[], Severity)} instead
      */
+    @Deprecated(since = "1.50.0", forRemoval = true)
     public ValidationMessage(KrakenModelItem item, String message, Severity severity) {
+        this(
+            item,
+            UUID.nameUUIDFromBytes(message.getBytes()).toString().substring(0, 8), // generated UUID as message code
+            MessageFormat.format(message.replace("'", "''"), new Object[]{}),
+            message.replace("'", "''"), // escape single commas for MessageFormat
+            new Object[]{},
+            severity
+        );
+    }
+
+    public ValidationMessage(@Nonnull KrakenModelItem item,
+                             @Nonnull String code,
+                             @Nonnull String message,
+                             @Nonnull String messageTemplate,
+                             @Nullable Object[] messageTemplateParameters,
+                             @Nonnull Severity severity) {
         this.item = Objects.requireNonNull(item);
+        this.code = Objects.requireNonNull(code);
         this.message = Objects.requireNonNull(message);
+        this.messageTemplate = Objects.requireNonNull(messageTemplate);
+        this.messageTemplateParameters = messageTemplateParameters;
         this.severity = Objects.requireNonNull(severity);
     }
 
+    @Nonnull
     public KrakenModelItem getItem() {
         return item;
     }
 
+    @Nonnull
+    public String getCode() {
+        return code;
+    }
+
+    @Nonnull
     public String getMessage() {
         return message;
     }
 
+    @Nonnull
+    public String getMessageTemplate() {
+        return messageTemplate;
+    }
+
+    @Nullable
+    public Object[] getMessageTemplateParameters() {
+        return messageTemplateParameters;
+    }
+
+    @Nonnull
     public Severity getSeverity() {
         return severity;
     }
@@ -72,44 +117,12 @@ public final class ValidationMessage {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ValidationMessage that = (ValidationMessage) o;
-        return item.getName().equals(that.item.getName()) &&
-                message.equals(that.message) &&
-                severity == that.severity;
+        return item.getName().equals(that.item.getName()) && code.equals(that.code) && message.equals(that.message);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(item.getName(), message, severity);
+        return Objects.hash(item.getName(), code, message);
     }
 
-    @Override
-    public String toString() {
-        String format = "[{0}] {1} - ''{2}'': {3}";
-        return MessageFormat.format(format, severity, modelTypeString(), item.getName(), message);
-    }
-
-    private String modelTypeString() {
-        if(item instanceof Rule) {
-            return "Rule";
-        }
-        if(item instanceof EntryPoint) {
-            return "EntryPoint";
-        }
-        if(item instanceof ContextDefinition) {
-            return "ContextDefinition";
-        }
-        if(item instanceof ExternalContextDefinition) {
-            return "External ContextDefinition";
-        }
-        if(item instanceof ExternalContextDefinitionReference) {
-            return "External ContextDefinition Reference";
-        }
-        if(item instanceof FunctionSignature) {
-            return "Function Signature";
-        }
-        if(item instanceof Function) {
-            return "Function";
-        }
-        throw new IllegalStateException("Unknown Kraken Model Type encountered: " + item.getClass());
-    }
 }

@@ -29,6 +29,8 @@ Root Context Policy {
     String createdBy : accessTrackInfo.createdBy
     Date updatedOn : accessTrackInfo.updatedOn
     String updatedBy : accessTrackInfo.updatedBy
+    SysDate systemDate
+    SysDate backupSystemDate
     CHILD CreditCardInfo : billingInfo.creditCardInfo
     child Insured : insured
     Child* Vehicle : riskItems
@@ -51,6 +53,10 @@ Context Referer {
 
 Context SuperReferer is Referer {
 
+}
+
+System Context SysDate {
+    String date
 }
 
 Context RefererInfo {

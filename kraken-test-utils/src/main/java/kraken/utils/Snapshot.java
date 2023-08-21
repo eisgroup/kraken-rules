@@ -20,6 +20,7 @@ import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -48,26 +49,29 @@ public class Snapshot {
         this.logger = logger;
     }
 
-    public void toMatch(String snapshot) {
+    public Optional<String> findMismatch(String snapshot) {
         if(updateSnapshots) {
             deleteSnapshot();
         }
 
         if(!Files.exists(snapshotFile)) {
             writeSnapshot(snapshot);
-        } else {
-            logger.info("Matching snapshot {}", snapshotFile);
-
-            List<String> snapshotLines = snapshot.lines().collect(Collectors.toList());
-            List<String> expectedSnapshotLines = readSnapshot().lines().collect(Collectors.toList());
-
-            if(!snapshotLines.equals(expectedSnapshotLines)) {
-                reportError(snapshotLines, expectedSnapshotLines);
-            }
+            return Optional.empty();
         }
+
+        logger.info("Matching snapshot {}", snapshotFile);
+
+        List<String> snapshotLines = snapshot.lines().collect(Collectors.toList());
+        List<String> expectedSnapshotLines = readSnapshot().lines().collect(Collectors.toList());
+
+        if (snapshotLines.equals(expectedSnapshotLines)) {
+            return Optional.empty();
+        }
+
+        return Optional.of(getMismatch(snapshotLines, expectedSnapshotLines));
     }
 
-    private void reportError(List<String> actualSnapshotLines, List<String> expectedSnapshotLines) {
+    private String getMismatch(List<String> actualSnapshotLines, List<String> expectedSnapshotLines) {
         String linePrefixFormat = "  %4d  ";
         String mismatchedLinePrefixFormat = "x %4d  ";
 
@@ -109,7 +113,11 @@ public class Snapshot {
             message.append(linePrefix).append(System.lineSeparator());
         }
 
-        throw new AssertionFailedError(message.toString());
+        return message.toString();
+    }
+
+    private void reportError(String message) {
+        throw new AssertionFailedError(message);
     }
 
     private void deleteSnapshot() {

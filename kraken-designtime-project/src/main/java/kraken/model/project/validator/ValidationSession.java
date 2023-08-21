@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import kraken.model.Dimension;
 import kraken.model.Function;
 import kraken.model.FunctionSignature;
 import kraken.model.Rule;
@@ -41,7 +42,7 @@ public class ValidationSession {
     private final List<ValidationMessage> externalContextValidationMessages = new ArrayList<>();
     private final List<ValidationMessage> functionSignatureValidationMessages = new ArrayList<>();
     private final List<ValidationMessage> functionValidationMessages = new ArrayList<>();
-
+    private final List<ValidationMessage> dimensionValidationMessages = new ArrayList<>();
     private final List<ValidationMessage> ruleValidationMessages = new ArrayList<>();
     private final List<ValidationMessage> entryPointValidationMessages = new ArrayList<>();
 
@@ -67,6 +68,8 @@ public class ValidationSession {
             functionSignatureValidationMessages.add(message);
         } else if(message.getItem() instanceof Function) {
             functionValidationMessages.add(message);
+        } else if(message.getItem() instanceof Dimension) {
+            dimensionValidationMessages.add(message);
         } else {
             throw new IllegalStateException("Unknown Kraken Model Type encountered: " + message.getItem().getClass());
         }
@@ -94,6 +97,10 @@ public class ValidationSession {
 
     public boolean hasRuleError() {
         return ruleValidationMessages.stream().anyMatch(m -> m.getSeverity() == Severity.ERROR);
+    }
+
+    public boolean hasDimensionError() {
+        return dimensionValidationMessages.stream().anyMatch(m -> m.getSeverity() == Severity.ERROR);
     }
 
     public ValidationResult result() {

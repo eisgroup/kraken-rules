@@ -16,8 +16,18 @@
 package kraken.model.project.validator.rule;
 
 import static kraken.el.ast.Template.asTemplateExpression;
-
-import java.util.function.Function;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_ASSERTION_RETURN_TYPE_NOT_BOOLEAN;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_CONDITION_REDUNDANT_TRUE;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_CONDITION_RETURN_TYPE_NOT_BOOLEAN;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_DEFAULT_RETURN_TYPE_NOT_COMPATIBLE;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_EXPRESSION_COERCE_DATETIME_TO_DATE;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_EXPRESSION_COERCE_DATE_TO_DATETIME;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_EXPRESSION_IS_LOGICALLY_EMPTY;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_EXPRESSION_IS_NOT_PARSEABLE;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_EXPRESSION_SYNTAX_ERROR;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_EXPRESSION_SYNTAX_INFO;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_EXPRESSION_SYNTAX_WARNING;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_TEMPLATE_RETURN_TYPE_NOT_PRIMITIVE;
 
 import kraken.el.Expression;
 import kraken.el.ast.Ast;
@@ -35,8 +45,8 @@ import kraken.model.project.KrakenProject;
 import kraken.model.project.ccr.CrossContextServiceProvider;
 import kraken.model.project.scope.ScopeBuilder;
 import kraken.model.project.scope.ScopeBuilderProvider;
-import kraken.model.project.validator.Severity;
 import kraken.model.project.validator.ValidationMessage;
+import kraken.model.project.validator.ValidationMessageBuilder;
 import kraken.model.project.validator.ValidationSession;
 import kraken.model.project.validator.rule.message.AstMessageDecoratorService;
 import kraken.model.validation.AssertionPayload;
@@ -97,28 +107,22 @@ public final class RuleExpressionValidator implements RuleValidator {
 
             String template = ((ValidationPayload) rule.getPayload()).getErrorMessage().getErrorMessage();
             String templateExpression = asTemplateExpression(template);
-            if(!checkIfParseable(templateExpression, "Error Message Template", rule, scope, session)) {
+            if(!checkIfParseable(templateExpression, "Validation message template", rule, scope, session)) {
                 return;
             }
             Ast ast = AstBuilder.from(templateExpression, scope);
             ast.getValidationMessages().stream()
-                .map(buildValidationMessageFromAstMessage(rule, "Error Message Template"))
+                .map(m -> buildValidationMessageFromAstMessage(m, rule, "Validation message template"))
                 .forEach(session::add);
 
             for (kraken.el.ast.Expression expression : ast.asTemplate().getTemplateExpressions()) {
                 if (!canFormatAsString(expression.getEvaluationType())) {
-                    session.add(new ValidationMessage(
-                        rule,
-                        String.format(
-                            "Return type of expression '%s' in validation message template must be primitive "
-                                + "or array of primitives, but found: %s",
-                            expression.getToken().getText(),
-                            expression.getEvaluationType()
-                        ),
-                        Severity.ERROR
-                    ));
+                    var m = ValidationMessageBuilder.create(RULE_TEMPLATE_RETURN_TYPE_NOT_PRIMITIVE, rule)
+                        .parameters(expression.getToken().getText(), expression.getEvaluationType())
+                        .build();
+                    session.add(m);
                 }
-                checkIfNotEmpty(rule, "Template", expression, session);
+                checkIfNotEmpty(rule, "Validation message template", expression, session);
             }
         }
     }
@@ -136,28 +140,15 @@ public final class RuleExpressionValidator implements RuleValidator {
             }
             Ast ast = AstBuilder.from(assertionExpression, scope);
             ast.getValidationMessages().stream()
-                .map(buildValidationMessageFromAstMessage(rule, "Assertion Expression"))
+                .map(m -> buildValidationMessageFromAstMessage(m, rule, "Assertion"))
                 .forEach(session::add);
 
             if (!Type.BOOLEAN.isAssignableFrom(ast.getExpression().getEvaluationType())) {
-                session.add(new ValidationMessage(
-                        rule,
-                        String.format("Return type of assertion expression must be BOOLEAN, but found: %s", ast.getExpression().getEvaluationType()),
-                        Severity.ERROR
-                ));
+                session.add(ValidationMessageBuilder.create(RULE_ASSERTION_RETURN_TYPE_NOT_BOOLEAN, rule)
+                    .parameters(ast.getExpression().getEvaluationType())
+                    .build());
             }
             checkIfNotEmpty(rule, "Assertion", ast.getExpression(), session);
-        }
-    }
-
-    private void checkIfNotEmpty(Rule rule, String type, kraken.el.ast.Expression e, ValidationSession session) {
-        if(e.isEmpty()) {
-            session.add(new ValidationMessage(
-                rule,
-                String.format("%s expression is logically empty. "
-                    + "Please check if there are unintentional spaces, new lines or comments remaining.", type),
-                Severity.ERROR
-            ));
         }
     }
 
@@ -169,7 +160,7 @@ public final class RuleExpressionValidator implements RuleValidator {
             }
             Ast ast = AstBuilder.from(defaultExpression, scope);
             ast.getValidationMessages().stream()
-                .map(buildValidationMessageFromAstMessage(rule, "Default Expression"))
+                .map(m -> buildValidationMessageFromAstMessage(m, rule, "Default"))
                 .forEach(session::add);
 
             Type fieldType = contextDefinition.isStrict()
@@ -177,39 +168,22 @@ public final class RuleExpressionValidator implements RuleValidator {
                 : Type.ANY;
 
             Type evaluationType = ast.getExpression().getEvaluationType();
-            String targetPath = rule.getTargetPath();
-
             if (!fieldType.isAssignableFrom(evaluationType)) {
-                String commonMessage = "Return type of default expression must be compatible with field type which is %1$s, " +
-                    "but expression return type is %2$s. " +
-                    "%2$s value will be automatically converted to %1$s value as a %3$s. " +
-                    "Automatic conversion should be avoided because it is a lossy operation " +
-                    "and the converted value depends on the local locale " +
-                    "which may produce inconsistent rule evaluation results.";
-
                 if (Type.DATE.isAssignableFrom(fieldType) && Type.DATETIME.isAssignableFrom(evaluationType)) {
-                    String dateFieldSpecificMessage = "date in local locale at that moment in time";
-                    session.add(
-                        new ValidationMessage(
-                            rule,
-                            String.format(commonMessage, fieldType, evaluationType, dateFieldSpecificMessage),
-                            Severity.WARNING
-                        ));
+                    var m = ValidationMessageBuilder.create(RULE_EXPRESSION_COERCE_DATETIME_TO_DATE, rule)
+                        .parameters(fieldType, evaluationType)
+                        .build();
+                    session.add(m);
                 } else if (Type.DATETIME.isAssignableFrom(fieldType) && Type.DATE.isAssignableFrom(evaluationType)) {
-                    String dateTimeFieldSpecificMessage = "moment in time at the start of the day in local locale";
-                    session.add(
-                        new ValidationMessage(
-                            rule,
-                            String.format(commonMessage, fieldType, evaluationType, dateTimeFieldSpecificMessage),
-                            Severity.WARNING
-                        ));
+                    var m = ValidationMessageBuilder.create(RULE_EXPRESSION_COERCE_DATE_TO_DATETIME, rule)
+                        .parameters(fieldType, evaluationType)
+                        .build();
+                    session.add(m);
                 } else {
-                    session.add(new ValidationMessage(
-                        rule,
-                        String.format("Return type of default expression must be compatible with field type which is %s, " +
-                            "but expression return type is %s", fieldType, ast.getExpression().getEvaluationType()),
-                        Severity.ERROR
-                    ));
+                    var m = ValidationMessageBuilder.create(RULE_DEFAULT_RETURN_TYPE_NOT_COMPATIBLE, rule)
+                        .parameters(fieldType, ast.getExpression().getEvaluationType())
+                        .build();
+                    session.add(m);
                 }
             }
             checkIfNotEmpty(rule, "Default", ast.getExpression(), session);
@@ -243,23 +217,20 @@ public final class RuleExpressionValidator implements RuleValidator {
 
             Ast ast = AstBuilder.from(conditionExpression, scope);
             ast.getValidationMessages().stream()
-                .map(buildValidationMessageFromAstMessage(rule, "Condition Expression"))
+                .map(m -> buildValidationMessageFromAstMessage(m, rule, "Condition"))
                 .forEach(session::add);
 
             if (!Type.BOOLEAN.isAssignableFrom(ast.getExpression().getEvaluationType())) {
-                session.add(new ValidationMessage(
-                        rule,
-                        String.format("Return type of condition expression must be BOOLEAN, but found: %s", ast.getExpression().getEvaluationType()),
-                        Severity.ERROR
-                ));
+                var m = ValidationMessageBuilder.create(RULE_CONDITION_RETURN_TYPE_NOT_BOOLEAN, rule)
+                    .parameters(ast.getExpression().getEvaluationType())
+                    .build();
+                session.add(m);
             }
             checkIfNotEmpty(rule, "Condition", ast.getExpression(), session);
 
             if (ast.getAstType() == AstType.LITERAL && Boolean.TRUE.equals(ast.getCompiledLiteralValue())) {
-                var message = "Redundant literal value 'true' in rule condition expression. "
-                    + "An empty condition expression is 'true' by default.";
-
-                session.add(new ValidationMessage(rule, message, Severity.INFO));
+                var m = ValidationMessageBuilder.create(RULE_CONDITION_REDUNDANT_TRUE, rule).build();
+                session.add(m);
             }
         }
     }
@@ -276,42 +247,40 @@ public final class RuleExpressionValidator implements RuleValidator {
             AstBuilder.from(expression, scope);
             return true;
         } catch (AstBuildingException e) {
-            session.add(new ValidationMessage(
-                rule,
-                String.format("%s expression cannot be parsed, because there is an error in expression syntax", type),
-                Severity.ERROR
-            ));
+            var m = ValidationMessageBuilder.create(RULE_EXPRESSION_IS_NOT_PARSEABLE, rule)
+                .parameters(type)
+                .build();
+            session.add(m);
             return false;
         }
     }
 
-    private Function<AstMessage, ValidationMessage> buildValidationMessageFromAstMessage(Rule rule,
-                                                                                         String expressionParent) {
+    private void checkIfNotEmpty(Rule rule, String type, kraken.el.ast.Expression e, ValidationSession session) {
+        if(e.isEmpty()) {
+            var m = ValidationMessageBuilder.create(RULE_EXPRESSION_IS_LOGICALLY_EMPTY, rule)
+                .parameters(type)
+                .build();
+            session.add(m);
+        }
+    }
 
-        return astMessage -> {
-            String message = decorator.decorate(astMessage, rule);
-            switch (astMessage.getSeverity()) {
-                case ERROR:
-                    return new ValidationMessage(
-                        rule,
-                        String.format("Error found in %s: %s", expressionParent, message),
-                        Severity.ERROR
-                    );
-                case WARNING:
-                    return new ValidationMessage(
-                        rule,
-                        String.format("Warning about %s: %s", expressionParent, message),
-                        Severity.WARNING
-                    );
-                case INFO:
-                    return new ValidationMessage(
-                        rule,
-                        String.format("Info about %s: %s", expressionParent, message),
-                        Severity.INFO
-                    );
-                default:
-                    throw new IllegalArgumentException("Unknown AstSeverity encountered: " + astMessage.getSeverity());
-            }
-        };
+    private ValidationMessage buildValidationMessageFromAstMessage(AstMessage astMessage, Rule rule, String type) {
+        String message = decorator.decorate(astMessage, rule);
+        switch (astMessage.getSeverity()) {
+            case ERROR:
+                return ValidationMessageBuilder.create(RULE_EXPRESSION_SYNTAX_ERROR, rule)
+                    .parameters(type, astMessage.getNode().getToken(), message)
+                    .build();
+            case WARNING:
+                return ValidationMessageBuilder.create(RULE_EXPRESSION_SYNTAX_WARNING, rule)
+                    .parameters(type, astMessage.getNode().getToken(), message)
+                    .build();
+            case INFO:
+                return ValidationMessageBuilder.create(RULE_EXPRESSION_SYNTAX_INFO, rule)
+                    .parameters(type, astMessage.getNode().getToken(), message)
+                    .build();
+            default:
+                throw new IllegalArgumentException("Unknown AstSeverity encountered: " + astMessage.getSeverity());
+        }
     }
 }

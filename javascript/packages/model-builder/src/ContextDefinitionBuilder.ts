@@ -76,6 +76,7 @@ export class ContextDefinitionBuilder {
         const context: ContextDefinition = {
             name: this.name,
             inheritedContexts: [],
+            system: false,
         }
         if (this.contextFields) {
             context.fields = this.contextFields

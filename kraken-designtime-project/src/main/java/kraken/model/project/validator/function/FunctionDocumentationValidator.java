@@ -15,6 +15,9 @@
  */
 package kraken.model.project.validator.function;
 
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.FUNCTION_DOCUMENTATION_PARAMETER_DUPLICATE;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.FUNCTION_DOCUMENTATION_PARAMETER_UNKNOWN;
+
 import java.util.stream.Collectors;
 
 import kraken.model.Function;
@@ -22,8 +25,7 @@ import kraken.model.FunctionParameter;
 import kraken.model.ParameterDocumentation;
 import kraken.model.project.KrakenProject;
 import kraken.model.project.validator.Duplicates;
-import kraken.model.project.validator.Severity;
-import kraken.model.project.validator.ValidationMessage;
+import kraken.model.project.validator.ValidationMessageBuilder;
 import kraken.model.project.validator.ValidationSession;
 
 /**
@@ -55,12 +57,9 @@ public final class FunctionDocumentationValidator {
             documentation.getParameterDocumentations(),
             ParameterDocumentation::getParameterName,
             duplicates -> session.add(
-                new ValidationMessage(
-                    function,
-                    "Error in function documentation. Found more than one description for parameter: "
-                        + duplicates.get(0).getParameterName(),
-                    Severity.ERROR
-                )
+                ValidationMessageBuilder.create(FUNCTION_DOCUMENTATION_PARAMETER_DUPLICATE, function)
+                    .parameters(duplicates.get(0).getParameterName())
+                    .build()
             )
         );
 
@@ -69,16 +68,10 @@ public final class FunctionDocumentationValidator {
 
         for(ParameterDocumentation parameterDocumentation : documentation.getParameterDocumentations()) {
             if(!parameters.containsKey(parameterDocumentation.getParameterName())) {
-                String availableParametersString = String.join(", ", parameters.keySet());
                 session.add(
-                    new ValidationMessage(
-                        function,
-                        "Error in function documentation. Parameter is documented but does not exist: "
-                            + parameterDocumentation.getParameterName()
-                            + ". Function has defined only these parameters: "
-                            + availableParametersString,
-                        Severity.ERROR
-                    )
+                    ValidationMessageBuilder.create(FUNCTION_DOCUMENTATION_PARAMETER_UNKNOWN, function)
+                        .parameters(parameterDocumentation.getParameterName(), String.join(", ", parameters.keySet()))
+                        .build()
                 );
             }
         }

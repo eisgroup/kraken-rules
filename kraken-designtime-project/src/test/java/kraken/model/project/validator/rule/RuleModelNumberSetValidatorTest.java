@@ -81,7 +81,7 @@ public class RuleModelNumberSetValidatorTest {
 
         assertHasSingleValidationError(
             session,
-            "[ERROR] Rule - 'RL': min or max must be set");
+            "Min or max must be set.");
     }
 
     @Test
@@ -90,7 +90,7 @@ public class RuleModelNumberSetValidatorTest {
 
         assertHasSingleValidationError(
             session,
-            "[ERROR] Rule - 'RL': step must be more than zero");
+            "Step must be more than zero.");
     }
 
     @Test
@@ -99,7 +99,7 @@ public class RuleModelNumberSetValidatorTest {
 
         assertHasSingleValidationError(
             session,
-            "[ERROR] Rule - 'RL': step must be more than zero");
+            "Step must be more than zero.");
     }
 
     @Test
@@ -108,7 +108,7 @@ public class RuleModelNumberSetValidatorTest {
 
         assertHasSingleValidationError(
             session,
-            "[ERROR] Rule - 'RL': min must be smaller than max");
+            "Min must be smaller than max.");
     }
 
     @Test
@@ -117,13 +117,13 @@ public class RuleModelNumberSetValidatorTest {
 
         assertHasSingleValidationError(
             session,
-            "[ERROR] Rule - 'RL': min must be smaller than max");
+            "Min must be smaller than max.");
     }
 
     private void assertHasSingleValidationError(ValidationSession session, String message) {
         assertThat(session.getValidationMessages(), hasSize(1));
         assertThat(session.getValidationMessages().get(0).getSeverity(), equalTo(Severity.ERROR));
-        assertThat(session.getValidationMessages().get(0).toString(), equalTo(message));
+        assertThat(session.getValidationMessages().get(0).getMessage(), equalTo(message));
     }
 
     private ValidationSession validate(Rule rule) {

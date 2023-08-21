@@ -15,17 +15,19 @@
  */
 package kraken.model.project.validator.context;
 
-import static kraken.model.project.validator.Severity.ERROR;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.CONTEXT_PARENT_DUPLICATE;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.CONTEXT_PARENT_IS_SYSTEM_CONTEXT;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.CONTEXT_PARENT_UNKNOWN;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.CONTEXT_PARENT_WRONG_FIELD_TYPE;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.CONTEXT_PARENT_WRONG_STRICTNESS;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import kraken.model.context.ContextDefinition;
 import kraken.model.context.ContextField;
 import kraken.model.project.KrakenProject;
-import kraken.model.project.validator.ValidationMessage;
+import kraken.model.project.validator.ValidationMessageBuilder;
 import kraken.model.project.validator.ValidationSession;
 
 /**
@@ -45,37 +47,42 @@ public final class ContextDefinitionInheritanceValidator {
                 .collect(Collectors.groupingBy(n -> n, Collectors.collectingAndThen(Collectors.toList(), List::size)));
             for(var groupedDefinition : groupedDefinitions.entrySet()) {
                 if(groupedDefinition.getValue() > 1) {
-                    String template = "parent '%s' is specified twice - please remove duplicated context";
-                    String message = String.format(template, groupedDefinition.getKey());
-                    session.add(new ValidationMessage(contextDefinition, message, ERROR));
+                    var m = ValidationMessageBuilder.create(CONTEXT_PARENT_DUPLICATE, contextDefinition)
+                        .parameters(groupedDefinition.getKey())
+                        .build();
+                    session.add(m);
                 }
             }
             for(String inheritedContextName : contextDefinition.getParentDefinitions()) {
                 ContextDefinition inheritedContextDefinition = krakenProject.getContextProjection(inheritedContextName);
                 if(inheritedContextDefinition == null) {
-                    String template = "parent '%s' is not valid because such ContextDefinition does not exist";
-                    String message = String.format(template, inheritedContextName);
-                    session.add(new ValidationMessage(contextDefinition, message, ERROR));
+                    var m = ValidationMessageBuilder.create(CONTEXT_PARENT_UNKNOWN, contextDefinition)
+                        .parameters(inheritedContextName)
+                        .build();
+                    session.add(m);
                 } else {
                     if (inheritedContextDefinition.isSystem()) {
-                        String template = "parent '%s' is not valid because such system"
-                            + " ContextDefinition cannot be inherited";
-                        String message = String.format(template, inheritedContextName);
-                        session.add(new ValidationMessage(contextDefinition, message, ERROR));
+                        var m = ValidationMessageBuilder.create(CONTEXT_PARENT_IS_SYSTEM_CONTEXT, contextDefinition)
+                            .parameters(inheritedContextName)
+                            .build();
+                        session.add(m);
                     }
 
                     if(contextDefinition.isStrict() && !inheritedContextDefinition.isStrict()) {
-                        String template = "ContextDefinition is strict but inherited ContextDefinition '%s' is not";
-                        String message = String.format(template, inheritedContextDefinition.getName());
-                        session.add(new ValidationMessage(contextDefinition, message, ERROR));
+                        var m = ValidationMessageBuilder.create(CONTEXT_PARENT_WRONG_STRICTNESS, contextDefinition)
+                            .parameters(inheritedContextName)
+                            .build();
+                        session.add(m);
                     }
                     for(ContextField inheritedField : inheritedContextDefinition.getContextFields().values()) {
                         if(contextDefinition.getContextFields().containsKey(inheritedField.getName())) {
                             ContextField contextField = contextDefinition.getContextFields().get(inheritedField.getName());
+
                             if(!areOverrideCompatible(contextField, inheritedField)) {
-                                String template = "field '%s' is overridden but it has a different type in inherited ContextDefinition '%s'";
-                                String message = String.format(template, contextField.getName(), inheritedContextName);
-                                session.add(new ValidationMessage(contextDefinition, message, ERROR));
+                                var m = ValidationMessageBuilder.create(CONTEXT_PARENT_WRONG_FIELD_TYPE, contextDefinition)
+                                    .parameters(contextField.getName(), inheritedContextName)
+                                    .build();
+                                session.add(m);
                             }
                         }
                     }

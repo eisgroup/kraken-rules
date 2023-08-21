@@ -16,6 +16,7 @@
 package kraken.model.dsl.read;
 
 import kraken.exception.KrakenException;
+import kraken.message.SystemMessage;
 
 /**
  * Indicates that DSL files cannot be read or parsed to Kraken Model.
@@ -24,11 +25,13 @@ import kraken.exception.KrakenException;
  */
 public class DSLReadingException extends KrakenException {
 
-    public DSLReadingException(String message) {
+    private static final long serialVersionUID = -4510323059187534676L;
+
+    public DSLReadingException(SystemMessage message) {
         super(message);
     }
 
-    public DSLReadingException(String message, Throwable cause) {
+    public DSLReadingException(SystemMessage message, Throwable cause) {
         super(message, cause);
     }
 }

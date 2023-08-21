@@ -20,7 +20,9 @@ import static org.mockito.Mockito.mock;
 import java.util.Collections;
 import java.util.Map;
 
-import kraken.el.TypeProvider;
+import kraken.context.model.tree.ContextModelTreeMetadata;
+import kraken.context.model.tree.impl.ContextModelTreeImpl;
+import kraken.el.TargetEnvironment;
 import kraken.runtime.EvaluationConfig;
 import kraken.runtime.EvaluationSession;
 import kraken.runtime.expressions.KrakenTypeProvider;
@@ -36,6 +38,10 @@ class PayloadHandlerTestConstants {
                 Collections.emptyMap(),
                 mock(KrakenTypeProvider.class),
                 Map.of(),
-                ""
+                "",
+                new ContextModelTreeImpl(
+                    Map.of(),
+                    Map.of(),
+                    new ContextModelTreeMetadata("test", TargetEnvironment.JAVA))
             );
 }

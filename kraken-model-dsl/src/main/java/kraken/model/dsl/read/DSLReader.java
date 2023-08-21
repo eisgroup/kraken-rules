@@ -15,6 +15,11 @@
  */
 package kraken.model.dsl.read;
 
+import static kraken.message.SystemMessageBuilder.Message.DSL_CANNOT_COLLECT;
+import static kraken.message.SystemMessageBuilder.Message.DSL_CANNOT_PARSE_URL;
+import static kraken.message.SystemMessageBuilder.Message.DSL_CANNOT_READ;
+import static kraken.message.SystemMessageBuilder.Message.DSL_NOT_VALID;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
@@ -27,13 +32,14 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
+import org.apache.commons.io.IOUtils;
+
+import kraken.message.SystemMessageBuilder;
 import kraken.model.dsl.DSLParsingException;
 import kraken.model.dsl.KrakenDSLModelParser;
 import kraken.model.dsl.error.LineParseCancellationException;
 import kraken.model.resource.Resource;
-
 import kraken.utils.ResourceLoader;
-import org.apache.commons.io.IOUtils;
 
 /**
  * @author mulevicius
@@ -58,11 +64,11 @@ public class DSLReader {
         this(List.of());
     }
 
-    public List<Resource> read(String directory) {
+    public List<Resource> read(String directory) throws DSLReadingException {
             return read(List.of(directory));
     }
 
-    public List<Resource> read(Collection<String> directories) {
+    public List<Resource> read(Collection<String> directories) throws DSLReadingException {
         resourceLock.lock();
         try {
             return directories.stream()
@@ -79,21 +85,19 @@ public class DSLReader {
         try (InputStream inputStream = url.openStream()) {
             String dsl = IOUtils.toString(inputStream, Charset.defaultCharset());
             return KrakenDSLModelParser.parseResource(dsl, url.toURI());
-        } catch (IOException | DSLParsingException e) {
-            throw new DSLReadingException("Invalid DSL at: " + url, e);
-        } catch (LineParseCancellationException exception) {
-            var template = "Invalid DSL at %s:%s:%s";
-            throw new DSLReadingException(
-                    String.format(
-                            template,
-                            url,
-                            exception.getLine(),
-                            exception.getColumn() + 1
-                    ),
-                    exception
-            );
+        } catch (DSLParsingException e) {
+            var message = SystemMessageBuilder.create(DSL_NOT_VALID).parameters(url).build();
+            throw new DSLReadingException(message, e);
+        } catch (LineParseCancellationException e) {
+            var position = url + ":" + e.getLine() + ":" + (e.getColumn() + 1);
+            var message = SystemMessageBuilder.create(DSL_NOT_VALID).parameters(position).build();
+            throw new DSLReadingException(message, e);
+        } catch (IOException e) {
+            var message = SystemMessageBuilder.create(DSL_CANNOT_READ).parameters(url).build();
+            throw new DSLReadingException(message, e);
         } catch (URISyntaxException e) {
-            throw new IllegalArgumentException("Failed to parse url to url", e);
+            var message = SystemMessageBuilder.create(DSL_CANNOT_PARSE_URL).parameters(url).build();
+            throw new DSLReadingException(message, e);
         }
     }
 
@@ -106,8 +110,9 @@ public class DSLReader {
                     .pattern(fileNamePattern)
                     .build()
                     .load();
-        } catch (UncheckedIOException | DSLParsingException e) {
-            throw new DSLReadingException("Exception while loading resources", e);
+        } catch (UncheckedIOException e) {
+            var message = SystemMessageBuilder.create(DSL_CANNOT_COLLECT).parameters(prefix, fileNamePattern).build();
+            throw new DSLReadingException(message, e);
         }
     }
 }

@@ -26,6 +26,12 @@ import { Moneys } from '../runtime/expressions/math/Moneys'
 import ValueListPayload = Payloads.Validation.ValueListPayload
 import { payloadResultCreator } from '../results/PayloadResultCreator'
 import { logger } from '../../utils/DevelopmentLogger'
+import {
+    KrakenRuntimeError,
+    SystemMessageBuilder,
+    VALUE_LIST_PAYLOAD_CANNOT_CONVERT_TO_NUMBER,
+    VALUE_LIST_PAYLOAD_CANNOT_CONVERT_TO_STRING,
+} from '../../error/KrakenRuntimeError'
 
 /**
  * A payload handler specific to {@link ValueListPayload}. Evaluates that field value
@@ -88,7 +94,8 @@ export class ValueListPayloadHandler implements RulePayloadHandler {
         if (typeof value === 'string') {
             return value
         }
-        throw Error(`Unable to convert ${value} to a string.`)
+        const m = new SystemMessageBuilder(VALUE_LIST_PAYLOAD_CANNOT_CONVERT_TO_STRING).parameters(value).build()
+        throw new KrakenRuntimeError(m)
     }
 
     private toNumber(value: unknown): number {
@@ -98,6 +105,7 @@ export class ValueListPayloadHandler implements RulePayloadHandler {
         if (typeof value === 'number') {
             return value as number
         }
-        throw Error(`Unable to convert ${value} to a number.`)
+        const m = new SystemMessageBuilder(VALUE_LIST_PAYLOAD_CANNOT_CONVERT_TO_NUMBER).parameters(value).build()
+        throw new KrakenRuntimeError(m)
     }
 }

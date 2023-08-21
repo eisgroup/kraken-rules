@@ -1,0 +1,9 @@
+Namespace Policy
+
+Rule "on system context" On Policy.systemDate {
+  Default To backupSystemDate
+}
+
+EntryPoint "on system context" {
+  "on system context"
+}

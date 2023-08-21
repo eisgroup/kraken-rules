@@ -15,13 +15,15 @@
  */
 package kraken.engine.sanity.check;
 
+import static kraken.utils.SnapshotMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import java.math.BigDecimal;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 import java.util.stream.Collectors;
 
 import org.junit.After;
@@ -35,7 +37,6 @@ import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
-import kraken.el.ast.builder.Literals;
 import kraken.runtime.EvaluationConfig;
 import kraken.runtime.engine.result.reducers.validation.ValidationStatusReducer;
 import kraken.testproduct.domain.AccessTrackInfo;
@@ -46,7 +47,9 @@ import kraken.testproduct.domain.TermDetails;
 import kraken.testproduct.domain.TransactionDetails;
 import kraken.testproduct.domain.Vehicle;
 import kraken.tracer.observer.Slf4jTraceObserver;
+import kraken.utils.Dates;
 import kraken.utils.Snapshot;
+import kraken.utils.SnapshotMatchers;
 import kraken.utils.SnapshotTestRunner;
 
 /**
@@ -90,8 +93,7 @@ public class EngineTraceSnapshotTest extends SanityEngineBaseTest {
 
             var result = engine.evaluate(policy(), "TracerSnapshotTest", new EvaluationConfig(Map.of(), "USD"));
             createReducer(overriddenRuleEvaluations()).reduce(result);
-
-            snapshot.toMatch(traceOutput());
+            assertThat(traceOutput(), matches(snapshot));
         }
     }
 
@@ -138,7 +140,7 @@ public class EngineTraceSnapshotTest extends SanityEngineBaseTest {
 
         var termDetails = new TermDetails();
         termDetails.setId("TermDetails-1");
-        termDetails.setTermEffectiveDate(Literals.getDate("1999-01-01"));
+        termDetails.setTermEffectiveDate(Dates.convertISOToLocalDate("1999-01-01"));
         policy.setTermDetails(termDetails);
 
         var transactionDetails = new TransactionDetails();

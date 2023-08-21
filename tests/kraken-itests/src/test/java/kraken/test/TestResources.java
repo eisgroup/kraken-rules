@@ -86,7 +86,7 @@ public class TestResources {
         Collection<Resource> resources = dslReader.read(info.dir);
         ResourceKrakenProjectBuilder krakenProjectBuilder = new ResourceKrakenProjectBuilder(resources);
         KrakenProject krakenProject = krakenProjectBuilder.buildKrakenProject(info.namespace);
-        krakenProjectValidationService.validate(krakenProject).logMessages(LOGGER);
+        krakenProjectValidationService.validate(krakenProject).logAllFormattedMessages(LOGGER);
         return new TestResources(krakenProject);
     }
 

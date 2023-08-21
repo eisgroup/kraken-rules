@@ -9,7 +9,7 @@
         <artifactId>parent-pom</artifactId>
         <relativePath>../../pom.xml</relativePath>
         <groupId>kraken</groupId>
-        <version>1.49.2</version>
+        <version>1.50.0</version>
     </parent>
 
     <properties>

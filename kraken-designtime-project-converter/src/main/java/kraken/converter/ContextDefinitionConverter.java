@@ -64,7 +64,8 @@ public class ContextDefinitionConverter {
                 contextProjection.getName(),
                 children,
                 fields,
-                new ArrayList<>(contextProjection.getParentDefinitions())
+                new ArrayList<>(contextProjection.getParentDefinitions()),
+                contextProjection.isSystem()
         );
     }
 

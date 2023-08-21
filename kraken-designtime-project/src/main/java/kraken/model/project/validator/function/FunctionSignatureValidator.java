@@ -15,19 +15,24 @@
  */
 package kraken.model.project.validator.function;
 
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.FUNCTION_SIGNATURE_DUPLICATE;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.FUNCTION_SIGNATURE_GENERIC_BOUND_DUPLICATE;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.FUNCTION_SIGNATURE_GENERIC_BOUND_IS_ITSELF_GENERIC;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.FUNCTION_SIGNATURE_PARAMETER_TYPE_UNKNOWN;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.FUNCTION_SIGNATURE_RETURN_TYPE_UNION_GENERIC_MIX;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.FUNCTION_SIGNATURE_RETURN_TYPE_UNKNOWN;
+
 import java.util.stream.Collectors;
 
 import kraken.el.scope.symbol.FunctionSymbol;
 import kraken.el.scope.type.Type;
-import kraken.model.Function;
 import kraken.model.FunctionSignature;
 import kraken.model.GenericTypeBound;
 import kraken.model.project.KrakenProject;
 import kraken.model.project.scope.ScopeBuilder;
 import kraken.model.project.scope.ScopeBuilderProvider;
 import kraken.model.project.validator.Duplicates;
-import kraken.model.project.validator.Severity;
-import kraken.model.project.validator.ValidationMessage;
+import kraken.model.project.validator.ValidationMessageBuilder;
 import kraken.model.project.validator.ValidationSession;
 import kraken.model.project.validator.namespaced.NamespacedValidator;
 
@@ -51,14 +56,10 @@ public final class FunctionSignatureValidator {
             krakenProject.getFunctionSignatures(),
             FunctionSignature::toHeader,
             duplicates -> {
-                session.add(new ValidationMessage(
-                    duplicates.get(0),
-                    String.format(
-                        "is not valid because there are more than one function signature defined: %s",
-                        duplicates.stream().map(FunctionSignature::format).collect(Collectors.joining(", "))
-                    ),
-                    Severity.ERROR
-                ));
+                var m = ValidationMessageBuilder.create(FUNCTION_SIGNATURE_DUPLICATE, duplicates.get(0))
+                    .parameters(duplicates.stream().map(FunctionSignature::format).collect(Collectors.joining(", ")))
+                    .build();
+                session.add(m);
             }
         );
 
@@ -82,30 +83,20 @@ public final class FunctionSignatureValidator {
             signature.getGenericTypeBounds(),
             GenericTypeBound::getGeneric,
             duplicates -> {
-                session.add(new ValidationMessage(
-                    signature,
-                    String.format(
-                        "is not valid because there are more than one generic bound for the same generic type "
-                            + "name '%s'",
-                        duplicates.get(0).getGeneric()
-                    ),
-                    Severity.ERROR
-                ));
+                var m = ValidationMessageBuilder.create(FUNCTION_SIGNATURE_GENERIC_BOUND_DUPLICATE, signature)
+                    .parameters(duplicates.get(0).getGeneric())
+                    .build();
+                session.add(m);
             }
         );
 
         for(GenericTypeBound genericTypeBound : signature.getGenericTypeBounds()) {
             Type boundType = scopeBuilder.resolveTypeOf(genericTypeBound.getBound());
             if(boundType.isGeneric()) {
-                session.add(new ValidationMessage(
-                    signature,
-                    String.format(
-                        "is not valid because generic type bound '%s' for generic '%s' is itself a generic type",
-                        genericTypeBound.getGeneric(),
-                        genericTypeBound.getBound()
-                    ),
-                    Severity.ERROR
-                ));
+                var m = ValidationMessageBuilder.create(FUNCTION_SIGNATURE_GENERIC_BOUND_IS_ITSELF_GENERIC, signature)
+                    .parameters(genericTypeBound.getGeneric(), genericTypeBound.getBound())
+                    .build();
+                session.add(m);
             }
         }
     }
@@ -114,22 +105,16 @@ public final class FunctionSignatureValidator {
         Type type = symbol.getType();
         String typeToken = signature.getReturnType();
         if (!type.isKnown()) {
-            session.add(new ValidationMessage(
-                signature,
-                String.format("is not valid because return type '%s' does not exist", typeToken),
-                Severity.ERROR
-            ));
+            var m = ValidationMessageBuilder.create(FUNCTION_SIGNATURE_RETURN_TYPE_UNKNOWN, signature)
+                .parameters(typeToken)
+                .build();
+            session.add(m);
         }
         if(type.isUnion() && type.isGeneric()) {
-            session.add(new ValidationMessage(
-                signature,
-                String.format(
-                    "is not valid because return type '%s' is a mix of union type and generic type. "
-                        + "Such type definition is not supported.",
-                    typeToken
-                ),
-                Severity.ERROR
-            ));
+            var m = ValidationMessageBuilder.create(FUNCTION_SIGNATURE_RETURN_TYPE_UNION_GENERIC_MIX, signature)
+                .parameters(typeToken)
+                .build();
+            session.add(m);
         }
     }
 
@@ -138,22 +123,16 @@ public final class FunctionSignatureValidator {
             Type type = parameter.getType();
             String typeToken = signature.getParameterTypes().get(parameter.getParameterIndex());
             if(!type.isKnown()) {
-                session.add(new ValidationMessage(
-                    signature,
-                    String.format("is not valid because parameter type '%s' does not exist", typeToken),
-                    Severity.ERROR
-                ));
+                var m = ValidationMessageBuilder.create(FUNCTION_SIGNATURE_PARAMETER_TYPE_UNKNOWN, signature)
+                    .parameters(typeToken)
+                    .build();
+                session.add(m);
             }
             if(type.isUnion() && type.isGeneric()) {
-                session.add(new ValidationMessage(
-                    signature,
-                    String.format(
-                        "is not valid because parameter type '%s' is a mix of union type and generic type. "
-                            + "Such type definition is not supported.",
-                        typeToken
-                    ),
-                    Severity.ERROR
-                ));
+                var m = ValidationMessageBuilder.create(FUNCTION_SIGNATURE_PARAMETER_TYPE_UNKNOWN, signature)
+                    .parameters(typeToken)
+                    .build();
+                session.add(m);
             }
         }
     }

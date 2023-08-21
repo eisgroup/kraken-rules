@@ -27,6 +27,7 @@ export namespace Contexts {
         children?: Record<string, ContextNavigation>
         fields?: Record<string, ContextField>
         inheritedContexts: string[]
+        system: boolean
     }
 
     /**

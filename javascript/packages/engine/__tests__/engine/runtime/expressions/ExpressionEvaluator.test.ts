@@ -93,7 +93,7 @@ describe('ExpressionEvaluator', () => {
                     { type: 'NonExisting' },
                     contextBuilder.buildFromRoot(dataObject),
                 ),
-            ).toThrow(`Evaluation of expression ${JSON.stringify({ type: 'NonExisting' })} is not supported`)
+            ).toThrow(`Unknown expression type encountered: ${JSON.stringify({ type: 'NonExisting' })}`)
         })
         describe('ComplexExpression', () => {
             it("should use '__dataObject__' and get data from DataContext", () => {

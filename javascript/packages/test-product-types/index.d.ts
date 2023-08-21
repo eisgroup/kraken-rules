@@ -193,6 +193,7 @@ export namespace TestProduct {
 
         export interface Policy extends kraken.testproduct.domain.meta.Identifiable {
             accessTrackInfo?: kraken.testproduct.domain.AccessTrackInfo;
+            backupSystemDate?: kraken.testproduct.domain.SysDate;
             billingInfo?: kraken.testproduct.domain.BillingInfo;
             coverage?: kraken.testproduct.domain.CarCoverage;
             createdFromPolicyRev?: number;
@@ -211,6 +212,7 @@ export namespace TestProduct {
             referer?: kraken.testproduct.domain.Referer;
             riskItems?: kraken.testproduct.domain.Vehicle[];
             state?: string;
+            systemDate?: kraken.testproduct.domain.SysDate;
             termDetails?: kraken.testproduct.domain.TermDetails;
             transactionDetails?: kraken.testproduct.domain.TransactionDetails;
         }
@@ -274,6 +276,14 @@ export namespace TestProduct {
     namespace kraken.testproduct.domain {
 
         export interface SuperReferer extends kraken.testproduct.domain.Referer {
+        }
+
+    }
+
+    namespace kraken.testproduct.domain {
+
+        export interface SysDate {
+            date?: string;
         }
 
     }
