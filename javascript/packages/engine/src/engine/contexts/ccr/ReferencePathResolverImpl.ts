@@ -21,7 +21,12 @@ import { CommonPathResolver } from './CommonPathResolver'
 import { ContextReference } from './ContextReference'
 import { ReferencePathResolver } from './ReferencePathResolver'
 import { ContextModelTree } from '../../../models/ContextModelTree'
-import { ErrorCode, KrakenRuntimeError } from '../../../error/KrakenRuntimeError'
+import {
+    CONTEXT_MODEL_TREE_MULTIPLE_TARGET,
+    CONTEXT_MODEL_TREE_UNDEFINED_TARGET,
+    KrakenRuntimeError,
+    SystemMessageBuilder,
+} from '../../../error/KrakenRuntimeError'
 
 /**
  * Resolves path to reference from data context to the data context
@@ -42,7 +47,8 @@ export class ReferencePathResolverImpl implements ReferencePathResolver {
         const paths = this.pathsToNodes[targetContextName].map(x => x.path)
 
         if (!paths.length) {
-            throw new KrakenRuntimeError(ErrorCode.INCORRECT_MODEL_TREE, 'Reference target paths cannot be empty')
+            const m = new SystemMessageBuilder(CONTEXT_MODEL_TREE_UNDEFINED_TARGET).build()
+            throw new KrakenRuntimeError(m)
         }
         if (paths.length === 1) {
             const targetPath = paths[0]
@@ -58,10 +64,8 @@ export class ReferencePathResolverImpl implements ReferencePathResolver {
                         .map(p => p.path.join('.'))
                         .join(', ')}' from '${origin.join('.')}'`,
             )
-            throw new KrakenRuntimeError(
-                ErrorCode.INCORRECT_MODEL_TREE,
-                `Cannot determine path to reference, resolved ${filtered.length}`,
-            )
+            const m = new SystemMessageBuilder(CONTEXT_MODEL_TREE_MULTIPLE_TARGET).parameters(filtered.length).build()
+            throw new KrakenRuntimeError(m)
         }
 
         const target = filtered[0]

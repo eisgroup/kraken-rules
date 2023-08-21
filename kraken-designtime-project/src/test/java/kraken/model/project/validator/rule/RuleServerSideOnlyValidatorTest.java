@@ -80,7 +80,9 @@ public class RuleServerSideOnlyValidatorTest {
         assertThat(validationSession.getValidationMessages(), hasSize(1));
         assertThat(validationSession.getValidationMessages().get(0).getSeverity(), is(Severity.ERROR));
         assertThat(validationSession.getValidationMessages().get(0).getMessage(),
-            containsString("variation is misconfigured, because it is not marked as @ServerSideOnly"));
+            containsString("Rule version is misconfigured, because it is not marked as @ServerSideOnly, "
+                + "but there are another rule version that is marked as @ServerSideOnly. "
+                + "All versions of the same rule must be consistently marked as @ServerSideOnly."));
     }
 
     @Test

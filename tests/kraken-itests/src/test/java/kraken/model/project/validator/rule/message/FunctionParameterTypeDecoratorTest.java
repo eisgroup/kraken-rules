@@ -69,9 +69,8 @@ public class FunctionParameterTypeDecoratorTest {
 
         String decoratedError = functionParameterTypeDecorator.decorate(message, rule);
 
-        assertEquals("error in 'GetVehicleModel(Vehicle)' with message: "
-                + "Incompatible type 'Vehicle[]' of function parameter at index 0 when invoking function "
-                + "GetVehicleModel(Vehicle). Expected type is 'Vehicle'. 'Vehicle' is a collection of values, "
+        assertEquals("Incompatible type 'Vehicle[]' of function parameter at index 0 when invoking "
+                + "function GetVehicleModel(Vehicle). Expected type is 'Vehicle'. 'Vehicle' is a collection of values, "
                 + "because 'Vehicle' is a cross context reference accessed from "
                 + "'Policy' which resolves to multiple cardinality through path(s): Policy->Vehicle.",
             decoratedError);
@@ -87,8 +86,7 @@ public class FunctionParameterTypeDecoratorTest {
 
         String decoratedError = functionParameterTypeDecorator.decorate(message, rule);
 
-        assertEquals("error in 'GetFirstElement(CreditCardInfo.cardType)' with message: "
-                + "Incompatible type 'String' of function parameter at index 0 when invoking function "
+        assertEquals("Incompatible type 'String' of function parameter at index 0 when invoking function "
                 + "GetFirstElement(CreditCardInfo.cardType). Expected type is 'String[]'. "
                 + "'CreditCardInfo.cardType' is not a collection of values, "
                 + "because 'CreditCardInfo' is a cross context reference accessed "

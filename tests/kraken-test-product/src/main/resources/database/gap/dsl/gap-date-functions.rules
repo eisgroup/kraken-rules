@@ -1,0 +1,9 @@
+Namespace Policy
+
+EntryPoint "DateFunctions-DefaultPlusDays" {
+  "DateFunctions-DefaultPlusDays"
+}
+
+Rule "DateFunctions-DefaultPlusDays" On Policy.txEffectiveDate {
+  Default To PlusDays(DateTime("2022-03-25T10:00:00"), 4)
+}

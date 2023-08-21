@@ -15,16 +15,17 @@
  */
 package kraken.runtime.engine.context;
 
+import static kraken.message.SystemMessageBuilder.Message.CONTEXT_PATH_EXTRACTION_MISSING;
+
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import kraken.context.path.ContextPath;
-import kraken.cross.context.path.CrossContextPathsResolver;
 import kraken.cross.context.path.CrossContextPath;
+import kraken.cross.context.path.CrossContextPathsResolver;
+import kraken.message.SystemMessageBuilder;
 import kraken.runtime.KrakenRuntimeException;
 import kraken.runtime.engine.context.data.DataContext;
 import kraken.runtime.engine.context.data.DataContexts;
@@ -73,7 +74,10 @@ class DataContextReferenceUpdater {
             List<CrossContextPath> ccPaths = crossContextPathsResolver.resolvePaths(contextPath, dependencyName);
 
             if (ccPaths.size() != 1) {
-                throw new KrakenRuntimeException("Failed to find reference path from '" + contextPath.getPathAsString() + "' to '" + dependencyName);
+                var m = SystemMessageBuilder.create(CONTEXT_PATH_EXTRACTION_MISSING)
+                    .parameters(contextPath.getPathAsString(), dependencyName)
+                    .build();
+                throw new KrakenRuntimeException(m);
             }
 
             return new ReferenceExtractionInfo(

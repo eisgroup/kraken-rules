@@ -47,6 +47,7 @@ import { RuleConditionProcessor } from './RuleConditionProcessor'
 import ExpressionVariable = Expressions.ExpressionVariable
 import { ValueListPayloadHandler } from './handlers/ValueListPayloadHandler'
 import { logger } from '../utils/DevelopmentLogger'
+import { ContextModelTree } from '../models/ContextModelTree'
 
 export type RuleEvaluation = {
     rule: Rule
@@ -64,11 +65,12 @@ export class RulePayloadProcessor {
         expressionEvaluator: ExpressionEvaluator,
         overrideExtractor: RuleOverrideContextExtractor,
         dataContextUpdater: DataContextUpdater,
+        modelTree: ContextModelTree.ContextModelTree,
     ) {
         this.overrideExtractor = overrideExtractor
         this.payloadHandlers = [
             new AssertionPayloadHandler(expressionEvaluator),
-            new DefaultValuePayloadHandler(expressionEvaluator),
+            new DefaultValuePayloadHandler(expressionEvaluator, modelTree),
             accessibilityPayloadHandler,
             visibilityPayloadHandler,
             new RegExpPayloadHandler(expressionEvaluator),

@@ -15,12 +15,9 @@
  */
 package kraken.model.project.validator.rule;
 
-import static kraken.model.project.validator.Severity.ERROR;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -37,6 +34,8 @@ import kraken.model.project.ccr.CrossContextServiceProvider;
 import kraken.model.project.dependencies.FieldDependency;
 import kraken.model.project.dependencies.RuleDependencyExtractor;
 import kraken.model.project.validator.ValidationMessage;
+import kraken.model.project.validator.ValidationMessageBuilder;
+import kraken.model.project.validator.ValidationMessageBuilder.Message;
 import kraken.model.project.validator.ValidationSession;
 import kraken.utils.dto.Pair;
 
@@ -88,8 +87,7 @@ public class RuleCrossContextCardinalityValidator implements RuleValidator {
                             .collect(Collectors.groupingBy(pair -> pair.right.getCardinality()));
 
             if (grouped.size() > 1) {
-                String message = createMessage(rule, ccr, grouped);
-                session.add(new ValidationMessage(rule, message, ERROR));
+                session.add(createMessage(rule, ccr, grouped));
             }
         });
     }
@@ -120,24 +118,20 @@ public class RuleCrossContextCardinalityValidator implements RuleValidator {
         };
     }
 
-    private String createMessage(Rule rule, String dc, Map<Cardinality, List<Pair<String, CrossContextPath>>> grouped) {
-        Function<Pair<String, CrossContextPath>, String> messageByCardinality =
-                pair -> "\n\t\t\tfrom '" + pair.left + "' to '" + String.join(".", pair.right.getPath()) + "'";
-        final String message = String.format(
-                "Cross Context Reference from '%s' to '%s' resolves to different cardinalities in different parts of model. " +
-                        "\n\t\tSingle: %s, " +
-                        "\n\t\tMultiple: %s",
-                rule.getContext(),
-                dc,
-                grouped.get(Cardinality.SINGLE).stream()
-                        .map(messageByCardinality)
-                        .collect(Collectors.joining(", ")),
-                grouped.get(Cardinality.MULTIPLE).stream()
-                        .map(messageByCardinality)
-                        .collect(Collectors.joining(", "))
-        );
-        logger.trace(message);
-        return message;
+    private ValidationMessage createMessage(Rule rule, String ccr, Map<Cardinality, List<Pair<String, CrossContextPath>>> grouped) {
+        return ValidationMessageBuilder.create(Message.RULE_CCR_DIFFERENT_CARDINALITIES, rule)
+            .parameters(rule.getContext(), ccr, formatExplanation(grouped))
+            .build();
     }
 
+    private String formatExplanation(Map<Cardinality, List<Pair<String, CrossContextPath>>> grouped) {
+        var single = grouped.get(Cardinality.SINGLE).stream()
+            .map(e -> "from " + e.left + " to " + e.right)
+            .collect(Collectors.joining(System.lineSeparator() + "    ", "    ", ""));
+        var multiple = grouped.get(Cardinality.MULTIPLE).stream()
+            .map(e -> "from " + e.left + " to " + e.right)
+            .collect(Collectors.joining(System.lineSeparator() + "    ", "    ", ""));
+
+        return "\n  Single:\n" + single + "\n  Multiple:\n" + multiple;
+    }
 }

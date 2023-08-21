@@ -61,7 +61,9 @@ describe('EngineSanityDefaultRulePriorityTest', () => {
         policy.billingInfo!.accountName = 'MIN'
 
         expect(() => sanityEngine.evaluate(policy, 'DefaultRuleByPriority')).toThrowError(
-            `[K010] On field 'Policy:0:policyNumber' applied '2' default rules: 'DefaultPolicyNumber-PriorityMIN2', 'DefaultPolicyNumber-PriorityMIN'. Only one default rule can be applied on the same field.`,
+            "[kus011] Field 'Policy:0:policyNumber' has more than one applicable default rule: " +
+                "'DefaultPolicyNumber-PriorityMIN2', 'DefaultPolicyNumber-PriorityMIN'. " +
+                'Only one default rule can be applied on the same field.',
         )
     })
 })

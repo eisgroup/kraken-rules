@@ -18,6 +18,7 @@ package kraken.runtime;
 import java.time.LocalDateTime;
 import java.util.Map;
 
+import kraken.context.model.tree.ContextModelTree;
 import kraken.el.functionregistry.FunctionHeader;
 import kraken.el.functionregistry.KelFunction;
 import kraken.runtime.expressions.KrakenTypeProvider;
@@ -33,6 +34,8 @@ public final class EvaluationSession {
     private static final TokenGenerator TOKEN_GENERATOR = new TokenGenerator();
 
     private final EvaluationConfig evaluationConfig;
+
+    private final ContextModelTree contextModelTree;
 
     private final String sessionToken;
 
@@ -50,8 +53,10 @@ public final class EvaluationSession {
                              Map<String, Object> expressionContext,
                              KrakenTypeProvider krakenTypeProvider,
                              Map<FunctionHeader, KelFunction> functions,
-                             String namespace) {
+                             String namespace,
+                             ContextModelTree contextModelTree) {
         this.evaluationConfig = evaluationConfig;
+        this.contextModelTree = contextModelTree;
         this.timestamp = LocalDateTime.now();
         this.sessionToken = TOKEN_GENERATOR.generateNewToken(timestamp);
         this.expressionContext = expressionContext;
@@ -86,5 +91,9 @@ public final class EvaluationSession {
 
     public String getNamespace() {
         return namespace;
+    }
+
+    public ContextModelTree getContextModelTree() {
+        return contextModelTree;
     }
 }

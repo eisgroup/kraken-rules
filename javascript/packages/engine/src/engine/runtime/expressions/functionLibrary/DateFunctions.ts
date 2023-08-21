@@ -55,7 +55,7 @@ function PlusYears(dateArg?: Date, num?: number): Date {
         throw new Error(message('PlusYears', message.reason.secondParam))
     }
     const date = new Date(dateArg)
-    date.setUTCFullYear(date.getUTCFullYear() + num)
+    date.setFullYear(date.getFullYear() + num)
 
     return resetToLastValidDayOfMonthIfNeeded(date, dateArg.getDate())
 }
@@ -68,7 +68,7 @@ function PlusMonths(dateArg?: Date, num?: number): Date {
         throw new Error(message('PlusMonths', message.reason.secondParam))
     }
     const date = new Date(dateArg)
-    date.setUTCMonth(date.getUTCMonth() + num)
+    date.setMonth(date.getMonth() + num)
 
     return resetToLastValidDayOfMonthIfNeeded(date, dateArg.getDate())
 }
@@ -81,7 +81,7 @@ function PlusDays(dateArg?: Date, num?: number): Date {
         throw new Error(message('PlusDays', message.reason.secondParam))
     }
     const date = new Date(dateArg)
-    date.setUTCDate(date.getUTCDate() + num)
+    date.setDate(date.getDate() + num)
     return date
 }
 
@@ -155,7 +155,7 @@ function WithYear(date: Date | undefined, year: number | undefined): Date {
     ensureValidYear('WithYear', year)
 
     const dateCopy = new Date(date)
-    dateCopy.setUTCFullYear(year)
+    dateCopy.setFullYear(year)
 
     return resetToLastValidDayOfMonthIfNeeded(dateCopy, date.getDate())
 }
@@ -170,7 +170,7 @@ function WithMonth(date: Date | undefined, month: number | undefined): Date {
     ensureValidMonth('WithMonth', month)
 
     const dateCopy = new Date(date)
-    dateCopy.setUTCMonth(month - 1)
+    dateCopy.setMonth(month - 1)
 
     return resetToLastValidDayOfMonthIfNeeded(dateCopy, date.getDate())
 }
@@ -185,13 +185,13 @@ function WithDay(date: Date | undefined, day: number | undefined): Date {
     ensureValidDay('WithDay', day)
 
     const dateCopy = new Date(date)
-    dateCopy.setUTCDate(day)
+    dateCopy.setDate(day)
 
-    if (dateCopy.getUTCDate() != day) {
+    if (dateCopy.getDate() != day) {
         throw new Error(
             `Cannot set day '${day}' in date '${date}' because month '${
-                date.getUTCMonth() + 1
-            }' of year '${date.getUTCFullYear()}' does not have this day.`,
+                date.getMonth() + 1
+            }' of year '${date.getFullYear()}' does not have this day.`,
         )
     }
 
@@ -256,10 +256,18 @@ function Format(date?: Date, format = 'YYYY-MM-DD'): string {
 }
 
 function tryParseDateString(functionName: string, dateString: string): Date {
-    const date = new Date(dateString)
+    let ds = dateString
+
+    const regexp = new RegExp('^\\d{4}-\\d{2}-\\d{2}$')
+    if (regexp.test(dateString)) {
+        ds = `${dateString}T00:00:00`
+    }
+
+    const date = new Date(ds)
     if (date.toString() === 'Invalid Date') {
         throw new Error("Failed to execute function 'Date' or 'DateTime' with parameters: " + [...arguments].join())
     }
+
     ensureValidYear(functionName, date.getFullYear())
     ensureValidMonth(functionName, date.getMonth() + 1)
     ensureValidDay(functionName, date.getDate())
@@ -302,7 +310,7 @@ function ensureValidDay(functionName: string, day: number): void {
  */
 function resetToLastValidDayOfMonthIfNeeded(date: Date, previousDay: number): Date {
     if (date.getDate() != previousDay) {
-        date.setUTCDate(0)
+        date.setDate(0)
     }
     return date
 }

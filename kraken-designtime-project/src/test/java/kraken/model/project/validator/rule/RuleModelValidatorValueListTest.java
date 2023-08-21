@@ -69,7 +69,7 @@ public class RuleModelValidatorValueListTest {
         assertThat(validationSession.getValidationMessages(), hasSize(1));
         assertThat(validationSession.getValidationMessages().get(0).getSeverity(), is(Severity.ERROR));
         assertThat(validationSession.getValidationMessages().get(0).getMessage(),
-            is("ValueList must be set"));
+            is("Value list must be set."));
     }
 
     @Test
@@ -85,10 +85,10 @@ public class RuleModelValidatorValueListTest {
         assertThat(validationSession.getValidationMessages(), hasSize(2));
         assertThat(validationSession.getValidationMessages().get(0).getSeverity(), is(Severity.ERROR));
         assertThat(validationSession.getValidationMessages().get(0).getMessage(),
-            is("ValueList data type must be set"));
+            is("Value list data type must be set."));
         assertThat(validationSession.getValidationMessages().get(1).getSeverity(), is(Severity.ERROR));
         assertThat(validationSession.getValidationMessages().get(1).getMessage(),
-            is("ValueList should contain at least one value"));
+            is("Value list should contain at least one value."));
     }
 
     private ValidationSession validate(Rule rule) {

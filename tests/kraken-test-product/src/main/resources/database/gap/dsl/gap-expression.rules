@@ -1,7 +1,8 @@
 Namespace Policy
 
 EntryPoint "Expressions_Date_Nested_Functions" {
-    "Expressions_default_to_date_with_nested_functions", "Expressions_default_to_date_with_nested_functions_when_plus_year_0"
+    "Expressions_default_to_date_with_nested_functions",
+    "Expressions_default_to_date_with_nested_functions_when_plus_year_0"
 }
 
 rule "Expressions_default_to_date_with_nested_functions" on Policy.txCreateDate {

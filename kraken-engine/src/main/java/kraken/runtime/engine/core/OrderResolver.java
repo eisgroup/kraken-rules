@@ -15,6 +15,9 @@
  */
 package kraken.runtime.engine.core;
 
+import static kraken.message.SystemMessageBuilder.Message.DEFAULT_RULE_DEPENDENCY_CYCLE_DETECTED;
+import static kraken.utils.MessageUtils.withSpaceBeforeEachLine;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -31,6 +34,7 @@ import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DirectedMultigraph;
 import org.jgrapht.traverse.TopologicalOrderIterator;
 
+import kraken.message.SystemMessageBuilder;
 import kraken.runtime.KrakenRuntimeException;
 import kraken.runtime.model.context.ContextNavigation;
 import kraken.runtime.model.rule.Dependency;
@@ -138,16 +142,20 @@ public class OrderResolver {
                 .map(a -> a.contextName + "." + a.contextField)
                 .distinct()
                 .collect(Collectors.joining(", "));
-            String involvedRules = cycle.stream()
+            String joinedInvolvedRules = cycle.stream()
                 .flatMap(a -> defaultRules.stream()
                     .filter(r -> r.getTargetPath().equals(a.contextField))
                     .filter(r -> leafTypesOfSupertype.get(r.getContext()).contains(a.contextName)))
                 .map(RuntimeRule::getName)
                 .distinct()
-                .collect(Collectors.joining(", "));
+                .collect(Collectors.joining(System.lineSeparator()));
 
-            var messageTemplate = "Cycle detected between fields: %s. Involved rules are: %s";
-            throw new KrakenRuntimeException(String.format(messageTemplate, fieldsInCycle, involvedRules));
+            var m = SystemMessageBuilder.create(DEFAULT_RULE_DEPENDENCY_CYCLE_DETECTED)
+                .parameters(
+                    fieldsInCycle,
+                    System.lineSeparator() + withSpaceBeforeEachLine(joinedInvolvedRules))
+                .build();
+            throw new KrakenRuntimeException(m);
         }
     }
 

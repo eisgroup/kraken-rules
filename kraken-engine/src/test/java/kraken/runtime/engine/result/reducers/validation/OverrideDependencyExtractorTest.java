@@ -168,7 +168,7 @@ public class OverrideDependencyExtractorTest {
         );
         contextReferences.forEach(dataContext::updateReference);
         Map<String, ContextField> fieldMap = fields.stream().collect(Collectors.toMap(ContextField::getName, f -> f));
-        dataContext.setContextDefinition(new RuntimeContextDefinition(name, Map.of(), fieldMap, List.of()));
+        dataContext.setContextDefinition(new RuntimeContextDefinition(name, Map.of(), fieldMap, List.of(), false));
         return dataContext;
     }
 

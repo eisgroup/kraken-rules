@@ -15,6 +15,7 @@
  */
 package kraken.runtime.engine.handlers;
 
+import kraken.message.SystemMessageBuilder;
 import kraken.model.payload.PayloadType;
 import kraken.model.validation.ValidationSeverity;
 import kraken.runtime.engine.conditions.ConditionEvaluationResult;
@@ -34,6 +35,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import static kraken.message.SystemMessageBuilder.Message.EXPRESSION_CANNOT_EVALUATE_VALUE;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -72,13 +74,15 @@ public class RulePayloadProcessorTest {
 
     @Test
     public void shouldNotBuildOverridableContextWhenExpressionEvaluationFails() {
+        var m = SystemMessageBuilder.create(EXPRESSION_CANNOT_EVALUATE_VALUE).parameters("expression").build();
+
         when(krakenExpressionEvaluator.evaluate(any(), any(), any()))
-                .thenThrow(new KrakenExpressionEvaluationException("", "", "", null));
+                .thenThrow(new KrakenExpressionEvaluationException(m, null));
 
         RuleEvaluationInstance ruleEvaluationInstance = createEvaluationInstance(
                 createAssertionPayloadRule(createAssertionPayload(true)), new DataContext());
 
-        RuleEvaluationResult result = testObject.process(ruleEvaluationInstance, null);
+        var result = testObject.process(ruleEvaluationInstance, null);
 
         verify(overrideDependencyExtractor, times(0))
                 .extractOverrideDependencies(any(), any());

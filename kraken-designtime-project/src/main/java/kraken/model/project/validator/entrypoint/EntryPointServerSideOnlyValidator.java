@@ -16,6 +16,9 @@
 package kraken.model.project.validator.entrypoint;
 
 import static kraken.model.project.validator.Severity.ERROR;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.ENTRYPOINT_INCONSISTENT_INCLUDE_SERVER_SIDE_ONLY;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.ENTRYPOINT_INCONSISTENT_RULE_SERVER_SIDE_ONLY;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.ENTRYPOINT_INCONSISTENT_VERSION_SERVER_SIDE_ONLY;
 
 import java.util.List;
 import java.util.Map;
@@ -27,6 +30,7 @@ import kraken.model.Rule;
 import kraken.model.entrypoint.EntryPoint;
 import kraken.model.project.KrakenProject;
 import kraken.model.project.validator.ValidationMessage;
+import kraken.model.project.validator.ValidationMessageBuilder;
 import kraken.model.project.validator.ValidationSession;
 
 /**
@@ -56,13 +60,9 @@ public class EntryPointServerSideOnlyValidator {
             .collect(Collectors.toList());
 
         if(!serverSideOnlyVariations.isEmpty() && serverSideOnlyVariations.size() != allVariations.size()) {
-            session.add(new ValidationMessage(
-                entryPoint,
-                "variation is misconfigured, because it is not marked as @ServerSideOnly, "
-                    + "but there are another EntryPoint variation that is marked as @ServerSideOnly."
-                    + "All variations of the same EntryPoint must be consistently marked as @ServerSideOnly.",
-                ERROR
-            ));
+            var m = ValidationMessageBuilder.create(ENTRYPOINT_INCONSISTENT_VERSION_SERVER_SIDE_ONLY, entryPoint)
+                .build();
+            session.add(m);
         }
     }
 
@@ -78,11 +78,10 @@ public class EntryPointServerSideOnlyValidator {
                 .collect(Collectors.toSet());
 
             if (!serverSideOnlyRuleNames.isEmpty()) {
-                session.add(new ValidationMessage(
-                    entryPoint,
-                    String.format("not annotated as @ServerSideOnly includes rule(s): '%s' marked as @ServerSideOnly",
-                        String.join(", ", serverSideOnlyRuleNames)),
-                    ERROR));
+                var m = ValidationMessageBuilder.create(ENTRYPOINT_INCONSISTENT_RULE_SERVER_SIDE_ONLY, entryPoint)
+                    .parameters(String.join(", ", serverSideOnlyRuleNames))
+                    .build();
+                session.add(m);
             }
         }
     }
@@ -108,16 +107,13 @@ public class EntryPointServerSideOnlyValidator {
                 .filter(ep -> ep.isServerSideOnly())
                 .collect(Collectors.toList());
             if(!includedServerSideEntryPoints.isEmpty()) {
-                session.add(new ValidationMessage(
-                    entryPoint,
-                    String.format(
-                        "not annotated as @ServerSideOnly includes entry point(s): '%s' marked as @ServerSideOnly",
-                        includedServerSideEntryPoints.stream()
-                            .map(EntryPoint::getName)
-                            .collect(Collectors.joining(","))
-                    ),
-                    ERROR
-                ));
+                var includesString = includedServerSideEntryPoints.stream()
+                    .map(EntryPoint::getName)
+                    .collect(Collectors.joining(","));
+                var m = ValidationMessageBuilder.create(ENTRYPOINT_INCONSISTENT_INCLUDE_SERVER_SIDE_ONLY, entryPoint)
+                    .parameters(includesString)
+                    .build();
+                session.add(m);
             }
         }
     }

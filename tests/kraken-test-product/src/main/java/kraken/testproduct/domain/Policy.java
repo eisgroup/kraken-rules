@@ -57,6 +57,9 @@ public class Policy extends Identifiable {
 
     private Object refToCustomer;
 
+    private SysDate systemDate;
+    private SysDate backupSystemDate;
+
     private SecondaryInsured oneInsured;
     private List<? extends SecondaryInsured> multipleInsureds;
     private List<? extends SecondaryInsured> multiInsureds1;
@@ -224,5 +227,21 @@ public class Policy extends Identifiable {
 
     public void setPolicyValue(MonetaryAmount policyValue) {
         this.policyValue = policyValue;
+    }
+
+    public SysDate getSystemDate() {
+        return systemDate;
+    }
+
+    public void setSystemDate(SysDate systemDate) {
+        this.systemDate = systemDate;
+    }
+
+    public SysDate getBackupSystemDate() {
+        return backupSystemDate;
+    }
+
+    public void setBackupSystemDate(SysDate backupSystemDate) {
+        this.backupSystemDate = backupSystemDate;
     }
 }

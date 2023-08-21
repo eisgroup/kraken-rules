@@ -15,6 +15,8 @@
  */
 package kraken.runtime.repository;
 
+import static kraken.message.SystemMessageBuilder.Message.RULE_REPOSITORY_DUPLICATE_RULE;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,14 +24,13 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
+import kraken.message.SystemMessageLogger;
 import kraken.runtime.model.context.RuntimeContextDefinition;
 import kraken.runtime.model.entrypoint.RuntimeEntryPoint;
 import kraken.runtime.model.project.RuntimeKrakenProject;
 import kraken.runtime.model.rule.RuntimeRule;
 import kraken.runtime.repository.dynamic.DynamicRuleRepositoryProcessor;
 import kraken.runtime.repository.filter.DimensionFilteringService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Default implementation of {@link RuntimeRuleRepository} and {@link RuntimeContextRepository}
@@ -42,13 +43,13 @@ import org.slf4j.LoggerFactory;
  */
 public class RuntimeProjectRepository implements RuntimeRuleRepository, RuntimeContextRepository {
 
-    private final static Logger logger = LoggerFactory.getLogger(RuntimeProjectRepository.class);
+    private final static SystemMessageLogger logger = SystemMessageLogger.getLogger(RuntimeProjectRepository.class);
 
-    private RuntimeKrakenProject krakenProject;
+    private final RuntimeKrakenProject krakenProject;
 
-    private DimensionFilteringService dimensionFilteringService;
+    private final DimensionFilteringService dimensionFilteringService;
 
-    private DynamicRuleRepositoryProcessor dynamicRuleRepositoryProcessor;
+    private final DynamicRuleRepositoryProcessor dynamicRuleRepositoryProcessor;
 
     public RuntimeProjectRepository(RuntimeKrakenProject krakenProject,
                                     DimensionFilteringService dimensionFilteringService,
@@ -136,11 +137,7 @@ public class RuntimeProjectRepository implements RuntimeRuleRepository, RuntimeC
 
     private void collectRuleOrLogWarningIfAlreadyExists(String entryPointName, RuntimeRule rule, Map<String, RuntimeRule> collectedRules) {
         if(collectedRules.containsKey(rule.getName())) {
-            logger.warn(
-                    "More than one rule found with the same name '{}' while resolving EntryPoint '{}'. "
-                            + " Additional rules with the same name will be ignored.",
-                    rule.getName(), entryPointName
-            );
+            logger.warn(RULE_REPOSITORY_DUPLICATE_RULE, rule.getName(), entryPointName);
         } else {
             collectedRules.put(rule.getName(), rule);
         }

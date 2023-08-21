@@ -15,6 +15,7 @@
  */
 package kraken.runtime.engine.context.extraction;
 
+import kraken.message.SystemMessage;
 import kraken.runtime.KrakenRuntimeException;
 
 /**
@@ -25,7 +26,9 @@ import kraken.runtime.KrakenRuntimeException;
  */
 public class ContextExtractionException extends KrakenRuntimeException{
 
-    public ContextExtractionException(String message) {
+    private static final long serialVersionUID = -7122571931365014313L;
+
+    public ContextExtractionException(SystemMessage message) {
         super(message);
     }
 }

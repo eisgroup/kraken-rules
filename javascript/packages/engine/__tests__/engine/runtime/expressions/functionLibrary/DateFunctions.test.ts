@@ -144,8 +144,8 @@ describe('Date Functions', () => {
         const date = new Date('2011-01-01')
         expect(f.WithYear(date, 2012)).k_toBeDateEqualTo(new Date('2012-01-01'))
 
-        const dateTime = new Date('2011-01-01T01:01:01Z')
-        expect(f.WithYear(dateTime, 2012)).k_toBeDateTimeEqualTo(new Date('2012-01-01T01:01:01Z'))
+        const dateTime = new Date('2011-01-01T01:01:01')
+        expect(f.WithYear(dateTime, 2012)).k_toBeDateTimeEqualTo(new Date('2012-01-01T01:01:01'))
 
         const date2 = new Date('2000-02-29')
         expect(f.WithYear(date2, 2001)).k_toBeDateEqualTo(new Date('2001-02-28'))
@@ -156,15 +156,15 @@ describe('Date Functions', () => {
         expect(() => f.WithYear(date, 10000)).toThrow()
     })
     it('should change year in date and preserve time', () => {
-        const dateTime = new Date('2000-02-29T01:01:01Z')
-        expect(f.WithYear(dateTime, 1999)).k_toBeDateTimeEqualTo(new Date('1999-02-28T01:01:01Z'))
+        const dateTime = new Date('2000-02-29T01:01:01')
+        expect(f.WithYear(dateTime, 1999)).k_toBeDateTimeEqualTo(new Date('1999-02-28T01:01:01'))
     })
     it('should change month in date', () => {
         const date = new Date('2011-01-01')
         expect(f.WithMonth(date, 2)).k_toBeDateEqualTo(new Date('2011-02-01'))
 
-        const dateTime = new Date('2011-01-01T01:01:01Z')
-        expect(f.WithMonth(dateTime, 2)).k_toBeDateTimeEqualTo(new Date('2011-02-01T01:01:01Z'))
+        const dateTime = new Date('2011-01-01T01:01:01')
+        expect(f.WithMonth(dateTime, 2)).k_toBeDateTimeEqualTo(new Date('2011-02-01T01:01:01'))
 
         const date2 = new Date('2000-01-30')
         expect(f.WithMonth(date2, 2)).k_toBeDateEqualTo(new Date('2000-02-29'))
@@ -175,15 +175,15 @@ describe('Date Functions', () => {
         expect(() => f.WithMonth(date, 13)).toThrow()
     })
     it('should change month in date and preserve time', () => {
-        const dateTime = new Date('2011-03-30T23:33:33Z')
-        expect(f.WithMonth(dateTime, 2)).k_toBeDateTimeEqualTo(new Date('2011-02-28T23:33:33Z'))
+        const dateTime = new Date('2011-03-30T23:33:33')
+        expect(f.WithMonth(dateTime, 2)).k_toBeDateTimeEqualTo(new Date('2011-02-28T23:33:33'))
     })
     it('should change day in date', () => {
         const date = new Date('2011-01-01')
         expect(f.WithDay(date, 2)).k_toBeDateEqualTo(new Date('2011-01-02'))
 
-        const dateTime = new Date('2011-01-01T01:01:01Z')
-        expect(f.WithDay(dateTime, 2)).k_toBeDateTimeEqualTo(new Date('2011-01-02T01:01:01Z'))
+        const dateTime = new Date('2011-01-01T01:01:01')
+        expect(f.WithDay(dateTime, 2)).k_toBeDateTimeEqualTo(new Date('2011-01-02T01:01:01'))
 
         expect(() => f.WithDay(undefined, 2012)).toThrow()
         expect(() => f.WithDay(date, undefined)).toThrow()
@@ -194,8 +194,8 @@ describe('Date Functions', () => {
         expect(() => f.WithDay(date2, 30)).toThrow()
     })
     it('should change day in date and preserve time', () => {
-        const date = new Date('1999-03-31T23:33:33Z')
-        expect(f.WithDay(date, 10)).k_toBeDateTimeEqualTo(new Date('1999-03-10T23:33:33Z'))
+        const date = new Date('1999-03-31T23:33:33')
+        expect(f.WithDay(date, 10)).k_toBeDateTimeEqualTo(new Date('1999-03-10T23:33:33'))
     })
     it('should add days', () => {
         const date = new Date('2000-01-01')
@@ -216,57 +216,62 @@ describe('Date Functions', () => {
         expect(f.PlusYears(date, -1)).k_toBeDateEqualTo(new Date('1999-02-28'))
     })
     it('should add days to date and preserve time', () => {
-        const date = new Date('2000-01-01T07:33:33Z')
-        expect(f.PlusDays(date, 1)).k_toBeDateTimeEqualTo(new Date('2000-01-02T07:33:33Z'))
-        expect(f.PlusDays(date, 32)).k_toBeDateTimeEqualTo(new Date('2000-02-02T07:33:33Z'))
+        const date = new Date('2000-01-01T07:33:33')
+        expect(f.PlusDays(date, 1)).k_toBeDateTimeEqualTo(new Date('2000-01-02T07:33:33'))
+        expect(f.PlusDays(date, 32)).k_toBeDateTimeEqualTo(new Date('2000-02-02T07:33:33'))
 
-        const date2 = new Date('2005-03-09T01:01:01Z')
-        expect(f.PlusDays(date2, 30)).k_toBeDateTimeEqualTo(new Date('2005-04-08T01:01:01Z'))
+        const date2 = new Date('2005-03-09T01:01:01')
+        expect(f.PlusDays(date2, 30)).k_toBeDateTimeEqualTo(new Date('2005-04-08T01:01:01'))
 
-        const date3 = new Date('2005-04-08T23:33:33Z')
-        expect(f.PlusDays(date3, -30)).k_toBeDateTimeEqualTo(new Date('2005-03-09T23:33:33Z'))
+        const date3 = new Date('2005-04-08T23:33:33')
+        expect(f.PlusDays(date3, -30)).k_toBeDateTimeEqualTo(new Date('2005-03-09T23:33:33'))
     })
     it('should add months to date and preserve time', () => {
-        const date = new Date('2000-01-30T07:33:33Z')
+        const date = new Date('2000-01-30T07:33:33')
 
-        expect(f.PlusMonths(date, 1)).k_toBeDateTimeEqualTo(new Date('2000-02-29T07:33:33Z'))
-        expect(f.PlusMonths(date, 13)).k_toBeDateTimeEqualTo(new Date('2001-02-28T07:33:33Z'))
+        expect(f.PlusMonths(date, 1)).k_toBeDateTimeEqualTo(new Date('2000-02-29T07:33:33'))
+        expect(f.PlusMonths(date, 13)).k_toBeDateTimeEqualTo(new Date('2001-02-28T07:33:33'))
 
-        const date3 = new Date('2005-03-09T01:01:01Z')
+        const date3 = new Date('2005-03-09T01:01:01')
 
-        expect(f.PlusMonths(date3, -12)).k_toBeDateTimeEqualTo(new Date('2004-03-09T01:01:01Z'))
-        expect(f.PlusMonths(date3, 1)).k_toBeDateTimeEqualTo(new Date('2005-04-09T01:01:01Z'))
+        expect(f.PlusMonths(date3, -12)).k_toBeDateTimeEqualTo(new Date('2004-03-09T01:01:01'))
+        expect(f.PlusMonths(date3, 1)).k_toBeDateTimeEqualTo(new Date('2005-04-09T01:01:01'))
 
-        const date2 = new Date('2005-03-09T23:33:33Z')
+        const date2 = new Date('2005-03-09T23:33:33')
 
-        expect(f.PlusMonths(date2, -12)).k_toBeDateTimeEqualTo(new Date('2004-03-09T23:33:33Z'))
-        expect(f.PlusMonths(date2, 1)).k_toBeDateTimeEqualTo(new Date('2005-04-09T23:33:33Z'))
+        expect(f.PlusMonths(date2, -12)).k_toBeDateTimeEqualTo(new Date('2004-03-09T23:33:33'))
+        expect(f.PlusMonths(date2, 1)).k_toBeDateTimeEqualTo(new Date('2005-04-09T23:33:33'))
     })
     it('should add years to date and preserve time', () => {
-        const date = new Date('2000-02-29T07:33:33Z')
+        const date = new Date('2000-02-29T07:33:33')
 
-        expect(f.PlusYears(date, 1)).k_toBeDateTimeEqualTo(new Date('2001-02-28T07:33:33Z'))
-        expect(f.PlusYears(date, -1)).k_toBeDateTimeEqualTo(new Date('1999-02-28T07:33:33Z'))
+        expect(f.PlusYears(date, 1)).k_toBeDateTimeEqualTo(new Date('2001-02-28T07:33:33'))
+        expect(f.PlusYears(date, -1)).k_toBeDateTimeEqualTo(new Date('1999-02-28T07:33:33'))
 
-        const date2 = new Date('2004-02-29T01:01:01Z')
+        const date2 = new Date('2004-02-29T01:01:01')
 
-        expect(f.PlusYears(date2, 1)).k_toBeDateTimeEqualTo(new Date('2005-02-28T01:01:01Z'))
-        expect(f.PlusYears(date2, -1)).k_toBeDateTimeEqualTo(new Date('2003-02-28T01:01:01Z'))
+        expect(f.PlusYears(date2, 1)).k_toBeDateTimeEqualTo(new Date('2005-02-28T01:01:01'))
+        expect(f.PlusYears(date2, -1)).k_toBeDateTimeEqualTo(new Date('2003-02-28T01:01:01'))
 
-        const date3 = new Date('2004-02-29T23:33:33Z')
+        const date3 = new Date('2004-02-29T23:33:33')
 
-        expect(f.PlusYears(date3, 1)).k_toBeDateTimeEqualTo(new Date('2005-02-28T23:33:33Z'))
-        expect(f.PlusYears(date3, -1)).k_toBeDateTimeEqualTo(new Date('2003-02-28T23:33:33Z'))
+        expect(f.PlusYears(date3, 1)).k_toBeDateTimeEqualTo(new Date('2005-02-28T23:33:33'))
+        expect(f.PlusYears(date3, -1)).k_toBeDateTimeEqualTo(new Date('2003-02-28T23:33:33'))
     })
     it('should add years to date and preserve on new years eve', () => {
-        const date = new Date('2004-12-31T23:33:33Z')
+        const date = new Date('2004-12-31T23:33:33')
 
-        expect(f.PlusYears(date, 1)).k_toBeDateTimeEqualTo(new Date('2005-12-31T23:33:33Z'))
-        expect(f.PlusYears(date, -1)).k_toBeDateTimeEqualTo(new Date('2003-12-31T23:33:33Z'))
+        expect(f.PlusYears(date, 1)).k_toBeDateTimeEqualTo(new Date('2005-12-31T23:33:33'))
+        expect(f.PlusYears(date, -1)).k_toBeDateTimeEqualTo(new Date('2003-12-31T23:33:33'))
 
-        const date2 = new Date('2005-01-01T01:01:01Z')
+        const date2 = new Date('2005-01-01T01:01:01')
 
-        expect(f.PlusYears(date2, 1)).k_toBeDateTimeEqualTo(new Date('2006-01-01T01:01:01Z'))
-        expect(f.PlusYears(date2, -1)).k_toBeDateTimeEqualTo(new Date('2004-01-01T01:01:01Z'))
+        expect(f.PlusYears(date2, 1)).k_toBeDateTimeEqualTo(new Date('2006-01-01T01:01:01'))
+        expect(f.PlusYears(date2, -1)).k_toBeDateTimeEqualTo(new Date('2004-01-01T01:01:01'))
+    })
+    it('should add days and handle DST', () => {
+        const date = new Date('2022-03-25T10:00:00')
+
+        expect(f.PlusDays(date, 4)).k_toBeDateTimeEqualTo(new Date('2022-03-29T10:00:00'))
     })
 })

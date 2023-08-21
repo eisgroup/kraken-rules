@@ -74,12 +74,11 @@ public class RuleCrossContextDependencyValidatorTest {
         assertThat(
                 validationMessages.get(0).getMessage(),
                 is(
-                "Found ambiguities for cross-context component:'AddressLine'.\n" +
-                        "Cannot distinguish between cross-context references: [\n" +
-                        "\tFrom: AutoPolicySummary.Vehicle.VehicleInfo to AutoPolicySummary.Vehicle.AddressInfo.AddressLine3,\n" +
-                        "\tFrom: AutoPolicySummary.Vehicle.VehicleInfo to AutoPolicySummary.Vehicle.AddressInfo.AddressLine2,\n" +
-                        "\tFrom: AutoPolicySummary.Vehicle.VehicleInfo to AutoPolicySummary.Vehicle.AddressInfo.AddressLine1\n" +
-                        "]")
+                "Cross context reference 'AddressLine' from 'AutoPolicySummary.Vehicle.VehicleInfo' is ambiguous. "
+                    + "Cannot distinguish between references: "
+                    + "AutoPolicySummary.Vehicle.AddressInfo.AddressLine3, "
+                    + "AutoPolicySummary.Vehicle.AddressInfo.AddressLine2, "
+                    + "AutoPolicySummary.Vehicle.AddressInfo.AddressLine1.")
                 );
     }
 
@@ -100,15 +99,14 @@ public class RuleCrossContextDependencyValidatorTest {
         assertThat(
                 validationMessages.get(0).getMessage(),
                 is(
-                "Found ambiguities for cross-context component:'AddressLine'.\n" +
-                    "Cannot distinguish between cross-context references: [\n" +
-                        "\tFrom: AutoPolicySummary to AutoPolicySummary.Vehicle.AddressInfo.AddressLine3,\n" +
-                        "\tFrom: AutoPolicySummary to AutoPolicySummary.Vehicle.AddressInfo.AddressLine2,\n" +
-                        "\tFrom: AutoPolicySummary to AutoPolicySummary.Vehicle.AddressInfo.AddressLine1,\n" +
-                        "\tFrom: AutoPolicySummary to AutoPolicySummary.Party.DriverInfo.AddressInfo.AddressLine3,\n" +
-                        "\tFrom: AutoPolicySummary to AutoPolicySummary.Party.DriverInfo.AddressInfo.AddressLine2,\n" +
-                        "\tFrom: AutoPolicySummary to AutoPolicySummary.Party.DriverInfo.AddressInfo.AddressLine1\n" +
-                    "]")
+                "Cross context reference 'AddressLine' from 'AutoPolicySummary' is ambiguous. "
+                    + "Cannot distinguish between references: "
+                    + "AutoPolicySummary.Vehicle.AddressInfo.AddressLine3, "
+                    + "AutoPolicySummary.Vehicle.AddressInfo.AddressLine2, "
+                    + "AutoPolicySummary.Vehicle.AddressInfo.AddressLine1, "
+                    + "AutoPolicySummary.Party.DriverInfo.AddressInfo.AddressLine3, "
+                    + "AutoPolicySummary.Party.DriverInfo.AddressInfo.AddressLine2, "
+                    + "AutoPolicySummary.Party.DriverInfo.AddressInfo.AddressLine1.")
         );
     }
 

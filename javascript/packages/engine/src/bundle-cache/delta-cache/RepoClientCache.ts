@@ -19,7 +19,12 @@ import { EntryPointBundle as Bundle } from '../../models/EntryPointBundle'
 import EntryPointBundle = Bundle.EntryPointBundle
 import EntryPointEvaluation = Bundle.EntryPointEvaluation
 import { Rule } from 'kraken-model'
-import { ErrorCode, KrakenRuntimeError } from '../../error/KrakenRuntimeError'
+import {
+    KrakenRuntimeError,
+    NO_BUNDLE_CACHE_BY_DIMENSIONS,
+    NO_BUNDLE_CACHE_BY_ENTRYPOINT,
+    SystemMessageBuilder,
+} from '../../error/KrakenRuntimeError'
 import { ExpressionContextManagerImpl } from '../expression-context-manager/ExpressionContextManagerImpl'
 import { ExpressionContext, ExpressionContextManager } from '../expression-context-manager/ExpressionContextManager'
 import { Cache } from '../Cache'
@@ -115,10 +120,9 @@ export class RepoClientCache implements ExpressionContextManager, Cache {
         if (cachedArtifact) {
             return this.getBundle(cachedArtifact, this.#expressionContextManager.getExpressionContext())
         }
-        throw new KrakenRuntimeError(
-            ErrorCode.NO_BUNDLE_BY_DIMENSIONS,
-            'No Entry point bundles found with dimensions:\n ' + JSON.stringify(dimension, undefined, 2),
-        )
+        const dimensions = JSON.stringify(dimension, undefined, 2)
+        const m = new SystemMessageBuilder(NO_BUNDLE_CACHE_BY_DIMENSIONS).parameters('\n' + dimensions).build()
+        throw new KrakenRuntimeError(m)
     }
 
     /**
@@ -153,24 +157,19 @@ export class RepoClientCache implements ExpressionContextManager, Cache {
 
     private getBundle(
         cachedDimensionArtifacts: CachedDimensionArtifacts,
-        expressionContext: Record<string, unknown> | undefined,
+        expressionContext: Record<string, unknown>,
     ): (entryPointName: string) => EntryPointBundle {
         return function _getBundle(entryPointName: string): EntryPointBundle {
             const bundle = cachedDimensionArtifacts.bundles[entryPointName]
             if (bundle) {
-                if (!expressionContext) {
-                    throw new KrakenRuntimeError(ErrorCode.NO_EXPRESSION_CONTEXT, 'No expression context found')
-                }
                 return {
                     engineVersion: bundle.engineVersion,
                     evaluation: bundle.evaluation,
                     expressionContext: expressionContext,
                 }
             }
-            throw new KrakenRuntimeError(
-                ErrorCode.NO_BUNDLE_BY_ENTRYPOINT,
-                'No Entry point bundle found with Entry point name: ' + entryPointName,
-            )
+            const m = new SystemMessageBuilder(NO_BUNDLE_CACHE_BY_ENTRYPOINT).parameters(entryPointName).build()
+            throw new KrakenRuntimeError(m)
         }
     }
 

@@ -16,12 +16,13 @@
 package kraken.converter.translation;
 
 import static kraken.el.ast.Template.asTemplateExpression;
+import static kraken.message.SystemMessageBuilder.Message.CONVERSION_CANNOT_TRANSLATE_EXPRESSION;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import kraken.converter.KrakenProjectConvertionException;
+import kraken.converter.KrakenProjectConversionException;
 import kraken.converter.translation.ast.AstRewriter;
 import kraken.converter.translation.ast.JavaRewriter;
 import kraken.converter.translation.ast.JavaScriptRewriter;
@@ -35,6 +36,7 @@ import kraken.el.ast.Template;
 import kraken.el.ast.builder.AstBuilder;
 import kraken.el.ast.builder.AstBuildingException;
 import kraken.el.scope.Scope;
+import kraken.message.SystemMessageBuilder;
 import kraken.model.Expression;
 import kraken.model.Function;
 import kraken.model.Rule;
@@ -59,20 +61,18 @@ import kraken.runtime.model.rule.payload.validation.ErrorMessage;
  */
 public class KrakenExpressionTranslator {
 
-    private TargetEnvironment targetEnvironment;
-    private ExpressionLanguage expressionLanguage;
-    private AstRewriter complexExpressionRewriter;
-    private AstRewriter pathExpressionRewriter;
-    private RuleDependencyExtractor ruleDependencyExtractor;
-    private KrakenProject krakenProject;
-    private ScopeBuilder scopeBuilder;
+    private final ExpressionLanguage expressionLanguage;
+    private final AstRewriter complexExpressionRewriter;
+    private final AstRewriter pathExpressionRewriter;
+    private final RuleDependencyExtractor ruleDependencyExtractor;
+    private final KrakenProject krakenProject;
+    private final ScopeBuilder scopeBuilder;
 
     public KrakenExpressionTranslator(KrakenProject krakenProject,
                                       TargetEnvironment targetEnvironment,
                                       RuleDependencyExtractor ruleDependencyExtractor) {
 
         this.expressionLanguage = KrakenKel.create(targetEnvironment);
-        this.targetEnvironment = targetEnvironment;
         if (targetEnvironment.equals(TargetEnvironment.JAVASCRIPT)) {
             this.complexExpressionRewriter = new JavaScriptRewriter(krakenProject);
         } else if (targetEnvironment.equals(TargetEnvironment.JAVA)) {
@@ -104,7 +104,10 @@ public class KrakenExpressionTranslator {
                 e.getAst()
             );
         } catch (AstBuildingException e) {
-            throw new KrakenProjectConvertionException("Error while translating expression: " + function.getBody().getExpressionString(), e);
+            var message = SystemMessageBuilder.create(CONVERSION_CANNOT_TRANSLATE_EXPRESSION)
+                .parameters(function.getBody().getExpressionString())
+                .build();
+            throw new KrakenProjectConversionException(message, e);
         }
     }
 
@@ -134,7 +137,10 @@ public class KrakenExpressionTranslator {
                     e.getAst()
             );
         } catch (AstBuildingException e) {
-            throw new KrakenProjectConvertionException("Error while translating expression: " + expression.getExpressionString(), e);
+            var message = SystemMessageBuilder.create(CONVERSION_CANNOT_TRANSLATE_EXPRESSION)
+                .parameters(expression.getExpressionString())
+                .build();
+            throw new KrakenProjectConversionException(message, e);
         }
     }
 
@@ -176,8 +182,10 @@ public class KrakenExpressionTranslator {
                     e.getAst()
             );
         } catch (AstBuildingException e) {
-            throw new KrakenProjectConvertionException("Error while translating navigation expression: "
-                    + contextNavigation.getNavigationExpression(), e);
+            var message = SystemMessageBuilder.create(CONVERSION_CANNOT_TRANSLATE_EXPRESSION)
+                .parameters(contextNavigation.getNavigationExpression())
+                .build();
+            throw new KrakenProjectConversionException(message, e);
         }
     }
 

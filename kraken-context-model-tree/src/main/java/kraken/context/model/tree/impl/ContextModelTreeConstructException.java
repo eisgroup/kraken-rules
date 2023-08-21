@@ -17,6 +17,7 @@
 package kraken.context.model.tree.impl;
 
 import kraken.exception.KrakenException;
+import kraken.message.SystemMessage;
 
 /**
  * @author psurinin@eisgroup.com
@@ -24,11 +25,13 @@ import kraken.exception.KrakenException;
  */
 public class ContextModelTreeConstructException extends KrakenException {
 
-    public ContextModelTreeConstructException(String message) {
+    private static final long serialVersionUID = -7527789651261574347L;
+
+    public ContextModelTreeConstructException(SystemMessage message) {
         super(message);
     }
 
-    public ContextModelTreeConstructException(String message, Throwable cause) {
+    public ContextModelTreeConstructException(SystemMessage message, Throwable cause) {
         super(message, cause);
     }
 }

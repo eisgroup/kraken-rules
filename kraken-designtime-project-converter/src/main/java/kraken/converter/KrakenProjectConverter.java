@@ -15,6 +15,8 @@
  */
 package kraken.converter;
 
+import static kraken.message.SystemMessageBuilder.Message.CONVERSION_INCOMPATIBLE_FUNCTION;
+import static kraken.message.SystemMessageBuilder.Message.CONVERSION_MISSING_FUNCTION;
 import static kraken.model.FunctionSignature.format;
 
 import java.util.Map;
@@ -25,6 +27,7 @@ import kraken.el.TargetEnvironment;
 import kraken.el.functionregistry.FunctionHeader;
 import kraken.el.functionregistry.FunctionRegistry;
 import kraken.el.functionregistry.JavaFunction;
+import kraken.message.SystemMessageBuilder;
 import kraken.model.FunctionSignature;
 import kraken.model.dimensions.DimensionSetService;
 import kraken.model.project.KrakenProject;
@@ -94,19 +97,17 @@ public class KrakenProjectConverter {
         for (FunctionSignature functionSignature : krakenProject.getFunctionSignatures()) {
             FunctionHeader header = FunctionSignature.toHeader(functionSignature);
             if (!functions.containsKey(header)) {
-                String template = "Critical error encountered while converting Kraken Project '%s' "
-                    + "from design-time to runtime model: function signature '%s' is defined "
-                    + "but implementation for this function does not exist in system";
-                String message = String.format(template, krakenProject.getNamespace(), format(functionSignature));
-                throw new KrakenProjectConvertionException(message);
+                var message = SystemMessageBuilder.create(CONVERSION_MISSING_FUNCTION)
+                    .parameters(krakenProject.getNamespace(), format(functionSignature))
+                    .build();
+                throw new KrakenProjectConversionException(message);
             }
             JavaFunction javaFunction = functions.get(header);
             if (!isFunctionMatchesSignature(javaFunction, functionSignature)) {
-                String template = "Critical error encountered while converting Kraken Project '%s' "
-                    + "from design-time to runtime model: function signature '%s' is defined "
-                    + "but implementation of this function is not compatible with defined signature";
-                String message = String.format(template, krakenProject.getNamespace(), format(functionSignature));
-                throw new KrakenProjectConvertionException(message);
+                var message = SystemMessageBuilder.create(CONVERSION_INCOMPATIBLE_FUNCTION)
+                    .parameters(krakenProject.getNamespace(), format(functionSignature))
+                    .build();
+                throw new KrakenProjectConversionException(message);
             }
         }
     }

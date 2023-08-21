@@ -193,6 +193,6 @@ public class KrakenProjectConverterTest {
             TargetEnvironment.JAVA
         );
 
-        assertThrows(KrakenProjectConvertionException.class, () -> krakenProjectConverter.convert());
+        assertThrows(KrakenProjectConversionException.class, () -> krakenProjectConverter.convert());
     }
 }

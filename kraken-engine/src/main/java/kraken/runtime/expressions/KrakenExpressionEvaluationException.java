@@ -15,6 +15,7 @@
  */
 package kraken.runtime.expressions;
 
+import kraken.message.SystemMessage;
 import kraken.runtime.KrakenRuntimeException;
 
 /**
@@ -23,23 +24,12 @@ import kraken.runtime.KrakenRuntimeException;
  * @author rimas
  * @since 1.0
  */
-@SuppressWarnings("WeakerAccess")
 public class KrakenExpressionEvaluationException extends KrakenRuntimeException {
 
-    public KrakenExpressionEvaluationException(String message, String expression, Object context, Exception ex) {
-        super(buildMessage(message, ex, expression, context == null ? "null" : context.toString()), ex);
+    private static final long serialVersionUID = 2553659324278437369L;
+
+    public KrakenExpressionEvaluationException(SystemMessage message, Exception ex) {
+        super(message, ex);
     }
 
-    private static String buildMessage(String message,
-                                       Exception ex,
-                                       String expression,
-                                       String contextName) {
-        return String.format(
-                "%s: %n\texpression: %s%n\tcontext:%s%n\terror:%s",
-                message,
-                expression,
-                contextName,
-                ex == null ? "" : ex.getMessage());
-
-    }
 }

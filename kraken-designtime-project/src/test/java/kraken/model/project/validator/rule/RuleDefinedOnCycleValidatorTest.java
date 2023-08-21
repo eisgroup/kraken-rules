@@ -16,9 +16,9 @@
 package kraken.model.project.validator.rule;
 
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.List;
 import java.util.Map;
@@ -32,7 +32,6 @@ import kraken.model.context.ContextDefinition;
 import kraken.model.dsl.read.DSLReader;
 import kraken.model.project.KrakenProject;
 import kraken.model.project.ResourceKrakenProject;
-import kraken.model.project.validator.KrakenProjectValidationService;
 import kraken.model.project.validator.Severity;
 import kraken.model.project.validator.ValidationMessage;
 import kraken.model.project.validator.ValidationSession;
@@ -79,7 +78,7 @@ public class RuleDefinedOnCycleValidatorTest {
         for (ValidationMessage validationMessage : result) {
             assertThat(
                     validationMessage.getMessage(),
-                    containsString("Defining rules on recursive Context Definition is not supported")
+                    containsString("Defining rules on recursive context definition is not supported.")
             );
             assertThat(validationMessage.getSeverity(), is(Severity.ERROR));
         }

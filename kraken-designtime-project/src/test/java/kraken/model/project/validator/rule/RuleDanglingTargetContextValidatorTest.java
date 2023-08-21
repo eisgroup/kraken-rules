@@ -72,7 +72,7 @@ public class RuleDanglingTargetContextValidatorTest {
         List<ValidationMessage> result = validate(krakenProject);
 
         assertThat(result, hasSize(1));
-        assertThat(toMessages(result), contains("[ERROR] Rule - 'RULE01': applied on ContextDefinition 'OtherContext' which is not related to Root Context 'PolicySummary'"));
+        assertThat(toMessages(result), contains("Rule is applied on context definition 'OtherContext' which is not related to root context definition 'PolicySummary'."));
     }
 
     private KrakenProject krakenProject(Resource contexts, Resource rules) {
@@ -93,7 +93,7 @@ public class RuleDanglingTargetContextValidatorTest {
     }
 
     private List<String> toMessages(List<ValidationMessage> messages) {
-        return messages.stream().map(ValidationMessage::toString)
+        return messages.stream().map(ValidationMessage::getMessage)
                 .collect(Collectors.toList());
     }
 

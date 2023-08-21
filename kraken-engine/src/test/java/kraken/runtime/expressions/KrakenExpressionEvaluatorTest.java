@@ -22,11 +22,17 @@ import static org.hamcrest.core.IsCollectionContaining.hasItems;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.mock;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
 
+import kraken.context.model.tree.ContextModelTree;
+import kraken.context.model.tree.ContextModelTreeMetadata;
+import kraken.context.model.tree.impl.ContextModelTreeImpl;
+import kraken.context.path.ContextPath;
+import kraken.el.TargetEnvironment;
 import kraken.el.ast.Ast;
 import kraken.el.ast.builder.AstBuilder;
 import kraken.el.functionregistry.functions.DateFunctions;
@@ -34,6 +40,7 @@ import kraken.el.scope.Scope;
 import kraken.runtime.EvaluationConfig;
 import kraken.runtime.EvaluationSession;
 import kraken.runtime.engine.context.data.DataContext;
+import kraken.runtime.model.context.RuntimeContextDefinition;
 import kraken.runtime.model.expression.CompiledExpression;
 import kraken.runtime.model.expression.ExpressionType;
 import kraken.runtime.model.rule.payload.validation.ErrorMessage;
@@ -125,7 +132,11 @@ public class KrakenExpressionEvaluatorTest {
             context,
             mock(KrakenTypeProvider.class),
             Map.of(),
-            ""
+            "",
+            new ContextModelTreeImpl(
+                Map.of(),
+                Map.of(),
+                new ContextModelTreeMetadata("test", TargetEnvironment.JAVA))
         );
     }
 

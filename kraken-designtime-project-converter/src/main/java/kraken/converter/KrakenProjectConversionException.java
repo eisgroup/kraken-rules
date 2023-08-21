@@ -16,19 +16,22 @@
 package kraken.converter;
 
 import kraken.exception.KrakenException;
+import kraken.message.SystemMessage;
 
 /**
  * Indicates a critical error during kraken model translation
  *
  * @author mulevicius
  */
-public class KrakenProjectConvertionException extends KrakenException {
+public class KrakenProjectConversionException extends KrakenException {
 
-    public KrakenProjectConvertionException(String message) {
+    private static final long serialVersionUID = 8245394778256093264L;
+
+    public KrakenProjectConversionException(SystemMessage message) {
         super(message);
     }
 
-    public KrakenProjectConvertionException(String message, Throwable cause) {
+    public KrakenProjectConversionException(SystemMessage message, Throwable cause) {
         super(message, cause);
     }
 }

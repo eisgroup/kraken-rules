@@ -39,6 +39,7 @@ import java.util.stream.Collectors;
 import static kraken.model.EntryPointName.*;
 import static kraken.utils.TestUtils.createMockRules;
 import static kraken.utils.TestUtils.toDSL;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -160,7 +161,7 @@ public class ReloadableRepositoryTest {
         assertThat(aReturn.getFailure().isEmpty(), is(false));
         assertThat(aReturn.getSuccess().isEmpty(), is(true));
         assertThat(aReturn.getFailure().get(),
-            is("[ERROR] Rule - 'TestRule': missing ContextDefinition with name 'NA'"));
+            containsString("[kvr027] Missing context definition with name 'NA'."));
     }
 
 }

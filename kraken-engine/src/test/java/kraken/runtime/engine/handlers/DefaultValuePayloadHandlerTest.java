@@ -15,25 +15,6 @@
  */
 package kraken.runtime.engine.handlers;
 
-import kraken.TestRuleBuilder;
-import kraken.model.context.Cardinality;
-import kraken.model.context.PrimitiveFieldDataType;
-import kraken.model.derive.DefaultingType;
-import kraken.runtime.KrakenRuntimeException;
-import kraken.runtime.engine.context.data.DataContext;
-import kraken.runtime.engine.events.ValueChangedEvent;
-import kraken.runtime.engine.result.DefaultValuePayloadResult;
-import kraken.runtime.engine.result.PayloadResult;
-import kraken.runtime.expressions.KrakenExpressionEvaluator;
-import kraken.runtime.model.context.ContextField;
-import kraken.runtime.model.context.RuntimeContextDefinition;
-import kraken.runtime.model.rule.RuntimeRule;
-
-import org.hamcrest.core.IsCollectionContaining;
-import org.javamoney.moneta.Money;
-import org.junit.Before;
-import org.junit.Test;
-
 import static kraken.model.context.PrimitiveFieldDataType.DATE;
 import static kraken.model.context.PrimitiveFieldDataType.DATETIME;
 import static kraken.model.context.PrimitiveFieldDataType.DECIMAL;
@@ -53,6 +34,23 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+
+import org.javamoney.moneta.Money;
+import org.junit.Before;
+import org.junit.Test;
+
+import kraken.TestRuleBuilder;
+import kraken.model.context.Cardinality;
+import kraken.model.derive.DefaultingType;
+import kraken.runtime.KrakenRuntimeException;
+import kraken.runtime.engine.context.data.DataContext;
+import kraken.runtime.engine.events.ValueChangedEvent;
+import kraken.runtime.engine.result.DefaultValuePayloadResult;
+import kraken.runtime.engine.result.PayloadResult;
+import kraken.runtime.expressions.KrakenExpressionEvaluator;
+import kraken.runtime.model.context.ContextField;
+import kraken.runtime.model.context.RuntimeContextDefinition;
+import kraken.runtime.model.rule.RuntimeRule;
 
 public class DefaultValuePayloadHandlerTest {
     private DefaultValuePayloadHandler defaultValuePayloadHandler;
@@ -345,7 +343,8 @@ public class DefaultValuePayloadHandlerTest {
                 "address",
                 field("address", "Address", Cardinality.SINGLE)
             ),
-            List.of()
+            List.of(),
+            false
         );
     }
 

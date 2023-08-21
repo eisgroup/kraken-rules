@@ -25,7 +25,7 @@ import { DataContext } from '../../../src/engine/contexts/data/DataContext'
 import ContextDefinition = Contexts.ContextDefinition
 import DefaultingType = Payloads.Derive.DefaultingType
 
-const handler = new DefaultValuePayloadHandler(mock.evaluator)
+const handler = new DefaultValuePayloadHandler(mock.evaluator, mock.modelTree)
 const { session } = mock
 let dataContext: DataContext
 
@@ -41,6 +41,7 @@ beforeEach(() => {
     const contextDefinition: ContextDefinition = {
         name: 'PersonContext',
         inheritedContexts: [],
+        system: false,
     }
     dataContext = new DataContext('1', 'PersonContext', data, mock.contextInstanceInfo, contextDefinition)
 })
@@ -212,6 +213,16 @@ describe('defaultValuePayloadHandler', () => {
                 .build()
         }
 
+        it('should set Money', () => {
+            const rule = createResetRule('moneyLimit', '__dataObject__.moneyLimit')
+            handler.executePayload(rule, context, session)
+            expect(instance.moneyLimit).toStrictEqual({ amount: 11, currency: 'USD' })
+        })
+        it('should set number', () => {
+            const rule = createResetRule('decimalLimit', '11')
+            handler.executePayload(rule, context, session)
+            expect(instance.decimalLimit).toStrictEqual(11)
+        })
         it('should coerce number to Money', () => {
             const rule = createResetRule('moneyLimit', '10')
             handler.executePayload(rule, context, session)
@@ -262,7 +273,7 @@ describe('defaultValuePayloadHandler', () => {
             const result = handler.executePayload(rule, context, session)
             expect(result.error).toBeDefined()
             expect(result.error?.error.message).toStrictEqual(
-                `Cannot apply value '10 (typeof number)' on 'Coverage.code' because value type is not assignable to field type 'STRING'. Rule will be silently ignored.`,
+                `[kus016] Cannot apply value '10 (typeof number)' on 'Coverage.code' because value type is not assignable to field type 'STRING'. Rule will be silently ignored.`,
             )
         })
         it('should reset to null', () => {

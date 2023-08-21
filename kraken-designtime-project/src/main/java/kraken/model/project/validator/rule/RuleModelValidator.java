@@ -15,18 +15,40 @@
  */
 package kraken.model.project.validator.rule;
 
-import static kraken.model.project.validator.Severity.ERROR;
-import static kraken.model.project.validator.Severity.WARNING;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_ASSERTION_EXPRESSION_IS_NULL;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_CONDITION_EXPRESSION_IS_NULL;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_CONTEXT_IS_NULL;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_DECIMAL64_PRECISION_LOSS;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_DEFAULT_EXPRESSION_IS_NULL;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_DEFAULT_TYPE_IS_NULL;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_LENGTH_IS_NOT_POSITIVE;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_NAME_IS_NULL;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_NUMBER_SET_MIN_AND_MAX_NOT_SET;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_NUMBER_SET_MIN_NOT_SMALLER_THAN_MAX;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_NUMBER_SET_STEP_NOT_MORE_THAN_ZERO;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_PAYLOAD_IS_NULL;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_PRIORITY_NOT_IN_DEFAULT;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_REGEXP_IS_NULL;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_SIZE_IS_NOT_POSITIVE;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_SIZE_MAX_IS_NOT_POSITIVE;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_SIZE_MIN_IS_NOT_POSITIVE;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_SIZE_MIN_NOT_LESS_THAN_MAX;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_SIZE_ORIENTATION_IS_NULL;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_TARGET_PATH_IS_NULL;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_USAGE_TYPE_IS_NULL;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_VALIDATION_CODE_IS_NULL;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_VALIDATION_SEVERITY_IS_NULL;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_VALUE_LIST_IS_EMPTY;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_VALUE_LIST_IS_NULL;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_VALUE_LIST_TYPE_IS_NULL;
 
 import java.math.BigDecimal;
 
-import kraken.el.ast.builder.Literals;
 import kraken.el.math.Numbers;
 import kraken.model.Rule;
 import kraken.model.ValueList;
-import kraken.model.ValueList.DataType;
 import kraken.model.derive.DefaultValuePayload;
-import kraken.model.project.validator.ValidationMessage;
+import kraken.model.project.validator.ValidationMessageBuilder;
 import kraken.model.project.validator.ValidationSession;
 import kraken.model.project.validator.namespaced.NamespacedValidator;
 import kraken.model.validation.AssertionPayload;
@@ -49,119 +71,119 @@ public class RuleModelValidator implements RuleValidator {
     @Override
     public void validate(Rule rule, ValidationSession session) {
         if(rule.getName() == null) {
-            session.add(errorMessage(rule, "name is not defined"));
+            session.add(ValidationMessageBuilder.create(RULE_NAME_IS_NULL, rule).build());
         }
         session.addAll(NamespacedValidator.validate(rule));
 
         if(rule.getContext() == null) {
-            session.add(errorMessage(rule, "context name is not defined"));
+            session.add(ValidationMessageBuilder.create(RULE_CONTEXT_IS_NULL, rule).build());
         }
         if(rule.getTargetPath() == null) {
-            session.add(errorMessage(rule, "targetPath is not defined"));
+            session.add(ValidationMessageBuilder.create(RULE_TARGET_PATH_IS_NULL, rule).build());
         }
         if(rule.getCondition() != null) {
             if(rule.getCondition().getExpression() == null
                 || rule.getCondition().getExpression().getExpressionString() == null) {
-                session.add(errorMessage(rule, "condition exists but condition expression is not defined"));
+                session.add(ValidationMessageBuilder.create(RULE_CONDITION_EXPRESSION_IS_NULL, rule).build());
             }
         }
         if(rule.getMetadata() != null) {
             rule.getMetadata().asMap().entrySet().stream()
                 .filter(e -> e.getValue() instanceof BigDecimal)
-                .forEach(e -> validatePrecision("dimension '" + e.getKey() + "'", (BigDecimal) e.getValue(), rule, session));
+                .forEach(e -> validatePrecision("Dimension '" + e.getKey() + "'", (BigDecimal) e.getValue(), rule, session));
         }
         if(rule.getPayload() == null) {
-            session.add(errorMessage(rule, "payload is not defined"));
+            session.add(ValidationMessageBuilder.create(RULE_PAYLOAD_IS_NULL, rule).build());
         } else {
             if(rule.getPayload() instanceof ValidationPayload) {
                 ValidationPayload payload = (ValidationPayload) rule.getPayload();
                 if(payload.getSeverity() == null) {
-                    session.add(errorMessage(rule, "severity is not defined"));
+                    session.add(ValidationMessageBuilder.create(RULE_VALIDATION_SEVERITY_IS_NULL, rule).build());
                 }
                 if(payload.getErrorMessage() != null
                     && payload.getErrorMessage().getErrorMessage() != null
                     && payload.getErrorMessage().getErrorCode() == null) {
-                    session.add(errorMessage(rule, "errorCode is not defined"));
+                    session.add(ValidationMessageBuilder.create(RULE_VALIDATION_CODE_IS_NULL, rule).build());
                 }
             }
             if(rule.getPayload() instanceof AssertionPayload) {
                 AssertionPayload payload = (AssertionPayload) rule.getPayload();
                 if(payload.getAssertionExpression() == null || payload.getAssertionExpression().getExpressionString() == null) {
-                    session.add(errorMessage(rule, "assertionExpression is not defined"));
+                    session.add(ValidationMessageBuilder.create(RULE_ASSERTION_EXPRESSION_IS_NULL, rule).build());
                 }
             }
             if(rule.getPayload() instanceof DefaultValuePayload) {
                 DefaultValuePayload payload = (DefaultValuePayload) rule.getPayload();
                 if(payload.getDefaultingType() == null) {
-                    session.add(errorMessage(rule, "defaultingType is not defined"));
+                    session.add(ValidationMessageBuilder.create(RULE_DEFAULT_TYPE_IS_NULL, rule).build());
                 }
                 if(payload.getValueExpression() == null || payload.getValueExpression().getExpressionString() == null) {
-                    session.add(errorMessage(rule, "valueExpression is not defined"));
+                    session.add(ValidationMessageBuilder.create(RULE_DEFAULT_EXPRESSION_IS_NULL, rule).build());
                 }
             }
             if(rule.getPayload() instanceof SizeRangePayload) {
                 SizeRangePayload payload = (SizeRangePayload) rule.getPayload();
                 if(payload.getMin() < 0) {
-                    session.add(errorMessage(rule, "Min must be positive"));
+                    session.add(ValidationMessageBuilder.create(RULE_SIZE_MIN_IS_NOT_POSITIVE, rule).build());
                 }
                 if(payload.getMax() < 0) {
-                    session.add(errorMessage(rule, "Max must be positive"));
+                    session.add(ValidationMessageBuilder.create(RULE_SIZE_MAX_IS_NOT_POSITIVE, rule).build());
                 }
                 if(payload.getMin() > payload.getMax()) {
-                    session.add(errorMessage(rule, "Min must be less than Max"));
+                    session.add(ValidationMessageBuilder.create(RULE_SIZE_MIN_NOT_LESS_THAN_MAX, rule).build());
                 }
             }
             if(rule.getPayload() instanceof RegExpPayload) {
                 RegExpPayload payload = (RegExpPayload) rule.getPayload();
                 if(payload.getRegExp() == null) {
-                    session.add(errorMessage(rule, "regExp is not defined"));
+                    session.add(ValidationMessageBuilder.create(RULE_REGEXP_IS_NULL, rule).build());
                 }
             }
             if(rule.getPayload() instanceof SizePayload) {
                 SizePayload payload = (SizePayload) rule.getPayload();
                 if(payload.getOrientation() == null) {
-                    session.add(errorMessage(rule, "orientation is not defined"));
+                    session.add(ValidationMessageBuilder.create(RULE_SIZE_ORIENTATION_IS_NULL, rule).build());
                 }
                 if(payload.getSize() < 0) {
-                    session.add(errorMessage(rule, "size must be positive"));
+                    session.add(ValidationMessageBuilder.create(RULE_SIZE_IS_NOT_POSITIVE, rule).build());
                 }
             }
             if(rule.getPayload() instanceof UsagePayload) {
                 UsagePayload payload = (UsagePayload) rule.getPayload();
                 if(payload.getUsageType() == null) {
-                    session.add(errorMessage(rule, "usageType is not defined"));
+                    session.add(ValidationMessageBuilder.create(RULE_USAGE_TYPE_IS_NULL, rule).build());
                 }
             }
             if(rule.getPayload() instanceof LengthPayload) {
                 LengthPayload payload = (LengthPayload) rule.getPayload();
                 if(payload.getLength() < 0) {
-                    session.add(errorMessage(rule, "length must be positive"));
+                    session.add(ValidationMessageBuilder.create(RULE_LENGTH_IS_NOT_POSITIVE, rule).build());
                 }
             }
             if(rule.getPayload() instanceof NumberSetPayload) {
                 var payload = (NumberSetPayload) rule.getPayload();
                 if(payload.getMin() == null && payload.getMax() == null) {
-                    session.add(errorMessage(rule, "min or max must be set"));
+                    session.add(ValidationMessageBuilder.create(RULE_NUMBER_SET_MIN_AND_MAX_NOT_SET, rule).build());
                 }
                 if(payload.getMin() != null && payload.getMax() != null) {
                     if(payload.getMin().compareTo(payload.getMax()) >= 0) {
-                        session.add(errorMessage(rule, "min must be smaller than max"));
+                        session.add(ValidationMessageBuilder.create(RULE_NUMBER_SET_MIN_NOT_SMALLER_THAN_MAX, rule).build());
                     }
                 }
                 if(payload.getStep() != null) {
                     if(payload.getStep().compareTo(BigDecimal.ZERO) <= 0) {
-                        session.add(errorMessage(rule, "step must be more than zero"));
+                        session.add(ValidationMessageBuilder.create(RULE_NUMBER_SET_STEP_NOT_MORE_THAN_ZERO, rule).build());
                     }
                 }
-                validatePrecision("min", payload.getMin(), rule, session);
-                validatePrecision("max", payload.getMax(), rule, session);
-                validatePrecision("step", payload.getStep(), rule, session);
+                validatePrecision("Min", payload.getMin(), rule, session);
+                validatePrecision("Max", payload.getMax(), rule, session);
+                validatePrecision("Step", payload.getStep(), rule, session);
             }
             if(!(rule.getPayload() instanceof DefaultValuePayload)) {
                 if(rule.getPriority() != null) {
-                    String payloadType = rule.getPayload().getPayloadType().getTypeName();
-                    session.add(errorMessage(rule, "priority cannot be set because rule payload type is " + payloadType
-                        + " - priority is supported only for defaulting rules."));
+                    session.add(ValidationMessageBuilder.create(RULE_PRIORITY_NOT_IN_DEFAULT, rule)
+                        .parameters(rule.getPayload().getPayloadType().getTypeName())
+                        .build());
                 }
             }
             if (rule.getPayload() instanceof ValueListPayload) {
@@ -169,21 +191,21 @@ public class RuleModelValidator implements RuleValidator {
                 ValueList valueList = valueListPayload.getValueList();
 
                 if (valueList == null) {
-                    session.add(errorMessage(rule, "ValueList must be set"));
+                    session.add(ValidationMessageBuilder.create(RULE_VALUE_LIST_IS_NULL, rule).build());
                 } else {
                     if (valueList.getValueType() == null) {
-                        session.add(errorMessage(rule, "ValueList data type must be set"));
+                        session.add(ValidationMessageBuilder.create(RULE_VALUE_LIST_TYPE_IS_NULL, rule).build());
                     }
 
                     if (valueList.getValues() == null || valueList.getValues().isEmpty()) {
-                        session.add(errorMessage(rule, "ValueList should contain at least one value"));
+                        session.add(ValidationMessageBuilder.create(RULE_VALUE_LIST_IS_EMPTY, rule).build());
                     }
 
                     if(valueList.getValues() != null) {
                         valueList.getValues().stream()
                             .filter(v -> v instanceof BigDecimal)
                             .map(v -> (BigDecimal) v)
-                            .forEach(bigDecimalValue -> validatePrecision("ValueList", bigDecimalValue, rule, session));
+                            .forEach(bigDecimalValue -> validatePrecision("Value list", bigDecimalValue, rule, session));
                     }
                 }
             }
@@ -192,24 +214,11 @@ public class RuleModelValidator implements RuleValidator {
 
     private void validatePrecision(String fieldName, BigDecimal number, Rule rule, ValidationSession session) {
         if(number != null && number.stripTrailingZeros().precision() > Numbers.DEFAULT_MATH_CONTEXT.getPrecision()) {
-            session.add(warningMessage(
-                rule,
-                String.format(
-                    "%s value '%s' cannot be encoded as a decimal64 without a loss of precision. Actual number at runtime would be rounded to '%s'",
-                    fieldName,
-                    number.toPlainString(),
-                    Numbers.normalized(number).toPlainString()
-                )
-            ));
+            var m = ValidationMessageBuilder.create(RULE_DECIMAL64_PRECISION_LOSS, rule)
+                .parameters(fieldName, number.toPlainString(), Numbers.normalized(number).toPlainString())
+                .build();
+            session.add(m);
         }
-    }
-
-    private ValidationMessage errorMessage(Rule rule, String message) {
-        return new ValidationMessage(rule, message, ERROR);
-    }
-
-    private ValidationMessage warningMessage(Rule rule, String message) {
-        return new ValidationMessage(rule, message, WARNING);
     }
 
     @Override

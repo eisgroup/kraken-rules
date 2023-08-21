@@ -53,12 +53,12 @@ describe('KelService', () => {
     it('should provide global completions', () => {
         const service = new KelService(instance.policy)
         const completion = service.provideCompletion('a.b', { line: 1, column: 17 })
-        expect(completion.completions).toHaveLength(156)
+        expect(completion.completions).toHaveLength(158)
     })
     it('should provide path completion', () => {
         const service = new KelService(instance.policy)
         const completion = service.provideCompletion('Policy.', { line: 1, column: 17 })
-        expect(completion.completions).toHaveLength(31)
+        expect(completion.completions).toHaveLength(33)
     })
     it('should provide validation with semantic errors', () => {
         const service = new KelService(instance.policy)

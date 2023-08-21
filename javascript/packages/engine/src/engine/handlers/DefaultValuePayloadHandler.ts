@@ -31,6 +31,12 @@ import DefaultValuePayload = Payloads.Derive.DefaultValuePayload
 import PayloadType = Payloads.PayloadType
 import ContextField = Contexts.ContextField
 import { formatExpressionEvaluationMessage } from '../../utils/ExpressionEvaluationMessageFormatter'
+import { ContextModelTree } from '../../models/ContextModelTree'
+import {
+    DEFAULT_VALUE_PAYLOAD_INCOMPATIBLE_VALUE,
+    formatCodeWithMessage,
+    SystemMessageBuilder,
+} from '../../error/KrakenRuntimeError'
 
 function isDefaultType(payload: DefaultValuePayload): boolean {
     return payload.defaultingType === DefaultingType.defaultValue
@@ -54,7 +60,10 @@ function toMoney(currency: string, amount: number): Contexts.MoneyType | undefin
  * Payload handler implementation to process {@link DefaultValuePayload}s
  */
 export class DefaultValuePayloadHandler implements RulePayloadHandler {
-    constructor(private readonly evaluator: ExpressionEvaluator) {}
+    constructor(
+        private readonly evaluator: ExpressionEvaluator,
+        private readonly modelTree: ContextModelTree.ContextModelTree,
+    ) {}
 
     handlesPayloadType(): Payloads.PayloadType {
         return PayloadType.DEFAULT
@@ -129,14 +138,19 @@ export class DefaultValuePayloadHandler implements RulePayloadHandler {
         if (!field) {
             return ExpressionEvaluationResult.expressionSuccess(value)
         }
-        if (!Contexts.fieldTypeChecker.isPrimitive(field.fieldType)) {
+        const isPrimitive = Contexts.fieldTypeChecker.isPrimitive(field.fieldType)
+        const isComplexSystem = this.modelTree.contexts[field.fieldType]?.system
+        if (!isPrimitive && !isComplexSystem) {
             throw Error(
                 `Unsupported operation. Default value rule '${rule.name}' is being applied on attribute '${
                     dataCtx.contextName
                 }.${field.name}' whose type is '${this.toTypeSymbol(
                     field,
-                )}'. Default value rule can only be applied on attribute which is primitive or a collection of primitives.`,
+                )}'. Default value rule can only be applied on attribute which is primitive or a collection of primitives or complex system type.`,
             )
+        }
+        if (isComplexSystem) {
+            return ExpressionEvaluationResult.expressionSuccess(value)
         }
         return this.coerceValue(value, field, dataCtx, session)
     }
@@ -222,15 +236,18 @@ export class DefaultValuePayloadHandler implements RulePayloadHandler {
         dataContext: DataContext,
         field: ContextField,
     ): ExpressionEvaluationResult.Result {
-        const message = `Cannot apply value '${ExpressionEvaluator.renderFieldValue(
-            value,
-        )} (typeof ${typeof value})' on '${dataContext.contextName}.${
-            field.name
-        }' because value type is not assignable to field type '${this.toTypeSymbol(
-            field,
-        )}'. Rule will be silently ignored.`
-        logger.warning(() => message)
-        return ExpressionEvaluationResult.expressionError({ message, severity: 'critical' })
+        const m = new SystemMessageBuilder(DEFAULT_VALUE_PAYLOAD_INCOMPATIBLE_VALUE)
+            .parameters(
+                ExpressionEvaluator.renderFieldValue(value),
+                typeof value,
+                dataContext.contextName,
+                field.name,
+                this.toTypeSymbol(field),
+            )
+            .build()
+        const formattedMessage = formatCodeWithMessage(m)
+        logger.warning(() => formattedMessage)
+        return ExpressionEvaluationResult.expressionError({ message: formattedMessage, severity: 'critical' })
     }
 
     private toTypeSymbol(field: ContextField): string {

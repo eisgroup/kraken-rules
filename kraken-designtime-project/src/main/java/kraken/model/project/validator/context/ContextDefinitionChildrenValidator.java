@@ -15,12 +15,15 @@
  */
 package kraken.model.project.validator.context;
 
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.CONTEXT_NAVIGATION_IS_SYSTEM_CONTEXT;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.CONTEXT_NAVIGATION_UNKNOWN_CHILDREN;
+
 import java.util.Map;
 
 import kraken.model.context.ContextDefinition;
 import kraken.model.project.KrakenProject;
-import kraken.model.project.validator.Severity;
-import kraken.model.project.validator.ValidationMessage;
+import kraken.model.project.validator.ValidationMessageBuilder;
+import kraken.model.project.validator.ValidationMessageBuilder.Message;
 import kraken.model.project.validator.ValidationSession;
 
 /**
@@ -43,21 +46,17 @@ public final class ContextDefinitionChildrenValidator {
                     ContextDefinition childContext = allContextDefinitions.get(contextNavigation.getTargetName());
 
                     if (childContext == null) {
-                        session.add(new ValidationMessage(
-                            contextDefinition,
-                            String.format("child '%s' is not valid because such context does not exist",
-                                contextNavigation.getTargetName()),
-                            Severity.ERROR)
-                        );
-                    } else if (childContext.isSystem()) {
-                        String messageTemplate = "child '%s' is not valid because it is a system context."
-                            + " System context cannot be used as a child in another context";
+                        var m = ValidationMessageBuilder.create(CONTEXT_NAVIGATION_UNKNOWN_CHILDREN, contextDefinition)
+                            .parameters(contextNavigation.getTargetName())
+                            .build();
 
-                        session.add(new ValidationMessage(
-                            contextDefinition,
-                            String.format(messageTemplate, contextNavigation.getTargetName()),
-                            Severity.ERROR)
-                        );
+                        session.add(m);
+                    } else if (childContext.isSystem()) {
+                        var m = ValidationMessageBuilder.create(CONTEXT_NAVIGATION_IS_SYSTEM_CONTEXT, contextDefinition)
+                            .parameters(contextNavigation.getTargetName())
+                            .build();
+
+                        session.add(m);
                     }
                 })
             );

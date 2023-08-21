@@ -55,7 +55,7 @@ describe('Engine Message Template Sanity Test', () => {
         const txEffectiveMessage = `Transaction effective date must be later than ${d1} but was ${d2}`
         expect(policyTxEffectiveResult.message?.errorMessage).toStrictEqual(txEffectiveMessage)
 
-        const d3 = format('2020-01-01')
+        const d3 = format('2020-01-01T00:00:00')
         const policyStateResult = result('Policy:0:state', results)
         const policyStateMessage = `\${nothingtoseehere}  true false  string string 10.123 ${d3} ${d1} ABC`
         expect(policyStateResult.message?.errorMessage).toStrictEqual(policyStateMessage)

@@ -15,6 +15,8 @@
  */
 package kraken.model.project.builder;
 
+import static kraken.message.SystemMessageBuilder.Message.KRAKEN_PROJECT_BUILD_NAMESPACE_INCLUDE_CYCLE;
+
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -22,6 +24,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import kraken.message.SystemMessageBuilder;
 import kraken.model.project.exception.IllegalKrakenProjectStateException;
 
 /**
@@ -35,7 +38,7 @@ import kraken.model.project.exception.IllegalKrakenProjectStateException;
  */
 class NamespaceTree {
 
-    private NamespaceNode root;
+    private final NamespaceNode root;
 
     NamespaceTree(NamespaceNode root) {
         this.root = root;
@@ -70,7 +73,10 @@ class NamespaceTree {
 
     private static void checkCycle(NamespaceNode current, Set<NamespaceNode> visited) {
         if (visited.contains(current)) {
-            throw new IllegalKrakenProjectStateException("A cycle found between namespaces: " + beautify(current, visited));
+            var m = SystemMessageBuilder.create(KRAKEN_PROJECT_BUILD_NAMESPACE_INCLUDE_CYCLE)
+                .parameters(beautify(current, visited))
+                .build();
+            throw new IllegalKrakenProjectStateException(m);
         }
 
         visited.add(current);

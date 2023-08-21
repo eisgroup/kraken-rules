@@ -20,8 +20,8 @@ import java.util.stream.Collectors;
 
 import kraken.model.Rule;
 import kraken.model.project.KrakenProject;
-import kraken.model.project.validator.Severity;
-import kraken.model.project.validator.ValidationMessage;
+import kraken.model.project.validator.ValidationMessageBuilder;
+import kraken.model.project.validator.ValidationMessageBuilder.Message;
 import kraken.model.project.validator.ValidationSession;
 
 /**
@@ -39,14 +39,9 @@ public class RuleNotAddedToEntryPointValidator implements RuleValidator {
 
     @Override
     public void validate(Rule rule, ValidationSession session) {
-        String template = "is not added to any entry point.";
-
         if(!allAddedRules.contains(rule.getName())) {
-            session.add(new ValidationMessage(
-                rule,
-                template,
-                Severity.WARNING
-            ));
+            var m = ValidationMessageBuilder.create(Message.RULE_NOT_IN_ENTRYPOINT, rule).build();
+            session.add(m);
         }
     }
 

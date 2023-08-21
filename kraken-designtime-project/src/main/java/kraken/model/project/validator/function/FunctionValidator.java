@@ -15,6 +15,17 @@
  */
 package kraken.model.project.validator.function;
 
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.FUNCTION_GENERIC_BOUND_DUPLICATE;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.FUNCTION_GENERIC_BOUND_IS_ITSELF_GENERIC;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.FUNCTION_NAME_DUPLICATE;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.FUNCTION_NAME_DUPLICATE_WITH_SIGNATURE;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.FUNCTION_NATIVE_DUPLICATE;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.FUNCTION_PARAMETER_DUPLICATE;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.FUNCTION_PARAMETER_TYPE_UNION_GENERIC_MIX;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.FUNCTION_PARAMETER_TYPE_UNKNOWN;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.FUNCTION_RETURN_TYPE_UNION_GENERIC_MIX;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.FUNCTION_RETURN_TYPE_UNKNOWN;
+
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -31,8 +42,7 @@ import kraken.model.project.KrakenProject;
 import kraken.model.project.scope.ScopeBuilder;
 import kraken.model.project.scope.ScopeBuilderProvider;
 import kraken.model.project.validator.Duplicates;
-import kraken.model.project.validator.Severity;
-import kraken.model.project.validator.ValidationMessage;
+import kraken.model.project.validator.ValidationMessageBuilder;
 import kraken.model.project.validator.ValidationSession;
 import kraken.model.project.validator.namespaced.NamespacedValidator;
 
@@ -65,14 +75,9 @@ public final class FunctionValidator {
     public void validate(ValidationSession session) {
         Duplicates.findAndDo(
             krakenProject.getFunctions(),
-            duplicates -> session.add(new ValidationMessage(
-                duplicates.get(0),
-                String.format(
-                    "is not valid because there are more than one function defined with the same name: '%s'",
-                    duplicates.get(0).getName()
-                ),
-                Severity.ERROR
-            ))
+            duplicates -> session.add(ValidationMessageBuilder.create(FUNCTION_NAME_DUPLICATE, duplicates.get(0))
+                .parameters(duplicates.get(0).getName())
+                .build())
         );
 
         for (Function function : krakenProject.getFunctions()) {
@@ -84,25 +89,17 @@ public final class FunctionValidator {
         session.addAll(NamespacedValidator.validate(function));
 
         if(functionSignatureNames.contains(function.getName())) {
-            session.add(new ValidationMessage(
-                function,
-                String.format(
-                    "is not valid because function signature with the same name '%s' is defined",
-                    function.getName()
-                ),
-                Severity.ERROR
-            ));
+            var m = ValidationMessageBuilder.create(FUNCTION_NAME_DUPLICATE_WITH_SIGNATURE, function)
+                .parameters(function.getName())
+                .build();
+            session.add(m);
         }
 
         if(nativeFunctionNames.contains(function.getName())) {
-            session.add(new ValidationMessage(
-                function,
-                String.format(
-                    "is not valid because native function with name '%s' already exists",
-                    function.getName()
-                ),
-                Severity.ERROR
-            ));
+            var m = ValidationMessageBuilder.create(FUNCTION_NATIVE_DUPLICATE, function)
+                .parameters(function.getName())
+                .build();
+            session.add(m);
         }
 
         FunctionSymbol symbol = scopeBuilder.buildFunctionSymbol(function);
@@ -117,30 +114,20 @@ public final class FunctionValidator {
             function.getGenericTypeBounds(),
             GenericTypeBound::getGeneric,
             duplicates -> {
-                session.add(new ValidationMessage(
-                    function,
-                    String.format(
-                        "is not valid because there are more than one generic bound for the same generic type "
-                            + "name '%s'",
-                        duplicates.get(0).getGeneric()
-                    ),
-                    Severity.ERROR
-                ));
+                var m = ValidationMessageBuilder.create(FUNCTION_GENERIC_BOUND_DUPLICATE, function)
+                    .parameters(duplicates.get(0).getGeneric())
+                    .build();
+                session.add(m);
             }
         );
 
         for(GenericTypeBound genericTypeBound : function.getGenericTypeBounds()) {
             Type boundType = scopeBuilder.resolveTypeOf(genericTypeBound.getBound());
             if(boundType.isGeneric()) {
-                session.add(new ValidationMessage(
-                    function,
-                    String.format(
-                        "is not valid because generic type bound '%s' for generic '%s' is itself a generic type",
-                        genericTypeBound.getBound(),
-                        genericTypeBound.getGeneric()
-                    ),
-                    Severity.ERROR
-                ));
+                var m = ValidationMessageBuilder.create(FUNCTION_GENERIC_BOUND_IS_ITSELF_GENERIC, function)
+                    .parameters(genericTypeBound.getBound(), genericTypeBound.getGeneric())
+                    .build();
+                session.add(m);
             }
         }
     }
@@ -149,25 +136,16 @@ public final class FunctionValidator {
         Type type = symbol.getType();
         String typeToken = function.getReturnType();
         if (!type.isKnown()) {
-            session.add(new ValidationMessage(
-                function,
-                String.format(
-                    "is not valid because return type '%s' does not exist",
-                    typeToken
-                ),
-                Severity.ERROR
-            ));
+            var m = ValidationMessageBuilder.create(FUNCTION_RETURN_TYPE_UNKNOWN, function)
+                .parameters(typeToken)
+                .build();
+            session.add(m);
         }
         if(type.isUnion() && type.isGeneric()) {
-            session.add(new ValidationMessage(
-                function,
-                String.format(
-                    "is not valid because return type '%s' is a mix of union type and generic type. "
-                        + "Such type definition is not supported.",
-                    typeToken
-                ),
-                Severity.ERROR
-            ));
+            var m = ValidationMessageBuilder.create(FUNCTION_RETURN_TYPE_UNION_GENERIC_MIX, function)
+                .parameters(typeToken)
+                .build();
+            session.add(m);
         }
     }
 
@@ -175,36 +153,28 @@ public final class FunctionValidator {
         Duplicates.findAndDo(
             function.getParameters(),
             FunctionParameter::getName,
-            duplicates -> session.add(new ValidationMessage(
-                function,
-                String.format(
-                    "is not valid because there are more than one parameter with the same name defined: '%s'",
-                    duplicates.get(0).getName()
-                ),
-                Severity.ERROR
-            ))
+            duplicates -> {
+                var m = ValidationMessageBuilder.create(FUNCTION_PARAMETER_DUPLICATE, function)
+                    .parameters(duplicates.get(0).getName())
+                    .build();
+                session.add(m);
+            }
         );
 
         for(var parameter : symbol.getParameters()) {
             Type type = parameter.getType();
             String typeToken = function.getParameters().get(parameter.getParameterIndex()).getType();
             if(!type.isKnown()) {
-                session.add(new ValidationMessage(
-                    function,
-                    String.format("is not valid because parameter type '%s' does not exist", typeToken),
-                    Severity.ERROR
-                ));
+                var m = ValidationMessageBuilder.create(FUNCTION_PARAMETER_TYPE_UNKNOWN, function)
+                    .parameters(typeToken)
+                    .build();
+                session.add(m);
             }
             if(type.isUnion() && type.isGeneric()) {
-                session.add(new ValidationMessage(
-                    function,
-                    String.format(
-                        "is not valid because parameter type '%s' is a mix of union type and generic type. "
-                            + "Such type definition is not supported.",
-                        typeToken
-                    ),
-                    Severity.ERROR
-                ));
+                var m = ValidationMessageBuilder.create(FUNCTION_PARAMETER_TYPE_UNION_GENERIC_MIX, function)
+                    .parameters(typeToken)
+                    .build();
+                session.add(m);
             }
         }
     }

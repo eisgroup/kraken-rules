@@ -15,6 +15,10 @@
  */
 package kraken.model.project.builder;
 
+import static kraken.message.SystemMessageBuilder.Message.KRAKEN_PROJECT_BUILD_NAMESPACE_INCLUDE_AMBIGUOUS;
+import static kraken.message.SystemMessageBuilder.Message.KRAKEN_PROJECT_BUILD_NAMESPACE_INCLUDE_ERRORS;
+import static kraken.utils.MessageUtils.withSpaceBeforeEachLine;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -25,6 +29,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import kraken.el.functionregistry.FunctionHeader;
+import kraken.message.SystemMessage;
+import kraken.message.SystemMessageBuilder;
 import kraken.model.Dimension;
 import kraken.model.Function;
 import kraken.model.FunctionSignature;
@@ -166,21 +172,20 @@ public final class NamespaceNode {
         collectAmbiguousIncludes(namespaceProjection.getDimensions(), ambiguousIncludes);
 
         if (!ambiguousIncludes.isEmpty()) {
-            Set<String> errors = ambiguousIncludes.values().stream()
-                    .map(ambiguousInclude ->
-                            String.format("Item '%s' is ambiguous, because it is included from multiple namespaces: %s.",
-                                    ambiguousInclude.getName(),
-                                    String.join(", ", ambiguousInclude.getNamespaces())
-                            )
-                    ).collect(Collectors.toSet());
-
-            String msg = String.format(
-                    "Kraken Project '%s' has namespace include errors: %s",
+            var formattedMessage = ambiguousIncludes.values().stream()
+                .map(ambiguousInclude ->
+                    SystemMessageBuilder.create(KRAKEN_PROJECT_BUILD_NAMESPACE_INCLUDE_AMBIGUOUS)
+                        .parameters(ambiguousInclude.getName(), String.join(", ", ambiguousInclude.getNamespaces()))
+                        .build())
+                .map(SystemMessage::formatMessageWithCode)
+                .collect(Collectors.joining(System.lineSeparator()));
+            var m = SystemMessageBuilder.create(KRAKEN_PROJECT_BUILD_NAMESPACE_INCLUDE_ERRORS)
+                .parameters(
                     namespaceProjection.getNamespace(),
-                    String.join(System.lineSeparator(), errors)
-            );
+                    System.lineSeparator() + withSpaceBeforeEachLine(formattedMessage))
+                .build();
 
-            throw new IllegalKrakenProjectStateException(msg);
+            throw new IllegalKrakenProjectStateException(m);
         }
 
     }

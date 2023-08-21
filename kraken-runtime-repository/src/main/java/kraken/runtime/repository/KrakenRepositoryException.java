@@ -16,17 +16,20 @@
 package kraken.runtime.repository;
 
 import kraken.exception.KrakenException;
+import kraken.message.SystemMessage;
 
 /**
  * @author mulevicius
  */
 public class KrakenRepositoryException extends KrakenException {
 
-    public KrakenRepositoryException(String message) {
+    private static final long serialVersionUID = 5284200593862000641L;
+
+    public KrakenRepositoryException(SystemMessage message) {
         super(message);
     }
 
-    public KrakenRepositoryException(String message, Throwable cause) {
+    public KrakenRepositoryException(SystemMessage message, Throwable cause) {
         super(message, cause);
     }
 }

@@ -17,6 +17,7 @@ package kraken.model.project.exception;
 
 import kraken.annotations.API;
 import kraken.exception.KrakenException;
+import kraken.message.SystemMessage;
 
 /**
  * @author mulevicius
@@ -24,7 +25,9 @@ import kraken.exception.KrakenException;
 @API
 public class KrakenProjectValidationException extends KrakenException {
 
-    public KrakenProjectValidationException(String message) {
+    private static final long serialVersionUID = 1872074472813152842L;
+
+    public KrakenProjectValidationException(SystemMessage message) {
         super(message);
     }
 }

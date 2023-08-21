@@ -1,0 +1,118 @@
+Namespace Policy
+
+EntryPoint
+      "Date time creation time must be consistent" {
+      "Date time creation time must be consistent" }
+Rule  "Date time creation time must be consistent" On Policy.state {
+  Assert DateTime("2020-01-01T00:00:00") = DateTime("2020-01-01")
+}
+
+EntryPoint
+      "Date creation time must be consistent" {
+      "Date creation time must be consistent" }
+Rule  "Date creation time must be consistent" On Policy.state {
+  Assert Date(2020, 1, 1) = Date("2020-01-01")
+}
+
+EntryPoint
+      "DateTime conversion is consistent" {
+      "DateTime conversion is consistent" }
+Rule  "DateTime conversion is consistent" On Policy.state {
+  Assert DateTime("2020-01-01") = AsTime(Date("2020-01-01"))
+}
+
+EntryPoint
+      "Date conversion is consistent" {
+      "Date conversion is consistent" }
+Rule  "Date conversion is consistent" On Policy.state {
+  Assert Date(2020, 1, 1) = AsDate(DateTime("2020-01-01"))
+}
+
+EntryPoint
+      "Date conversion is consistent WithDay" {
+      "Date conversion is consistent WithDay" }
+Rule  "Date conversion is consistent WithDay" On Policy.state {
+  Assert Date(2020, 1, 1) = WithDay(AsDate(DateTime("2020-01-02")), 1)
+  Error "code" : "${Date(2020, 1, 1)} = ${WithDay(AsDate(DateTime('2020-01-02')), 1)}"
+}
+
+EntryPoint
+      "Date conversion is consistent WithMonth" {
+      "Date conversion is consistent WithMonth" }
+Rule  "Date conversion is consistent WithMonth" On Policy.state {
+  Assert Date(2020, 1, 1) = WithMonth(AsDate(DateTime("2020-02-01")), 1)
+  Error "code" : "${Date(2020, 1, 1)} = ${WithMonth(AsDate(DateTime('2020-02-01')), 1)}"
+}
+
+EntryPoint
+      "Date conversion is consistent WithYear" {
+      "Date conversion is consistent WithYear" }
+Rule  "Date conversion is consistent WithYear" On Policy.state {
+  Assert Date(2020, 1, 1) = WithYear(Date(2020, 1, 1), 2020)
+  Error "code" : "${Date(2020, 1, 1)} = ${WithYear(Date(2020, 1, 1), 2020)}"
+}
+
+EntryPoint
+      "Date conversion is consistent PlusYears_Months_Days" {
+      "Date conversion is consistent PlusYears" }
+Rule  "Date conversion is consistent PlusYears" On Policy.state {
+  Assert Date(2022, 2, 2) = PlusDays(PlusMonths(PlusYears(AsDate(DateTime("2021-01-01")), 1),1),1)
+}
+
+EntryPoint
+      "Now conversion" {
+      "Now conversion" }
+Rule  "Now conversion" On Policy.state {
+  Assert AsDate(Now()) = Today() and AsTime(AsDate(Now())) = AsTime(Today())
+}
+
+EntryPoint
+      "Date Getters" {
+      "Date Getters" }
+Rule  "Date Getters" On Policy.state {
+  Assert Date( GetYear(Today()), GetMonth(Today()), GetDay(Today()) ) = Today() && Date( GetYear(Now()), GetMonth(Now()), GetDay(Now()) ) = Today()
+}
+
+EntryPoint
+      "Create date with string format" {
+      "Create date with string format" }
+Rule  "Create date with string format" On Policy.state {
+  Assert
+    DateTime(
+      Concat({
+        Format(
+          Date(
+            GetYear(
+              PlusYears(Date("2020-02-02"), 1)
+            ),
+            GetMonth(
+              PlusMonths(Date("2020-02-02"), 1)
+            ),
+            1
+          ),
+          "YYYY-MM-DD"
+        ),
+        "T00:00:00"
+        })
+      )
+      =
+      DateTime("2021-03-01T00:00:00")
+      Error "code": '${DateTime(
+                             Concat({
+                               Format(
+                                 Date(
+                                   GetYear(
+                                     PlusMonths(Date("2020-02-02"), 1)
+                                   ),
+                                   GetMonth(
+                                     PlusMonths(Date("2020-02-02"), 1)
+                                   ),
+                                   1
+                                 ),
+                                 "YYYY-MM-DD"
+                               ),
+                               "T00:00:00"
+                               })
+                             )} = ${DateTime("2021-03-01T00:00:00")} '
+
+     }

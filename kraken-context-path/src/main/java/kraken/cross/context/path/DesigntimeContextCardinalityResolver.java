@@ -15,8 +15,10 @@
  */
 package kraken.cross.context.path;
 
-import kraken.context.path.node.ContextPathNode;
+import static kraken.message.SystemMessageBuilder.Message.CCR_NAVIGATION_NOT_FOUND;
+
 import kraken.context.path.node.ContextPathNodeRepository;
+import kraken.message.SystemMessageBuilder;
 import kraken.model.context.Cardinality;
 
 /**
@@ -41,12 +43,11 @@ public class DesigntimeContextCardinalityResolver implements ContextCardinalityR
 
     @Override
     public Cardinality getCardinality(String parent, String child) {
-        ContextPathNode.ChildNode childNode = contextPathNodeRepository.get(parent)
-                .getChildren().get(child);
+        var childNode = contextPathNodeRepository.get(parent).getChildren().get(child);
 
         if (childNode == null) {
-            throw new CrossContextNavigationException(String.format(
-                    "Couldn't find navigation from '%s' to '%s'", parent, child));
+            var message = SystemMessageBuilder.create(CCR_NAVIGATION_NOT_FOUND).parameters(parent, child).build();
+            throw new CrossContextNavigationException(message);
         }
 
         return childNode.getCardinality();

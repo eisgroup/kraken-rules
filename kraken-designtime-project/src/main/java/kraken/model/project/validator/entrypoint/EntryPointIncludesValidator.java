@@ -15,15 +15,17 @@
  */
 package kraken.model.project.validator.entrypoint;
 
-import java.text.MessageFormat;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.ENTRYPOINT_DUPLICATE_INCLUDE;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.ENTRYPOINT_NESTED_INCLUDE;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.ENTRYPOINT_UNKNOWN_INCLUDE;
+
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import kraken.model.entrypoint.EntryPoint;
 import kraken.model.project.KrakenProject;
-import kraken.model.project.validator.Severity;
-import kraken.model.project.validator.ValidationMessage;
+import kraken.model.project.validator.ValidationMessageBuilder;
 import kraken.model.project.validator.ValidationSession;
 
 /**
@@ -43,11 +45,10 @@ public class EntryPointIncludesValidator {
         for (String includedEntryPointName : entryPoint.getIncludedEntryPointNames()) {
             List<EntryPoint> includedEntryPoints = entryPointsByName.get(includedEntryPointName);
             if (includedEntryPoints == null || includedEntryPoints.isEmpty()) {
-                String message = MessageFormat.format(
-                    "has included EntryPoint ''{0}'' which does not exist.",
-                    includedEntryPointName
-                );
-                session.add(new ValidationMessage(entryPoint, message, Severity.ERROR));
+                var m = ValidationMessageBuilder.create(ENTRYPOINT_UNKNOWN_INCLUDE, entryPoint)
+                    .parameters(includedEntryPointName)
+                    .build();
+                session.add(m);
             }
 
             if (includedEntryPoints != null) {
@@ -66,12 +67,10 @@ public class EntryPointIncludesValidator {
                     .collect(Collectors.toList());
 
             if(!duplicateRuleNames.isEmpty()) {
-                String message = MessageFormat.format(
-                    "has included EntryPoint ''{0}'' " + "and it has one or more rule with the same name: ''{1}''.",
-                    includedEntryPoint,
-                    String.join(", ", duplicateRuleNames)
-                );
-                session.add(new ValidationMessage(entryPoint, message, Severity.WARNING));
+                var m = ValidationMessageBuilder.create(ENTRYPOINT_DUPLICATE_INCLUDE, entryPoint)
+                    .parameters(includedEntryPoint, String.join(", ", duplicateRuleNames))
+                    .build();
+                session.add(m);
             }
         }
     }
@@ -83,12 +82,10 @@ public class EntryPointIncludesValidator {
             .filter(includedEntryPoint -> !includedEntryPoint.getIncludedEntryPointNames().isEmpty())
             .findFirst()
             .ifPresent(entryPointWithTransitiveIncludes -> {
-                String message = MessageFormat.format(
-                    "has included EntryPoint ''{0}'' which has declared includes. "
-                        + "It is forbidden to have includes in EntryPoints, that are included.",
-                    entryPointWithTransitiveIncludes.getName()
-                );
-                session.add(new ValidationMessage(entryPoint, message, Severity.ERROR));
+                var m = ValidationMessageBuilder.create(ENTRYPOINT_NESTED_INCLUDE, entryPoint)
+                    .parameters(entryPointWithTransitiveIncludes.getName())
+                    .build();
+                session.add(m);
             });
     }
 }

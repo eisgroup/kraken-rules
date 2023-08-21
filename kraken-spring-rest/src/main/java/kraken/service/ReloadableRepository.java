@@ -26,15 +26,14 @@ import java.util.stream.Stream;
 
 import org.springframework.http.ResponseEntity;
 
-import kraken.model.dimensions.DimensionSetService;
 import kraken.model.EntryPointName;
 import kraken.model.Rule;
+import kraken.model.dimensions.DimensionSetService;
 import kraken.model.dsl.KrakenDSLModelParser;
 import kraken.model.entrypoint.EntryPoint;
 import kraken.model.project.KrakenProject;
 import kraken.model.project.ResourceKrakenProject;
 import kraken.model.project.validator.KrakenProjectValidationService;
-import kraken.model.project.validator.ValidationMessage;
 import kraken.model.resource.Resource;
 import kraken.runtime.repository.dynamic.DynamicRuleHolder;
 import kraken.runtime.repository.dynamic.DynamicRuleRepository;
@@ -83,15 +82,10 @@ public class ReloadableRepository implements DynamicRuleRepository {
         List<Rule> rules = Stream.concat(storage.getRules(), resource.getRules().stream()).collect(Collectors.toList());
 
         ResourceKrakenProject krakenProject = baseKrakenProject.with(entryPoints, rules);
-        List<ValidationMessage> validationMessages = krakenProjectValidationService
-                .validateRulesAndEntryPoints(krakenProject)
-                .getErrors();
-        if (!validationMessages.isEmpty()) {
-            return Return.fail(
-                    validationMessages.stream()
-                            .map(ValidationMessage::toString)
-                            .collect(Collectors.joining("\n"))
-            );
+
+        var validationResult = krakenProjectValidationService.validateRulesAndEntryPoints(krakenProject);
+        if (validationResult.hasErrorMessages()) {
+            return Return.fail(validationResult.formatErrorMessages());
         }
         storage.add(entryPointName, resource.getRules());
         return Return.ok("Rules are imported");

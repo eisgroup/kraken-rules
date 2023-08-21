@@ -15,6 +15,8 @@
  */
 package kraken.runtime.engine.handlers;
 
+import static kraken.message.SystemMessageBuilder.Message.DEFAULT_VALUE_PAYLOAD_INCOMPATIBLE_VALUE;
+import static kraken.message.SystemMessageBuilder.Message.RULE_DEFAULT_VALUE_EXPRESSION_EVALUATION_FAILURE;
 import static kraken.runtime.utils.TargetPathUtils.resolveTargetPath;
 
 import java.time.LocalDate;
@@ -23,15 +25,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import javax.money.Monetary;
 import javax.money.MonetaryAmount;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import kraken.el.functionregistry.functions.MoneyFunctions;
 import kraken.el.math.Numbers;
+import kraken.message.SystemMessageBuilder;
+import kraken.message.SystemMessageLogger;
 import kraken.model.context.Cardinality;
 import kraken.model.context.PrimitiveFieldDataType;
 import kraken.model.derive.DefaultingType;
@@ -48,6 +49,7 @@ import kraken.runtime.engine.result.DefaultValuePayloadResult;
 import kraken.runtime.engine.result.PayloadResult;
 import kraken.runtime.expressions.KrakenExpressionEvaluator;
 import kraken.runtime.model.context.ContextField;
+import kraken.runtime.model.context.RuntimeContextDefinition;
 import kraken.runtime.model.rule.RuntimeRule;
 import kraken.runtime.model.rule.payload.derive.DefaultValuePayload;
 import kraken.tracer.Tracer;
@@ -60,9 +62,9 @@ import kraken.tracer.Tracer;
  */
 public class DefaultValuePayloadHandler implements RulePayloadHandler {
 
-    private final KrakenExpressionEvaluator evaluator;
+    private static final SystemMessageLogger logger = SystemMessageLogger.getLogger(DefaultValuePayloadHandler.class);
 
-    private final Logger logger = LoggerFactory.getLogger(DefaultValuePayloadHandler.class);
+    private final KrakenExpressionEvaluator evaluator;
 
     public DefaultValuePayloadHandler(KrakenExpressionEvaluator evaluator) {
         this.evaluator = evaluator;
@@ -97,15 +99,15 @@ public class DefaultValuePayloadHandler implements RulePayloadHandler {
                         defaultValuePayload.getDefaultingType())
                 );
             }
-        } catch (KrakenRuntimeException ex) {
+        } catch (KrakenRuntimeException e) {
             logger.debug(
-                "Default value expression '{}' in rule '{}' failed with exception: \n {}",
+                RULE_DEFAULT_VALUE_EXPRESSION_EVALUATION_FAILURE,
                 defaultValuePayload.getValueExpression().getExpressionString(),
                 rule.getName(),
-                ex
+                e
             );
 
-            return new DefaultValuePayloadResult(ex);
+            return new DefaultValuePayloadResult(e);
         }
 
         List<RuleEvent> events = new ArrayList<>();
@@ -158,10 +160,15 @@ public class DefaultValuePayloadHandler implements RulePayloadHandler {
         if(dataContext.getContextDefinition() != null) {
             ContextField contextField = dataContext.getContextDefinition().getFields().get(rule.getTargetPath());
             if (contextField != null) {
-                if(!PrimitiveFieldDataType.isPrimitiveType(contextField.getFieldType())) {
+                boolean isPrimitive = PrimitiveFieldDataType.isPrimitiveType(contextField.getFieldType());
+                boolean isComplexSystemType = Optional
+                    .ofNullable(session.getContextModelTree().getContext(contextField.getFieldType()))
+                    .map(RuntimeContextDefinition::isSystem)
+                    .orElse(false);
+                if(!isPrimitive && !isComplexSystemType) {
                     String template = "Unsupported operation. "
                         + "Default value rule '%s' is being applied on attribute '%s.%s' whose type type is '%s'. "
-                        + "Default value rule can only be applied on attribute which is primitive or a collection of primitives.";
+                        + "Default value rule can only be applied on attribute which is primitive or a collection of primitives or a complex system type.";
                     String type = toTypeSymbol(contextField);
                     String message = String.format(
                         template,
@@ -172,6 +179,10 @@ public class DefaultValuePayloadHandler implements RulePayloadHandler {
                     );
                     throw new UnsupportedOperationException(message);
                 }
+                if (isComplexSystemType){
+                    return value;
+                }
+
                 return coerce(value, dataContext, contextField, session);
             }
         }
@@ -261,21 +272,19 @@ public class DefaultValuePayloadHandler implements RulePayloadHandler {
     }
 
     private void throwAndLogIncompatibleValueType(Object value, DataContext dataContext, ContextField field) {
-        String template = "Cannot apply value '%s (instanceof %s)' on '%s.%s' because value type is not assignable to "
-            + "field type '%s'. Rule will be silently ignored.";
-        String type = toTypeSymbol(field);
-        String message = String.format(
-            template,
-            FieldValueRenderer.render(value),
-            value.getClass().getName(),
-            dataContext.getContextDefinition().getName(),
-            field.getName(),
-            type
-        );
+        var m = SystemMessageBuilder.create(DEFAULT_VALUE_PAYLOAD_INCOMPATIBLE_VALUE)
+            .parameters(
+                FieldValueRenderer.render(value),
+                value.getClass().getName(),
+                dataContext.getContextDefinition().getName(),
+                field.getName(),
+                toTypeSymbol(field)
+            )
+            .build();
 
-        logger.warn(message);
+        logger.getSl4jLogger().warn(m.formatMessageWithCode());
 
-        throw new KrakenRuntimeException(message);
+        throw new KrakenRuntimeException(m);
     }
 
     private String toTypeSymbol(ContextField field) {

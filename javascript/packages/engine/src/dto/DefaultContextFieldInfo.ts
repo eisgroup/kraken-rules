@@ -16,7 +16,7 @@
 
 import { Contexts } from 'kraken-model'
 import { DataContext } from '../engine/contexts/data/DataContext'
-import { ErrorCode, KrakenRuntimeError } from '../error/KrakenRuntimeError'
+import { CONTEXT_MODEL_TREE_MISSING_FIELD, KrakenRuntimeError, SystemMessageBuilder } from '../error/KrakenRuntimeError'
 import { ContextFieldInfo } from 'kraken-engine-api'
 
 export class DefaultContextFieldInfo implements ContextFieldInfo {
@@ -31,10 +31,8 @@ export class DefaultContextFieldInfo implements ContextFieldInfo {
         if (dataContext.contextDefinition.fields?.[fieldName]) {
             contextField = dataContext.contextDefinition.fields[fieldName]
         } else {
-            throw new KrakenRuntimeError(
-                ErrorCode.INCORRECT_MODEL_TREE,
-                `Fields projection for a DataContext instance lacks of field '${fieldName}'`,
-            )
+            const m = new SystemMessageBuilder(CONTEXT_MODEL_TREE_MISSING_FIELD).parameters(fieldName).build()
+            throw new KrakenRuntimeError(m)
         }
         this.contextId = dataContext.contextId
         this.contextName = dataContext.contextName

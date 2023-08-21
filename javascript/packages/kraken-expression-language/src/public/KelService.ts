@@ -11,6 +11,8 @@ import { ValidatingNodeVisitor } from '../visitor/validation/ValidatingVisitor'
 import { Cache } from './Cache'
 import { AstMessage } from '../visitor/validation/AstMessage'
 import { Type } from '../type/Types'
+import { TypeHintVisitor } from '../visitor/hint/TypeHintVisitor'
+import { TypeHint } from '../visitor/hint/TypeHint'
 
 export interface Validation {
     messages: ValidationMessage[]
@@ -61,6 +63,13 @@ export class KelService {
 
     constructor(private readonly scope: Scope) {}
 
+    provideTypeHints(expression: string): TypeHint[] {
+        const { node } = this.parserCache.getOrCompute(expression, e => this.compute(e))
+        const visitor = new TypeHintVisitor()
+        visitor.visit(node)
+        return visitor.getHints()
+    }
+
     provideCompletion(expression: string, cursor: Cursor): Completion {
         const { node } = this.parserCache.getOrCompute(expression, e => this.compute(e))
         const visitor = new AutocompleteNodeVisitor(cursor)
@@ -79,28 +88,6 @@ export class KelService {
         return {
             messages: [...syntax, ...semantic, ...additional],
         }
-    }
-
-    private provideAdditionalValidations(expression: string, config?: ValidationConfiguration): ValidationMessage[] {
-        const messages: ValidationMessage[] = []
-
-        if (!config?.allowsTrue) {
-            const { node } = this.parserCache.getOrCompute(expression, e => this.compute(e))
-
-            if (
-                node.nodeType === 'BOOLEAN' &&
-                node.context instanceof BooleanContext &&
-                node.context.BOOL().text.toLowerCase() === 'true'
-            ) {
-                messages.push({
-                    message: "Redundant literal value 'true'. Expression is 'true' by default.",
-                    range: getRange(node),
-                    severity: 'INFO',
-                })
-            }
-        }
-
-        return messages
     }
 
     /**
@@ -140,6 +127,28 @@ export class KelService {
 
     resolveExpressionEvaluationType(expression: string): Type {
         return this.parserCache.getOrCompute(expression, e => this.compute(e)).node.evaluationType
+    }
+
+    private provideAdditionalValidations(expression: string, config?: ValidationConfiguration): ValidationMessage[] {
+        const messages: ValidationMessage[] = []
+
+        if (!config?.allowsTrue) {
+            const { node } = this.parserCache.getOrCompute(expression, e => this.compute(e))
+
+            if (
+                node.nodeType === 'BOOLEAN' &&
+                node.context instanceof BooleanContext &&
+                node.context.BOOL().text.toLowerCase() === 'true'
+            ) {
+                messages.push({
+                    message: "Redundant literal value 'true'. Expression is 'true' by default.",
+                    range: getRange(node),
+                    severity: 'INFO',
+                })
+            }
+        }
+
+        return messages
     }
 
     private compute(expression: string): { node: Node; parser: KelParser } {

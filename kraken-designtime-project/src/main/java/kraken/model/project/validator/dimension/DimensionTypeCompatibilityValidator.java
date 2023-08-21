@@ -15,6 +15,8 @@
  */
 package kraken.model.project.validator.dimension;
 
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.DIMENSION_VALUE_TYPE_INCOMPATIBLE;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,6 +29,8 @@ import kraken.model.MetadataAware;
 import kraken.model.project.KrakenProject;
 import kraken.model.project.validator.Severity;
 import kraken.model.project.validator.ValidationMessage;
+import kraken.model.project.validator.ValidationMessageBuilder;
+import kraken.model.project.validator.ValidationMessageBuilder.Message;
 import kraken.utils.Dates;
 
 /**
@@ -46,20 +50,12 @@ public final class DimensionTypeCompatibilityValidator {
 
         return dimensionValues.stream()
             .filter(dimensionValue -> !isTypeCompatible(dimensionValue.getDimensionValue(), dimensionValue.getDimension()))
-            .map(dimensionValue -> {
-                String template = " has a value for dimension '%s' set to '%s', "
-                    + "but such value cannot be set to this dimension. "
-                    + "Expected dimension value type is '%s'.";
-
-                String message = String.format(
-                    template,
+            .map(dimensionValue -> ValidationMessageBuilder.create(DIMENSION_VALUE_TYPE_INCOMPATIBLE, metadataAware)
+                .parameters(
                     dimensionValue.getDimension().getName(),
                     render(dimensionValue.getDimensionValue()),
-                    dimensionValue.getDimension().getDataType()
-                );
-
-                return new ValidationMessage(metadataAware, message, Severity.ERROR);
-            })
+                    dimensionValue.getDimension().getDataType())
+                .build())
             .collect(Collectors.toList());
     }
 

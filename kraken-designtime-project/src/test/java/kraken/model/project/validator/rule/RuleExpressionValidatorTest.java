@@ -124,8 +124,7 @@ public class RuleExpressionValidatorTest {
 
         assertThat(validationMessages, hasSize(1));
         assertThat(validationMessages,
-            contains("Error found in Condition Expression: error in 'notExistingField' with message: "
-                + "Reference 'notExistingField' not found."));
+            contains("Condition expression has error in 'notExistingField'. Reference 'notExistingField' not found."));
     }
 
     @Test
@@ -149,10 +148,10 @@ public class RuleExpressionValidatorTest {
 
         assertThat(validationMessages, hasSize(2));
         assertThat(validationMessages, contains(
-            "Error found in Error Message Template: error in 'notExistingField' with message: "
+            "Validation message template expression has error in 'notExistingField'. "
                 + "Reference 'notExistingField' not found.",
-            "Return type of expression 'notExistingField' in validation message template must be primitive "
-                + "or array of primitives, but found: Unknown"
+            "Return type of expression 'notExistingField' in validation message template "
+                + "must be primitive or array of primitives, but found: Unknown."
         ));
     }
 
@@ -178,7 +177,7 @@ public class RuleExpressionValidatorTest {
         assertThat(validationMessages, hasSize(1));
         assertThat(validationMessages,
             contains("Return type of expression 'PartyContext' in validation message template must be primitive "
-                + "or array of primitives, but found: PartyContext")
+                + "or array of primitives, but found: PartyContext.")
         );
     }
 
@@ -199,12 +198,10 @@ public class RuleExpressionValidatorTest {
 
         assertThat(validationMessages, hasSize(2));
         assertThat(validationMessages, containsInAnyOrder(
-                "Error found in Assertion Expression: error "
-                    + "in 'notExistingField.nested.path >= 21' with message: "
+                "Assertion expression has error in 'notExistingField.nested.path >= 21'. "
                     + "Operation MoreThanOrEquals can only be performed on comparable types, "
-                    + "but was performed on 'Unknown' and 'Number'",
-                "Error found in Assertion Expression: error "
-                    + "in 'notExistingField.nested.path' with message: "
+                    + "but was performed on 'Unknown' and 'Number'.",
+                "Assertion expression has error in 'notExistingField.nested.path'. "
                     + "Reference 'notExistingField' not found."
                 )
         );
@@ -301,13 +298,11 @@ public class RuleExpressionValidatorTest {
 
         assertThat(validationMessages, hasSize(3));
         assertThat(validationMessages, containsInAnyOrder(
-                "Error found in Default Expression: error in 'notValidExpression > valid' with message: "
+                "Default expression has error in 'notValidExpression > valid'. "
                     + "Operation MoreThan can only be performed on comparable types, "
-                    + "but was performed on 'Unknown' and 'Unknown'",
-                "Error found in Default Expression: error in 'notValidExpression' with message: "
-                    + "Reference 'notValidExpression' not found.",
-                "Error found in Default Expression: error in 'valid' with message: "
-                    + "Reference 'valid' not found."
+                    + "but was performed on 'Unknown' and 'Unknown'.",
+                "Default expression has error in 'notValidExpression'. Reference 'notValidExpression' not found.",
+                "Default expression has error in 'valid'. Reference 'valid' not found."
                 )
         );
     }
@@ -327,8 +322,8 @@ public class RuleExpressionValidatorTest {
 
         assertThat(validationMessages, hasSize(1));
         assertThat(validationMessages.get(0).getMessage(),
-                equalTo("Return type of default expression must be compatible with field type which is String, " +
-                        "but expression return type is Boolean")
+                equalTo("Return type of default expression must be compatible with field type which is String, "
+                    + "but expression return type is Boolean.")
         );
     }
 
@@ -451,8 +446,8 @@ public class RuleExpressionValidatorTest {
 
         assertThat(validationMessages, hasSize(1));
         assertThat(validationMessages.get(0).getMessage(),
-                equalTo("Return type of default expression must be compatible with field type which is String," +
-                        " but expression return type is Boolean")
+                equalTo("Return type of default expression must be compatible with field type which is String, "
+                    + "but expression return type is Boolean.")
         );
     }
 
@@ -485,10 +480,10 @@ public class RuleExpressionValidatorTest {
                         .map(validationMessage -> validationMessage.getMessage())
                         .collect(Collectors.toList()),
                 containsInAnyOrder(
-                        "Error found in Default Expression: error in 'context.next.nextField' "
-                            + "with message: Attribute 'next' not found in 'ExternalContext_context'.",
+                        "Default expression has error in 'context.next.nextField'. "
+                            + "Attribute 'next' not found in 'ExternalContext_context'.",
                         "Return type of default expression must be compatible with field type which is String, "
-                            + "but expression return type is Unknown")
+                            + "but expression return type is Unknown.")
         );
     }
 
@@ -521,8 +516,10 @@ public class RuleExpressionValidatorTest {
                         .map(validationMessage -> validationMessage.getMessage())
                         .collect(Collectors.toList()),
                 containsInAnyOrder(
-                        "Error found in Default Expression: error in 'context.prev.previousStringField + 10' with message: Left side of Addition operation must be of type 'Number' but was 'String'",
-                        "Return type of default expression must be compatible with field type which is String, but expression return type is Number")
+                        "Default expression has error in 'context.prev.previousStringField + 10'. "
+                            + "Left side of Addition operation must be of type 'Number' but was 'String'.",
+                        "Return type of default expression must be compatible with field type which is String, "
+                            + "but expression return type is Number.")
         );
     }
 
@@ -547,7 +544,7 @@ public class RuleExpressionValidatorTest {
 
         assertThat(validationMessages.get(0).getMessage(),
             equalTo(
-                "Error found in Default Expression: error in 'CustomFunction(1)' with message: "
+                "Default expression has error in 'CustomFunction(1)'. "
                     + "Incompatible type 'Number' of function parameter at index 0 when invoking function CustomFunction(1). "
                     + "Expected type is 'String'."
             )
@@ -619,7 +616,7 @@ public class RuleExpressionValidatorTest {
         assertThat(
             validationMessages.stream().map(ValidationMessage::getMessage).collect(Collectors.toList()),
             containsInAnyOrder(
-                "Assertion expression cannot be parsed, because there is an error in expression syntax"
+                "Assertion expression cannot be parsed, because there is an error in expression syntax."
             )
         );
     }
@@ -645,8 +642,8 @@ public class RuleExpressionValidatorTest {
         assertThat(validationMessages, hasSize(1));
         assertThat(validationMessages.get(0).getSeverity(), is(Severity.INFO));
         assertThat(validationMessages.get(0).getMessage(),
-            equalTo("Redundant literal value 'true' in rule condition expression. "
-                + "An empty condition expression is 'true' by default."));
+            equalTo("Redundant literal value true in rule condition expression. "
+                + "An empty condition expression is true by default."));
     }
 
     @Test
@@ -668,10 +665,9 @@ public class RuleExpressionValidatorTest {
         assertThat(validationMessages, hasSize(1));
         assertThat(validationMessages.get(0).getSeverity(), is(Severity.WARNING));
         assertThat(validationMessages.get(0).getMessage(),
-            equalTo("Warning about Assertion Expression: "
-                + "warning about '1234567890.1234567' with message: "
+            equalTo("Assertion expression has warning message about '1234567890.1234567'. "
                 + "Number '1234567890.1234567' cannot be encoded as a decimal64 without a loss of precision. "
-                + "Actual number at runtime would be rounded to '1234567890.123457'"));
+                + "Actual number at runtime would be rounded to '1234567890.123457'."));
     }
 
     private List<ValidationMessage> validate(Rule rule, KrakenProject krakenProject) {

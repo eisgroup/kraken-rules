@@ -17,6 +17,7 @@ package kraken.model.project.exception;
 
 import kraken.annotations.API;
 import kraken.exception.KrakenException;
+import kraken.message.SystemMessage;
 import kraken.model.project.KrakenProject;
 
 /**
@@ -27,11 +28,13 @@ import kraken.model.project.KrakenProject;
 @API
 public class IllegalKrakenProjectStateException extends KrakenException {
 
-    public IllegalKrakenProjectStateException(String message) {
+    private static final long serialVersionUID = 8381576871244182140L;
+
+    public IllegalKrakenProjectStateException(SystemMessage message) {
         super(message);
     }
 
-    public IllegalKrakenProjectStateException(String message, Throwable cause) {
+    public IllegalKrakenProjectStateException(SystemMessage message, Throwable cause) {
         super(message, cause);
     }
 

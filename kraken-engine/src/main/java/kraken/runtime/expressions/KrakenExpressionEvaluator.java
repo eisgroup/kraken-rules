@@ -15,6 +15,9 @@
  */
 package kraken.runtime.expressions;
 
+import static kraken.message.SystemMessageBuilder.Message.EXPRESSION_CANNOT_EVALUATE_SET;
+import static kraken.message.SystemMessageBuilder.Message.EXPRESSION_CANNOT_EVALUATE_VALUE;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,14 +36,15 @@ import kraken.el.ast.builder.AstBuilder;
 import kraken.el.functionregistry.FunctionInvoker;
 import kraken.el.interpreter.evaluator.InterpretingExpressionEvaluator;
 import kraken.el.scope.Scope;
-import kraken.runtime.utils.TargetPathUtils;
-import kraken.runtime.utils.TemplateParameterRenderer;
+import kraken.message.SystemMessageBuilder;
 import kraken.runtime.EvaluationSession;
 import kraken.runtime.engine.context.data.DataContext;
 import kraken.runtime.model.context.ContextNavigation;
 import kraken.runtime.model.expression.CompiledExpression;
 import kraken.runtime.model.expression.ExpressionType;
 import kraken.runtime.model.rule.payload.validation.ErrorMessage;
+import kraken.runtime.utils.TargetPathUtils;
+import kraken.runtime.utils.TemplateParameterRenderer;
 import kraken.utils.Assertions;
 
 /**
@@ -97,7 +101,10 @@ public class KrakenExpressionEvaluator {
             expressionLanguage.evaluateSetExpression(valueToSet, path, dataObject);
             return evaluateGetProperty(path, dataObject);
         } catch (ExpressionEvaluationException ex) {
-            throw new KrakenExpressionEvaluationException("Error while evaluating set", path, dataObject, ex);
+            var m = SystemMessageBuilder.create(EXPRESSION_CANNOT_EVALUATE_SET)
+                .parameters(path)
+                .build();
+            throw new KrakenExpressionEvaluationException(m, ex);
         }
     }
 
@@ -141,7 +148,10 @@ public class KrakenExpressionEvaluator {
             }
             return expressionLanguage.evaluate(new Expression(path, ast), new EvaluationContext(dataObject));
         } catch (ExpressionEvaluationException ex) {
-            throw new KrakenExpressionEvaluationException("Error while evaluating path", path, dataObject, ex);
+            var m = SystemMessageBuilder.create(EXPRESSION_CANNOT_EVALUATE_VALUE)
+                .parameters(path)
+                .build();
+            throw new KrakenExpressionEvaluationException(m, ex);
         }
     }
 
@@ -167,8 +177,10 @@ public class KrakenExpressionEvaluator {
         try {
             return expressionLanguage.evaluate(new Expression(expression, ast), evaluationContext);
         } catch (ExpressionEvaluationException ex) {
-            throw new KrakenExpressionEvaluationException("Error while evaluating expression", expression,
-                evaluationContext.getDataObject(), ex);
+            var m = SystemMessageBuilder.create(EXPRESSION_CANNOT_EVALUATE_VALUE)
+                .parameters(expression)
+                .build();
+            throw new KrakenExpressionEvaluationException(m, ex);
         }
     }
 

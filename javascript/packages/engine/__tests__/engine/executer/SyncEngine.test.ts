@@ -250,7 +250,7 @@ describe('SyncEngine', () => {
     })
     it('should when restriction is invalid Context instance', () => {
         expect(() => engine.evaluateSubTree({}, { cd: '', noid: 0 }, '', mock.evaluationConfig)).toThrow(
-            'Restriction node is invalid Context instance',
+            '[kus010] Restriction node is not a valid context instance.',
         )
     })
     it('should evaluate with empty entryPoint bundle', () => {

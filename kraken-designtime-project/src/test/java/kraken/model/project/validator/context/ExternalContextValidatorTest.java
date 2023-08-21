@@ -61,8 +61,8 @@ public class ExternalContextValidatorTest {
         assertThat(validationMessages, hasSize(1));
         ValidationMessage message = validationMessages.iterator().next();
         assertThat(message.getSeverity(), is(Severity.ERROR));
-        assertThat(message.getMessage(), is("Root ExternalContext definition should be empty "
-            + "or have ONE element named 'context', but found: one, two"));
+        assertThat(message.getMessage(), is("Root external context definition should be empty or have "
+            + "ONE element named context, but found: one, two."));
     }
 
     @Test
@@ -83,8 +83,8 @@ public class ExternalContextValidatorTest {
         assertThat(validationMessages, hasSize(1));
         ValidationMessage message = validationMessages.iterator().next();
         assertThat(message.getSeverity(), is(Severity.ERROR));
-        assertThat(message.getMessage(), is("Root ExternalContext definition should be empty "
-            + "or have ONE element named 'context', but found: other"));
+        assertThat(message.getMessage(), is("Root external context definition should be empty or have "
+            + "ONE element named context, but found: other."));
     }
 
     @Test
@@ -104,8 +104,8 @@ public class ExternalContextValidatorTest {
         assertThat(validationMessages, hasSize(1));
         ValidationMessage message = validationMessages.iterator().next();
         assertThat(message.getSeverity(), is(Severity.ERROR));
-        assertThat(message.getMessage(), is("External context definitions referenced in External Context " +
-                "definition should be available in kraken project, but following referenced values are not found: unknown"));
+        assertThat(message.getMessage(), is("Referenced external context definition must exist in kraken project, "
+            + "but the following referenced contexts are not found: unknown."));
     }
 
     @Test
@@ -128,7 +128,8 @@ public class ExternalContextValidatorTest {
         assertThat(validationMessages, hasSize(1));
         ValidationMessage message = validationMessages.iterator().next();
         assertThat(message.getSeverity(), is(Severity.ERROR));
-        assertThat(message.getMessage(), is("Naming clash between external context definitions and child external context found, clashing values: type"));
+        assertThat(message.getMessage(), is("Naming clash between external context definitions and child external "
+            + "context found, clashing values: type."));
     }
 
     @Test
@@ -163,7 +164,7 @@ public class ExternalContextValidatorTest {
 
         ValidationMessage message = messages.iterator().next();
 
-        assertThat(message.getMessage(), is("type 'SomeType' of field 'attributeName' is unknown or not supported"));
+        assertThat(message.getMessage(), is("Type 'SomeType' of field 'attributeName' is unknown or not supported."));
         assertThat(message.getSeverity(), is(Severity.ERROR));
     }
 

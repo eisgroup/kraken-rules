@@ -15,12 +15,8 @@
  */
 package kraken.context.model.tree.repository;
 
-import kraken.context.model.tree.ContextModelTree;
-import kraken.context.model.tree.impl.ContextModelTreeConstructException;
-import kraken.context.model.tree.ContextModelTreeMetadata;
-import kraken.context.model.tree.impl.ContextModelTreeImpl;
-import kraken.el.TargetEnvironment;
-import kraken.utils.ResourceLoader;
+import static kraken.message.SystemMessageBuilder.Message.CONTEXT_MODEL_TREE_CANNOT_COLLECT;
+import static kraken.message.SystemMessageBuilder.Message.CONTEXT_MODEL_TREE_CANNOT_READ;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -29,6 +25,14 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import kraken.context.model.tree.ContextModelTree;
+import kraken.context.model.tree.ContextModelTreeMetadata;
+import kraken.context.model.tree.impl.ContextModelTreeConstructException;
+import kraken.context.model.tree.impl.ContextModelTreeImpl;
+import kraken.el.TargetEnvironment;
+import kraken.message.SystemMessageBuilder;
+import kraken.utils.ResourceLoader;
 
 /**
  * {@link ContextModelTree} repository, that loads all resources from classpath. Resources must be
@@ -44,15 +48,17 @@ public class StaticContextModelTreeRepository implements ContextModelTreeReposit
     public static final String EXTENSION = "krakenmodel";
 
     public static StaticContextModelTreeRepository initialize() {
+        var pattern = ".*\\." + EXTENSION;
         final Collection<URL> urls;
         try {
             urls = ResourceLoader.builder()
                     .baseDir("")
-                    .pattern(".*\\." + EXTENSION)
+                    .pattern(pattern)
                     .build()
                     .load();
         } catch (UncheckedIOException e) {
-            throw new ContextModelTreeConstructException("Exception while loading resources", e);
+            var message = SystemMessageBuilder.create(CONTEXT_MODEL_TREE_CANNOT_COLLECT).parameters(pattern).build();
+            throw new ContextModelTreeConstructException(message, e);
         }
         final Map<String, ContextModelTree> resources = urls.stream()
                 .map(StaticContextModelTreeRepository::modelTree)
@@ -73,11 +79,12 @@ public class StaticContextModelTreeRepository implements ContextModelTreeReposit
         try (ObjectInputStream ois = new ObjectInputStream(url.openStream())) {
             return ((ContextModelTreeImpl) ois.readObject());
         } catch (IOException | ClassNotFoundException e) {
-            throw new ContextModelTreeConstructException("Exception while loading resources", e);
+            var message = SystemMessageBuilder.create(CONTEXT_MODEL_TREE_CANNOT_READ).parameters(url).build();
+            throw new ContextModelTreeConstructException(message, e);
         }
     }
 
-    private Map<String, ContextModelTree> repository;
+    private final Map<String, ContextModelTree> repository;
 
     @Override
     public ContextModelTree get(String namespace, TargetEnvironment targetEnvironment) {

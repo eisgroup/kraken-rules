@@ -16,13 +16,16 @@
 package kraken.cross.context.path;
 
 import kraken.exception.KrakenException;
+import kraken.message.SystemMessage;
 
 /**
  * @author mulevicius
  */
 public class CrossContextNavigationException extends KrakenException {
 
-    public CrossContextNavigationException(String message) {
+    private static final long serialVersionUID = 8278649117258706737L;
+
+    public CrossContextNavigationException(SystemMessage message) {
         super(message);
     }
 }

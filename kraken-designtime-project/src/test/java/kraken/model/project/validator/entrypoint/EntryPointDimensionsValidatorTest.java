@@ -100,8 +100,9 @@ public class EntryPointDimensionsValidatorTest {
         assertThat(validationSession.getValidationMessages(), hasSize(1));
         assertThat(validationSession.getValidationMessages().get(0).getSeverity(), is(Severity.ERROR));
         assertThat(validationSession.getValidationMessages().get(0).getMessage(), containsString(
-            "has a value for dimension 'stringDimension' set to '2000-01-01', "
-                + "but such value cannot be set to this dimension. Expected dimension value type is 'String'."
+            "Dimension 'stringDimension' value is '2000-01-01', "
+                + "but such value cannot be set to this dimension. "
+                + "Expected dimension value type is 'String'."
         ));
     }
 
@@ -123,8 +124,9 @@ public class EntryPointDimensionsValidatorTest {
         assertThat(validationSession.getValidationMessages(), hasSize(1));
         assertThat(validationSession.getValidationMessages().get(0).getSeverity(), is(Severity.ERROR));
         assertThat(validationSession.getValidationMessages().get(0).getMessage(), containsString(
-            "has a value for dimension 'dateTimeDimension' set to '2000-01-01', "
-                + "but such value cannot be set to this dimension. Expected dimension value type is 'Datetime'."
+            "Dimension 'dateTimeDimension' value is '2000-01-01', "
+                + "but such value cannot be set to this dimension. "
+                + "Expected dimension value type is 'Datetime'."
         ));
     }
 

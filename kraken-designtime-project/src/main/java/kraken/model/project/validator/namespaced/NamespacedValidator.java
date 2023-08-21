@@ -15,14 +15,15 @@
  */
 package kraken.model.project.validator.namespaced;
 
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.NAMESPACED_NAME_HAS_FORBIDDEN_SYMBOLS;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import kraken.model.KrakenModelItem;
 import kraken.model.project.validator.ValidationMessage;
+import kraken.model.project.validator.ValidationMessageBuilder;
 import kraken.namespace.Namespaced;
-
-import static kraken.model.project.validator.Severity.ERROR;
 
 /**
  * @author mulevicius
@@ -32,13 +33,8 @@ public class NamespacedValidator {
     public static List<ValidationMessage> validate(KrakenModelItem namespaced) {
         List<ValidationMessage> validationMessages = new ArrayList<>();
         if(namespaced.getName() != null && namespaced.getName().contains(Namespaced.SEPARATOR)) {
-            validationMessages.add(
-                    new ValidationMessage(
-                            namespaced,
-                            "name cannot contain '" + Namespaced.SEPARATOR + "' symbol",
-                            ERROR
-                    )
-            );
+            var m = ValidationMessageBuilder.create(NAMESPACED_NAME_HAS_FORBIDDEN_SYMBOLS, namespaced).build();
+            validationMessages.add(m);
         }
         return validationMessages;
     }

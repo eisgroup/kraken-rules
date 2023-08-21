@@ -15,9 +15,11 @@
  */
 package kraken.model.project.validator;
 
+import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -25,50 +27,188 @@ import org.slf4j.Logger;
 import static kraken.model.project.validator.Severity.ERROR;
 import static kraken.model.project.validator.Severity.INFO;
 import static kraken.model.project.validator.Severity.WARNING;
+import static kraken.utils.MessageUtils.withSpaceBeforeEachLine;
+
+import kraken.model.Dimension;
+import kraken.model.Function;
+import kraken.model.FunctionSignature;
+import kraken.model.KrakenModelItem;
+import kraken.model.Rule;
+import kraken.model.context.ContextDefinition;
+import kraken.model.context.external.ExternalContext;
+import kraken.model.context.external.ExternalContextDefinition;
+import kraken.model.entrypoint.EntryPoint;
 
 /**
  * @author mulevicius
  */
 public class ValidationResult {
 
-    private List<ValidationMessage> validationMessages;
+    private final Map<KrakenModelItem, KrakenModelItemValidationResult> modelValidationResults;
 
-    public ValidationResult(List<ValidationMessage> validationMessages) {
-        this.validationMessages = Objects.requireNonNull(validationMessages);
+    private final List<ValidationMessage> allMessages;
+    private final List<ValidationMessage> errorMessages;
+    private final List<ValidationMessage> warningMessages;
+    private final List<ValidationMessage> infoMessages;
+
+    public ValidationResult(List<ValidationMessage> allMessages) {
+        this.allMessages = allMessages;
+
+        this.errorMessages = allMessages.stream().filter(m -> m.getSeverity() == ERROR).collect(Collectors.toList());
+        this.warningMessages = allMessages.stream().filter(m -> m.getSeverity() == WARNING).collect(Collectors.toList());
+        this.infoMessages = allMessages.stream().filter(m -> m.getSeverity() == INFO).collect(Collectors.toList());
+
+        this.modelValidationResults = allMessages.stream()
+            .collect(Collectors.groupingBy(ValidationMessage::getItem)).values().stream()
+            .map(KrakenModelItemValidationResult::new)
+            .collect(Collectors.toMap(KrakenModelItemValidationResult::getKrakenModelItem, r -> r));
     }
 
-    public List<ValidationMessage> getErrors() {
-        return validationMessages.stream().filter(m -> m.getSeverity() == ERROR).collect(Collectors.toList());
+    public List<ValidationMessage> getAllMessages() {
+        return Collections.unmodifiableList(allMessages);
+    }
+    public boolean hasErrorMessages() {
+        return !errorMessages.isEmpty();
+    }
+    public boolean hasWarningMessages() {
+        return !warningMessages.isEmpty();
+    }
+    public boolean hasInfoMessages() {
+        return !infoMessages.isEmpty();
+    }
+    public List<ValidationMessage> getErrorMessages() {
+        return Collections.unmodifiableList(errorMessages);
+    }
+    public List<ValidationMessage> getWarningMessages() {
+        return Collections.unmodifiableList(warningMessages);
+    }
+    public List<ValidationMessage> getInfoMessages() {
+        return Collections.unmodifiableList(infoMessages);
     }
 
-    public List<ValidationMessage> getWarnings() {
-        return validationMessages.stream().filter(m -> m.getSeverity() == WARNING).collect(Collectors.toList());
+    public List<ValidationMessage> findMessagesFor(KrakenModelItem item) {
+        return Optional.ofNullable(modelValidationResults.get(item))
+            .map(KrakenModelItemValidationResult::getAllMessages)
+            .orElse(List.of());
+    }
+    public List<ValidationMessage> findErrorMessagesFor(KrakenModelItem item) {
+        return Optional.ofNullable(modelValidationResults.get(item))
+            .map(KrakenModelItemValidationResult::getErrorMessages)
+            .orElse(List.of());
+    }
+    public List<ValidationMessage> findWarningMessagesFor(KrakenModelItem item) {
+        return Optional.ofNullable(modelValidationResults.get(item))
+            .map(KrakenModelItemValidationResult::getWarningMessages)
+            .orElse(List.of());
+    }
+    public List<ValidationMessage> findInfoMessagesFor(KrakenModelItem item) {
+        return Optional.ofNullable(modelValidationResults.get(item))
+            .map(KrakenModelItemValidationResult::getInfoMessages)
+            .orElse(List.of());
     }
 
-    public List<ValidationMessage> getInfo() {
-        return validationMessages.stream().filter(m -> m.getSeverity() == INFO).collect(Collectors.toList());
+    public String formatErrorMessages() {
+        return modelValidationResults.values().stream()
+            .filter(KrakenModelItemValidationResult::hasErrorMessages)
+            .map(itemResult -> formatMessage(itemResult.getKrakenModelItem(), itemResult.getErrorMessages()))
+            .collect(Collectors.joining(System.lineSeparator()));
     }
 
-    public List<ValidationMessage> getValidationMessages() {
-        return Collections.unmodifiableList(validationMessages);
-    }
-
-    public void logMessages(Logger logger) {
-        validationMessages.stream().forEach(m -> {
-            if (m.getSeverity() == INFO) {
-                logger.info(m.toString());
+    public void logAllFormattedMessages(Logger logger) {
+        modelValidationResults.values().forEach(itemResult -> {
+            if(itemResult.hasInfoMessages()) {
+                logger.info(formatMessage(itemResult.getKrakenModelItem(), itemResult.getInfoMessages()));
             }
-            if (m.getSeverity() == WARNING) {
-                logger.warn(m.toString());
+            if(itemResult.hasWarningMessages()) {
+                logger.warn(formatMessage(itemResult.getKrakenModelItem(), itemResult.getWarningMessages()));
             }
-            if (m.getSeverity() == ERROR) {
-                logger.error(m.toString());
+            if(itemResult.hasErrorMessages()) {
+                logger.error(formatMessage(itemResult.getKrakenModelItem(), itemResult.getErrorMessages()));
             }
         });
     }
 
-    @Override
-    public String toString() {
-        return validationMessages.stream().map(ValidationMessage::toString).collect(Collectors.joining(System.lineSeparator()));
+    private String formatMessage(KrakenModelItem item, List<ValidationMessage> messages) {
+        var joinedMessages = messages.stream()
+            .map(m -> MessageFormat.format("[{0}] {1}", m.getCode(), m.getMessage()))
+            .collect(Collectors.joining(System.lineSeparator()));
+
+        return MessageFormat.format(
+            "{0} ''{1}'' has validation messages:" + System.lineSeparator() + "{2}",
+            krakenModelItemToTypeString(item),
+            item.getName(),
+            withSpaceBeforeEachLine(joinedMessages)
+        );
+    }
+
+    private String krakenModelItemToTypeString(KrakenModelItem item) {
+        if(item instanceof Rule) {
+            return "Rule";
+        }
+        if(item instanceof EntryPoint) {
+            return "Entry point";
+        }
+        if(item instanceof ContextDefinition) {
+            return "Context definition";
+        }
+        if(item instanceof Function) {
+            return "Function";
+        }
+        if(item instanceof FunctionSignature) {
+            return "Function signature";
+        }
+        if(item instanceof Dimension) {
+            return "Dimension";
+        }
+        if(item instanceof ExternalContext) {
+            return "External context";
+        }
+        if(item instanceof ExternalContextDefinition) {
+            return "External context definition";
+        }
+        throw new IllegalArgumentException("Unknown kraken model item type: " + item.getClass().getName());
+    }
+
+
+    private static class KrakenModelItemValidationResult {
+
+        private final KrakenModelItem krakenModelItem;
+        private final List<ValidationMessage> allMessages;
+        private final List<ValidationMessage> errorMessages;
+        private final List<ValidationMessage> warningMessages;
+        private final List<ValidationMessage> infoMessages;
+
+        KrakenModelItemValidationResult(List<ValidationMessage> allMessages) {
+            this.krakenModelItem = allMessages.get(0).getItem();
+            this.allMessages = allMessages;
+            this.errorMessages = allMessages.stream().filter(m -> m.getSeverity() == ERROR).collect(Collectors.toList());
+            this.warningMessages = allMessages.stream().filter(m -> m.getSeverity() == WARNING).collect(Collectors.toList());
+            this.infoMessages = allMessages.stream().filter(m -> m.getSeverity() == INFO).collect(Collectors.toList());
+        }
+
+        public KrakenModelItem getKrakenModelItem() {
+            return krakenModelItem;
+        }
+        public List<ValidationMessage> getAllMessages() {
+            return Collections.unmodifiableList(allMessages);
+        }
+        public List<ValidationMessage> getErrorMessages() {
+            return Collections.unmodifiableList(errorMessages);
+        }
+        public List<ValidationMessage> getWarningMessages() {
+            return Collections.unmodifiableList(warningMessages);
+        }
+        public List<ValidationMessage> getInfoMessages() {
+            return Collections.unmodifiableList(infoMessages);
+        }
+        public boolean hasErrorMessages() {
+            return !errorMessages.isEmpty();
+        }
+        public boolean hasWarningMessages() {
+            return !warningMessages.isEmpty();
+        }
+        public boolean hasInfoMessages() {
+            return !infoMessages.isEmpty();
+        }
     }
 }

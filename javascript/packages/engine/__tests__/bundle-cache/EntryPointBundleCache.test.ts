@@ -1,7 +1,7 @@
 import { Rule } from 'kraken-model'
 import { RegExpPayloadBuilder, RulesBuilder } from 'kraken-model-builder'
-import { ErrorCode, RepoClientCache } from '../../src'
 import { DeltaBundleCache } from '../../src/bundle-cache/delta-cache/DeltaBundleCache'
+import { RepoClientCache } from '../../src/bundle-cache/delta-cache/RepoClientCache'
 import { DimensionSetBundleCache } from '../../src/bundle-cache/dimension-set-cache/DimensionSetBundleCache'
 import { DimensionValueSet } from '../../src/bundle-cache/dimension-set-cache/DimensionSetCache'
 import { EntryPointBundleCache } from '../../src/bundle-cache/EntryPointBundleCache'
@@ -15,6 +15,23 @@ const set = {
 
 type TestVariation = { name: 'delta' | 'dimension set'; getCache: () => EntryPointBundleCache }
 const testVariations: TestVariation[] = [delta, set]
+
+describe('EntryPointBundleCache', () => {
+    it(`delta should fail on non cached rules by dimensions`, () => {
+        const entryPointName = 'ep'
+        const cache = delta.getCache()
+        const bundle = getBundle({ entryPointName })
+        cache.add(entryPointName, {}, bundle)
+        expect(() => cache.get(entryPointName, { a: 'a' })).toThrowError('kus003')
+    })
+    it(`dimension set should fail on non cached rules by dimensions`, () => {
+        const entryPointName = 'ep'
+        const cache = set.getCache()
+        const bundle = getBundle({ entryPointName })
+        cache.add(entryPointName, {}, bundle)
+        expect(() => cache.get(entryPointName, { a: 'a' })).toThrowError('kus001')
+    })
+})
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 describe.each(testVariations!)('EntryPointBundleCache', ({ name, getCache }) => {
@@ -55,21 +72,14 @@ describe.each(testVariations!)('EntryPointBundleCache', ({ name, getCache }) => 
         const bundle = getBundle({ entryPointName })
         cache.setExpressionContext({})
         cache.add(entryPointName, {}, bundle)
-        expect(() => cache.get('noop', {})).toThrowError(ErrorCode.NO_BUNDLE_BY_ENTRYPOINT)
-    })
-    it(`[${name}] should fail on non cached rules by dimensions`, () => {
-        const entryPointName = 'ep'
-        const cache = getCache()
-        const bundle = getBundle({ entryPointName })
-        cache.add(entryPointName, {}, bundle)
-        expect(() => cache.get(entryPointName, { a: 'a' })).toThrowError(ErrorCode.NO_BUNDLE_BY_DIMENSIONS)
+        expect(() => cache.get('noop', {})).toThrowError('kus002')
     })
     it(`[${name}] should fail on non cached expression context`, () => {
         const entryPointName = 'ep'
         const cache = getCache()
         const bundle = getBundle({ entryPointName })
         cache.add(entryPointName, {}, bundle)
-        expect(() => cache.get(entryPointName, {})).toThrowError(ErrorCode.NO_EXPRESSION_CONTEXT)
+        expect(() => cache.get(entryPointName, {})).toThrowError('kus013')
     })
     it(`[${name}] should calculate no excludes`, () => {
         const cache = getCache()

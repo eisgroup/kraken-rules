@@ -100,8 +100,8 @@ public class RuleDimensionsValidatorTest {
         assertThat(validationSession.getValidationMessages(), hasSize(1));
         assertThat(validationSession.getValidationMessages().get(0).getSeverity(), is(Severity.ERROR));
         assertThat(validationSession.getValidationMessages().get(0).getMessage(), containsString(
-            "has a value for dimension 'numberDimension' set to 'false', "
-                + "but such value cannot be set to this dimension. Expected dimension value type is 'Integer'."
+            "Dimension 'numberDimension' value is 'false', but such value cannot be set to this dimension. "
+                + "Expected dimension value type is 'Integer'."
         ));
     }
 

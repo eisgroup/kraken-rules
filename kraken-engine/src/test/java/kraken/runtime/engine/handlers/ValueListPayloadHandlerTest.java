@@ -272,7 +272,9 @@ public class ValueListPayloadHandlerTest {
                 "policyCost", createField("policyCost", PrimitiveFieldDataType.MONEY),
                 "policyLimit", createField("policyLimit", PrimitiveFieldDataType.DECIMAL)
                 ),
-            List.of());
+                List.of(),
+            false
+        );
     }
 
     private ContextField createField(String name, PrimitiveFieldDataType type) {

@@ -15,12 +15,11 @@
  */
 package kraken.model.project;
 
-import java.text.MessageFormat;
-import java.util.stream.Collectors;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import kraken.message.SystemMessageBuilder;
+import kraken.message.SystemMessageBuilder.Message;
 import kraken.model.project.exception.KrakenProjectValidationException;
 import kraken.model.project.validator.KrakenProjectValidationService;
 import kraken.model.project.validator.ValidationResult;
@@ -53,14 +52,12 @@ public class DefaultKrakenProjectFactory implements KrakenProjectFactory {
 
         KrakenProject krakenProject = krakenProjectBuilder.buildKrakenProject(namespace);
         ValidationResult validationResult = krakenProjectValidationService.validate(krakenProject);
-        validationResult.logMessages(logger);
-        if(!validationResult.getErrors().isEmpty()) {
+        validationResult.logAllFormattedMessages(logger);
+        if(validationResult.hasErrorMessages()) {
             String namespaceName = namespace.equals(Namespaced.GLOBAL) ? "GLOBAL" : namespace;
-            String pattern = "KrakenProject for namespace ''{0}'' is not valid. Validation errors:\n{1}";
-            String validationErrors = validationResult.getErrors().stream()
-                    .map(error -> error.toString())
-                    .collect(Collectors.joining(System.lineSeparator()));
-            String message = MessageFormat.format(pattern, namespaceName, validationErrors);
+            var message = SystemMessageBuilder.create(Message.KRAKEN_PROJECT_NOT_VALID)
+                .parameters(namespaceName, System.lineSeparator() + validationResult.formatErrorMessages())
+                .build();
             throw new KrakenProjectValidationException(message);
         }
 

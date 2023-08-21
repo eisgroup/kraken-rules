@@ -16,10 +16,13 @@
 package kraken.model.project.validator.entrypoint;
 
 import static kraken.model.project.validator.Severity.ERROR;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.ENTRYPOINT_NAME_IS_NULL;
 
 import kraken.model.entrypoint.EntryPoint;
 import kraken.model.project.KrakenProject;
 import kraken.model.project.validator.ValidationMessage;
+import kraken.model.project.validator.ValidationMessageBuilder;
+import kraken.model.project.validator.ValidationMessageBuilder.Message;
 import kraken.model.project.validator.ValidationSession;
 import kraken.model.project.validator.namespaced.NamespacedValidator;
 
@@ -43,7 +46,8 @@ public class EntryPointDefinitionValidator {
     public void validate(EntryPoint entryPoint, ValidationSession session) {
         ValidationSession epValidationSession = new ValidationSession();
         if(entryPoint.getName() == null) {
-            epValidationSession.add(new ValidationMessage(entryPoint, "name is not defined", ERROR));
+            var m = ValidationMessageBuilder.create(ENTRYPOINT_NAME_IS_NULL, entryPoint).build();
+            epValidationSession.add(m);
         }
         epValidationSession.addAll(NamespacedValidator.validate(entryPoint));
         if(!epValidationSession.hasEntryPointError()) {

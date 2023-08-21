@@ -15,13 +15,14 @@
  */
 package kraken.model.project.validator.entrypoint;
 
-import static kraken.model.project.validator.Severity.ERROR;
+import static kraken.model.project.validator.ValidationMessageBuilder.Message.ENTRYPOINT_UNKNOWN_RULE;
 
 import java.util.Set;
 
 import kraken.model.entrypoint.EntryPoint;
 import kraken.model.project.KrakenProject;
-import kraken.model.project.validator.ValidationMessage;
+import kraken.model.project.validator.ValidationMessageBuilder;
+import kraken.model.project.validator.ValidationMessageBuilder.Message;
 import kraken.model.project.validator.ValidationSession;
 
 /**
@@ -39,12 +40,10 @@ public class EntryPointRuleExistenceValidator {
         Set<String> availableRules = krakenProject.getRuleVersions().keySet();
         for(String includedRuleName : entryPoint.getRuleNames()) {
             if(!availableRules.contains(includedRuleName)) {
-                ValidationMessage message = new ValidationMessage(
-                    entryPoint,
-                    "Rule is included in EntryPoint, but such Rule does not exist: " + includedRuleName,
-                    ERROR
-                );
-                session.add(message);
+                var m = ValidationMessageBuilder.create(ENTRYPOINT_UNKNOWN_RULE, entryPoint)
+                    .parameters(includedRuleName)
+                    .build();
+                session.add(m);
             }
         }
     }

@@ -18,7 +18,6 @@ package kraken.runtime.engine;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import kraken.context.Context;
@@ -77,15 +76,15 @@ public class RuleEngineImpl implements RuleEngine {
             new RuleEngineInvocationOperation(entryPointName, data, evaluationConfig),
             () -> {
                 String namespace = Namespaces.toNamespaceName(entryPointName);
+                ContextModelTree contextModelTree = modelTree(namespace);
                 RuntimeProjectRepository repository = runtimeProjectRepositoryFactory.resolveRepository(namespace);
-                EvaluationSession session = createEvaluationSession(evaluationConfig, repository, namespace);
+                EvaluationSession session = createEvaluationSession(evaluationConfig, repository, namespace, contextModelTree);
                 logInputData(session.getSessionToken(), data, entryPointName, evaluationConfig.getContext());
                 EntryPointBundle bundle = buildEntryPointBundle(entryPointName, evaluationConfig);
                 logEffectiveRules(session.getSessionToken(), bundle);
                 if (noRulesArePresent(bundle)) {
                     return new EntryPointResult();
                 }
-                ContextModelTree contextModelTree = modelTree(namespace);
                 final ContextDataProvider provider = StaticContextDataProvider.create(
                     crossContextPathsResolverFactory.resolve(contextModelTree),
                     repository,
@@ -118,15 +117,20 @@ public class RuleEngineImpl implements RuleEngine {
             new RuleEngineInvocationOperation(entryPointName, data, node, evaluationConfig),
             () -> {
                 String namespace = Namespaces.toNamespaceName(entryPointName);
+                ContextModelTree contextModelTree = modelTree(namespace);
                 RuntimeProjectRepository repository = runtimeProjectRepositoryFactory.resolveRepository(namespace);
-                EvaluationSession session = createEvaluationSession(evaluationConfig, repository, namespace);
+                EvaluationSession session = createEvaluationSession(
+                    evaluationConfig,
+                    repository,
+                    namespace,
+                    contextModelTree
+                );
                 logInputData(session.getSessionToken(), data, node, entryPointName, evaluationConfig.getContext());
                 EntryPointBundle bundle = buildEntryPointBundle(entryPointName, evaluationConfig);
                 logEffectiveRules(session.getSessionToken(), bundle);
                 if (noRulesArePresent(bundle)) {
                     return new EntryPointResult();
                 }
-                ContextModelTree contextModelTree = modelTree(namespace);
                 final ContextDataProvider provider = StaticContextDataProvider.create(
                     crossContextPathsResolverFactory.resolve(contextModelTree),
                     repository,
@@ -224,7 +228,8 @@ public class RuleEngineImpl implements RuleEngine {
 
     private EvaluationSession createEvaluationSession(EvaluationConfig evaluationConfig,
                                                       RuntimeProjectRepository repository,
-                                                      String namespace) {
+                                                      String namespace,
+                                                      ContextModelTree contextModelTree) {
         KrakenTypeProvider krakenTypeProvider = new KrakenTypeProvider(contextInstanceInfoResolver, repository);
         Map<FunctionHeader, KelFunction> functions = repository.getKrakenProject().getFunctions().values().stream()
             .map(f -> new KelFunction(
@@ -238,7 +243,8 @@ public class RuleEngineImpl implements RuleEngine {
             evaluationConfig.getContext(),
             krakenTypeProvider,
             functions,
-            namespace
+            namespace,
+            contextModelTree
         );
     }
 }

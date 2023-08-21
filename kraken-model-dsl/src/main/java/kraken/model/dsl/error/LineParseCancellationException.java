@@ -22,6 +22,7 @@ import org.antlr.v4.runtime.misc.ParseCancellationException;
  */
 public class LineParseCancellationException extends ParseCancellationException {
 
+    private static final long serialVersionUID = 168244439137826088L;
     private final int line;
     private final int column;
 

@@ -69,8 +69,7 @@ public class ComparisonTypeDecoratorTest {
         String decoratedError = comparisonTypeDecorator.decorate(message, rule);
 
         assertEquals(
-            "error in 'Vehicle.model != 'WV'' with message: "
-                + "Both sides of operator 'NotEquals' must have same type, "
+            "Both sides of operator 'NotEquals' must have same type, "
                 + "but left side was of type 'String[]' and right side was of type 'String'. "
                 + "'Vehicle.model' is a collection of values, because 'Vehicle' is a cross context reference accessed "
                 + "from 'Policy.CreditCardInfo' which resolves to multiple cardinality through path(s): Policy->Vehicle.",
@@ -89,8 +88,7 @@ public class ComparisonTypeDecoratorTest {
 
         String decoratedError = comparisonTypeDecorator.decorate(message, rule);
 
-        assertEquals("error in 'Vehicle.model != 'WV'' with message: "
-                + "Both sides of operator 'NotEquals' must have same type, "
+        assertEquals("Both sides of operator 'NotEquals' must have same type, "
                 + "but left side was of type 'String[]' and right side was of type 'String'. "
                 + "'Vehicle.model' is a collection of values, because 'Vehicle' is a cross context reference accessed "
                 + "from 'Policy' which resolves to multiple cardinality through path(s): Policy->Vehicle.",
@@ -109,8 +107,7 @@ public class ComparisonTypeDecoratorTest {
 
         String decoratedError = comparisonTypeDecorator.decorate(message, rule);
 
-        assertEquals("error in 'CreditCardInfo.cardType != policies' with message: "
-                + "Both sides of operator 'NotEquals' must have same type, "
+        assertEquals("Both sides of operator 'NotEquals' must have same type, "
                 + "but left side was of type 'String' and right side was of type 'String[]'. "
                 + "'CreditCardInfo.cardType' is not a collection of values, "
                 + "because 'CreditCardInfo' is a cross context reference accessed "
@@ -130,8 +127,7 @@ public class ComparisonTypeDecoratorTest {
 
         String decoratedError = comparisonTypeDecorator.decorate(message, rule);
 
-        assertEquals("error in 'CreditCardInfo.cardType != Vehicle.model' with message: "
-                + "Both sides of operator 'NotEquals' must have same type, "
+        assertEquals("Both sides of operator 'NotEquals' must have same type, "
                 + "but left side was of type 'String' and right side was of type 'String[]'. "
                 + "'CreditCardInfo.cardType' is not a collection of values, "
                 + "because 'CreditCardInfo' is a cross context reference accessed "

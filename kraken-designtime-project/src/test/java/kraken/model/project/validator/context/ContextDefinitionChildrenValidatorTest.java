@@ -60,7 +60,7 @@ public class ContextDefinitionChildrenValidatorTest {
         assertThat(message.getItem().getName(), is("ContextDefOne"));
         assertThat(message.getSeverity(), is(Severity.ERROR));
         assertThat(message.getMessage(),
-            containsString("child 'ContextDefTwo' is not valid because such context does not exist"));
+            containsString("Child 'ContextDefTwo' is not valid because such context definition does not exist."));
     }
 
     @Test
@@ -78,8 +78,8 @@ public class ContextDefinitionChildrenValidatorTest {
         assertThat(message.getItem().getName(), is("ContextDefOne"));
         assertThat(message.getSeverity(), is(Severity.ERROR));
         assertThat(message.getMessage(),
-            containsString("child 'SystemContextDef' is not valid because it is a system context."
-                + " System context cannot be used as a child in another context"));
+            containsString("Child 'SystemContextDef' is not valid because it is a system context definition. "
+                + "System context definition cannot be used as a child in another context."));
     }
 
     @Test

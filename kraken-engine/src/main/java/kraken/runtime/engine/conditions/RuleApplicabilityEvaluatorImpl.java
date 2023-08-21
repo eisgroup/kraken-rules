@@ -15,9 +15,12 @@
  */
 package kraken.runtime.engine.conditions;
 
+import static kraken.message.SystemMessageBuilder.Message.RULE_CONDITION_EXPRESSION_EVALUATION_FAILURE;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import kraken.message.SystemMessageLogger;
 import kraken.runtime.EvaluationSession;
 import kraken.runtime.engine.context.data.DataContext;
 import kraken.runtime.engine.evaluation.loop.RuleEvaluationInstance;
@@ -36,7 +39,7 @@ import kraken.tracer.Tracer;
  */
 public class RuleApplicabilityEvaluatorImpl implements RuleApplicabilityEvaluator {
 
-    private static final Logger logger = LoggerFactory.getLogger(RuleApplicabilityEvaluatorImpl.class);
+    private static final SystemMessageLogger logger = SystemMessageLogger.getLogger(RuleApplicabilityEvaluatorImpl.class);
 
     private final KrakenExpressionEvaluator evaluator;
 
@@ -67,7 +70,7 @@ public class RuleApplicabilityEvaluatorImpl implements RuleApplicabilityEvaluato
             return new ConditionEvaluationResult(conditionResult);
         } catch (KrakenExpressionEvaluationException e) {
             logger.debug(
-                "Condition expression '{}' failed with exception, \n{}",
+                RULE_CONDITION_EXPRESSION_EVALUATION_FAILURE,
                 condition.getExpression().getExpressionString(),
                 e
             );

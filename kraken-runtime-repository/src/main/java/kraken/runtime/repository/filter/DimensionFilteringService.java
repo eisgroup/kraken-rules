@@ -15,23 +15,24 @@
  */
 package kraken.runtime.repository.filter;
 
+import static kraken.message.SystemMessageBuilder.Message.RULE_REPOSITORY_FILTERING_MULTIPLE_ENTRYPOINTS;
+import static kraken.message.SystemMessageBuilder.Message.RULE_REPOSITORY_FILTERING_MULTIPLE_RULES;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
+import kraken.message.SystemMessageLogger;
 import kraken.runtime.model.MetadataContainer;
 import kraken.runtime.model.entrypoint.RuntimeEntryPoint;
 import kraken.runtime.model.rule.RuntimeRule;
 import kraken.runtime.repository.filter.trace.DimensionFilterAppliedOperation;
 import kraken.runtime.repository.filter.trace.EntryPointDimensionFilteringOperation;
-import kraken.runtime.repository.filter.trace.RuleDimensionFilteringOperation;
 import kraken.runtime.repository.filter.trace.MultipleDimensionResultOperation;
+import kraken.runtime.repository.filter.trace.RuleDimensionFilteringOperation;
 import kraken.tracer.Tracer;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author mulevicius
@@ -40,7 +41,7 @@ public class DimensionFilteringService {
 
     private final Collection<DimensionFilter> filters;
 
-    private final static Logger logger = LoggerFactory.getLogger(DimensionFilteringService.class);
+    private final static SystemMessageLogger logger = SystemMessageLogger.getLogger(DimensionFilteringService.class);
 
     public DimensionFilteringService(Collection<DimensionFilter> filters) {
         this.filters = Objects.requireNonNull(filters);
@@ -61,11 +62,8 @@ public class DimensionFilteringService {
 
                 if (filteredRules.size() > 1) {
                     Tracer.doOperation(new MultipleDimensionResultOperation());
-                    logger.warn(
-                        "Returning first of multiple rules found for name {} and context {}",
-                        rules.iterator().next().getName(),
-                        context
-                    );
+                    var ruleName = rules.iterator().next().getName();
+                    logger.warn(RULE_REPOSITORY_FILTERING_MULTIPLE_RULES, ruleName, context);
                 }
 
                 return getItem(filteredRules);
@@ -87,11 +85,8 @@ public class DimensionFilteringService {
 
                 if (filteredEntryPoints.size() > 1) {
                     Tracer.doOperation(new MultipleDimensionResultOperation());
-                    logger.warn(
-                        "Returning first of multiple entryPoints found for name {} and context {}",
-                        entryPoints.iterator().next().getName(),
-                        context
-                    );
+                    var entryPointName = entryPoints.iterator().next().getName();
+                    logger.warn(RULE_REPOSITORY_FILTERING_MULTIPLE_ENTRYPOINTS, entryPointName, context);
                 }
 
                 return getItem(filteredEntryPoints);

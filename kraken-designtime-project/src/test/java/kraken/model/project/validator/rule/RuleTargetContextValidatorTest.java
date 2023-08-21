@@ -63,7 +63,7 @@ public class RuleTargetContextValidatorTest {
 
         assertThat(message.getItem().getName(), is(rule.getName()));
         assertThat(message.getSeverity(), is(Severity.ERROR));
-        assertThat(message.getMessage(), containsString("missing ContextDefinition with name 'ContextDefOne'"));
+        assertThat(message.getMessage(), containsString("Missing context definition with name 'ContextDefOne'."));
     }
 
     @Test
@@ -79,7 +79,8 @@ public class RuleTargetContextValidatorTest {
 
         assertThat(message.getItem().getName(), is(rule.getName()));
         assertThat(message.getSeverity(), is(Severity.ERROR));
-        assertThat(message.getMessage(), containsString("cannot be applied on system ContextDefinition 'SystemContextDef'."));
+        assertThat(message.getMessage(),
+            containsString("Cannot be applied on system context definition 'SystemContextDef'."));
     }
 
     @Test
@@ -98,8 +99,8 @@ public class RuleTargetContextValidatorTest {
 
         assertThat(message.getItem().getName(), is(rule.getName()));
         assertThat(message.getSeverity(), is(Severity.ERROR));
-        assertThat(message.getMessage(), containsString("ContextDefinition 'ContextDefTwo' doesn't "
-            + "have field 'targetAttr'"));
+        assertThat(message.getMessage(),
+            containsString("Context definition 'ContextDefTwo' doesn't have field 'targetAttr'."));
     }
 
     @Test
@@ -119,7 +120,7 @@ public class RuleTargetContextValidatorTest {
         assertThat(message.getItem().getName(), is(rule.getName()));
         assertThat(message.getSeverity(), is(Severity.ERROR));
         assertThat(message.getMessage(),
-            containsString("cannot be applied on field because it is forbidden to be a rule target - 'targetAttr'"));
+            containsString("Cannot be applied on a field 'targetAttr' because it is forbidden to be a rule target."));
     }
 
     private KrakenProject createProject(Rule rule, ContextDefinition... contextDefinitions) {
