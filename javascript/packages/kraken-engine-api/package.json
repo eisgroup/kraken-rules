@@ -1,6 +1,6 @@
 {
     "name": "kraken-engine-api",
-    "version": "1.50.1-stage.0",
+    "version": "1.50.2-stage.0",
     "description": "Kraken Engine API",
     "main": "target/dist/js/src/index.js",
     "types": "target/dist/definitions/src/index.d.ts",
@@ -9,7 +9,7 @@
         "registry": "https://genesis-npm-release.exigengroup.com/repository/genesis-npm-release/"
     },
     "dependencies": {
-        "kraken-model": "1.50.1-stage.0"
+        "kraken-model": "1.50.2-stage.0"
     },
     "devDependencies": {
         "@types/node": "13.9.0",
@@ -34,5 +34,5 @@
         "target/dist/definitions",
         "target/dist/js"
     ],
-    "gitHead": "c38abc725f8c625fcdd999954e7940f5d6e827b6"
+    "gitHead": "f5543df3a697bea54f4bf495a2604f073215422a"
 }
