@@ -25,7 +25,9 @@ import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.misc.ObjectModelAdaptor;
 import org.stringtemplate.v4.misc.STNoSuchPropertyException;
 
+import java.beans.Introspector;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * Used by {@link DSLModelConverter} to render/adapt {@link ContextNavigation}, {@link ContextField} and {@link Cardinality}
@@ -45,16 +47,17 @@ class ContextDefinitionRenderer {
     }
 
     private static String resolveNavigationExpression(ContextNavigation navigation){
-        return navigation.getNavigationExpression() != null
-                && navigation.getNavigationExpression().compareToIgnoreCase(navigation.getTargetName()) != 0
-                ? navigation.getNavigationExpression()
-                : null;
+        if(Objects.equals(navigation.getNavigationExpression(), Introspector.decapitalize(navigation.getTargetName()))) {
+            return null;
+        }
+        return navigation.getNavigationExpression();
     }
 
     private static String resolveFieldPath(ContextField field){
-        return field.getFieldPath() != null && !field.getFieldPath().equals(field.getName())
-                ? field.getFieldPath()
-                : null;
+        if(Objects.equals(field.getFieldPath(), Introspector.decapitalize(field.getName()))) {
+            return null;
+        }
+        return field.getFieldPath();
     }
 
     private static String resolveFieldType(ContextField field){

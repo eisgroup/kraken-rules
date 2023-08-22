@@ -84,7 +84,8 @@ public class ContextDefinitionConversionTest {
 
         ContextNavigation contextNavigation1 = createContextNavigation("contextNavigation1", "expression", Cardinality.SINGLE);
         ContextNavigation contextNavigation2 = createContextNavigation("contextNavigation2", "expression", Cardinality.MULTIPLE);
-        contextDefinition.setChildren(toLinkedMap(ContextNavigation::getTargetName, contextNavigation1, contextNavigation2));
+        ContextNavigation contextNavigation3 = createContextNavigation("DNCoinsurance", "dnCoinsurance", Cardinality.SINGLE);
+        contextDefinition.setChildren(toLinkedMap(ContextNavigation::getTargetName, contextNavigation1, contextNavigation2, contextNavigation3));
 
         String convertedContext = convert(contextDefinition);
         assertEquals(
@@ -105,6 +106,8 @@ public class ContextDefinitionConversionTest {
             "    Child contextNavigation1 : expression" +
             System.lineSeparator() +
             "    Child* contextNavigation2 : expression" +
+            System.lineSeparator() +
+            "    Child DNCoinsurance : dnCoinsurance" +
             System.lineSeparator() +
             "}" +
             System.lineSeparator(),
@@ -204,7 +207,7 @@ public class ContextDefinitionConversionTest {
                         System.lineSeparator() +
                         "    String* field2 : notMatchingPath" +
                         System.lineSeparator() +
-                        "    Boolean Field3 : field3" +
+                        "    Boolean Field3" +
                         System.lineSeparator() +
                         "}" +
                         System.lineSeparator(),
