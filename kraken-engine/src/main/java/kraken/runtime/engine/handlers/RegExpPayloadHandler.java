@@ -55,7 +55,7 @@ public class RegExpPayloadHandler implements RulePayloadHandler {
         Tracer.doOperation(new FieldValueValidationOperation(value));
         boolean valid = isEmptyValue(value) || Pattern.matches(payload.getRegExp(), convertToString(value));
 
-        List<String> templateVariables = evaluator.evaluateTemplateVariables(payload.getErrorMessage(), dataContext, session);
+        var templateVariables = evaluator.evaluateTemplateVariables(payload.getErrorMessage(), dataContext, session);
         return new RegExpPayloadResult(valid, payload, templateVariables);
     }
 

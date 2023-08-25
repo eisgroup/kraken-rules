@@ -223,6 +223,7 @@ export namespace Localization {
         return {
             errorCode: payloadResult.message?.errorCode ?? defaultMessage.code,
             errorMessage: payloadResult.message?.errorMessage ?? defaultMessage.message,
+            rawTemplateVariables: payloadResult.message?.rawTemplateVariables ?? [],
             templateVariables: payloadResult.message?.errorMessage
                 ? payloadResult.message?.templateVariables
                 : renderTemplateParameters(defaultMessage.parameters ?? []),

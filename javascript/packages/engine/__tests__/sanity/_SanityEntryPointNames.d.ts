@@ -1,4 +1,5 @@
-export type EntryPointName = "on system context" 
+export type EntryPointName = "RawTemplates" 
+	| "on system context" 
 	| "Create date with string format" 
 	| "Date Getters" 
 	| "Now conversion" 

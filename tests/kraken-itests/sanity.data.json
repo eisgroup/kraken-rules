@@ -1,6 +1,10 @@
 {
   "evaluations": [
     {
+      "id": "RawTemplates",
+      "entryPointName": "Policy:RawTemplates"
+    },
+    {
       "id": "on system context",
       "entryPointName": "Policy:on system context"
     },

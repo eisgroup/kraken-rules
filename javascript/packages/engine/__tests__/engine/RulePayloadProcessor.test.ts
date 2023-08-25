@@ -90,6 +90,7 @@ describe('RulePayloadProcessor', () => {
         rule.condition = {
             expression: {
                 expressionString: 'false',
+                originalExpressionString: 'false',
                 expressionType: 'COMPLEX',
             },
         }
@@ -100,6 +101,7 @@ describe('RulePayloadProcessor', () => {
         rule.condition = {
             expression: {
                 expressionString: 'true',
+                originalExpressionString: 'true',
                 expressionType: 'COMPLEX',
             },
         }

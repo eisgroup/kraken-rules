@@ -39,16 +39,8 @@ export class AssertionPayloadHandler implements RulePayloadHandler {
 
         logger.debug(() => formatExpressionEvaluationMessage('assertion', payload.assertionExpression, dataContext))
 
-        const expressionResult = this.evaluator.evaluate(
-            payload.assertionExpression,
-            dataContext,
-            session.expressionContext,
-        )
-        const templateVariables = this.evaluator.evaluateTemplateVariables(
-            payload.errorMessage,
-            dataContext,
-            session.expressionContext,
-        )
+        const expressionResult = this.evaluator.evaluate(payload.assertionExpression, dataContext, session)
+        const templateVariables = this.evaluator.evaluateTemplateVariables(payload.errorMessage, dataContext, session)
         if (ExpressionEvaluationResult.isSuccess(expressionResult)) {
             return payloadResultCreator.assertion(payload, Boolean(expressionResult.success), templateVariables)
         }

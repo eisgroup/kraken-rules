@@ -29,6 +29,7 @@ import org.junit.Test;
 import kraken.model.context.Cardinality;
 import kraken.model.context.external.ExternalContext;
 import kraken.model.context.external.ExternalContextDefinition;
+import kraken.model.factory.RulesModelFactory;
 import kraken.model.project.KrakenProject;
 import kraken.model.project.KrakenProjectMocks;
 import kraken.model.project.validator.Severity;
@@ -202,6 +203,28 @@ public class ExternalContextValidatorTest {
                 KrakenProjectMocks.externalContextDefinitionAttributeType("UNKNOWN", true, Cardinality.SINGLE))));
 
         List<ValidationMessage> messages = validate(krakenProject(null, List.of(externalContextDefinition)));
+
+        assertThat(messages, hasSize(0));
+    }
+
+    @Test
+    public void shouldReturnNoValidationMessagesFromCorrectSystemContextType() {
+        ExternalContextDefinition externalContextDefinition = KrakenProjectMocks.externalContextDefinition("TypeName",
+            List.of(KrakenProjectMocks.externalContextDefinitionAttribute("attributeName",
+                KrakenProjectMocks.externalContextDefinitionAttributeType("ExternalLink", false, Cardinality.SINGLE))));
+
+        var systemContextDefinition = RulesModelFactory.getInstance().createContextDefinition();
+        systemContextDefinition.setName("ExternalLink");
+        systemContextDefinition.setSystem(true);
+
+        var krakenProject = KrakenProjectMocks.krakenProject(
+            List.of(systemContextDefinition),
+            null,
+            List.of(externalContextDefinition),
+            List.of(),
+            List.of());
+
+        List<ValidationMessage> messages = validate(krakenProject);
 
         assertThat(messages, hasSize(0));
     }

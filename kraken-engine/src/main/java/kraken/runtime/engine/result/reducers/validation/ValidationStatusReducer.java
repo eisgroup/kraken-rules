@@ -149,6 +149,7 @@ public class ValidationStatusReducer implements EntryPointResultReducer<Validati
             message.getMessage(),
             message.getCode(),
             message.getParameters(),
+            message.getRawParameters(),
             message.getMessageTemplate(),
             ((ValidationPayloadResult)ruleResult.getPayloadResult()).getValidationSeverity(),
             fieldEvaluationResult.getContextFieldInfo()
@@ -167,6 +168,9 @@ public class ValidationStatusReducer implements EntryPointResultReducer<Validati
             payloadResult.getMessage() != null
                 ? payloadResult.getTemplateVariables()
                 : renderParameters(defaultMessage.getParameters()),
+            payloadResult.getMessage() != null
+                ? payloadResult.getRawTemplateVariables()
+                : defaultMessage.getParameters(),
             payloadResult.getMessageTemplate() != null
                 ? payloadResult.getMessageTemplate()
                 : defaultMessage.getMessage()
@@ -191,12 +195,18 @@ public class ValidationStatusReducer implements EntryPointResultReducer<Validati
         private final String code;
         private final String message;
         private final List<String> parameters;
+        private final List<Object> rawParameters;
         private final String messageTemplate;
 
-        public RenderedValidationMessage(@Nonnull String code, @Nonnull String message, @Nonnull List<String> parameters, @Nonnull String messageTemplate) {
+        public RenderedValidationMessage(@Nonnull String code,
+                                         @Nonnull String message,
+                                         @Nonnull List<String> parameters,
+                                         @Nonnull List<Object> rawParameters,
+                                         @Nonnull String messageTemplate) {
             this.code = code;
             this.message = message;
             this.parameters = parameters;
+            this.rawParameters = rawParameters;
             this.messageTemplate = messageTemplate;
         }
 
@@ -213,6 +223,11 @@ public class ValidationStatusReducer implements EntryPointResultReducer<Validati
         @Nonnull
         public List<String> getParameters() {
             return parameters;
+        }
+
+        @Nonnull
+        public List<Object> getRawParameters() {
+            return rawParameters;
         }
 
         @Nonnull

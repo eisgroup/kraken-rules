@@ -32,30 +32,37 @@ public class CompiledExpression implements Serializable {
     private static final long serialVersionUID = 7122032254357905188L;
 
     private final String expressionString;
+    private final String originalExpressionString;
     private final ExpressionType expressionType;
     private final Serializable compiledLiteralValue;
-    private final String compiledLiteralValueType;
+    private final String expressionEvaluationType;
     private final Collection<ExpressionVariable> expressionVariables;
     private final transient Ast ast;
 
     public CompiledExpression(
             String expressionString,
+            String originalExpressionString,
             ExpressionType expressionType,
             Serializable compiledLiteralValue,
-            String compiledLiteralValueType,
+            String expressionEvaluationType,
             Collection<ExpressionVariable> expressionVariables,
             Ast ast
     ) {
         this.expressionString = expressionString;
+        this.originalExpressionString = originalExpressionString;
         this.expressionType = expressionType;
         this.compiledLiteralValue = compiledLiteralValue;
-        this.compiledLiteralValueType = compiledLiteralValueType;
+        this.expressionEvaluationType = expressionEvaluationType;
         this.expressionVariables = expressionVariables;
         this.ast = ast;
     }
 
     public String getExpressionString() {
         return expressionString;
+    }
+
+    public String getOriginalExpressionString() {
+        return originalExpressionString;
     }
 
     public ExpressionType getExpressionType() {
@@ -66,12 +73,8 @@ public class CompiledExpression implements Serializable {
         return compiledLiteralValue;
     }
 
-    /**
-     *
-     * @return type of literal value {@link #getCompiledLiteralValue()}. If literal value is null then type will be null.
-     */
-    public String getCompiledLiteralValueType() {
-        return compiledLiteralValueType;
+    public String getExpressionEvaluationType() {
+        return expressionEvaluationType;
     }
 
     public Collection<ExpressionVariable> getExpressionVariables() {

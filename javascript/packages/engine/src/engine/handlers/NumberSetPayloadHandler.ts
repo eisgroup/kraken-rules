@@ -47,11 +47,7 @@ export class NumberSetPayloadHandler implements RulePayloadHandler {
             success = Numbers.isValueInNumberSet(value, payload.min, payload.max, payload.step)
         }
 
-        const templateVariables = this.evaluator.evaluateTemplateVariables(
-            payload.errorMessage,
-            dataContext,
-            session.expressionContext,
-        )
+        const templateVariables = this.evaluator.evaluateTemplateVariables(payload.errorMessage, dataContext, session)
 
         return payloadResultCreator.numberSet(payload, success, templateVariables)
     }

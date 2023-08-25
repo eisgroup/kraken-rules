@@ -25,7 +25,7 @@ public class RegExpPayloadResult extends ValidationPayloadResult {
 
     private final String regExp;
 
-    public RegExpPayloadResult(Boolean success, RegExpPayload payload, List<String> templateVariables) {
+    public RegExpPayloadResult(Boolean success, RegExpPayload payload, List<Object> templateVariables) {
         super(success, payload, templateVariables);
 
         this.regExp = payload.getRegExp();

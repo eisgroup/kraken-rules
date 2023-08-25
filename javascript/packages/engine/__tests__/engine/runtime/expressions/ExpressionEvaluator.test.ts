@@ -17,18 +17,26 @@
 import { ExpressionEvaluationResult } from 'kraken-engine-api'
 
 import { ExpressionEvaluator } from '../../../../src/engine/runtime/expressions/ExpressionEvaluator'
-import { dateFunctions } from '../../../../src/engine/runtime/expressions/functionLibrary/DateFunctions'
 import { mock } from '../../../mock'
 import { Contexts, Expressions } from 'kraken-model'
 import { TestProduct } from 'kraken-test-product'
 import Insured = TestProduct.kraken.testproduct.domain.Insured
+import { Moneys } from '../../../../src/engine/runtime/expressions/math/Moneys'
 
 const evaluator = ExpressionEvaluator.DEFAULT
 
-function complex(expressionString: string): Expressions.Expression {
+function complex(expressionString: string): Expressions.ComplexExpression {
     return {
         expressionType: 'COMPLEX',
         expressionString,
+        originalExpressionString: expressionString,
+    }
+}
+function path(expressionString: string): Expressions.PathExpression {
+    return {
+        expressionType: 'PATH',
+        expressionString,
+        originalExpressionString: expressionString,
     }
 }
 
@@ -40,7 +48,7 @@ function unwrap(expressionResult: ExpressionEvaluationResult.Result): unknown {
     return expressionResult.success
 }
 
-const { contextBuilder, data } = mock
+const { session, contextBuilder, data } = mock
 let dataObject = data.empty()
 beforeEach(() => (dataObject = data.empty()))
 
@@ -48,7 +56,7 @@ describe('ExpressionEvaluator', () => {
     describe('evaluate', () => {
         it('should evaluate the expression with _in native function', () => {
             function evaluate(expressionString): unknown {
-                return evaluator.evaluate({ expressionString, expressionType: 'COMPLEX' }, mock.dataContextEmpty())
+                return evaluator.evaluate(complex(expressionString), mock.dataContextEmpty(), session)
             }
             expect(
                 evaluate(
@@ -59,17 +67,15 @@ describe('ExpressionEvaluator', () => {
             expect(evaluate('_in(["a", "b"], "a")')).toBeTruthy()
         })
         it('should evaluate get with PropertyExpression', () => {
-            const name = evaluator.evaluate(
-                { expressionType: 'PATH', expressionString: 'id' },
-                contextBuilder.buildFromRoot(dataObject),
-            )
+            const name = evaluator.evaluate(path('id'), contextBuilder.buildFromRoot(dataObject), session)
             expect(unwrap(name)).toBe(dataObject.id)
         })
         it('should evaluate get with PathExpression', () => {
             dataObject.billingInfo = { accountName: 'name' }
             const name = evaluator.evaluate(
-                { expressionType: 'PATH', expressionString: 'billingInfo.accountName' },
+                path('billingInfo.accountName'),
                 contextBuilder.buildFromRoot(dataObject),
+                session,
             )
             expect(unwrap(name)).toBe(dataObject.billingInfo.accountName)
         })
@@ -79,12 +85,28 @@ describe('ExpressionEvaluator', () => {
                 {
                     expressionType: 'LITERAL',
                     expressionString: '3',
+                    originalExpressionString: '3',
                     compiledLiteralValue: 3,
-                    compiledLiteralValueType: 'Number',
+                    expressionEvaluationType: 'Number',
                 },
                 contextBuilder.buildFromRoot(dataObject),
+                session,
             )
             expect(unwrap(name)).toBe(3)
+        })
+        it('should coerce number to money', () => {
+            const name = evaluator.evaluate(
+                {
+                    expressionType: 'LITERAL',
+                    expressionString: '10',
+                    originalExpressionString: '10',
+                    compiledLiteralValue: 10,
+                    expressionEvaluationType: 'Money',
+                },
+                contextBuilder.buildFromRoot(dataObject),
+                session,
+            )
+            expect(unwrap(name)).toStrictEqual(Moneys.toMoney('USD', 10))
         })
         it('should throw error on not supported expression', () => {
             expect(() =>
@@ -92,18 +114,24 @@ describe('ExpressionEvaluator', () => {
                     // @ts-expect-error testing negative case
                     { type: 'NonExisting' },
                     contextBuilder.buildFromRoot(dataObject),
+                    session,
                 ),
             ).toThrow(`Unknown expression type encountered: ${JSON.stringify({ type: 'NonExisting' })}`)
         })
         describe('ComplexExpression', () => {
             it("should use '__dataObject__' and get data from DataContext", () => {
-                const name = evaluator.evaluate(complex('__dataObject__.id'), contextBuilder.buildFromRoot(dataObject))
+                const name = evaluator.evaluate(
+                    complex('__dataObject__.id'),
+                    contextBuilder.buildFromRoot(dataObject),
+                    session,
+                )
                 expect(unwrap(name)).toBe(dataObject.id)
             })
             it('should navigate data from DataContext', () => {
                 const name = evaluator.evaluate(
                     complex('__dataObject__.insured.id'),
                     contextBuilder.buildFromRoot(dataObject),
+                    session,
                 )
                 expect(unwrap(name)).toBe(dataObject.insured!.id)
             })
@@ -111,6 +139,7 @@ describe('ExpressionEvaluator', () => {
                 const result = evaluator.evaluate(
                     complex("__dataObject__.id == '0'"),
                     contextBuilder.buildFromRoot(dataObject),
+                    session,
                 )
                 expect(!!unwrap(result)).toBeTruthy()
             })
@@ -118,25 +147,27 @@ describe('ExpressionEvaluator', () => {
                 const result = evaluator.evaluate(
                     complex("__dataObject__.id == '0' && __dataObject__.cd === 'Policy'"),
                     contextBuilder.buildFromRoot(dataObject),
+                    session,
                 )
                 expect(!!unwrap(result)).toBeTruthy()
             })
             it('should throw on NaN result', () => {
-                const result = evaluator.evaluate(complex('Math.sqrt(-1)'), mock.data.dataContextEmpty())
+                const result = evaluator.evaluate(complex('Math.sqrt(-1)'), mock.data.dataContextEmpty(), session)
                 expect(ExpressionEvaluationResult.isError(result)).toBeTruthy()
             })
             it('should throw on +Infinity result', () => {
-                const result = evaluator.evaluate(complex('1 / 0'), mock.data.dataContextEmpty())
+                const result = evaluator.evaluate(complex('1 / 0'), mock.data.dataContextEmpty(), session)
                 expect(ExpressionEvaluationResult.isError(result)).toBeTruthy()
             })
             it('should throw on -Infinity result', () => {
-                const result = evaluator.evaluate(complex('-1 / 0'), mock.data.dataContextEmpty())
+                const result = evaluator.evaluate(complex('-1 / 0'), mock.data.dataContextEmpty(), session)
                 expect(ExpressionEvaluationResult.isError(result)).toBeTruthy()
             })
             it('should invoke kel functions', () => {
                 const result = mock.policyEvaluator.evaluate(
                     complex('this.Fibonacci(10) === 55'),
                     contextBuilder.buildFromRoot(dataObject),
+                    session,
                 )
                 expect(unwrap(result)).toBeTruthy()
             })
@@ -164,10 +195,7 @@ describe('ExpressionEvaluator', () => {
                 name: 'Peter',
             }
             const navigationExpression: Contexts.ContextNavigation = {
-                navigationExpression: {
-                    expressionType: 'PATH',
-                    expressionString: 'insured',
-                },
+                navigationExpression: path('insured'),
                 cardinality: 'SINGLE',
                 targetName: 'Insured',
             }
@@ -185,10 +213,7 @@ describe('ExpressionEvaluator', () => {
                 name: 'Peter',
             }
             const navigationExpression: Contexts.ContextNavigation = {
-                navigationExpression: {
-                    expressionType: 'COMPLEX',
-                    expressionString: '__dataObject__.insured',
-                },
+                navigationExpression: complex('__dataObject__.insured'),
                 cardinality: 'SINGLE',
                 targetName: 'Insured',
             }
@@ -224,7 +249,7 @@ describe('ExpressionEvaluator', () => {
                         errorCode: 'code',
                     },
                     contextBuilder.buildFromRoot(dataObject),
-                    {},
+                    session,
                 )
                 expect(templateVariables).toStrictEqual([])
             })
@@ -236,70 +261,79 @@ describe('ExpressionEvaluator', () => {
                             {
                                 expressionType: 'LITERAL',
                                 expressionString: '"string"',
+                                originalExpressionString: '"string',
                                 compiledLiteralValue: 'string',
-                                compiledLiteralValueType: 'String',
+                                expressionEvaluationType: 'String',
                             },
                             {
                                 expressionType: 'LITERAL',
                                 expressionString: '10.123',
+                                originalExpressionString: '10.123',
                                 compiledLiteralValue: 10.123,
-                                compiledLiteralValueType: 'Number',
+                                expressionEvaluationType: 'Number',
                             },
                             {
                                 expressionType: 'LITERAL',
                                 expressionString: 'true',
+                                originalExpressionString: 'true',
                                 compiledLiteralValue: true,
-                                compiledLiteralValueType: 'Boolean',
+                                expressionEvaluationType: 'Boolean',
                             },
                             {
                                 expressionType: 'LITERAL',
                                 expressionString: 'false',
+                                originalExpressionString: 'false',
                                 compiledLiteralValue: false,
-                                compiledLiteralValueType: 'Boolean',
+                                expressionEvaluationType: 'Boolean',
                             },
                             {
                                 expressionType: 'LITERAL',
                                 expressionString: '',
+                                originalExpressionString: '',
                                 compiledLiteralValue: null,
                             },
                             {
                                 expressionType: 'LITERAL',
                                 expressionString: '2020-01-01',
+                                originalExpressionString: '2020-01-01',
                                 compiledLiteralValue: '2020-01-01',
-                                compiledLiteralValueType: 'Date',
+                                expressionEvaluationType: 'Date',
                             },
                             {
                                 expressionType: 'LITERAL',
                                 expressionString: '2020-01-01T10:00:00Z',
+                                originalExpressionString: '2020-01-01T10:00:00Z',
                                 compiledLiteralValue: '2020-01-01T10:00:00Z',
-                                compiledLiteralValueType: 'DateTime',
+                                expressionEvaluationType: 'DateTime',
                             },
                             {
-                                expressionType: 'COMPLEX',
-                                expressionString: '__dataObject__.policyNumber',
+                                expressionType: 'LITERAL',
+                                expressionString: '25.55',
+                                originalExpressionString: '25.55',
+                                compiledLiteralValue: 25.55,
+                                expressionEvaluationType: 'Money',
                             },
-                            {
-                                expressionType: 'COMPLEX',
-                                expressionString: '__dataObject__.unknownAttribute',
-                            },
+                            complex('__dataObject__.policyNumber'),
+                            complex('__dataObject__.unknownAttribute'),
                         ],
                         templateParts: [],
                         errorCode: 'code',
                     },
                     contextBuilder.buildFromRoot(dataObject),
-                    {},
+                    session,
                 )
 
                 expect(templateVariables).toStrictEqual([
                     'string',
-                    '10.123',
-                    'true',
-                    'false',
-                    '',
-                    dateFunctions.Format(new Date('2020-01-01'), 'YYYY-MM-DD hh:mm:ss'),
-                    dateFunctions.Format(new Date('2020-01-01T10:00:00Z'), 'YYYY-MM-DD hh:mm:ss'),
+                    10.123,
+                    true,
+                    false,
+                    null,
+                    new Date('2020-01-01'),
+                    new Date('2020-01-01T10:00:00Z'),
+                    Moneys.toMoney('USD', 25.55),
                     'policyNumber',
-                    '',
+                    undefined,
                 ])
             })
         })

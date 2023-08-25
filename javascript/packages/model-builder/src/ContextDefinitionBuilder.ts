@@ -63,6 +63,7 @@ export class ContextDefinitionBuilder {
             navigationExpression: {
                 expressionType: 'PATH',
                 expressionString: nav,
+                originalExpressionString: nav,
             },
             cardinality: 'SINGLE',
             targetName: name,

@@ -35,7 +35,7 @@ public class NumberSetPayloadResult extends ValidationPayloadResult {
 
     public NumberSetPayloadResult(Boolean success,
                                   NumberSetPayload payload,
-                                  List<String> templateVariables) {
+                                  List<Object> templateVariables) {
         super(success, payload, templateVariables);
 
         this.min = payload.getMin();

@@ -25,7 +25,7 @@ public class LengthPayloadResult extends ValidationPayloadResult {
 
     private final int length;
 
-    public LengthPayloadResult(Boolean success, LengthPayload payload, List<String> templateVariables) {
+    public LengthPayloadResult(Boolean success, LengthPayload payload, List<Object> templateVariables) {
         super(success, payload, templateVariables);
 
         this.length = payload.getLength();

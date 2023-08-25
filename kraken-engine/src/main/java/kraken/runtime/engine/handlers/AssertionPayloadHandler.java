@@ -57,14 +57,14 @@ public class AssertionPayloadHandler implements RulePayloadHandler {
                 new AssertionExpressionEvaluationOperation(assertionPayload.getAssertionExpression(), dataContext)
             );
             Object result = evaluator.evaluate(assertionPayload.getAssertionExpression(), dataContext, session);
-            List<String> templateVariables
+            var templateVariables
                 = evaluator.evaluateTemplateVariables(assertionPayload.getErrorMessage(), dataContext, session);
 
             return new AssertionPayloadResult(Boolean.TRUE.equals(result), assertionPayload, templateVariables);
         } catch (KrakenExpressionEvaluationException e) {
             logger.debug(
                 RULE_ASSERTION_EXPRESSION_EVALUATION_FAILURE,
-                assertionPayload.getAssertionExpression().getExpressionString(),
+                assertionPayload.getAssertionExpression().getOriginalExpressionString(),
                 rule.getName(),
                 e
             );

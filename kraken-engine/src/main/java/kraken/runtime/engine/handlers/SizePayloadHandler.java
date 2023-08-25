@@ -18,6 +18,7 @@ package kraken.runtime.engine.handlers;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import kraken.model.payload.PayloadType;
 import kraken.runtime.EvaluationSession;
@@ -29,6 +30,7 @@ import kraken.runtime.engine.result.SizePayloadResult;
 import kraken.runtime.expressions.KrakenExpressionEvaluator;
 import kraken.runtime.model.rule.RuntimeRule;
 import kraken.runtime.model.rule.payload.validation.SizePayload;
+import kraken.runtime.utils.TemplateParameterRenderer;
 import kraken.tracer.Tracer;
 
 /**
@@ -55,7 +57,7 @@ public class SizePayloadHandler implements RulePayloadHandler {
         }
 
         var payload = (SizePayload) rule.getPayload();
-        List<String> templateVariables = evaluator.evaluateTemplateVariables(
+        List<Object> rawTemplateVariables = evaluator.evaluateTemplateVariables(
             payload.getErrorMessage(),
             dataContext,
             session
@@ -67,7 +69,7 @@ public class SizePayloadHandler implements RulePayloadHandler {
             success = evaluateCollection((Collection<?>) value, payload);
         }
 
-        return new SizePayloadResult(success, payload, templateVariables);
+        return new SizePayloadResult(success, payload, rawTemplateVariables);
     }
 
     private boolean evaluateCollection(Collection<?> fieldValues, SizePayload payload) {

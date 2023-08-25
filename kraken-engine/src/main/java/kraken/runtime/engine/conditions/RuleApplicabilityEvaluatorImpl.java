@@ -71,7 +71,7 @@ public class RuleApplicabilityEvaluatorImpl implements RuleApplicabilityEvaluato
         } catch (KrakenExpressionEvaluationException e) {
             logger.debug(
                 RULE_CONDITION_EXPRESSION_EVALUATION_FAILURE,
-                condition.getExpression().getExpressionString(),
+                condition.getExpression().getOriginalExpressionString(),
                 e
             );
             return new ConditionEvaluationResult(e);

@@ -21,6 +21,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -45,6 +46,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -78,6 +80,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "Value didn\u0027t match asserton: doNotSolicit \u003d true or doNotSolicit \u003d false",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "Value didn\u0027\u0027t match asserton: doNotSolicit \u003d true or doNotSolicit \u003d false",
             "validationSeverity": "critical"
           },
@@ -101,6 +104,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "Value didn\u0027t match asserton: doNotSolicit \u003d true or doNotSolicit \u003d false",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "Value didn\u0027\u0027t match asserton: doNotSolicit \u003d true or doNotSolicit \u003d false",
             "validationSeverity": "critical"
           },
@@ -135,6 +139,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -159,6 +164,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -193,6 +199,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -226,6 +233,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "Value didn\u0027t match asserton: doNotSolicit \u003d true or doNotSolicit \u003d false",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "Value didn\u0027\u0027t match asserton: doNotSolicit \u003d true or doNotSolicit \u003d false",
             "validationSeverity": "critical"
           },
@@ -260,6 +268,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -294,6 +303,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -328,6 +338,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -362,6 +373,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -395,6 +407,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "Value didn\u0027t match asserton: firstName !\u003d lastName",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "Value didn\u0027\u0027t match asserton: firstName !\u003d lastName",
             "validationSeverity": "critical"
           },
@@ -429,6 +442,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -463,6 +477,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -497,6 +512,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -531,6 +547,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -565,6 +582,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -599,6 +617,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -633,6 +652,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "Field is required",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "Field is required",
             "validationSeverity": "critical"
           },
@@ -667,6 +687,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -701,6 +722,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -734,6 +756,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "Value didn\u0027t match asserton: termNo \u003e\u003d 0 and termNo \u003c 100",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "Value didn\u0027\u0027t match asserton: termNo \u003e\u003d 0 and termNo \u003c 100",
             "validationSeverity": "critical"
           },
@@ -758,6 +781,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -792,6 +816,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -826,6 +851,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -860,6 +886,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -894,6 +921,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -928,6 +956,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -961,6 +990,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "Value didn\u0027t match asserton: included \u003d true or included \u003d false",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "Value didn\u0027\u0027t match asserton: included \u003d true or included \u003d false",
             "validationSeverity": "critical"
           },
@@ -995,6 +1025,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -1029,6 +1060,7 @@ kraken.engine.sanity.check.EngineSanityPolicyCombineTest.shouldEvaluatePolicyCom
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },

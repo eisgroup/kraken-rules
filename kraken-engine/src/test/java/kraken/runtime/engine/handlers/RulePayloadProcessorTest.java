@@ -116,6 +116,7 @@ public class RulePayloadProcessorTest {
         CompiledExpression compiledExpression = mock(CompiledExpression.class);
 
         when(compiledExpression.getExpressionString()).thenReturn("");
+        when(compiledExpression.getOriginalExpressionString()).thenReturn("");
         when(assertionPayload.getType()).thenReturn(PayloadType.ASSERTION);
         when(assertionPayload.getSeverity()).thenReturn(ValidationSeverity.critical);
         when(assertionPayload.isOverridable()).thenReturn(isOverridable);

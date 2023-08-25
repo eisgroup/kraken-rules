@@ -59,11 +59,7 @@ export class SizePayloadHandler implements RulePayloadHandler {
             }
         }
 
-        const templateVariables = this.evaluator.evaluateTemplateVariables(
-            payload.errorMessage,
-            dataContext,
-            session.expressionContext,
-        )
+        const templateVariables = this.evaluator.evaluateTemplateVariables(payload.errorMessage, dataContext, session)
         return payloadResultCreator.size(payload, result, templateVariables)
     }
 

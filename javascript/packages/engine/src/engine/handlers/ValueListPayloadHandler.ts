@@ -54,11 +54,7 @@ export class ValueListPayloadHandler implements RulePayloadHandler {
         logger.debug(() => `Validating field which has value: ${ExpressionEvaluator.renderFieldValue(value)}`)
         const result = this.doExecute(value, payload)
 
-        const templateVariables = this.evaluator.evaluateTemplateVariables(
-            payload.errorMessage,
-            dataContext,
-            session.expressionContext,
-        )
+        const templateVariables = this.evaluator.evaluateTemplateVariables(payload.errorMessage, dataContext, session)
         return payloadResultCreator.valueList(payload, result, templateVariables)
     }
 

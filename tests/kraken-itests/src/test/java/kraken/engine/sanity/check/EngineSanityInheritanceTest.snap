@@ -220,6 +220,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckAssertionCarCo
             "messageCode": "code",
             "message": "Value didn\u0027t match assertion expirationDate \u003e effectiveDate",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "Value didn\u0027\u0027t match assertion expirationDate \u003e effectiveDate",
             "validationSeverity": "critical"
           },
@@ -253,6 +254,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckAssertionCarCo
             "messageCode": "code",
             "message": "Value didn\u0027t match assertion limitAmount \u003e 1000 and limitAmount \u003c 1000000",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "Value didn\u0027\u0027t match assertion limitAmount \u003e 1000 and limitAmount \u003c 1000000",
             "validationSeverity": "critical"
           },
@@ -286,6 +288,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckAssertionCarCo
             "messageCode": "code",
             "message": "Value didn\u0027t match assertion expirationDate \u003e effectiveDate",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "Value didn\u0027\u0027t match assertion expirationDate \u003e effectiveDate",
             "validationSeverity": "critical"
           },
@@ -319,6 +322,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckAssertionCarCo
             "messageCode": "code",
             "message": "Value didn\u0027t match assertion limitAmount \u003e 1000 and limitAmount \u003c 1000000",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "Value didn\u0027\u0027t match assertion limitAmount \u003e 1000 and limitAmount \u003c 1000000",
             "validationSeverity": "critical"
           },
@@ -352,6 +356,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckAssertionCarCo
             "messageCode": "code",
             "message": "Value didn\u0027t match assertion limitAmount \u003e 1000 and limitAmount \u003c 1000000",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "Value didn\u0027\u0027t match assertion limitAmount \u003e 1000 and limitAmount \u003c 1000000",
             "validationSeverity": "critical"
           },
@@ -653,6 +658,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
             "usageType": "mandatory",
             "success": false,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -684,6 +690,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
             "usageType": "mandatory",
             "success": false,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -716,6 +723,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
             "success": false,
             "messageCode": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "",
             "validationSeverity": "critical"
           },
@@ -749,6 +757,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
             "success": false,
             "messageCode": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "",
             "validationSeverity": "critical"
           },
@@ -781,6 +790,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
             "usageType": "mandatory",
             "success": false,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -812,6 +822,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
             "usageType": "mandatory",
             "success": false,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -843,6 +854,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
             "usageType": "mandatory",
             "success": false,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -875,6 +887,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
             "success": false,
             "messageCode": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "",
             "validationSeverity": "critical"
           },
@@ -908,6 +921,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
             "success": false,
             "messageCode": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "",
             "validationSeverity": "critical"
           },
@@ -940,6 +954,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
             "usageType": "mandatory",
             "success": false,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -971,6 +986,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
             "usageType": "mandatory",
             "success": false,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1002,6 +1018,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
             "usageType": "mandatory",
             "success": false,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1033,6 +1050,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
             "usageType": "mandatory",
             "success": false,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1070,6 +1088,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
             "usageType": "mandatory",
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1101,6 +1120,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
             "usageType": "mandatory",
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1133,6 +1153,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
             "success": true,
             "messageCode": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "",
             "validationSeverity": "critical"
           },
@@ -1166,6 +1187,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
             "success": true,
             "messageCode": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "",
             "validationSeverity": "critical"
           },
@@ -1198,6 +1220,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
             "usageType": "mandatory",
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1229,6 +1252,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
             "usageType": "mandatory",
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1260,6 +1284,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
             "usageType": "mandatory",
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1292,6 +1317,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
             "success": true,
             "messageCode": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "",
             "validationSeverity": "critical"
           },
@@ -1325,6 +1351,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
             "success": true,
             "messageCode": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "",
             "validationSeverity": "critical"
           },
@@ -1357,6 +1384,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
             "usageType": "mandatory",
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1388,6 +1416,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
             "usageType": "mandatory",
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1419,6 +1448,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
             "usageType": "mandatory",
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1450,6 +1480,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldCheckUsagePayloadCa
             "usageType": "mandatory",
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -1691,6 +1722,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldEvaluateRulesOnLoca
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -1715,6 +1747,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldEvaluateRulesOnLoca
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -1749,6 +1782,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldEvaluateRulesOnLoca
             "messageCode": "code",
             "message": "String doesn\u0027t match Regular Expression: ^\\d{5}$",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "String doesn\u0027\u0027t match Regular Expression: ^\\d\u0027{\u00275\u0027}\u0027$",
             "validationSeverity": "critical"
           },
@@ -1773,6 +1807,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldEvaluateRulesOnLoca
             "messageCode": "code",
             "message": "String doesn\u0027t match Regular Expression: ^\\d{5}$",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "String doesn\u0027\u0027t match Regular Expression: ^\\d\u0027{\u00275\u0027}\u0027$",
             "validationSeverity": "critical"
           },
@@ -1825,6 +1860,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldEvaluateRulesOnLoca
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -1859,6 +1895,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldEvaluateRulesOnLoca
             "messageCode": "code",
             "message": "String doesn\u0027t match Regular Expression: ^\\d{5}$",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "String doesn\u0027\u0027t match Regular Expression: ^\\d\u0027{\u00275\u0027}\u0027$",
             "validationSeverity": "critical"
           },
@@ -1973,6 +2010,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldValidateInheritedMa
             "usageType": "mandatory",
             "success": false,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -2004,6 +2042,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldValidateInheritedMa
             "usageType": "mandatory",
             "success": false,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -2036,6 +2075,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldValidateInheritedMa
             "success": false,
             "messageCode": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "",
             "validationSeverity": "critical"
           },
@@ -2069,6 +2109,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldValidateInheritedMa
             "success": false,
             "messageCode": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "",
             "validationSeverity": "critical"
           },
@@ -2101,6 +2142,7 @@ kraken.engine.sanity.check.EngineSanityInheritanceTest.shouldValidateInheritedMa
             "usageType": "mandatory",
             "success": false,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {

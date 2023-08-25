@@ -23,3 +23,25 @@ Rule "Templates_R03_Policy.state" On Policy.state {
     Error "R03-ERROR" :
         "\${nothingtoseehere} ${} ${true} ${false} ${null} ${'string'} ${\"string\"} ${10.123} ${Date(\"2020-01-01\")} ${2021-01-01T10:00:00Z} ${Concat(for i in {'a', 'b', 'c'} return UpperCase(i))}"
 }
+
+
+EntryPoint "RawTemplates" {
+    "RawTemplates_R01_Policy.state"
+}
+
+Rule "RawTemplates_R01_Policy.state" On Policy.state {
+    Assert false
+    Error "R01-ERROR" :
+        "
+        ${true}
+        ${false}
+        ${null}
+        ${'string'}
+        ${\"string\"}
+        ${10.123}
+        ${Date(\"2020-01-01\")}
+        ${2021-01-01T10:00:00Z}
+        ${Concat(for i in {'a', 'b', 'c'} return UpperCase(i))}
+        ${Policy.policyValue}
+        "
+}

@@ -15,6 +15,7 @@
  */
 package kraken.runtime.engine.result.reducers.validation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -151,7 +152,7 @@ public class DefaultValidationMessageProvider implements ValidationMessageProvid
         return new ValidationMessage(
             MESSAGE.VALUE_LIST.code,
             MESSAGE.VALUE_LIST.message,
-            List.of(payloadResult.getValueList().valuesAsString())
+            new ArrayList<>(payloadResult.getValueList().getValues())
         );
     }
 

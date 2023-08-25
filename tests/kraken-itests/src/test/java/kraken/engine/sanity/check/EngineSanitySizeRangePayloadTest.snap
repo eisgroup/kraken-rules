@@ -20,6 +20,7 @@ kraken.engine.sanity.check.EngineSanitySizeRangePayloadTest.shouldFailOnLess=[
             "max": 3,
             "success": false,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -58,6 +59,7 @@ kraken.engine.sanity.check.EngineSanitySizeRangePayloadTest.shouldFailOnMore=[
             "max": 3,
             "success": false,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -96,6 +98,7 @@ kraken.engine.sanity.check.EngineSanitySizeRangePayloadTest.shouldSuccessOnInRan
             "max": 3,
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {

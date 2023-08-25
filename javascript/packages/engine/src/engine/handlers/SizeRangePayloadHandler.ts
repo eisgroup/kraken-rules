@@ -46,11 +46,7 @@ export class SizeRangePayloadHandler implements RulePayloadHandler {
             result = size >= payload.min && value.length <= payload.max
         }
 
-        const templateVariables = this.evaluator.evaluateTemplateVariables(
-            payload.errorMessage,
-            dataContext,
-            session.expressionContext,
-        )
+        const templateVariables = this.evaluator.evaluateTemplateVariables(payload.errorMessage, dataContext, session)
         return payloadResultCreator.sizeRange(payload, result, templateVariables)
     }
 

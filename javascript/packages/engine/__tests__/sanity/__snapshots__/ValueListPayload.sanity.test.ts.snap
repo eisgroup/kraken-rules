@@ -29,6 +29,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "err-integer-value-list",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": false,
@@ -81,6 +82,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "err-string-value-list",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": false,
@@ -215,6 +217,7 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "err-integer-value-list",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": false,
@@ -234,6 +237,7 @@ Object {
               ],
             },
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "Policy revision must be within allowed values",
           "severity": "critical",
           "templateVariables": Array [],
@@ -261,6 +265,7 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "err-string-value-list",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": false,
@@ -274,6 +279,7 @@ Object {
               ],
             },
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "Policy currency must be within allowed values",
           "severity": "critical",
           "templateVariables": Array [],
@@ -312,6 +318,7 @@ Object {
               ],
             },
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "Policy value must be within allowed values",
           "severity": "critical",
           "templateVariables": Array [
@@ -352,6 +359,7 @@ Object {
               ],
             },
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "RRCoverage limit must be within allowed values",
           "severity": "critical",
           "templateVariables": Array [
@@ -393,6 +401,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "err-integer-value-list",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -445,6 +454,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "err-string-value-list",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -579,6 +589,7 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "err-integer-value-list",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
@@ -598,6 +609,7 @@ Object {
               ],
             },
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "Policy revision must be within allowed values",
           "severity": "critical",
           "templateVariables": Array [],
@@ -625,6 +637,7 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "err-string-value-list",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
@@ -638,6 +651,7 @@ Object {
               ],
             },
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "Policy currency must be within allowed values",
           "severity": "critical",
           "templateVariables": Array [],
@@ -676,6 +690,7 @@ Object {
               ],
             },
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "Policy value must be within allowed values",
           "severity": "critical",
           "templateVariables": Array [
@@ -716,6 +731,7 @@ Object {
               ],
             },
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "RRCoverage limit must be within allowed values",
           "severity": "critical",
           "templateVariables": Array [

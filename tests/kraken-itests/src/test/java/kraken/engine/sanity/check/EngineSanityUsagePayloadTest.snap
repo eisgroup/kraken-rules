@@ -19,6 +19,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteOnUnknownTy
             "usageType": "mandatory",
             "success": false,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -58,6 +59,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -92,6 +94,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -126,6 +129,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -160,6 +164,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -194,6 +199,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -228,6 +234,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -262,6 +269,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -296,6 +304,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -330,6 +339,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -364,6 +374,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -398,6 +409,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "Field is required",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "Field is required",
             "validationSeverity": "critical"
           },
@@ -432,6 +444,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -466,6 +479,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -500,6 +514,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -534,6 +549,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -568,6 +584,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -602,6 +619,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -636,6 +654,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -670,6 +689,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -704,6 +724,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -738,6 +759,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -778,6 +800,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -812,6 +835,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -846,6 +870,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -880,6 +905,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -914,6 +940,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -948,6 +975,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -982,6 +1010,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -1016,6 +1045,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -1050,6 +1080,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -1084,6 +1115,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -1118,6 +1150,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -1152,6 +1185,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -1186,6 +1220,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -1220,6 +1255,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -1254,6 +1290,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -1288,6 +1325,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "Field is required",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "Field is required",
             "validationSeverity": "critical"
           },
@@ -1322,6 +1360,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -1356,6 +1395,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -1390,6 +1430,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -1424,6 +1465,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -1458,6 +1500,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -1492,6 +1535,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -1526,6 +1570,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -1560,6 +1605,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -1594,6 +1640,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -1628,6 +1675,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "The field is mandatory",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "The field is mandatory",
             "validationSeverity": "critical"
           },
@@ -1668,6 +1716,7 @@ kraken.engine.sanity.check.EngineSanityUsagePayloadTest.shouldExecuteUsagePayloa
             "messageCode": "code",
             "message": "Field must be empty",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "Field must be empty",
             "validationSeverity": "critical"
           },

@@ -46,16 +46,6 @@ function isResetType(payload: DefaultValuePayload): boolean {
     return payload.defaultingType === DefaultingType.resetValue
 }
 
-function toMoney(currency: string, amount: number): Contexts.MoneyType | undefined {
-    if (amount == undefined) {
-        return undefined
-    }
-    return {
-        amount: amount,
-        currency: currency,
-    }
-}
-
 /**
  * Payload handler implementation to process {@link DefaultValuePayload}s
  */
@@ -75,7 +65,7 @@ export class DefaultValuePayloadHandler implements RulePayloadHandler {
         const targetPath = TargetPathUtils.resolveTargetPath(rule.targetPath, dataCtx)
 
         logger.debug(() => formatExpressionEvaluationMessage('default value', payload.valueExpression, dataCtx))
-        const expressionResult = this.evaluator.evaluate(payload.valueExpression, dataCtx, session.expressionContext)
+        const expressionResult = this.evaluator.evaluate(payload.valueExpression, dataCtx, session)
         if (ExpressionEvaluationResult.isError(expressionResult)) {
             return payloadResultCreator.defaultFail(expressionResult)
         }
@@ -197,7 +187,7 @@ export class DefaultValuePayloadHandler implements RulePayloadHandler {
                     return value
                 }
                 if (typeof value === 'number') {
-                    return toMoney(session.currencyCd, value)
+                    return Moneys.toMoney(session.currencyCd, value)
                 }
                 throw new Error(`Cannot convert to: ${field.fieldType}`)
             case 'INTEGER':

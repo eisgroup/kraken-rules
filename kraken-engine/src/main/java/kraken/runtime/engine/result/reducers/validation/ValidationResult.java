@@ -15,6 +15,7 @@
  */
 package kraken.runtime.engine.result.reducers.validation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import kraken.annotations.API;
@@ -48,10 +49,16 @@ public class ValidationResult {
     private final String messageCode;
 
     /**
-     * If message is a template then this is an ordered list of evaluated and formatted template placeholder expressions.
+     * If message is a template then this is an ordered list of evaluated and formatted template placeholder values.
      * Can be used as a values for indexed placeholders when formatting localized message.
      */
     private final List<String> templateVariables;
+
+    /**
+     * If message is a template then this is an ordered list of evaluated but unformatted template placeholder values.
+     * Can be used as a values for indexed placeholders when formatting localized message.
+     */
+    private final List<Object> rawTemplateVariables;
 
     /**
      * MessageFormat compatible template created from default error message
@@ -69,7 +76,7 @@ public class ValidationResult {
     private final ValidationSeverity severity;
 
     /**
-     * @deprecated use {@link #ValidationResult(String, String, String, List, String, ValidationSeverity, ContextFieldInfo)} instead.
+     * @deprecated use {@link #ValidationResult(String, String, String, List, List, String, ValidationSeverity, ContextFieldInfo)} instead.
      */
     @Deprecated(since = "1.42.0", forRemoval = true)
     public ValidationResult(String ruleName,
@@ -88,6 +95,10 @@ public class ValidationResult {
         );
     }
 
+    /**
+     * @deprecated use {@link #ValidationResult(String, String, String, List, List, String, ValidationSeverity, ContextFieldInfo)} instead.
+     */
+    @Deprecated(since = "1.51.0", forRemoval = true)
     public ValidationResult(String ruleName,
                             String message,
                             String messageCode,
@@ -95,10 +106,22 @@ public class ValidationResult {
                             String messageTemplate,
                             ValidationSeverity severity,
                             ContextFieldInfo contextFieldInfo) {
+        this(ruleName, message, messageCode, templateVariables, new ArrayList<>(templateVariables), messageTemplate, severity, contextFieldInfo);
+    }
+
+    public ValidationResult(String ruleName,
+                            String message,
+                            String messageCode,
+                            List<String> templateVariables,
+                            List<Object> rawTemplateVariables,
+                            String messageTemplate,
+                            ValidationSeverity severity,
+                            ContextFieldInfo contextFieldInfo) {
         this.ruleName = ruleName;
         this.message = message;
         this.messageCode = messageCode;
         this.templateVariables = templateVariables;
+        this.rawTemplateVariables = rawTemplateVariables;
         this.messageTemplate = messageTemplate;
         this.contextFieldInfo = contextFieldInfo;
         this.severity = severity;
@@ -118,6 +141,10 @@ public class ValidationResult {
 
     public List<String> getTemplateVariables() {
         return templateVariables;
+    }
+
+    public List<Object> getRawTemplateVariables() {
+        return rawTemplateVariables;
     }
 
     public ValidationSeverity getSeverity() {

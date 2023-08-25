@@ -90,7 +90,7 @@ public class KrakenExpressionEvaluator {
             typeProvider,
             new FunctionInvoker(session.getFunctions(), functionEvaluator, typeProvider, KrakenKel.EXPRESSION_TARGET)
         );
-        return evaluate(expression.getExpressionString(), expression.getAst(), evaluationContext);
+        return evaluate(expression, evaluationContext);
     }
 
     public Object evaluateSetProperty(Object valueToSet, String path, Object dataObject) {
@@ -124,11 +124,7 @@ public class KrakenExpressionEvaluator {
             new FunctionInvoker(session.getFunctions(), functionEvaluator, typeProvider, KrakenKel.EXPRESSION_TARGET)
         );
 
-        return evaluate(
-            contextNavigation.getNavigationExpression().getExpressionString(),
-            contextNavigation.getNavigationExpression().getAst(),
-            evaluationContext
-        );
+        return evaluate(contextNavigation.getNavigationExpression(), evaluationContext);
     }
 
     public Object evaluateGetProperty(String path, Object dataObject) {
@@ -155,7 +151,7 @@ public class KrakenExpressionEvaluator {
         }
     }
 
-    public List<String> evaluateTemplateVariables(ErrorMessage message, DataContext context, EvaluationSession session) {
+    public List<Object> evaluateTemplateVariables(ErrorMessage message, DataContext context, EvaluationSession session) {
         if(message == null) {
             return List.of();
         }
@@ -167,18 +163,17 @@ public class KrakenExpressionEvaluator {
                     return null;
                 }
             })
-            .map(TemplateParameterRenderer::render)
             .collect(Collectors.toList());
     }
 
-    private Object evaluate(String expression, Ast ast, EvaluationContext evaluationContext) {
-        Assertions.assertNotEmpty(expression, "Expression");
-
+    private Object evaluate(CompiledExpression compiledExpression, EvaluationContext evaluationContext) {
+        Assertions.assertNotEmpty(compiledExpression.getExpressionString(), "Expression");
         try {
-            return expressionLanguage.evaluate(new Expression(expression, ast), evaluationContext);
+            var expression = new Expression(compiledExpression.getExpressionString(), compiledExpression.getAst());
+            return expressionLanguage.evaluate(expression, evaluationContext);
         } catch (ExpressionEvaluationException ex) {
             var m = SystemMessageBuilder.create(EXPRESSION_CANNOT_EVALUATE_VALUE)
-                .parameters(expression)
+                .parameters(compiledExpression.getOriginalExpressionString())
                 .build();
             throw new KrakenExpressionEvaluationException(m, ex);
         }

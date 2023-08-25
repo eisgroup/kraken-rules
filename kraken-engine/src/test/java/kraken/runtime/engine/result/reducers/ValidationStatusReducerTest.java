@@ -15,6 +15,7 @@
  */
 package kraken.runtime.engine.result.reducers;
 
+import static kraken.runtime.model.expression.ExpressionType.COMPLEX;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -232,7 +233,7 @@ public class ValidationStatusReducerTest {
     private ErrorMessage createErrorMessage(List<String> templateParts, String expression) {
         List<CompiledExpression> templateExpressions = new ArrayList<>();
         Ast ast = AstBuilder.from(expression, Scope.dynamic());
-        templateExpressions.add(new CompiledExpression(expression, ExpressionType.COMPLEX, null, null, List.of(), ast));
+        templateExpressions.add(new CompiledExpression(expression, expression, COMPLEX, null, null, List.of(), ast));
         return new ErrorMessage("code", templateParts, templateExpressions);
     }
 

@@ -16,6 +16,8 @@
 
 package kraken;
 
+import static kraken.runtime.model.expression.ExpressionType.COMPLEX;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
@@ -99,14 +101,14 @@ public class TestRuleBuilder {
                 templateExpressions.stream()
                     .map(tExp -> {
                         Expression te = expression(tExp);
-                        return new CompiledExpression(te.getExpression(), ExpressionType.COMPLEX, null, null, List.of(), te.getAst());
+                        return new CompiledExpression(te.getExpression(), tExp, COMPLEX, null, null, List.of(), te.getAst());
                     })
                     .collect(Collectors.toList())
             ),
             ValidationSeverity.critical,
             false,
             null,
-            new CompiledExpression(e.getExpression(), ExpressionType.COMPLEX, null, null, List.of(), e.getAst())
+            new CompiledExpression(e.getExpression(), expression, COMPLEX, null, null, List.of(), e.getAst())
         );
         return this;
     }
@@ -118,7 +120,7 @@ public class TestRuleBuilder {
     public TestRuleBuilder defaultPayload(String expression, DefaultingType defaultingType) {
         Expression e = expression(expression);
         this.payload = new DefaultValuePayload(
-                new CompiledExpression(e.getExpression(), ExpressionType.COMPLEX, null, null, List.of(), e.getAst()),
+                new CompiledExpression(e.getExpression(), expression, COMPLEX, null, null, List.of(), e.getAst()),
                 defaultingType == null ? DefaultingType.defaultValue : defaultingType
         );
         return this;

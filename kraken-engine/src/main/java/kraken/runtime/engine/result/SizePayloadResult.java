@@ -31,8 +31,10 @@ public class SizePayloadResult extends ValidationPayloadResult {
 
     private final SizeOrientation sizeOrientation;
 
-    public SizePayloadResult(Boolean success, SizePayload payload, List<String> templateVariables) {
-        super(success, payload, templateVariables);
+    public SizePayloadResult(
+        Boolean success, SizePayload payload, List<Object> rawTemplateVariables
+    ) {
+        super(success, payload, rawTemplateVariables);
 
         this.size = payload.getSize();
         this.sizeOrientation = payload.getOrientation();

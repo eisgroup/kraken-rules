@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
-import kraken.el.Value;
 import kraken.el.ast.validation.AstMessage;
 import kraken.el.ast.validation.AstValidatingVisitor;
 
@@ -115,16 +114,6 @@ public class Ast {
     public Object getCompiledLiteralValue() {
         if(expression instanceof LiteralExpression) {
             return ((LiteralExpression) expression).getValue();
-        }
-        return null;
-    }
-
-    public String getCompiledLiteralValueType() {
-        if(expression instanceof Null) {
-            return null;
-        }
-        if(expression instanceof LiteralExpression) {
-            return expression.getEvaluationType().getName();
         }
         return null;
     }

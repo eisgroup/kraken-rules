@@ -15,6 +15,7 @@
  */
 package kraken.runtime.expressions;
 
+import static kraken.runtime.model.expression.ExpressionType.COMPLEX;
 import static kraken.runtime.utils.TemplateParameterRenderer.TEMPLATE_DATE_TIME_FORMAT;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
@@ -22,6 +23,8 @@ import static org.hamcrest.core.IsCollectionContaining.hasItems;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.mock;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -85,7 +88,7 @@ public class KrakenExpressionEvaluatorTest {
 
     @Test
     public void shouldEvaluateAndFormatTemplateVariables() {
-        Policy policy = new Policy("policyCd");
+        Policy policy = new Policy("P01");
         Map<String, Object> context = Map.of("Policy", policy);
         ErrorMessage errorMessage = new ErrorMessage("code", List.of(), List.of(
             expression("'string'"),
@@ -102,20 +105,20 @@ public class KrakenExpressionEvaluatorTest {
         var templateVariables = evaluator.evaluateTemplateVariables(errorMessage, dataContext, session(context));
         assertThat(templateVariables, hasItems(
             "string",
-            "10.123",
-            "true",
-            "false",
-            "",
-            "2020-01-01",
-            DateFunctions.dateTime("2020-01-01T10:00:00Z").format(TEMPLATE_DATE_TIME_FORMAT),
-            "policyCd",
-            ""
+            BigDecimal.valueOf(10.123),
+            true,
+            false,
+            null,
+            DateFunctions.date("2020-01-01"),
+            DateFunctions.dateTime("2020-01-01T10:00:00Z"),
+            "P01",
+            null
         ));
     }
 
     private CompiledExpression expression(String expression) {
         Ast ast = AstBuilder.from(expression, Scope.dynamic());
-        return new CompiledExpression(expression, ExpressionType.COMPLEX, null, null, List.of(), ast);
+        return new CompiledExpression(expression, expression, COMPLEX, null, null, List.of(), ast);
     }
 
     private DataContext dataContext(String name, Object root) {

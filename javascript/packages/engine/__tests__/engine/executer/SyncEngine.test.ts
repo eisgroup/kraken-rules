@@ -23,6 +23,8 @@ import { Payloads } from 'kraken-model'
 import { EvaluationMode } from '../../../src/engine/runtime/EvaluationMode'
 import { DimensionSetBundleCache } from '../../../src/bundle-cache/dimension-set-cache/DimensionSetBundleCache'
 import { EntryPointBundle, ExpressionContextManagerImpl } from '../../../src'
+import * as KrakenRuntimeError from '../../../src/error/KrakenRuntimeError'
+
 import UsageType = Payloads.Validation.UsageType
 import PayloadType = Payloads.PayloadType
 
@@ -209,6 +211,110 @@ beforeEach(() => {
         entryPointName: 'Empty',
         rules: [],
     })
+    addBundleForDefaultDimension({
+        delta: false,
+        fieldOrder: [],
+        entryPointName: 'no attribute in model tree',
+        rules: [
+            new RulesBuilder()
+                .setContext(Policy.name)
+                .setName('no attribute')
+                .setTargetPath('fake')
+                .setPayload(PayloadBuilder.accessibility().notAccessible())
+                .build(),
+        ],
+    })
+    addBundleForDefaultDimension({
+        delta: false,
+        fieldOrder: [],
+        entryPointName: 'no context in model tree',
+        rules: [
+            new RulesBuilder()
+                .setContext('fake')
+                .setName('no attribute')
+                .setTargetPath('fake')
+                .setPayload(PayloadBuilder.accessibility().notAccessible())
+                .build(),
+        ],
+    })
+    addBundleForDefaultDimension({
+        delta: false,
+        fieldOrder: [],
+        entryPointName: 'no context in model tree for condition',
+        rules: [
+            new RulesBuilder()
+                .setContext(Policy.name)
+                .setName('test')
+                .setTargetPath(Policy.fields.accountName.name)
+                .setPayload(PayloadBuilder.accessibility().notAccessible())
+                .setCondition('true', [{ name: 'fake', type: 'CROSS_CONTEXT' }])
+                .build(),
+        ],
+    })
+    const assertRule = new RulesBuilder()
+        .setContext(Policy.name)
+        .setName('test')
+        .setTargetPath(Policy.fields.accountName.name)
+        .setPayload({
+            assertionExpression: {
+                expressionVariables: [{ name: 'fake', type: 'CROSS_CONTEXT' }],
+                expressionType: 'COMPLEX',
+                expressionString: 'false || true',
+                originalExpressionString: 'false or true',
+            },
+            severity: Payloads.Validation.ValidationSeverity.critical,
+            type: Payloads.PayloadType.ASSERTION,
+        } as Payloads.Validation.AssertionPayload)
+        .build()
+    addBundleForDefaultDimension({
+        delta: false,
+        fieldOrder: [],
+        entryPointName: 'no context in model tree for assertion',
+        rules: [assertRule],
+    })
+    addBundleForDefaultDimension({
+        delta: false,
+        fieldOrder: [`${Policy.name}.${Policy.fields.accountName.name}`],
+        entryPointName: 'no context in model tree for default',
+        rules: [
+            new RulesBuilder()
+                .setContext(Policy.name)
+                .setName('test')
+                .setTargetPath(Policy.fields.accountName.name)
+                .setPayload({
+                    type: Payloads.PayloadType.DEFAULT,
+                    defaultingType: Payloads.Derive.DefaultingType.defaultValue,
+                    valueExpression: {
+                        expressionVariables: [{ name: 'fake', type: 'CROSS_CONTEXT' }],
+                        expressionType: 'COMPLEX',
+                        expressionString: 'false || true',
+                        originalExpressionString: 'false or true',
+                    },
+                } as Payloads.Derive.DefaultValuePayload)
+                .build(),
+        ],
+    })
+    addBundleForDefaultDimension({
+        delta: false,
+        fieldOrder: [`${Policy.name}.${Policy.fields.accountName.name}`],
+        entryPointName: 'unknown expression type',
+        rules: [
+            new RulesBuilder()
+                .setContext(Policy.name)
+                .setName('test')
+                .setTargetPath(Policy.fields.accountName.name)
+                .setPayload({
+                    type: Payloads.PayloadType.DEFAULT,
+                    defaultingType: Payloads.Derive.DefaultingType.defaultValue,
+                    valueExpression: {
+                        expressionType: 'fake' as unknown,
+                        expressionString: 'false || true',
+                        originalExpressionString: 'false or true',
+                    },
+                } as Payloads.Derive.DefaultValuePayload)
+                .build(),
+        ],
+    })
     engine = new SyncEngine({
         cache: cache,
         dataInfoResolver: mock.spi.dataResolver,
@@ -219,6 +325,52 @@ beforeEach(() => {
 })
 
 describe('SyncEngine', () => {
+    it('should throw on unknown expression type', () => {
+        const doThrow = () =>
+            engine.evaluate(mock.data.empty(), 'unknown expression type', { currencyCd: 'USD', context: {} })
+        expect(doThrow).toThrow(KrakenRuntimeError.UNKNOWN_EXPRESSION_TYPE.code)
+    })
+    it('should throw an error if bundle is absent', () => {
+        const doThrow = () => engine.evaluate(mock.data.empty(), 'no bundle', { currencyCd: 'USD', context: {} })
+        expect(doThrow).toThrow(KrakenRuntimeError.NO_BUNDLE_CACHE_BY_ENTRYPOINT.code)
+    })
+    it('should throw an error if the model tree does not contain attribute as a rule target', () => {
+        const doThrow = () =>
+            engine.evaluate(mock.data.empty(), 'no attribute in model tree', { currencyCd: 'USD', context: {} })
+        expect(doThrow).toThrow(KrakenRuntimeError.CONTEXT_MODEL_TREE_MISSING_FIELD.code)
+    })
+    it('should throw an error if the model tree does not contain context as a rule target', () => {
+        const doThrow = () =>
+            engine.evaluate(mock.data.empty(), 'no context in model tree', {
+                currencyCd: 'USD',
+                context: {},
+            })
+        expect(doThrow).toThrow(KrakenRuntimeError.CONTEXT_MODEL_TREE_MISSING_EXTRACTION_PATH.code)
+    })
+    it('should throw an error if the model tree does not contain context from condition expression', () => {
+        const doThrow = () =>
+            engine.evaluate(mock.data.empty(), 'no context in model tree for condition', {
+                currencyCd: 'USD',
+                context: {},
+            })
+        expect(doThrow).toThrow(KrakenRuntimeError.CONTEXT_MODEL_TREE_UNDEFINED_TARGET.code)
+    })
+    it('should throw an error if the model tree does not contain context from assertion expression', () => {
+        const doThrow = () =>
+            engine.evaluate(mock.data.empty(), 'no context in model tree for assertion', {
+                currencyCd: 'USD',
+                context: {},
+            })
+        expect(doThrow).toThrow(KrakenRuntimeError.CONTEXT_MODEL_TREE_UNDEFINED_TARGET.code)
+    })
+    it('should throw an error if the model tree does not contain context from default value expression', () => {
+        const doThrow = () =>
+            engine.evaluate(mock.data.empty(), 'no context in model tree for default', {
+                currencyCd: 'USD',
+                context: {},
+            })
+        expect(doThrow).toThrow(KrakenRuntimeError.CONTEXT_MODEL_TREE_UNDEFINED_TARGET.code)
+    })
     it('should evaluate rule with external data', () => {
         const results = engine.evaluate(mock.data.empty(), 'ExternalContext', {
             currencyCd: 'USD',

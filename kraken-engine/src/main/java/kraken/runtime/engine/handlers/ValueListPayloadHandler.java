@@ -18,6 +18,8 @@ package kraken.runtime.engine.handlers;
 import static kraken.message.SystemMessageBuilder.Message.VALUE_LIST_PAYLOAD_CANNOT_CONVERT_TO_NUMBER;
 import static kraken.message.SystemMessageBuilder.Message.VALUE_LIST_PAYLOAD_CANNOT_CONVERT_TO_STRING;
 
+import java.util.stream.Collectors;
+
 import javax.money.MonetaryAmount;
 
 import kraken.el.math.Numbers;
@@ -28,6 +30,7 @@ import kraken.runtime.EvaluationSession;
 import kraken.runtime.KrakenRuntimeException;
 import kraken.runtime.engine.RulePayloadHandler;
 import kraken.runtime.engine.context.data.DataContext;
+import kraken.runtime.engine.handlers.trace.FieldValueRenderer;
 import kraken.runtime.engine.handlers.trace.FieldValueValidationOperation;
 import kraken.runtime.engine.result.PayloadResult;
 import kraken.runtime.engine.result.ValueListPayloadResult;
@@ -64,16 +67,21 @@ public final class ValueListPayloadHandler implements RulePayloadHandler {
         Tracer.doOperation(new FieldValueValidationOperation(value));
         boolean success = doExecute(value, payload);
 
-        var templateVariables = evaluator.evaluateTemplateVariables(payload.getErrorMessage(), dataContext, session);
-        return new ValueListPayloadResult(success, payload, templateVariables);
+        var rawTemplateVariables = evaluator.evaluateTemplateVariables(payload.getErrorMessage(), dataContext, session);
+
+        return new ValueListPayloadResult(success, payload, rawTemplateVariables);
     }
 
     @Override
     public String describePayloadResult(PayloadResult payloadResult) {
         var result = (ValueListPayloadResult) payloadResult;
+        var valuesString = result.getValueList().getValues().stream()
+            .map(FieldValueRenderer::render)
+            .collect(Collectors.joining(", "));
+
         return result.getSuccess()
-            ? String.format("Field is valid. Field value is one of [ %s ].", result.getValueList().valuesAsString())
-            : String.format("Field is not valid. Field value is not one of [ %s ].", result.getValueList().valuesAsString());
+            ? String.format("Field is valid. Field value is one of [ %s ].", valuesString)
+            : String.format("Field is not valid. Field value is not one of [ %s ].", valuesString);
     }
 
     private boolean doExecute(Object fieldValue, ValueListPayload valueListPayload) {

@@ -37,8 +37,8 @@ public class ValueListPayloadResult extends ValidationPayloadResult {
 
     public ValueListPayloadResult(Boolean success,
                                   ValueListPayload payload,
-                                  List<String> templateVariables) {
-        super(success, payload, templateVariables);
+                                  List<Object> rawTemplateVariables) {
+        super(success, payload, rawTemplateVariables);
         this.valueList = payload.getValueList();
     }
 

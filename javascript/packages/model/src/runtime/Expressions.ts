@@ -19,16 +19,14 @@ export namespace Expressions {
      * Models expression to be used in rules model
      */
     export interface BaseExpression {
-        /**
-         * Expression type for expressionString
-         */
         expressionType: ExpressionType
         expressionString: string
+        originalExpressionString: string
+        expressionEvaluationType?: string
     }
 
     export interface ComplexExpression extends BaseExpression {
         expressionType: 'COMPLEX'
-
         expressionVariables?: ExpressionVariable[]
     }
 
@@ -41,19 +39,7 @@ export namespace Expressions {
 
     export interface LiteralExpression extends BaseExpression {
         expressionType: 'LITERAL'
-
-        /**
-         * If 'expressionType' is {@link ExpressionType#LITERAL}, then number,
-         * string, boolean or null will be 'compiledLiteralValue'. Otherwise this field
-         * will be {@code undefined}
-         */
         compiledLiteralValue: number | string | boolean | null
-
-        /**
-         * Indicates type of a literal. Can be: String, Number, Boolean, Date, DateTime.
-         * If value is not available then literal is null value.
-         */
-        compiledLiteralValueType?: 'String' | 'Number' | 'Boolean' | 'Date' | 'DateTime'
     }
 
     export interface PathExpression extends BaseExpression {
