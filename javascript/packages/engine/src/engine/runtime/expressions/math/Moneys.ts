@@ -18,6 +18,7 @@ import { Contexts } from 'kraken-model'
 
 export const Moneys = {
     isMoney,
+    toMoney,
 }
 
 function isMoney(value: unknown): value is Contexts.MoneyType {
@@ -28,4 +29,11 @@ function isMoney(value: unknown): value is Contexts.MoneyType {
         Object.prototype.hasOwnProperty.call(value, 'currency') &&
         Object.getOwnPropertyNames(value).length === 2
     )
+}
+
+function toMoney(currency: string, amount: number): Contexts.MoneyType {
+    return {
+        amount: amount,
+        currency: currency,
+    }
 }

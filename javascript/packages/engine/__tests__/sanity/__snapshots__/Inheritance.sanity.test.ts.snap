@@ -291,7 +291,7 @@ Object {
             "payloadResult": Object {
               "error": Object {
                 "error": Object {
-                  "message": "Expression: '(this._nd(__dataObject__.expirationDate) > this._nd(__dataObject__.effectiveDate))' failed",
+                  "message": "Error while evaluating expression: expirationDate > effectiveDate",
                   "severity": "info",
                 },
                 "kind": 2,
@@ -330,7 +330,7 @@ Object {
             "payloadResult": Object {
               "error": Object {
                 "error": Object {
-                  "message": "Expression: '((this._nd(__dataObject__.limitAmount) > 1000) && (this._nd(__dataObject__.limitAmount) < 1000000))' failed",
+                  "message": "Error while evaluating expression: limitAmount > 1000 and limitAmount < 1000000",
                   "severity": "info",
                 },
                 "kind": 2,
@@ -369,7 +369,7 @@ Object {
             "payloadResult": Object {
               "error": Object {
                 "error": Object {
-                  "message": "Expression: '(this._nd(__dataObject__.expirationDate) > this._nd(__dataObject__.effectiveDate))' failed",
+                  "message": "Error while evaluating expression: expirationDate > effectiveDate",
                   "severity": "info",
                 },
                 "kind": 2,
@@ -408,7 +408,7 @@ Object {
             "payloadResult": Object {
               "error": Object {
                 "error": Object {
-                  "message": "Expression: '((this._nd(__dataObject__.limitAmount) > 1000) && (this._nd(__dataObject__.limitAmount) < 1000000))' failed",
+                  "message": "Error while evaluating expression: limitAmount > 1000 and limitAmount < 1000000",
                   "severity": "info",
                 },
                 "kind": 2,
@@ -447,7 +447,7 @@ Object {
             "payloadResult": Object {
               "error": Object {
                 "error": Object {
-                  "message": "Expression: '((this._nd(__dataObject__.limitAmount) > 1000) && (this._nd(__dataObject__.limitAmount) < 1000000))' failed",
+                  "message": "Error while evaluating expression: limitAmount > 1000 and limitAmount < 1000000",
                   "severity": "info",
                 },
                 "kind": 2,
@@ -486,13 +486,14 @@ Object {
           "payloadResult": Object {
             "error": Object {
               "error": Object {
-                "message": "Expression: '(this._nd(__dataObject__.expirationDate) > this._nd(__dataObject__.effectiveDate))' failed",
+                "message": "Error while evaluating expression: expirationDate > effectiveDate",
                 "severity": "info",
               },
               "kind": 2,
             },
             "type": 1,
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0108",
           "severity": undefined,
           "templateVariables": Array [],
@@ -519,13 +520,14 @@ Object {
           "payloadResult": Object {
             "error": Object {
               "error": Object {
-                "message": "Expression: '((this._nd(__dataObject__.limitAmount) > 1000) && (this._nd(__dataObject__.limitAmount) < 1000000))' failed",
+                "message": "Error while evaluating expression: limitAmount > 1000 and limitAmount < 1000000",
                 "severity": "info",
               },
               "kind": 2,
             },
             "type": 1,
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0117",
           "severity": undefined,
           "templateVariables": Array [],
@@ -552,13 +554,14 @@ Object {
           "payloadResult": Object {
             "error": Object {
               "error": Object {
-                "message": "Expression: '(this._nd(__dataObject__.expirationDate) > this._nd(__dataObject__.effectiveDate))' failed",
+                "message": "Error while evaluating expression: expirationDate > effectiveDate",
                 "severity": "info",
               },
               "kind": 2,
             },
             "type": 1,
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0108",
           "severity": undefined,
           "templateVariables": Array [],
@@ -585,13 +588,14 @@ Object {
           "payloadResult": Object {
             "error": Object {
               "error": Object {
-                "message": "Expression: '((this._nd(__dataObject__.limitAmount) > 1000) && (this._nd(__dataObject__.limitAmount) < 1000000))' failed",
+                "message": "Error while evaluating expression: limitAmount > 1000 and limitAmount < 1000000",
                 "severity": "info",
               },
               "kind": 2,
             },
             "type": 1,
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0117",
           "severity": undefined,
           "templateVariables": Array [],
@@ -618,13 +622,14 @@ Object {
           "payloadResult": Object {
             "error": Object {
               "error": Object {
-                "message": "Expression: '((this._nd(__dataObject__.limitAmount) > 1000) && (this._nd(__dataObject__.limitAmount) < 1000000))' failed",
+                "message": "Error while evaluating expression: limitAmount > 1000 and limitAmount < 1000000",
                 "severity": "info",
               },
               "kind": 2,
             },
             "type": 1,
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0117",
           "severity": undefined,
           "templateVariables": Array [],
@@ -664,6 +669,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "Value didn't match assertion expirationDate > effectiveDate",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -703,6 +709,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "Value didn't match assertion limitAmount > 1000 and limitAmount < 1000000",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -742,6 +749,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "Value didn't match assertion expirationDate > effectiveDate",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -781,6 +789,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "Value didn't match assertion limitAmount > 1000 and limitAmount < 1000000",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -820,6 +829,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "Value didn't match assertion limitAmount > 1000 and limitAmount < 1000000",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -859,12 +869,14 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "Value didn't match assertion expirationDate > effectiveDate",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
             "type": 1,
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0108",
           "severity": "critical",
           "templateVariables": Array [],
@@ -892,12 +904,14 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "Value didn't match assertion limitAmount > 1000 and limitAmount < 1000000",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
             "type": 1,
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0117",
           "severity": "critical",
           "templateVariables": Array [],
@@ -925,12 +939,14 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "Value didn't match assertion expirationDate > effectiveDate",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
             "type": 1,
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0108",
           "severity": "critical",
           "templateVariables": Array [],
@@ -958,12 +974,14 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "Value didn't match assertion limitAmount > 1000 and limitAmount < 1000000",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
             "type": 1,
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0117",
           "severity": "critical",
           "templateVariables": Array [],
@@ -991,12 +1009,14 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "Value didn't match assertion limitAmount > 1000 and limitAmount < 1000000",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
             "type": 1,
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0117",
           "severity": "critical",
           "templateVariables": Array [],
@@ -1484,6 +1504,7 @@ Object {
               "message": Object {
                 "errorCode": "The field is mandatory",
                 "errorMessage": undefined,
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": false,
@@ -1524,6 +1545,7 @@ Object {
               "message": Object {
                 "errorCode": "The field is mandatory",
                 "errorMessage": undefined,
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": false,
@@ -1672,6 +1694,7 @@ Object {
               "message": Object {
                 "errorCode": "The field is mandatory",
                 "errorMessage": undefined,
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": false,
@@ -1712,6 +1735,7 @@ Object {
               "message": Object {
                 "errorCode": "The field is mandatory",
                 "errorMessage": undefined,
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": false,
@@ -1899,6 +1923,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0111",
           "severity": "critical",
           "templateVariables": Array [],
@@ -1929,6 +1954,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0118",
           "severity": "critical",
           "templateVariables": Array [],
@@ -1956,6 +1982,7 @@ Object {
             "message": Object {
               "errorCode": "The field is mandatory",
               "errorMessage": undefined,
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": false,
@@ -1963,6 +1990,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0099",
           "severity": "critical",
           "templateVariables": Array [],
@@ -1990,6 +2018,7 @@ Object {
             "message": Object {
               "errorCode": "The field is mandatory",
               "errorMessage": undefined,
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": false,
@@ -1997,6 +2026,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0105",
           "severity": "critical",
           "templateVariables": Array [],
@@ -2027,6 +2057,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0115",
           "severity": "critical",
           "templateVariables": Array [],
@@ -2057,6 +2088,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0111",
           "severity": "critical",
           "templateVariables": Array [],
@@ -2087,6 +2119,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0118",
           "severity": "critical",
           "templateVariables": Array [],
@@ -2114,6 +2147,7 @@ Object {
             "message": Object {
               "errorCode": "The field is mandatory",
               "errorMessage": undefined,
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": false,
@@ -2121,6 +2155,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0099",
           "severity": "critical",
           "templateVariables": Array [],
@@ -2148,6 +2183,7 @@ Object {
             "message": Object {
               "errorCode": "The field is mandatory",
               "errorMessage": undefined,
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": false,
@@ -2155,6 +2191,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0105",
           "severity": "critical",
           "templateVariables": Array [],
@@ -2185,6 +2222,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0115",
           "severity": "critical",
           "templateVariables": Array [],
@@ -2215,6 +2253,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0111",
           "severity": "critical",
           "templateVariables": Array [],
@@ -2245,6 +2284,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0118",
           "severity": "critical",
           "templateVariables": Array [],
@@ -2275,6 +2315,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0115",
           "severity": "critical",
           "templateVariables": Array [],
@@ -2386,6 +2427,7 @@ Object {
               "message": Object {
                 "errorCode": "The field is mandatory",
                 "errorMessage": undefined,
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -2426,6 +2468,7 @@ Object {
               "message": Object {
                 "errorCode": "The field is mandatory",
                 "errorMessage": undefined,
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -2574,6 +2617,7 @@ Object {
               "message": Object {
                 "errorCode": "The field is mandatory",
                 "errorMessage": undefined,
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -2614,6 +2658,7 @@ Object {
               "message": Object {
                 "errorCode": "The field is mandatory",
                 "errorMessage": undefined,
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -2801,6 +2846,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0111",
           "severity": "critical",
           "templateVariables": Array [],
@@ -2831,6 +2877,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0118",
           "severity": "critical",
           "templateVariables": Array [],
@@ -2858,6 +2905,7 @@ Object {
             "message": Object {
               "errorCode": "The field is mandatory",
               "errorMessage": undefined,
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
@@ -2865,6 +2913,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0099",
           "severity": "critical",
           "templateVariables": Array [],
@@ -2892,6 +2941,7 @@ Object {
             "message": Object {
               "errorCode": "The field is mandatory",
               "errorMessage": undefined,
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
@@ -2899,6 +2949,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0105",
           "severity": "critical",
           "templateVariables": Array [],
@@ -2929,6 +2980,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0115",
           "severity": "critical",
           "templateVariables": Array [],
@@ -2959,6 +3011,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0111",
           "severity": "critical",
           "templateVariables": Array [],
@@ -2989,6 +3042,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0118",
           "severity": "critical",
           "templateVariables": Array [],
@@ -3016,6 +3070,7 @@ Object {
             "message": Object {
               "errorCode": "The field is mandatory",
               "errorMessage": undefined,
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
@@ -3023,6 +3078,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0099",
           "severity": "critical",
           "templateVariables": Array [],
@@ -3050,6 +3106,7 @@ Object {
             "message": Object {
               "errorCode": "The field is mandatory",
               "errorMessage": undefined,
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
@@ -3057,6 +3114,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0105",
           "severity": "critical",
           "templateVariables": Array [],
@@ -3087,6 +3145,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0115",
           "severity": "critical",
           "templateVariables": Array [],
@@ -3117,6 +3176,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0111",
           "severity": "critical",
           "templateVariables": Array [],
@@ -3147,6 +3207,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0118",
           "severity": "critical",
           "templateVariables": Array [],
@@ -3177,6 +3238,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0115",
           "severity": "critical",
           "templateVariables": Array [],
@@ -3688,6 +3750,7 @@ Object {
               "message": Object {
                 "errorCode": "The field is mandatory",
                 "errorMessage": undefined,
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": false,
@@ -3728,6 +3791,7 @@ Object {
               "message": Object {
                 "errorCode": "The field is mandatory",
                 "errorMessage": undefined,
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": false,
@@ -3807,6 +3871,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0111",
           "severity": "critical",
           "templateVariables": Array [],
@@ -3837,6 +3902,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0118",
           "severity": "critical",
           "templateVariables": Array [],
@@ -3864,6 +3930,7 @@ Object {
             "message": Object {
               "errorCode": "The field is mandatory",
               "errorMessage": undefined,
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": false,
@@ -3871,6 +3938,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0099",
           "severity": "critical",
           "templateVariables": Array [],
@@ -3898,6 +3966,7 @@ Object {
             "message": Object {
               "errorCode": "The field is mandatory",
               "errorMessage": undefined,
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": false,
@@ -3905,6 +3974,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0105",
           "severity": "critical",
           "templateVariables": Array [],
@@ -3935,6 +4005,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0115",
           "severity": "critical",
           "templateVariables": Array [],
@@ -4066,6 +4137,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "The field is mandatory",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -4106,6 +4178,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "String doesn't match Regular Expression: ^\\\\d{5}$",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "regExp": "^\\\\d{5}$",
@@ -4146,6 +4219,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "The field is mandatory",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -4186,6 +4260,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "String doesn't match Regular Expression: ^\\\\d{5}$",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "regExp": "^\\\\d{5}$",
@@ -4243,6 +4318,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "The field is mandatory",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -4283,6 +4359,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "String doesn't match Regular Expression: ^\\\\d{5}$",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "regExp": "^\\\\d{5}$",
@@ -4323,6 +4400,7 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "The field is mandatory",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
@@ -4330,6 +4408,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0156",
           "severity": "critical",
           "templateVariables": Array [],
@@ -4357,6 +4436,7 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "String doesn't match Regular Expression: ^\\\\d{5}$",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "regExp": "^\\\\d{5}$",
@@ -4364,6 +4444,7 @@ Object {
             "type": 32,
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0157A",
           "severity": "critical",
           "templateVariables": Array [],
@@ -4391,6 +4472,7 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "The field is mandatory",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
@@ -4398,6 +4480,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0156",
           "severity": "critical",
           "templateVariables": Array [],
@@ -4425,6 +4508,7 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "String doesn't match Regular Expression: ^\\\\d{5}$",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "regExp": "^\\\\d{5}$",
@@ -4432,6 +4516,7 @@ Object {
             "type": 32,
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0157A",
           "severity": "critical",
           "templateVariables": Array [],
@@ -4459,6 +4544,7 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "The field is mandatory",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
@@ -4466,6 +4552,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0156",
           "severity": "critical",
           "templateVariables": Array [],
@@ -4493,6 +4580,7 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "String doesn't match Regular Expression: ^\\\\d{5}$",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "regExp": "^\\\\d{5}$",
@@ -4500,6 +4588,7 @@ Object {
             "type": 32,
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0157A",
           "severity": "critical",
           "templateVariables": Array [],

@@ -18,6 +18,7 @@ kraken.engine.sanity.check.EngineSanityFunctionsTest.shouldExecuteFromMoneyFunct
           "payloadResult": {
             "success": false,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -54,6 +55,7 @@ kraken.engine.sanity.check.EngineSanityFunctionsTest.shouldExecuteFromMoneyFunct
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -90,6 +92,7 @@ kraken.engine.sanity.check.EngineSanityFunctionsTest.shouldExecuteFunctionAssert
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -110,6 +113,7 @@ kraken.engine.sanity.check.EngineSanityFunctionsTest.shouldExecuteFunctionAssert
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -130,6 +134,7 @@ kraken.engine.sanity.check.EngineSanityFunctionsTest.shouldExecuteFunctionAssert
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -150,6 +155,7 @@ kraken.engine.sanity.check.EngineSanityFunctionsTest.shouldExecuteFunctionAssert
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -170,6 +176,7 @@ kraken.engine.sanity.check.EngineSanityFunctionsTest.shouldExecuteFunctionAssert
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -190,6 +197,7 @@ kraken.engine.sanity.check.EngineSanityFunctionsTest.shouldExecuteFunctionAssert
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -210,6 +218,7 @@ kraken.engine.sanity.check.EngineSanityFunctionsTest.shouldExecuteFunctionAssert
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -230,6 +239,7 @@ kraken.engine.sanity.check.EngineSanityFunctionsTest.shouldExecuteFunctionAssert
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -250,6 +260,7 @@ kraken.engine.sanity.check.EngineSanityFunctionsTest.shouldExecuteFunctionAssert
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -270,6 +281,7 @@ kraken.engine.sanity.check.EngineSanityFunctionsTest.shouldExecuteFunctionAssert
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -290,6 +302,7 @@ kraken.engine.sanity.check.EngineSanityFunctionsTest.shouldExecuteFunctionAssert
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -310,6 +323,7 @@ kraken.engine.sanity.check.EngineSanityFunctionsTest.shouldExecuteFunctionAssert
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -330,6 +344,7 @@ kraken.engine.sanity.check.EngineSanityFunctionsTest.shouldExecuteFunctionAssert
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -350,6 +365,7 @@ kraken.engine.sanity.check.EngineSanityFunctionsTest.shouldExecuteFunctionAssert
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -370,6 +386,7 @@ kraken.engine.sanity.check.EngineSanityFunctionsTest.shouldExecuteFunctionAssert
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -390,6 +407,7 @@ kraken.engine.sanity.check.EngineSanityFunctionsTest.shouldExecuteFunctionAssert
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -410,6 +428,7 @@ kraken.engine.sanity.check.EngineSanityFunctionsTest.shouldExecuteFunctionAssert
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -430,6 +449,7 @@ kraken.engine.sanity.check.EngineSanityFunctionsTest.shouldExecuteFunctionAssert
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -450,6 +470,7 @@ kraken.engine.sanity.check.EngineSanityFunctionsTest.shouldExecuteFunctionAssert
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -470,6 +491,7 @@ kraken.engine.sanity.check.EngineSanityFunctionsTest.shouldExecuteFunctionAssert
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -490,6 +512,7 @@ kraken.engine.sanity.check.EngineSanityFunctionsTest.shouldExecuteFunctionAssert
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -510,6 +533,7 @@ kraken.engine.sanity.check.EngineSanityFunctionsTest.shouldExecuteFunctionAssert
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -530,6 +554,7 @@ kraken.engine.sanity.check.EngineSanityFunctionsTest.shouldExecuteFunctionAssert
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -550,6 +575,7 @@ kraken.engine.sanity.check.EngineSanityFunctionsTest.shouldExecuteFunctionAssert
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -570,6 +596,7 @@ kraken.engine.sanity.check.EngineSanityFunctionsTest.shouldExecuteFunctionAssert
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -590,6 +617,7 @@ kraken.engine.sanity.check.EngineSanityFunctionsTest.shouldExecuteFunctionAssert
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -610,6 +638,7 @@ kraken.engine.sanity.check.EngineSanityFunctionsTest.shouldExecuteFunctionAssert
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -630,6 +659,7 @@ kraken.engine.sanity.check.EngineSanityFunctionsTest.shouldExecuteFunctionAssert
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -650,6 +680,7 @@ kraken.engine.sanity.check.EngineSanityFunctionsTest.shouldExecuteFunctionAssert
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {

@@ -26,7 +26,7 @@ public class AssertionPayloadResult extends ValidationPayloadResult implements E
 
     private Exception exception;
 
-    public AssertionPayloadResult(Boolean success, AssertionPayload payload, List<String> templateVariables) {
+    public AssertionPayloadResult(Boolean success, AssertionPayload payload, List<Object> templateVariables) {
         super(success, payload, templateVariables);
     }
 

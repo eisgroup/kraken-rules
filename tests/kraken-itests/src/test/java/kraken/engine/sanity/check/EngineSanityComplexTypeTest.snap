@@ -18,6 +18,7 @@ kraken.engine.sanity.check.EngineSanityComplexTypeTest.shouldReferenceComplexCol
           "payloadResult": {
             "success": false,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -48,6 +49,7 @@ kraken.engine.sanity.check.EngineSanityComplexTypeTest.shouldReferenceComplexCol
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {

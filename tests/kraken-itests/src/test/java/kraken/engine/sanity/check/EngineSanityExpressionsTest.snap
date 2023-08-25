@@ -18,6 +18,7 @@ kraken.engine.sanity.check.EngineSanityExpressionsTest.shouldAssertWithPropositi
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -136,6 +137,7 @@ kraken.engine.sanity.check.EngineSanityExpressionsTest.shouldExecuteFilterExpres
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -166,6 +168,7 @@ kraken.engine.sanity.check.EngineSanityExpressionsTest.shouldExecuteFilterExpres
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -196,6 +199,7 @@ kraken.engine.sanity.check.EngineSanityExpressionsTest.shouldExecuteFilterExpres
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -226,6 +230,7 @@ kraken.engine.sanity.check.EngineSanityExpressionsTest.shouldExecuteFilterExpres
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -256,6 +261,7 @@ kraken.engine.sanity.check.EngineSanityExpressionsTest.shouldExecuteFilterExpres
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -286,6 +292,7 @@ kraken.engine.sanity.check.EngineSanityExpressionsTest.shouldExecuteFilterExpres
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -316,6 +323,7 @@ kraken.engine.sanity.check.EngineSanityExpressionsTest.shouldExecuteFilterExpres
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -346,6 +354,7 @@ kraken.engine.sanity.check.EngineSanityExpressionsTest.shouldExecuteFilterExpres
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -376,6 +385,7 @@ kraken.engine.sanity.check.EngineSanityExpressionsTest.shouldExecuteFilterExpres
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -406,6 +416,7 @@ kraken.engine.sanity.check.EngineSanityExpressionsTest.shouldExecuteFilterExpres
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {

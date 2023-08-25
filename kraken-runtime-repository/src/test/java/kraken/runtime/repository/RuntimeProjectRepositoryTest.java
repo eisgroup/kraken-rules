@@ -135,6 +135,10 @@ public class RuntimeProjectRepositoryTest {
                 ((AssertionPayload)dynamicRule.getPayload()).getAssertionExpression().getExpressionString(),
                 equalTo("(Policy.packageCd == 'dynamic')")
         );
+        assertThat(
+            ((AssertionPayload)dynamicRule.getPayload()).getAssertionExpression().getOriginalExpressionString(),
+            equalTo("Policy.packageCd == 'dynamic'")
+        );
     }
 
     static class PackageDimensionFilter implements DimensionFilter {

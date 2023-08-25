@@ -20,12 +20,12 @@ import {
     RuleOverride,
     ContextFieldInfo,
     ErrorMessage,
+    FieldMetadata,
+    FieldMetadataResult,
 } from 'kraken-engine-api'
 
 import { EntryPointReducer } from '../Reducer'
 import { Localization } from '../Localization'
-import { FieldMetadata, FieldMetadataResult } from 'kraken-engine-api'
-
 import ValidationRuleEvaluationResult = RuleEvaluationResults.ValidationRuleEvaluationResult
 import { payloadResultTypeChecker } from '../PayloadResultTypeChecker'
 
@@ -82,6 +82,7 @@ export class FieldMetadataReducer implements EntryPointReducer<Record<string, Fi
                                     ruleResult.overrideInfo,
                                 ) && this.#isRuleOverridden(ruleResult.overrideInfo.overrideContext)
                             validationResults.push({
+                                rawTemplateVariables: ruleResult.payloadResult.message?.rawTemplateVariables ?? [],
                                 ruleName: ruleResult.ruleInfo.ruleName,
                                 errorCode: error.errorCode,
                                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

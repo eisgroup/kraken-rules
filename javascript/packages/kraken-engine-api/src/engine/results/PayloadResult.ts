@@ -61,11 +61,17 @@ export interface ErrorMessage {
      * A list of variables to be used in localized message templates.
      * Variables are extracted from rule validation message template and formatted for being displayed
      * in localized message template.
-     *
-     * @type {string[]}
-     * @memberof ErrorMessage
      */
     templateVariables: string[]
+
+    /**
+     * A list of variables to be used in localized message templates.
+     * Variables are extracted from rule validation message template.
+     * Values are not converted to a string.
+     * These values provided directly from the expressions in the message template.
+     * These values can be usefull if you want to localize the message and the template variables according to the locale.
+     */
+    rawTemplateVariables: unknown[]
 }
 
 export interface VisibilityPayloadResult extends PayloadResult {

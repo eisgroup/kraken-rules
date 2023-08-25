@@ -29,6 +29,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "The field is mandatory",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -69,6 +70,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "Value didn't match asserton: doNotSolicit = true or doNotSolicit = false",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -108,6 +110,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "The field is mandatory",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -148,6 +151,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "The field is mandatory",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -188,6 +192,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "Value didn't match asserton: doNotSolicit = true or doNotSolicit = false",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -227,6 +232,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "The field is mandatory",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -267,6 +273,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "The field is mandatory",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -307,6 +314,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "Value didn't match asserton: doNotSolicit = true or doNotSolicit = false",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -346,6 +354,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "The field is mandatory",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -386,6 +395,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "The field is mandatory",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -426,6 +436,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "The field is mandatory",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -466,6 +477,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "The field is mandatory",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -506,6 +518,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "Value didn't match asserton: firstName != lastName",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -545,6 +558,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "The field is mandatory",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -585,6 +599,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "The field is mandatory",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -625,6 +640,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "The field is mandatory",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -665,6 +681,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "The field is mandatory",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -705,6 +722,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "The field is mandatory",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -745,6 +763,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "The field is mandatory",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -785,6 +804,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "Field is required",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -825,6 +845,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "The field is mandatory",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -865,6 +886,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "The field is mandatory",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -905,6 +927,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "Value didn't match asserton: termNo >= 0 and termNo < 100",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -933,6 +956,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "The field is mandatory",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -973,6 +997,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "The field is mandatory",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -1013,6 +1038,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "The field is mandatory",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -1053,6 +1079,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "The field is mandatory",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -1093,6 +1120,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "The field is mandatory",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -1133,6 +1161,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "The field is mandatory",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -1173,6 +1202,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "Value didn't match asserton: included = true or included = false",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -1212,6 +1242,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "The field is mandatory",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -1252,6 +1283,7 @@ Object {
               "message": Object {
                 "errorCode": "code",
                 "errorMessage": "The field is mandatory",
+                "rawTemplateVariables": Array [],
                 "templateVariables": Array [],
               },
               "success": true,
@@ -1292,6 +1324,7 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "The field is mandatory",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
@@ -1299,6 +1332,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0156",
           "severity": "critical",
           "templateVariables": Array [],
@@ -1326,12 +1360,14 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "Value didn't match asserton: doNotSolicit = true or doNotSolicit = false",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
             "type": 1,
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0155",
           "severity": "critical",
           "templateVariables": Array [],
@@ -1359,6 +1395,7 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "The field is mandatory",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
@@ -1366,6 +1403,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0157",
           "severity": "critical",
           "templateVariables": Array [],
@@ -1393,6 +1431,7 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "The field is mandatory",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
@@ -1400,6 +1439,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0156",
           "severity": "critical",
           "templateVariables": Array [],
@@ -1427,12 +1467,14 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "Value didn't match asserton: doNotSolicit = true or doNotSolicit = false",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
             "type": 1,
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0155",
           "severity": "critical",
           "templateVariables": Array [],
@@ -1460,6 +1502,7 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "The field is mandatory",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
@@ -1467,6 +1510,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0157",
           "severity": "critical",
           "templateVariables": Array [],
@@ -1494,6 +1538,7 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "The field is mandatory",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
@@ -1501,6 +1546,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0156",
           "severity": "critical",
           "templateVariables": Array [],
@@ -1528,12 +1574,14 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "Value didn't match asserton: doNotSolicit = true or doNotSolicit = false",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
             "type": 1,
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0155",
           "severity": "critical",
           "templateVariables": Array [],
@@ -1561,6 +1609,7 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "The field is mandatory",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
@@ -1568,6 +1617,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0157",
           "severity": "critical",
           "templateVariables": Array [],
@@ -1595,6 +1645,7 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "The field is mandatory",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
@@ -1602,6 +1653,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0149",
           "severity": "critical",
           "templateVariables": Array [],
@@ -1629,6 +1681,7 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "The field is mandatory",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
@@ -1636,6 +1689,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0149",
           "severity": "critical",
           "templateVariables": Array [],
@@ -1663,6 +1717,7 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "The field is mandatory",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
@@ -1670,6 +1725,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0148",
           "severity": "critical",
           "templateVariables": Array [],
@@ -1697,12 +1753,14 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "Value didn't match asserton: firstName != lastName",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
             "type": 1,
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0150",
           "severity": "critical",
           "templateVariables": Array [],
@@ -1730,6 +1788,7 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "The field is mandatory",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
@@ -1737,6 +1796,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0042",
           "severity": "critical",
           "templateVariables": Array [],
@@ -1764,6 +1824,7 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "The field is mandatory",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
@@ -1771,6 +1832,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0032",
           "severity": "critical",
           "templateVariables": Array [],
@@ -1798,6 +1860,7 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "The field is mandatory",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
@@ -1805,6 +1868,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0008",
           "severity": "critical",
           "templateVariables": Array [],
@@ -1832,6 +1896,7 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "The field is mandatory",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
@@ -1839,6 +1904,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0028",
           "severity": "critical",
           "templateVariables": Array [],
@@ -1866,6 +1932,7 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "The field is mandatory",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
@@ -1873,6 +1940,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0044",
           "severity": "critical",
           "templateVariables": Array [],
@@ -1900,6 +1968,7 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "The field is mandatory",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
@@ -1907,6 +1976,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0047",
           "severity": "critical",
           "templateVariables": Array [],
@@ -1934,6 +2004,7 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "Field is required",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
@@ -1941,6 +2012,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0001A",
           "severity": "critical",
           "templateVariables": Array [],
@@ -1968,6 +2040,7 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "The field is mandatory",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
@@ -1975,6 +2048,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0004",
           "severity": "critical",
           "templateVariables": Array [],
@@ -2002,6 +2076,7 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "The field is mandatory",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
@@ -2009,6 +2084,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0054",
           "severity": "critical",
           "templateVariables": Array [],
@@ -2036,12 +2112,14 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "Value didn't match asserton: termNo >= 0 and termNo < 100",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
             "type": 1,
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0051",
           "severity": "critical",
           "templateVariables": Array [],
@@ -2056,6 +2134,7 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "The field is mandatory",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
@@ -2063,6 +2142,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0050",
           "severity": "critical",
           "templateVariables": Array [],
@@ -2090,6 +2170,7 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "The field is mandatory",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
@@ -2097,6 +2178,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0020",
           "severity": "critical",
           "templateVariables": Array [],
@@ -2124,6 +2206,7 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "The field is mandatory",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
@@ -2131,6 +2214,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0016",
           "severity": "critical",
           "templateVariables": Array [],
@@ -2158,6 +2242,7 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "The field is mandatory",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
@@ -2165,6 +2250,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0011",
           "severity": "critical",
           "templateVariables": Array [],
@@ -2192,6 +2278,7 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "The field is mandatory",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
@@ -2199,6 +2286,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0039",
           "severity": "critical",
           "templateVariables": Array [],
@@ -2226,6 +2314,7 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "The field is mandatory",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
@@ -2233,6 +2322,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0035",
           "severity": "critical",
           "templateVariables": Array [],
@@ -2260,12 +2350,14 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "Value didn't match asserton: included = true or included = false",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
             "type": 1,
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0073",
           "severity": "critical",
           "templateVariables": Array [],
@@ -2293,6 +2385,7 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "The field is mandatory",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
@@ -2300,6 +2393,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0074",
           "severity": "critical",
           "templateVariables": Array [],
@@ -2327,6 +2421,7 @@ Object {
             "message": Object {
               "errorCode": "code",
               "errorMessage": "The field is mandatory",
+              "rawTemplateVariables": Array [],
               "templateVariables": Array [],
             },
             "success": true,
@@ -2334,6 +2429,7 @@ Object {
             "usageType": "mandatory",
             "validationSeverity": "critical",
           },
+          "rawTemplateVariables": Array [],
           "ruleName": "R0088",
           "severity": "critical",
           "templateVariables": Array [],

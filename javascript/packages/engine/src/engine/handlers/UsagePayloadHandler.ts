@@ -50,11 +50,7 @@ export class UsagePayloadHandler implements RulePayloadHandler {
             result = isEmpty(value)
         }
 
-        const templateVariables = this.evaluator.evaluateTemplateVariables(
-            payload.errorMessage,
-            dataContext,
-            session.expressionContext,
-        )
+        const templateVariables = this.evaluator.evaluateTemplateVariables(payload.errorMessage, dataContext, session)
 
         return payloadResultCreator.usage(payload, result, templateVariables)
     }

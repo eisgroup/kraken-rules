@@ -39,11 +39,7 @@ export class LengthPayloadHandler implements RulePayloadHandler {
         const valueLength = typeof value === 'string' ? (value as string).length : 0
         const success = valueLength <= payload.length
 
-        const templateVariables = this.evaluator.evaluateTemplateVariables(
-            payload.errorMessage,
-            dataContext,
-            session.expressionContext,
-        )
+        const templateVariables = this.evaluator.evaluateTemplateVariables(payload.errorMessage, dataContext, session)
 
         return payloadResultCreator.length(payload, success, templateVariables)
     }

@@ -99,7 +99,7 @@
          -- Evaluated DefaultValuePayload. Field value was not changed.
       <- Evaluated rule 'TR_CarCoverage_code_default' on COLLCoverage:COLLCoverage-1:code. Evaluation status - APPLIED.
       -> Evaluating rule 'TR_CarCoverage_code_default' on CarCoverage:CarCoverage-1:code.
-         -- Evaluating default value expression: 'AA'
+         -- Evaluating default value expression: "AA"
          -- Evaluated DefaultValuePayload. Field value set to 'AA'.
       <- Evaluated rule 'TR_CarCoverage_code_default' on CarCoverage:CarCoverage-1:code. Evaluation status - APPLIED.
       -> Evaluating rule 'TR_Policy_TxEffectiveDate_default' on Policy:Policy-1:txEffectiveDate.
@@ -119,11 +119,11 @@
          -- Evaluated DefaultValuePayload. Field value reset from '10000' to '15000'.
       <- Evaluated rule 'TR_CarCoverage_Reset' on CarCoverage:CarCoverage-1:limitAmount. Evaluation status - APPLIED.
       -> Evaluating rule 'TR_CarCoverage_Condition_default' on COLLCoverage:COLLCoverage-1:deductibleAmount with priority 100.
-         -> Evaluating condition expression: ((limitAmount > 10) && (limitAmount < 50))
+         -> Evaluating condition expression: limitAmount > 10 and limitAmount < 50
          <- Evaluated condition to 'false'.
       <- Evaluated rule 'TR_CarCoverage_Condition_default' on COLLCoverage:COLLCoverage-1:deductibleAmount. Evaluation status - SKIPPED.
       -> Evaluating rule 'TR_CarCoverage_Condition_LimitAmt_error' on COLLCoverage:COLLCoverage-1:deductibleAmount with priority 0.
-         -> Evaluating condition expression: (Policy.riskItems[10].model == 'Audi')
+         -> Evaluating condition expression: Policy.riskItems[10].model = "Audi"
             Cross context references:
             Policy=Policy:Policy-1
          <- Couldn't evaluate condition expression due to error.
@@ -133,11 +133,11 @@
          -- Evaluated DefaultValuePayload. Field value reset from '25' to '25000'.
       <- Evaluated rule 'TR_CarCoverage_default' on COLLCoverage:COLLCoverage-1:deductibleAmount. Evaluation status - APPLIED.
       -> Evaluating rule 'TR_CarCoverage_Condition_default' on CarCoverage:CarCoverage-1:deductibleAmount with priority 100.
-         -> Evaluating condition expression: ((limitAmount > 10) && (limitAmount < 50))
+         -> Evaluating condition expression: limitAmount > 10 and limitAmount < 50
          <- Evaluated condition to 'false'.
       <- Evaluated rule 'TR_CarCoverage_Condition_default' on CarCoverage:CarCoverage-1:deductibleAmount. Evaluation status - SKIPPED.
       -> Evaluating rule 'TR_CarCoverage_Condition_LimitAmt_error' on CarCoverage:CarCoverage-1:deductibleAmount with priority 0.
-         -> Evaluating condition expression: (Policy.riskItems[10].model == 'Audi')
+         -> Evaluating condition expression: Policy.riskItems[10].model = "Audi"
             Cross context references:
             Policy=Policy:Policy-1
          <- Couldn't evaluate condition expression due to error.
@@ -180,13 +180,13 @@
          COLLCoverage:COLLCoverage-1
          CarCoverage:CarCoverage-1
       -> Evaluating rule 'TR_CarCoverage_Payload_error' on COLLCoverage:COLLCoverage-1:deductibleAmount.
-         -- Evaluating assertion expression: (Policy.riskItems[10].model == 'Audi')
+         -- Evaluating assertion expression: Policy.riskItems[10].model = "Audi"
             Cross context references:
             Policy=Policy:Policy-1
          -- Evaluated AssertionPayload. Field is valid. Assertion is not evaluated due to expression error.
       <- Evaluated rule 'TR_CarCoverage_Payload_error' on COLLCoverage:COLLCoverage-1:deductibleAmount. Evaluation status - IGNORED.
       -> Evaluating rule 'TR_CarCoverage_Payload_error' on CarCoverage:CarCoverage-1:deductibleAmount.
-         -- Evaluating assertion expression: (Policy.riskItems[10].model == 'Audi')
+         -- Evaluating assertion expression: Policy.riskItems[10].model = "Audi"
             Cross context references:
             Policy=Policy:Policy-1
          -- Evaluated AssertionPayload. Field is valid. Assertion is not evaluated due to expression error.
@@ -221,11 +221,11 @@
          COLLCoverage:COLLCoverage-1
          CarCoverage:CarCoverage-1
       -> Evaluating rule 'TR_CarCoverage_assert_error' on COLLCoverage:COLLCoverage-1:code.
-         -- Evaluating assertion expression: (code == 'AA')
+         -- Evaluating assertion expression: code == "AA"
          -- Evaluated AssertionPayload. Field is not valid. Assertion evaluated to false.
       <- Evaluated rule 'TR_CarCoverage_assert_error' on COLLCoverage:COLLCoverage-1:code. Evaluation status - APPLIED.
       -> Evaluating rule 'TR_CarCoverage_assert_error' on CarCoverage:CarCoverage-1:code.
-         -- Evaluating assertion expression: (code == 'AA')
+         -- Evaluating assertion expression: code == "AA"
          -- Evaluated AssertionPayload. Field is valid. Assertion evaluated to true.
       <- Evaluated rule 'TR_CarCoverage_assert_error' on CarCoverage:CarCoverage-1:code. Evaluation status - APPLIED.
    <- Evaluated rule 'TR_CarCoverage_assert_error' on a total of 2 instances.
@@ -233,7 +233,7 @@
       -- Resolved 1 data context(s) for rule 'TR_CarCoverage_assert_ccr' target 'COLLCoverage':
          COLLCoverage:COLLCoverage-1
       -> Evaluating rule 'TR_CarCoverage_assert_ccr' on COLLCoverage:COLLCoverage-1:code.
-         -- Evaluating assertion expression: (((Policy.state == 'AZ') && (Vehicle.costNew > 10000)) && (COLLCoverage.limitAmount > 10))
+         -- Evaluating assertion expression: Policy.state = "AZ" and Vehicle.costNew > 10000 and COLLCoverage.limitAmount > 10
             Cross context references:
             Policy=Policy:Policy-1
             Vehicle=Vehicle:Vehicle-1
@@ -320,11 +320,11 @@
          COLLCoverage:COLLCoverage-1
          CarCoverage:CarCoverage-1
       -> Evaluating rule 'TR_CarCoverage_assert_info' on COLLCoverage:COLLCoverage-1:code.
-         -- Evaluating assertion expression: (code == 'AA')
+         -- Evaluating assertion expression: code == "AA"
          -- Evaluated AssertionPayload. Field is not valid. Assertion evaluated to false.
       <- Evaluated rule 'TR_CarCoverage_assert_info' on COLLCoverage:COLLCoverage-1:code. Evaluation status - APPLIED.
       -> Evaluating rule 'TR_CarCoverage_assert_info' on CarCoverage:CarCoverage-1:code.
-         -- Evaluating assertion expression: (code == 'AA')
+         -- Evaluating assertion expression: code == "AA"
          -- Evaluated AssertionPayload. Field is valid. Assertion evaluated to true.
       <- Evaluated rule 'TR_CarCoverage_assert_info' on CarCoverage:CarCoverage-1:code. Evaluation status - APPLIED.
    <- Evaluated rule 'TR_CarCoverage_assert_info' on a total of 2 instances.
@@ -333,11 +333,11 @@
          COLLCoverage:COLLCoverage-1
          CarCoverage:CarCoverage-1
       -> Evaluating rule 'TR_CarCoverage_assert_warn' on COLLCoverage:COLLCoverage-1:code.
-         -- Evaluating assertion expression: (code == 'AA')
+         -- Evaluating assertion expression: code == "AA"
          -- Evaluated AssertionPayload. Field is not valid. Assertion evaluated to false.
       <- Evaluated rule 'TR_CarCoverage_assert_warn' on COLLCoverage:COLLCoverage-1:code. Evaluation status - APPLIED.
       -> Evaluating rule 'TR_CarCoverage_assert_warn' on CarCoverage:CarCoverage-1:code.
-         -- Evaluating assertion expression: (code == 'AA')
+         -- Evaluating assertion expression: code == "AA"
          -- Evaluated AssertionPayload. Field is valid. Assertion evaluated to true.
       <- Evaluated rule 'TR_CarCoverage_assert_warn' on CarCoverage:CarCoverage-1:code. Evaluation status - APPLIED.
    <- Evaluated rule 'TR_CarCoverage_assert_warn' on a total of 2 instances.
@@ -385,11 +385,11 @@
          COLLCoverage:COLLCoverage-1
          CarCoverage:CarCoverage-1
       -> Evaluating rule 'TR_CarCoverage_code_assert' on COLLCoverage:COLLCoverage-1:code.
-         -- Evaluating assertion expression: (code == 'AA')
+         -- Evaluating assertion expression: code == "AA"
          -- Evaluated AssertionPayload. Field is not valid. Assertion evaluated to false.
       <- Evaluated rule 'TR_CarCoverage_code_assert' on COLLCoverage:COLLCoverage-1:code. Evaluation status - APPLIED.
       -> Evaluating rule 'TR_CarCoverage_code_assert' on CarCoverage:CarCoverage-1:code.
-         -- Evaluating assertion expression: (code == 'AA')
+         -- Evaluating assertion expression: code == "AA"
          -- Evaluated AssertionPayload. Field is valid. Assertion evaluated to true.
       <- Evaluated rule 'TR_CarCoverage_code_assert' on CarCoverage:CarCoverage-1:code. Evaluation status - APPLIED.
    <- Evaluated rule 'TR_CarCoverage_code_assert' on a total of 2 instances.

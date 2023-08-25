@@ -44,7 +44,7 @@ export class ReferencePathResolverImpl implements ReferencePathResolver {
      * @override
      */
     resolveReferencePath(origin: PathToNode, targetContextName: string): ContextReference {
-        const paths = this.pathsToNodes[targetContextName].map(x => x.path)
+        const paths = (this.pathsToNodes[targetContextName] ?? []).map(x => x.path)
 
         if (!paths.length) {
             const m = new SystemMessageBuilder(CONTEXT_MODEL_TREE_UNDEFINED_TARGET).build()

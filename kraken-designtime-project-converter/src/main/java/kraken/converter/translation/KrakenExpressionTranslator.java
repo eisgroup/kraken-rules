@@ -97,9 +97,10 @@ public class KrakenExpressionTranslator {
             kraken.el.Expression e = translateExpression(rewrittenAst);
             return new CompiledExpression(
                 e.getExpression(),
+                function.getBody().getExpressionString(),
                 convert(rewrittenAst.getAstType()),
                 rewrittenAst.getAstType() == AstType.LITERAL ? (Serializable) rewrittenAst.getCompiledLiteralValue() : null,
-                rewrittenAst.getAstType() == AstType.LITERAL ? rewrittenAst.getCompiledLiteralValueType() : null,
+                rewrittenAst.getExpression().getEvaluationType().getName(),
                 List.of(),
                 e.getAst()
             );
@@ -129,12 +130,13 @@ public class KrakenExpressionTranslator {
             Ast rewrittenAst = rewrite(ast);
             kraken.el.Expression e = translateExpression(rewrittenAst);
             return new CompiledExpression(
-                    e.getExpression(),
-                    convert(rewrittenAst.getAstType()),
-                    rewrittenAst.getAstType() == AstType.LITERAL ? (Serializable) rewrittenAst.getCompiledLiteralValue() : null,
-                    rewrittenAst.getAstType() == AstType.LITERAL ? rewrittenAst.getCompiledLiteralValueType() : null,
-                    expressionVariables,
-                    e.getAst()
+                e.getExpression(),
+                expression.getExpressionString(),
+                convert(rewrittenAst.getAstType()),
+                rewrittenAst.getAstType() == AstType.LITERAL ? (Serializable) rewrittenAst.getCompiledLiteralValue() : null,
+                rewrittenAst.getExpression().getEvaluationType().getName(),
+                expressionVariables,
+                e.getAst()
             );
         } catch (AstBuildingException e) {
             var message = SystemMessageBuilder.create(CONVERSION_CANNOT_TRANSLATE_EXPRESSION)
@@ -174,12 +176,14 @@ public class KrakenExpressionTranslator {
             Ast rewrittenAst = rewrite(ast);
             kraken.el.Expression e = translateExpression(rewrittenAst);
             return new CompiledExpression(
-                    e.getExpression(),
-                    convert(rewrittenAst.getAstType()),
-                    rewrittenAst.getAstType() == AstType.LITERAL ? (Serializable) rewrittenAst.getCompiledLiteralValue() : null,
-                    rewrittenAst.getAstType() == AstType.LITERAL ? rewrittenAst.getCompiledLiteralValueType() : null,
-                    List.of(),
-                    e.getAst()
+                e.getExpression(),
+                contextNavigation.getNavigationExpression(),
+                convert(rewrittenAst.getAstType()),
+                rewrittenAst.getAstType() == AstType.LITERAL ? (Serializable) rewrittenAst.getCompiledLiteralValue() : null,
+                // navigation expressions are dynamic path expressions and evaluation type is irrelevant
+                null,
+                List.of(),
+                e.getAst()
             );
         } catch (AstBuildingException e) {
             var message = SystemMessageBuilder.create(CONVERSION_CANNOT_TRANSLATE_EXPRESSION)

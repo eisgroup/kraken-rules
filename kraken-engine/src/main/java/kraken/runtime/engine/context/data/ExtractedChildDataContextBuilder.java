@@ -78,7 +78,7 @@ public class ExtractedChildDataContextBuilder {
         } catch (KrakenExpressionEvaluationException e) {
             logger.trace(
                 "Error while evaluating navigation expression: {}. No object will be extracted.",
-                contextNavigation.getNavigationExpression().getExpressionString(),
+                contextNavigation.getNavigationExpression().getOriginalExpressionString(),
                 e
             );
             return null;

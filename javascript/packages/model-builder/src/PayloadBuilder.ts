@@ -163,6 +163,7 @@ export class AssertionPayloadBuilder {
             assertionExpression: {
                 expressionType: 'COMPLEX',
                 expressionString: expression,
+                originalExpressionString: expression,
             },
             severity: ValidationSeverity.critical,
         }
@@ -178,6 +179,7 @@ export class AssertionPayloadBuilder {
             assertionExpression: {
                 expressionType: 'COMPLEX',
                 expressionString: expression,
+                originalExpressionString: expression,
             },
             isOverridable: true,
             overrideGroup,
@@ -201,6 +203,7 @@ export class DefaultValuePayloadBuilder {
             valueExpression: {
                 expressionType: 'COMPLEX',
                 expressionString: expression,
+                originalExpressionString: expression,
             },
         }
     }

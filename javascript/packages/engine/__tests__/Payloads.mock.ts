@@ -45,6 +45,8 @@ export const DEFAULT_VALUE_PAYLOAD: DefaultValuePayload = {
     valueExpression: {
         expressionType: 'LITERAL',
         compiledLiteralValue: 'value',
-        compiledLiteralValueType: 'String',
+        expressionEvaluationType: 'String',
+        expressionString: "'value'",
+        originalExpressionString: "'value'",
     },
 }

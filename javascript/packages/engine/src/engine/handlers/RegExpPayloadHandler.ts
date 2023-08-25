@@ -40,11 +40,7 @@ export class RegExpPayloadHandler implements RulePayloadHandler {
         logger.debug(() => `Validating field which has value: ${ExpressionEvaluator.renderFieldValue(value)}`)
         const evaluationResult = this.valueMatchesRegExp(value, payload)
 
-        const templateVariables = this.evaluator.evaluateTemplateVariables(
-            payload.errorMessage,
-            dataContext,
-            session.expressionContext,
-        )
+        const templateVariables = this.evaluator.evaluateTemplateVariables(payload.errorMessage, dataContext, session)
         return payloadResultCreator.regexp(payload, evaluationResult, templateVariables)
     }
 

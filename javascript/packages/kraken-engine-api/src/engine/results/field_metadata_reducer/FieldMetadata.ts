@@ -23,6 +23,7 @@ export interface FieldMetadataResult {
     errorCode: string
     errorMessage: string
     templateVariables: string[]
+    rawTemplateVariables: unknown[]
     payloadResult: PayloadResult
     isOverridable: boolean
     isOverridden: boolean

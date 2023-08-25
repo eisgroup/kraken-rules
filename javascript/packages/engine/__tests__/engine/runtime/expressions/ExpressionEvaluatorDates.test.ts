@@ -20,7 +20,7 @@ import { TestProduct } from 'kraken-test-product'
 import { ExpressionEvaluationResult } from 'kraken-engine-api'
 import { Expressions } from 'kraken-model'
 
-const { evaluator } = mock
+const { evaluator, session } = mock
 
 export const q = (value: string) => {
     let modValue = value[0] !== "'" ? `'${value}` : value
@@ -32,6 +32,7 @@ function complex(expressionString: string): Expressions.Expression {
     return {
         expressionType: 'COMPLEX',
         expressionString,
+        originalExpressionString: expressionString,
     }
 }
 
@@ -54,36 +55,41 @@ function unwrapAsBoolean(expressionResult: ExpressionEvaluationResult.Result): b
 describe('Date functions in expression evaluator', () => {
     const dataContext = mock.data.dataContextEmpty()
     it('should create current date', () => {
-        const result = evaluator.evaluate(complex('this.Today()'), dataContext)
+        const result = evaluator.evaluate(complex('this.Today()'), dataContext, session)
         expect(unwrapAsDate(result)).k_toBeTodayDate()
     })
     it('should create date passed in params', () => {
-        const result = evaluator.evaluate(complex("this.Date('2011-11-11')"), dataContext)
+        const result = evaluator.evaluate(complex("this.Date('2011-11-11')"), dataContext, session)
         expect(unwrapAsDate(result)).k_toBeDateEqualTo(new Date('2011-11-11'))
     })
     it('should add to 1 year to current date', () => {
-        const result = evaluator.evaluate(complex("this.PlusYears(this.Date('2011-11-11'), 1)"), dataContext)
+        const result = evaluator.evaluate(complex("this.PlusYears(this.Date('2011-11-11'), 1)"), dataContext, session)
         expect(unwrapAsDate(result)).k_toBeDateEqualTo(new Date('2012-11-11'))
     })
     it('should add to 1 month to current date', () => {
-        const result = evaluator.evaluate(complex("this.PlusMonths(this.Date('2011-11-11'), 3)"), dataContext)
+        const result = evaluator.evaluate(complex("this.PlusMonths(this.Date('2011-11-11'), 3)"), dataContext, session)
         expect(unwrapAsDate(result)).k_toBeDateEqualTo(new Date('2012-02-11'))
     })
     it('should add to 1 day to current date', () => {
-        const result = evaluator.evaluate(complex("this.PlusDays(this.Date('2011-11-11'), 3)"), dataContext)
+        const result = evaluator.evaluate(complex("this.PlusDays(this.Date('2011-11-11'), 3)"), dataContext, session)
         expect(unwrapAsDate(result)).k_toBeDateEqualTo(new Date('2011-11-14'))
     })
     it('should compare two dates from date field kraken format', () => {
         const dc = mock.data.dataContextEmpty()
         const dcObject = dc.dataObject as unknown as TestProduct.kraken.testproduct.domain.Policy
         dcObject.accessTrackInfo!.createdOn = new Date(2000, 1, 1)
-        const result = evaluator.evaluate(complex(`this.Today() > __dataObject__.accessTrackInfo.createdOn`), dc)
+        const result = evaluator.evaluate(
+            complex(`this.Today() > __dataObject__.accessTrackInfo.createdOn`),
+            dc,
+            session,
+        )
         expect(unwrapAsBoolean(result)).toBeTruthy()
     })
     it('should test NumberOfDaysBetween to true', () => {
         const result = evaluator.evaluate(
             complex("this.NumberOfDaysBetween(this.Date('2011-11-01'), this.Date('2011-11-10')) == 9"),
             dataContext,
+            session,
         )
         expect(unwrapAsBoolean(result)).toBeTruthy()
     })
@@ -91,6 +97,7 @@ describe('Date functions in expression evaluator', () => {
         const result = evaluator.evaluate(
             complex("this.NumberOfDaysBetween(this.Date('2011-11-01'), this.Date('2011-11-11')) == 9"),
             dataContext,
+            session,
         )
         expect(unwrapAsBoolean(result)).toBeFalsy()
     })
@@ -98,6 +105,7 @@ describe('Date functions in expression evaluator', () => {
         const result = evaluator.evaluate(
             complex("this.NumberOfDaysBetween(this.Date('2011-11-10'), this.Date('2011-11-01')) == 9"),
             dataContext,
+            session,
         )
         expect(unwrapAsBoolean(result)).toBeTruthy()
     })
@@ -105,6 +113,7 @@ describe('Date functions in expression evaluator', () => {
         const result = evaluator.evaluate(
             complex("this.IsDateBetween(this.Date('2011-11-05'), this.Date('2011-11-01'), this.Date('2011-11-10'))"),
             dataContext,
+            session,
         )
         expect(unwrapAsBoolean(result)).toBeTruthy()
     })
@@ -112,6 +121,7 @@ describe('Date functions in expression evaluator', () => {
         const result = evaluator.evaluate(
             complex("this.IsDateBetween(this.Date('2011-11-11'), this.Date('2011-11-01'), this.Date('2011-11-10'))"),
             dataContext,
+            session,
         )
         expect(unwrapAsBoolean(result)).toBeFalsy()
     })
@@ -119,6 +129,7 @@ describe('Date functions in expression evaluator', () => {
         const result = evaluator.evaluate(
             complex("this.IsDateBetween(this.Date('2011-11-10'), this.Date('2011-11-01'), this.Date('2011-11-10'))"),
             dataContext,
+            session,
         )
         expect(unwrapAsBoolean(result)).toBeTruthy()
     })

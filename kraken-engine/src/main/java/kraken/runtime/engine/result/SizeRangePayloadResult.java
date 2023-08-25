@@ -16,6 +16,7 @@
 package kraken.runtime.engine.result;
 
 import java.util.List;
+import java.util.Objects;
 
 import kraken.annotations.API;
 import kraken.runtime.model.rule.payload.validation.SizeRangePayload;
@@ -29,7 +30,7 @@ public class SizeRangePayloadResult extends ValidationPayloadResult {
     private final int min;
     private final int max;
 
-    public SizeRangePayloadResult(Boolean success, SizeRangePayload payload, List<String> templateVariables) {
+    public SizeRangePayloadResult(Boolean success, SizeRangePayload payload, List<Object> templateVariables) {
         super(success, payload, templateVariables);
 
         this.min = payload.getMin();

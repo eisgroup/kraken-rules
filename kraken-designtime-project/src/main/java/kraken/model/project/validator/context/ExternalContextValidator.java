@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import kraken.model.context.ContextDefinition;
 import kraken.model.context.PrimitiveFieldDataType;
 import kraken.model.context.SystemDataTypes;
 import kraken.model.context.external.ExternalContext;
@@ -52,7 +53,10 @@ public class ExternalContextValidator {
         if(krakenProject.getExternalContext() != null) {
             validateRootExternalContext(krakenProject.getExternalContext(), session);
         }
-        validateContextDefinitions(krakenProject.getExternalContextDefinitions(), session);
+        var systemContextDefinitions = krakenProject.getContextDefinitions().values().stream()
+            .filter(ContextDefinition::isSystem)
+            .collect(Collectors.toMap(ContextDefinition::getName, c -> c));
+        validateContextDefinitions(krakenProject.getExternalContextDefinitions(), systemContextDefinitions, session);
     }
 
     private void validateRootExternalContext(ExternalContext rootExternalContext, ValidationSession session) {
@@ -116,6 +120,7 @@ public class ExternalContextValidator {
 
     private void validateContextDefinitions(
         Map<String, ExternalContextDefinition> externalContextDefinitions,
+        Map<String, ContextDefinition> systemContextDefinitions,
         ValidationSession session
     ) {
         externalContextDefinitions.values().stream()
@@ -125,7 +130,9 @@ public class ExternalContextValidator {
 
                     return !PrimitiveFieldDataType.isPrimitiveType(type)
                         && !SystemDataTypes.isSystemDataType(type)
-                        && !externalContextDefinitions.containsKey(type);})
+                        && !systemContextDefinitions.containsKey(type)
+                        && !externalContextDefinitions.containsKey(type);
+                })
                 .map(attribute ->
                     ValidationMessageBuilder.create(EXTERNAL_CONTEXT_UNKNOWN_FIELD_TYPE, ecd)
                     .parameters(attribute.getType().getType(), attribute.getName())

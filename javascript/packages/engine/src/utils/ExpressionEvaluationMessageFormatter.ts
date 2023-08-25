@@ -22,7 +22,7 @@ export function formatExpressionEvaluationMessage(
     expression: Expressions.Expression,
     dataContext: DataContext,
 ): string {
-    let message = `Evaluating ${type} expression: ${expression.expressionString}`
+    let message = `Evaluating ${type} expression: ${expression.originalExpressionString}`
     const ccrDescription = describeCrossContextReferences(expression, dataContext)
     if (ccrDescription) {
         message += `\n${ccrDescription}`

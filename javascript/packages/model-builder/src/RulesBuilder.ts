@@ -52,6 +52,7 @@ export class RulesBuilder {
             expression: {
                 expressionType: 'COMPLEX',
                 expressionString: conditionString,
+                originalExpressionString: conditionString,
                 expressionVariables,
             } as Expressions.ComplexExpression,
         }

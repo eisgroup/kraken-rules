@@ -19,6 +19,7 @@ import { FunctionCache } from './FunctionCache'
 import { ExpressionEvaluationResult as Result } from 'kraken-engine-api'
 import { logger } from '../../../utils/DevelopmentLogger'
 import { KelFunction, registry } from './ExpressionEvaluator'
+import { Expressions } from 'kraken-model'
 
 export interface ExpressionContext {
     dataObject: object
@@ -28,7 +29,7 @@ export interface ExpressionContext {
 
 export interface ComplexEvaluation {
     expressionContext: ExpressionContext
-    expression: string
+    expression: Expressions.ComplexExpression
 }
 
 export interface EvaluationFunctions {
@@ -65,7 +66,7 @@ export class ComplexEvaluator {
     evaluate(evaluation: ComplexEvaluation): Result.Result {
         const expression = evaluation.expression
 
-        const declarations = ['__dataObject__', '__references__', 'context', `return (${expression})`]
+        const declarations = ['__dataObject__', '__references__', 'context', `return (${expression.expressionString})`]
 
         const variables: unknown[] = [
             evaluation.expressionContext.dataObject,
@@ -73,13 +74,15 @@ export class ComplexEvaluator {
             evaluation.expressionContext.context,
         ]
         try {
-            const result = this.functionCache.compute(expression, declarations).apply(this.functionInvoker, variables)
-            return this.validResult(result, expression)
+            const result = this.functionCache
+                .compute(expression.expressionString, declarations)
+                .apply(this.functionInvoker, variables)
+            return this.validResult(result, expression.originalExpressionString)
         } catch (error) {
-            logger.debug(() => [`Expression evaluation failed: '${expression}'`, error])
+            logger.debug(() => [`Error while evaluating expression: ${expression.originalExpressionString}`, error])
             return Result.expressionError({
                 severity: 'info',
-                message: `Expression: '${expression}' failed`,
+                message: `Error while evaluating expression: ${expression.originalExpressionString}`,
             })
         }
     }

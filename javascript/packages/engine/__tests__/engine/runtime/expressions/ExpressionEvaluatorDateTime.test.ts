@@ -19,7 +19,7 @@ import { mock } from '../../../mock'
 import { DataContext } from '../../../../src/engine/contexts/data/DataContext'
 import { Expressions } from 'kraken-model'
 
-const { evaluator } = mock
+const { evaluator, session } = mock
 
 export interface TestDataObject {
     creationTime: string
@@ -37,6 +37,7 @@ function complex(expression: string): Expressions.Expression {
     return {
         expressionType: 'COMPLEX',
         expressionString: expression,
+        originalExpressionString: expression,
     }
 }
 
@@ -49,18 +50,22 @@ beforeEach(() => {
 
 describe('DateTime in ExpressionEvaluator', () => {
     it('should create date time passed in params', () => {
-        const date = evaluator.evaluate(complex("this.DateTime('2011-11-11T10:10:10')"), dataContext)
+        const date = evaluator.evaluate(complex("this.DateTime('2011-11-11T10:10:10')"), dataContext, session)
         evaluator.evaluateSet('creationTime', dataContext.dataObject, unwrap(date))
         const creationTime = (dataContext.dataObject as unknown as TestDataObject).creationTime
         expect(new Date(creationTime)).k_toBeDateEqualTo(unwrap(date))
     })
     it('should compare two dates in kraken format from command expression', () => {
-        const is = evaluator.evaluate(complex(`this.Today() > this.DateTime('2011-11-11T10:10:10')`), dataContext)
+        const is = evaluator.evaluate(
+            complex(`this.Today() > this.DateTime('2011-11-11T10:10:10')`),
+            dataContext,
+            session,
+        )
         expect(unwrap(is)).toBeTruthy()
     })
     it('should create current dateTime', () => {
         const beforeNow = new Date()
-        const now = unwrap(evaluator.evaluate(complex('this.Now()'), dataContext))
+        const now = unwrap(evaluator.evaluate(complex('this.Now()'), dataContext, session))
         const afterNow = new Date()
         // impossible to accurately test Now(), since immediately create Date will have different timestamp
         expect(now.getTime()).toBeGreaterThanOrEqual(beforeNow.getTime())

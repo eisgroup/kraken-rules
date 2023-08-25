@@ -49,8 +49,6 @@ import java.util.stream.Stream;
  */
 public final class ContextPathExtractor  {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ContextPathExtractor.class);
-
     private final Map<String, Collection<ContextPath>> paths;
     private final ContextPathNodeRepository repository;
     private final Collection<Cycle> cycles;

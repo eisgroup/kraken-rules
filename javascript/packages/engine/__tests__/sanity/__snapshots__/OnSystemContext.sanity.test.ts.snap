@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Engine Sanity Accessibility Payload Test should execute 'on system context' entrypoint 1`] = `
+exports[`Engine Sanity On System Context Test should execute 'on system context' entrypoint 1`] = `
 Object {
   "entryPointResults": Object {
     "evaluationTimestamp": Any<Date>,

@@ -33,6 +33,7 @@ kraken.engine.sanity.check.EngineSanityValueListPayloadTest.shouldExecuteValueLi
             "messageCode": "code",
             "message": "err-integer-value-list",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "err-integer-value-list",
             "validationSeverity": "critical"
           },
@@ -73,6 +74,7 @@ kraken.engine.sanity.check.EngineSanityValueListPayloadTest.shouldExecuteValueLi
             "messageCode": "code",
             "message": "err-string-value-list",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "err-string-value-list",
             "validationSeverity": "critical"
           },
@@ -113,6 +115,7 @@ kraken.engine.sanity.check.EngineSanityValueListPayloadTest.shouldExecuteValueLi
             },
             "success": false,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -152,6 +155,7 @@ kraken.engine.sanity.check.EngineSanityValueListPayloadTest.shouldExecuteValueLi
             },
             "success": false,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -203,6 +207,7 @@ kraken.engine.sanity.check.EngineSanityValueListPayloadTest.shouldExecuteValueLi
             "messageCode": "code",
             "message": "err-integer-value-list",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "err-integer-value-list",
             "validationSeverity": "critical"
           },
@@ -243,6 +248,7 @@ kraken.engine.sanity.check.EngineSanityValueListPayloadTest.shouldExecuteValueLi
             "messageCode": "code",
             "message": "err-string-value-list",
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "messageTemplate": "err-string-value-list",
             "validationSeverity": "critical"
           },
@@ -283,6 +289,7 @@ kraken.engine.sanity.check.EngineSanityValueListPayloadTest.shouldExecuteValueLi
             },
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -322,6 +329,7 @@ kraken.engine.sanity.check.EngineSanityValueListPayloadTest.shouldExecuteValueLi
             },
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {

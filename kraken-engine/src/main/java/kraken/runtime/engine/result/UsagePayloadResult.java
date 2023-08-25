@@ -26,7 +26,7 @@ public class UsagePayloadResult extends ValidationPayloadResult {
 
     private final UsageType usageType;
 
-    public UsagePayloadResult(Boolean success, UsagePayload payload, List<String> templateVariables) {
+    public UsagePayloadResult(Boolean success, UsagePayload payload, List<Object> templateVariables) {
         super(success, payload, templateVariables);
 
         this.usageType = payload.getUsageType();

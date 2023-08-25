@@ -136,7 +136,7 @@ public class ValidationMessageBuilder {
         CONTEXT_PARENT_WRONG_FIELD_TYPE(
             "kvc019",
             "Field ''{0}'' is overridden but it has a different type "
-                + "in inherited context definition ''{0}''.",
+                + "in inherited context definition ''{1}''.",
             ERROR
         ),
 

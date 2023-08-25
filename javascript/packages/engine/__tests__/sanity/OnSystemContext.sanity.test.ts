@@ -19,7 +19,7 @@ import { sanityEngine } from './_SanityEngine'
 import { FieldMetadataReducer } from '../../src/engine/results/field_metadata_reducer/FieldMetadataReducer'
 import { MatchableResults } from 'kraken-jest-matchers'
 
-describe('Engine Sanity Accessibility Payload Test', () => {
+describe('Engine Sanity On System Context Test', () => {
     const { empty } = sanityMocks
     it("should execute 'on system context' entrypoint", () => {
         const policy = empty()

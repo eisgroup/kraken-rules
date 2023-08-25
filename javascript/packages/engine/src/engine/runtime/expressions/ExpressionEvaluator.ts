@@ -27,6 +27,7 @@ import { Moneys } from './math/Moneys'
 import { DataContext } from '../../contexts/data/DataContext'
 import { TargetPathUtils } from './TargetPathUtils'
 import { KrakenRuntimeError, SystemMessageBuilder, UNKNOWN_EXPRESSION_TYPE } from '../../../error/KrakenRuntimeError'
+import { ExecutionSession } from '../../ExecutionSession'
 
 /**
  * Global expression functions registry.
@@ -115,8 +116,7 @@ export class ExpressionEvaluator {
      * @param dataContext   contains data object and external references, that can
      *                      be accessed in expression string. External references can be
      *                      accessed from ComplexExpressions.
-     * @param context       optional parameter, that provides external context. Can be
-     *                      Accessed from ComplexExpressions.
+     * @param session       evaluation session
      * @returns result of expression.
      * @throws  if expression is not {@Link TargetPathUtils.Expression}
      * @throws  error on invalid complex expression. The cause can be invalid expression context,
@@ -126,15 +126,31 @@ export class ExpressionEvaluator {
     evaluate(
         expression: Expressions.Expression,
         dataContext: DataContext,
-        context?: Record<string, unknown>,
+        session: ExecutionSession,
+    ): Expression.Result {
+        const result = this.evaluateExpression(expression, dataContext, session)
+        if (
+            ExpressionEvaluationResult.isSuccess(result) &&
+            expression.expressionEvaluationType === 'Money' &&
+            typeof result.success === 'number'
+        ) {
+            return ExpressionEvaluationResult.expressionSuccess(Moneys.toMoney(session.currencyCd, result.success))
+        }
+        return result
+    }
+
+    private evaluateExpression(
+        expression: Expressions.Expression,
+        dataContext: DataContext,
+        session: ExecutionSession,
     ): Expression.Result {
         switch (expression.expressionType) {
             case 'PATH':
                 return this.evaluateGet(expression.expressionString, dataContext.dataObject)
             case 'LITERAL':
                 if (
-                    expression.compiledLiteralValueType === 'Date' ||
-                    expression.compiledLiteralValueType === 'DateTime'
+                    expression.expressionEvaluationType === 'Date' ||
+                    expression.expressionEvaluationType === 'DateTime'
                 ) {
                     return Expression.expressionSuccess(new Date(expression.compiledLiteralValue as string))
                 }
@@ -144,9 +160,9 @@ export class ExpressionEvaluator {
                     expressionContext: {
                         dataObject: dataContext.dataObject,
                         references: dataContext.objectReferences,
-                        context,
+                        context: session.expressionContext,
                     },
-                    expression: expression.expressionString,
+                    expression: expression,
                 })
             default:
                 throw new KrakenRuntimeError(
@@ -175,7 +191,7 @@ export class ExpressionEvaluator {
                         dataObject: dataContext.dataObject,
                         references: {},
                     },
-                    expression: expression.expressionString,
+                    expression,
                 })
             default:
                 throw new KrakenRuntimeError(
@@ -222,20 +238,18 @@ export class ExpressionEvaluator {
      * @param dataContext   contains data object and external references, that can
      *                      be accessed in expression string. External references can be
      *                      accessed from ComplexExpressions.
-     * @param context       optional parameter, that provides external context. Can be
-     *                      Accessed from ComplexExpression.
+     * @param session       execution session
      * @returns a list of formatted values obtained by evaluating message template expressions
      */
     evaluateTemplateVariables(
         message: ErrorMessage | undefined,
         dataContext: DataContext,
-        context?: Record<string, unknown>,
-    ): string[] {
+        session: ExecutionSession,
+    ): unknown[] {
         return message
             ? message.templateExpressions
-                  .map(p => this.evaluate(p, dataContext, context))
+                  .map(p => this.evaluate(p, dataContext, session))
                   .map(result => (ExpressionEvaluationResult.isError(result) ? undefined : result.success))
-                  .map(ExpressionEvaluator.renderTemplateParameter)
             : []
     }
 
@@ -258,8 +272,7 @@ export class ExpressionEvaluator {
         if (ExpressionEvaluationResult.isError(valueResult)) {
             throw new Error(`Failed to resolve field value from '${path}'`)
         }
-        const value = valueResult.success
-        return value
+        return valueResult.success
     }
 
     static renderTemplateParameter(value: unknown): string {

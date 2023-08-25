@@ -17,10 +17,12 @@ package kraken.runtime.engine.result;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import kraken.annotations.API;
 import kraken.model.validation.ValidationSeverity;
 import kraken.runtime.model.rule.payload.validation.ValidationPayload;
+import kraken.runtime.utils.TemplateParameterRenderer;
 
 /**
  * Payload result class to store results of {@link ValidationPayload} execution
@@ -39,14 +41,23 @@ public abstract class ValidationPayloadResult implements PayloadResult {
 
     private final List<String> templateVariables;
 
+    private final List<Object> rawTemplateVariables;
+
     private final String messageTemplate;
 
     private final ValidationSeverity validationSeverity;
 
-    public ValidationPayloadResult(Boolean success, ValidationPayload payload, List<String> templateVariables) {
+    public ValidationPayloadResult(
+        Boolean success,
+        ValidationPayload payload,
+        List<Object> rawTemplateVariables
+    ) {
         this.success = success;
         this.validationSeverity = payload.getSeverity();
-        this.templateVariables = Objects.requireNonNull(templateVariables);
+        this.rawTemplateVariables = Objects.requireNonNull(rawTemplateVariables);
+        this.templateVariables = rawTemplateVariables.stream()
+            .map(TemplateParameterRenderer::render)
+            .collect(Collectors.toList());
 
         this.messageCode = payload.getErrorMessage() != null
             ? payload.getErrorMessage().getErrorCode()
@@ -115,5 +126,9 @@ public abstract class ValidationPayloadResult implements PayloadResult {
 
     private static String escapeMessageFormatSymbols(String unescaped) {
         return unescaped.replace("'", "''").replace("{", "'{'").replace("}", "'}'");
+    }
+
+    public List<Object> getRawTemplateVariables() {
+        return rawTemplateVariables;
     }
 }

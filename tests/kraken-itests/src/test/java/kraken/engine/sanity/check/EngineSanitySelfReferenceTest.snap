@@ -18,6 +18,7 @@ kraken.engine.sanity.check.EngineSanitySelfReferenceTest.shouldReferenceSameCont
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -38,6 +39,7 @@ kraken.engine.sanity.check.EngineSanitySelfReferenceTest.shouldReferenceSameCont
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -58,6 +60,7 @@ kraken.engine.sanity.check.EngineSanitySelfReferenceTest.shouldReferenceSameCont
           "payloadResult": {
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {

@@ -86,7 +86,6 @@ import kraken.el.ast.StringLiteral;
 import kraken.el.ast.Subtraction;
 import kraken.el.ast.Template;
 import kraken.el.ast.This;
-import kraken.el.ast.ValueBlock;
 import kraken.el.ast.token.Token;
 import kraken.el.functionregistry.FunctionHeader;
 import kraken.el.scope.Scope;
@@ -499,7 +498,7 @@ public class AstBuilderTest {
         assertThat(((DateLiteral) expression).toString(), equalTo("2018-01-01"));
 
         assertThat(ast.getCompiledLiteralValue(), equalTo(LocalDate.parse("2018-01-01")));
-        assertThat(ast.getCompiledLiteralValueType(), equalTo("Date"));
+        assertThat(ast.getExpression().getEvaluationType().getName(), equalTo("Date"));
     }
 
     @Test
@@ -516,7 +515,7 @@ public class AstBuilderTest {
         assertThat(((DateTimeLiteral) expression).toString(), equalTo("2018-01-01T10:00:00Z"));
 
         assertThat(ast.getCompiledLiteralValue(), equalTo(Literals.getDateTime("2018-01-01T10:00:00Z")));
-        assertThat(ast.getCompiledLiteralValueType(), equalTo("DateTime"));
+        assertThat(ast.getExpression().getEvaluationType().getName(), equalTo("DateTime"));
     }
 
     @Test
@@ -718,7 +717,7 @@ public class AstBuilderTest {
         assertThat(ast.getAstType(), is(AstType.LITERAL));
         assertThat(((BooleanLiteral) ast.getExpression()).getValue(), equalTo(true));
         assertThat(ast.getCompiledLiteralValue(), equalTo(true));
-        assertThat(ast.getCompiledLiteralValueType(), equalTo("Boolean"));
+        assertThat(ast.getExpression().getEvaluationType().getName(), equalTo("Boolean"));
 
         ast = rawAst("false");
         assertThat(ast.getAstType(), is(AstType.LITERAL));
@@ -742,7 +741,7 @@ public class AstBuilderTest {
         assertThat(ast.getAstType(), is(AstType.LITERAL));
         assertThat(((NumberLiteral)expression).getValue(), equalTo(new BigDecimal("0.25")));
         assertThat(ast.getCompiledLiteralValue(), equalTo(new BigDecimal("0.25")));
-        assertThat(ast.getCompiledLiteralValueType(), equalTo("Number"));
+        assertThat(ast.getExpression().getEvaluationType().getName(), equalTo("Number"));
 
         ast = rawAst("-5");
         expression = ast.getExpression();
@@ -771,7 +770,7 @@ public class AstBuilderTest {
         assertThat(ast.getAstType(), is(AstType.LITERAL));
         assertThat(((StringLiteral)expression).getValue(), equalTo("str"));
         assertThat(ast.getCompiledLiteralValue(), equalTo("str"));
-        assertThat(ast.getCompiledLiteralValueType(), equalTo("String"));
+        assertThat(ast.getExpression().getEvaluationType().getName(), equalTo("String"));
 
         ast = rawAst("\"st\\'r\"");
         expression = ast.getExpression();
@@ -789,7 +788,7 @@ public class AstBuilderTest {
         assertThat(ast.getAstType(), is(AstType.LITERAL));
         assertThat(((Null)expression).getValue(), nullValue());
         assertThat(ast.getCompiledLiteralValue(), nullValue());
-        assertThat(ast.getCompiledLiteralValueType(), nullValue());
+        assertThat(ast.getExpression().getEvaluationType().getName(), equalTo("Any"));
     }
 
     @Test

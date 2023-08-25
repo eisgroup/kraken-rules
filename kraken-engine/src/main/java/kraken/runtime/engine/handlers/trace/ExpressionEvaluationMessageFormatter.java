@@ -29,7 +29,7 @@ import kraken.runtime.model.expression.ExpressionVariableType;
 public class ExpressionEvaluationMessageFormatter {
 
     public static String format(String type, CompiledExpression expression, DataContext dataContext) {
-        String message = "Evaluating " + type + " expression: " + expression.getExpressionString();
+        String message = "Evaluating " + type + " expression: " + expression.getOriginalExpressionString();
         String ccr = describeCrossContextReferences(expression, dataContext);
         if(!ccr.isEmpty()) {
             message += System.lineSeparator() + ccr;

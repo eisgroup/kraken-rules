@@ -38,7 +38,7 @@ const extendedModelTree = Object.freeze(extendedModelTreeJson as unknown as Cont
 const policyFunctions = policyFunctionsJson as unknown as KelFunction[]
 const policyExtendedFunctions = policyExtendedFunctionsJson as unknown as KelFunction[]
 const evaluationConfig = Object.freeze({ context: {}, currencyCd: 'USD' })
-const session = Object.freeze(new ExecutionSession(evaluationConfig, {}))
+const session = Object.freeze(new ExecutionSession(evaluationConfig, {}, 'ep'))
 const toMoney = (amount: number) => ({ amount: amount, currency: 'USD' })
 const contextInstanceInfo: ContextInstanceInfo = Object.freeze({
     getContextInstanceId: () => '1',

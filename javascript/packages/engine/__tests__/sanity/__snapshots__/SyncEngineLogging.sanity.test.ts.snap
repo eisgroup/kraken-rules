@@ -84,19 +84,19 @@ exports[`SyncEngine Should debug log in development environment 1`] = `
             CarCoverage:CarCoverage-1
       <- Context extraction
       -> Evaluating rule 'TR_CarCoverage_code_default' on COLLCoverage:COLLCoverage-1:code
-         -- Evaluating default value expression: 'AA'
+         -- Evaluating default value expression: \\"AA\\"
          -- Evaluated DEFAULT. Field value was not changed.
       <- Evaluated rule 'TR_CarCoverage_code_default' on COLLCoverage:COLLCoverage-1:code. Evaluation status - APPLIED.
       -> Evaluating rule 'TR_CarCoverage_code_default' on CarCoverage:CarCoverage-1:code
-         -- Evaluating default value expression: 'AA'
+         -- Evaluating default value expression: \\"AA\\"
          -- Evaluated DEFAULT. Field value set to 'AA'.
       <- Evaluated rule 'TR_CarCoverage_code_default' on CarCoverage:CarCoverage-1:code. Evaluation status - APPLIED.
       -> Evaluating rule 'TR_Policy_TxEffectiveDate_default' on Policy:Policy-1:txEffectiveDate
-         -- Evaluating default value expression: this.DateTime('2022-01-01T22:00:00Z')
+         -- Evaluating default value expression: 2022-01-01T22:00:00Z
          -- Evaluated DEFAULT. Field value set to '2022-01-01T22:00:00.000Z'.
       <- Evaluated rule 'TR_Policy_TxEffectiveDate_default' on Policy:Policy-1:txEffectiveDate. Evaluation status - APPLIED.
       -> Evaluating rule 'TR_Policy_EffectiveDate_default' on Policy:Policy-1:effectiveDate
-         -- Evaluating default value expression: this.Date('2022-01-01')
+         -- Evaluating default value expression: 2022-01-01
          -- Evaluated DEFAULT. Field value reset from '1999-01-01T00:00:00.000Z' to '2022-01-01T00:00:00.000Z'.
       <- Evaluated rule 'TR_Policy_EffectiveDate_default' on Policy:Policy-1:effectiveDate. Evaluation status - APPLIED.
       -> Evaluating rule 'TR_CarCoverage_Reset' on COLLCoverage:COLLCoverage-1:limitAmount
@@ -108,14 +108,14 @@ exports[`SyncEngine Should debug log in development environment 1`] = `
          -- Evaluated DEFAULT. Field value reset from '10000' to '15000'.
       <- Evaluated rule 'TR_CarCoverage_Reset' on CarCoverage:CarCoverage-1:limitAmount. Evaluation status - APPLIED.
       -> Evaluating rule 'TR_CarCoverage_Condition_default' on COLLCoverage:COLLCoverage-1:deductibleAmount with priority 100
-         -> Evaluating condition expression: ((this._nd(__dataObject__.limitAmount) > 10) && (this._nd(__dataObject__.limitAmount) < 50))
+         -> Evaluating condition expression: limitAmount > 10 and limitAmount < 50
          <- Evaluated condition to 'false'.
       <- Evaluated rule 'TR_CarCoverage_Condition_default' on COLLCoverage:COLLCoverage-1:deductibleAmount. Evaluation status - SKIPPED.
       -> Evaluating rule 'TR_CarCoverage_Condition_LimitAmt_error' on COLLCoverage:COLLCoverage-1:deductibleAmount with priority 0
-         -> Evaluating condition expression: this._eq(__references__.Policy.riskItems[10].model, 'Audi')
+         -> Evaluating condition expression: Policy.riskItems[10].model = \\"Audi\\"
             Cross context references:
             Policy=Policy:Policy-1
-            -- Expression evaluation failed: 'this._eq(__references__.Policy.riskItems[10].model, 'Audi')'
+            -- Error while evaluating expression: Policy.riskItems[10].model = \\"Audi\\"
                Error message: Cannot read property 'model' of undefined
          <- Couldn't evaluate condition expression due to error.
       <- Evaluated rule 'TR_CarCoverage_Condition_LimitAmt_error' on COLLCoverage:COLLCoverage-1:deductibleAmount. Evaluation status - IGNORED.
@@ -124,14 +124,14 @@ exports[`SyncEngine Should debug log in development environment 1`] = `
          -- Evaluated DEFAULT. Field value reset from '25' to '25000'.
       <- Evaluated rule 'TR_CarCoverage_default' on COLLCoverage:COLLCoverage-1:deductibleAmount. Evaluation status - APPLIED.
       -> Evaluating rule 'TR_CarCoverage_Condition_default' on CarCoverage:CarCoverage-1:deductibleAmount with priority 100
-         -> Evaluating condition expression: ((this._nd(__dataObject__.limitAmount) > 10) && (this._nd(__dataObject__.limitAmount) < 50))
+         -> Evaluating condition expression: limitAmount > 10 and limitAmount < 50
          <- Evaluated condition to 'false'.
       <- Evaluated rule 'TR_CarCoverage_Condition_default' on CarCoverage:CarCoverage-1:deductibleAmount. Evaluation status - SKIPPED.
       -> Evaluating rule 'TR_CarCoverage_Condition_LimitAmt_error' on CarCoverage:CarCoverage-1:deductibleAmount with priority 0
-         -> Evaluating condition expression: this._eq(__references__.Policy.riskItems[10].model, 'Audi')
+         -> Evaluating condition expression: Policy.riskItems[10].model = \\"Audi\\"
             Cross context references:
             Policy=Policy:Policy-1
-            -- Expression evaluation failed: 'this._eq(__references__.Policy.riskItems[10].model, 'Audi')'
+            -- Error while evaluating expression: Policy.riskItems[10].model = \\"Audi\\"
                Error message: Cannot read property 'model' of undefined
          <- Couldn't evaluate condition expression due to error.
       <- Evaluated rule 'TR_CarCoverage_Condition_LimitAmt_error' on CarCoverage:CarCoverage-1:deductibleAmount. Evaluation status - IGNORED.
@@ -173,18 +173,18 @@ exports[`SyncEngine Should debug log in development environment 1`] = `
          COLLCoverage:COLLCoverage-1
          CarCoverage:CarCoverage-1
       -> Evaluating rule 'TR_CarCoverage_Payload_error' on COLLCoverage:COLLCoverage-1:deductibleAmount
-         -- Evaluating assertion expression: this._eq(__references__.Policy.riskItems[10].model, 'Audi')
+         -- Evaluating assertion expression: Policy.riskItems[10].model = \\"Audi\\"
             Cross context references:
             Policy=Policy:Policy-1
-         -- Expression evaluation failed: 'this._eq(__references__.Policy.riskItems[10].model, 'Audi')'
+         -- Error while evaluating expression: Policy.riskItems[10].model = \\"Audi\\"
             Error message: Cannot read property 'model' of undefined
          -- Evaluated ASSERTION. Field is valid. Assertion is not evaluated due to expression error.
       <- Evaluated rule 'TR_CarCoverage_Payload_error' on COLLCoverage:COLLCoverage-1:deductibleAmount. Evaluation status - IGNORED.
       -> Evaluating rule 'TR_CarCoverage_Payload_error' on CarCoverage:CarCoverage-1:deductibleAmount
-         -- Evaluating assertion expression: this._eq(__references__.Policy.riskItems[10].model, 'Audi')
+         -- Evaluating assertion expression: Policy.riskItems[10].model = \\"Audi\\"
             Cross context references:
             Policy=Policy:Policy-1
-         -- Expression evaluation failed: 'this._eq(__references__.Policy.riskItems[10].model, 'Audi')'
+         -- Error while evaluating expression: Policy.riskItems[10].model = \\"Audi\\"
             Error message: Cannot read property 'model' of undefined
          -- Evaluated ASSERTION. Field is valid. Assertion is not evaluated due to expression error.
       <- Evaluated rule 'TR_CarCoverage_Payload_error' on CarCoverage:CarCoverage-1:deductibleAmount. Evaluation status - IGNORED.
@@ -218,11 +218,11 @@ exports[`SyncEngine Should debug log in development environment 1`] = `
          COLLCoverage:COLLCoverage-1
          CarCoverage:CarCoverage-1
       -> Evaluating rule 'TR_CarCoverage_assert_error' on COLLCoverage:COLLCoverage-1:code
-         -- Evaluating assertion expression: this._eq(__dataObject__.code, 'AA')
+         -- Evaluating assertion expression: code == \\"AA\\"
          -- Evaluated ASSERTION. Field is not valid. Assertion evaluated to false.
       <- Evaluated rule 'TR_CarCoverage_assert_error' on COLLCoverage:COLLCoverage-1:code. Evaluation status - APPLIED.
       -> Evaluating rule 'TR_CarCoverage_assert_error' on CarCoverage:CarCoverage-1:code
-         -- Evaluating assertion expression: this._eq(__dataObject__.code, 'AA')
+         -- Evaluating assertion expression: code == \\"AA\\"
          -- Evaluated ASSERTION. Field is valid. Assertion evaluated to true.
       <- Evaluated rule 'TR_CarCoverage_assert_error' on CarCoverage:CarCoverage-1:code. Evaluation status - APPLIED.
    <- Evaluated rule 'TR_CarCoverage_assert_error' on a total of 2 instances.
@@ -230,7 +230,7 @@ exports[`SyncEngine Should debug log in development environment 1`] = `
       -- Resolved 1 data context(s) for rule 'TR_CarCoverage_assert_ccr' target 'COLLCoverage':
          COLLCoverage:COLLCoverage-1
       -> Evaluating rule 'TR_CarCoverage_assert_ccr' on COLLCoverage:COLLCoverage-1:code
-         -- Evaluating assertion expression: ((this._eq(__references__.Policy.state, 'AZ') && (this._nd(__references__.Vehicle.costNew) > 10000)) && (this._nd(__references__.COLLCoverage.limitAmount) > 10))
+         -- Evaluating assertion expression: Policy.state = \\"AZ\\" and Vehicle.costNew > 10000 and COLLCoverage.limitAmount > 10
             Cross context references:
             Policy=Policy:Policy-1
             Vehicle=Vehicle:Vehicle-1
@@ -317,11 +317,11 @@ exports[`SyncEngine Should debug log in development environment 1`] = `
          COLLCoverage:COLLCoverage-1
          CarCoverage:CarCoverage-1
       -> Evaluating rule 'TR_CarCoverage_assert_info' on COLLCoverage:COLLCoverage-1:code
-         -- Evaluating assertion expression: this._eq(__dataObject__.code, 'AA')
+         -- Evaluating assertion expression: code == \\"AA\\"
          -- Evaluated ASSERTION. Field is not valid. Assertion evaluated to false.
       <- Evaluated rule 'TR_CarCoverage_assert_info' on COLLCoverage:COLLCoverage-1:code. Evaluation status - APPLIED.
       -> Evaluating rule 'TR_CarCoverage_assert_info' on CarCoverage:CarCoverage-1:code
-         -- Evaluating assertion expression: this._eq(__dataObject__.code, 'AA')
+         -- Evaluating assertion expression: code == \\"AA\\"
          -- Evaluated ASSERTION. Field is valid. Assertion evaluated to true.
       <- Evaluated rule 'TR_CarCoverage_assert_info' on CarCoverage:CarCoverage-1:code. Evaluation status - APPLIED.
    <- Evaluated rule 'TR_CarCoverage_assert_info' on a total of 2 instances.
@@ -330,11 +330,11 @@ exports[`SyncEngine Should debug log in development environment 1`] = `
          COLLCoverage:COLLCoverage-1
          CarCoverage:CarCoverage-1
       -> Evaluating rule 'TR_CarCoverage_assert_warn' on COLLCoverage:COLLCoverage-1:code
-         -- Evaluating assertion expression: this._eq(__dataObject__.code, 'AA')
+         -- Evaluating assertion expression: code == \\"AA\\"
          -- Evaluated ASSERTION. Field is not valid. Assertion evaluated to false.
       <- Evaluated rule 'TR_CarCoverage_assert_warn' on COLLCoverage:COLLCoverage-1:code. Evaluation status - APPLIED.
       -> Evaluating rule 'TR_CarCoverage_assert_warn' on CarCoverage:CarCoverage-1:code
-         -- Evaluating assertion expression: this._eq(__dataObject__.code, 'AA')
+         -- Evaluating assertion expression: code == \\"AA\\"
          -- Evaluated ASSERTION. Field is valid. Assertion evaluated to true.
       <- Evaluated rule 'TR_CarCoverage_assert_warn' on CarCoverage:CarCoverage-1:code. Evaluation status - APPLIED.
    <- Evaluated rule 'TR_CarCoverage_assert_warn' on a total of 2 instances.
@@ -382,11 +382,11 @@ exports[`SyncEngine Should debug log in development environment 1`] = `
          COLLCoverage:COLLCoverage-1
          CarCoverage:CarCoverage-1
       -> Evaluating rule 'TR_CarCoverage_code_assert' on COLLCoverage:COLLCoverage-1:code
-         -- Evaluating assertion expression: this._eq(__dataObject__.code, 'AA')
+         -- Evaluating assertion expression: code == \\"AA\\"
          -- Evaluated ASSERTION. Field is not valid. Assertion evaluated to false.
       <- Evaluated rule 'TR_CarCoverage_code_assert' on COLLCoverage:COLLCoverage-1:code. Evaluation status - APPLIED.
       -> Evaluating rule 'TR_CarCoverage_code_assert' on CarCoverage:CarCoverage-1:code
-         -- Evaluating assertion expression: this._eq(__dataObject__.code, 'AA')
+         -- Evaluating assertion expression: code == \\"AA\\"
          -- Evaluated ASSERTION. Field is valid. Assertion evaluated to true.
       <- Evaluated rule 'TR_CarCoverage_code_assert' on CarCoverage:CarCoverage-1:code. Evaluation status - APPLIED.
    <- Evaluated rule 'TR_CarCoverage_code_assert' on a total of 2 instances.

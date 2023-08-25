@@ -30,19 +30,16 @@ import {
     ValueListPayloadResult,
 } from 'kraken-engine-api'
 import { Payloads } from 'kraken-model'
+import { ExpressionEvaluator } from '../runtime/expressions/ExpressionEvaluator'
 
 export const payloadResultCreator = {
     assertionFail(error: ExpressionEvaluationResult.ErrorResult): AssertionPayloadResult {
-        return {
-            type: PayloadResultType.ASSERTION,
-            error,
-        }
+        return { type: PayloadResultType.ASSERTION, error }
     },
-
     assertion(
         payload: Payloads.Validation.AssertionPayload,
         success: boolean,
-        templateVariables: string[],
+        templateVariables: unknown[],
     ): AssertionPayloadResult {
         return {
             type: PayloadResultType.ASSERTION,
@@ -51,11 +48,10 @@ export const payloadResultCreator = {
             validationSeverity: payload.severity,
         }
     },
-
     length(
         payload: Payloads.Validation.LengthPayload,
         success: boolean,
-        templateVariables: string[],
+        templateVariables: unknown[],
     ): LengthPayloadResult {
         return {
             type: PayloadResultType.LENGTH,
@@ -65,11 +61,10 @@ export const payloadResultCreator = {
             validationSeverity: payload.severity,
         }
     },
-
     regexp(
         payload: Payloads.Validation.RegExpPayload,
         success: boolean,
-        templateVariables: string[],
+        templateVariables: unknown[],
     ): RegExpPayloadResult {
         return {
             type: PayloadResultType.REGEXP,
@@ -79,8 +74,7 @@ export const payloadResultCreator = {
             validationSeverity: payload.severity,
         }
     },
-
-    size(payload: Payloads.Validation.SizePayload, success: boolean, templateVariables: string[]): SizePayloadResult {
+    size(payload: Payloads.Validation.SizePayload, success: boolean, templateVariables: unknown[]): SizePayloadResult {
         return {
             type: PayloadResultType.SIZE,
             success,
@@ -90,11 +84,10 @@ export const payloadResultCreator = {
             validationSeverity: payload.severity,
         }
     },
-
     sizeRange(
         payload: Payloads.Validation.SizeRangePayload,
         success: boolean,
-        templateVariables: string[],
+        templateVariables: unknown[],
     ): SizeRangePayloadResult {
         return {
             type: PayloadResultType.SIZE_RANGE,
@@ -105,11 +98,10 @@ export const payloadResultCreator = {
             validationSeverity: payload.severity,
         }
     },
-
     usage(
         payload: Payloads.Validation.UsagePayload,
         success: boolean,
-        templateVariables: string[],
+        templateVariables: unknown[],
     ): UsagePayloadResult {
         return {
             type: PayloadResultType.USAGE,
@@ -119,11 +111,10 @@ export const payloadResultCreator = {
             validationSeverity: payload.severity,
         }
     },
-
     valueList(
         payload: Payloads.Validation.ValueListPayload,
         success: boolean,
-        templateVariables: string[],
+        templateVariables: unknown[],
     ): ValueListPayloadResult {
         return {
             type: PayloadResultType.VALUE_LIST,
@@ -133,29 +124,19 @@ export const payloadResultCreator = {
             validationSeverity: payload.severity,
         }
     },
-
     default(events: RuleEvent[]): DefaultValuePayloadResult {
-        return {
-            type: PayloadResultType.DEFAULT,
-            events,
-        }
+        return { type: PayloadResultType.DEFAULT, events }
     },
-
     defaultFail(error: ExpressionEvaluationResult.ErrorResult): DefaultValuePayloadResult {
-        return {
-            type: PayloadResultType.DEFAULT,
-            error,
-        }
+        return { type: PayloadResultType.DEFAULT, error }
     },
-
     defaultNoEvents(): DefaultValuePayloadResult {
         return { type: PayloadResultType.DEFAULT, events: [] }
     },
-
     numberSet(
         payload: Payloads.Validation.NumberSetPayload,
         success: boolean,
-        templateVariables: string[],
+        templateVariables: unknown[],
     ): NumberSetPayloadResult {
         return {
             type: PayloadResultType.NUMBER_SET,
@@ -171,19 +152,22 @@ export const payloadResultCreator = {
 
 function format(
     message: Payloads.Validation.ErrorMessage | undefined,
-    templateVariables: string[],
+    rawTemplateVariables: unknown[],
 ): ErrorMessage | undefined {
     if (message === undefined) {
         return undefined
     }
+
+    const templateVariables = rawTemplateVariables.map(ExpressionEvaluator.renderTemplateParameter)
+
     return {
+        rawTemplateVariables,
+        templateVariables,
         errorCode: message.errorCode,
         errorMessage:
-            message.templateParts.length > 0
-                ? // inserts variables between array items in templateParts
-                  // the assumption is that 'templateVariables.length - 1 === templateParts.length'
+            message.templateParts.length > 0 // inserts variables between array items in templateParts
+                ? // the assumption is that 'templateVariables.length - 1 === templateParts.length'
                   message.templateParts.reduce((v1, v2, i) => v1 + templateVariables[i - 1] + v2)
                 : undefined,
-        templateVariables: templateVariables,
     }
 }

@@ -20,6 +20,7 @@ kraken.engine.sanity.check.EngineSanitySizePayloadTest.shouldFailWithSize3=[
             "sizeOrientation": "EQUALS",
             "success": false,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -42,6 +43,7 @@ kraken.engine.sanity.check.EngineSanitySizePayloadTest.shouldFailWithSize3=[
             "sizeOrientation": "MIN",
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -64,6 +66,7 @@ kraken.engine.sanity.check.EngineSanitySizePayloadTest.shouldFailWithSize3=[
             "sizeOrientation": "MAX",
             "success": false,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -102,6 +105,7 @@ kraken.engine.sanity.check.EngineSanitySizePayloadTest.shouldHandleNullCollectio
             "sizeOrientation": "EQUALS",
             "success": false,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -124,6 +128,7 @@ kraken.engine.sanity.check.EngineSanitySizePayloadTest.shouldHandleNullCollectio
             "sizeOrientation": "MIN",
             "success": false,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -146,6 +151,7 @@ kraken.engine.sanity.check.EngineSanitySizePayloadTest.shouldHandleNullCollectio
             "sizeOrientation": "MAX",
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -184,6 +190,7 @@ kraken.engine.sanity.check.EngineSanitySizePayloadTest.shouldSucceedWithSize2=[
             "sizeOrientation": "EQUALS",
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -206,6 +213,7 @@ kraken.engine.sanity.check.EngineSanitySizePayloadTest.shouldSucceedWithSize2=[
             "sizeOrientation": "MIN",
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {
@@ -228,6 +236,7 @@ kraken.engine.sanity.check.EngineSanitySizePayloadTest.shouldSucceedWithSize2=[
             "sizeOrientation": "MAX",
             "success": true,
             "templateVariables": [],
+            "rawTemplateVariables": [],
             "validationSeverity": "critical"
           },
           "conditionEvaluationResult": {

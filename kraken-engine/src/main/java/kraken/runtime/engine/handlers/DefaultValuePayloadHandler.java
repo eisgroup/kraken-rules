@@ -102,7 +102,7 @@ public class DefaultValuePayloadHandler implements RulePayloadHandler {
         } catch (KrakenRuntimeException e) {
             logger.debug(
                 RULE_DEFAULT_VALUE_EXPRESSION_EVALUATION_FAILURE,
-                defaultValuePayload.getValueExpression().getExpressionString(),
+                defaultValuePayload.getValueExpression().getOriginalExpressionString(),
                 rule.getName(),
                 e
             );

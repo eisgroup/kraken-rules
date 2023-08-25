@@ -36,7 +36,7 @@ export class RuleConditionProcessor {
         }
         const expressionResult = logger.groupDebug(
             () => formatExpressionEvaluationMessage('condition', condition.expression, dataContext),
-            () => this.evaluator.evaluate(condition.expression, dataContext, session.expressionContext),
+            () => this.evaluator.evaluate(condition.expression, dataContext, session),
             result =>
                 ExpressionEvaluationResult.isError(result)
                     ? `Couldn't evaluate condition expression due to error.`
