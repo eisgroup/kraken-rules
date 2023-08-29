@@ -24,6 +24,7 @@ import ContextDefinition = Contexts.ContextDefinition
  */
 export class DataContext {
     public readonly id: string
+    public readonly description: string
     // lazy props
     public path?: string[]
     public parentChain?: DataContext[]
@@ -40,6 +41,7 @@ export class DataContext {
     /**
      * @param contextId     Identifies particular data context instance
      * @param contextName   Context definition name, identifies context type
+     * @param contextPath   A path to data context.
      * @param dataObject    Underlying data object for context
      * @param info          Information about data object
      * @param contextDefinition    context definition of this context
@@ -48,6 +50,7 @@ export class DataContext {
     constructor(
         public readonly contextId: string,
         public readonly contextName: string,
+        public readonly contextPath: string | undefined,
         public readonly dataObject: Record<string, unknown>,
         public readonly info: ContextInstanceInfo,
         public readonly contextDefinition: ContextDefinition,
@@ -69,10 +72,16 @@ export class DataContext {
         }
 
         this.id = `${this.contextName}:${this.contextId}`
+        this.description =
+            this.contextPath == undefined ? this.id : `${this.contextName}:${this.contextPath}:${this.contextId}`
     }
 
     getId(): string {
         return this.id
+    }
+
+    getDescription(): string {
+        return this.description
     }
 
     getPath(): string[] {
@@ -87,6 +96,10 @@ export class DataContext {
             this.parentChain = getParents(this)
         }
         return this.parentChain
+    }
+
+    getContextPath(): string | undefined {
+        return this.contextPath
     }
 
     updateReference(name: string, cardinality: Cardinality, dataContexts: DataContext[]) {

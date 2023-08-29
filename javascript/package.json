@@ -1,6 +1,6 @@
 {
   "name": "root",
-  "version": "1.51.1-stage.0",
+  "version": "1.52.1-stage.0",
   "workspaces": [
     "packages/*"
   ],
@@ -22,14 +22,15 @@
     "lerna": "3.16.4",
     "prettier": "2.6.2",
     "semver": "7.3.2",
-    "typedoc": "0.22.18",
+    "typedoc": "0.24.8",
     "typedoc-plugin-mermaid": "1.8.0"
   },
   "engines": {
     "node": ">=14.0.0"
   },
   "resolutions": {
-    "typescript": "4.2.4",
+    "@types/node": "20.4.5",
+    "typescript": "5.1.6",
     "@types/react": "16.9.23",
     "@types/react-dom": "16.9.0"
   },

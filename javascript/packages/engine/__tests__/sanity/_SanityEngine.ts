@@ -17,6 +17,7 @@ import { readdirSync } from 'fs'
 import { EntryPointResult } from 'kraken-engine-api'
 import { TestProduct } from 'kraken-test-product'
 import { ExpressionContextManagerImpl } from '../../src'
+import { DataContextPathProvider } from '../../src/engine/runtime/DataContextPathProvider'
 import { DimensionSetBundleCache } from '../../src/bundle-cache/dimension-set-cache/DimensionSetBundleCache'
 
 import { EvaluationConfig, SyncEngine } from '../../src/engine/executer/SyncEngine'
@@ -72,10 +73,14 @@ function createSanityEngine(
 class SanityEngine {
     constructor(private readonly namespace: string, private readonly engine: SyncEngine) {}
 
-    private createEvaluationConfig(useCaseName: keyof typeof SANITY_DIMENSIONS): EvaluationConfig {
+    private createEvaluationConfig(
+        useCaseName: keyof typeof SANITY_DIMENSIONS,
+        pathProvider?: DataContextPathProvider,
+    ): EvaluationConfig {
         return {
-            context: { dimensions: SANITY_DIMENSIONS[useCaseName] },
-            currencyCd: 'EUR',
+            context: { dimensions: useCaseName == undefined ? {} : SANITY_DIMENSIONS[useCaseName] },
+            currencyCd: 'USD',
+            dataContextPathProvider: pathProvider,
         }
     }
 
@@ -83,12 +88,13 @@ class SanityEngine {
         data: AutoPolicySummary,
         entryPoint: EntryPointName,
         useCaseName?: keyof typeof SANITY_DIMENSIONS,
+        pathProvider?: DataContextPathProvider,
     ): EntryPointResult {
         cache.setExpressionContext(useCaseName ? SANITY_DIMENSIONS[useCaseName] : {})
         return this.engine.evaluate(
             data,
             this.resolveEntryPointName(entryPoint),
-            useCaseName ? this.createEvaluationConfig(useCaseName) : sanityMocks.evalConf(),
+            this.createEvaluationConfig(useCaseName, pathProvider),
         )
     }
 

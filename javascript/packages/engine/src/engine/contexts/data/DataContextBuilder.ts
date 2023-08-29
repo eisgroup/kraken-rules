@@ -26,11 +26,13 @@ import {
     UNKNOWN_CONTEXT_DEFINITION,
 } from '../../../error/KrakenRuntimeError'
 import { ContextInstanceInfo } from 'kraken-engine-api'
+import { DataContextPathProvider } from '../../runtime/DataContextPathProvider'
 
 export class DataContextBuilder {
     constructor(
         private readonly modelTree: ContextModelTree.ContextModelTree,
         private readonly resolver: ContextInstanceInfoResolver<unknown>,
+        private readonly pathProvider: () => DataContextPathProvider,
     ) {}
 
     /**
@@ -74,6 +76,7 @@ export class DataContextBuilder {
         return new DataContext(
             requireDefinedValue(info.getContextInstanceId(), 'Context instance id is null'),
             contextDefinitionName,
+            this.pathProvider().getPath(info.getContextInstanceId()),
             data as Record<string, unknown>,
             info,
             contextDefinition,

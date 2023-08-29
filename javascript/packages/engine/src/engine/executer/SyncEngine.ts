@@ -47,6 +47,7 @@ import EntryPointEvaluation = EntryPointBundle.EntryPointEvaluation
 import { EvaluationMode, isSupportedPayloadType } from '../runtime/EvaluationMode'
 import { EntryPointBundleCache } from '../../bundle-cache/EntryPointBundleCache'
 import { OrderedEvaluationLoop } from '../processors/OrderedEvaluationLoop'
+import { DataContextPathProvider, DEFAULT_PATH_PROVIDER } from '../runtime/DataContextPathProvider'
 
 export interface EvaluationConfig {
     context: {
@@ -77,6 +78,11 @@ export interface EvaluationConfig {
      * This enables data extraction caching between different evaluations.
      */
     evaluationId?: string
+
+    /**
+     *
+     */
+    dataContextPathProvider?: DataContextPathProvider
 }
 
 /**
@@ -127,11 +133,19 @@ export class SyncEngine {
 
     readonly #expressionEvaluator: ExpressionEvaluator
     readonly #engineCompatibilityVersion?: string
+    #dataContextPathProvider?: DataContextPathProvider
 
     private evaluationId?: string
     private serviceCache?: CachedDataExtractionServices
 
     constructor(config: SyncEngineConfig) {
+        function getContextDataBuilder(this: SyncEngine) {
+            if (this.#dataContextPathProvider) {
+                return this.#dataContextPathProvider
+            }
+
+            return DEFAULT_PATH_PROVIDER
+        }
         function resolveInheritance(name: string): string[] {
             return config.modelTree.contexts[name].inheritedContexts
         }
@@ -139,7 +153,12 @@ export class SyncEngine {
             FunctionRegistry.createInstanceFunctions(config.dataInfoResolver, resolveInheritance),
             config.functions ?? [],
         )
-        this.#dataContextBuilder = new DataContextBuilder(config.modelTree, config.contextInstanceInfoResolver)
+        // TODO refactor to pass function data context builder... ?? ->
+        this.#dataContextBuilder = new DataContextBuilder(
+            config.modelTree,
+            config.contextInstanceInfoResolver,
+            getContextDataBuilder.bind(this),
+        )
         this.#contextDataExtractor = new ContextDataExtractorImpl(
             config.modelTree,
             new ExtractedChildDataContextBuilder(this.#dataContextBuilder, this.#expressionEvaluator),
@@ -167,6 +186,7 @@ export class SyncEngine {
 
     evaluate(data: object, entryPointName: string, config: EvaluationConfig): EntryPointResult {
         restartLogger()
+        this.updateDataContextPathProvider(config)
         return logger.group(
             () => `Kraken logs: '${entryPointName}'`,
             () => this.doEvaluate(data, entryPointName, config),
@@ -176,6 +196,7 @@ export class SyncEngine {
 
     evaluateSubTree(data: object, node: object, entryPointName: string, config: EvaluationConfig): EntryPointResult {
         restartLogger()
+        this.updateDataContextPathProvider(config)
         return logger.group(
             () => `Kraken logs: '${entryPointName}'`,
             () => this.doEvaluate(data, entryPointName, config, this.requireValidNode(node)),
@@ -299,5 +320,13 @@ export class SyncEngine {
             throw new KrakenRuntimeError(m)
         }
         return node
+    }
+
+    private readonly updateDataContextPathProvider = (evaluationConfig: EvaluationConfig): void => {
+        if (evaluationConfig.dataContextPathProvider) {
+            this.#dataContextPathProvider = evaluationConfig.dataContextPathProvider
+        } else {
+            this.#dataContextPathProvider = DEFAULT_PATH_PROVIDER
+        }
     }
 }

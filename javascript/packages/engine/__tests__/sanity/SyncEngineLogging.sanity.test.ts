@@ -16,6 +16,7 @@
 import { KrakenConfig } from '../../src/config'
 import { sanityEngine } from './_SanityEngine'
 import { TestProduct } from 'kraken-test-product'
+import { mock } from '../mock'
 
 type ThisWithKraken = typeof global & { Kraken: KrakenConfig }
 
@@ -94,6 +95,68 @@ describe('SyncEngine', () => {
         sanityEngine.evaluate(policy, 'TracerSnapshotTest')
 
         const logs = (global as ThisWithKraken).Kraken.logger.logs
+
+        expect(logs.join('\n')).toMatchSnapshot()
+    })
+    it('Should debug log in development environment with path provider', () => {
+        ;(global as ThisWithKraken).Kraken.logger.debug = true
+        process.env.NODE_ENV = 'development'
+
+        const policy: TestProduct.kraken.testproduct.domain.Policy = {
+            id: 'Policy-1',
+            cd: 'Policy',
+            state: 'OT',
+            termDetails: {
+                id: 'TermDetails-1',
+                cd: 'TermDetails',
+                termEffectiveDate: new Date('1999-01-01'),
+            },
+            accessTrackInfo: {
+                id: 'AccessTrackInfo-1',
+                cd: 'AccessTrackInfo',
+            },
+            transactionDetails: {
+                id: 'TransactionDetails-1',
+                cd: 'TransactionDetails',
+            },
+            billingInfo: {
+                id: 'BillingInfo-1',
+                cd: 'BillingInfo',
+                creditCardInfo: {
+                    id: 'CreditCardInfo-1',
+                    cd: 'CreditCardInfo',
+                    cardCreditLimitAmount: {
+                        amount: 505,
+                        currency: 'USD',
+                    },
+                },
+            },
+            riskItems: [
+                {
+                    id: 'Vehicle-1',
+                    cd: 'Vehicle',
+                    costNew: 30000,
+                    collCoverages: [
+                        {
+                            id: 'COLLCoverage-1',
+                            cd: 'COLLCoverage',
+                            code: '123',
+                            limitAmount: 15,
+                            deductibleAmount: 25,
+                        },
+                    ],
+                },
+            ],
+            coverage: {
+                id: 'CarCoverage-1',
+                cd: 'CarCoverage',
+                limitAmount: 10000,
+            },
+        }
+
+        const logs = (global as ThisWithKraken).Kraken.logger.logs
+
+        sanityEngine.evaluate(policy, 'TracerSnapshotTest', undefined, mock.pathProvider)
 
         expect(logs.join('\n')).toMatchSnapshot()
     })

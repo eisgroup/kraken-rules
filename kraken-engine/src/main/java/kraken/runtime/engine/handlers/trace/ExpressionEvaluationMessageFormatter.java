@@ -56,10 +56,10 @@ public class ExpressionEvaluationMessageFormatter {
             return "null";
         }
         if(ref.getCardinality() == Cardinality.SINGLE) {
-            return ref.getDataContext() == null ? "null" : ref.getDataContext().getIdString();
+            return ref.getDataContext() == null ? "null" : ref.getDataContext().getContextDescription();
         } else {
             return ref.getDataContexts().stream()
-                .map(DataContext::getIdString)
+                .map(DataContext::getContextDescription)
                 .collect(Collectors.joining(",", "[", "]"));
         }
     }

@@ -35,6 +35,7 @@ import org.junit.Test;
 import kraken.context.model.tree.ContextModelTreeMetadata;
 import kraken.context.model.tree.impl.ContextModelTreeImpl;
 import kraken.el.TargetEnvironment;
+import kraken.runtime.DataContextPathProvider;
 import kraken.runtime.EvaluationConfig;
 import kraken.runtime.EvaluationSession;
 import kraken.runtime.engine.context.data.DataContext;
@@ -89,7 +90,11 @@ public class ContextDataExtractorTest {
                 Map.of(),
                 Map.of(),
                 new ContextModelTreeMetadata("test", TargetEnvironment.JAVA)));
-        this.dataContextBuilder = new DataContextBuilder(runtimeContextRepository, instanceInfoResolver);
+        this.dataContextBuilder = new DataContextBuilder(
+            runtimeContextRepository,
+            instanceInfoResolver,
+            DataContextPathProvider.DEFAULT
+        );
         this.contextDataExtractor = new ContextDataExtractor(
             runtimeContextRepository,
             testResources.getModelTree(),

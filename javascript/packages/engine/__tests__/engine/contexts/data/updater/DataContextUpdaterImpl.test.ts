@@ -73,6 +73,7 @@ describe('DataContextUpdaterImpl', () => {
         const dataContext = new DataContext(
             '1',
             CreditCardInfo.name,
+            'data.creditCardInfo',
             { test: 'data' },
             { getContextInstanceId: () => '1', getContextName: () => CreditCardInfo.name },
             mock.modelTree.contexts[CreditCardInfo.name],

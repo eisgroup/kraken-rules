@@ -1,6 +1,6 @@
 {
     "name": "kraken-model",
-    "version": "1.51.1-stage.0",
+    "version": "1.52.1-stage.0",
     "description": "Kraken model types",
     "main": "./target/dist/js/src/index.js",
     "types": "./target/dist/definitions/src/index.d.ts",
@@ -16,7 +16,7 @@
         "jsdom-global": "3.0.2",
         "rimraf": "3.0.2",
         "ts-node": "4.1.0",
-        "typescript": "4.2.4"
+        "typescript": "5.1.6"
     },
     "scripts": {
         "lint": "eslint src",
@@ -32,5 +32,5 @@
         "target/dist/definitions",
         "target/dist/js"
     ],
-    "gitHead": "b5d5841bc262bd911aa1a80fd7a22575e12c793e"
+    "gitHead": "7b16c3527954e4c5f07d4955e9cfe5ee3e069124"
 }

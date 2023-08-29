@@ -18,6 +18,7 @@ package kraken.runtime.engine.context;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import kraken.runtime.DataContextPathProvider;
 import kraken.runtime.engine.context.data.DataContext;
 import kraken.runtime.engine.context.data.DataContextBuilder;
 import kraken.runtime.engine.context.data.DataContextBuildingException;
@@ -28,6 +29,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -36,7 +38,9 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 /**
@@ -51,20 +55,26 @@ public class DataContextBuilderTest {
     @InjectMocks
     private DataContextBuilder testObject;
 
+    private DataContextPathProvider pathProvider;
     private Person person = new Person();
 
     @Before
     public void setUp() {
         RuntimeContextRepository contextRepository = mock(RuntimeContextRepository.class);
         DataNavigationContextInstanceInfoResolver resolver = new DataNavigationContextInstanceInfoResolver();
-        testObject = new DataContextBuilder(contextRepository, resolver);
+
+        pathProvider = mock(DataContextPathProvider.class);
+        testObject = new DataContextBuilder(contextRepository, resolver, pathProvider);
     }
 
     @Test
     public void contextIsBuildFromObject() {
+        when(pathProvider.getPath(any())).thenReturn("Person");
+
         DataContext dataContext = testObject.buildFromRoot(person);
         assertThat(dataContext.getDataObject(), is(person));
         assertThat(dataContext.getContextName(), is(equalTo("Person")));
+        assertThat(dataContext.getContextPath(), is("Person"));
         assertThat(dataContext.getContextId(), is(notNullValue()));
         assertThat(dataContext.getContextId(), is(instanceOf(String.class)));
     }

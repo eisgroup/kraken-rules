@@ -48,7 +48,7 @@ function describeReference(reference: DataReference | undefined): string {
         return 'null'
     }
     if (reference.cardinality === 'SINGLE') {
-        return reference.dataContexts[0]?.id ?? 'null'
+        return reference.dataContexts[0]?.description ?? 'null'
     }
-    return `[${reference.dataContexts.map(c => c.id).join(',')}]`
+    return `[${reference.dataContexts.map(c => c.description).join(',')}]`
 }

@@ -96,7 +96,11 @@ public class StaticContextDataProvider implements ContextDataProvider {
     ) {
         NodeInstanceInfo nodeInstanceInfo = createNodeContext(node, contextInstanceInfoResolver);
 
-        final DataContextBuilder dataContextBuilder = new DataContextBuilder(contextRepository, contextInstanceInfoResolver);
+        final DataContextBuilder dataContextBuilder = new DataContextBuilder(
+            contextRepository,
+            contextInstanceInfoResolver,
+            session.getEvaluationConfig().getDataContextPathProvider()
+        );
         final DataContext root = dataContextBuilder.buildFromRoot(data);
 
         final ContextDataExtractor contextDataExtractor = new ContextDataExtractor(
@@ -139,7 +143,7 @@ public class StaticContextDataProvider implements ContextDataProvider {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Resolved {} to instances: {}", targetContextName,
                     targetContextInstances.stream()
-                            .map(DataContext::getIdString)
+                            .map(DataContext::getContextDescription)
                             .collect(Collectors.joining(", ")));
         }
     }

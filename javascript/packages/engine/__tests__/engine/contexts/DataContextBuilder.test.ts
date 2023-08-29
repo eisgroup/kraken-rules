@@ -20,7 +20,7 @@ import { mock } from '../../mock'
 import { DataContext } from '../../../src/engine/contexts/data/DataContext'
 
 describe('DataContextBuilder', () => {
-    const builder = new DataContextBuilder(mock.modelTree, mock.spi.instance)
+    const builder = new DataContextBuilder(mock.modelTree, mock.spi.instance, () => mock.pathProvider)
     const dataObject = Object.freeze(mock.data.empty())
     const { Insured, Party, AddressInfo } = mock.modelTreeJson.contexts
     it('should create instance', () => {

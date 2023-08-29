@@ -1,13 +1,14 @@
 {
-  "entryPointStrategy": "packages",
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPointStrategy": "legacy-packages",
   "entryPoints": [
     "packages/engine",
     "packages/kraken-engine-api",
     "packages/model"
-  ],
+  ], 
   "excludeExternals": true,
   "excludePrivate": true,
-  "externalPattern": "**/node_modules/**/*",
+  "externalPattern": ["**/node_modules/**/*"],
   "exclude": [
     "__tests__",
     "node_modules",

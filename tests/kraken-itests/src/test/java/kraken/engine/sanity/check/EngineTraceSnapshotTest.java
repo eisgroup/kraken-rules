@@ -22,9 +22,12 @@ import java.math.BigDecimal;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneId;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import javax.annotation.Nonnull;
 
 import org.junit.After;
 import org.junit.Before;
@@ -37,7 +40,9 @@ import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
+import kraken.runtime.DataContextPathProvider;
 import kraken.runtime.EvaluationConfig;
+import kraken.runtime.EvaluationMode;
 import kraken.runtime.engine.result.reducers.validation.ValidationStatusReducer;
 import kraken.testproduct.domain.AccessTrackInfo;
 import kraken.testproduct.domain.COLLCoverage;
@@ -62,6 +67,8 @@ public class EngineTraceSnapshotTest extends SanityEngineBaseTest {
 
     private ListAppender<ILoggingEvent> appender;
 
+    private DataContextPathProvider dataContextPathProvider;
+
     @Override
     @Before
     public void setUp() {
@@ -73,7 +80,12 @@ public class EngineTraceSnapshotTest extends SanityEngineBaseTest {
         appender.start();
         logger.addAppender(appender);
 
+        var pathsById = new LinkedHashMap<String, String>();
+        pathsById.put("TermDetails-1", "path.to.TermDetails-1");
+        pathsById.put("CarCoverage-1", "path.to.CarCoverage-1");
+
         this.appender = appender;
+        this.dataContextPathProvider = new TestContextPathProvider(pathsById);
     }
 
     @After
@@ -91,7 +103,13 @@ public class EngineTraceSnapshotTest extends SanityEngineBaseTest {
             // so that LocalDateTime#now and LocalDate#now returns fixed time
             clock.when(Clock::systemDefaultZone).thenReturn(mockedClock);
 
-            var result = engine.evaluate(policy(), "TracerSnapshotTest", new EvaluationConfig(Map.of(), "USD"));
+            var result = engine.evaluate(policy(), "TracerSnapshotTest", new EvaluationConfig(
+                Map.of(),
+                "USD",
+                EvaluationMode.ALL,
+                dataContextPathProvider
+            ));
+
             createReducer(overriddenRuleEvaluations()).reduce(result);
             assertThat(traceOutput(), matches(snapshot));
         }
@@ -114,6 +132,21 @@ public class EngineTraceSnapshotTest extends SanityEngineBaseTest {
         return List.of(
             "TR_CarCoverage_code_assert:COLLCoverage:COLLCoverage-1"
         );
+    }
+
+    private static class TestContextPathProvider implements DataContextPathProvider {
+
+        private final Map<String, String> pathsById;
+
+        public TestContextPathProvider(Map<String, String> pathsById) {
+            this.pathsById = pathsById;
+        }
+
+        @Override
+        public String getPath(@Nonnull String dataContextId) {
+            return pathsById.get(dataContextId);
+        }
+
     }
 
     private Policy policy() {

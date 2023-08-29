@@ -23,6 +23,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
+import javax.annotation.Nonnull;
+
 /**
  * @author psurinin
  */
@@ -42,34 +44,54 @@ public final class EvaluationConfig {
 
     private final EvaluationMode evaluationMode;
 
+    private final DataContextPathProvider dataContextPathProvider;
+
     public EvaluationConfig() {
         this(Collections.emptyMap(), Currency.getInstance(Locale.getDefault()).getCurrencyCode());
     }
 
-    public EvaluationConfig(String currencyCd) {
+    public EvaluationConfig(@Nonnull String currencyCd) {
         this(Collections.emptyMap(), Objects.requireNonNull(currencyCd));
     }
 
-    public EvaluationConfig(Map<String, Object> context, String currencyCd) {
+    public EvaluationConfig(@Nonnull Map<String, Object> context, @Nonnull String currencyCd) {
         this(context, currencyCd, EvaluationMode.ALL);
     }
 
-    public EvaluationConfig(Map<String, Object> context, String currencyCd, EvaluationMode evaluationMode) {
-        this.context = context;
-        this.currencyCd = currencyCd;
-        this.evaluationMode = evaluationMode;
+    public EvaluationConfig(@Nonnull Map<String, Object> context,
+                            @Nonnull String currencyCd,
+                            @Nonnull EvaluationMode evaluationMode) {
+        this(context, currencyCd, evaluationMode, DataContextPathProvider.DEFAULT);
     }
 
+    public EvaluationConfig(@Nonnull Map<String, Object> context,
+                            @Nonnull String currencyCd,
+                            @Nonnull EvaluationMode evaluationMode,
+                            @Nonnull DataContextPathProvider dataContextPathProvider) {
+        this.context = Objects.requireNonNull(context);
+        this.currencyCd = Objects.requireNonNull(currencyCd);
+        this.evaluationMode = Objects.requireNonNull(evaluationMode);
+        this.dataContextPathProvider = Objects.requireNonNull(dataContextPathProvider);
+    }
+
+    @Nonnull
     public Map<String, Object> getContext() {
         return Collections.unmodifiableMap(context);
     }
 
+    @Nonnull
     public String getCurrencyCd() {
         return currencyCd;
     }
 
+    @Nonnull
     public EvaluationMode getEvaluationMode() {
         return evaluationMode;
+    }
+
+    @Nonnull
+    public DataContextPathProvider getDataContextPathProvider() {
+        return dataContextPathProvider;
     }
 
 }

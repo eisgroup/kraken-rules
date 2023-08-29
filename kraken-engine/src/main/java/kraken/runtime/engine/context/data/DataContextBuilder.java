@@ -21,6 +21,7 @@ import static kraken.utils.MessageUtils.withSpaceBeforeEachLine;
 import java.util.stream.Collectors;
 
 import kraken.message.SystemMessageBuilder;
+import kraken.runtime.DataContextPathProvider;
 import kraken.runtime.engine.context.extraction.ContextChildExtractionInfo;
 import kraken.runtime.engine.context.extraction.instance.ContextExtractionResult;
 import kraken.runtime.engine.context.info.ContextInstanceInfo;
@@ -39,13 +40,16 @@ public class DataContextBuilder {
 
     private final RuntimeContextRepository contextRepository;
     private final ContextInstanceInfoResolver<?> instanceInfoResolver;
+    private final DataContextPathProvider dataContextPathProvider;
 
     public DataContextBuilder(
             RuntimeContextRepository contextRepository,
-            ContextInstanceInfoResolver<?> instanceInfoResolver
+            ContextInstanceInfoResolver<?> instanceInfoResolver,
+            DataContextPathProvider dataContextPathProvider
     ) {
         this.contextRepository = contextRepository;
         this.instanceInfoResolver = instanceInfoResolver;
+        this.dataContextPathProvider = dataContextPathProvider;
     }
 
     /**
@@ -93,6 +97,7 @@ public class DataContextBuilder {
 
         dataContext.setContextName(info.getContextName());
         dataContext.setContextId(info.getContextInstanceId());
+        dataContext.setContextPath(dataContextPathProvider.getPath(info.getContextInstanceId()));
         dataContext.setDataObject(contextDataObject);
         dataContext.setContextDefinition(contextDefinition);
         dataContext.setContextInstanceInfo(info);

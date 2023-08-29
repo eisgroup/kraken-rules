@@ -55,6 +55,7 @@ DataContext {
   },
   "contextId": "3",
   "contextName": "Party",
+  "contextPath": "path.to.3",
   "dataContextReferences": Object {
     "Party": Object {
       "cardinality": "SINGLE",
@@ -78,6 +79,7 @@ DataContext {
       },
     ],
   },
+  "description": "Party:path.to.3:3",
   "id": "Party:3",
   "info": Object {
     "getContextInstanceId": [Function],
@@ -389,6 +391,7 @@ DataContext {
     },
     "contextId": "0",
     "contextName": "Policy",
+    "contextPath": "path.to.0",
     "dataContextReferences": Object {
       "Policy": Object {
         "cardinality": "SINGLE",
@@ -457,6 +460,7 @@ DataContext {
         "id": "8",
       },
     },
+    "description": "Policy:path.to.0:0",
     "id": "Policy:0",
     "info": Object {
       "getContextInstanceId": [Function],
@@ -603,6 +607,7 @@ DataContext {
   },
   "contextId": "iai1",
   "contextName": "AddressInfo",
+  "contextPath": "path.to.iai1",
   "dataContextReferences": Object {
     "AddressInfo": Object {
       "cardinality": "SINGLE",
@@ -616,6 +621,7 @@ DataContext {
     "cd": "AddressInfo",
     "id": "iai1",
   },
+  "description": "AddressInfo:path.to.iai1:iai1",
   "id": "AddressInfo:iai1",
   "info": Object {
     "getContextInstanceId": [Function],
@@ -673,6 +679,7 @@ DataContext {
     },
     "contextId": "insured-1-id",
     "contextName": "Insured",
+    "contextPath": "path.to.insured-1-id",
     "dataContextReferences": Object {
       "Insured": Object {
         "cardinality": "SINGLE",
@@ -690,6 +697,7 @@ DataContext {
       "cd": "Insured",
       "id": "insured-1-id",
     },
+    "description": "Insured:path.to.insured-1-id:insured-1-id",
     "id": "Insured:insured-1-id",
     "info": Object {
       "getContextInstanceId": [Function],
@@ -995,6 +1003,7 @@ DataContext {
       },
       "contextId": "0",
       "contextName": "Policy",
+      "contextPath": "path.to.0",
       "dataContextReferences": Object {
         "Policy": Object {
           "cardinality": "SINGLE",
@@ -1063,6 +1072,7 @@ DataContext {
           "id": "8",
         },
       },
+      "description": "Policy:path.to.0:0",
       "id": "Policy:0",
       "info": Object {
         "getContextInstanceId": [Function],

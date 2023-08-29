@@ -27,7 +27,7 @@ describe('CachingContextDataExtractor', () => {
             new ContextDataExtractorImpl(
                 mock.modelTree,
                 new ExtractedChildDataContextBuilder(
-                    new DataContextBuilder(mock.modelTree, mock.spi.instance),
+                    new DataContextBuilder(mock.modelTree, mock.spi.instance, () => mock.pathProvider),
                     ExpressionEvaluator.DEFAULT,
                 ),
             ),
