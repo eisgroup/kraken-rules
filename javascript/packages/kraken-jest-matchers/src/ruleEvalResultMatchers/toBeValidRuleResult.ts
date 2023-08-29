@@ -90,16 +90,11 @@ export function k_toBeValidRuleResult<T extends RuleEvaluationResult>(
                     promise: this.promise,
                 },
             )
-
         default:
-            return error(
-                '.k_toBeValidRuleResult',
-                `Payload of type ${received.kind}.`,
-                `Payload of type ${Kind.VALIDATION} or ${Kind.REGULAR} or ${Kind.NOT_APPLICABLE}.`,
-                {
-                    isNot: this.isNot,
-                    promise: this.promise,
-                },
-            )
+            throwIfNotMatched(received)
     }
+}
+
+function throwIfNotMatched(_v: never): never {
+    throw new Error('Additional rule result type is not supported')
 }

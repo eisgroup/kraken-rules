@@ -43,7 +43,14 @@ beforeEach(() => {
         inheritedContexts: [],
         system: false,
     }
-    dataContext = new DataContext('1', 'PersonContext', data, mock.contextInstanceInfo, contextDefinition)
+    dataContext = new DataContext(
+        '1',
+        'PersonContext',
+        'data.personContext',
+        data,
+        mock.contextInstanceInfo,
+        contextDefinition,
+    )
 })
 
 describe('defaultValuePayloadHandler', () => {
@@ -197,7 +204,14 @@ describe('defaultValuePayloadHandler', () => {
                 fields,
                 inheritedContexts: [],
             }
-            context = new DataContext('1', 'Coverage', instance, mock.contextInstanceInfo, contextDefinition)
+            context = new DataContext(
+                '1',
+                'Coverage',
+                'data.coverage',
+                instance,
+                mock.contextInstanceInfo,
+                contextDefinition,
+            )
         })
 
         function createResetRule(field: string, defaultExpression: string): Rule {
@@ -238,7 +252,7 @@ describe('defaultValuePayloadHandler', () => {
             const i: Coverage = {
                 labels: ['A'],
             }
-            const c = new DataContext('1', 'Coverage', i, mock.contextInstanceInfo, contextDefinition)
+            const c = new DataContext('1', 'Coverage', 'data.coverage', i, mock.contextInstanceInfo, contextDefinition)
             handler.executePayload(rule, c, session)
             expect(i.labels).toStrictEqual(['label'])
         })
@@ -247,7 +261,7 @@ describe('defaultValuePayloadHandler', () => {
             const i: Coverage = {
                 labels: [],
             }
-            const c = new DataContext('1', 'Coverage', i, mock.contextInstanceInfo, contextDefinition)
+            const c = new DataContext('1', 'Coverage', 'data.coverage', i, mock.contextInstanceInfo, contextDefinition)
             handler.executePayload(rule, c, session)
             expect(i.labels).toStrictEqual(['label'])
         })
@@ -256,7 +270,7 @@ describe('defaultValuePayloadHandler', () => {
             const i: Coverage = {
                 labels: undefined,
             }
-            const c = new DataContext('1', 'Coverage', i, mock.contextInstanceInfo, contextDefinition)
+            const c = new DataContext('1', 'Coverage', 'data.coverage', i, mock.contextInstanceInfo, contextDefinition)
             handler.executePayload(rule, c, session)
             expect(i.labels).toStrictEqual(['label'])
         })

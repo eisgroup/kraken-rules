@@ -32,6 +32,7 @@ import { ExpressionEvaluator, KelFunction } from '../src/engine/runtime/expressi
 import { FunctionRegistry } from '../src/engine/runtime/expressions/functionLibrary/Registry'
 import { DataContext } from '../src/engine/contexts/data/DataContext'
 import { ContextInstanceInfo } from 'kraken-engine-api'
+import { DataContextPathProvider, DEFAULT_PATH_PROVIDER } from '../src/engine/runtime/DataContextPathProvider'
 
 const modelTree = Object.freeze(modelTreeJson as unknown as ContextModelTree.ContextModelTree)
 const extendedModelTree = Object.freeze(extendedModelTreeJson as unknown as ContextModelTree.ContextModelTree)
@@ -176,6 +177,7 @@ const dataContextEmpty: () => DataContext = () => {
     return new DataContext(
         emptyPolicy.id!,
         Policy.name,
+        '',
         emptyPolicy as Record<string, unknown>,
         info,
         modelTree.contexts[Policy.name],
@@ -191,6 +193,7 @@ const dataContextEmptyExtended: () => DataContext = () => {
     return new DataContext(
         emptyPolicy.id!,
         PolicyExtended.name,
+        '',
         emptyPolicy as Record<string, unknown>,
         info,
         extendedModelTree.contexts[PolicyExtended.name],
@@ -212,6 +215,7 @@ const dataContextExplicit = (policy: Partial<TestProduct.kraken.testproduct.doma
     return new DataContext(
         policy.id!,
         Policy.name,
+        '',
         policy as Record<string, unknown>,
         {
             getContextInstanceId: () => policy.id!,
@@ -243,6 +247,12 @@ const dataResolver = {
     resolveId: (identifiable: Identifiable) => identifiable['id'],
     resolveName: (identifiable: Identifiable) => identifiable['cd'],
 } as DataObjectInfoResolver
+
+const pathProvider = {
+    getPath(dataContextId: string): string | undefined {
+        return `path.to.${dataContextId}`
+    },
+} as DataContextPathProvider
 function resolveInfo(root: Identifiable): ContextInstanceInfo {
     return {
         getContextInstanceId: () => root['id']!,
@@ -259,7 +269,7 @@ const spi = {
         resolveExtractedInfo: resolveInfo,
     } as ContextInstanceInfoResolver<Identifiable>,
 }
-const contextBuilder = new DataContextBuilder(modelTree, spi.instance)
+const contextBuilder = new DataContextBuilder(modelTree, spi.instance, () => DEFAULT_PATH_PROVIDER)
 const evaluator = ExpressionEvaluator.DEFAULT
 const contextDataExtractor = new ContextDataExtractorImpl(
     modelTree,
@@ -287,4 +297,5 @@ export const mock = {
     policyFunctions,
     policyExtendedFunctions,
     policyEvaluator,
+    pathProvider,
 }

@@ -194,8 +194,8 @@ export class OrderedEvaluationLoop {
             if (appliedRuleEvaluation && appliedRuleEvaluation.priority > evaluation.priority) {
                 const appliedEvaluation = appliedRuleEvaluation
                 logger.debug(() => {
-                    const fieldId = this.toFieldId(evaluation.dataContext, evaluation.rule.targetPath)
-                    return `Suppressing rule '${evaluation.rule.name}' with priority '${evaluation.priority}' on ${fieldId} because rule '${appliedEvaluation.rule.name}' with higher priority '${appliedEvaluation.priority}' was applied. Evaluation status - UNUSED.`
+                    const fieldDescription = this.toFieldDescription(evaluation.dataContext, evaluation.rule.targetPath)
+                    return `Suppressing rule '${evaluation.rule.name}' with priority '${evaluation.priority}' on ${fieldDescription} because rule '${appliedEvaluation.rule.name}' with higher priority '${appliedEvaluation.priority}' was applied. Evaluation status - UNUSED.`
                 })
                 continue
             }
@@ -268,11 +268,11 @@ export class OrderedEvaluationLoop {
     }
 
     private describeRuleOnInstanceEvaluation(evaluation: RuleEvaluation, prioritizedEvaluation: boolean): string {
-        const fieldId = this.toFieldId(evaluation.dataContext, evaluation.rule.targetPath)
+        const fieldDescription = this.toFieldDescription(evaluation.dataContext, evaluation.rule.targetPath)
         if (evaluation.rule.payload.type === PayloadType.DEFAULT && prioritizedEvaluation) {
-            return `Evaluating rule '${evaluation.rule.name}' on ${fieldId} with priority ${evaluation.priority}`
+            return `Evaluating rule '${evaluation.rule.name}' on ${fieldDescription} with priority ${evaluation.priority}`
         } else {
-            return `Evaluating rule '${evaluation.rule.name}' on ${fieldId}`
+            return `Evaluating rule '${evaluation.rule.name}' on ${fieldDescription}`
         }
     }
 
@@ -280,10 +280,10 @@ export class OrderedEvaluationLoop {
         evaluation: RuleEvaluation,
         result: RuleOnInstanceEvaluationResult,
     ): string {
-        const fieldId = this.toFieldId(evaluation.dataContext, evaluation.rule.targetPath)
+        const fieldDescription = this.toFieldDescription(evaluation.dataContext, evaluation.rule.targetPath)
         return `Evaluated rule '${
             evaluation.rule.name
-        }' on ${fieldId}. Evaluation status - ${this.resolveEvaluationStatus(result)}.`
+        }' on ${fieldDescription}. Evaluation status - ${this.resolveEvaluationStatus(result)}.`
     }
 
     private resolveEvaluationStatus(result: RuleOnInstanceEvaluationResult): 'SKIPPED' | 'APPLIED' | 'IGNORED' {
@@ -307,7 +307,7 @@ export class OrderedEvaluationLoop {
 
     private describeResolvedContextData(contextData: ContextData, rule: Rule): string {
         const describe = (contexts: DataContext[]): string => {
-            return `${contexts.map(c => `${c.contextName}:${c.contextId}`).join('\n')}`
+            return `${contexts.map(c => `${c.description}`).join('\n')}`
         }
         let message = `Resolved ${contextData.allowedContexts.length} data context(s) for rule '${rule.name}' target '${rule.context}'`
         if (contextData.allowedContexts.length > 0) {
@@ -337,7 +337,11 @@ export class OrderedEvaluationLoop {
     }
 
     private toFieldId(context: DataContext, fieldName: string): string {
-        return `${context.contextName}:${context.contextId}:${fieldName}`
+        return `${context.id}:${fieldName}`
+    }
+
+    private toFieldDescription(context: DataContext, fieldName: string): string {
+        return `${context.description}:${fieldName}`
     }
 
     private validateDefaultsOnOneField(results: Record<string, FieldEvaluationResult>): void {

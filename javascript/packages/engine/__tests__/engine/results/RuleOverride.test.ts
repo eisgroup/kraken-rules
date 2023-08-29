@@ -31,7 +31,7 @@ describe('RuleOverride', () => {
             inheritedContexts: [],
         }
         const dataContext = (id: string, parent?: DataContext) =>
-            new DataContext(id, 'mockName', {}, mock.contextInstanceInfo, contextDefinition, parent)
+            new DataContext(id, 'mockName', 'mockPath', {}, mock.contextInstanceInfo, contextDefinition, parent)
         const root = dataContext('rootId')
         const child1 = dataContext('child1', root)
         const child2 = dataContext('child1', child1)
@@ -201,6 +201,7 @@ function createDataContext(dc: { name: string; field: string; value: unknown }):
     return new DataContext(
         'dc' + idCounter++,
         dc.name,
+        '',
         { [dc.field]: dc.value },
         mock.contextInstanceInfo,
         mock.modelTree.contexts[dc.name],

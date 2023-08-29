@@ -1,5 +1,5 @@
-var webpack = require('webpack')
-var path = require('path')
+const path = require('path')
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin')
 
 module.exports = env => {
     console.log(env)
@@ -10,15 +10,16 @@ module.exports = env => {
 
         output: {
             filename: 'app.js',
-            publicPath: 'target/dist',
             path: path.resolve('target/dist'),
         },
 
         devServer: {
             port: 3001,
-            historyApiFallback: true,
-            inline: true,
-            contentBase: path.resolve('target/dist'),
+            open: true,
+            hot: true,
+            static: {
+                directory: path.join(__dirname, 'target', 'dist'),
+            },
         },
 
         resolve: {
@@ -27,7 +28,7 @@ module.exports = env => {
         },
 
         module: {
-            loaders: [
+            rules: [
                 {
                     test: /\.(j|t)sx?$/,
                     exclude: /(node_modules)/,
@@ -64,11 +65,6 @@ module.exports = env => {
                 },
             ],
         },
-        plugins: [
-            new webpack.DefinePlugin({
-                'process.env.NODE_ENV': JSON.stringify(env.NODE_ENV),
-            }),
-            new webpack.ProgressPlugin(),
-        ],
+        plugins: [new NodePolyfillPlugin()],
     }
 }

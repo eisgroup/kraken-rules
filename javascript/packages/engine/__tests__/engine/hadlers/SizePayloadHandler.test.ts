@@ -99,5 +99,5 @@ function rule(payload: Payloads.Validation.SizePayload): Rule {
 function dataContext(size?: number): DataContext {
     const policy = mock.data.empty()
     policy.policies = size ? Array(size) : undefined
-    return new DataContext('1', Policy.name, policy as Record<string, unknown>, mock.contextInstanceInfo, Policy)
+    return new DataContext('1', Policy.name, '', policy as Record<string, unknown>, mock.contextInstanceInfo, Policy)
 }

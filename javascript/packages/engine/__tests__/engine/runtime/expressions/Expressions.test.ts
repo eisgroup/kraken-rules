@@ -23,7 +23,7 @@ describe('Expressions', () => {
         const { Policy } = mock.modelTree.contexts
         const resolved = TargetPathUtils.resolveTargetPath(
             Policy.fields.createdOn.name,
-            new DataContext('1', 'Policy', {}, mock.contextInstanceInfo, Policy, undefined),
+            new DataContext('1', 'Policy', '', {}, mock.contextInstanceInfo, Policy, undefined),
         )
         expect(resolved).toBe('accessTrackInfo.createdOn')
     })

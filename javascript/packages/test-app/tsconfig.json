@@ -1,7 +1,6 @@
 {
     "compilerOptions": {
         "skipDefaultLibCheck": true,
-        "suppressImplicitAnyIndexErrors": true,
         "jsx": "preserve",
         "target": "es2018",
         "module": "commonjs",

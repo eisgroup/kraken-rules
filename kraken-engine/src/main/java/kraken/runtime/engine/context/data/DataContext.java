@@ -22,6 +22,8 @@ import kraken.runtime.engine.context.info.ContextInstanceInfo;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import javax.annotation.Nullable;
+
 /**
  * DTO wrapper for data context object instance
  *
@@ -39,6 +41,11 @@ public class DataContext {
      * Context definition name, identifies context type
      */
     private String contextName;
+
+    /**
+     * A path to {@code this} data context as provided by {@link kraken.runtime.DataContextPathProvider}.
+     */
+    private String contextPath;
 
     /**
      * Underlying data object for context
@@ -84,6 +91,21 @@ public class DataContext {
 
     public String getContextId() {
         return contextId;
+    }
+
+    public void setContextPath(String contextPath) {
+        this.contextPath = contextPath;
+    }
+
+    @Nullable
+    public String getContextPath() {
+        return contextPath;
+    }
+
+    public String getContextDescription() {
+        return contextPath == null
+            ? getIdString()
+            : contextName + ":" + contextPath + ":" + contextId;
     }
 
     public String getIdString() {

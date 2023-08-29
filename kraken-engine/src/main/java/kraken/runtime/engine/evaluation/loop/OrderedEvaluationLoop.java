@@ -379,8 +379,7 @@ public class OrderedEvaluationLoop implements EvaluationLoop {
         }
 
         private String describeEvaluation() {
-            return suppressedEvaluation.getDataContext().getContextName() + ":"
-                + suppressedEvaluation.getDataContext().getContextId() + ":"
+            return suppressedEvaluation.getDataContext().getContextDescription() + ":"
                 + suppressedEvaluation.getRule().getTargetPath();
         }
     }
@@ -419,8 +418,7 @@ public class OrderedEvaluationLoop implements EvaluationLoop {
         }
 
         private String describeEvaluation() {
-            return evaluation.getDataContext().getContextName() + ":"
-                + evaluation.getDataContext().getContextId() + ":"
+            return evaluation.getDataContext().getContextDescription() + ":"
                 + evaluation.getRule().getTargetPath();
         }
     }
@@ -461,7 +459,7 @@ public class OrderedEvaluationLoop implements EvaluationLoop {
 
         private String describe(List<DataContext> contexts) {
             return contexts.stream()
-                .map(dataContext -> dataContext.getContextName() + ":" + dataContext.getContextId())
+                .map(DataContext::getContextDescription)
                 .collect(Collectors.joining(System.lineSeparator()));
         }
 

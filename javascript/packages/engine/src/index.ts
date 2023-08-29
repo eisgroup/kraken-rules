@@ -62,6 +62,8 @@ export * from './engine/results/field_metadata_reducer/FieldMetadataReducer'
 // error
 export * from './error/KrakenRuntimeError'
 
+export * from './engine/runtime/DataContextPathProvider'
+
 // re-export
 export {
     ContextInstanceInfo,
