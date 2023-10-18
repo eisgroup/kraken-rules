@@ -15,18 +15,10 @@
  */
 package kraken.model.factory;
 
-import kraken.annotations.API;
-
 import java.util.Iterator;
 import java.util.ServiceLoader;
 
-/**
- * Singleton class that provides {@link RulesModelFactory} implementation based on service loader logic.
- *
- * psurinin@eisgroup.com
- */
-@API
-public class FactoryProvider {
+class FactoryProvider {
 
     private static RulesModelFactory instance = null;
 

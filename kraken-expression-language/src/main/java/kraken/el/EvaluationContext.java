@@ -15,6 +15,7 @@
  */
 package kraken.el;
 
+import java.time.ZoneId;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -56,23 +57,26 @@ public class EvaluationContext {
     private final Map<String, Object> variables;
     private final TypeProvider typeProvider;
     private final FunctionInvoker functionInvoker;
+    private final ZoneId zoneId;
 
     public EvaluationContext() {
         this(null);
     }
 
     public EvaluationContext(@Nullable Object dataObject) {
-        this(dataObject, Collections.emptyMap(), DEFAULT_TYPE_PROVIDER, DEFAULT_FUNCTION_INVOKER);
+        this(dataObject, Collections.emptyMap(), DEFAULT_TYPE_PROVIDER, DEFAULT_FUNCTION_INVOKER, ZoneId.systemDefault());
     }
 
     public EvaluationContext(@Nullable Object dataObject,
                              Map<String, Object> variables,
                              TypeProvider typeProvider,
-                             FunctionInvoker functionInvoker) {
+                             FunctionInvoker functionInvoker,
+                             ZoneId zoneId) {
         this.dataObject = dataObject;
         this.variables = Objects.requireNonNull(variables);
         this.typeProvider = Objects.requireNonNull(typeProvider);
         this.functionInvoker = Objects.requireNonNull(functionInvoker);
+        this.zoneId = Objects.requireNonNull(zoneId);
     }
 
     @Nullable
@@ -90,5 +94,9 @@ public class EvaluationContext {
 
     public FunctionInvoker getFunctionInvoker() {
         return functionInvoker;
+    }
+
+    public ZoneId getZoneId() {
+        return zoneId;
     }
 }

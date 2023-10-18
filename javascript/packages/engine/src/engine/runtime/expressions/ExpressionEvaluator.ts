@@ -256,8 +256,9 @@ export class ExpressionEvaluator {
     /**
      * Rebuilds registered functions in the evaluator.
      */
-    rebuildFunctions(): void {
-        this.#evaluator.rebuildFunctionInvokerIfNeeded()
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    rebuildFunctions(functions: Record<string, Function>): void {
+        this.#evaluator.rebuildFunctionInvoker(functions)
     }
 
     /**

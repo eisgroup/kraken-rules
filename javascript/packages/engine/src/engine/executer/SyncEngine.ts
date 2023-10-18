@@ -45,8 +45,9 @@ import {
 import { EntryPointBundle } from '../../models/EntryPointBundle'
 import EntryPointEvaluation = EntryPointBundle.EntryPointEvaluation
 import { EvaluationMode, isSupportedPayloadType } from '../runtime/EvaluationMode'
-import { EntryPointBundleCache } from '../../bundle-cache/EntryPointBundleCache'
+import { EntryPointBundleCache, ruleTimezoneIdDimension } from '../../bundle-cache/EntryPointBundleCache'
 import { OrderedEvaluationLoop } from '../processors/OrderedEvaluationLoop'
+import { DateCalculator } from '../runtime/expressions/date/DateCalculator'
 import { DataContextPathProvider, DEFAULT_PATH_PROVIDER } from '../runtime/DataContextPathProvider'
 
 export interface EvaluationConfig {
@@ -83,6 +84,19 @@ export interface EvaluationConfig {
      *
      */
     dataContextPathProvider?: DataContextPathProvider
+
+    /**
+     * Timezone used for rule date calculations. If not specified then system locale will be used for calculations.
+     * If specified, then {@link SyncEngineConfig#cache} will be queried and cached by using rule timezone id as
+     * an additional dimension by key with value {@link ruleTimezoneIdDimension}
+     */
+    ruleTimezoneId?: string
+
+    /**
+     * Environment specific implementation of {@link DateCalculator}.
+     * If not specified then default calculator is used which does not support timezone specific date calculations.
+     */
+    dateCalculator?: DateCalculator
 }
 
 /**
@@ -208,7 +222,14 @@ export class SyncEngine {
         const start = Date.now()
 
         this.logEngineInputData(data, evaluationConfig, node)
-        const bundle = this.#bundleCache.get(entryPointName, evaluationConfig.context.dimensions || {})
+        const bundleDimensionContext = {
+            ...evaluationConfig.context.dimensions,
+        }
+        if (evaluationConfig.ruleTimezoneId) {
+            bundleDimensionContext[ruleTimezoneIdDimension] = evaluationConfig.ruleTimezoneId
+        }
+
+        const bundle = this.#bundleCache.get(entryPointName, bundleDimensionContext)
 
         const version = this.#engineCompatibilityVersion || ENGINE_VERSION
         if (bundle.engineVersion && this.normalizedVersion(bundle.engineVersion) !== this.normalizedVersion(version)) {
@@ -217,19 +238,23 @@ export class SyncEngine {
             )
         }
 
-        const filteredRulesEvaluation = this.filterRules(bundle.evaluation, evaluationConfig.evaluationMode)
-
-        if (!filteredRulesEvaluation.rules.length) {
-            logger.debug(() => `Kraken rules evaluation took ${Math.round(Date.now() - start)} ms`, true)
-            return DefaultEntryPointResult.empty()
-        }
-
-        this.#expressionEvaluator.rebuildFunctions() //
         requireDefinedValue(evaluationConfig.currencyCd, 'Currency code cannot be absent')
         const session = new ExecutionSession(
             evaluationConfig,
             bundle.expressionContext,
             bundle.evaluation.entryPointName,
+        )
+
+        const filteredRulesEvaluation = this.filterRules(bundle.evaluation, evaluationConfig.evaluationMode)
+        if (!filteredRulesEvaluation.rules.length) {
+            logger.debug(() => `Kraken rules evaluation took ${Math.round(Date.now() - start)} ms`, true)
+            return new DefaultEntryPointResult({}, session.timestamp, session.ruleTimezoneId)
+        }
+        this.#expressionEvaluator.rebuildFunctions(
+            FunctionRegistry.INSTANCE.bindRegisteredFunctions({
+                zoneId: session.ruleTimezoneId,
+                dateCalculator: session.dateCalculator,
+            }),
         )
         const cachingServices = this.getCachingServices(evaluationConfig.evaluationId)
         const result = OrderedEvaluationLoop.getInstance({

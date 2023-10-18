@@ -15,6 +15,7 @@
  */
 package kraken.el.functionregistry.functions;
 
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
@@ -25,6 +26,8 @@ import kraken.el.ExpressionLanguageConfiguration;
 import kraken.el.InvocationContextHolder;
 import kraken.el.InvocationContextHolder.InvocationContext;
 import kraken.el.TypeProvider;
+import kraken.el.FunctionContextHolder;
+import kraken.el.FunctionContextHolder.FunctionContext;
 import kraken.el.functionregistry.FunctionInvoker;
 import kraken.el.interpreter.evaluator.InterpretingExpressionEvaluator;
 
@@ -61,8 +64,9 @@ public class TypeFunctionsTest {
             new InterpretingExpressionEvaluator(new ExpressionLanguageConfiguration(false, true)),
             typeProvider
         );
-        EvaluationContext evaluationContext = new EvaluationContext(null, Map.of(), typeProvider, functionInvoker);
+        EvaluationContext evaluationContext = new EvaluationContext(null, Map.of(), typeProvider, functionInvoker, ZoneId.systemDefault());
         InvocationContextHolder.setInvocationContext(new InvocationContext(evaluationContext));
+        FunctionContextHolder.setFunctionContext(new FunctionContext(evaluationContext.getZoneId()));
     }
 
     @Test

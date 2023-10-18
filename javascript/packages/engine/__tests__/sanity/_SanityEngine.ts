@@ -30,6 +30,7 @@ import { SANITY_DIMENSIONS } from './_SanityDimensions'
 import { EntryPointName } from './_SanityEntryPointNames'
 
 import AutoPolicySummary = TestProduct.kraken.testproduct.domain.Policy
+import { DefaultEntryPointResult } from '../../src/dto/DefaultEntryPointResult'
 function isJsonName(fileName: string): boolean {
     return fileName.indexOf('.json') !== -1
 }
@@ -91,11 +92,12 @@ class SanityEngine {
         pathProvider?: DataContextPathProvider,
     ): EntryPointResult {
         cache.setExpressionContext(useCaseName ? SANITY_DIMENSIONS[useCaseName] : {})
-        return this.engine.evaluate(
+        const result = this.engine.evaluate(
             data,
             this.resolveEntryPointName(entryPoint),
             this.createEvaluationConfig(useCaseName, pathProvider),
         )
+        return this.sanitize(result)
     }
 
     evaluateSubTree(
@@ -107,10 +109,16 @@ class SanityEngine {
     ): EntryPointResult {
         cache.setExpressionContext(useCaseName ? SANITY_DIMENSIONS[useCaseName] : {})
         const evaluationConfig = useCaseName ? this.createEvaluationConfig(useCaseName) : sanityMocks.evalConf()
-        return this.engine.evaluateSubTree(data, node, this.resolveEntryPointName(entryPoint), {
+        const result = this.engine.evaluateSubTree(data, node, this.resolveEntryPointName(entryPoint), {
             ...evaluationConfig,
             evaluationId: options?.evaluationId,
         })
+        return this.sanitize(result)
+    }
+
+    private sanitize(result: EntryPointResult): EntryPointResult {
+        // sanitizes EntryPointResult to be snapshot friendly by stripping or hardcoding environment specific contents
+        return new DefaultEntryPointResult(result.getFieldResults(), result.evaluationTimestamp, 'Europe/Vilnius')
     }
 
     private resolveEntryPointName(entryPointName: string): string {

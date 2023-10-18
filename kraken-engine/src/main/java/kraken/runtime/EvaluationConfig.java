@@ -17,6 +17,7 @@ package kraken.runtime;
 
 import kraken.annotations.API;
 
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.Currency;
 import java.util.Locale;
@@ -42,6 +43,11 @@ public final class EvaluationConfig {
      */
     private final String currencyCd;
 
+    /**
+     * Timezone to use for date calculations and date formatting
+     */
+    private final ZoneId ruleTimezoneId;
+
     private final EvaluationMode evaluationMode;
 
     private final DataContextPathProvider dataContextPathProvider;
@@ -51,7 +57,7 @@ public final class EvaluationConfig {
     }
 
     public EvaluationConfig(@Nonnull String currencyCd) {
-        this(Collections.emptyMap(), Objects.requireNonNull(currencyCd));
+        this(Collections.emptyMap(), currencyCd);
     }
 
     public EvaluationConfig(@Nonnull Map<String, Object> context, @Nonnull String currencyCd) {
@@ -61,16 +67,25 @@ public final class EvaluationConfig {
     public EvaluationConfig(@Nonnull Map<String, Object> context,
                             @Nonnull String currencyCd,
                             @Nonnull EvaluationMode evaluationMode) {
-        this(context, currencyCd, evaluationMode, DataContextPathProvider.DEFAULT);
+        this(context, currencyCd, evaluationMode, ZoneId.systemDefault());
     }
 
     public EvaluationConfig(@Nonnull Map<String, Object> context,
                             @Nonnull String currencyCd,
                             @Nonnull EvaluationMode evaluationMode,
+                            @Nonnull ZoneId ruleTimezoneId) {
+        this(context, currencyCd, evaluationMode, ruleTimezoneId, DataContextPathProvider.DEFAULT);
+    }
+
+    public EvaluationConfig(@Nonnull Map<String, Object> context,
+                            @Nonnull String currencyCd,
+                            @Nonnull EvaluationMode evaluationMode,
+                            @Nonnull ZoneId ruleTimezoneId,
                             @Nonnull DataContextPathProvider dataContextPathProvider) {
         this.context = Objects.requireNonNull(context);
         this.currencyCd = Objects.requireNonNull(currencyCd);
         this.evaluationMode = Objects.requireNonNull(evaluationMode);
+        this.ruleTimezoneId = Objects.requireNonNull(ruleTimezoneId);
         this.dataContextPathProvider = Objects.requireNonNull(dataContextPathProvider);
     }
 
@@ -82,6 +97,11 @@ public final class EvaluationConfig {
     @Nonnull
     public String getCurrencyCd() {
         return currencyCd;
+    }
+
+    @Nonnull
+    public ZoneId getRuleTimezoneId() {
+        return ruleTimezoneId;
     }
 
     @Nonnull

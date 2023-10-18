@@ -30,6 +30,7 @@ import java.util.Optional;
 import javax.money.Monetary;
 import javax.money.MonetaryAmount;
 
+import kraken.el.date.DateCalculator;
 import kraken.el.math.Numbers;
 import kraken.message.SystemMessageBuilder;
 import kraken.message.SystemMessageLogger;
@@ -242,7 +243,8 @@ public class DefaultValuePayloadHandler implements RulePayloadHandler {
                     return value;
                 }
                 if(value instanceof LocalDateTime) {
-                    return ((LocalDateTime) value).toLocalDate();
+                    var ruleTimezoneId = session.getEvaluationConfig().getRuleTimezoneId();
+                    return DateCalculator.getInstance().toDate((LocalDateTime) value, ruleTimezoneId);
                 }
                 throwAndLogIncompatibleValueType(value, dataContext, field);
                 break;
@@ -251,7 +253,8 @@ public class DefaultValuePayloadHandler implements RulePayloadHandler {
                     return value;
                 }
                 if(value instanceof LocalDate) {
-                    return ((LocalDate) value).atStartOfDay();
+                    var ruleTimezoneId = session.getEvaluationConfig().getRuleTimezoneId();
+                    return DateCalculator.getInstance().toDateTime((LocalDate) value, ruleTimezoneId);
                 }
                 throwAndLogIncompatibleValueType(value, dataContext, field);
                 break;

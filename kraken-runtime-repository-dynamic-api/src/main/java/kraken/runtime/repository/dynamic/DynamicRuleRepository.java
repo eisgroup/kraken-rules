@@ -73,6 +73,12 @@ public interface DynamicRuleRepository {
      *                   Note, that entryPoint is a simple name and does NOT have a namespace prefix.
      * @param context is a data used to vary implementations of {@link Rule} logic that are applicable for the given entryPoint.
      *                   context usually contains dimensions, but can also contain other data as a key value pairs.
+     *                   Context will also contain rule execution timezone as a key {@link kraken.context.Context#RULE_TIMEZONE_ID_DIMENSION}.
+     *                   Timezone can be used for date specific calculations during rule resolution.
+     *                   If your dynamic rule depends on timezone, then you must add a
+     *                   {@link kraken.context.Context#RULE_TIMEZONE_ID_DIMENSION} to {@link kraken.dimensions.DimensionSet}
+     *                   as a special kind of dimension that the rule depends on.
+     *                   Otherwise, rule caching may behave incorrectly when timezone changes between rule evaluations.
      *
      * @return a stream of {@link DynamicRuleHolder}, each containing a dynamically generated rule and set of dimensions
      *                   which affect its variability

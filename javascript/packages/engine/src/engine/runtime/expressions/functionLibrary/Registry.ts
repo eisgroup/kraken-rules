@@ -27,11 +27,13 @@ import { mathFunctions } from './MathFunctions'
 import { DataObjectInfoResolver } from '../../../contexts/info/DataObjectInfoResolver'
 import BigNumber from 'bignumber.js'
 import { Numbers } from '../math/Numbers'
+import { DateCalculator } from '../date/DateCalculator'
 
 /**
  * Declares custom function implementation to be invocable in Kraken Expression Language.
  * Function implementation can access {@link FunctionScope} that contains utilities
- * useful when implementing custom logic in consistent way. See example on how to access {@link FunctionScope}.
+ * and current evaluation session specific metadata, such as a current evaluation timezone.
+ * This is useful when implementing custom logic in consistent way. See example on how to access {@link FunctionScope}.
  *
  * @see {@link FunctionScope}
  * @example
@@ -60,6 +62,27 @@ export interface FunctionScope {
      * @return number converted to BigNumber in IEE 754 64bit Decimal representation
      */
     normalize: (n: number) => BigNumber
+
+    /**
+     * A current evaluation session specific metadata
+     */
+    functionContext: FunctionContext
+}
+
+export type FunctionContext = {
+    /**
+     *  Timezone of a current evaluation session
+     */
+    zoneId: string
+}
+
+export type BindingConfiguration = {
+    zoneId: string
+    dateCalculator: DateCalculator
+}
+
+export interface InternalFunctionScope extends FunctionScope {
+    dateCalculator: DateCalculator
 }
 
 export class FunctionRegistry {
@@ -76,7 +99,7 @@ export class FunctionRegistry {
      */
     static createInstanceFunctions = _createInstanceFunctions
 
-    functionRegistry: Record<string, Function> = {
+    private internalFunctionRegistry: Record<string, Function> = {
         ...nativeFunctions,
         ...dateFunctions,
         ...arrayFunctions,
@@ -87,6 +110,8 @@ export class FunctionRegistry {
         ...quantifierFunctions,
         ...mathFunctions,
     }
+
+    private functionRegistry: Record<string, Function> = {}
 
     add(fx: FunctionDeclaration): void {
         if (fx.name == undefined) {
@@ -104,31 +129,54 @@ export class FunctionRegistry {
         if (fx.name.indexOf('.') > 0) {
             throw new Error(errorMessage("function name cannot contain symbol '.'"))
         }
-        if (this.functionRegistry[fx.name]) {
+        if (this.internalFunctionRegistry[fx.name] || this.functionRegistry[fx.name]) {
             throw new Error(errorMessage(`function with name '${fx.name}' already registered`))
         }
-
-        this.functionRegistry[fx.name] = fx.function.bind({
-            normalize: Numbers.normalized,
-        })
+        this.functionRegistry[fx.name] = fx.function
     }
 
     /**
      * @deprecated since 1.33.0. Use {@link registeredFunctions} instead.
      */
     names(): string[] {
-        return Object.keys(this.functionRegistry)
+        return Object.keys(this.registeredFunctions())
     }
 
     /**
      * @deprecated since 1.33.0. Use {@link registeredFunctions} instead.
      */
     functions(): Function[] {
-        return Object.values(this.functionRegistry)
+        return Object.values(this.registeredFunctions())
     }
 
     registeredFunctions(): Record<string, Function> {
-        return this.functionRegistry
+        return {
+            ...this.internalFunctionRegistry,
+            ...this.functionRegistry,
+        }
+    }
+
+    bindRegisteredFunctions(configuration: BindingConfiguration): Record<string, Function> {
+        const functionContext: FunctionContext = {
+            zoneId: configuration.zoneId,
+        }
+        const functions: Record<string, Function> = {}
+        Object.keys(this.internalFunctionRegistry).forEach(
+            name =>
+                (functions[name] = this.internalFunctionRegistry[name].bind({
+                    normalize: Numbers.normalized,
+                    functionContext: functionContext,
+                    dateCalculator: configuration.dateCalculator,
+                } as InternalFunctionScope)),
+        )
+        Object.keys(this.functionRegistry).forEach(
+            name =>
+                (functions[name] = this.functionRegistry[name].bind({
+                    normalize: Numbers.normalized,
+                    functionContext: functionContext,
+                } as FunctionScope)),
+        )
+        return functions
     }
 }
 

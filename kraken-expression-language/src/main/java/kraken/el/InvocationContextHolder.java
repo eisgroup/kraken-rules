@@ -15,8 +15,6 @@
  */
 package kraken.el;
 
-import java.util.Map;
-
 /**
  * @author mulevicius
  */

@@ -19,6 +19,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 import java.text.MessageFormat;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -52,21 +53,24 @@ public class FunctionInvoker {
     private final InterpretingExpressionEvaluator functionEvaluator;
     private final TypeProvider typeProvider;
     private final String expressionTarget;
+    private final ZoneId zoneId;
 
     public FunctionInvoker(Map<FunctionHeader, KelFunction> kelFunctions,
                            InterpretingExpressionEvaluator functionEvaluator,
                            TypeProvider typeProvider) {
-        this(kelFunctions, functionEvaluator, typeProvider, null);
+        this(kelFunctions, functionEvaluator, typeProvider, null, ZoneId.systemDefault());
     }
 
     public FunctionInvoker(Map<FunctionHeader, KelFunction> kelFunctions,
                            InterpretingExpressionEvaluator functionEvaluator,
                            TypeProvider typeProvider,
-                           String expressionTarget) {
+                           String expressionTarget,
+                           ZoneId zoneId) {
         this.kelFunctions = kelFunctions;
         this.functionEvaluator = functionEvaluator;
         this.typeProvider = typeProvider;
         this.expressionTarget = expressionTarget;
+        this.zoneId = zoneId;
     }
 
     public Object invoke(String functionName, Object[] arguments) {
@@ -108,7 +112,7 @@ public class FunctionInvoker {
         for(int i = 0; i < function.getParameters().size(); i++) {
             argumentContext.put(function.getParameters().get(i).getName(), functionContext.getArguments()[i]);
         }
-        EvaluationContext evaluationContext = new EvaluationContext(argumentContext, Map.of(), typeProvider, this);
+        EvaluationContext evaluationContext = new EvaluationContext(argumentContext, Map.of(), typeProvider, this, zoneId);
         return functionEvaluator.evaluate(function.getBody(), evaluationContext);
     }
 

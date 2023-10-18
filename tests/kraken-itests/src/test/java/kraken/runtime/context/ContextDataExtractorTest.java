@@ -25,7 +25,6 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.Mockito.mock;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -81,8 +80,7 @@ public class ContextDataExtractorTest {
         instanceInfoResolver.setInfoResolver(new MockInfoResolver());
 
         var session = new EvaluationSession(
-            new EvaluationConfig(),
-            Collections.emptyMap(),
+            new EvaluationConfig(Map.of(), "USD"),
             mock(KrakenTypeProvider.class),
             Map.of(),
             testResources.getKrakenProject().getNamespace(),

@@ -18,7 +18,7 @@
 import { FunctionCache } from './FunctionCache'
 import { ExpressionEvaluationResult as Result } from 'kraken-engine-api'
 import { logger } from '../../../utils/DevelopmentLogger'
-import { KelFunction, registry } from './ExpressionEvaluator'
+import { KelFunction } from './ExpressionEvaluator'
 import { Expressions } from 'kraken-model'
 
 export interface ExpressionContext {
@@ -39,11 +39,8 @@ export interface EvaluationFunctions {
 
 export class ComplexEvaluator {
     private readonly initialFunctions: Record<string, Function>
-
     private readonly functionInvoker: Record<string, Function>
-    private readonly functionCache: FunctionCache
-
-    private functionRegistrySize = 0
+    private readonly expressionCache: FunctionCache
 
     constructor(jsFunctions: EvaluationFunctions[] = [], kelFunctions: KelFunction[] = []) {
         this.functionInvoker = {}
@@ -57,15 +54,12 @@ export class ComplexEvaluator {
                 `return (${f.body})`,
             ])
         }
-
-        this.rebuildFunctionInvokerIfNeeded()
-
-        this.functionCache = new FunctionCache()
+        this.rebuildFunctionInvoker({})
+        this.expressionCache = new FunctionCache()
     }
 
     evaluate(evaluation: ComplexEvaluation): Result.Result {
         const expression = evaluation.expression
-
         const declarations = ['__dataObject__', '__references__', 'context', `return (${expression.expressionString})`]
 
         const variables: unknown[] = [
@@ -74,7 +68,7 @@ export class ComplexEvaluator {
             evaluation.expressionContext.context,
         ]
         try {
-            const result = this.functionCache
+            const result = this.expressionCache
                 .compute(expression.expressionString, declarations)
                 .apply(this.functionInvoker, variables)
             return this.validResult(result, expression.originalExpressionString)
@@ -87,14 +81,9 @@ export class ComplexEvaluator {
         }
     }
 
-    rebuildFunctionInvokerIfNeeded(): void {
-        const registeredFunctions = registry.registeredFunctions()
-        const currentFunctionRegistrySize = Object.keys(registeredFunctions).length
-        if (this.functionRegistrySize < currentFunctionRegistrySize) {
-            Object.assign(this.functionInvoker, registeredFunctions)
-            Object.assign(this.functionInvoker, this.initialFunctions)
-            this.functionRegistrySize = currentFunctionRegistrySize
-        }
+    rebuildFunctionInvoker(functions: Record<string, Function>): void {
+        Object.assign(this.functionInvoker, functions)
+        Object.assign(this.functionInvoker, this.initialFunctions)
     }
 
     private validResult(result: unknown, expression: string): Result.Result {

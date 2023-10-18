@@ -78,6 +78,7 @@ Object {
         ],
       },
     },
+    "ruleTimezoneId": "Europe/Vilnius",
   },
   "fieldResults": Object {
     "Policy:0:policyNumber": Object {
@@ -150,6 +151,7 @@ Object {
         ],
       },
     },
+    "ruleTimezoneId": "Europe/Vilnius",
   },
   "fieldResults": Object {
     "Policy:0:policyNumber": Object {
@@ -209,6 +211,7 @@ Object {
         ],
       },
     },
+    "ruleTimezoneId": "Europe/Vilnius",
   },
   "fieldResults": Object {
     "CreditCardInfo:2:cardCreditLimitAmount": Object {
@@ -286,6 +289,7 @@ Object {
         ],
       },
     },
+    "ruleTimezoneId": "Europe/Vilnius",
   },
   "fieldResults": Object {
     "CreditCardInfo:2:cardCreditLimitAmount": Object {
@@ -363,6 +367,7 @@ Object {
         ],
       },
     },
+    "ruleTimezoneId": "Europe/Vilnius",
   },
   "fieldResults": Object {
     "Policy:0:policyNumber": Object {
@@ -440,6 +445,7 @@ Object {
         ],
       },
     },
+    "ruleTimezoneId": "Europe/Vilnius",
   },
   "fieldResults": Object {
     "Policy:0:policyNumber": Object {
@@ -1189,6 +1195,7 @@ Object {
         ],
       },
     },
+    "ruleTimezoneId": "Europe/Vilnius",
   },
   "fieldResults": Object {
     "Policy:0:policyNumber": Object {

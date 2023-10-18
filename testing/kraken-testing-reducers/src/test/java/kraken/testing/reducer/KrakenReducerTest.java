@@ -17,6 +17,7 @@
 package kraken.testing.reducer;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -55,7 +56,7 @@ public class KrakenReducerTest {
 
     @Test
     public void shouldReturnResultForIgnored() {
-        final EntryPointResult entryPointResult = new EntryPointResult(Map.of(
+        final EntryPointResult entryPointResult = createEntryPointResult(Map.of(
                 "context:id:field",
                 new FieldEvaluationResult(
                         contextFieldInfo(),
@@ -67,8 +68,7 @@ public class KrakenReducerTest {
                                         null
                                 )
                         )
-                )),
-                LocalDateTime.now()
+                ))
         );
         final DataContext dataContext = getDataContext();
         final Collection<VisibilityMetadata> metadata = KrakenReducers.VISIBILITY.reduce(entryPointResult);
@@ -83,7 +83,7 @@ public class KrakenReducerTest {
 
     @Test
     public void shouldReturnHiddenResult() {
-        final EntryPointResult entryPointResult = new EntryPointResult(Map.of(
+        final EntryPointResult entryPointResult = createEntryPointResult(Map.of(
                 "context:id:field",
                 new FieldEvaluationResult(
                         contextFieldInfo(),
@@ -95,8 +95,7 @@ public class KrakenReducerTest {
                                         null
                                 )
                         )
-                )),
-                LocalDateTime.now()
+                ))
         );
         final DataContext dataContext = getDataContext();
         final Collection<VisibilityMetadata> metadata = KrakenReducers.VISIBILITY.reduce(entryPointResult);
@@ -109,7 +108,7 @@ public class KrakenReducerTest {
 
     @Test
     public void shouldReturnNotAccessibleResult() {
-        final EntryPointResult entryPointResult = new EntryPointResult(Map.of(
+        final EntryPointResult entryPointResult = createEntryPointResult(Map.of(
                 "context:id:field",
                 new FieldEvaluationResult(
                         contextFieldInfo(),
@@ -121,8 +120,7 @@ public class KrakenReducerTest {
                                         null
                                 )
                         )
-                )),
-                LocalDateTime.now()
+                ))
         );
         final Collection<AccessibilityMetadata> metadata = KrakenReducers.ACCESSIBILITY.reduce(entryPointResult);
         assertThat(metadata, hasSize(1));
@@ -142,7 +140,7 @@ public class KrakenReducerTest {
         when(assertionPayload.getSeverity()).thenReturn(ValidationSeverity.critical);
         AssertionPayloadResult assertionPayloadResult = new AssertionPayloadResult(new RuntimeException(), assertionPayload);
 
-        EntryPointResult entryPointResult = new EntryPointResult(Map.of(
+        EntryPointResult entryPointResult = createEntryPointResult(Map.of(
                 "context:id:field",
                 new FieldEvaluationResult(
                         contextFieldInfo(),
@@ -166,8 +164,7 @@ public class KrakenReducerTest {
                                         null
                                 )
                         )
-                )),
-                LocalDateTime.now()
+                ))
         );
         final Collection<ValidationMetadata> metadata = KrakenReducers.VALIDATION.reduce(entryPointResult);
         assertThat(
@@ -198,7 +195,7 @@ public class KrakenReducerTest {
         final DefaultValuePayloadResult payloadResult = new DefaultValuePayloadResult(
                 List.of(new ValueChangedEvent(getDataContext(), "txType", 1,2))
         );
-        final EntryPointResult entryPointResult = new EntryPointResult(Map.of(
+        final EntryPointResult entryPointResult = createEntryPointResult(Map.of(
                 "context:id:field",
                 new FieldEvaluationResult(
                         contextFieldInfo(),
@@ -210,8 +207,7 @@ public class KrakenReducerTest {
                                         null
                                 )
                         )
-                )),
-                LocalDateTime.now()
+                ))
         );
         final Collection<DefaultValueMetadata> metadata = KrakenReducers.DEFAULT.reduce(entryPointResult);
         assertThat(metadata, hasSize(1));
@@ -223,7 +219,7 @@ public class KrakenReducerTest {
     @Test
     public void shouldReturnDefaultResultWithError() {
         final DefaultValuePayloadResult payloadResult = new DefaultValuePayloadResult(new RuntimeException());
-        final EntryPointResult entryPointResult = new EntryPointResult(Map.of(
+        final EntryPointResult entryPointResult = createEntryPointResult(Map.of(
                 "context:id:field",
                 new FieldEvaluationResult(
                         contextFieldInfo(),
@@ -235,8 +231,7 @@ public class KrakenReducerTest {
                                         null
                                 )
                         )
-                )),
-                LocalDateTime.now()
+                ))
         );
         final Collection<DefaultValueMetadata> metadata = KrakenReducers.DEFAULT.reduce(entryPointResult);
         assertThat(metadata, hasSize(1));
@@ -248,7 +243,7 @@ public class KrakenReducerTest {
         final DefaultValuePayloadResult payloadResult = new DefaultValuePayloadResult(
                 List.of(new ValueChangedEvent(getDataContext(), "txType", 1,2))
         );
-        final EntryPointResult entryPointResult = new EntryPointResult(Map.of(
+        final EntryPointResult entryPointResult = createEntryPointResult(Map.of(
                 "context:id:field",
                 new FieldEvaluationResult(
                         contextFieldInfo(),
@@ -266,8 +261,7 @@ public class KrakenReducerTest {
                                         null
                                 )
                         )
-                )),
-                LocalDateTime.now()
+                ))
         );
         final Collection<DefaultValueMetadata> metadata = KrakenReducers.DEFAULT.reduce(entryPointResult);
 
@@ -288,5 +282,9 @@ public class KrakenReducerTest {
 
     private RuleInfo rule(String name, PayloadType payloadType) {
         return new RuleInfo(name, "Context", TARGET_PATH, payloadType);
+    }
+
+    private EntryPointResult createEntryPointResult(Map<String, FieldEvaluationResult> fieldResults) {
+        return new EntryPointResult(fieldResults, LocalDateTime.now(), ZoneId.systemDefault());
     }
 }

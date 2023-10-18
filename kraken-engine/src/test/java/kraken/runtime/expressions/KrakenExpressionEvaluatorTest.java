@@ -16,7 +16,6 @@
 package kraken.runtime.expressions;
 
 import static kraken.runtime.model.expression.ExpressionType.COMPLEX;
-import static kraken.runtime.utils.TemplateParameterRenderer.TEMPLATE_DATE_TIME_FORMAT;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.hamcrest.core.IsCollectionContaining.hasItems;
@@ -24,17 +23,13 @@ import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.mock;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
 
-import kraken.context.model.tree.ContextModelTree;
 import kraken.context.model.tree.ContextModelTreeMetadata;
 import kraken.context.model.tree.impl.ContextModelTreeImpl;
-import kraken.context.path.ContextPath;
 import kraken.el.TargetEnvironment;
 import kraken.el.ast.Ast;
 import kraken.el.ast.builder.AstBuilder;
@@ -43,9 +38,7 @@ import kraken.el.scope.Scope;
 import kraken.runtime.EvaluationConfig;
 import kraken.runtime.EvaluationSession;
 import kraken.runtime.engine.context.data.DataContext;
-import kraken.runtime.model.context.RuntimeContextDefinition;
 import kraken.runtime.model.expression.CompiledExpression;
-import kraken.runtime.model.expression.ExpressionType;
 import kraken.runtime.model.rule.payload.validation.ErrorMessage;
 
 /**
@@ -131,8 +124,7 @@ public class KrakenExpressionEvaluatorTest {
 
     private EvaluationSession session(Map<String, Object> context) {
         return new EvaluationSession(
-            new EvaluationConfig(),
-            context,
+            new EvaluationConfig(context, "USD"),
             mock(KrakenTypeProvider.class),
             Map.of(),
             "",

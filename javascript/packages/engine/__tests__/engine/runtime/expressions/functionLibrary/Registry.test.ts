@@ -25,12 +25,6 @@ beforeEach(() => {
 })
 
 describe('Functions registry', () => {
-    it('should return function names', () => {
-        expect(Object.keys(r.registeredFunctions())).toContain('Now')
-    })
-    it('should return functions', () => {
-        expect(Object.entries(r.registeredFunctions())).toHaveLength(72)
-    })
     it('should add function', () => {
         const length = Object.entries(r.functions()).length
         r.add({

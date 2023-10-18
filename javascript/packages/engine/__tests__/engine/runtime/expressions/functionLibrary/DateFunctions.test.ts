@@ -14,7 +14,13 @@
  *  limitations under the License.
  */
 
-import { dateFunctions as f } from '../../../../../src/engine/runtime/expressions/functionLibrary/DateFunctions'
+import { FunctionRegistry } from '../../../../../src/engine/runtime/expressions/functionLibrary/Registry'
+import { DefaultDateCalculator } from '../../../../../src/engine/runtime/expressions/date/DateCalculator'
+
+const f = FunctionRegistry.INSTANCE.bindRegisteredFunctions({
+    zoneId: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    dateCalculator: new DefaultDateCalculator(),
+})
 
 describe('Date Functions', () => {
     it('should create date from numbers', () => {
@@ -34,25 +40,19 @@ describe('Date Functions', () => {
     it('should get day from date', () => {
         expect(f.GetDay(f.Date('2011-12-31'))).toBe(31)
         expect(() => f.GetDay()).toThrow()
-        // @ts-expect-error testing negative case
         expect(() => f.GetDay(12)).toThrow()
-        // @ts-expect-error testing negative case
         expect(() => f.GetDay('12')).toThrow()
     })
     it('should get month from date', () => {
         expect(f.GetMonth(f.Date('2011-12-31'))).toBe(12)
         expect(() => f.GetMonth()).toThrow()
-        // @ts-expect-error testing negative case
         expect(() => f.GetMonth(12)).toThrow()
-        // @ts-expect-error testing negative case
         expect(() => f.GetMonth('12')).toThrow()
     })
     it('should get year from date', () => {
         expect(f.GetYear(f.Date('2011-12-31'))).toBe(2011)
         expect(() => f.GetYear()).toThrow()
-        // @ts-expect-error testing negative case
         expect(() => f.GetYear(12)).toThrow()
-        // @ts-expect-error testing negative case
         expect(() => f.GetYear('12')).toThrow()
     })
     it('should count number of days between', () => {
@@ -79,9 +79,7 @@ describe('Date Functions', () => {
         expect(f.NumberOfMonthsBetween(f.Date(2011, 1, 31), f.Date(2011, 2, 1))).toBe(0)
         expect(f.NumberOfMonthsBetween(f.Date(2012, 2, 28), f.Date(2011, 1, 31))).toBe(12)
         expect(f.NumberOfMonthsBetween(f.Date(2011, 1, 31), f.Date(2012, 2, 28))).toBe(12)
-        // @ts-expect-error testing negative case
         expect(() => f.NumberOfMonthsBetween(1, f.Date(2012, 1, 31))).toThrow()
-        // @ts-expect-error testing negative case
         expect(() => f.NumberOfMonthsBetween(f.Date(2012, 1, 31), 1)).toThrow()
         expect(() => f.NumberOfMonthsBetween(f.Date(2012, 1, 31))).toThrow()
         expect(() => f.NumberOfMonthsBetween()).toThrow()
@@ -95,9 +93,7 @@ describe('Date Functions', () => {
         expect(f.NumberOfYearsBetween(f.Date(2010, 1, 16), f.Date(2011, 12, 16))).toBe(1)
         expect(f.NumberOfYearsBetween(f.Date(2022, 1, 31), f.Date(2011, 1, 31))).toBe(11)
         expect(f.NumberOfYearsBetween(f.Date(2011, 1, 31), f.Date(2022, 1, 31))).toBe(11)
-        // @ts-expect-error testing negative case
         expect(() => f.NumberOfYearsBetween(1, f.Date(2012, 1, 31))).toThrow()
-        // @ts-expect-error testing negative case
         expect(() => f.NumberOfYearsBetween(f.Date(2012, 1, 31), 1)).toThrow()
         expect(() => f.NumberOfYearsBetween(f.Date(2012, 1, 31))).toThrow()
         expect(() => f.NumberOfYearsBetween()).toThrow()

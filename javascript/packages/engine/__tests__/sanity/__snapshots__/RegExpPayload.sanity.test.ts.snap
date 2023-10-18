@@ -470,6 +470,7 @@ Object {
         ],
       },
     },
+    "ruleTimezoneId": "Europe/Vilnius",
   },
   "fieldResults": Object {
     "AddressInfo:17:city": Object {
@@ -1144,6 +1145,7 @@ Object {
         ],
       },
     },
+    "ruleTimezoneId": "Europe/Vilnius",
   },
   "fieldResults": Object {
     "AddressInfo:7:city": Object {
@@ -1660,6 +1662,7 @@ Object {
         ],
       },
     },
+    "ruleTimezoneId": "Europe/Vilnius",
   },
   "fieldResults": Object {
     "AddressInfo:5:city": Object {
@@ -2388,6 +2391,7 @@ Object {
         ],
       },
     },
+    "ruleTimezoneId": "Europe/Vilnius",
   },
   "fieldResults": Object {
     "AddressInfo:17:city": Object {

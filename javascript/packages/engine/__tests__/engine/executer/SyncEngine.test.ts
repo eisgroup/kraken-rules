@@ -326,54 +326,39 @@ beforeEach(() => {
 
 describe('SyncEngine', () => {
     it('should throw on unknown expression type', () => {
-        const doThrow = () =>
-            engine.evaluate(mock.data.empty(), 'unknown expression type', { currencyCd: 'USD', context: {} })
+        const doThrow = () => engine.evaluate(mock.data.empty(), 'unknown expression type', mock.evaluationConfig)
         expect(doThrow).toThrow(KrakenRuntimeError.UNKNOWN_EXPRESSION_TYPE.code)
     })
     it('should throw an error if bundle is absent', () => {
-        const doThrow = () => engine.evaluate(mock.data.empty(), 'no bundle', { currencyCd: 'USD', context: {} })
+        const doThrow = () => engine.evaluate(mock.data.empty(), 'no bundle', mock.evaluationConfig)
         expect(doThrow).toThrow(KrakenRuntimeError.NO_BUNDLE_CACHE_BY_ENTRYPOINT.code)
     })
     it('should throw an error if the model tree does not contain attribute as a rule target', () => {
-        const doThrow = () =>
-            engine.evaluate(mock.data.empty(), 'no attribute in model tree', { currencyCd: 'USD', context: {} })
+        const doThrow = () => engine.evaluate(mock.data.empty(), 'no attribute in model tree', mock.evaluationConfig)
         expect(doThrow).toThrow(KrakenRuntimeError.CONTEXT_MODEL_TREE_MISSING_FIELD.code)
     })
     it('should throw an error if the model tree does not contain context as a rule target', () => {
-        const doThrow = () =>
-            engine.evaluate(mock.data.empty(), 'no context in model tree', {
-                currencyCd: 'USD',
-                context: {},
-            })
+        const doThrow = () => engine.evaluate(mock.data.empty(), 'no context in model tree', mock.evaluationConfig)
         expect(doThrow).toThrow(KrakenRuntimeError.CONTEXT_MODEL_TREE_MISSING_EXTRACTION_PATH.code)
     })
     it('should throw an error if the model tree does not contain context from condition expression', () => {
         const doThrow = () =>
-            engine.evaluate(mock.data.empty(), 'no context in model tree for condition', {
-                currencyCd: 'USD',
-                context: {},
-            })
+            engine.evaluate(mock.data.empty(), 'no context in model tree for condition', mock.evaluationConfig)
         expect(doThrow).toThrow(KrakenRuntimeError.CONTEXT_MODEL_TREE_UNDEFINED_TARGET.code)
     })
     it('should throw an error if the model tree does not contain context from assertion expression', () => {
         const doThrow = () =>
-            engine.evaluate(mock.data.empty(), 'no context in model tree for assertion', {
-                currencyCd: 'USD',
-                context: {},
-            })
+            engine.evaluate(mock.data.empty(), 'no context in model tree for assertion', mock.evaluationConfig)
         expect(doThrow).toThrow(KrakenRuntimeError.CONTEXT_MODEL_TREE_UNDEFINED_TARGET.code)
     })
     it('should throw an error if the model tree does not contain context from default value expression', () => {
         const doThrow = () =>
-            engine.evaluate(mock.data.empty(), 'no context in model tree for default', {
-                currencyCd: 'USD',
-                context: {},
-            })
+            engine.evaluate(mock.data.empty(), 'no context in model tree for default', mock.evaluationConfig)
         expect(doThrow).toThrow(KrakenRuntimeError.CONTEXT_MODEL_TREE_UNDEFINED_TARGET.code)
     })
     it('should evaluate rule with external data', () => {
         const results = engine.evaluate(mock.data.empty(), 'ExternalContext', {
-            currencyCd: 'USD',
+            ...mock.evaluationConfig,
             context: {
                 externalData: {
                     key: 'value',
@@ -398,7 +383,7 @@ describe('SyncEngine', () => {
         expect(customFunction).toHaveBeenCalledTimes(1)
     })
     it('should throw an error when no currency code is provided', () => {
-        expect(() => engine.evaluate({}, '', { currencyCd: '', context: {} })).toThrow()
+        expect(() => engine.evaluate({}, '', { ...mock.evaluationConfig, currencyCd: '' })).toThrow()
     })
     it('should when restriction is invalid Context instance', () => {
         expect(() => engine.evaluateSubTree({}, { cd: '', noid: 0 }, '', mock.evaluationConfig)).toThrow(
@@ -523,7 +508,7 @@ describe('SyncEngine', () => {
             },
         })
 
-        const result = engine.evaluate(data, 'function rebuilding', { currencyCd: 'eur', context: {} })
+        const result = engine.evaluate(data, 'function rebuilding', mock.evaluationConfig)
 
         expect(result).k_toHaveExpressionsFailures(0)
     })

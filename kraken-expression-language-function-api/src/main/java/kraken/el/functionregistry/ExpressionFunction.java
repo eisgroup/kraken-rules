@@ -21,6 +21,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import kraken.annotations.API;
+import kraken.el.FunctionContextHolder;
 
 /**
  * Annotated Java Method will be available as Expression Function in expressions evaluated by Kraken Expression Language.
@@ -72,6 +73,10 @@ import kraken.annotations.API;
  * <p/>
  * Every defined Expression Function must be unique in the system
  * where uniqueness is determined by name of Expression Function and by parameter count.
+ *<p/>
+ * Custom function implementation can access {@link kraken.el.FunctionContextHolder.FunctionContext} by
+ * {@link FunctionContextHolder#getFunctionContext()} to access current evaluation session specific metadata,
+ * such as a current evaluation timezone.
  *
  * @author mulevicius
  */

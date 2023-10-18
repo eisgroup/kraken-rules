@@ -24,6 +24,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
 
 import java.text.MessageFormat;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -189,7 +190,7 @@ public class ValidationStatusReducerTest {
 
         FieldEvaluationResult fieldEvaluationResult = new FieldEvaluationResult(contextFieldInfo, results);
 
-        return new EntryPointResult(Map.of("contextId01", fieldEvaluationResult), LocalDateTime.now());
+        return new EntryPointResult(Map.of("contextId01", fieldEvaluationResult), LocalDateTime.now(), ZoneId.systemDefault());
     }
 
     private EntryPointResult entryPointResult(RuntimeRule... rules) {

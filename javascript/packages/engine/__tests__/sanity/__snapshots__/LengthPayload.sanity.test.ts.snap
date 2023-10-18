@@ -88,6 +88,7 @@ Object {
         ],
       },
     },
+    "ruleTimezoneId": "Europe/Vilnius",
   },
   "fieldResults": Object {
     "Party:15:relationToPrimaryInsured": Object {
@@ -254,6 +255,7 @@ Object {
         ],
       },
     },
+    "ruleTimezoneId": "Europe/Vilnius",
   },
   "fieldResults": Object {
     "Party:1:relationToPrimaryInsured": Object {
@@ -420,6 +422,7 @@ Object {
         ],
       },
     },
+    "ruleTimezoneId": "Europe/Vilnius",
   },
   "fieldResults": Object {
     "Party:15:relationToPrimaryInsured": Object {
@@ -586,6 +589,7 @@ Object {
         ],
       },
     },
+    "ruleTimezoneId": "Europe/Vilnius",
   },
   "fieldResults": Object {
     "Party:1:relationToPrimaryInsured": Object {
@@ -752,6 +756,7 @@ Object {
         ],
       },
     },
+    "ruleTimezoneId": "Europe/Vilnius",
   },
   "fieldResults": Object {
     "Party:15:relationToPrimaryInsured": Object {

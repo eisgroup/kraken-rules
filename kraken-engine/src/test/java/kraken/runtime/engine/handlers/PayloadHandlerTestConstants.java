@@ -17,7 +17,6 @@ package kraken.runtime.engine.handlers;
 
 import static org.mockito.Mockito.mock;
 
-import java.util.Collections;
 import java.util.Map;
 
 import kraken.context.model.tree.ContextModelTreeMetadata;
@@ -34,8 +33,7 @@ class PayloadHandlerTestConstants {
 
     static final EvaluationSession SESSION =
             new EvaluationSession(
-                new EvaluationConfig("USD"),
-                Collections.emptyMap(),
+                new EvaluationConfig(Map.of(), "USD"),
                 mock(KrakenTypeProvider.class),
                 Map.of(),
                 "",
