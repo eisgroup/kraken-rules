@@ -40,6 +40,9 @@
    {
      "context": {},
      "currencyCd": "USD",
+     "ruleTimezoneId": {
+       "id": "Europe/Vilnius"
+     },
      "evaluationMode": "ALL",
      "dataContextPathProvider": {
        "pathsById": {

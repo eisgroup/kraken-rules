@@ -19,7 +19,6 @@ import { ExtractedChildDataContextBuilder } from '../../../../../src/engine/cont
 import { ContextDataExtractorImpl } from '../../../../../src/engine/contexts/data/extraction/ContextDataExtractorImpl'
 import { mock } from '../../../../mock'
 import { DataContextBuilder } from '../../../../../src/engine/contexts/data/DataContextBuilder'
-import { ExpressionEvaluator } from '../../../../../src/engine/runtime/expressions/ExpressionEvaluator'
 
 describe('CachingContextDataExtractor', () => {
     it('should extract once by name', () => {
@@ -28,7 +27,7 @@ describe('CachingContextDataExtractor', () => {
                 mock.modelTree,
                 new ExtractedChildDataContextBuilder(
                     new DataContextBuilder(mock.modelTree, mock.spi.instance, () => mock.pathProvider),
-                    ExpressionEvaluator.DEFAULT,
+                    mock.evaluator,
                 ),
             ),
         )

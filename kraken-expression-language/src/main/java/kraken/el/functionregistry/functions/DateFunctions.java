@@ -15,17 +15,19 @@
  */
 package kraken.el.functionregistry.functions;
 
-import static java.time.temporal.ChronoUnit.DAYS;
-import static java.time.temporal.ChronoUnit.MONTHS;
-
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.regex.Pattern;
 
 import kraken.el.ExpressionEvaluationException;
-import kraken.el.ast.builder.Literals;
+import kraken.el.FunctionContextHolder;
+import kraken.el.date.DateCalculator;
+import kraken.el.date.DateCalculator.DateField;
+import kraken.el.date.DateCalculator.DateTimeField;
 import kraken.el.functionregistry.Example;
 import kraken.el.functionregistry.ExpressionFunction;
 import kraken.el.functionregistry.FunctionDocumentation;
@@ -51,6 +53,11 @@ import kraken.el.functionregistry.ParameterType;
 @Native
 public class DateFunctions implements FunctionLibrary {
 
+    private static final Pattern ISO_DATE = Pattern.compile("^\\d{4}-\\d{2}-\\d{2}$");
+    private static final Pattern ISO_DATETIME_NO_OFFSET = Pattern.compile("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}$");
+
+    private static final DateCalculator dateCalculator = DateCalculator.getInstance();
+
     @FunctionDocumentation(
         description = "Create a date from ISO String.",
         throwsError = "if string does not match date pattern 'YYYY-MM-DD'",
@@ -69,9 +76,15 @@ public class DateFunctions implements FunctionLibrary {
         ) String date
     ) {
         try {
-            return getDate(date);
+            if(ISO_DATETIME_NO_OFFSET.matcher(date).matches()) {
+                return dateCalculator.toDate(dateCalculator.createDateTime(date, zoneId()), zoneId());
+            }
+            if(ISO_DATE.matcher(date).matches()) {
+                return dateCalculator.createDate(date);
+            }
+            return dateCalculator.toDate(dateCalculator.createDateTime(date), zoneId());
         } catch (DateTimeParseException e) {
-            throw new ExpressionEvaluationException("Cannot parse date from pattern: " + date, e);
+            throw new ExpressionEvaluationException("Cannot parse date from: " + date, e);
         }
     }
 
@@ -93,9 +106,15 @@ public class DateFunctions implements FunctionLibrary {
         ) String dateTime
     ) {
         try {
-            return getDateTime(dateTime);
+            if(ISO_DATETIME_NO_OFFSET.matcher(dateTime).matches()) {
+                return dateCalculator.createDateTime(dateTime, zoneId());
+            }
+            if(ISO_DATE.matcher(dateTime).matches()) {
+                return dateCalculator.toDateTime(dateCalculator.createDate(dateTime), zoneId());
+            }
+            return dateCalculator.createDateTime(dateTime);
         } catch (DateTimeParseException e) {
-            throw new ExpressionEvaluationException("Cannot parse dateTime from pattern: " + dateTime, e);
+            throw new ExpressionEvaluationException("Cannot parse date time from: " + dateTime, e);
         }
     }
 
@@ -108,7 +127,7 @@ public class DateFunctions implements FunctionLibrary {
     )
     @ExpressionFunction("AsDate")
     public static LocalDate asDate(@NotNull @ParameterDocumentation(name = "time") LocalDateTime time) {
-        return time.toLocalDate();
+        return dateCalculator.toDate(time, zoneId());
     }
 
     @FunctionDocumentation(
@@ -120,7 +139,7 @@ public class DateFunctions implements FunctionLibrary {
     )
     @ExpressionFunction("AsTime")
     public static LocalDateTime asTime(@NotNull @ParameterDocumentation(name = "date") LocalDate date) {
-        return date.atStartOfDay();
+        return dateCalculator.toDateTime(date, zoneId());
     }
 
     @FunctionDocumentation(
@@ -128,7 +147,7 @@ public class DateFunctions implements FunctionLibrary {
     )
     @ExpressionFunction("Today")
     public static LocalDate today() {
-        return LocalDate.now();
+        return dateCalculator.today(zoneId());
     }
 
     @FunctionDocumentation(
@@ -136,7 +155,7 @@ public class DateFunctions implements FunctionLibrary {
     )
     @ExpressionFunction("Now")
     public static LocalDateTime now() {
-        return LocalDateTime.now();
+        return dateCalculator.now();
     }
 
     @FunctionDocumentation(
@@ -161,10 +180,10 @@ public class DateFunctions implements FunctionLibrary {
         @NotNull @ParameterDocumentation(name = "numberOfYears", description = "can be positive or negative number") Number years
     ) {
         if (date instanceof LocalDate) {
-            return (T) ((LocalDate) date).plusYears(years.longValue());
+            return (T) dateCalculator.addDateField((LocalDate) date, DateField.YEAR, years.longValue());
         }
         if (date instanceof LocalDateTime) {
-            return (T) ((LocalDateTime) date).plusYears(years.longValue());
+            return (T) dateCalculator.addDateTimeField((LocalDateTime) date, DateTimeField.YEAR, years.longValue(), zoneId());
         }
         throw new ExpressionEvaluationException(
             "Function 'PlusYears' accepts as a first parameter instance of 'LocalDate' or 'LocalDateTime'"
@@ -191,10 +210,10 @@ public class DateFunctions implements FunctionLibrary {
         @NotNull @ParameterDocumentation(name = "numberOfDays", description = "can be positive or negative number") Number days
     ) {
         if (date instanceof LocalDate) {
-            return (T) ((LocalDate) date).plusDays(days.longValue());
+            return (T) dateCalculator.addDateField((LocalDate) date, DateField.DAY_OF_MONTH, days.longValue());
         }
         if (date instanceof LocalDateTime) {
-            return (T) ((LocalDateTime) date).plusDays(days.longValue());
+            return (T) dateCalculator.addDateTimeField((LocalDateTime) date, DateTimeField.DAY_OF_MONTH, days.longValue(), zoneId());
         }
         throw new ExpressionEvaluationException(
             "Function 'PlusDays' accepts as a first parameter instance of 'LocalDate' or 'LocalDateTime'"
@@ -223,41 +242,14 @@ public class DateFunctions implements FunctionLibrary {
         @NotNull @ParameterDocumentation(name = "numberOfMonths", description = "can be positive or negative number") Number months
     ) {
         if (date instanceof LocalDate) {
-            return (T) ((LocalDate) date).plusMonths(months.longValue());
+            return (T) dateCalculator.addDateField((LocalDate) date, DateField.MONTH, months.longValue());
         }
         if (date instanceof LocalDateTime) {
-            return (T) ((LocalDateTime) date).plusMonths(months.longValue());
+            return (T) dateCalculator.addDateTimeField((LocalDateTime) date, DateTimeField.MONTH, months.longValue(), zoneId());
         }
         throw new ExpressionEvaluationException(
             "Function 'PlusMonths' accepts as a first parameter instance of 'LocalDate' or 'LocalDateTime'"
         );
-    }
-
-    @SuppressWarnings("squid:S1166")
-    private static LocalDate getDate(String date) {
-        try {
-            return Literals.getDate(date);
-        } catch (DateTimeParseException ex) {
-            return getDateTime(date).toLocalDate();
-        }
-    }
-
-    @SuppressWarnings("squid:S1166")
-    private static LocalDateTime getDateTime(String dateTime) {
-        try {
-            return Literals.getDateTime(dateTime);
-        } catch (DateTimeParseException ex) {
-            return parseNoOffset(dateTime);
-        }
-    }
-
-    @SuppressWarnings("squid:S1166")
-    private static LocalDateTime parseNoOffset(String dateTime) {
-        try {
-            return LocalDateTime.parse(dateTime);
-        } catch (DateTimeParseException ex) {
-            return LocalDate.parse(dateTime).atStartOfDay();
-        }
     }
 
     @FunctionDocumentation(
@@ -277,7 +269,7 @@ public class DateFunctions implements FunctionLibrary {
         @NotNull @ParameterDocumentation(name = "start", description = "start of the range") LocalDate start,
         @NotNull @ParameterDocumentation(name = "end", description = "end of the range") LocalDate end
     ) {
-        return of.isEqual(start) || of.isEqual(end) || isDateBetweenNotInclusive(of, start, end);
+        return of.isEqual(start) || of.isEqual(end) || (of.isBefore(end) && of.isAfter(start));
     }
 
     @FunctionDocumentation(
@@ -297,11 +289,7 @@ public class DateFunctions implements FunctionLibrary {
         validateMonth(month);
         validateDay(day);
 
-        return LocalDate.of(year.intValue(), month.intValue(), day.intValue());
-    }
-
-    private static Boolean isDateBetweenNotInclusive(LocalDate of, LocalDate start, LocalDate end) {
-        return of.isBefore(end) && of.isAfter(start);
+        return dateCalculator.createDate(year.intValue(), month.intValue(), day.intValue());
     }
 
     @FunctionDocumentation(
@@ -322,10 +310,10 @@ public class DateFunctions implements FunctionLibrary {
             Object dateOrDatetime
     ) {
         if (dateOrDatetime instanceof LocalDate) {
-            return ((LocalDate) dateOrDatetime).getDayOfMonth();
+            return dateCalculator.getDateField((LocalDate)dateOrDatetime, DateField.DAY_OF_MONTH);
         }
         if (dateOrDatetime instanceof LocalDateTime) {
-            return ((LocalDateTime) dateOrDatetime).getDayOfMonth();
+            return dateCalculator.getDateTimeField((LocalDateTime)dateOrDatetime, DateTimeField.DAY_OF_MONTH, zoneId());
         }
         throw new ExpressionEvaluationException("Day can be extracted only from date or date time");
     }
@@ -347,10 +335,10 @@ public class DateFunctions implements FunctionLibrary {
             Object dateOrDatetime
     ) {
         if (dateOrDatetime instanceof LocalDate) {
-            return ((LocalDate) dateOrDatetime).getMonthValue();
+            return dateCalculator.getDateField((LocalDate)dateOrDatetime, DateField.MONTH);
         }
         if (dateOrDatetime instanceof LocalDateTime) {
-            return ((LocalDateTime) dateOrDatetime).getMonthValue();
+            return dateCalculator.getDateTimeField((LocalDateTime)dateOrDatetime, DateTimeField.MONTH, zoneId());
         }
         throw new ExpressionEvaluationException("Month can be extracted only from date or date time");
     }
@@ -372,10 +360,10 @@ public class DateFunctions implements FunctionLibrary {
             Object dateOrDatetime
     ) {
         if (dateOrDatetime instanceof LocalDate) {
-            return ((LocalDate) dateOrDatetime).getYear();
+            return dateCalculator.getDateField((LocalDate)dateOrDatetime, DateField.YEAR);
         }
         if (dateOrDatetime instanceof LocalDateTime) {
-            return ((LocalDateTime) dateOrDatetime).getYear();
+            return dateCalculator.getDateTimeField((LocalDateTime)dateOrDatetime, DateTimeField.YEAR, zoneId());
         }
         throw new ExpressionEvaluationException("Year can be extracted only from date or date time");
     }
@@ -420,7 +408,7 @@ public class DateFunctions implements FunctionLibrary {
         @NotNull @ParameterDocumentation(name = "date1") LocalDate d1,
         @NotNull @ParameterDocumentation(name = "date2") LocalDate d2
     ) {
-        return Math.abs(MONTHS.between(d1, d2));
+        return Math.abs(dateCalculator.difference(d1, d2, DateField.MONTH));
     }
 
     @FunctionDocumentation(
@@ -438,7 +426,7 @@ public class DateFunctions implements FunctionLibrary {
         @NotNull @ParameterDocumentation(name = "date1") LocalDate d1,
         @NotNull @ParameterDocumentation(name = "date2") LocalDate d2
     ) {
-        return numberOfMonthsBetween(d1, d2) / 12L;
+        return Math.abs(dateCalculator.difference(d1, d2, DateField.YEAR));
     }
 
     @FunctionDocumentation(
@@ -455,7 +443,7 @@ public class DateFunctions implements FunctionLibrary {
         @NotNull @ParameterDocumentation(name = "date1") LocalDate d1,
         @NotNull @ParameterDocumentation(name = "date2") LocalDate d2
     ) {
-        return Math.abs(DAYS.between(d1, d2));
+        return Math.abs(dateCalculator.difference(d1, d2, DateField.DAY_OF_MONTH));
     }
 
     @FunctionDocumentation(
@@ -480,10 +468,10 @@ public class DateFunctions implements FunctionLibrary {
         validateYear(year);
 
         if(value instanceof LocalDate) {
-            return (T) ((LocalDate) value).withYear(year.intValue());
+            return (T) dateCalculator.withDateField((LocalDate) value, DateField.YEAR, year.intValue());
         }
         if(value instanceof LocalDateTime) {
-            return (T) ((LocalDateTime) value).withYear(year.intValue());
+            return (T) dateCalculator.withDateTimeField((LocalDateTime) value, DateTimeField.YEAR, year.intValue(), zoneId());
         }
         throw new ExpressionEvaluationException("Year can only be modified for Date or DateTime, but parameter was: " + value);
     }
@@ -512,10 +500,10 @@ public class DateFunctions implements FunctionLibrary {
         validateMonth(month);
 
         if(value instanceof LocalDate) {
-            return (T) ((LocalDate) value).withMonth(month.intValue());
+            return (T) dateCalculator.withDateField((LocalDate) value, DateField.MONTH, month.intValue());
         }
         if(value instanceof LocalDateTime) {
-            return (T) ((LocalDateTime) value).withMonth(month.intValue());
+            return (T) dateCalculator.withDateTimeField((LocalDateTime) value, DateTimeField.MONTH, month.intValue(), zoneId());
         }
         throw new ExpressionEvaluationException("Month can only be modified for Date or DateTime, but parameter was: " + value);
     }
@@ -542,11 +530,11 @@ public class DateFunctions implements FunctionLibrary {
         validateDay(day);
 
         try {
-            if (value instanceof LocalDate) {
-                return (T) ((LocalDate) value).withDayOfMonth(day.intValue());
+            if(value instanceof LocalDate) {
+                return (T) dateCalculator.withDateField((LocalDate) value, DateField.DAY_OF_MONTH, day.intValue());
             }
-            if (value instanceof LocalDateTime) {
-                return (T) ((LocalDateTime) value).withDayOfMonth(day.intValue());
+            if(value instanceof LocalDateTime) {
+                return (T) dateCalculator.withDateTimeField((LocalDateTime) value, DateTimeField.DAY_OF_MONTH, day.intValue(), zoneId());
             }
         } catch (DateTimeException e) {
             String template = "Cannot set day '%s' in date '%s' because such day does not exist.";
@@ -577,5 +565,9 @@ public class DateFunctions implements FunctionLibrary {
         if(dayValue < 1 || dayValue > 31) {
             throw new ExpressionEvaluationException("Day value must be from 1 to 31, but was: " + dayValue);
         }
+    }
+
+    private static ZoneId zoneId() {
+        return FunctionContextHolder.getFunctionContext().getZoneId();
     }
 }

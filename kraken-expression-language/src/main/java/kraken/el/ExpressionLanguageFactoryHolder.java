@@ -15,8 +15,6 @@
  */
 package kraken.el;
 
-import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.ServiceLoader;
@@ -26,6 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import kraken.el.InvocationContextHolder.InvocationContext;
 import kraken.el.ast.Ast;
+import kraken.el.FunctionContextHolder.FunctionContext;
 
 /**
  * Holds all available Expression Languages in classpath.
@@ -136,12 +135,15 @@ public class ExpressionLanguageFactoryHolder {
             if(StringUtils.isEmpty(expression.getExpression())) {
                 return null;
             }
-            InvocationContext previous = InvocationContextHolder.getInvocationContext();
-            InvocationContextHolder.setInvocationContext(new InvocationContext(evaluationContext));
+            var previousInvocationContext = InvocationContextHolder.getInvocationContext();
+            var previousFunctionContext = FunctionContextHolder.getFunctionContext();
             try {
+                InvocationContextHolder.setInvocationContext(new InvocationContext(evaluationContext));
+                FunctionContextHolder.setFunctionContext(new FunctionContext(evaluationContext.getZoneId()));
                 return expressionLanguage.evaluate(expression, evaluationContext);
             } finally {
-                InvocationContextHolder.setInvocationContext(previous);
+                FunctionContextHolder.setFunctionContext(previousFunctionContext);
+                InvocationContextHolder.setInvocationContext(previousInvocationContext);
             }
         }
 

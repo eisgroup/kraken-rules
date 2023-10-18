@@ -46,6 +46,7 @@ Object {
         ],
       },
     },
+    "ruleTimezoneId": "Europe/Vilnius",
   },
   "fieldResults": Object {
     "Policy:0:policyNumber": Object {
@@ -133,6 +134,7 @@ Object {
         ],
       },
     },
+    "ruleTimezoneId": "Europe/Vilnius",
   },
   "fieldResults": Object {
     "Policy:0:policyCurrency": Object {
@@ -239,6 +241,7 @@ Object {
         ],
       },
     },
+    "ruleTimezoneId": "Europe/Vilnius",
   },
   "fieldResults": Object {
     "PolicyExtended:0:policyCurrency": Object {

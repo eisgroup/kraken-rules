@@ -15,18 +15,22 @@
  */
 package kraken.runtime.engine;
 
+import static kraken.context.Context.DIMENSIONS;
+import static kraken.context.Context.EXTERNAL_DATA;
+import static kraken.context.Context.RULE_TIMEZONE_ID_DIMENSION;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import kraken.context.Context;
 import kraken.context.model.tree.ContextModelTree;
 import kraken.context.model.tree.repository.ContextModelTreeRepository;
 import kraken.el.TargetEnvironment;
 import kraken.el.functionregistry.FunctionHeader;
 import kraken.el.functionregistry.KelFunction;
 import kraken.el.functionregistry.KelFunction.Parameter;
+import kraken.namespace.Namespaces;
 import kraken.runtime.EvaluationConfig;
 import kraken.runtime.EvaluationSession;
 import kraken.runtime.RuleEngine;
@@ -45,7 +49,6 @@ import kraken.runtime.logging.KrakenDataLogger;
 import kraken.runtime.repository.RuntimeProjectRepository;
 import kraken.runtime.repository.factory.RuntimeProjectRepositoryFactory;
 import kraken.tracer.Tracer;
-import kraken.namespace.Namespaces;
 
 /**
  * Default implementation for {@link RuleEngine}
@@ -83,7 +86,7 @@ public class RuleEngineImpl implements RuleEngine {
                 EntryPointBundle bundle = buildEntryPointBundle(entryPointName, evaluationConfig);
                 logEffectiveRules(session.getSessionToken(), bundle);
                 if (noRulesArePresent(bundle)) {
-                    return new EntryPointResult();
+                    return new EntryPointResult(session.getTimestamp(), evaluationConfig.getRuleTimezoneId());
                 }
                 final ContextDataProvider provider = StaticContextDataProvider.create(
                     crossContextPathsResolverFactory.resolve(contextModelTree),
@@ -129,7 +132,7 @@ public class RuleEngineImpl implements RuleEngine {
                 EntryPointBundle bundle = buildEntryPointBundle(entryPointName, evaluationConfig);
                 logEffectiveRules(session.getSessionToken(), bundle);
                 if (noRulesArePresent(bundle)) {
-                    return new EntryPointResult();
+                    return new EntryPointResult(session.getTimestamp(), evaluationConfig.getRuleTimezoneId());
                 }
                 final ContextDataProvider provider = StaticContextDataProvider.create(
                     crossContextPathsResolverFactory.resolve(contextModelTree),
@@ -187,15 +190,21 @@ public class RuleEngineImpl implements RuleEngine {
     private EntryPointBundle buildEntryPointBundle(String entryPointName, EvaluationConfig evaluationConfig) {
         return entryPointBundleFactory.build(
             entryPointName,
-            bundleContext(evaluationConfig.getContext()),
+            bundleContext(evaluationConfig),
             evaluationConfig.getEvaluationMode()
         );
     }
 
-    private Map<String, Object> bundleContext(Map<String, Object> context) {
-        HashMap<String, Object> copy = new HashMap<>(context);
-        copy.remove(Context.EXTERNAL_DATA);
-        return copy;
+    private Map<String, Object> bundleContext(EvaluationConfig evaluationConfig) {
+        var contextCopy = new HashMap<>(evaluationConfig.getContext());
+        contextCopy.remove(EXTERNAL_DATA);
+        var dimensions = contextCopy.get(DIMENSIONS);
+        if(dimensions instanceof Map) {
+            var dimensionsCopy = new HashMap<>((Map<String, Object>)dimensions);
+            dimensionsCopy.put(RULE_TIMEZONE_ID_DIMENSION, evaluationConfig.getRuleTimezoneId());
+            contextCopy.put(DIMENSIONS, dimensionsCopy);
+        }
+        return contextCopy;
     }
 
     private boolean noRulesArePresent(EntryPointBundle bundle) {
@@ -240,7 +249,6 @@ public class RuleEngineImpl implements RuleEngine {
             .collect(Collectors.toMap(KelFunction::header, f -> f));
         return new EvaluationSession(
             evaluationConfig,
-            evaluationConfig.getContext(),
             krakenTypeProvider,
             functions,
             namespace,

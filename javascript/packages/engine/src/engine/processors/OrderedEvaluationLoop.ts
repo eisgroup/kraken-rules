@@ -91,7 +91,7 @@ export class OrderedEvaluationLoop {
         logger.info(() => {
             return { results }
         }, true)
-        return new DefaultEntryPointResult(results)
+        return new DefaultEntryPointResult(results, session.timestamp, session.ruleTimezoneId)
     }
 
     private evaluateDefaultRules(

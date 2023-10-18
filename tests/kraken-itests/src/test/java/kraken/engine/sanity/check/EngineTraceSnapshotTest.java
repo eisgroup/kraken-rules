@@ -15,7 +15,7 @@
  */
 package kraken.engine.sanity.check;
 
-import static kraken.utils.SnapshotMatchers.*;
+import static kraken.utils.SnapshotMatchers.matches;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.math.BigDecimal;
@@ -25,6 +25,7 @@ import java.time.ZoneId;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
@@ -54,7 +55,6 @@ import kraken.testproduct.domain.Vehicle;
 import kraken.tracer.observer.Slf4jTraceObserver;
 import kraken.utils.Dates;
 import kraken.utils.Snapshot;
-import kraken.utils.SnapshotMatchers;
 import kraken.utils.SnapshotTestRunner;
 
 /**
@@ -98,17 +98,17 @@ public class EngineTraceSnapshotTest extends SanityEngineBaseTest {
     @Test
     public void shouldMatchTracerOutputSnapshot() {
         Clock mockedClock = Clock.fixed(Instant.parse("2023-01-01T00:00:00.00Z"), ZoneId.systemDefault());
+
         try (MockedStatic<Clock> clock = Mockito.mockStatic(Clock.class)) {
             // statically mocks current java clock in scope of this test
             // so that LocalDateTime#now and LocalDate#now returns fixed time
             clock.when(Clock::systemDefaultZone).thenReturn(mockedClock);
 
-            var result = engine.evaluate(policy(), "TracerSnapshotTest", new EvaluationConfig(
-                Map.of(),
-                "USD",
-                EvaluationMode.ALL,
-                dataContextPathProvider
-            ));
+            var result = engine.evaluate(
+                policy(),
+                "TracerSnapshotTest",
+                new EvaluationConfig(Map.of(), "USD", EvaluationMode.ALL, ZoneId.of("Europe/Vilnius"), dataContextPathProvider)
+            );
 
             createReducer(overriddenRuleEvaluations()).reduce(result);
             assertThat(traceOutput(), matches(snapshot));

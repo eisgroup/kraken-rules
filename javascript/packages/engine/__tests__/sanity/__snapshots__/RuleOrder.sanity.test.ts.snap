@@ -258,6 +258,7 @@ Object {
         ],
       },
     },
+    "ruleTimezoneId": "Europe/Vilnius",
   },
   "fieldResults": Object {
     "BillingAddress:ba1:countryCd": Object {
@@ -570,6 +571,7 @@ Object {
         ],
       },
     },
+    "ruleTimezoneId": "Europe/Vilnius",
   },
   "fieldResults": Object {
     "BillingAddress:adi1:city": Object {

@@ -84,11 +84,13 @@ public class KrakenExpressionEvaluator {
         }
 
         KrakenTypeProvider typeProvider = session.getKrakenTypeProvider();
+        var zoneId = session.getEvaluationConfig().getRuleTimezoneId();
         EvaluationContext evaluationContext = new EvaluationContext(
             dataContext.getDataObject(),
             createExpressionVars(session, dataContext),
             typeProvider,
-            new FunctionInvoker(session.getFunctions(), functionEvaluator, typeProvider, KrakenKel.EXPRESSION_TARGET)
+            new FunctionInvoker(session.getFunctions(), functionEvaluator, typeProvider, KrakenKel.EXPRESSION_TARGET, zoneId),
+            zoneId
         );
         return evaluate(expression, evaluationContext);
     }
@@ -117,11 +119,13 @@ public class KrakenExpressionEvaluator {
             );
         }
         KrakenTypeProvider typeProvider = session.getKrakenTypeProvider();
+        var zoneId = session.getEvaluationConfig().getRuleTimezoneId();
         EvaluationContext evaluationContext = new EvaluationContext(
             dataContext.getDataObject(),
             Map.of(),
             typeProvider,
-            new FunctionInvoker(session.getFunctions(), functionEvaluator, typeProvider, KrakenKel.EXPRESSION_TARGET)
+            new FunctionInvoker(session.getFunctions(), functionEvaluator, typeProvider, KrakenKel.EXPRESSION_TARGET, zoneId),
+            zoneId
         );
 
         return evaluate(contextNavigation.getNavigationExpression(), evaluationContext);
@@ -181,7 +185,7 @@ public class KrakenExpressionEvaluator {
 
     private static Map<String, Object> createExpressionVars(EvaluationSession session, DataContext dataContext) {
         var vars = new HashMap<>(dataContext.getObjectReferences());
-        vars.put("context", session.getExpressionContext());
+        vars.put("context", session.getEvaluationConfig().getContext());
         return vars;
     }
 

@@ -270,7 +270,16 @@ const spi = {
     } as ContextInstanceInfoResolver<Identifiable>,
 }
 const contextBuilder = new DataContextBuilder(modelTree, spi.instance, () => DEFAULT_PATH_PROVIDER)
-const evaluator = ExpressionEvaluator.DEFAULT
+const evaluator = new ExpressionEvaluator(
+    FunctionRegistry.createInstanceFunctions(dataResolver, name => modelTree.contexts[name].inheritedContexts),
+    [],
+)
+evaluator.rebuildFunctions(
+    FunctionRegistry.INSTANCE.bindRegisteredFunctions({
+        zoneId: session.ruleTimezoneId,
+        dateCalculator: session.dateCalculator,
+    }),
+)
 const contextDataExtractor = new ContextDataExtractorImpl(
     modelTree,
     new ExtractedChildDataContextBuilder(contextBuilder, evaluator),
@@ -278,6 +287,12 @@ const contextDataExtractor = new ContextDataExtractorImpl(
 const policyEvaluator = new ExpressionEvaluator(
     FunctionRegistry.createInstanceFunctions(dataResolver, name => modelTree.contexts[name].inheritedContexts),
     policyFunctions,
+)
+policyEvaluator.rebuildFunctions(
+    FunctionRegistry.INSTANCE.bindRegisteredFunctions({
+        zoneId: session.ruleTimezoneId,
+        dateCalculator: session.dateCalculator,
+    }),
 )
 export const mock = {
     dataContextEmpty,

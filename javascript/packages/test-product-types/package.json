@@ -1,6 +1,6 @@
 {
     "name": "kraken-test-product",
-    "version": "1.52.1-stage.0",
+    "version": "1.53.1-stage.0",
     "description": "Test product typings",
     "main": "index.d.ts",
     "author": "psurinin <psurinin@eisgroup.com> (http://eisgroup.com)",

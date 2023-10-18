@@ -29,10 +29,13 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.ZoneId;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.Ignore;
 
 import kraken.el.ExpressionEvaluationException;
+import kraken.el.FunctionContextHolder;
+import kraken.el.FunctionContextHolder.FunctionContext;
 import kraken.el.ast.builder.Literals;
 import kraken.utils.Dates;
 
@@ -40,6 +43,11 @@ import kraken.utils.Dates;
  * @author psurinin
  */
 public class DateFunctionsTest {
+
+    @Before
+    public void setUp() throws Exception {
+        FunctionContextHolder.setFunctionContext(new FunctionContext(ZoneId.systemDefault()));
+    }
 
     @Test
     public void shouldThrowIfDatePatternIsNotValid() {

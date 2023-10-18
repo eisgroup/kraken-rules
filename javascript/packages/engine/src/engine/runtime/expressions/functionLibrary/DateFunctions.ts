@@ -17,235 +17,280 @@
 
 import moment from 'moment'
 import { message } from './function.utils'
+import { InternalFunctionScope } from './Registry'
 
-function Today(): Date {
-    const now = new Date()
-    return new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0)
+export const dateFunctions = {
+    Format,
+    GetYear,
+    GetMonth,
+    GetDay,
+    Today,
+    Now,
+    Date: FxDate,
+    DateTime: FxDateTime,
+    PlusYears,
+    PlusMonths,
+    PlusDays,
+    AsDate,
+    AsTime,
+    NumberOfDaysBetween,
+    NumberOfMonthsBetween,
+    NumberOfYearsBetween,
+    IsDateBetween,
+    WithYear,
+    WithMonth,
+    WithDay,
 }
 
-function Now(): Date {
-    return new Date()
+const ISO_DATE = new RegExp('^\\d{4}-\\d{2}-\\d{2}$')
+const ISO_DATETIME_NO_OFFSET = new RegExp('^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}$')
+
+function Today(this: InternalFunctionScope): Date {
+    return this.dateCalculator.today(this.functionContext.zoneId)
+}
+
+function Now(this: InternalFunctionScope): Date {
+    return this.dateCalculator.now()
 }
 
 function FxDate(dateString?: string): Date
 function FxDate(year?: number, month?: number, day?: number): Date
 
-function FxDate(dateString?: string | number, month?: number, day?: number): Date {
-    if (!dateString) {
-        throw new Error("Failed to execute function 'Date' or 'DateTime' with parameters: " + [...arguments].join())
+function FxDate(this: InternalFunctionScope, dateStringOrYear?: string | number, month?: number, day?: number): Date {
+    if (typeof dateStringOrYear === 'string') {
+        let date
+        if (ISO_DATETIME_NO_OFFSET.test(dateStringOrYear)) {
+            const dateTime = this.dateCalculator.createDateTime(dateStringOrYear, this.functionContext.zoneId)
+            date = this.dateCalculator.toDate(dateTime, this.functionContext.zoneId)
+        } else if (ISO_DATE.test(dateStringOrYear)) {
+            date = this.dateCalculator.createDate(dateStringOrYear)
+        } else {
+            const dateTime = this.dateCalculator.createDateTime(dateStringOrYear)
+            date = this.dateCalculator.toDate(dateTime, this.functionContext.zoneId)
+        }
+        if (date.toString() === 'Invalid Date') {
+            throw new Error(`Failed to execute function 'Date' with parameters: ${[...arguments].join()}`)
+        }
+        return date
     }
-    if (typeof dateString === 'string') {
-        return tryParseDateString('Date', dateString)
-    }
-    const year = dateString
-    if (month && day) {
-        ensureValidYear('Date', year)
+    if (typeof dateStringOrYear === 'number' && month && day) {
+        ensureValidYear('Date', dateStringOrYear)
         ensureValidMonth('Date', month)
         ensureValidDay('Date', day)
-        return new Date(year, month - 1, day)
+        return this.dateCalculator.createDate(dateStringOrYear, month, day)
     }
-    throw new Error("Failed to execute function 'Date' or 'DateTime' with parameters: " + [...arguments].join())
+    throw new Error("Failed to execute function 'Date' with parameters: " + [...arguments].join())
 }
 
-function PlusYears(dateArg?: Date, num?: number): Date {
+function FxDateTime(this: InternalFunctionScope, dateTimeString: string): Date {
+    let dateTime
+    if (ISO_DATETIME_NO_OFFSET.test(dateTimeString)) {
+        dateTime = this.dateCalculator.createDateTime(dateTimeString, this.functionContext.zoneId)
+    } else if (ISO_DATE.test(dateTimeString)) {
+        const date = this.dateCalculator.createDate(dateTimeString)
+        dateTime = this.dateCalculator.toDateTime(date, this.functionContext.zoneId)
+    } else {
+        dateTime = this.dateCalculator.createDateTime(dateTimeString)
+    }
+    if (dateTime.toString() === 'Invalid Date') {
+        throw new Error(`Failed to execute function 'DateTime' with parameters: ${[...arguments].join()}`)
+    }
+    return dateTime
+}
+
+function PlusYears(this: InternalFunctionScope, dateArg?: Date, num?: number): Date {
     if (!dateArg) {
         throw new Error(message('PlusYears', message.reason.firstParam))
     }
     if (num == undefined) {
         throw new Error(message('PlusYears', message.reason.secondParam))
     }
-    const date = new Date(dateArg)
-    date.setFullYear(date.getFullYear() + num)
-
-    return resetToLastValidDayOfMonthIfNeeded(date, dateArg.getDate())
+    if (this.dateCalculator.isDate(dateArg)) {
+        return this.dateCalculator.addDateField(dateArg, 'YEAR', num)
+    }
+    if (this.dateCalculator.isDateTime(dateArg)) {
+        return this.dateCalculator.addDateTimeField(dateArg, 'YEAR', num, this.functionContext.zoneId)
+    }
+    throw new Error(`Failed to execute function 'PlusYears' with parameters: ${[...arguments].join()}`)
 }
 
-function PlusMonths(dateArg?: Date, num?: number): Date {
+function PlusMonths(this: InternalFunctionScope, dateArg?: Date, num?: number): Date {
     if (!dateArg) {
         throw new Error(message('PlusMonths', message.reason.firstParam))
     }
     if (num == undefined) {
         throw new Error(message('PlusMonths', message.reason.secondParam))
     }
-    const date = new Date(dateArg)
-    date.setMonth(date.getMonth() + num)
-
-    return resetToLastValidDayOfMonthIfNeeded(date, dateArg.getDate())
+    if (this.dateCalculator.isDate(dateArg)) {
+        return this.dateCalculator.addDateField(dateArg, 'MONTH', num)
+    }
+    if (this.dateCalculator.isDateTime(dateArg)) {
+        return this.dateCalculator.addDateTimeField(dateArg, 'MONTH', num, this.functionContext.zoneId)
+    }
+    throw new Error(`Failed to execute function 'PlusMonths' with parameters: ${[...arguments].join()}`)
 }
 
-function PlusDays(dateArg?: Date, num?: number): Date {
+function PlusDays(this: InternalFunctionScope, dateArg?: Date, num?: number): Date {
     if (!dateArg) {
         throw new Error(message('PlusDays', message.reason.firstParam))
     }
     if (num == undefined) {
         throw new Error(message('PlusDays', message.reason.secondParam))
     }
-    const date = new Date(dateArg)
-    date.setDate(date.getDate() + num)
-    return date
+    if (this.dateCalculator.isDate(dateArg)) {
+        return this.dateCalculator.addDateField(dateArg, 'DAY_OF_MONTH', num)
+    }
+    if (this.dateCalculator.isDateTime(dateArg)) {
+        return this.dateCalculator.addDateTimeField(dateArg, 'DAY_OF_MONTH', num, this.functionContext.zoneId)
+    }
+    throw new Error(`Failed to execute function 'PlusDays' with parameters: ${[...arguments].join()}`)
 }
 
-function AsDate(dateArg?: Date): Date {
+function AsDate(this: InternalFunctionScope, dateArg?: Date): Date {
     if (!dateArg) {
         throw new Error(message('AsDate', message.reason.firstParam))
     }
-    return new Date(dateArg.getFullYear(), dateArg.getMonth(), dateArg.getDate())
+    return this.dateCalculator.toDate(dateArg, this.functionContext.zoneId)
 }
 
-function AsTime(dateArg?: Date): Date {
+function AsTime(this: InternalFunctionScope, dateArg?: Date): Date {
     if (!dateArg) {
         throw new Error(message('AsTime', message.reason.firstParam))
     }
-    return new Date(dateArg.getFullYear(), dateArg.getMonth(), dateArg.getDate(), 0, 0, 0, 0)
+    return this.dateCalculator.toDateTime(dateArg, this.functionContext.zoneId)
 }
 
-function IsDateBetween(dateToCheck?: Date, start?: Date, end?: Date): boolean {
+function IsDateBetween(this: InternalFunctionScope, dateToCheck?: Date, start?: Date, end?: Date): boolean {
     if (!dateToCheck) {
-        throw new Error(message('NumberOfDaysBetween', message.reason.firstParam))
+        throw new Error(message('IsDateBetween', message.reason.firstParam))
     }
     if (!start) {
-        throw new Error(message('NumberOfDaysBetween', message.reason.secondParam))
+        throw new Error(message('IsDateBetween', message.reason.secondParam))
     }
     if (!end) {
-        throw new Error(message('NumberOfDaysBetween', message.reason.thirdParam))
+        throw new Error(message('IsDateBetween', message.reason.thirdParam))
     }
-    return dateAfter(dateToCheck, start) && dateBefore(dateToCheck, end)
+    return dateToCheck >= start && dateToCheck <= end
 }
 
-function GetDay(date?: Date): number {
+function GetDay(this: InternalFunctionScope, date?: Date): number {
     if (!date) {
-        throw new Error("Failed to execute function 'GetDay'. Parameter is absent")
+        throw new Error(message('GetDay', message.reason.firstParam))
     }
-    try {
-        return date.getDate()
-    } catch (error) {
-        throw new Error(`Failed to execute function 'GetDay'. Parameter '${date}' is invalid`)
+    if (this.dateCalculator.isDate(date)) {
+        return this.dateCalculator.getDateField(date, 'DAY_OF_MONTH')
     }
+    if (this.dateCalculator.isDateTime(date)) {
+        return this.dateCalculator.getDateTimeField(date, 'DAY_OF_MONTH', this.functionContext.zoneId)
+    }
+    throw new Error(`Failed to execute function 'GetDay' with parameters: ${[...arguments].join()}`)
 }
 
-function GetYear(date?: Date): number {
+function GetYear(this: InternalFunctionScope, date?: Date): number {
     if (!date) {
-        throw new Error("Failed to execute function 'GetYear'. Parameter is absent")
+        throw new Error(message('GetYear', message.reason.firstParam))
     }
-    try {
-        return date.getFullYear()
-    } catch (error) {
-        throw new Error(`Failed to execute function 'GetYear'. Parameter '${date}' is invalid`)
+    if (this.dateCalculator.isDate(date)) {
+        return this.dateCalculator.getDateField(date, 'YEAR')
     }
+    if (this.dateCalculator.isDateTime(date)) {
+        return this.dateCalculator.getDateTimeField(date, 'YEAR', this.functionContext.zoneId)
+    }
+    throw new Error(`Failed to execute function 'GetYear' with parameters: ${[...arguments].join()}`)
 }
 
-function GetMonth(date?: Date): number {
+function GetMonth(this: InternalFunctionScope, date?: Date): number {
     if (!date) {
-        throw new Error("Failed to execute function 'GetMonth'. Parameter is absent")
+        throw new Error(message('GetMonth', message.reason.firstParam))
     }
-    try {
-        return date.getMonth() + 1
-    } catch (error) {
-        throw new Error(`Failed to execute function 'GetMonth'. Parameter '${date}' is invalid`)
+    if (this.dateCalculator.isDate(date)) {
+        return this.dateCalculator.getDateField(date, 'MONTH')
     }
+    if (this.dateCalculator.isDateTime(date)) {
+        return this.dateCalculator.getDateTimeField(date, 'MONTH', this.functionContext.zoneId)
+    }
+    throw new Error(`Failed to execute function 'GetMonth' with parameters: ${[...arguments].join()}`)
 }
 
-function WithYear(date: Date | undefined, year: number | undefined): Date {
+function WithYear(this: InternalFunctionScope, date: Date | undefined, year: number | undefined): Date {
     if (!date) {
-        throw new Error(`Failed to execute function 'WithYear', because date value is null or undefined`)
+        throw new Error(message('WithYear', message.reason.firstParam))
     }
     if (!year) {
-        throw new Error(`Failed to execute function 'WithYear', because year value is null or undefined`)
+        throw new Error(message('WithYear', message.reason.firstParam))
     }
     ensureValidYear('WithYear', year)
-
-    const dateCopy = new Date(date)
-    dateCopy.setFullYear(year)
-
-    return resetToLastValidDayOfMonthIfNeeded(dateCopy, date.getDate())
+    if (this.dateCalculator.isDate(date)) {
+        return this.dateCalculator.withDateField(date, 'YEAR', year)
+    }
+    if (this.dateCalculator.isDateTime(date)) {
+        return this.dateCalculator.withDateTimeField(date, 'YEAR', year, this.functionContext.zoneId)
+    }
+    throw new Error(`Failed to execute function 'WithYear' with parameters: ${[...arguments].join()}`)
 }
 
-function WithMonth(date: Date | undefined, month: number | undefined): Date {
+function WithMonth(this: InternalFunctionScope, date: Date | undefined, month: number | undefined): Date {
     if (!date) {
-        throw new Error(`Failed to execute function 'WithMonth', because date value is null or undefined`)
+        throw new Error(message('WithMonth', message.reason.firstParam))
     }
     if (!month) {
-        throw new Error(`Failed to execute function 'WithMonth', because month value is null or undefined`)
+        throw new Error(message('WithMonth', message.reason.firstParam))
     }
     ensureValidMonth('WithMonth', month)
-
-    const dateCopy = new Date(date)
-    dateCopy.setMonth(month - 1)
-
-    return resetToLastValidDayOfMonthIfNeeded(dateCopy, date.getDate())
+    if (this.dateCalculator.isDate(date)) {
+        return this.dateCalculator.withDateField(date, 'MONTH', month)
+    }
+    if (this.dateCalculator.isDateTime(date)) {
+        return this.dateCalculator.withDateTimeField(date, 'MONTH', month, this.functionContext.zoneId)
+    }
+    throw new Error(`Failed to execute function 'WithMonth' with parameters: ${[...arguments].join()}`)
 }
 
-function WithDay(date: Date | undefined, day: number | undefined): Date {
+function WithDay(this: InternalFunctionScope, date: Date | undefined, day: number | undefined): Date {
     if (!date) {
-        throw new Error(`Failed to execute function 'WithDay', because date value is null or undefined`)
+        throw new Error(message('WithDay', message.reason.firstParam))
     }
     if (!day) {
-        throw new Error(`Failed to execute function 'WithDay', because day value is null or undefined`)
+        throw new Error(message('WithDay', message.reason.firstParam))
     }
-    ensureValidDay('WithDay', day)
-
-    const dateCopy = new Date(date)
-    dateCopy.setDate(day)
-
-    if (dateCopy.getDate() != day) {
-        throw new Error(
-            `Cannot set day '${day}' in date '${date}' because month '${
-                date.getMonth() + 1
-            }' of year '${date.getFullYear()}' does not have this day.`,
-        )
+    ensureValidMonth('WithDay', day)
+    if (this.dateCalculator.isDate(date)) {
+        return this.dateCalculator.withDateField(date, 'DAY_OF_MONTH', day)
     }
-
-    return dateCopy
+    if (this.dateCalculator.isDateTime(date)) {
+        return this.dateCalculator.withDateTimeField(date, 'DAY_OF_MONTH', day, this.functionContext.zoneId)
+    }
+    throw new Error(`Failed to execute function 'WithDay' with parameters: ${[...arguments].join()}`)
 }
 
-function NumberOfDaysBetween(start?: Date, end?: Date): number {
-    if (!start) {
+function NumberOfDaysBetween(this: InternalFunctionScope, d1?: Date, d2?: Date): number {
+    if (!d1) {
         throw new Error(message('NumberOfDaysBetween', message.reason.firstParam))
     }
-    if (!end) {
+    if (!d2) {
         throw new Error(message('NumberOfDaysBetween', message.reason.secondParam))
     }
-    const offsetInMilliseconds = (end.getTimezoneOffset() - start.getTimezoneOffset()) * 60 * 1000
-    const day = 24 * 60 * 60 * 1000
-    const diffTime = Math.abs(start.getTime() - end.getTime() + offsetInMilliseconds)
-    return Math.floor(diffTime / day)
+    return this.dateCalculator.differenceBetweenDates(d1, d2, 'DAY_OF_MONTH')
 }
 
-function NumberOfMonthsBetween(d1?: Date, d2?: Date): number {
+function NumberOfMonthsBetween(this: InternalFunctionScope, d1?: Date, d2?: Date): number {
     if (!d1) {
         throw new Error(message('NumberOfMonthsBetween', message.reason.firstParam))
     }
     if (!d2) {
         throw new Error(message('NumberOfMonthsBetween', message.reason.secondParam))
     }
-    try {
-        const date1 = AsDate(d1)
-        const date2 = AsDate(d2)
-
-        const from = date1 < date2 ? date1 : date2
-        const to = date2 > date1 ? date2 : date1
-
-        let fullMonths = (to.getFullYear() - from.getFullYear()) * 12 + (to.getMonth() - from.getMonth())
-        if (fullMonths > 0) {
-            fullMonths -= 1
-        }
-
-        let partialMonth = 0
-        if (
-            (from.getFullYear() < to.getFullYear() || from.getMonth() < to.getMonth()) &&
-            to.getDate() >= from.getDate()
-        ) {
-            partialMonth = 1
-        }
-
-        return fullMonths + partialMonth
-    } catch (error) {
-        throw new Error(message('NumberOfMonthsBetween', 'Parameters are invalid: ' + [...arguments]))
-    }
+    return this.dateCalculator.differenceBetweenDates(d1, d2, 'MONTH')
 }
 
-function NumberOfYearsBetween(start?: Date, end?: Date): number {
-    return Math.floor(NumberOfMonthsBetween(start, end) / 12)
+function NumberOfYearsBetween(this: InternalFunctionScope, d1?: Date, d2?: Date): number {
+    if (!d1) {
+        throw new Error(message('NumberOfYearsBetween', message.reason.firstParam))
+    }
+    if (!d2) {
+        throw new Error(message('NumberOfYearsBetween', message.reason.secondParam))
+    }
+    return this.dateCalculator.differenceBetweenDates(d1, d2, 'YEAR')
 }
 
 function Format(date?: Date, format = 'YYYY-MM-DD'): string {
@@ -253,25 +298,6 @@ function Format(date?: Date, format = 'YYYY-MM-DD'): string {
         throw new Error(message('Format', message.reason.firstParam))
     }
     return moment(date).format(format)
-}
-
-function tryParseDateString(functionName: string, dateString: string): Date {
-    let ds = dateString
-
-    const regexp = new RegExp('^\\d{4}-\\d{2}-\\d{2}$')
-    if (regexp.test(dateString)) {
-        ds = `${dateString}T00:00:00`
-    }
-
-    const date = new Date(ds)
-    if (date.toString() === 'Invalid Date') {
-        throw new Error("Failed to execute function 'Date' or 'DateTime' with parameters: " + [...arguments].join())
-    }
-
-    ensureValidYear(functionName, date.getFullYear())
-    ensureValidMonth(functionName, date.getMonth() + 1)
-    ensureValidDay(functionName, date.getDate())
-    return date
 }
 
 function ensureValidYear(functionName: string, year: number): void {
@@ -297,46 +323,3 @@ function ensureValidDay(functionName: string, day: number): void {
         )
     }
 }
-
-/**
- *  When changing date to some month-of-year it may shift day-of-month to the first day of the next month when requested
- *  month-of-year does not have such a day.
- *  In this case we need to do a correction so that it works equivalently to Java implementation.
- *  A correction is to rewind to last valid day-of-month.
- *  By setting day to 0 the date is reset to last day of the previous month which is the last valid day-of-month.
- *
- * @param date after modification
- * @param previousDay of date before modification
- */
-function resetToLastValidDayOfMonthIfNeeded(date: Date, previousDay: number): Date {
-    if (date.getDate() != previousDay) {
-        date.setDate(0)
-    }
-    return date
-}
-
-export const dateFunctions = {
-    Format,
-    GetYear,
-    GetMonth,
-    GetDay,
-    Today,
-    Now,
-    Date: FxDate,
-    DateTime: FxDate,
-    PlusYears,
-    PlusMonths,
-    PlusDays,
-    AsDate,
-    AsTime,
-    NumberOfDaysBetween,
-    NumberOfMonthsBetween,
-    NumberOfYearsBetween,
-    IsDateBetween,
-    WithYear,
-    WithMonth,
-    WithDay,
-}
-
-const dateAfter = (date: Date, start: Date) => date >= start
-const dateBefore = (date: Date, end: Date) => date <= end

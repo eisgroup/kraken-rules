@@ -36,7 +36,7 @@ public class Dates {
     }
 
     public static LocalDateTime convertISOToLocalDateTime(String isoDateTime) {
-        return LocalDateTime.ofInstant(ZonedDateTime.parse(isoDateTime).toInstant(), ZoneId.systemDefault());
+        return ZonedDateTime.parse(isoDateTime).withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
     }
 
     public static String convertLocalDateToISO(LocalDate localDate) {

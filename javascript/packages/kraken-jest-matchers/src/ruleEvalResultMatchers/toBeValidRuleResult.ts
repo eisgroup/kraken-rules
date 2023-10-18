@@ -80,7 +80,7 @@ export function k_toBeValidRuleResult<T extends RuleEvaluationResult>(
                 promise: this.promise,
             })
         }
-        case RuleEvaluationResults.Kind.NOT_APPLICABLE:
+        case Kind.NOT_APPLICABLE:
             return error(
                 '.k_toBeValidRuleResult',
                 `Payload ${JSON.stringify(received)} which is not applicable due to condition evaluation result.`,

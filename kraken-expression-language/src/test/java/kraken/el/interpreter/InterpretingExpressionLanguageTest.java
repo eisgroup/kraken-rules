@@ -17,6 +17,7 @@ package kraken.el.interpreter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -28,6 +29,8 @@ import kraken.el.ast.builder.AstBuilder;
 import kraken.el.ast.builder.Literals;
 import kraken.el.ast.token.Token;
 import kraken.el.TypeProvider;
+import kraken.el.FunctionContextHolder;
+import kraken.el.FunctionContextHolder.FunctionContext;
 import kraken.el.functionregistry.FunctionInvoker;
 import kraken.el.interpreter.evaluator.InterpretingExpressionEvaluator;
 import kraken.el.scope.Scope;
@@ -694,10 +697,11 @@ public class InterpretingExpressionLanguageTest {
             new InterpretingExpressionEvaluator(new ExpressionLanguageConfiguration(false, true)),
             typeProvider
         );
-        return new EvaluationContext(object, variables, typeProvider, functionInvoker);
+        return new EvaluationContext(object, variables, typeProvider, functionInvoker, ZoneId.systemDefault());
     }
 
     private void mockInvocationContext(EvaluationContext evaluationContext) {
         InvocationContextHolder.setInvocationContext(new InvocationContext(evaluationContext));
+        FunctionContextHolder.setFunctionContext(new FunctionContext(evaluationContext.getZoneId()));
     }
 }

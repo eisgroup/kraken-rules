@@ -41,8 +41,6 @@ public final class EvaluationSession {
 
     private final LocalDateTime timestamp;
 
-    private final Map<String, Object> expressionContext;
-
     private final KrakenTypeProvider krakenTypeProvider;
 
     private final Map<FunctionHeader, KelFunction> functions;
@@ -50,19 +48,17 @@ public final class EvaluationSession {
     private final String namespace;
 
     public EvaluationSession(EvaluationConfig evaluationConfig,
-                             Map<String, Object> expressionContext,
                              KrakenTypeProvider krakenTypeProvider,
                              Map<FunctionHeader, KelFunction> functions,
                              String namespace,
                              ContextModelTree contextModelTree) {
         this.evaluationConfig = evaluationConfig;
-        this.contextModelTree = contextModelTree;
-        this.timestamp = LocalDateTime.now();
-        this.sessionToken = TOKEN_GENERATOR.generateNewToken(timestamp);
-        this.expressionContext = expressionContext;
         this.krakenTypeProvider = krakenTypeProvider;
         this.functions = functions;
         this.namespace = namespace;
+        this.contextModelTree = contextModelTree;
+        this.timestamp = LocalDateTime.now();
+        this.sessionToken = TOKEN_GENERATOR.generateNewToken(timestamp);
     }
 
     public EvaluationConfig getEvaluationConfig() {
@@ -75,10 +71,6 @@ public final class EvaluationSession {
 
     public LocalDateTime getTimestamp() {
         return timestamp;
-    }
-
-    public Map<String, Object> getExpressionContext() {
-        return expressionContext;
     }
 
     public KrakenTypeProvider getKrakenTypeProvider() {
@@ -96,4 +88,5 @@ public final class EvaluationSession {
     public ContextModelTree getContextModelTree() {
         return contextModelTree;
     }
+
 }

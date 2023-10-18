@@ -62,6 +62,7 @@ export * from './engine/results/field_metadata_reducer/FieldMetadataReducer'
 // error
 export * from './error/KrakenRuntimeError'
 
+export { DateCalculator, DateField, DateTimeField } from './engine/runtime/expressions/date/DateCalculator'
 export * from './engine/runtime/DataContextPathProvider'
 
 // re-export

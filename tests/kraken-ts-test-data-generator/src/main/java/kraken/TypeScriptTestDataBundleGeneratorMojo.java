@@ -27,6 +27,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import kraken.context.Context;
 import kraken.runtime.EvaluationMode;
 import org.apache.commons.io.IOUtils;
 import org.apache.maven.plugin.AbstractMojo;
@@ -283,10 +284,9 @@ public class TypeScriptTestDataBundleGeneratorMojo extends AbstractMojo {
     }
 
     private String resolveBundleAsJsonString(String entryPointName, Map<String, Object> context) {
-        var defaultDimensions = new HashMap<String, Object>();
         EntryPointBundle bundle = entryPointBundleFactory.build(
             entryPointName,
-            context == null ? defaultDimensions : context,
+            context == null ? Map.of() : context,
             EvaluationMode.ALL
         );
         // strip engine version to avoid version incompatibility warnings in local testing environments and snapshots
