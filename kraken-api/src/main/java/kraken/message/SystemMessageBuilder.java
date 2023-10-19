@@ -217,6 +217,7 @@ public class SystemMessageBuilder {
             "kbs045",
             "Cycle detected between fields: {0}. Involved rules are: {1}"
         ),
+        @Documented
         DEFAULT_RULE_MULTIPLE_ON_SAME_FIELD(
             "kbs046",
             "Field ''{0}'' has more than one applicable default rule: {1}. "
@@ -287,6 +288,7 @@ public class SystemMessageBuilder {
         public String getMessageTemplate() {
             return messageTemplate;
         }
+
     }
 
     private final Message message;
@@ -308,9 +310,15 @@ public class SystemMessageBuilder {
     }
 
     public SystemMessage build() {
+        String message = DocumentationAppender.append(
+            this.message,
+            MessageFormat.format(this.message.getMessageTemplate(), this.parameters));
+
+
         return new SystemMessage(
             this.message.getCode(),
-            MessageFormat.format(this.message.getMessageTemplate(), this.parameters)
+            message
         );
     }
+
 }

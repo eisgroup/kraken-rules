@@ -22,6 +22,7 @@ import static kraken.model.project.validator.Severity.WARNING;
 import java.text.MessageFormat;
 import java.util.Objects;
 
+import kraken.message.DocumentationAppender;
 import kraken.model.KrakenModelItem;
 import kraken.namespace.Namespaced;
 
@@ -652,6 +653,24 @@ public class ValidationMessageBuilder {
                 + "which is not annotated as @ServerSideOnly",
             ERROR
         ),
+        DUPLICATE_RULE_VERSION(
+            "kvr053",
+            "Rule version has duplicates. "
+                + "Rule version is uniquely identified by rule name and dimensions. "
+                + "If more than one rule version with the same name and dimensions is present, "
+                + "then only one of duplicated rules versions will be selected for evaluation. "
+                + "Review all rule definitions and remove duplicates.",
+            WARNING
+        ),
+        DUPLICATE_ENTRYPOINT_VERSION(
+            "kvr054",
+            "Entry point version has duplicates. "
+                + "Entry point version is uniquely identified by entry point name and dimensions. "
+                + "If more than one entry point version with the same name and dimensions is present, "
+                + "then only one of duplicated entry points versions will be selected for evaluation. "
+                + "Review all entry point definitions and remove duplicates.",
+            WARNING
+        ),
         ;
 
         private final String code;
@@ -700,10 +719,16 @@ public class ValidationMessageBuilder {
     }
 
     public ValidationMessage build() {
+        String message = MessageFormat.format(this.message.getMessageTemplate(), this.parameters);
+
+        if (this.message instanceof Enum<?>) {
+            message = DocumentationAppender.append((Enum<?>) this.message, message);
+        }
+
         return new ValidationMessage(
             this.item,
             this.message.getCode(),
-            MessageFormat.format(this.message.getMessageTemplate(), this.parameters),
+            message,
             this.message.getMessageTemplate(),
             this.parameters,
             this.message.getSeverity()

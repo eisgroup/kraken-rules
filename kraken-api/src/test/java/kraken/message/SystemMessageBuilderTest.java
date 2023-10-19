@@ -42,4 +42,5 @@ public class SystemMessageBuilderTest {
 
         assertThat("Duplicate system message codes found!", duplicateMessageCodes, empty());
     }
+
 }

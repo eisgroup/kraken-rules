@@ -6,7 +6,7 @@
     <groupId>kraken</groupId>
     <artifactId>parent-pom</artifactId>
     <packaging>pom</packaging>
-    <version>1.53.0</version>
+    <version>1.54.0</version>
 
     <name>Kraken</name>
 

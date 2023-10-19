@@ -15,14 +15,11 @@
  */
 package kraken.model.project.validator.entrypoint;
 
-import static kraken.model.project.validator.Severity.ERROR;
 import static kraken.model.project.validator.ValidationMessageBuilder.Message.ENTRYPOINT_NAME_IS_NULL;
 
 import kraken.model.entrypoint.EntryPoint;
 import kraken.model.project.KrakenProject;
-import kraken.model.project.validator.ValidationMessage;
 import kraken.model.project.validator.ValidationMessageBuilder;
-import kraken.model.project.validator.ValidationMessageBuilder.Message;
 import kraken.model.project.validator.ValidationSession;
 import kraken.model.project.validator.namespaced.NamespacedValidator;
 
@@ -35,12 +32,14 @@ public class EntryPointDefinitionValidator {
     private final EntryPointRuleExistenceValidator entryPointRuleExistenceValidator;
     private final EntryPointServerSideOnlyValidator entryPointServerSideOnlyValidator;
     private final EntryPointDimensionsValidator entryPointDimensionsValidator;
+    private final EntryPointVersionDuplicationValidator entryPointDuplicationValidator;
 
     public EntryPointDefinitionValidator(KrakenProject krakenProject) {
         this.entryPointIncludesValidator = new EntryPointIncludesValidator(krakenProject);
         this.entryPointRuleExistenceValidator = new EntryPointRuleExistenceValidator(krakenProject);
         this.entryPointServerSideOnlyValidator = new EntryPointServerSideOnlyValidator(krakenProject);
         this.entryPointDimensionsValidator = new EntryPointDimensionsValidator(krakenProject);
+        this.entryPointDuplicationValidator = new EntryPointVersionDuplicationValidator(krakenProject);
     }
 
     public void validate(EntryPoint entryPoint, ValidationSession session) {
@@ -55,6 +54,7 @@ public class EntryPointDefinitionValidator {
             entryPointRuleExistenceValidator.validate(entryPoint, epValidationSession);
             entryPointServerSideOnlyValidator.validate(entryPoint, epValidationSession);
             entryPointDimensionsValidator.validate(entryPoint, epValidationSession);
+            entryPointDuplicationValidator.validate(entryPoint, epValidationSession);
         }
 
         session.addAll(epValidationSession.getValidationMessages());
