@@ -1,37 +1,37 @@
 assertionPayload(payload) ::= <<
-Assert <payload.assertionExpression.expressionString><validationMessage(payload)><overridable(payload)>
+    Assert <payload.assertionExpression.expressionString><validationMessage(payload)><overridable(payload)>
 >>
 
 regExpPayload(payload) ::= <<
-Assert Matches "<payload.regExp>"<validationMessage(payload)><overridable(payload)>
+    Assert Matches "<payload.regExp>"<validationMessage(payload)><overridable(payload)>
 >>
 
 usageMandatoryPayload(payload) ::= <<
-Set Mandatory<validationMessage(payload)><overridable(payload)>
+    Set Mandatory<validationMessage(payload)><overridable(payload)>
 >>
 
 usageEmptyPayload(payload) ::= <<
-Assert Empty<validationMessage(payload)><overridable(payload)>
+    Assert Empty<validationMessage(payload)><overridable(payload)>
 >>
 
 sizeMaxPayload(payload) ::= <<
-Assert Size Max <payload.size><validationMessage(payload)><overridable(payload)>
+    Assert Size Max <payload.size><validationMessage(payload)><overridable(payload)>
 >>
 
 sizeMinPayload(payload) ::= <<
-Assert Size Min <payload.size><validationMessage(payload)><overridable(payload)>
+    Assert Size Min <payload.size><validationMessage(payload)><overridable(payload)>
 >>
 
 sizeEqualsPayload(payload) ::= <<
-Assert Size <payload.size><validationMessage(payload)><overridable(payload)>
+    Assert Size <payload.size><validationMessage(payload)><overridable(payload)>
 >>
 
 sizeRangePayload(payload) ::= <<
-Assert Size Min <payload.min> Max <payload.max><validationMessage(payload)><overridable(payload)>
+    Assert Size Min <payload.min> Max <payload.max><validationMessage(payload)><overridable(payload)>
 >>
 
 numberSetPayload(payload) ::= <<
-Assert Number<\\\>
+    Assert Number<\\\>
 <if(payload.min)> Min <payload.min><endif><\\\>
 <if(payload.max)> Max <payload.max><endif><\\\>
 <if(payload.step)> Step <payload.step><endif><\\\>
@@ -39,42 +39,44 @@ Assert Number<\\\>
 >>
 
 lengthPayload(payload) ::= <<
-Assert Length <payload.length><validationMessage(payload)><overridable(payload)>
+    Assert Length <payload.length><validationMessage(payload)><overridable(payload)>
 >>
 
 valueListPayload(payload) ::= <<
-Assert In <payload.valueList>
+    Assert In <payload.valueList>
 <validationMessage(payload)><overridable(payload)>
 >>
 
 defaultValuePayload(payload) ::= <<
-Default To <payload.valueExpression.expressionString>
+    Default To <payload.valueExpression.expressionString>
 >>
 
 resetValuePayload(payload) ::= <<
-Reset To <payload.valueExpression.expressionString>
+    Reset To <payload.valueExpression.expressionString>
 >>
 
 nullValuePayload() ::= <<
-Reset
+    Reset
 >>
 
 visibilityPayload() ::= <<
-Set Hidden
+    Set Hidden
 >>
 
 accessibilityPayload() ::= <<
-Set Disabled
+    Set Disabled
 >>
 
 validationMessage(payload) ::= <<
 <if(payload.errorMessage)><if(payload.errorMessage.errorCode)>
-<if(!payload.severity)>Error<else><payload.severity><endif> <errorMessage(payload.errorMessage)><endif><endif>
+<if(!payload.severity)>
+    Error<else>
+    <payload.severity><endif> <errorMessage(payload.errorMessage)><endif><endif>
 >>
 
 overridable(payload) ::= <<
 <if(payload.overridable)>
-Overridable<overrideGroup(payload.overrideGroup)><endif>
+    Overridable<overrideGroup(payload.overrideGroup)><endif>
 >>
 
 overrideGroup(overrideGroup) ::= <<

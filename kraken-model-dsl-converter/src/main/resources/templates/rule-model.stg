@@ -15,6 +15,6 @@ Rule "<rule.name; format="deescapeString">" On <rule.context>.<rule.targetPath> 
     <if(rule.condition)>
     When <rule.condition.expression.expressionString>
     <endif>
-    <rule.payload>
+<rule.payload>
 }
 >>
