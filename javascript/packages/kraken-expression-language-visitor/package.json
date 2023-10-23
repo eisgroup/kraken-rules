@@ -1,6 +1,6 @@
 {
     "name": "kraken-expression-language-visitor",
-    "version": "1.54.1-stage.0",
+    "version": "1.55.1-stage.0",
     "main": "./target/dist/js/src/index.js",
     "types": "./target/dist/definitions/src/index.d.ts",
     "publishConfig": {
@@ -35,5 +35,5 @@
         "target/dist/definitions",
         "target/dist/js"
     ],
-    "gitHead": "3903ec43ee610bb614b147cbe836dcdfc038c4c3"
+    "gitHead": "efcf1a5e805088ee8af67ef21c2b8ce2fea62eb4"
 }

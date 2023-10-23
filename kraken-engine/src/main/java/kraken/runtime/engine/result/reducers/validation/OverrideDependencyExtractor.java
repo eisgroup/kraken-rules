@@ -53,7 +53,7 @@ public class OverrideDependencyExtractor {
         for(Dependency dependency : rule.getDependencies()) {
             if(isFieldDependency(dependency)) {
                 DataReference reference = dataContext.getDataContextReferences().get(dependency.getContextName());
-                if(isReferenceSingular(reference)) {
+                if (isReferenceSingular(reference) && reference.getDataContext() != null) {
                     ContextField contextField = reference.getDataContext().getContextDefinition().getFields().get(dependency.getFieldName());
                     if (isFieldSimplePrimitive(contextField)) {
                         Object value = krakenExpressionEvaluator.evaluateTargetField(
