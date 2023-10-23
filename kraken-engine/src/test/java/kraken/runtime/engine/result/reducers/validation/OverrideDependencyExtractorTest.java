@@ -81,6 +81,24 @@ public class OverrideDependencyExtractorTest {
     }
 
     @Test
+    public void shouldNotExtractDependencyWhenReferenceDataContextIsNull() {
+        Map<String, OverrideDependency> overrideDependencies = overrideDependencyExtractor.extractOverrideDependencies(
+            rule(
+                selfDependency("RiskItem", "itemName")
+            ),
+            context(
+                "Policy",
+                List.of(),
+                List.of(
+                    ref("RiskItem", null, Cardinality.SINGLE)
+                )
+            )
+        );
+
+        assertThat(overrideDependencies.values(), empty());
+    }
+
+    @Test
     public void shouldNotExtractFieldDependency() {
         Map<String, OverrideDependency> overrideDependencies = overrideDependencyExtractor.extractOverrideDependencies(
                 rule(
@@ -181,7 +199,7 @@ public class OverrideDependencyExtractorTest {
     }
 
     private DataReference ref(String refName, DataContext dataContext, Cardinality cardinality) {
-        return new DataReference(refName, List.of(dataContext), cardinality);
+        return new DataReference(refName, dataContext == null ? List.of() : List.of(dataContext), cardinality);
     }
 
     private RuntimeRule rule(Dependency... dependencies) {
