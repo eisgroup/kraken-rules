@@ -197,7 +197,7 @@ Object {
         ],
       },
     },
-    "ruleTimezoneId": "Europe/Vilnius",
+    "ruleTimeZoneId": "Europe/Vilnius",
   },
   "fieldResults": Object {
     "COLLCoverage:2:deductibleAmount": Object {
@@ -465,7 +465,7 @@ Object {
         ],
       },
     },
-    "ruleTimezoneId": "Europe/Vilnius",
+    "ruleTimeZoneId": "Europe/Vilnius",
   },
   "fieldResults": Object {
     "COLLCoverage:2:expirationDate": Object {
@@ -848,7 +848,7 @@ Object {
         ],
       },
     },
-    "ruleTimezoneId": "Europe/Vilnius",
+    "ruleTimeZoneId": "Europe/Vilnius",
   },
   "fieldResults": Object {
     "COLLCoverage:2:expirationDate": Object {
@@ -1292,7 +1292,7 @@ Object {
         ],
       },
     },
-    "ruleTimezoneId": "Europe/Vilnius",
+    "ruleTimeZoneId": "Europe/Vilnius",
   },
   "fieldResults": Object {
     "COLLCoverage:2:deductibleAmount": Object {
@@ -1901,7 +1901,7 @@ Object {
         ],
       },
     },
-    "ruleTimezoneId": "Europe/Vilnius",
+    "ruleTimeZoneId": "Europe/Vilnius",
   },
   "fieldResults": Object {
     "COLLCoverage:2:code": Object {
@@ -2825,7 +2825,7 @@ Object {
         ],
       },
     },
-    "ruleTimezoneId": "Europe/Vilnius",
+    "ruleTimeZoneId": "Europe/Vilnius",
   },
   "fieldResults": Object {
     "COLLCoverage:2:code": Object {
@@ -3457,7 +3457,7 @@ Object {
         ],
       },
     },
-    "ruleTimezoneId": "Europe/Vilnius",
+    "ruleTimeZoneId": "Europe/Vilnius",
   },
   "fieldResults": Object {
     "COLLCoverage:2:code": Object {
@@ -3626,7 +3626,7 @@ Object {
         ],
       },
     },
-    "ruleTimezoneId": "Europe/Vilnius",
+    "ruleTimeZoneId": "Europe/Vilnius",
   },
   "fieldResults": Object {
     "FullCoverage:2:deductibleAmount": Object {
@@ -3853,7 +3853,7 @@ Object {
         ],
       },
     },
-    "ruleTimezoneId": "Europe/Vilnius",
+    "ruleTimeZoneId": "Europe/Vilnius",
   },
   "fieldResults": Object {
     "FullCoverage:2:code": Object {
@@ -4087,7 +4087,7 @@ Object {
         ],
       },
     },
-    "ruleTimezoneId": "Europe/Vilnius",
+    "ruleTimeZoneId": "Europe/Vilnius",
   },
   "fieldResults": Object {
     "COLLCoverage:2:code": Object {
@@ -4387,7 +4387,7 @@ Object {
         ],
       },
     },
-    "ruleTimezoneId": "Europe/Vilnius",
+    "ruleTimeZoneId": "Europe/Vilnius",
   },
   "fieldResults": Object {
     "AddressInfo:17:countryCd": Object {

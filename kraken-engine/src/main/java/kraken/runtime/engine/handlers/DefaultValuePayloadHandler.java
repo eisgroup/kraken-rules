@@ -243,8 +243,8 @@ public class DefaultValuePayloadHandler implements RulePayloadHandler {
                     return value;
                 }
                 if(value instanceof LocalDateTime) {
-                    var ruleTimezoneId = session.getEvaluationConfig().getRuleTimezoneId();
-                    return DateCalculator.getInstance().toDate((LocalDateTime) value, ruleTimezoneId);
+                    var ruleTimeZoneId = session.getEvaluationConfig().getRuleTimeZoneId();
+                    return DateCalculator.getInstance().toDate((LocalDateTime) value, ruleTimeZoneId);
                 }
                 throwAndLogIncompatibleValueType(value, dataContext, field);
                 break;
@@ -253,8 +253,8 @@ public class DefaultValuePayloadHandler implements RulePayloadHandler {
                     return value;
                 }
                 if(value instanceof LocalDate) {
-                    var ruleTimezoneId = session.getEvaluationConfig().getRuleTimezoneId();
-                    return DateCalculator.getInstance().toDateTime((LocalDate) value, ruleTimezoneId);
+                    var ruleTimeZoneId = session.getEvaluationConfig().getRuleTimeZoneId();
+                    return DateCalculator.getInstance().toDateTime((LocalDate) value, ruleTimeZoneId);
                 }
                 throwAndLogIncompatibleValueType(value, dataContext, field);
                 break;

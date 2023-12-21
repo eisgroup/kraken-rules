@@ -39,11 +39,18 @@ export namespace debug {
         const entryPointKeys = Object.keys(entryPointKeyObject)
 
         export class DevToolsDebugger implements debug.api.Debugger {
-            breakPoints: Map<string, debug.api.DebugOptions> = new Map()
-            #i = 1
+            breakPoints: Map<string, debug.api.DebugOptions>
+            #i: number
 
-            log = false
-            break = true
+            log: boolean
+            break: boolean
+
+            constructor(previous?: debug.api.Debugger) {
+                this.breakPoints = previous ? previous.breakPoints : new Map()
+                this.#i = previous ? previous.breakPoints.size + 1 : 1
+                this.log = previous ? previous.log : false
+                this.break = previous ? previous.break : true
+            }
 
             debugRule(options: debug.api.DebugRuleOptions) {
                 this.#validate(ruleKeys, options)

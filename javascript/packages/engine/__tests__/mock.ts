@@ -276,7 +276,7 @@ const evaluator = new ExpressionEvaluator(
 )
 evaluator.rebuildFunctions(
     FunctionRegistry.INSTANCE.bindRegisteredFunctions({
-        zoneId: session.ruleTimezoneId,
+        zoneId: session.ruleTimeZoneId,
         dateCalculator: session.dateCalculator,
     }),
 )
@@ -290,7 +290,7 @@ const policyEvaluator = new ExpressionEvaluator(
 )
 policyEvaluator.rebuildFunctions(
     FunctionRegistry.INSTANCE.bindRegisteredFunctions({
-        zoneId: session.ruleTimezoneId,
+        zoneId: session.ruleTimeZoneId,
         dateCalculator: session.dateCalculator,
     }),
 )

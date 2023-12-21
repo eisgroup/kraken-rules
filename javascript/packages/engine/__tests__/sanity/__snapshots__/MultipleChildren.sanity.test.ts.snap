@@ -258,7 +258,7 @@ Object {
         ],
       },
     },
-    "ruleTimezoneId": "Europe/Vilnius",
+    "ruleTimeZoneId": "Europe/Vilnius",
   },
   "fieldResults": Object {
     "SecondaryInsured:1:name": Object {

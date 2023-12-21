@@ -43,8 +43,7 @@ public final class EntryPointVersionDuplicationValidator {
     }
 
     public void validate(EntryPoint entryPoint, ValidationSession validationSession) {
-        boolean hasDuplicates = krakenProject.getEntryPointVersions().getOrDefault(entryPoint.getName(), List.of())
-            .stream()
+        boolean hasDuplicates = krakenProject.getEntryPointVersions().get(entryPoint.getName()).stream()
             .filter(entryPointVersion -> !Objects.equals(entryPoint.getEntryPointVariationId(),
                 entryPointVersion.getEntryPointVariationId()))
             .anyMatch(entryPointVersion -> isDuplicate(entryPoint, entryPointVersion));

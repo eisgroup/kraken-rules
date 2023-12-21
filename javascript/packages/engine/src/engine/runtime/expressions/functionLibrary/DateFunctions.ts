@@ -18,6 +18,8 @@
 import moment from 'moment'
 import { message } from './function.utils'
 import { InternalFunctionScope } from './Registry'
+import { DateCalculator, DateField, ISO_DATE, ISO_DATETIME_NO_OFFSET, ISO_DATETIME_ZULU } from '../date/DateCalculator'
+import { ensureValidDay, ensureValidMonth, ensureValidYear } from '../math/Temporal'
 
 export const dateFunctions = {
     Format,
@@ -42,125 +44,79 @@ export const dateFunctions = {
     WithDay,
 }
 
-const ISO_DATE = new RegExp('^\\d{4}-\\d{2}-\\d{2}$')
-const ISO_DATETIME_NO_OFFSET = new RegExp('^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}$')
-
-function Today(this: InternalFunctionScope): Date {
+function Today(this: InternalFunctionScope): unknown {
     return this.dateCalculator.today(this.functionContext.zoneId)
 }
 
-function Now(this: InternalFunctionScope): Date {
+function Now(this: InternalFunctionScope): unknown {
     return this.dateCalculator.now()
 }
 
-function FxDate(dateString?: string): Date
-function FxDate(year?: number, month?: number, day?: number): Date
+function FxDate(dateString?: string): unknown
+function FxDate(year?: number, month?: number, day?: number): unknown
 
-function FxDate(this: InternalFunctionScope, dateStringOrYear?: string | number, month?: number, day?: number): Date {
+function FxDate(
+    this: InternalFunctionScope,
+    dateStringOrYear?: string | number,
+    month?: number,
+    day?: number,
+): unknown {
+    const dc = this.dateCalculator
+    const zoneId = this.functionContext.zoneId
     if (typeof dateStringOrYear === 'string') {
-        let date
         if (ISO_DATETIME_NO_OFFSET.test(dateStringOrYear)) {
-            const dateTime = this.dateCalculator.createDateTime(dateStringOrYear, this.functionContext.zoneId)
-            date = this.dateCalculator.toDate(dateTime, this.functionContext.zoneId)
+            return dc.toDate(dc.createDateTime(dateStringOrYear, zoneId), zoneId)
         } else if (ISO_DATE.test(dateStringOrYear)) {
-            date = this.dateCalculator.createDate(dateStringOrYear)
-        } else {
-            const dateTime = this.dateCalculator.createDateTime(dateStringOrYear)
-            date = this.dateCalculator.toDate(dateTime, this.functionContext.zoneId)
+            return dc.createDate(dateStringOrYear)
+        } else if (ISO_DATETIME_ZULU.test(dateStringOrYear)) {
+            return dc.toDate(dc.createDateTime(dateStringOrYear), zoneId)
         }
-        if (date.toString() === 'Invalid Date') {
-            throw new Error(`Failed to execute function 'Date' with parameters: ${[...arguments].join()}`)
-        }
-        return date
     }
-    if (typeof dateStringOrYear === 'number' && month && day) {
-        ensureValidYear('Date', dateStringOrYear)
-        ensureValidMonth('Date', month)
-        ensureValidDay('Date', day)
-        return this.dateCalculator.createDate(dateStringOrYear, month, day)
+    if (typeof dateStringOrYear === 'number' && month != undefined && day != undefined) {
+        validateYear('Date', dateStringOrYear)
+        validateMonth('Date', month)
+        validateDay('Date', day)
+        return dc.createDate(dateStringOrYear, month, day)
     }
     throw new Error("Failed to execute function 'Date' with parameters: " + [...arguments].join())
 }
 
-function FxDateTime(this: InternalFunctionScope, dateTimeString: string): Date {
-    let dateTime
+function FxDateTime(this: InternalFunctionScope, dateTimeString: string): unknown {
+    const dc = this.dateCalculator
+    const zoneId = this.functionContext.zoneId
+
     if (ISO_DATETIME_NO_OFFSET.test(dateTimeString)) {
-        dateTime = this.dateCalculator.createDateTime(dateTimeString, this.functionContext.zoneId)
+        return dc.createDateTime(dateTimeString, zoneId)
     } else if (ISO_DATE.test(dateTimeString)) {
-        const date = this.dateCalculator.createDate(dateTimeString)
-        dateTime = this.dateCalculator.toDateTime(date, this.functionContext.zoneId)
-    } else {
-        dateTime = this.dateCalculator.createDateTime(dateTimeString)
+        return dc.toDateTime(dc.createDate(dateTimeString), zoneId)
+    } else if (ISO_DATETIME_ZULU.test(dateTimeString)) {
+        return dc.createDateTime(dateTimeString)
     }
-    if (dateTime.toString() === 'Invalid Date') {
-        throw new Error(`Failed to execute function 'DateTime' with parameters: ${[...arguments].join()}`)
-    }
-    return dateTime
+
+    throw new Error("Failed to execute function 'DateTime' with parameters: " + [...arguments].join())
 }
 
-function PlusYears(this: InternalFunctionScope, dateArg?: Date, num?: number): Date {
-    if (!dateArg) {
-        throw new Error(message('PlusYears', message.reason.firstParam))
-    }
-    if (num == undefined) {
-        throw new Error(message('PlusYears', message.reason.secondParam))
-    }
-    if (this.dateCalculator.isDate(dateArg)) {
-        return this.dateCalculator.addDateField(dateArg, 'YEAR', num)
-    }
-    if (this.dateCalculator.isDateTime(dateArg)) {
-        return this.dateCalculator.addDateTimeField(dateArg, 'YEAR', num, this.functionContext.zoneId)
-    }
-    throw new Error(`Failed to execute function 'PlusYears' with parameters: ${[...arguments].join()}`)
-}
-
-function PlusMonths(this: InternalFunctionScope, dateArg?: Date, num?: number): Date {
-    if (!dateArg) {
-        throw new Error(message('PlusMonths', message.reason.firstParam))
-    }
-    if (num == undefined) {
-        throw new Error(message('PlusMonths', message.reason.secondParam))
-    }
-    if (this.dateCalculator.isDate(dateArg)) {
-        return this.dateCalculator.addDateField(dateArg, 'MONTH', num)
-    }
-    if (this.dateCalculator.isDateTime(dateArg)) {
-        return this.dateCalculator.addDateTimeField(dateArg, 'MONTH', num, this.functionContext.zoneId)
-    }
-    throw new Error(`Failed to execute function 'PlusMonths' with parameters: ${[...arguments].join()}`)
-}
-
-function PlusDays(this: InternalFunctionScope, dateArg?: Date, num?: number): Date {
-    if (!dateArg) {
-        throw new Error(message('PlusDays', message.reason.firstParam))
-    }
-    if (num == undefined) {
-        throw new Error(message('PlusDays', message.reason.secondParam))
-    }
-    if (this.dateCalculator.isDate(dateArg)) {
-        return this.dateCalculator.addDateField(dateArg, 'DAY_OF_MONTH', num)
-    }
-    if (this.dateCalculator.isDateTime(dateArg)) {
-        return this.dateCalculator.addDateTimeField(dateArg, 'DAY_OF_MONTH', num, this.functionContext.zoneId)
-    }
-    throw new Error(`Failed to execute function 'PlusDays' with parameters: ${[...arguments].join()}`)
-}
-
-function AsDate(this: InternalFunctionScope, dateArg?: Date): Date {
-    if (!dateArg) {
+function AsDate(this: InternalFunctionScope, dateTimeArg?: unknown): unknown {
+    if (!dateTimeArg) {
         throw new Error(message('AsDate', message.reason.firstParam))
     }
-    return this.dateCalculator.toDate(dateArg, this.functionContext.zoneId)
+    if (this.dateCalculator.isDateTime(dateTimeArg)) {
+        return this.dateCalculator.toDate(dateTimeArg, this.functionContext.zoneId)
+    }
+    throw new Error(message('AsDate', 'First parameter must be DATETIME value.'))
 }
 
-function AsTime(this: InternalFunctionScope, dateArg?: Date): Date {
+function AsTime(this: InternalFunctionScope, dateArg?: unknown): unknown {
     if (!dateArg) {
         throw new Error(message('AsTime', message.reason.firstParam))
     }
-    return this.dateCalculator.toDateTime(dateArg, this.functionContext.zoneId)
+    if (this.dateCalculator.isDate(dateArg)) {
+        return this.dateCalculator.toDateTime(dateArg, this.functionContext.zoneId)
+    }
+    throw new Error(message('AsTime', 'First parameter must be DATE value.'))
 }
 
-function IsDateBetween(this: InternalFunctionScope, dateToCheck?: Date, start?: Date, end?: Date): boolean {
+function IsDateBetween(this: InternalFunctionScope, dateToCheck?: unknown, start?: unknown, end?: unknown): boolean {
     if (!dateToCheck) {
         throw new Error(message('IsDateBetween', message.reason.firstParam))
     }
@@ -170,127 +126,135 @@ function IsDateBetween(this: InternalFunctionScope, dateToCheck?: Date, start?: 
     if (!end) {
         throw new Error(message('IsDateBetween', message.reason.thirdParam))
     }
-    return dateToCheck >= start && dateToCheck <= end
+    if (!this.dateCalculator.isDate(dateToCheck)) {
+        throw new Error(message('IsDateBetween', 'First parameter must be a DATE value.'))
+    }
+    if (!this.dateCalculator.isDate(start)) {
+        throw new Error(message('IsDateBetween', 'Second parameter must be a DATE value.'))
+    }
+    if (!this.dateCalculator.isDate(end)) {
+        throw new Error(message('IsDateBetween', 'Third parameter must be a DATE value.'))
+    }
+
+    const dateToCheckNormalized = this.dateCalculator.convertDateToJavascriptDate(dateToCheck)
+    const startNormalized = this.dateCalculator.convertDateToJavascriptDate(start)
+    const endNormalized = this.dateCalculator.convertDateToJavascriptDate(end)
+
+    return (
+        dateToCheckNormalized.getTime() >= startNormalized.getTime() &&
+        dateToCheckNormalized.getTime() <= endNormalized.getTime()
+    )
 }
 
-function GetDay(this: InternalFunctionScope, date?: Date): number {
+function PlusYears(this: InternalFunctionScope, dateArg?: unknown, num?: number): unknown {
+    return plusField('PlusYears', dateArg, num, 'YEAR', this.dateCalculator, this.functionContext.zoneId)
+}
+
+function PlusMonths(this: InternalFunctionScope, dateArg?: unknown, num?: number): unknown {
+    return plusField('PlusMonths', dateArg, num, 'MONTH', this.dateCalculator, this.functionContext.zoneId)
+}
+
+function PlusDays(this: InternalFunctionScope, dateArg?: unknown, num?: number): unknown {
+    return plusField('PlusDays', dateArg, num, 'DAY_OF_MONTH', this.dateCalculator, this.functionContext.zoneId)
+}
+
+function GetYear(this: InternalFunctionScope, date?: unknown): number {
+    return getField('GetYear', date, 'YEAR', this)
+}
+
+function GetMonth(this: InternalFunctionScope, date?: unknown): number {
+    return getField('GetMonth', date, 'MONTH', this)
+}
+
+function GetDay(this: InternalFunctionScope, date?: unknown): number {
+    return getField('GetDay', date, 'DAY_OF_MONTH', this)
+}
+
+function WithYear(this: InternalFunctionScope, date: unknown, year: number | undefined): unknown {
+    return withField('WithYear', date, year, 'YEAR', this)
+}
+
+function WithMonth(this: InternalFunctionScope, date: unknown, month: number | undefined): unknown {
+    return withField('WithMonth', date, month, 'MONTH', this)
+}
+
+function WithDay(this: InternalFunctionScope, date: unknown, day: number | undefined): unknown {
+    return withField('WithDay', date, day, 'DAY_OF_MONTH', this)
+}
+
+function getField(functionName: string, date: unknown, field: DateField, fc: InternalFunctionScope): number {
     if (!date) {
-        throw new Error(message('GetDay', message.reason.firstParam))
+        throw new Error(message(functionName, message.reason.firstParam))
     }
-    if (this.dateCalculator.isDate(date)) {
-        return this.dateCalculator.getDateField(date, 'DAY_OF_MONTH')
+
+    const dc = fc.dateCalculator
+    const zoneId = fc.functionContext.zoneId
+
+    if (dc.isDate(date)) {
+        return dc.getDateField(date, field)
     }
-    if (this.dateCalculator.isDateTime(date)) {
-        return this.dateCalculator.getDateTimeField(date, 'DAY_OF_MONTH', this.functionContext.zoneId)
+    if (dc.isDateTime(date)) {
+        return dc.getDateTimeField(date, field, zoneId)
     }
-    throw new Error(`Failed to execute function 'GetDay' with parameters: ${[...arguments].join()}`)
+    throw new Error(`Failed to execute function '${functionName}' with parameters: ${[...arguments].join()}`)
 }
 
-function GetYear(this: InternalFunctionScope, date?: Date): number {
+function withField(
+    functionName: string,
+    date: unknown,
+    value: number | undefined,
+    field: DateField,
+    fc: InternalFunctionScope,
+): unknown {
     if (!date) {
-        throw new Error(message('GetYear', message.reason.firstParam))
+        throw new Error(message(functionName, message.reason.firstParam))
     }
-    if (this.dateCalculator.isDate(date)) {
-        return this.dateCalculator.getDateField(date, 'YEAR')
+    if (value == undefined) {
+        throw new Error(message(functionName, message.reason.firstParam))
     }
-    if (this.dateCalculator.isDateTime(date)) {
-        return this.dateCalculator.getDateTimeField(date, 'YEAR', this.functionContext.zoneId)
+
+    if (field === 'YEAR') {
+        validateYear(functionName, value)
+    } else if (field === 'MONTH') {
+        validateMonth(functionName, value)
+    } else if (field === 'DAY_OF_MONTH') {
+        validateDay(functionName, value)
     }
-    throw new Error(`Failed to execute function 'GetYear' with parameters: ${[...arguments].join()}`)
+
+    const dc = fc.dateCalculator
+    const zoneId = fc.functionContext.zoneId
+
+    if (dc.isDate(date)) {
+        return dc.withDateField(date, field, value)
+    }
+    if (dc.isDateTime(date)) {
+        return dc.withDateTimeField(date, field, value, zoneId)
+    }
+    throw new Error(`Failed to execute function '${functionName}' with parameters: ${[...arguments].join()}`)
 }
 
-function GetMonth(this: InternalFunctionScope, date?: Date): number {
+function plusField(
+    functionName: string,
+    date: unknown,
+    value: number | undefined,
+    field: DateField,
+    dc: DateCalculator<unknown, unknown>,
+    zoneId: string,
+): unknown {
     if (!date) {
-        throw new Error(message('GetMonth', message.reason.firstParam))
+        throw new Error(message(functionName, message.reason.firstParam))
     }
-    if (this.dateCalculator.isDate(date)) {
-        return this.dateCalculator.getDateField(date, 'MONTH')
+    if (value == undefined) {
+        throw new Error(message(functionName, message.reason.secondParam))
     }
-    if (this.dateCalculator.isDateTime(date)) {
-        return this.dateCalculator.getDateTimeField(date, 'MONTH', this.functionContext.zoneId)
-    }
-    throw new Error(`Failed to execute function 'GetMonth' with parameters: ${[...arguments].join()}`)
-}
 
-function WithYear(this: InternalFunctionScope, date: Date | undefined, year: number | undefined): Date {
-    if (!date) {
-        throw new Error(message('WithYear', message.reason.firstParam))
+    if (dc.isDate(date)) {
+        return dc.addDateField(date, field, value)
     }
-    if (!year) {
-        throw new Error(message('WithYear', message.reason.firstParam))
+    if (dc.isDateTime(date)) {
+        return dc.addDateTimeField(date, field, value, zoneId)
     }
-    ensureValidYear('WithYear', year)
-    if (this.dateCalculator.isDate(date)) {
-        return this.dateCalculator.withDateField(date, 'YEAR', year)
-    }
-    if (this.dateCalculator.isDateTime(date)) {
-        return this.dateCalculator.withDateTimeField(date, 'YEAR', year, this.functionContext.zoneId)
-    }
-    throw new Error(`Failed to execute function 'WithYear' with parameters: ${[...arguments].join()}`)
-}
-
-function WithMonth(this: InternalFunctionScope, date: Date | undefined, month: number | undefined): Date {
-    if (!date) {
-        throw new Error(message('WithMonth', message.reason.firstParam))
-    }
-    if (!month) {
-        throw new Error(message('WithMonth', message.reason.firstParam))
-    }
-    ensureValidMonth('WithMonth', month)
-    if (this.dateCalculator.isDate(date)) {
-        return this.dateCalculator.withDateField(date, 'MONTH', month)
-    }
-    if (this.dateCalculator.isDateTime(date)) {
-        return this.dateCalculator.withDateTimeField(date, 'MONTH', month, this.functionContext.zoneId)
-    }
-    throw new Error(`Failed to execute function 'WithMonth' with parameters: ${[...arguments].join()}`)
-}
-
-function WithDay(this: InternalFunctionScope, date: Date | undefined, day: number | undefined): Date {
-    if (!date) {
-        throw new Error(message('WithDay', message.reason.firstParam))
-    }
-    if (!day) {
-        throw new Error(message('WithDay', message.reason.firstParam))
-    }
-    ensureValidMonth('WithDay', day)
-    if (this.dateCalculator.isDate(date)) {
-        return this.dateCalculator.withDateField(date, 'DAY_OF_MONTH', day)
-    }
-    if (this.dateCalculator.isDateTime(date)) {
-        return this.dateCalculator.withDateTimeField(date, 'DAY_OF_MONTH', day, this.functionContext.zoneId)
-    }
-    throw new Error(`Failed to execute function 'WithDay' with parameters: ${[...arguments].join()}`)
-}
-
-function NumberOfDaysBetween(this: InternalFunctionScope, d1?: Date, d2?: Date): number {
-    if (!d1) {
-        throw new Error(message('NumberOfDaysBetween', message.reason.firstParam))
-    }
-    if (!d2) {
-        throw new Error(message('NumberOfDaysBetween', message.reason.secondParam))
-    }
-    return this.dateCalculator.differenceBetweenDates(d1, d2, 'DAY_OF_MONTH')
-}
-
-function NumberOfMonthsBetween(this: InternalFunctionScope, d1?: Date, d2?: Date): number {
-    if (!d1) {
-        throw new Error(message('NumberOfMonthsBetween', message.reason.firstParam))
-    }
-    if (!d2) {
-        throw new Error(message('NumberOfMonthsBetween', message.reason.secondParam))
-    }
-    return this.dateCalculator.differenceBetweenDates(d1, d2, 'MONTH')
-}
-
-function NumberOfYearsBetween(this: InternalFunctionScope, d1?: Date, d2?: Date): number {
-    if (!d1) {
-        throw new Error(message('NumberOfYearsBetween', message.reason.firstParam))
-    }
-    if (!d2) {
-        throw new Error(message('NumberOfYearsBetween', message.reason.secondParam))
-    }
-    return this.dateCalculator.differenceBetweenDates(d1, d2, 'YEAR')
+    throw new Error(`Failed to execute function '${functionName}' with parameters: ${[...arguments].join()}`)
 }
 
 function Format(date?: Date, format = 'YYYY-MM-DD'): string {
@@ -300,26 +264,62 @@ function Format(date?: Date, format = 'YYYY-MM-DD'): string {
     return moment(date).format(format)
 }
 
-function ensureValidYear(functionName: string, year: number): void {
-    if (year < 1 || year > 9999) {
-        throw new Error(
-            `Failed to execute function '${functionName}'. Year value must be from 1 to 9999, but was: '${year}'`,
-        )
+function NumberOfDaysBetween(this: InternalFunctionScope, d1?: unknown, d2?: unknown): number {
+    return calculateDifference('NumberOfDaysBetween', 'DAY_OF_MONTH', this.dateCalculator, d1, d2)
+}
+
+function NumberOfMonthsBetween(this: InternalFunctionScope, d1?: unknown, d2?: unknown): number {
+    return calculateDifference('NumberOfDaysBetween', 'MONTH', this.dateCalculator, d1, d2)
+}
+
+function NumberOfYearsBetween(this: InternalFunctionScope, d1?: unknown, d2?: unknown): number {
+    return calculateDifference('NumberOfDaysBetween', 'YEAR', this.dateCalculator, d1, d2)
+}
+
+function calculateDifference(
+    functionName: string,
+    field: DateField,
+    dc: DateCalculator<unknown, unknown>,
+    d1: unknown,
+    d2: unknown,
+): number {
+    if (!d1) {
+        throw new Error(message(functionName, message.reason.firstParam))
+    }
+    if (!d2) {
+        throw new Error(message(functionName, message.reason.secondParam))
+    }
+
+    if (dc.isDate(d1) && dc.isDate(d2)) {
+        return dc.differenceBetweenDates(d1, d2, field)
+    }
+
+    throw new Error(`Failed to execute function '${functionName}' with parameters: ${[...arguments].join()}`)
+}
+
+function validateYear(functionName: string, year: number): void {
+    try {
+        ensureValidYear(year)
+    } catch (e) {
+        const m = e instanceof Error ? e.message : e
+        throw new Error(`Failed to execute function '${functionName}'. ${m}`)
     }
 }
 
-function ensureValidMonth(functionName: string, month: number): void {
-    if (month < 1 || month > 12) {
-        throw new Error(
-            `Failed to execute function '${functionName}'. Month value must be from 1 (January) to 12 (December), but was: '${month}'`,
-        )
+function validateMonth(functionName: string, month: number): void {
+    try {
+        ensureValidMonth(month)
+    } catch (e) {
+        const m = e instanceof Error ? e.message : e
+        throw new Error(`Failed to execute function '${functionName}'. ${m}`)
     }
 }
 
-function ensureValidDay(functionName: string, day: number): void {
-    if (day < 1 || day > 31) {
-        throw new Error(
-            `Failed to execute function '${functionName}'. Day value must be from 1 to 31, but was: '${day}'`,
-        )
+function validateDay(functionName: string, day: number): void {
+    try {
+        ensureValidDay(day)
+    } catch (e) {
+        const m = e instanceof Error ? e.message : e
+        throw new Error(`Failed to execute function '${functionName}'. ${m}`)
     }
 }

@@ -80,9 +80,26 @@ public class RuleServerSideOnlyValidatorTest {
         assertThat(validationSession.getValidationMessages(), hasSize(1));
         assertThat(validationSession.getValidationMessages().get(0).getSeverity(), is(Severity.ERROR));
         assertThat(validationSession.getValidationMessages().get(0).getMessage(),
-            containsString("Rule version is misconfigured, because it is not marked as @ServerSideOnly, "
-                + "but there are another rule version that is marked as @ServerSideOnly. "
-                + "All versions of the same rule must be consistently marked as @ServerSideOnly."));
+            containsString("Rule is misconfigured, because it has versions with different restrictions. " +
+                "All versions of the same rule must be consistently marked or not marked as @ServerSideOnly."));
+    }
+
+    @Test
+    public void shouldFailWhenOtherRuleVersionsAreNotMarkedAsServerSideOnly() {
+        Rule firstVersion = createRule("anotherServerSideRule", false);
+        Rule secondVersion = createRule("anotherServerSideRule", true);
+        Rule thirdVersion = createRule("anotherServerSideRule", true);
+
+        KrakenProject krakenProject = createProject(List.of(firstVersion, secondVersion, thirdVersion));
+
+        ValidationSession validationSession = doValidate(thirdVersion, krakenProject);
+
+        assertTrue(validationSession.hasRuleError());
+        assertThat(validationSession.getValidationMessages(), hasSize(1));
+        assertThat(validationSession.getValidationMessages().get(0).getSeverity(), is(Severity.ERROR));
+        assertThat(validationSession.getValidationMessages().get(0).getMessage(),
+            containsString("Rule is misconfigured, because it has versions with different restrictions. " +
+                "All versions of the same rule must be consistently marked or not marked as @ServerSideOnly."));
     }
 
     @Test

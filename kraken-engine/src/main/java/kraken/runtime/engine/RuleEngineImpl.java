@@ -86,7 +86,7 @@ public class RuleEngineImpl implements RuleEngine {
                 EntryPointBundle bundle = buildEntryPointBundle(entryPointName, evaluationConfig);
                 logEffectiveRules(session.getSessionToken(), bundle);
                 if (noRulesArePresent(bundle)) {
-                    return new EntryPointResult(session.getTimestamp(), evaluationConfig.getRuleTimezoneId());
+                    return new EntryPointResult(session.getTimestamp(), evaluationConfig.getRuleTimeZoneId());
                 }
                 final ContextDataProvider provider = StaticContextDataProvider.create(
                     crossContextPathsResolverFactory.resolve(contextModelTree),
@@ -132,7 +132,7 @@ public class RuleEngineImpl implements RuleEngine {
                 EntryPointBundle bundle = buildEntryPointBundle(entryPointName, evaluationConfig);
                 logEffectiveRules(session.getSessionToken(), bundle);
                 if (noRulesArePresent(bundle)) {
-                    return new EntryPointResult(session.getTimestamp(), evaluationConfig.getRuleTimezoneId());
+                    return new EntryPointResult(session.getTimestamp(), evaluationConfig.getRuleTimeZoneId());
                 }
                 final ContextDataProvider provider = StaticContextDataProvider.create(
                     crossContextPathsResolverFactory.resolve(contextModelTree),
@@ -199,9 +199,12 @@ public class RuleEngineImpl implements RuleEngine {
         var contextCopy = new HashMap<>(evaluationConfig.getContext());
         contextCopy.remove(EXTERNAL_DATA);
         var dimensions = contextCopy.get(DIMENSIONS);
+        if(dimensions == null) {
+            dimensions = new HashMap<>();
+        }
         if(dimensions instanceof Map) {
             var dimensionsCopy = new HashMap<>((Map<String, Object>)dimensions);
-            dimensionsCopy.put(RULE_TIMEZONE_ID_DIMENSION, evaluationConfig.getRuleTimezoneId());
+            dimensionsCopy.put(RULE_TIMEZONE_ID_DIMENSION, evaluationConfig.getRuleTimeZoneId());
             contextCopy.put(DIMENSIONS, dimensionsCopy);
         }
         return contextCopy;

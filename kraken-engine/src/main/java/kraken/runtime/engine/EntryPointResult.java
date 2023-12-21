@@ -30,23 +30,23 @@ public class EntryPointResult {
 
     private final transient LocalDateTime evaluationTimeStamp;
 
-    private final transient ZoneId ruleTimezoneId;
+    private final transient ZoneId ruleTimeZoneId;
 
     public EntryPointResult() {
         this(LocalDateTime.now(), ZoneId.systemDefault());
     }
 
     public EntryPointResult(@Nonnull LocalDateTime evaluationTimeStamp,
-                            @Nonnull ZoneId ruleTimezoneId) {
-        this(Map.of(), evaluationTimeStamp, ruleTimezoneId);
+                            @Nonnull ZoneId ruleTimeZoneId) {
+        this(Map.of(), evaluationTimeStamp, ruleTimeZoneId);
     }
 
     public EntryPointResult(@Nonnull Map<String, FieldEvaluationResult> fieldResults,
                             @Nonnull LocalDateTime evaluationTimeStamp,
-                            @Nonnull ZoneId ruleTimezoneId) {
+                            @Nonnull ZoneId ruleTimeZoneId) {
         this.fieldResults = new HashMap<>(fieldResults);
         this.evaluationTimeStamp = Objects.requireNonNull(evaluationTimeStamp);
-        this.ruleTimezoneId = Objects.requireNonNull(ruleTimezoneId);
+        this.ruleTimeZoneId = Objects.requireNonNull(ruleTimeZoneId);
     }
 
     /**
@@ -80,7 +80,7 @@ public class EntryPointResult {
     }
 
     @Nonnull
-    public ZoneId getRuleTimezoneId() {
-        return ruleTimezoneId;
+    public ZoneId getRuleTimeZoneId() {
+        return ruleTimeZoneId;
     }
 }

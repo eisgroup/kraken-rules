@@ -42,7 +42,9 @@ public class RuleDefinitionValidator {
             new RuleExpressionValidator(krakenProject),
             new RuleServerSideOnlyValidator(krakenProject),
             new RuleDimensionsValidator(krakenProject),
-            new RuleVersionDuplicationValidator(krakenProject)
+            new RuleVersionDuplicationValidator(krakenProject),
+            new RuleVersionsOverridabilityValidator(krakenProject),
+            new RuleVersionsPayloadTypeValidator(krakenProject)
         );
 
         this.dynamicRuleValidators = List.of(

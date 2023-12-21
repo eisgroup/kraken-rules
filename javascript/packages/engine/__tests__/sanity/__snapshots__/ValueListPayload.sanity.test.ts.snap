@@ -194,7 +194,7 @@ Object {
         ],
       },
     },
-    "ruleTimezoneId": "Europe/Vilnius",
+    "ruleTimeZoneId": "Europe/Vilnius",
   },
   "fieldResults": Object {
     "Policy:12:createdFromPolicyRev": Object {
@@ -567,7 +567,7 @@ Object {
         ],
       },
     },
-    "ruleTimezoneId": "Europe/Vilnius",
+    "ruleTimeZoneId": "Europe/Vilnius",
   },
   "fieldResults": Object {
     "Policy:12:createdFromPolicyRev": Object {

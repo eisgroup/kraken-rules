@@ -71,18 +71,18 @@ export interface FunctionScope {
 
 export type FunctionContext = {
     /**
-     *  Timezone of a current evaluation session
+     *  Time zone of a current evaluation session
      */
     zoneId: string
 }
 
 export type BindingConfiguration = {
     zoneId: string
-    dateCalculator: DateCalculator
+    dateCalculator: DateCalculator<unknown, unknown>
 }
 
 export interface InternalFunctionScope extends FunctionScope {
-    dateCalculator: DateCalculator
+    dateCalculator: DateCalculator<unknown, unknown>
 }
 
 export class FunctionRegistry {

@@ -122,6 +122,49 @@ public class RuleTargetContextValidatorTest {
         assertThat(message.getMessage(),
             containsString("Cannot be applied on a field 'targetAttr' because it is forbidden to be a rule target."));
     }
+    @Test
+    public void shouldAddValidationMessageWhenRuleVersionsDefinedOnDifferentContext() {
+        Rule rule = KrakenProjectMocks.rule("ruleName", "ContextDefOne", "targetAttr");
+        Rule secondRule = KrakenProjectMocks.rule("ruleName", "ContextDefTwo", "targetAttr");
+        EntryPoint entryPoint = KrakenProjectMocks.entryPoint("entryPointName", List.of(rule.getName(), secondRule.getName()));
+        ContextDefinition contextOne = createStrictDefinition("ContextDefOne", createField("targetAttr"));
+        ContextDefinition contextTwo = createStrictDefinition("ContextDefTwo", createField("targetAttr"));
+
+        KrakenProject krakenProject = KrakenProjectMocks.krakenProject(
+            Arrays.asList(contextOne, contextTwo), List.of(entryPoint), List.of(rule, secondRule));
+        doValidate(rule, krakenProject);
+
+        assertThat(validationSession.getValidationMessages(), hasSize(1));
+
+        ValidationMessage message = validationSession.getValidationMessages().get(0);
+
+        assertThat(message.getItem().getName(), is(rule.getName()));
+        assertThat(message.getSeverity(), is(Severity.ERROR));
+        assertThat(message.getMessage(),
+            containsString("Rule has version applied on different context or attribute: ContextDefTwo.targetAttr."));
+    }
+
+    @Test
+    public void shouldAddValidationMessageWhenRuleVersionsDefinedOnDifferentAttribute() {
+        Rule rule = KrakenProjectMocks.rule("ruleName", "ContextDefOne", "targetAttr");
+        Rule secondRule = KrakenProjectMocks.rule("ruleName", "ContextDefOne", "targetAttrTwo");
+        EntryPoint entryPoint = KrakenProjectMocks.entryPoint("entryPointName", List.of(rule.getName(), secondRule.getName()));
+        ContextDefinition contextOne = createStrictDefinition(
+            "ContextDefOne", createField("targetAttr"), createField("targetAttrTwo"));
+
+        KrakenProject krakenProject = KrakenProjectMocks.krakenProject(
+            Arrays.asList(contextOne), List.of(entryPoint), List.of(rule, secondRule));
+        doValidate(rule, krakenProject);
+
+        assertThat(validationSession.getValidationMessages(), hasSize(1));
+
+        ValidationMessage message = validationSession.getValidationMessages().get(0);
+
+        assertThat(message.getItem().getName(), is(rule.getName()));
+        assertThat(message.getSeverity(), is(Severity.ERROR));
+        assertThat(message.getMessage(),
+            containsString("Rule has version applied on different context or attribute: ContextDefOne.targetAttrTwo."));
+    }
 
     private KrakenProject createProject(Rule rule, ContextDefinition... contextDefinitions) {
         EntryPoint  entryPoint = KrakenProjectMocks.entryPoint("entryPointName", rule.getName());

@@ -26,6 +26,6 @@ public class Context {
     /**
      * Key in dimensions map, where value is an instance of {@link java.time.ZoneId} for rule evaluation.
      */
-    public static final String RULE_TIMEZONE_ID_DIMENSION = "__ruleTimezoneId__";
+    public static final String RULE_TIMEZONE_ID_DIMENSION = "__ruleTimeZoneId__";
 
 }

@@ -20,7 +20,7 @@
  *
  * @author Mindaugas Ulevicius
  */
-export interface DateCalculator {
+export interface DateCalculator<DATE, DATETIME> {
     /**
      * Creates a date instance from ISO 8061 date string. String must be in YYYY-MM-DD format.
      * Time portion, compact and reduced precision formats are not supported.
@@ -28,7 +28,7 @@ export interface DateCalculator {
      * @return created date instance
      * @throws error if date does not match YYYY-MM-DD pattern or if the date cannot be created with given values
      */
-    createDate(date: string): Date
+    createDate(date: string): DATE
 
     /**
      * Creates a date instance from year, month and day triplet. Year, month and day start from 1.
@@ -39,14 +39,14 @@ export interface DateCalculator {
      * @return created date instance
      * @throws error if the date cannot be created with given values
      */
-    createDate(year: number, month: number, day: number): Date
+    createDate(year: number, month: number, day: number): DATE
 
     /**
      * Creates a date instance which is date in specified timezone at this moment in time.
      * @param zoneId that indicates specific timezone
      * @return created date instance
      */
-    today(zoneId: string): Date
+    today(zoneId: string): DATE
 
     /**
      * Returns a specific field value of date. Year, month and day start from 1.
@@ -54,7 +54,7 @@ export interface DateCalculator {
      * @param field indicates which field value to return
      * @return value of the requested field
      */
-    getDateField(date: Date, field: DateField): number
+    getDateField(date: DATE, field: DateField): number
 
     /**
      * Returns a new date instance with changed specific field value of date. Year, month and day start from 1.
@@ -70,7 +70,7 @@ export interface DateCalculator {
      * @return new instance of date with changed field value
      * @throws error if the date cannot be created with given value
      */
-    withDateField(date: Date, field: DateField, value: number): Date
+    withDateField(date: DATE, field: DateField, value: number): DATE
 
     /**
      * Returns a new date instance with modified specific field value of date.
@@ -83,7 +83,7 @@ export interface DateCalculator {
      * @param value amount to add to field value
      * @return new instance of date with changed field value
      */
-    addDateField(date: Date, field: DateField, value: number): Date
+    addDateField(date: DATE, field: DateField, value: number): DATE
 
     /**
      * Calculates a difference between two date instances by some date field.
@@ -96,7 +96,7 @@ export interface DateCalculator {
      * @param field indicates date field to calculate a difference of
      * @return difference of some date field
      */
-    differenceBetweenDates(date1: Date, date2: Date, field: DateField): number
+    differenceBetweenDates(date1: DATE, date2: DATE, field: DateField): number
 
     /**
      * Creates a datetime instance from ISO 8061 datetime string.
@@ -107,7 +107,7 @@ export interface DateCalculator {
      * @throws error if date time does not match YYYY-MM-DDThh:mm:ddZ pattern or if the datetime cannot be created
      * with given values
      */
-    createDateTime(dateTime: string): Date
+    createDateTime(dateTime: string): DATETIME
 
     /**
      * Creates a datetime instance from ISO 8061 datetime string in specified timezone.
@@ -120,7 +120,7 @@ export interface DateCalculator {
      * @throws error if date time does not match YYYY-MM-DDThh:mm:dd pattern or if the datetime cannot be created
      * with given values
      */
-    createDateTime(dateTime: string, zoneId: string): Date
+    createDateTime(dateTime: string, zoneId: string): DATETIME
 
     /**
      * Creates a datetime instance from year, month, day, hours, minutes and seconds in specified timezone.
@@ -144,12 +144,12 @@ export interface DateCalculator {
         minutes: number,
         seconds: number,
         zoneId: string,
-    ): Date
+    ): DATETIME
 
     /**
      * @return a current moment in time
      */
-    now(): Date
+    now(): DATETIME
 
     /**
      * Returns a specific field value of datetime. Year, month and day start from 1. Hours, minutes and seconds start from 0.
@@ -158,7 +158,7 @@ export interface DateCalculator {
      * @param zoneId a timezone of a clock
      * @return value of the requested field
      */
-    getDateTimeField(dateTime: Date, field: DateTimeField, zoneId: string): number
+    getDateTimeField(dateTime: DATETIME, field: DateTimeField, zoneId: string): number
 
     /**
      * Returns a new datetime instance with changed specific field value of datetime. Year, month and day start from 1.
@@ -177,7 +177,7 @@ export interface DateCalculator {
      * @return new instance of datetime with changed field value
      * @throws error if datetime cannot be created with given values
      */
-    withDateTimeField(dateTime: Date, field: DateTimeField, value: number, zoneId: string): Date
+    withDateTimeField(dateTime: DATETIME, field: DateTimeField, value: number, zoneId: string): DATETIME
 
     /**
      * Returns a new datetime instance with modified specific field value of date.
@@ -193,7 +193,7 @@ export interface DateCalculator {
      * @param zoneId a timezone of a clock. All operations are performed as if the clock is located in specified timezone.
      * @return new instance of datetime with changed field value
      */
-    addDateTimeField(dateTime: Date, field: DateTimeField, value: number, zoneId: string): Date
+    addDateTimeField(dateTime: DATETIME, field: DateTimeField, value: number, zoneId: string): DATETIME
 
     /**
      * Returns a moment in time which represents a start of the day at the provided date in specified timezone.
@@ -202,7 +202,7 @@ export interface DateCalculator {
      * @param zoneId a timezone of a clock
      * @return datetime instance that represents a start of the day at the provided date in specified timezone
      */
-    toDateTime(date: Date, zoneId: string): Date
+    toDateTime(date: DATE, zoneId: string): DATETIME
 
     /**
      * Returns a current calendar date of the moment in time at the specified timezone.
@@ -211,21 +211,25 @@ export interface DateCalculator {
      * @param zoneId a timezone of a clock
      * @return date instance that represents current date of the moment in time at the specified timezone
      */
-    toDate(dateTime: Date, zoneId: string): Date
+    toDate(dateTime: DATETIME, zoneId: string): DATE
 
     /**
-     * Differentiates date from datetime instance when using the same javascript Date container.
+     * Differentiates date from datetime.
      *
      * @param d date or datetime
      */
-    isDate(d: Date): boolean
+    isDate(d: unknown): boolean
 
     /**
-     * Differentiates date from datetime instance when using the same javascript Date container.
+     * Differentiates date from datetime.
      *
      * @param d date or datetime
      */
-    isDateTime(d: Date): boolean
+    isDateTime(d: unknown): boolean
+
+    convertDateToJavascriptDate(date: DATE): Date
+
+    convertDateTimeToJavascriptDate(dateTime: DATETIME): Date
 }
 
 /**
@@ -238,355 +242,6 @@ export type DateField = 'YEAR' | 'MONTH' | 'DAY_OF_MONTH'
  */
 export type DateTimeField = 'YEAR' | 'MONTH' | 'DAY_OF_MONTH' | 'HOUR' | 'MINUTE' | 'SECOND'
 
-export class DefaultDateCalculator implements DateCalculator {
-    private ISO_DATE = new RegExp('^\\d{4}-\\d{2}-\\d{2}$')
-    private ISO_DATETIME_NO_OFFSET = new RegExp('^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}$')
-    private ISO_DATETIME_ZULU = new RegExp('^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$')
-
-    addDateField(date: Date, field: DateField, value: number): Date {
-        const dateResult = new Date(date)
-        switch (field) {
-            case 'YEAR': {
-                dateResult.setFullYear(date.getFullYear() + value)
-                return this.resetToLastValidDayOfMonthIfNeeded(dateResult, date.getDate())
-            }
-            case 'MONTH': {
-                dateResult.setMonth(date.getMonth() + value)
-                return this.resetToLastValidDayOfMonthIfNeeded(dateResult, date.getDate())
-            }
-            case 'DAY_OF_MONTH': {
-                dateResult.setDate(date.getDate() + value)
-                return dateResult
-            }
-        }
-    }
-
-    addDateTimeField(dateTime: Date, field: DateTimeField, value: number, zoneId: string): Date {
-        this.ensureValidZoneId(zoneId)
-        const dateTimeResult = new Date(dateTime)
-        switch (field) {
-            case 'YEAR': {
-                dateTimeResult.setFullYear(dateTime.getFullYear() + value)
-                return this.resetToLastValidDayOfMonthIfNeeded(dateTimeResult, dateTime.getDate())
-            }
-            case 'MONTH': {
-                dateTimeResult.setMonth(dateTime.getMonth() + value)
-                return this.resetToLastValidDayOfMonthIfNeeded(dateTimeResult, dateTime.getDate())
-            }
-            case 'DAY_OF_MONTH': {
-                dateTimeResult.setDate(dateTime.getDate() + value)
-                return dateTimeResult
-            }
-            case 'HOUR': {
-                dateTimeResult.setHours(dateTime.getHours() + value)
-                return dateTimeResult
-            }
-            case 'MINUTE': {
-                dateTimeResult.setMinutes(dateTime.getMinutes() + value)
-                return dateTimeResult
-            }
-            case 'SECOND': {
-                dateTimeResult.setSeconds(dateTime.getSeconds() + value)
-                return dateTimeResult
-            }
-        }
-    }
-
-    createDate(date: string): Date
-    createDate(year: number, month: number, day: number): Date
-    createDate(dateStringOrYear: string | number, month?: number, day?: number): Date {
-        if (typeof dateStringOrYear === 'string') {
-            if (this.ISO_DATE.test(dateStringOrYear)) {
-                return this.ensureValid(new Date(`${dateStringOrYear}T00:00:00`))
-            }
-            throw new Error(`Failed to create Date from pattern ${dateStringOrYear}`)
-        }
-        if (month !== undefined && day !== undefined) {
-            this.ensureValidYear(dateStringOrYear)
-            this.ensureValidMonth(month)
-            this.ensureValidDay(day)
-            return new Date(dateStringOrYear, month - 1, day)
-        }
-        throw new Error('Failed to create Date')
-    }
-
-    createDateTime(dateTime: string): Date
-    createDateTime(dateTime: string, zoneId: string): Date
-    createDateTime(
-        year: number,
-        month: number,
-        day: number,
-        hours: number,
-        minutes: number,
-        seconds: number,
-        zoneId: string,
-    ): Date
-    createDateTime(
-        dateTimeStringOrYear: string | number,
-        zoneIdOrMonth?: string | number,
-        day?: number,
-        hours?: number,
-        minutes?: number,
-        seconds?: number,
-        zoneId?: string,
-    ): Date {
-        if (typeof dateTimeStringOrYear === 'string') {
-            if (typeof zoneIdOrMonth === 'string' && this.ISO_DATETIME_NO_OFFSET.test(dateTimeStringOrYear)) {
-                this.ensureValidZoneId(zoneIdOrMonth)
-                return this.ensureValid(new Date(dateTimeStringOrYear))
-            }
-            if (!zoneIdOrMonth && this.ISO_DATETIME_ZULU.test(dateTimeStringOrYear)) {
-                return this.ensureValid(new Date(dateTimeStringOrYear))
-            }
-            throw new Error(`Failed to create Date from pattern ${dateTimeStringOrYear}`)
-        }
-        if (
-            typeof zoneIdOrMonth === 'number' &&
-            day !== undefined &&
-            hours !== undefined &&
-            minutes !== undefined &&
-            seconds !== undefined &&
-            zoneId
-        ) {
-            this.ensureValidYear(dateTimeStringOrYear)
-            this.ensureValidMonth(zoneIdOrMonth)
-            this.ensureValidDay(day)
-            this.ensureValidHours(hours)
-            this.ensureValidMinutes(minutes)
-            this.ensureValidSeconds(seconds)
-            this.ensureValidZoneId(zoneId)
-            return new Date(dateTimeStringOrYear, zoneIdOrMonth - 1, day, hours, minutes, seconds)
-        }
-        throw new Error('Failed to create Date')
-    }
-
-    differenceBetweenDates(date1: Date, date2: Date, field: DateField): number {
-        const from = date1 < date2 ? date1 : date2
-        const to = date2 > date1 ? date2 : date1
-
-        switch (field) {
-            case 'YEAR':
-                return Math.floor(this.differenceBetweenDates(date1, date2, 'MONTH') / 12)
-            case 'MONTH': {
-                let fullMonths = (to.getFullYear() - from.getFullYear()) * 12 + (to.getMonth() - from.getMonth())
-                if (fullMonths > 0) {
-                    fullMonths -= 1
-                }
-                let partialMonth = 0
-                if (
-                    (from.getFullYear() < to.getFullYear() || from.getMonth() < to.getMonth()) &&
-                    to.getDate() >= from.getDate()
-                ) {
-                    partialMonth = 1
-                }
-                return fullMonths + partialMonth
-            }
-            case 'DAY_OF_MONTH': {
-                const offsetInMilliseconds = (to.getTimezoneOffset() - from.getTimezoneOffset()) * 60 * 1000
-                const day = 24 * 60 * 60 * 1000
-                const diffTime = Math.abs(from.getTime() - to.getTime() + offsetInMilliseconds)
-                return Math.floor(diffTime / day)
-            }
-        }
-    }
-
-    getDateField(date: Date, field: DateField): number {
-        switch (field) {
-            case 'YEAR':
-                return date.getFullYear()
-            case 'MONTH':
-                return date.getMonth() + 1
-            case 'DAY_OF_MONTH':
-                return date.getDate()
-        }
-    }
-
-    getDateTimeField(dateTime: Date, field: DateTimeField, zoneId: string): number {
-        this.ensureValidZoneId(zoneId)
-        switch (field) {
-            case 'YEAR':
-                return dateTime.getFullYear()
-            case 'MONTH':
-                return dateTime.getMonth() + 1
-            case 'DAY_OF_MONTH':
-                return dateTime.getDate()
-            case 'HOUR':
-                return dateTime.getHours()
-            case 'MINUTE':
-                return dateTime.getMinutes()
-            case 'SECOND':
-                return dateTime.getSeconds()
-        }
-    }
-
-    isDate(_d: Date): boolean {
-        // default implementation does not support differentiation between DATE and DATETIME
-        return true
-    }
-
-    isDateTime(_d: Date): boolean {
-        // default implementation does not support differentiation between DATE and DATETIME
-        return true
-    }
-
-    now(): Date {
-        return new Date()
-    }
-
-    withDateField(date: Date, field: DateField, value: number): Date {
-        const dateResult = new Date(date)
-        switch (field) {
-            case 'YEAR': {
-                this.ensureValidYear(value)
-                dateResult.setFullYear(value)
-                return this.resetToLastValidDayOfMonthIfNeeded(dateResult, date.getDate())
-            }
-            case 'MONTH': {
-                this.ensureValidMonth(value)
-                dateResult.setMonth(value - 1)
-                return this.resetToLastValidDayOfMonthIfNeeded(dateResult, date.getDate())
-            }
-            case 'DAY_OF_MONTH': {
-                this.ensureValidDay(value)
-                dateResult.setDate(value)
-                if (dateResult.getDate() != value) {
-                    throw new Error(
-                        `Cannot set day '${value}' in date '${date}' because month '${
-                            date.getMonth() + 1
-                        }' of year '${date.getFullYear()}' does not have this day.`,
-                    )
-                }
-                return dateResult
-            }
-        }
-    }
-
-    withDateTimeField(dateTime: Date, field: DateTimeField, value: number, zoneId: string): Date {
-        this.ensureValidZoneId(zoneId)
-        const dateTimeResult = new Date(dateTime)
-        switch (field) {
-            case 'YEAR': {
-                this.ensureValidYear(value)
-                dateTimeResult.setFullYear(value)
-                return this.resetToLastValidDayOfMonthIfNeeded(dateTimeResult, dateTime.getDate())
-            }
-            case 'MONTH': {
-                this.ensureValidMonth(value)
-                dateTimeResult.setMonth(value - 1)
-                return this.resetToLastValidDayOfMonthIfNeeded(dateTimeResult, dateTime.getDate())
-            }
-            case 'DAY_OF_MONTH': {
-                this.ensureValidDay(value)
-                dateTimeResult.setDate(value)
-                if (dateTimeResult.getDate() != value) {
-                    throw new Error(
-                        `Cannot set day '${value}' in date '${dateTime}' because month '${
-                            dateTime.getMonth() + 1
-                        }' of year '${dateTime.getFullYear()}' does not have this day.`,
-                    )
-                }
-                return dateTimeResult
-            }
-            case 'HOUR': {
-                this.ensureValidHours(value)
-                dateTimeResult.setHours(value)
-                return dateTimeResult
-            }
-            case 'MINUTE': {
-                this.ensureValidMinutes(value)
-                dateTimeResult.setMinutes(value)
-                return dateTimeResult
-            }
-            case 'SECOND': {
-                this.ensureValidSeconds(value)
-                dateTimeResult.setSeconds(value)
-                return dateTimeResult
-            }
-        }
-    }
-
-    toDate(dateTime: Date, zoneId: string): Date {
-        this.ensureValidZoneId(zoneId)
-        return new Date(dateTime.getFullYear(), dateTime.getMonth(), dateTime.getDate())
-    }
-
-    toDateTime(date: Date, zoneId: string): Date {
-        this.ensureValidZoneId(zoneId)
-        return new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0)
-    }
-
-    today(zoneId: string): Date {
-        this.ensureValidZoneId(zoneId)
-        const now = new Date()
-        return new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0)
-    }
-
-    /**
-     *  When changing date to some month-of-year it may shift day-of-month to the first day of the next month when requested
-     *  month-of-year does not have such a day.
-     *  In this case we need to do a correction so that it works equivalently to Java implementation.
-     *  A correction is to rewind to last valid day-of-month.
-     *  By setting day to 0 the date is reset to last day of the previous month which is the last valid day-of-month.
-     *
-     * @param date after modification
-     * @param previousDay of date before modification
-     */
-    private resetToLastValidDayOfMonthIfNeeded(date: Date, previousDay: number): Date {
-        if (date.getDate() != previousDay) {
-            date.setDate(0)
-        }
-        return date
-    }
-
-    private ensureValidZoneId(zoneId: string): void {
-        const systemTimezoneId = Intl.DateTimeFormat().resolvedOptions().timeZone
-        if (zoneId !== systemTimezoneId) {
-            throw new Error(
-                `Default implementation of DateCalculator does not support timezone specific calculations. System timezone is ${systemTimezoneId}, but function was invoked for timezone ${zoneId}.`,
-            )
-        }
-    }
-
-    private ensureValid(date: Date): Date {
-        if (date.toString() === 'Invalid Date') {
-            throw new Error(`Error while creating Date`)
-        }
-        return date
-    }
-
-    private ensureValidYear(year: number): void {
-        if (year < 1 || year > 9999) {
-            throw new Error(`Error while creating Date. Year must be between 1 and 9999`)
-        }
-    }
-
-    private ensureValidMonth(month: number): void {
-        if (month < 1 || month > 12) {
-            throw new Error(`Error while creating Date. Month must be between 1 and 12`)
-        }
-    }
-
-    private ensureValidDay(day: number): void {
-        if (day < 1 || day > 31) {
-            throw new Error(`Error while creating Date. Day must be between 1 and 31`)
-        }
-    }
-
-    private ensureValidHours(hours: number): void {
-        if (hours < 0 || hours > 23) {
-            throw new Error(`Error while creating Date. Hours must be between 0 and 23`)
-        }
-    }
-
-    private ensureValidMinutes(minutes: number): void {
-        if (minutes < 0 || minutes > 59) {
-            throw new Error(`Error while creating Date. Minutes must be between 0 and 59`)
-        }
-    }
-
-    private ensureValidSeconds(seconds: number): void {
-        if (seconds < 0 || seconds > 59) {
-            throw new Error(`Error while creating Date. Seconds must be between 0 and 59`)
-        }
-    }
-}
+export const ISO_DATE = new RegExp('^\\d{4}-\\d{2}-\\d{2}$')
+export const ISO_DATETIME_NO_OFFSET = new RegExp('^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}$')
+export const ISO_DATETIME_ZULU = new RegExp('^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$')

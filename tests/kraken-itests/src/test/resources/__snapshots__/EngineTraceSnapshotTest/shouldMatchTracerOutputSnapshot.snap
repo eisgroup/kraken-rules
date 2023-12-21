@@ -40,7 +40,7 @@
    {
      "context": {},
      "currencyCd": "USD",
-     "ruleTimezoneId": {
+     "ruleTimeZoneId": {
        "id": "Europe/Vilnius"
      },
      "evaluationMode": "ALL",

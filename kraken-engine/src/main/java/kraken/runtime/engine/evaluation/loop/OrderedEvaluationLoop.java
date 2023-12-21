@@ -71,7 +71,7 @@ public class OrderedEvaluationLoop implements EvaluationLoop {
         otherResults.forEach(result -> addResult(result, results));
 
         validateDefaultsOnOneField(results);
-        return new EntryPointResult(results, session.getTimestamp(), session.getEvaluationConfig().getRuleTimezoneId());
+        return new EntryPointResult(results, session.getTimestamp(), session.getEvaluationConfig().getRuleTimeZoneId());
     }
 
     private List<RuleOnInstanceEvaluationResult> evaluateRules(EntryPointEvaluation entryPointEvaluation,

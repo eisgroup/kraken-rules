@@ -15,10 +15,13 @@
  */
 
 import { FunctionRegistry } from '../../../../../src/engine/runtime/expressions/functionLibrary/Registry'
-import { DefaultDateCalculator } from '../../../../../src/engine/runtime/expressions/date/DateCalculator'
+import {
+    DefaultDateCalculator,
+    resolveBrowserTimezoneId,
+} from '../../../../../src/engine/runtime/expressions/math/Temporal'
 
 const f = FunctionRegistry.INSTANCE.bindRegisteredFunctions({
-    zoneId: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    zoneId: resolveBrowserTimezoneId(),
     dateCalculator: new DefaultDateCalculator(),
 })
 

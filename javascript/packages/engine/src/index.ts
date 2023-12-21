@@ -32,7 +32,11 @@ export * from './bundle-cache/expression-context-manager/ExpressionContextManage
 export * from './bundle-cache/expression-context-manager/ExpressionContextManagerImpl'
 
 export { registry, KelFunction, FunctionParameter } from './engine/runtime/expressions/ExpressionEvaluator'
-export { FunctionScope } from './engine/runtime/expressions/functionLibrary/Registry'
+export {
+    FunctionScope,
+    FunctionContext,
+    FunctionDeclaration,
+} from './engine/runtime/expressions/functionLibrary/Registry'
 export * from './engine/runtime/EvaluationMode'
 
 // Payload result utils
@@ -62,7 +66,7 @@ export * from './engine/results/field_metadata_reducer/FieldMetadataReducer'
 // error
 export * from './error/KrakenRuntimeError'
 
-export { DateCalculator, DateField, DateTimeField } from './engine/runtime/expressions/date/DateCalculator'
+export * from './engine/runtime/expressions/date/DateCalculator'
 export * from './engine/runtime/DataContextPathProvider'
 
 // re-export

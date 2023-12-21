@@ -15,8 +15,23 @@
  */
 
 import { nativeFunctions } from '../../../../../src/engine/runtime/expressions/functionLibrary/NativeFunctions'
+import { Numbers } from '../../../../../src/engine/runtime/expressions/math/Numbers'
+import { InternalFunctionScope } from '../../../../../src/engine/runtime/expressions/functionLibrary/Registry'
+
+import {
+    DefaultDateCalculator,
+    resolveBrowserTimezoneId,
+} from '../../../../../src/engine/runtime/expressions/math/Temporal'
 
 describe('Native Functions Test', () => {
+    const scope: InternalFunctionScope = {
+        normalize: Numbers.normalized,
+        functionContext: {
+            zoneId: resolveBrowserTimezoneId(),
+        },
+        dateCalculator: new DefaultDateCalculator(),
+    }
+
     describe('_n function', () => {
         it('should check if value is number', () => {
             expect(() => nativeFunctions._n(undefined)).toThrow()
@@ -25,15 +40,6 @@ describe('Native Functions Test', () => {
             expect(() => nativeFunctions._n(true)).toThrow()
 
             expect(nativeFunctions._n(10)).toBe(10)
-        })
-        it('should check if value is number or date', () => {
-            expect(() => nativeFunctions._nd(undefined)).toThrow()
-            expect(() => nativeFunctions._nd(null)).toThrow()
-            expect(() => nativeFunctions._nd('string')).toThrow()
-            expect(() => nativeFunctions._nd(true)).toThrow()
-            expect(nativeFunctions._nd(10)).toBe(10)
-            const date = new Date()
-            expect(nativeFunctions._nd(date)).toBe(date)
         })
         it('should check if value is string', () => {
             expect(() => nativeFunctions._s(undefined)).toThrow()
@@ -52,34 +58,70 @@ describe('Native Functions Test', () => {
             expect(nativeFunctions._b(true)).toBe(true)
         })
         it('should check if value is eq', () => {
-            expect(nativeFunctions._eq(undefined, null)).toBe(true)
-            expect(nativeFunctions._eq(null, '')).toBe(false)
-            expect(nativeFunctions._eq(10, 10)).toBe(true)
-            expect(nativeFunctions._eq(0, false)).toBe(false)
-            expect(nativeFunctions._eq(0, null)).toBe(false)
-            expect(nativeFunctions._eq(new Date(2000, 1, 1), new Date(2000, 1, 1))).toBe(true)
+            expect(nativeFunctions._eq.bind(scope)(undefined, null)).toBe(true)
+            expect(nativeFunctions._eq.bind(scope)(null, '')).toBe(false)
+            expect(nativeFunctions._eq.bind(scope)(10, 10)).toBe(true)
+            expect(nativeFunctions._eq.bind(scope)(0, false)).toBe(false)
+            expect(nativeFunctions._eq.bind(scope)(0, null)).toBe(false)
+            expect(nativeFunctions._eq.bind(scope)(new Date(2000, 1, 1), new Date(2000, 1, 1))).toBe(true)
+        })
+        it('should check if value is mt', () => {
+            expect(() => nativeFunctions._mt.bind(scope)(undefined, 10)).toThrow()
+            expect(nativeFunctions._mt.bind(scope)(10, 9)).toBe(true)
+            expect(nativeFunctions._mt.bind(scope)(10, 10)).toBe(false)
+            expect(nativeFunctions._mt.bind(scope)(10, 11)).toBe(false)
+            expect(nativeFunctions._mt.bind(scope)(new Date('2020-01-02'), new Date('2020-01-01'))).toBe(true)
+            expect(nativeFunctions._mt.bind(scope)(new Date('2020-01-01'), new Date('2020-01-02'))).toBe(false)
+            expect(nativeFunctions._mt.bind(scope)(new Date('2020-01-02'), new Date('2020-01-02'))).toBe(false)
+        })
+        it('should check if value is mte', () => {
+            expect(() => nativeFunctions._mte.bind(scope)(undefined, 10)).toThrow()
+            expect(nativeFunctions._mte.bind(scope)(10, 9)).toBe(true)
+            expect(nativeFunctions._mte.bind(scope)(10, 10)).toBe(true)
+            expect(nativeFunctions._mte.bind(scope)(10, 11)).toBe(false)
+            expect(nativeFunctions._mte.bind(scope)(new Date('2020-01-02'), new Date('2020-01-01'))).toBe(true)
+            expect(nativeFunctions._mte.bind(scope)(new Date('2020-01-01'), new Date('2020-01-02'))).toBe(false)
+            expect(nativeFunctions._mte.bind(scope)(new Date('2020-01-02'), new Date('2020-01-02'))).toBe(true)
+        })
+        it('should check if value is lt', () => {
+            expect(() => nativeFunctions._lt.bind(scope)(undefined, 10)).toThrow()
+            expect(nativeFunctions._lt.bind(scope)(10, 9)).toBe(false)
+            expect(nativeFunctions._lt.bind(scope)(10, 10)).toBe(false)
+            expect(nativeFunctions._lt.bind(scope)(10, 11)).toBe(true)
+            expect(nativeFunctions._lt.bind(scope)(new Date('2020-01-02'), new Date('2020-01-01'))).toBe(false)
+            expect(nativeFunctions._lt.bind(scope)(new Date('2020-01-01'), new Date('2020-01-02'))).toBe(true)
+            expect(nativeFunctions._lt.bind(scope)(new Date('2020-01-02'), new Date('2020-01-02'))).toBe(false)
+        })
+        it('should check if value is lte', () => {
+            expect(() => nativeFunctions._lte.bind(scope)(undefined, 10)).toThrow()
+            expect(nativeFunctions._lte.bind(scope)(10, 9)).toBe(false)
+            expect(nativeFunctions._lte.bind(scope)(10, 10)).toBe(true)
+            expect(nativeFunctions._lte.bind(scope)(10, 11)).toBe(true)
+            expect(nativeFunctions._lte.bind(scope)(new Date('2020-01-02'), new Date('2020-01-01'))).toBe(false)
+            expect(nativeFunctions._lte.bind(scope)(new Date('2020-01-01'), new Date('2020-01-02'))).toBe(true)
+            expect(nativeFunctions._lte.bind(scope)(new Date('2020-01-02'), new Date('2020-01-02'))).toBe(true)
         })
         it('should check if value is eq', () => {
-            expect(nativeFunctions._neq(undefined, null)).toBe(false)
-            expect(nativeFunctions._neq(null, '')).toBe(true)
-            expect(nativeFunctions._neq(10, 10)).toBe(false)
-            expect(nativeFunctions._neq(0, false)).toBe(true)
-            expect(nativeFunctions._neq(0, null)).toBe(true)
+            expect(nativeFunctions._neq.bind(scope)(undefined, null)).toBe(false)
+            expect(nativeFunctions._neq.bind(scope)(null, '')).toBe(true)
+            expect(nativeFunctions._neq.bind(scope)(10, 10)).toBe(false)
+            expect(nativeFunctions._neq.bind(scope)(0, false)).toBe(true)
+            expect(nativeFunctions._neq.bind(scope)(0, null)).toBe(true)
         })
         it('should check if value is in array', () => {
-            expect(nativeFunctions._in(undefined, undefined)).toBe(false)
-            expect(nativeFunctions._in(null, null)).toBe(false)
-            expect(nativeFunctions._in([], null)).toBe(false)
-            expect(nativeFunctions._in([undefined], null)).toBe(true)
-            expect(nativeFunctions._in([null], undefined)).toBe(true)
-            expect(nativeFunctions._in([10], 10)).toBe(true)
-            expect(nativeFunctions._in(['string'], 'string')).toBe(true)
-            expect(nativeFunctions._in([true], true)).toBe(true)
+            expect(nativeFunctions._in.bind(scope)(undefined, undefined)).toBe(false)
+            expect(nativeFunctions._in.bind(scope)(null, null)).toBe(false)
+            expect(nativeFunctions._in.bind(scope)([], null)).toBe(false)
+            expect(nativeFunctions._in.bind(scope)([undefined], null)).toBe(true)
+            expect(nativeFunctions._in.bind(scope)([null], undefined)).toBe(true)
+            expect(nativeFunctions._in.bind(scope)([10], 10)).toBe(true)
+            expect(nativeFunctions._in.bind(scope)(['string'], 'string')).toBe(true)
+            expect(nativeFunctions._in.bind(scope)([true], true)).toBe(true)
 
-            expect(nativeFunctions._in([false], null)).toBe(false)
-            expect(nativeFunctions._in([false], 0)).toBe(false)
-            expect(nativeFunctions._in([false], undefined)).toBe(false)
-            expect(() => nativeFunctions._in({ a: 'a' }, undefined)).toThrow()
+            expect(nativeFunctions._in.bind(scope)([false], null)).toBe(false)
+            expect(nativeFunctions._in.bind(scope)([false], 0)).toBe(false)
+            expect(nativeFunctions._in.bind(scope)([false], undefined)).toBe(false)
+            expect(() => nativeFunctions._in.bind(scope)({ a: 'a' }, undefined)).toThrow()
         })
         it('should do modulus', () => {
             expect(nativeFunctions._mod(10.1, 3)).toBe(1.1)

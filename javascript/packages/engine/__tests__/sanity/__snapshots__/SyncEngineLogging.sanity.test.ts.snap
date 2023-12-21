@@ -116,7 +116,7 @@ exports[`SyncEngine Should debug log in development environment 1`] = `
             Cross context references:
             Policy=Policy:Policy-1
             -- Error while evaluating expression: Policy.riskItems[10].model = \\"Audi\\"
-               Error message: Cannot read property 'model' of undefined
+               Error message: Cannot read properties of undefined (reading 'model')
          <- Couldn't evaluate condition expression due to error.
       <- Evaluated rule 'TR_CarCoverage_Condition_LimitAmt_error' on COLLCoverage:COLLCoverage-1:deductibleAmount. Evaluation status - IGNORED.
       -> Evaluating rule 'TR_CarCoverage_default' on COLLCoverage:COLLCoverage-1:deductibleAmount with priority -2147483648
@@ -132,7 +132,7 @@ exports[`SyncEngine Should debug log in development environment 1`] = `
             Cross context references:
             Policy=Policy:Policy-1
             -- Error while evaluating expression: Policy.riskItems[10].model = \\"Audi\\"
-               Error message: Cannot read property 'model' of undefined
+               Error message: Cannot read properties of undefined (reading 'model')
          <- Couldn't evaluate condition expression due to error.
       <- Evaluated rule 'TR_CarCoverage_Condition_LimitAmt_error' on CarCoverage:CarCoverage-1:deductibleAmount. Evaluation status - IGNORED.
       -> Evaluating rule 'TR_CarCoverage_default' on CarCoverage:CarCoverage-1:deductibleAmount with priority -2147483648
@@ -177,7 +177,7 @@ exports[`SyncEngine Should debug log in development environment 1`] = `
             Cross context references:
             Policy=Policy:Policy-1
          -- Error while evaluating expression: Policy.riskItems[10].model = \\"Audi\\"
-            Error message: Cannot read property 'model' of undefined
+            Error message: Cannot read properties of undefined (reading 'model')
          -- Evaluated ASSERTION. Field is valid. Assertion is not evaluated due to expression error.
       <- Evaluated rule 'TR_CarCoverage_Payload_error' on COLLCoverage:COLLCoverage-1:deductibleAmount. Evaluation status - IGNORED.
       -> Evaluating rule 'TR_CarCoverage_Payload_error' on CarCoverage:CarCoverage-1:deductibleAmount
@@ -185,7 +185,7 @@ exports[`SyncEngine Should debug log in development environment 1`] = `
             Cross context references:
             Policy=Policy:Policy-1
          -- Error while evaluating expression: Policy.riskItems[10].model = \\"Audi\\"
-            Error message: Cannot read property 'model' of undefined
+            Error message: Cannot read properties of undefined (reading 'model')
          -- Evaluated ASSERTION. Field is valid. Assertion is not evaluated due to expression error.
       <- Evaluated rule 'TR_CarCoverage_Payload_error' on CarCoverage:CarCoverage-1:deductibleAmount. Evaluation status - IGNORED.
    <- Evaluated rule 'TR_CarCoverage_Payload_error' on a total of 2 instances.
@@ -526,7 +526,7 @@ exports[`SyncEngine Should debug log in development environment with path provid
             Cross context references:
             Policy=Policy:path.to.Policy-1:Policy-1
             -- Error while evaluating expression: Policy.riskItems[10].model = \\"Audi\\"
-               Error message: Cannot read property 'model' of undefined
+               Error message: Cannot read properties of undefined (reading 'model')
          <- Couldn't evaluate condition expression due to error.
       <- Evaluated rule 'TR_CarCoverage_Condition_LimitAmt_error' on COLLCoverage:path.to.COLLCoverage-1:COLLCoverage-1:deductibleAmount. Evaluation status - IGNORED.
       -> Evaluating rule 'TR_CarCoverage_default' on COLLCoverage:path.to.COLLCoverage-1:COLLCoverage-1:deductibleAmount with priority -2147483648
@@ -542,7 +542,7 @@ exports[`SyncEngine Should debug log in development environment with path provid
             Cross context references:
             Policy=Policy:path.to.Policy-1:Policy-1
             -- Error while evaluating expression: Policy.riskItems[10].model = \\"Audi\\"
-               Error message: Cannot read property 'model' of undefined
+               Error message: Cannot read properties of undefined (reading 'model')
          <- Couldn't evaluate condition expression due to error.
       <- Evaluated rule 'TR_CarCoverage_Condition_LimitAmt_error' on CarCoverage:path.to.CarCoverage-1:CarCoverage-1:deductibleAmount. Evaluation status - IGNORED.
       -> Evaluating rule 'TR_CarCoverage_default' on CarCoverage:path.to.CarCoverage-1:CarCoverage-1:deductibleAmount with priority -2147483648
@@ -587,7 +587,7 @@ exports[`SyncEngine Should debug log in development environment with path provid
             Cross context references:
             Policy=Policy:path.to.Policy-1:Policy-1
          -- Error while evaluating expression: Policy.riskItems[10].model = \\"Audi\\"
-            Error message: Cannot read property 'model' of undefined
+            Error message: Cannot read properties of undefined (reading 'model')
          -- Evaluated ASSERTION. Field is valid. Assertion is not evaluated due to expression error.
       <- Evaluated rule 'TR_CarCoverage_Payload_error' on COLLCoverage:path.to.COLLCoverage-1:COLLCoverage-1:deductibleAmount. Evaluation status - IGNORED.
       -> Evaluating rule 'TR_CarCoverage_Payload_error' on CarCoverage:path.to.CarCoverage-1:CarCoverage-1:deductibleAmount
@@ -595,7 +595,7 @@ exports[`SyncEngine Should debug log in development environment with path provid
             Cross context references:
             Policy=Policy:path.to.Policy-1:Policy-1
          -- Error while evaluating expression: Policy.riskItems[10].model = \\"Audi\\"
-            Error message: Cannot read property 'model' of undefined
+            Error message: Cannot read properties of undefined (reading 'model')
          -- Evaluated ASSERTION. Field is valid. Assertion is not evaluated due to expression error.
       <- Evaluated rule 'TR_CarCoverage_Payload_error' on CarCoverage:path.to.CarCoverage-1:CarCoverage-1:deductibleAmount. Evaluation status - IGNORED.
    <- Evaluated rule 'TR_CarCoverage_Payload_error' on a total of 2 instances.

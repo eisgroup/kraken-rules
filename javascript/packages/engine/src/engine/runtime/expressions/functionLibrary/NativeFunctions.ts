@@ -15,15 +15,20 @@
  */
 
 import { message } from './function.utils'
-import { Numbers } from './../math/Numbers'
+import { Numbers } from '../math/Numbers'
+import { DateCalculator } from '../date/DateCalculator'
+import { InternalFunctionScope } from './Registry'
 
 export const nativeFunctions = {
     _s,
     _n,
-    _nd,
     _b,
     _eq,
     _neq,
+    _mt,
+    _mte,
+    _lt,
+    _lte,
     _in,
     _mod,
     _sub,
@@ -96,24 +101,6 @@ function _n(obj?: unknown): number {
 }
 
 /**
- * Coerces value to number or Date for comparison
- * in consistent manner throughout different Kraken Engine implementations
- *
- * @param obj
- * @return a coerced number or Date
- * @throws error if value type is not number or Date
- */
-function _nd(obj?: unknown): number | Date {
-    if (typeof obj === 'number') {
-        return obj as number
-    }
-    if (obj instanceof Date) {
-        return obj as Date
-    }
-    throw new Error(message('_nd', `Parameter must be number or Date, but was ${typeof obj} instead`))
-}
-
-/**
  * Coerces value to boolean in consistent manner throughout different Kraken Engine implementations
  *
  * @param obj
@@ -135,12 +122,18 @@ function _b(obj?: unknown): boolean {
  * @param value2
  * @return true if values are equal
  */
-function _eq(value1?: unknown, value2?: unknown): boolean {
+function _eq(this: InternalFunctionScope, value1?: unknown, value2?: unknown): boolean {
+    return eq(value1, value2, this.dateCalculator)
+}
+
+function eq(value1: unknown, value2: unknown, dc: DateCalculator<unknown, unknown>): boolean {
     if (value1 == undefined && value2 == undefined) {
         return true
     }
-    if (value1 instanceof Date && value2 instanceof Date) {
-        return value1.getTime() === value2.getTime()
+    if ((dc.isDate(value1) && dc.isDate(value2)) || (dc.isDateTime(value1) && dc.isDateTime(value2))) {
+        const value1Time = dc.convertDateToJavascriptDate(value1).getTime()
+        const value2Time = dc.convertDateToJavascriptDate(value2).getTime()
+        return value1Time === value2Time
     }
     return value1 === value2
 }
@@ -153,8 +146,60 @@ function _eq(value1?: unknown, value2?: unknown): boolean {
  * @param value2
  * @return true if values are not equal
  */
-function _neq(value1?: unknown, value2?: unknown): boolean {
-    return !_eq(value1, value2)
+function _neq(this: InternalFunctionScope, value1?: unknown, value2?: unknown): boolean {
+    return !eq(value1, value2, this.dateCalculator)
+}
+
+function _mt(this: InternalFunctionScope, value1?: unknown, value2?: unknown): boolean {
+    if (typeof value1 === 'number' && typeof value2 === 'number') {
+        return value1 > value2
+    }
+    const dc = this.dateCalculator
+    if ((dc.isDate(value1) && dc.isDate(value2)) || (dc.isDateTime(value1) && dc.isDateTime(value2))) {
+        const value1Time = dc.convertDateToJavascriptDate(value1).getTime()
+        const value2Time = dc.convertDateToJavascriptDate(value2).getTime()
+        return value1Time > value2Time
+    }
+    throw new Error(`Objects are not comparable: ${value1} ${value2}`)
+}
+
+function _mte(this: InternalFunctionScope, value1?: unknown, value2?: unknown): boolean {
+    if (typeof value1 === 'number' && typeof value2 === 'number') {
+        return value1 >= value2
+    }
+    const dc = this.dateCalculator
+    if ((dc.isDate(value1) && dc.isDate(value2)) || (dc.isDateTime(value1) && dc.isDateTime(value2))) {
+        const value1Time = dc.convertDateToJavascriptDate(value1).getTime()
+        const value2Time = dc.convertDateToJavascriptDate(value2).getTime()
+        return value1Time >= value2Time
+    }
+    throw new Error(`Objects are not comparable: ${value1} ${value2}`)
+}
+
+function _lt(this: InternalFunctionScope, value1?: unknown, value2?: unknown): boolean {
+    if (typeof value1 === 'number' && typeof value2 === 'number') {
+        return value1 < value2
+    }
+    const dc = this.dateCalculator
+    if ((dc.isDate(value1) && dc.isDate(value2)) || (dc.isDateTime(value1) && dc.isDateTime(value2))) {
+        const value1Time = dc.convertDateToJavascriptDate(value1).getTime()
+        const value2Time = dc.convertDateToJavascriptDate(value2).getTime()
+        return value1Time < value2Time
+    }
+    throw new Error(`Objects are not comparable: ${value1} ${value2}`)
+}
+
+function _lte(this: InternalFunctionScope, value1?: unknown, value2?: unknown): boolean {
+    if (typeof value1 === 'number' && typeof value2 === 'number') {
+        return value1 <= value2
+    }
+    const dc = this.dateCalculator
+    if ((dc.isDate(value1) && dc.isDate(value2)) || (dc.isDateTime(value1) && dc.isDateTime(value2))) {
+        const value1Time = dc.convertDateToJavascriptDate(value1).getTime()
+        const value2Time = dc.convertDateToJavascriptDate(value2).getTime()
+        return value1Time <= value2Time
+    }
+    throw new Error(`Objects are not comparable: ${value1} ${value2}`)
 }
 
 /**
@@ -166,13 +211,13 @@ function _neq(value1?: unknown, value2?: unknown): boolean {
  * @return true if values are equal
  * @throws error if array parameter type is not Array
  */
-function _in(array?: unknown, value?: unknown): boolean {
+function _in(this: InternalFunctionScope, array?: unknown, value?: unknown): boolean {
     if (array == undefined) {
         return false
     }
     if (Array.isArray(array)) {
         for (const item of array) {
-            if (_eq(item, value)) {
+            if (eq(item, value, this.dateCalculator)) {
                 return true
             }
         }

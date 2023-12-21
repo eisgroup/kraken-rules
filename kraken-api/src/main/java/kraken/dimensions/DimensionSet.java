@@ -25,9 +25,9 @@ import kraken.annotations.API;
 /**
  *  Represents information about rule variability by dimensions. Holds the set of dimension names,
  *  by which rule is varied, as well as variability type.
- *  If rule varies by rule execution timezone then the timezone must also be provided as a special kind of dimension
+ *  If rule varies by rule execution time zone then the time zone must also be provided as a special kind of dimension
  *  with name {@link kraken.context.Context#RULE_TIMEZONE_ID_DIMENSION}.
- *  Otherwise, rule caching may behave incorrectly when timezone changes between rule evaluations.
+ *  Otherwise, rule caching may behave incorrectly when time zone changes between rule evaluations.
  *
  * @author rimas
  * @since 1.40.0

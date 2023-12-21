@@ -45,7 +45,7 @@ import {
 import { EntryPointBundle } from '../../models/EntryPointBundle'
 import EntryPointEvaluation = EntryPointBundle.EntryPointEvaluation
 import { EvaluationMode, isSupportedPayloadType } from '../runtime/EvaluationMode'
-import { EntryPointBundleCache, ruleTimezoneIdDimension } from '../../bundle-cache/EntryPointBundleCache'
+import { EntryPointBundleCache, ruleTimeZoneIdDimension } from '../../bundle-cache/EntryPointBundleCache'
 import { OrderedEvaluationLoop } from '../processors/OrderedEvaluationLoop'
 import { DateCalculator } from '../runtime/expressions/date/DateCalculator'
 import { DataContextPathProvider, DEFAULT_PATH_PROVIDER } from '../runtime/DataContextPathProvider'
@@ -86,17 +86,18 @@ export interface EvaluationConfig {
     dataContextPathProvider?: DataContextPathProvider
 
     /**
-     * Timezone used for rule date calculations. If not specified then system locale will be used for calculations.
+     * Time zone used for rule date calculations. If not specified then system locale will be used for calculations.
      * If specified, then {@link SyncEngineConfig#cache} will be queried and cached by using rule timezone id as
-     * an additional dimension by key with value {@link ruleTimezoneIdDimension}
+     * an additional dimension by key with value {@link ruleTimeZoneIdDimension}
      */
-    ruleTimezoneId?: string
+    ruleTimeZoneId?: string
 
     /**
      * Environment specific implementation of {@link DateCalculator}.
-     * If not specified then default calculator is used which does not support timezone specific date calculations.
+     * If not specified then default calculator is used which does not support timezone specific date calculations
+     * or custom DATE types.
      */
-    dateCalculator?: DateCalculator
+    dateCalculator?: DateCalculator<unknown, unknown>
 }
 
 /**
@@ -225,8 +226,8 @@ export class SyncEngine {
         const bundleDimensionContext = {
             ...evaluationConfig.context.dimensions,
         }
-        if (evaluationConfig.ruleTimezoneId) {
-            bundleDimensionContext[ruleTimezoneIdDimension] = evaluationConfig.ruleTimezoneId
+        if (evaluationConfig.ruleTimeZoneId) {
+            bundleDimensionContext[ruleTimeZoneIdDimension] = evaluationConfig.ruleTimeZoneId
         }
 
         const bundle = this.#bundleCache.get(entryPointName, bundleDimensionContext)
@@ -248,11 +249,11 @@ export class SyncEngine {
         const filteredRulesEvaluation = this.filterRules(bundle.evaluation, evaluationConfig.evaluationMode)
         if (!filteredRulesEvaluation.rules.length) {
             logger.debug(() => `Kraken rules evaluation took ${Math.round(Date.now() - start)} ms`, true)
-            return new DefaultEntryPointResult({}, session.timestamp, session.ruleTimezoneId)
+            return new DefaultEntryPointResult({}, session.timestamp, session.ruleTimeZoneId)
         }
         this.#expressionEvaluator.rebuildFunctions(
             FunctionRegistry.INSTANCE.bindRegisteredFunctions({
-                zoneId: session.ruleTimezoneId,
+                zoneId: session.ruleTimeZoneId,
                 dateCalculator: session.dateCalculator,
             }),
         )

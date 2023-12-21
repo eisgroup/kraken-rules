@@ -204,7 +204,7 @@ export class DefaultValuePayloadHandler implements RulePayloadHandler {
                     return value
                 }
                 if (value instanceof Date && session.dateCalculator.isDateTime(value)) {
-                    return session.dateCalculator.toDate(value, session.ruleTimezoneId)
+                    return session.dateCalculator.toDate(value, session.ruleTimeZoneId)
                 }
                 throw new Error(`Cannot convert to: ${field.fieldType}`)
             case 'DATETIME':
@@ -212,7 +212,7 @@ export class DefaultValuePayloadHandler implements RulePayloadHandler {
                     return value
                 }
                 if (value instanceof Date && session.dateCalculator.isDate(value)) {
-                    return session.dateCalculator.toDateTime(value, session.ruleTimezoneId)
+                    return session.dateCalculator.toDateTime(value, session.ruleTimeZoneId)
                 }
                 throw new Error(`Cannot convert to: ${field.fieldType}`)
             case 'BOOLEAN':

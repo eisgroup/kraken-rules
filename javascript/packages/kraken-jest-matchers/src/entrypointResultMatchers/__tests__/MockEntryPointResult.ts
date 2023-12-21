@@ -24,7 +24,7 @@ export class MockEntryPointResult implements EntryPointResult {
     readonly results: Record<string, FieldEvaluationResult>
     readonly ruleResults: RuleEvaluationResult[]
     readonly evaluationTimestamp: Date
-    readonly ruleTimezoneId: string
+    readonly ruleTimeZoneId: string
 
     constructor(results: Record<string, FieldEvaluationResult>) {
         this.results = results
@@ -32,7 +32,7 @@ export class MockEntryPointResult implements EntryPointResult {
             .map(x => x.ruleResults)
             .reduce(flat, [])
         this.evaluationTimestamp = new Date()
-        this.ruleTimezoneId = 'Europe/Vilnius'
+        this.ruleTimeZoneId = 'Europe/Vilnius'
     }
 
     getAllRuleResults(): RuleEvaluationResult[] {
