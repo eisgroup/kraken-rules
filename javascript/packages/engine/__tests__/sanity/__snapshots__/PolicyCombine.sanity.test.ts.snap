@@ -1301,7 +1301,7 @@ Object {
         ],
       },
     },
-    "ruleTimezoneId": "Europe/Vilnius",
+    "ruleTimeZoneId": "Europe/Vilnius",
   },
   "fieldResults": Object {
     "AddressInfo:17:countryCd": Object {

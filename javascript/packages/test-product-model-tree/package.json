@@ -1,13 +1,13 @@
 {
     "name": "kraken-test-product-model-tree",
-    "version": "1.55.1-stage.0",
+    "version": "1.57.1-stage.0",
     "description": "",
     "main": "target/index.js",
     "types": "target/index.d.ts",
     "author": "Pavel Surinin <psurinin@eisgroup.com> (http://eisgroup.com)",
     "license": "Apache-2.0",
     "devDependencies": {
-        "typescript": "5.1.6"
+        "typescript": "5.2.2"
     },
     "scripts": {
         "compile": "tsc",

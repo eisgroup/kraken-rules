@@ -13,7 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { DefaultDateCalculator } from '../../../../../src/engine/runtime/expressions/date/DateCalculator'
+
+import {
+    DefaultDateCalculator,
+    resolveBrowserTimezoneId,
+} from '../../../../../src/engine/runtime/expressions/math/Temporal'
 
 function d(date: string): Date {
     return new Date(`${date}T00:00:00`)
@@ -21,7 +25,7 @@ function d(date: string): Date {
 
 describe('DefaultDateCalculator', () => {
     const calculator = new DefaultDateCalculator()
-    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone
+    const tz = resolveBrowserTimezoneId()
     it('should create Date', () => {
         expect(calculator.createDate(2020, 1, 23)).toStrictEqual(new Date('2020-01-23T00:00:00'))
         expect(() => calculator.createDate(2020, 0, 1)).toThrow()

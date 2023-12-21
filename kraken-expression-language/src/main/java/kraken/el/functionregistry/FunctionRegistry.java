@@ -63,14 +63,8 @@ import kraken.el.scope.type.Type;
 public final class FunctionRegistry {
 
     private static final ReadWriteLock functionLock = new ReentrantReadWriteLock();
-    public static final String NATIVE_FUNCTION_DOCS_ABSENT =
-        "Native function must be annotated with " + FunctionDocumentation.class.getName();
-    public static final String NATIVE_LIBRARY_ABSENT_DOCS =
-        "Native function library must be annotated with " + LibraryDocumentation.class.getName();
-
     private static List<LibraryDoc> LIBRARY_DOCS = new ArrayList<>();
     private static Map<FunctionHeader, JavaFunction> ALL_FUNCTIONS = new HashMap<>();
-
     private static Map<FunctionHeader, JavaFunction> FUNCTIONS_NO_EXP_TARGET = new HashMap<>();
     private static Map<String, Map<FunctionHeader, JavaFunction>> FUNCTIONS_BY_EXP_TARGET = new HashMap<>();
 
@@ -353,7 +347,7 @@ public final class FunctionRegistry {
         FunctionDocumentation doc = method.getAnnotation(FunctionDocumentation.class);
         if (isNative && doc == null) {
             throw new IllegalStateException(
-                String.format("%s. method '%s'", NATIVE_FUNCTION_DOCS_ABSENT, method.getName()));
+                String.format("Native function must be annotated with @FunctionDocumentation. Method: %s", method.getName()));
         }
         FunctionHeader functionHeader = javaFunction.header();
         return new FunctionDoc(

@@ -44,9 +44,9 @@ public final class EvaluationConfig {
     private final String currencyCd;
 
     /**
-     * Timezone to use for date calculations and date formatting
+     * Time zone to use for date calculations and date formatting
      */
-    private final ZoneId ruleTimezoneId;
+    private final ZoneId ruleTimeZoneId;
 
     private final EvaluationMode evaluationMode;
 
@@ -73,19 +73,19 @@ public final class EvaluationConfig {
     public EvaluationConfig(@Nonnull Map<String, Object> context,
                             @Nonnull String currencyCd,
                             @Nonnull EvaluationMode evaluationMode,
-                            @Nonnull ZoneId ruleTimezoneId) {
-        this(context, currencyCd, evaluationMode, ruleTimezoneId, DataContextPathProvider.DEFAULT);
+                            @Nonnull ZoneId ruleTimeZoneId) {
+        this(context, currencyCd, evaluationMode, ruleTimeZoneId, DataContextPathProvider.DEFAULT);
     }
 
     public EvaluationConfig(@Nonnull Map<String, Object> context,
                             @Nonnull String currencyCd,
                             @Nonnull EvaluationMode evaluationMode,
-                            @Nonnull ZoneId ruleTimezoneId,
+                            @Nonnull ZoneId ruleTimeZoneId,
                             @Nonnull DataContextPathProvider dataContextPathProvider) {
         this.context = Objects.requireNonNull(context);
         this.currencyCd = Objects.requireNonNull(currencyCd);
         this.evaluationMode = Objects.requireNonNull(evaluationMode);
-        this.ruleTimezoneId = Objects.requireNonNull(ruleTimezoneId);
+        this.ruleTimeZoneId = Objects.requireNonNull(ruleTimeZoneId);
         this.dataContextPathProvider = Objects.requireNonNull(dataContextPathProvider);
     }
 
@@ -100,8 +100,8 @@ public final class EvaluationConfig {
     }
 
     @Nonnull
-    public ZoneId getRuleTimezoneId() {
-        return ruleTimezoneId;
+    public ZoneId getRuleTimeZoneId() {
+        return ruleTimeZoneId;
     }
 
     @Nonnull

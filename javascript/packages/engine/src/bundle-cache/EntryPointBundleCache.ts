@@ -4,7 +4,7 @@ import { ExpressionContextManager } from './expression-context-manager/Expressio
 
 export type DimensionSet = string[]
 export type Dimensions = Record<string, unknown>
-export const ruleTimezoneIdDimension = '__ruleTimezoneId__'
+export const ruleTimeZoneIdDimension = '__ruleTimeZoneId__'
 
 /**
  * Cache to manage {@link EntryPointBundle}

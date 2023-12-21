@@ -23,7 +23,7 @@ import RuleEvaluationResult = RuleEvaluationResults.RuleEvaluationResult
  */
 export interface EntryPointResult {
     readonly evaluationTimestamp: Date
-    readonly ruleTimezoneId: string
+    readonly ruleTimeZoneId: string
 
     /**
      * Returns entry point result mapped by field name.

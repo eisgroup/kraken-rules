@@ -16,6 +16,56 @@
 
 import { debug } from './debugger/Debugger'
 
+const watchedFields = ['enabled', 'debug', 'info', 'error', 'warning', 'entriesCount', 'log', 'break']
+const watchedMethods = ['debugRule', 'debugEntryPoint', 'delete', 'clear']
+const nestedObjects = ['logger', 'debugger', 'breakPoints']
+
+const handler: ProxyHandler<object> = {
+    get(target: object, key: string | symbol): object {
+        let value = Reflect.get(target, key)
+
+        if (typeof value === 'object' && value !== null && nestedObjects.some(nested => nested.includes(String(key)))) {
+            return new Proxy(Reflect.get(target, key), handler)
+        }
+
+        if (typeof value === 'function') {
+            value = value.bind(target)
+            return new Proxy(value, handler)
+        }
+
+        return value
+    },
+    set(target: object, key: string | symbol, value: unknown): boolean {
+        Reflect.set(target, key, value)
+
+        if (watchedFields.some(watchedField => watchedField.includes(String(key)))) {
+            const config = { ...(global as unknown as WithKraken).Kraken }
+            config.logger.logs = []
+
+            sessionStorage.setItem('krakenLogger', JSON.stringify(config, replacer))
+        }
+
+        return true
+    },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    apply(target: object, thisArg: any, argArray: any[]): any {
+        if (typeof target === 'function') {
+            const applied = Reflect.apply(target, thisArg, argArray)
+
+            if (watchedMethods.some(watchedMethod => target.name.includes(watchedMethod))) {
+                const config = { ...(global as unknown as WithKraken).Kraken }
+                config.logger.logs = []
+
+                sessionStorage.setItem('krakenLogger', JSON.stringify(config, replacer))
+            }
+
+            return applied
+        }
+
+        throw Error('Unable to call a function. Target is not a function.')
+    },
+}
+
 /**
  * Configures Kraken evaluation. It can be configured from the console.
  * Open the console and  modify the config options
@@ -45,13 +95,14 @@ export type WithKraken = {
 }
 
 function init(): void {
+    const savedConfig = getFromSessionStorage()
     const logger: KrakenConfig['logger'] = {
         enabled: process.env.NODE_ENV !== 'production',
-        debug: false,
-        info: true,
-        error: true,
-        warning: true,
-        entriesCount: 2000,
+        debug: savedConfig ? savedConfig.logger.debug : false,
+        info: savedConfig ? savedConfig.logger.info : true,
+        error: savedConfig ? savedConfig.logger.error : true,
+        warning: savedConfig ? savedConfig.logger.warning : true,
+        entriesCount: savedConfig ? savedConfig.logger.entriesCount : 2000,
         logs: [],
         clear(): void {
             const config = (global as unknown as WithKraken).Kraken
@@ -77,19 +128,70 @@ function init(): void {
         },
     }
     if (global) {
-        ;(global as unknown as WithKraken).Kraken = {
-            logger,
-            debugger: new debug.impl.DevToolsDebugger(),
+        if (typeof window !== 'undefined') {
+            ;(global as unknown as WithKraken).Kraken = new Proxy<KrakenConfig>(
+                {
+                    logger,
+                    debugger: new debug.impl.DevToolsDebugger(savedConfig?.debugger),
+                },
+                handler,
+            )
+        } else {
+            ;(global as unknown as WithKraken).Kraken = {
+                logger,
+                debugger: new debug.impl.DevToolsDebugger(),
+            }
         }
+
         return
     }
 }
 
 function getConfig(): KrakenConfig {
     if (global) {
-        return (global as unknown as { Kraken: KrakenConfig })['Kraken']
+        return getFromSessionStorage() ?? (global as unknown as { Kraken: KrakenConfig })['Kraken']
     }
     throw new Error('Kraken configuration was not initialized')
+}
+
+function getFromSessionStorage(): KrakenConfig | undefined {
+    if (typeof window !== 'undefined') {
+        if (sessionStorage.getItem('krakenLogger')) {
+            return JSON.parse(sessionStorage.getItem('krakenLogger') ?? '', reviver)
+        }
+    }
+
+    return undefined
+}
+
+type ValueContainer = {
+    dataType: string
+    value: unknown
+}
+
+function replacer(_key: unknown, value: unknown) {
+    if (value instanceof Map) {
+        return {
+            dataType: 'Map',
+            value: [...value],
+        } as ValueContainer
+    } else {
+        return value
+    }
+}
+
+function reviver(_key: unknown, value: unknown) {
+    if (isValueContainer(value)) {
+        if (value.dataType === 'Map') {
+            return new Map(value.value as [unknown, unknown][])
+        }
+    }
+
+    return value
+}
+
+function isValueContainer(value: unknown): value is ValueContainer {
+    return typeof value === 'object' && value !== null && 'dataType' in value
 }
 
 export const krakenConfig = { init, getConfig }

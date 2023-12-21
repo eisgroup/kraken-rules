@@ -76,7 +76,7 @@ import kraken.el.FunctionContextHolder;
  *<p/>
  * Custom function implementation can access {@link kraken.el.FunctionContextHolder.FunctionContext} by
  * {@link FunctionContextHolder#getFunctionContext()} to access current evaluation session specific metadata,
- * such as a current evaluation timezone.
+ * such as a current evaluation time zone.
  *
  * @author mulevicius
  */

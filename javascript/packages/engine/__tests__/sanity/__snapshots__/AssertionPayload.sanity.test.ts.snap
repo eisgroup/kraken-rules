@@ -165,7 +165,7 @@ Object {
         ],
       },
     },
-    "ruleTimezoneId": "Europe/Vilnius",
+    "ruleTimeZoneId": "Europe/Vilnius",
   },
   "fieldResults": Object {
     "AddressInfo:7:doNotSolicit": Object {
@@ -477,7 +477,7 @@ Object {
         ],
       },
     },
-    "ruleTimezoneId": "Europe/Vilnius",
+    "ruleTimeZoneId": "Europe/Vilnius",
   },
   "fieldResults": Object {
     "AddressInfo:5:doNotSolicit": Object {
@@ -670,7 +670,7 @@ Object {
         ],
       },
     },
-    "ruleTimezoneId": "Europe/Vilnius",
+    "ruleTimeZoneId": "Europe/Vilnius",
   },
   "fieldResults": Object {
     "Vehicle:6:included": Object {
@@ -958,7 +958,7 @@ Object {
         ],
       },
     },
-    "ruleTimezoneId": "Europe/Vilnius",
+    "ruleTimeZoneId": "Europe/Vilnius",
   },
   "fieldResults": Object {
     "AddressInfo:17:doNotSolicit": Object {

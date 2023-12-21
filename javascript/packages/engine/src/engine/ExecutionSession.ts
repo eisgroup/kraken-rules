@@ -19,15 +19,20 @@ import { WithKraken } from '../config'
 import { debug } from '../debugger/Debugger'
 import { EvaluationConfig } from './executer/SyncEngine'
 import { DataContext } from './contexts/data/DataContext'
-import { DateCalculator, DefaultDateCalculator } from './runtime/expressions/date/DateCalculator'
+import { DateCalculator } from './runtime/expressions/date/DateCalculator'
+import {
+    DateCalculatorAdapter,
+    DefaultDateCalculator,
+    resolveBrowserTimezoneId,
+} from './runtime/expressions/math/Temporal'
 
 export class ExecutionSession {
     public readonly entryPointName: string
     public readonly currencyCd: string
     public readonly expressionContext: Record<string, unknown>
     public readonly timestamp: Date
-    public readonly ruleTimezoneId: string
-    public readonly dateCalculator: DateCalculator
+    public readonly ruleTimeZoneId: string
+    public readonly dateCalculator: DateCalculator<unknown, unknown>
     private readonly breakPointMatcher: debug.impl.BreakPointMatcher
     constructor(
         evaluationConfig: EvaluationConfig,
@@ -42,8 +47,10 @@ export class ExecutionSession {
         }
         this.timestamp = new Date()
         this.entryPointName = entryPointName
-        this.dateCalculator = evaluationConfig.dateCalculator ?? new DefaultDateCalculator()
-        this.ruleTimezoneId = evaluationConfig.ruleTimezoneId ?? Intl.DateTimeFormat().resolvedOptions().timeZone
+        this.dateCalculator = evaluationConfig.dateCalculator
+            ? new DateCalculatorAdapter(evaluationConfig.dateCalculator)
+            : new DefaultDateCalculator()
+        this.ruleTimeZoneId = evaluationConfig.ruleTimeZoneId ?? resolveBrowserTimezoneId()
         const g: unknown = globalThis
         if (globalKrakenObjectInitialized(g)) {
             this.breakPointMatcher = new debug.impl.BreakPointMatcher(g.Kraken.debugger.breakPoints, {

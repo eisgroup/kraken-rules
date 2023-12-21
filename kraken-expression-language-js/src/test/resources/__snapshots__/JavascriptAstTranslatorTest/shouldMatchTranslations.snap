@@ -1,0 +1,359 @@
+true
+=>
+true
+
+false
+=>
+false
+
+null
+=>
+undefined
+
+1
+=>
+1
+
+-1
+=>
+-1
+
+1.0
+=>
+1.0
+
+1.5
+=>
+1.5
+
+-1.5
+=>
+-1.5
+
+'string'
+=>
+'string'
+
+"string"
+=>
+'string'
+
+'\'\"\\'
+=>
+'\'"\\'
+
+Coverage
+=>
+Coverage
+
+Coverage.limit
+=>
+Coverage.limit
+
+coverages
+=>
+coverages
+
+this.coverages
+=>
+coverages
+
+coverages
+=>
+coverages
+
+coverages[0]
+=>
+__dataObject__.coverages[0]
+
+coverages[0].limit
+=>
+__dataObject__.coverages[0].limit
+
+coverages[this.limit > 20]
+=>
+(__dataObject__.coverages || []).filter(_x_=>this._mt(_x_.limit,20))
+
+coverages[limit > this.limit]
+=>
+(__dataObject__.coverages || []).filter(_x_=>this._mt(_x_.limit,_x_.limit))
+
+coverages[*].limit
+=>
+(__dataObject__.coverages || []).map(_x_=>_x_.limit)
+
+coverages[this.limit > 20].limit
+=>
+((__dataObject__.coverages || []).filter(_x_=>this._mt(_x_.limit,20)) || []).map(_x_=>_x_.limit)
+
+riskItems[*].coverages[*].limit
+=>
+((__dataObject__.riskItems || []).map(_x_=>_x_.coverages).reduce((p, n) => p.concat(n), []) || []).map(_x_=>_x_.limit)
+
+riskItems[Count(coverages[limit > 10]) = 0]
+=>
+(__dataObject__.riskItems || []).filter(_x_=>this._eq(this.Count((_x_.coverages || []).filter(_y_=>this._mt(_y_.limit,10))), 0))
+
+context.riskItems[Count(context.coverages[riskItemLimit > this.limit]) = 0]
+=>
+(this._flatMap(context,_x_=>_x_.riskItems) || []).filter(_x_=>this._eq(this.Count((this._flatMap(context,_y_=>_y_.coverages) || []).filter(_y_=>this._mt(this._o('riskItemLimit',[_y_, _x_]).riskItemLimit,this._flatMap(_y_,_z_=>_z_.limit)))), 0))
+
+-Coverage.limit
+=>
+-this._n(Coverage.limit)
+
+Coverage.limit + 5
+=>
+this._add(Coverage.limit, 5)
+
+Coverage.limit - 5
+=>
+this._sub(Coverage.limit, 5)
+
+Coverage.limit * 5
+=>
+this._mult(Coverage.limit, 5)
+
+Coverage.limit / 5
+=>
+this._div(Coverage.limit, 5)
+
+Coverage.limit ** 5
+=>
+this._pow(Coverage.limit, 5)
+
+Coverage.limit % 5
+=>
+this._mod(Coverage.limit, 5)
+
+Coverage.limit ** 5 + 10
+=>
+this._add(this._pow(Coverage.limit, 5), 10)
+
+Coverage.limit ** (5 + 10)
+=>
+this._pow(Coverage.limit, this._add(5, 10))
+
+Coverage.limit > 5
+=>
+this._mt(Coverage.limit,5)
+
+Coverage.limit >= 5
+=>
+this._mte(Coverage.limit,5)
+
+Coverage.limit < 5
+=>
+this._lt(Coverage.limit,5)
+
+Coverage.limit <= 5
+=>
+this._lte(Coverage.limit,5)
+
+Coverage.limit = 5
+=>
+this._eq(Coverage.limit, 5)
+
+Coverage.limit != 5
+=>
+this._neq(Coverage.limit, 5)
+
+!(Coverage.limit = 5)
+=>
+!this._eq(Coverage.limit, 5)
+
+not(Coverage.limit = 5)
+=>
+!this._eq(Coverage.limit, 5)
+
+Coverage.coverageCd matches '[a..z]'
+=>
+(/[a..z]/.test(this._s(Coverage.coverageCd)))
+
+Coverage.limit in {1, 2, 3}
+=>
+this._in([1,2,3],Coverage.limit)
+
+!true
+=>
+!true
+
+Coverage.selected and Coverage.included
+=>
+(this._b(Coverage.selected) && this._b(Coverage.included))
+
+Coverage.selected or Coverage.included
+=>
+(this._b(Coverage.selected) || this._b(Coverage.included))
+
+false or Coverage.selected and Coverage.included
+=>
+(false || (this._b(Coverage.selected) && this._b(Coverage.included)))
+
+false and Coverage.selected or Coverage.included
+=>
+((false && this._b(Coverage.selected)) || this._b(Coverage.included))
+
+if Coverage.selected then Coverage.limit
+=>
+(this._b(Coverage.selected) ? Coverage.limit : undefined)
+
+if Coverage.selected then Coverage.limit else RiskItem.limit
+=>
+(this._b(Coverage.selected) ? Coverage.limit : RiskItem.limit)
+
+coverages[this instanceof Coverage]
+=>
+(__dataObject__.coverages || []).filter(_x_=>this._i(_x_,'Coverage'))
+
+coverages[this typeof Coverage]
+=>
+(__dataObject__.coverages || []).filter(_x_=>this._t(_x_,'Coverage'))
+
+Coverage instanceof Coverage
+=>
+this._i(Coverage,'Coverage')
+
+Coverage typeof Coverage
+=>
+this._t(Coverage,'Coverage')
+
+(Coverage) Coverage
+=>
+Coverage
+
+Count(coverages)
+=>
+this.Count(__dataObject__.coverages)
+
+riskItems[*].coverages[Count(coverages[*].limit)]
+=>
+(__dataObject__.riskItems || []).map(_x_=>_x_.coverages[this.Count((__dataObject__.coverages || []).map(_y_=>_y_.limit))])
+
+context.additional.policies[Distinct(for p in {this.policyNumber} return p)[0] = policyNumber]
+=>
+(this._flatMap(this._flatMap(context,_x_=>_x_.additional),_x_=>_x_.policies) || []).filter(_x_=>this._eq(this.Distinct(([this._flatMap(_x_,_y_=>_y_.policyNumber)] || []).map(p=>p).reduce((p, n) => p.concat(n), []))[0], _x_.policyNumber))
+
+FromMoney(Coverage.money) > 100
+=>
+this._mt(this.FromMoney(Coverage.money),100)
+
+Coverage.money > 100
+=>
+this._mt(this.FromMoney(Coverage.money),100)
+
+{Coverage.limit, RiskItem.limit}
+=>
+[Coverage.limit,RiskItem.limit]
+
+{'key1' : Coverage.limit, 'key2' : RiskItem.limit}
+=>
+{'key1':Coverage.limit,'key2':RiskItem.limit}
+
+{}
+=>
+[]
+
+GenericArray({Coverage.money, 1})
+=>
+this.GenericArray([this.FromMoney(Coverage.money),1])
+
+(coverages[limit > 20].deductibleAmounts)[0]
+=>
+((__dataObject__.coverages || []).filter(_x_=>this._mt(_x_.limit,20)) || []).map(_x_=>_x_.deductibleAmounts).reduce((p, n) => p.concat(n), [])[0]
+
+coverages[limit > 20].deductibleAmounts[0]
+=>
+((__dataObject__.coverages || []).filter(_x_=>this._mt(_x_.limit,20)) || []).map(_x_=>_x_.deductibleAmounts[0])
+
+coverages[*].deductibleAmounts[this > 20]
+=>
+((__dataObject__.coverages || []).map(_x_=>_x_.deductibleAmounts).reduce((p, n) => p.concat(n), []) || []).filter(_x_=>this._mt(_x_,20))
+
+(coverages[*].limit)[this > 20]
+=>
+((__dataObject__.coverages || []).map(_x_=>_x_.limit) || []).filter(_x_=>this._mt(_x_,20))
+
+coverages[RiskItem.limit > 20].limit
+=>
+((__dataObject__.coverages || []).filter(_x_=>this._mt(RiskItem.limit,20)) || []).map(_x_=>_x_.limit)
+
+coverages[RiskItem.limit > 20]
+=>
+(__dataObject__.coverages || []).filter(_x_=>this._mt(RiskItem.limit,20))
+
+for c in coverages[limit > 20] return c.limitAmount
+=>
+((__dataObject__.coverages || []).filter(_x_=>this._mt(_x_.limit,20)) || []).map(c=>c.limitAmount)
+
+Count(for c in coverages[limit > 20] return c.limitAmount)
+=>
+this.Count(((__dataObject__.coverages || []).filter(_x_=>this._mt(_x_.limit,20)) || []).map(c=>c.limitAmount))
+
+every c in coverages satisfies c.limitAmount > 10
+=>
+(__dataObject__.coverages || []).every(c=>this._mt(c.limitAmount,10))
+
+some c in coverages satisfies c.limitAmount > 10
+=>
+(__dataObject__.coverages || []).some(c=>this._mt(c.limitAmount,10))
+
+riskItems[every c in coverages satisfies c.limitAmount > 10]
+=>
+(__dataObject__.riskItems || []).filter(_x_=>(_x_.coverages || []).every(c=>this._mt(c.limitAmount,10)))
+
+every c in coverages satisfies coverages[c.limitAmount = 10]
+=>
+(__dataObject__.coverages || []).every(c=>(__dataObject__.coverages || []).filter(_x_=>this._eq(c.limitAmount, 10)))
+
+Sum(for i in {2} return     i + Sum(for j in {2} return       j + Sum(for k in {2} return k)     )  )
+=>
+this.Sum(([2] || []).map(i=>this._add(i, this.Sum(([2] || []).map(j=>this._add(j, this.Sum(([2] || []).map(k=>k))))))))
+
+context.dynamic
+=>
+this._flatMap(context,_x_=>_x_.dynamic)
+
+context.dynamic * context.dynamic
+=>
+this._mult(this._flatMap(context,_x_=>_x_.dynamic), this._flatMap(context,_x_=>_x_.dynamic))
+
+context.value1 > context.value2
+=>
+this._mt(this._flatMap(context,_x_=>_x_.value1),this._flatMap(context,_x_=>_x_.value2))
+
+if(context.value1) then context.value2
+=>
+(this._b(this._flatMap(context,_x_=>_x_.value1)) ? this._flatMap(context,_x_=>_x_.value2) : undefined)
+
+context.array[0].value1 > Coverage.limit
+=>
+this._mt(this._flatMap(this._flatMap(context,_x_=>_x_.array[0]),_x_=>_x_.value1),Coverage.limit)
+
+every v in context.array[a > 10].value1 satisfies v < Coverage.limit 
+=>
+(this._flatMap((this._flatMap(context,_x_=>_x_.array) || []).filter(_x_=>this._mt(_x_.a,10)),_x_=>_x_.value1) || []).every(v=>this._lt(v,Coverage.limit))
+
+GetCoverages(RiskItem)[0].limit
+=>
+this.GetCoverages(RiskItem)[0].limit
+
+some l in GetCoverages(RiskItem).limit satisfies l == Coverage.limit
+=>
+((this.GetCoverages(RiskItem) || []).map(_x_=>_x_.limit) || []).some(l=>this._eq(l, Coverage.limit))
+
+set l to Coverage.limit return l > 100
+=>
+(()=>{const l=Coverage.limit;return this._mt(l,100);})()
+
+set l to Coverage.limit set islimit to every v in context.array[a > 10].value satisfies v < l return islimit = true
+=>
+(()=>{const l=Coverage.limit;const islimit=(this._flatMap((this._flatMap(context,_x_=>_x_.array) || []).filter(_x_=>this._mt(_x_.a,10)),_x_=>_x_.value) || []).every(v=>this._lt(v,l));return this._eq(islimit, true);})()
+
+set a to 100 set b to every c in coverages satisfies set limit to c.limitAmount return limit > a return if b then a
+=>
+(()=>{const a=100;const b=(__dataObject__.coverages || []).every(c=>(()=>{const limit=c.limitAmount;return this._mt(limit,a);})());return (this._b(b) ? a : undefined);})()
+
+set a to 100 return if true then set b to 1 return a > 1
+=>
+(()=>{const a=100;return (true ? (()=>{const b=1;return this._mt(a,1);})() : undefined);})()

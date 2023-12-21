@@ -53,8 +53,8 @@ public interface DateCalculator {
     LocalDate createDate(int year, int month, int day);
 
     /**
-     * Creates a date instance which is date in specified timezone at this moment in time.
-     * @param zoneId that indicates specific timezone
+     * Creates a date instance which is date in specified time zone at this moment in time.
+     * @param zoneId that indicates specific time zone
      * @return created date instance
      */
     LocalDate today(ZoneId zoneId);
@@ -121,12 +121,12 @@ public interface DateCalculator {
     LocalDateTime createDateTime(String dateTime);
 
     /**
-     * Creates a datetime instance from ISO 8061 datetime string in specified timezone.
+     * Creates a datetime instance from ISO 8061 datetime string in specified time zone.
      * String must be in YYYY-MM-DDThh:mm:ss format.
-     * It must not contain timezone portion.
+     * It must not contain time zone portion.
      *
      * @param dateTime string in YYYY-MM-DDThh:mm:ss format
-     * @param zoneId a timezone of a clock
+     * @param zoneId a time zone of a clock
      * @return created datetime instance
      * @throws DateTimeException if datetime cannot be created with the given values
      * @throws DateTimeParseException if datetime string does not match YYYY-MM-DDThh:mm:dd pattern
@@ -134,7 +134,7 @@ public interface DateCalculator {
     LocalDateTime createDateTime(String dateTime, ZoneId zoneId);
 
     /**
-     * Creates a datetime instance from year, month, day, hours, minutes and seconds in specified timezone.
+     * Creates a datetime instance from year, month, day, hours, minutes and seconds in specified time zone.
      * Year, month, and day start from 1. Hours, minutes and seconds start from 0.
      *
      * @param year a year
@@ -143,7 +143,7 @@ public interface DateCalculator {
      * @param hours hour of the day, starting from 0 and ending with 23h
      * @param minutes minute of the hour, starting from 0 and ending with 59
      * @param seconds second of a minute, starting from 0 and ending with 59
-     * @param zoneId a timezone of a clock
+     * @param zoneId a time zone of a clock
      * @return created datetime instance
      * @throws DateTimeException if datetime cannot be created with the given values
      */
@@ -158,7 +158,7 @@ public interface DateCalculator {
      * Returns a specific field value of datetime. Year, month and day start from 1. Hours, minutes and seconds start from 0.
      * @param dateTime initial datetime instance
      * @param field indicates which field value to return
-     * @param zoneId a timezone of a clock
+     * @param zoneId a time zone of a clock
      * @return value of the requested field
      */
     int getDateTimeField(LocalDateTime dateTime, DateTimeField field, ZoneId zoneId);
@@ -176,7 +176,7 @@ public interface DateCalculator {
      * @param dateTime initial datetime instance
      * @param field indicates which field to change in initial datetime instance
      * @param value field value to set
-     * @param zoneId a timezone of a clock. All operations are performed as if the clock is located in specified timezone.
+     * @param zoneId a time zone of a clock. All operations are performed as if the clock is located in specified time zone.
      * @return new instance of datetime with changed field value
      * @throws DateTimeException if datetime cannot be created with the given values
      */
@@ -193,26 +193,26 @@ public interface DateCalculator {
      * @param dateTime initial datetime instance
      * @param field indicates which field to change in initial datetime instance
      * @param value amount to add to field value
-     * @param zoneId a timezone of a clock. All operations are performed as if the clock is located in specified timezone.
+     * @param zoneId a time zone of a clock. All operations are performed as if the clock is located in specified time zone.
      * @return new instance of datetime with changed field value
      */
     LocalDateTime addDateTimeField(LocalDateTime dateTime, DateTimeField field, long value, ZoneId zoneId);
 
     /**
-     * Returns a moment in time which represents a start of the day at the provided date in specified timezone.
+     * Returns a moment in time which represents a start of the day at the provided date in specified time zone.
      *
      * @param date initial date instance
-     * @param zoneId a timezone of a clock
-     * @return datetime instance that represents a start of the day at the provided date in specified timezone
+     * @param zoneId a time zone of a clock
+     * @return datetime instance that represents a start of the day at the provided date in specified time zone
      */
     LocalDateTime toDateTime(LocalDate date, ZoneId zoneId);
 
     /**
-     * Returns a current calendar date of the moment in time at the specified timezone.
+     * Returns a current calendar date of the moment in time at the specified time zone.
      *
      * @param dateTime initial datetime instance that indicates a moment in time
-     * @param zoneId a timezone of a clock
-     * @return date instance that represents current date of the moment in time at the specified timezone
+     * @param zoneId a time zone of a clock
+     * @return date instance that represents current date of the moment in time at the specified time zone
      */
     LocalDate toDate(LocalDateTime dateTime, ZoneId zoneId);
 

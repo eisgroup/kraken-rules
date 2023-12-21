@@ -554,9 +554,8 @@ public class ValidationMessageBuilder {
         ),
         RULE_INCONSISTENT_VERSION_SERVER_SIDE_ONLY(
             "kvr037",
-            "Rule version is misconfigured, because it is not marked as @ServerSideOnly, "
-                + "but there are another rule version that is marked as @ServerSideOnly. "
-                + "All versions of the same rule must be consistently marked as @ServerSideOnly.",
+            "Rule is misconfigured, because it has versions with different restrictions. "
+                + "All versions of the same rule must be consistently marked or not marked as @ServerSideOnly.",
             ERROR
         ),
         RULE_CCR_IS_AMBIGUOUS(
@@ -669,6 +668,21 @@ public class ValidationMessageBuilder {
                 + "If more than one entry point version with the same name and dimensions is present, "
                 + "then only one of duplicated entry points versions will be selected for evaluation. "
                 + "Review all entry point definitions and remove duplicates.",
+            WARNING
+        ),
+        RULE_INCONSISTENT_VERSION_OVERRIDABLE(
+            "kvr055",
+            "Rule has versions with different overridability configuration.",
+            WARNING
+        ),
+        RULE_INCONSISTENT_VERSION_PAYLOAD(
+            "kvr056",
+            "Rule has versions with incompatible payload types. {0} payload type is not compatible with {1}.",
+            WARNING
+        ),
+        RULE_INCONSISTENT_VERSION_OVERRIDABLE_GROUP(
+            "kvr057",
+            "Rule has versions with different override group configuration.",
             WARNING
         ),
         ;

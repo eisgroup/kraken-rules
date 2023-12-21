@@ -50,7 +50,7 @@ public class FunctionContextHolder {
 
         /**
          *
-         * @return timezone of a current evaluation session
+         * @return time zone of a current evaluation session
          */
         public ZoneId getZoneId() {
             return zoneId;

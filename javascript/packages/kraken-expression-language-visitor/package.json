@@ -1,6 +1,6 @@
 {
     "name": "kraken-expression-language-visitor",
-    "version": "1.55.1-stage.0",
+    "version": "1.57.1-stage.0",
     "main": "./target/dist/js/src/index.js",
     "types": "./target/dist/definitions/src/index.d.ts",
     "publishConfig": {
@@ -17,7 +17,7 @@
         "jest": "27.5.1",
         "rimraf": "3.0.2",
         "ts-node": "4.1.0",
-        "typescript": "5.1.6"
+        "typescript": "5.2.2"
     },
     "scripts": {
         "lint": "eslint src test --ignore-pattern **/generated/**",
@@ -35,5 +35,5 @@
         "target/dist/definitions",
         "target/dist/js"
     ],
-    "gitHead": "efcf1a5e805088ee8af67ef21c2b8ce2fea62eb4"
+    "gitHead": "f101a3083e0b6627e30e715cc1759d3bfca70577"
 }

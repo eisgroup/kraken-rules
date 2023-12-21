@@ -44,7 +44,6 @@ import kraken.runtime.model.expression.CompiledExpression;
 import kraken.runtime.model.expression.ExpressionType;
 import kraken.runtime.model.rule.payload.validation.ErrorMessage;
 import kraken.runtime.utils.TargetPathUtils;
-import kraken.runtime.utils.TemplateParameterRenderer;
 import kraken.utils.Assertions;
 
 /**
@@ -84,7 +83,7 @@ public class KrakenExpressionEvaluator {
         }
 
         KrakenTypeProvider typeProvider = session.getKrakenTypeProvider();
-        var zoneId = session.getEvaluationConfig().getRuleTimezoneId();
+        var zoneId = session.getEvaluationConfig().getRuleTimeZoneId();
         EvaluationContext evaluationContext = new EvaluationContext(
             dataContext.getDataObject(),
             createExpressionVars(session, dataContext),
@@ -119,7 +118,7 @@ public class KrakenExpressionEvaluator {
             );
         }
         KrakenTypeProvider typeProvider = session.getKrakenTypeProvider();
-        var zoneId = session.getEvaluationConfig().getRuleTimezoneId();
+        var zoneId = session.getEvaluationConfig().getRuleTimeZoneId();
         EvaluationContext evaluationContext = new EvaluationContext(
             dataContext.getDataObject(),
             Map.of(),

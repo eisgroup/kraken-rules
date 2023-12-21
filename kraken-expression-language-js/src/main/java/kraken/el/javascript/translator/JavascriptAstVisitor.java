@@ -172,27 +172,27 @@ public class JavascriptAstVisitor extends QueuedAstVisitor<String> {
     public String visit(In in) {
         String object = visit(in.getLeft());
         String collection = visit(in.getRight());
-        return "this._in("+ collection +", " + object + ")";
+        return f("_in("+ collection +"," + object + ")");
     }
 
     @Override
     public String visit(MoreThanOrEquals moreThanOrEquals) {
-        return "(" + coerceNumberOrDate(moreThanOrEquals.getLeft()) + " >= " + coerceNumberOrDate(moreThanOrEquals.getRight()) + ")";
+        return f("_mte(" + visit(moreThanOrEquals.getLeft()) + "," + visit(moreThanOrEquals.getRight()) + ")");
     }
 
     @Override
     public String visit(MoreThan moreThan) {
-        return "(" + coerceNumberOrDate(moreThan.getLeft()) + " > " + coerceNumberOrDate(moreThan.getRight()) + ")";
+        return f("_mt(" + visit(moreThan.getLeft()) + "," + visit(moreThan.getRight()) + ")");
     }
 
     @Override
     public String visit(LessThanOrEquals lessThanOrEquals) {
-        return "(" + coerceNumberOrDate(lessThanOrEquals.getLeft()) + " <= " + coerceNumberOrDate(lessThanOrEquals.getRight()) + ")";
+        return f("_lte(" + visit(lessThanOrEquals.getLeft()) + "," + visit(lessThanOrEquals.getRight()) + ")");
     }
 
     @Override
     public String visit(LessThan lessThan) {
-        return "(" + coerceNumberOrDate(lessThan.getLeft()) + " < " + coerceNumberOrDate(lessThan.getRight()) + ")";
+        return f("_lt(" + visit(lessThan.getLeft()) + "," + visit(lessThan.getRight()) + ")");
     }
 
     @Override
@@ -476,13 +476,6 @@ public class JavascriptAstVisitor extends QueuedAstVisitor<String> {
     private String coerceBoolean(Expression expression) {
         if(isReference(expression)) {
             return f("_b(" + visit(expression) + ")");
-        }
-        return visit(expression);
-    }
-
-    private String coerceNumberOrDate(Expression expression) {
-        if(isReference(expression)) {
-            return f("_nd(" + visit(expression) + ")");
         }
         return visit(expression);
     }

@@ -17,8 +17,6 @@ package kraken.model.project.validator.rule;
 
 import static kraken.model.project.validator.ValidationMessageBuilder.Message.RULE_INCONSISTENT_VERSION_SERVER_SIDE_ONLY;
 
-import java.util.List;
-
 import kraken.model.Rule;
 import kraken.model.project.KrakenProject;
 import kraken.model.project.validator.ValidationMessageBuilder;
@@ -40,15 +38,11 @@ public final class RuleServerSideOnlyValidator implements RuleValidator {
 
     @Override
     public void validate(Rule rule, ValidationSession session) {
-        if (!rule.isServerSideOnly()) {
-            boolean hasServerSideOnlyVariations = krakenProject.getRuleVersions()
-                .getOrDefault(rule.getName(), List.of())
-                .stream()
-                .anyMatch(Rule::isServerSideOnly);
-            if (hasServerSideOnlyVariations) {
-                var m = ValidationMessageBuilder.create(RULE_INCONSISTENT_VERSION_SERVER_SIDE_ONLY, rule).build();
-                session.add(m);
-            }
+        boolean hasServerSideOnlyVariations = krakenProject.getRuleVersions().get(rule.getName()).stream()
+            .anyMatch(r -> rule.isServerSideOnly() != r.isServerSideOnly());
+        if (hasServerSideOnlyVariations) {
+            var m = ValidationMessageBuilder.create(RULE_INCONSISTENT_VERSION_SERVER_SIDE_ONLY, rule).build();
+            session.add(m);
         }
     }
 

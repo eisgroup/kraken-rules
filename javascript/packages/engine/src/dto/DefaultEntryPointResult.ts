@@ -25,13 +25,13 @@ import { conditionEvaluationTypeChecker } from './DefaultConditionEvaluationResu
 export class DefaultEntryPointResult implements EntryPointResult {
     readonly results: Record<string, FieldEvaluationResult>
     readonly evaluationTimestamp: Date
-    readonly ruleTimezoneId: string
+    readonly ruleTimeZoneId: string
 
-    constructor(results: Record<string, FieldEvaluationResult>, evaluationTimestamp: Date, ruleTimezoneId: string) {
+    constructor(results: Record<string, FieldEvaluationResult>, evaluationTimestamp: Date, ruleTimeZoneId: string) {
         this.results = results
         this.getApplicableResults.bind(this)
         this.evaluationTimestamp = evaluationTimestamp
-        this.ruleTimezoneId = ruleTimezoneId
+        this.ruleTimeZoneId = ruleTimeZoneId
     }
 
     getAllRuleResults(): RuleEvaluationResult[] {
